@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from '../components/routeComponents/ProtectedRoute';
 import './App.css';
+import React from 'react';
+import Home from '../components/landingPage/Home';
 
 function App() {
 
@@ -10,8 +12,6 @@ function App() {
   const updateStatus = () => {
     setIsLoggedIn((prev) => !prev);
   };
-
-fetch
 
   return (
     <div className="App">
@@ -23,7 +23,7 @@ fetch
           <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
           
           </Route>
-          <Route path='*' element={<Navigate to='/' />} />
+          <Route path='*' element={} />
         </Routes>
       </BrowserRouter>
     </div>
