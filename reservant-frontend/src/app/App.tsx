@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from '../components/routeComponents/ProtectedRoute';
-import './App.css';
 import React from 'react';
 import Home from '../components/landingPage/Home';
+import Register from '../components/RegisterPage/Register/Register';
 
 function App() {
 
@@ -18,12 +18,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login updateStatus={updateStatus} />} />
+          
+          {/* czeka na login */}
+          {/* <Route path='/login' element={<Login updateStatus={updateStatus} />} /> */}
+          
           <Route path='/register' element={<Register updateStatus={updateStatus} />} />
           <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
           
           </Route>
-          <Route path='*' element={} />
+          
+          {/* czeka na 404 */}
+          {/* <Route path='*' element={} /> */}
+        
         </Routes>
       </BrowserRouter>
     </div>
