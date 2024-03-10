@@ -1,4 +1,5 @@
 import React, {useState} from "react"
+import RegisterValidator from "../RegisterValidator/RegisterValidator";
 
 interface UserProps {
     name: string,
@@ -52,6 +53,8 @@ export default function RegisterForm ({onSubmit}: RegisterFormProps) {
     return(
         <div className="RegisterForm">
             <h1>Rejestracja</h1>
+
+            <RegisterValidator/>
 
             <label htmlFor="name">imię:</label>
             <input id="name" type="text" value={name} placeholder="imię" onChange={e => setName(e.target.value)}/>
