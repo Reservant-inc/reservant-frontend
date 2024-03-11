@@ -4,6 +4,7 @@ import ProtectedRoute from '../components/routeComponents/ProtectedRoute';
 import './App.css';
 import React from 'react';
 import Home from '../components/landingPage/Home';
+import NotFound from '../components/NotFound';
 
 function App() {
 
@@ -23,7 +24,7 @@ function App() {
           <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
           
           </Route>
-          <Route path='*' element={} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
