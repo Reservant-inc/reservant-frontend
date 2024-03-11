@@ -5,6 +5,7 @@ import "./App.css";
 import React from "react";
 import Home from "../components/landingPage/Home";
 import Login from "../components/login/Login";
+import NotFound from '../components/NotFound';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,7 +28,8 @@ function App() {
             element={<Register updateStatus={updateStatus} />}
           />
           <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}></Route>
-          <Route path="*" element={} />
+          <Route path='*' element={<NotFound />} />
+
         </Routes>
       </BrowserRouter>
     </div>
