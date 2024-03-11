@@ -16,6 +16,7 @@ interface RegisterProps {
 
 export default function Register ({updateStatus}: RegisterProps) {
     
+    //template przesyłania danych rejestrowanego aktora
     const onSubmit = (user: UserProps, link: string) => {
         fetch(link, {
             method: 'POST',
