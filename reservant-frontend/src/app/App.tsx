@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProtectedRoute from '../components/routeComponents/ProtectedRoute';
-import React from 'react';
-import Home from '../components/landingPage/Home';
+import ProtectedRoute from "../components/routeComponents/ProtectedRoute";
+import "./App.css";
+import React from "react";
+import Home from "../components/landingPage/Home";
+import Login from "../components/login/Login";
 import Register from '../components/RegisterPage/Register/Register';
+import NotFound from '../components/NotFound';
 
 function App() {
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const updateStatus = () => {
@@ -17,19 +19,18 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Home />} />
-          
-          {/* czeka na login */}
-          {/* <Route path='/login' element={<Login updateStatus={updateStatus} />} /> */}
-          
-          <Route path='/register' element={<Register updateStatus={updateStatus} />} />
-          <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
-          
-          </Route>
-          
-          {/* czeka na 404 */}
-          {/* <Route path='*' element={} /> */}
-        
+
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={<Login updateStatus={updateStatus} />}
+          />
+          <Route
+            path="/register"
+            element={<Register updateStatus={updateStatus} />}
+          />
+          <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}></Route>
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
