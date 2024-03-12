@@ -22,9 +22,9 @@ interface onSubmitProps {
 
 export default function Register ({updateStatus}: RegisterProps) {
     
-    //template przesyłania danych rejestrowanego aktora
+    //template of a function responsible for sending data of user being registered
     const onSubmit = ({user, link, validate}:  onSubmitProps) => {
-        // if(validate())
+        if(validate())
         {
             fetch(link, {
                 method: 'POST',
