@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import RegisterValidator from "../register/RegisterValidator";
 import './RegisterForm.css';
 
 interface UserProps {
@@ -29,13 +28,19 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
     const [phoneNumber, setPhoneNumber] = useState<string>("");
     const [birthDate, setBirthDate] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-
     const [passwordRepeated, setPasswordRepeated] = useState<string>("");
 
-    const [messages, setMessages] = useState<string[]>([]);
+    const [firstNameMessage, setFirstNameMessage] = useState<string>("");
+    const [lastNameMessage, setLastNameMessage] = useState<string>("");
+    const [emailMessage, setEmailMessage] = useState<string>("");
+    const [phoneNumberMessage, setPhoneNumberMessage] = useState<string>("");
+    const [birthDateMessage, setBirthDateMessage] = useState<string>("");
+    const [passwordMessage, setPasswordMessage] = useState<string>("");
+    const [passwordRepeatedMessage, setPasswordRepeatedMessage] = useState<string>("");
+
     const [check, setCheck] = useState<boolean>(true);
 
-    //funkcja odpowiadająca za przesłanie danych rejestrowanego klienta
+    //function responsible for sending data of customer being registered
     const submitUser = () => {
         onSubmit({
             user:
@@ -52,7 +57,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         })
     }
 
-    //funkcja odpowiadająca za przesłanie danych rejestrowanego właściciela
+    //function responsible for sending data of restaurant owner being registered
     const submitOwner = () => {
         onSubmit({
             user:
@@ -69,37 +74,50 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         })
     }
 
+    //function responsible for validating inputs, returns true if all inputs are valid
     const validate = (): boolean => {
-        setMessages([])
-        console.log(messages)
         setCheck(true)
         if (!(firstName.trim().length > 0)) {
-            setMessages([...messages, `pole "imię" nie może być puste`])
+            setFirstNameMessage("first name cannot be empty")
             setCheck(false)
+        } else {
+            setFirstNameMessage("")
         }
-        if (lastName.trim().length === 0) {
-            setMessages([...messages, `pole "nazwisko" nie może być puste`])
+        if (!(lastName.trim().length > 0)) {
+            setLastNameMessage("last name cannot be empty")
             setCheck(false)
+        } else {
+            setLastNameMessage("")
+        }
+        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+            setEmailMessage("invalid e-mail")
+            setCheck(false)
+        } else {
+            setEmailMessage("")
+        }
+        if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phoneNumber)) {
+            setPhoneNumberMessage("invalid phone number")
+            setCheck(false)
+        } else {
+            setPhoneNumberMessage("")
         }
         if (birthDate.length === 0) {
-            setMessages([...messages, `pole "data urodzenia" nie może być puste`])
+            setBirthDateMessage("birth date cannot be empty")
             setCheck(false)
+        } else {
+            setBirthDateMessage("")
         }
-        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-            setMessages([...messages, `podany e-mail jest niepoprawny`])
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+            setPasswordMessage("invalid password")
             setCheck(false)
-        }
-        if (phoneNumber.length != 9) {
-            setMessages([...messages, `numer telefonu jest niepoprawny`])
-            setCheck(false)
+        } else {
+            setPasswordMessage("")
         }
         if (password != passwordRepeated) {
-            setMessages([...messages, `podane hasła muszą być zgodne`])
+            setPasswordRepeatedMessage("passwords must match")
             setCheck(false)
-        }
-        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password)) {
-            setMessages([...messages, `pole "hasło" musi zawierać: 8 znaków, w tym 1 duża litera, 1 mała litera i 1 cyfra`])
-            setCheck(false)
+        } else {
+            setPasswordRepeatedMessage("")
         }
         if (check)
             return true;
@@ -110,53 +128,37 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         <div className="registerForm">
             <h1>Rejestracja</h1>
 
-            {/* <RegisterValidator messages={messages}/> */}
+            <label htmlFor="name">name:</label>
+            <input id="name" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} />
+            <label htmlFor="name">{firstNameMessage}</label>
 
-            <div className="registerInput">
-                <label htmlFor="name">Name:</label>
-                <input id="name" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} />
-            </div>
+            <label htmlFor="surname">surname:</label>
+            <input id="surname" type="text" value={lastName} onChange={e => setLastName(e.target.value)} />
+            <label htmlFor="surname">{lastNameMessage}</label>
 
-            <div className="registerInput">
-                <label htmlFor="surname">Surname:</label>
-                <input id="surname" type="text" value={lastName} onChange={e => setLastName(e.target.value)} />
-            </div>
+            <label htmlFor="birthDate">birth date:</label>
+            <input id="birthDate" type="date" onChange={e => setBirthDate(e.target.value)} />
+            <label htmlFor="birthDate">{birthDateMessage}</label>
 
-            <div className="registerInput">
-                <label htmlFor="birthDate">Birth date:</label>
-                <input id="birthDate" type="date" onChange={e => setBirthDate(e.target.value)} />
-            </div>
+            <label htmlFor="email">e-mail:</label>
+            <input id="email" type="text" value={email} onChange={e => setEmail(e.target.value)} />
+            <label htmlFor="email">{emailMessage}</label>
 
-            <div className="registerInput">
-                <label htmlFor="email">E-mail:</label>
-                <input id="email" type="text" value={email} onChange={e => setEmail(e.target.value)} />
-            </div>
+            <label htmlFor="number">phone number:</label>
+            <input id="number" type="text" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
+            <label htmlFor="number">{phoneNumberMessage}</label>
 
-            <div className="registerInput">
-                <label htmlFor="number">Phone number:</label>
-                {/* typ można zmienić na text, trzeba tylko pamiętać wtedy o trim() przy walidacji */}
-                <input id="number" type="text" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
-            </div>
+            <label htmlFor="password">password:</label>
+            <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+            <label htmlFor="password">{passwordMessage}</label>
 
-            <div className="registerInput">
-                <label htmlFor="password">Password:</label>
-                <input id="password" type="text" value={password} onChange={e => setPassword(e.target.value)} />
-            </div>
+            <label htmlFor="passwordRepeated">repeat password:</label>
+            <input id="passwordRepeated" type="password" value={passwordRepeated} onChange={e => setPasswordRepeated(e.target.value)} />
+            <label htmlFor="passwordRepeated">{passwordRepeatedMessage}</label>
 
-
-            <div className="registerInput">
-                <label htmlFor="passwordRepeated">Repeat password:</label>
-                <input id="passwordRepeated" type="text" value={passwordRepeated} onChange={e => setPasswordRepeated(e.target.value)} />
-            </div>
-
-
-            <div className="registerButtons">
-                <input type="button" onClick={submitUser} value="Zarejestruj się" />
-                {/* do ustalnia jeszcze gdzie wybieramy jako kto chce się ktoś rejestrować */}
-                <input type="button" onClick={submitOwner} value="Zarejestruj się jako właściciel" />
-            </div>
-
-
+            <input type="button" onClick={submitUser} value="Zarejestruj się" />
+            {/* do ustalnia jeszcze gdzie wybieramy jako kto chce się ktoś rejestrować */}
+            <input type="button" onClick={submitOwner} value="Zarejestruj się jako właściciel" />
         </div>
     )
 }
