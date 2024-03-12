@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "../components/routeComponents/ProtectedRoute";
 import React from "react";
 import Home from "../components/landingPage/Home";
-import Register from '../components/RegisterPage/Register/Register';
+import Register from '../components/auth/register/Register';
 import Login from "../components/auth/login/Login";
 import NotFound from '../components/routeComponents/NotFound';
 

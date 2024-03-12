@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import RegisterValidator from "../RegisterValidator/RegisterValidator";
+import RegisterValidator from "../../RegisterPage/RegisterValidator/RegisterValidator";
 
 interface UserProps {
     firstName: string,
