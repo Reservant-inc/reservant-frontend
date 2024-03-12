@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import Cookies from "js-cookie";
+import './Login.css';
 
 const Login = ({ updateStatus }) => {
   const navigate = useNavigate();

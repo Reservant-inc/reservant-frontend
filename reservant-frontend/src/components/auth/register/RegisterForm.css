@@ -1,0 +1,31 @@
+.registerForm {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.registerInput {
+    flex-direction: column;
+    display: flex;
+    width: 25%;
+}
+
+.registerInput label {
+    margin-bottom: 5px;
+}
+
+.registerInput input {
+    margin-bottom: 10px;
+}
+
+.registerButtons {
+    margin-top: 15px;
+    flex-direction: column;
+    display: flex;
+    width: 25%;
+}
+
+.registerButtons input {
+    margin-bottom: 5px;
+}
