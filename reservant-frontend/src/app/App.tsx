@@ -4,8 +4,8 @@ import ProtectedRoute from "../components/routeComponents/ProtectedRoute";
 import "./App.css";
 import React from "react";
 import Home from "../components/landingPage/Home";
-import Login from "../components/login/Login";
-import NotFound from '../components/NotFound';
+import Login from "../components/auth/login/Login";
+import NotFound from '../components/routeComponents/NotFound';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
