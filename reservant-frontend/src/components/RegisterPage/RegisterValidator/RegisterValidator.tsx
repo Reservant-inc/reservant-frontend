@@ -1,15 +1,15 @@
 import React from "react";
 
 interface RegisterValidatorProps{
-    message: boolean
+    messages: string[]
 }
 
-export default function RegisterValidator ({message}: RegisterValidatorProps) {
+export default function RegisterValidator ({messages}: RegisterValidatorProps) {
     
     return (
         <div className="RegisterValidator">
             <p>
-                {message?"spełniono warunki":"nie spełniono warunków"}
+                {`${messages}`}
             </p>
         </div>
     )
