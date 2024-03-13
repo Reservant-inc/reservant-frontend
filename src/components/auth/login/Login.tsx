@@ -4,6 +4,7 @@ import InputField from "./InputField";
 import Cookies from "js-cookie";
 import EmailValidator from "./EmailValidator";
 import PasswordValidator from "./PasswordValidator";
+import './Login.css';
 
 const Login = ({ updateStatus }) => {
   const navigate = useNavigate();
