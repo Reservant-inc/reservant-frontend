@@ -2,28 +2,56 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import Cookies from "js-cookie";
+import EmailValidator from "./EmailValidator";
+import PasswordValidator from "./PasswordValidator";
 
 const Login = ({ updateStatus }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [isEmailEmpty, setIsEmailEmpty] = useState<boolean>(false);
-  const [isPasswordEmpty, setIsPasswordEmpty] = useState<boolean>(false);
+  const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
+  const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
+  // Activate the submit button only if both password and email are validated
   useEffect(() => {
-    setIsEmailEmpty(email.trim() === "");
-    setIsPasswordEmpty(password.trim() === "");
-  }, [email, password]);
+    if (isEmailValid && isPasswordValid) {
+      setIsButtonActive(true);
+    } else {
+      setIsButtonActive(false);
+    }
+  }, [isEmailValid, isPasswordValid]);
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleEmailFocus = () => {
+    if (!isEmailFocused) {
+      setIsEmailFocused(true);
+    }
+  };
+
+  const handlePasswordFocus = () => {
+    if (!isPasswordFocused) {
+      setIsPasswordFocused(true);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isEmailEmpty && !isPasswordEmpty) {
+    if (isEmailValid && isPasswordValid) {
       try {
-        const response = await fetch("http://172.21.40.127/auth/login", {
-          // ?
+        const response = await fetch("http://172.21.40.127:12038/auth/login", {
           method: "POST",
-          credentials: "same-origin",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -32,12 +60,10 @@ const Login = ({ updateStatus }) => {
         if (!response.ok) {
           throw new Error("Invalid login data");
         }
+
         const data = await response.json();
-        if (data.roles.length > 1) {
-          navigate("/"); // if the user has more than 1 role, navigate to a page that let's you pick a role
-          // albo i nie
-        }
-        Cookies.set("username", data.Username); // ?
+
+        Cookies.set("username", data.Username);
         updateStatus();
         setEmail("");
         setPassword("");
@@ -53,19 +79,33 @@ const Login = ({ updateStatus }) => {
       <div className="container-login">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
-          <InputField type="email" value={email} handleChange={setEmail}>
+          <InputField
+            type="email"
+            value={email}
+            handleChange={handleEmail}
+            onFocus={handleEmailFocus}
+          >
             Email:
           </InputField>
-          {isEmailEmpty && <p>Email cannot be empty!</p>}
+          <EmailValidator
+            email={email}
+            isEmailFocused={isEmailFocused}
+            setIsEmailValid={setIsEmailValid}
+          />
           <InputField
             type="password"
             value={password}
-            handleChange={setPassword}
+            handleChange={handlePassword}
+            onFocus={handlePasswordFocus}
           >
             Password:
           </InputField>
-          {isPasswordEmpty && <p>Password cannot be empty!</p>}
-          <button>Login</button>
+          <PasswordValidator
+            password={password}
+            isPasswordFocused={isPasswordFocused}
+            setIsPasswordValid={setIsPasswordValid}
+          />
+          <button disabled={!isButtonActive}>Login</button>
         </form>
       </div>
       <div className="container-links">
