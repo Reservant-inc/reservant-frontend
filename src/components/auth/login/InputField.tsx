@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputField = ({ type, value, handleChange, children }) => {
+const InputField = ({ type, value, handleChange, onFocus, children }) => {
   return (
     <div>
       <label htmlFor={type}>{children}</label>
@@ -8,7 +8,8 @@ const InputField = ({ type, value, handleChange, children }) => {
       <input
         type={type}
         value={value}
-        onChange={(e) => handleChange(e.target.value)}
+        onChange={handleChange}
+        onFocus={onFocus}
       />
     </div>
   );
