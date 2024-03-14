@@ -3,6 +3,9 @@ pipeline {
 
     stages {
         stage('Build') {
+            when {
+                branch 'main'
+            }
             steps {
                 sh "docker build -t reservant-front ."
             }
