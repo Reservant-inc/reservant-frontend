@@ -10,21 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.13.2
+          node-version: '16'
 
       - name: Install dependencies
         run: npm install
+        env:
+          CI: ""
 
-      - name: Build code
+      - name: Build
         run: npm run build
-
-      - name: Export artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: ./build
+        env:
+          CI: ""
