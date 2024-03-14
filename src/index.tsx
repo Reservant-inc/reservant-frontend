@@ -8,4 +8,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <Reactsekude
+  <React>
+    <h1>sekude</h1>
+  </React>
+);
