@@ -1,7 +1,7 @@
 import React from "react";
 import RegisterForm from './RegisterForm';
 
-interface UserProps {
+export interface UserProps {
     firstName: string,
     lastName: string,
     email: string,
@@ -20,12 +20,11 @@ interface onSubmitProps {
     validate: () => boolean;
 }
 
-export default function Register ({updateStatus}: RegisterProps) {
-    
+export default function Register({ updateStatus }: RegisterProps) {
+
     //template of a function responsible for sending data of user being registered
-    const onSubmit = ({user, link, validate}:  onSubmitProps) => {
-        if(validate())
-        {
+    const onSubmit = ({ user, link, validate }: onSubmitProps) => {
+        if (validate()) {
             fetch(link, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -35,15 +34,15 @@ export default function Register ({updateStatus}: RegisterProps) {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
             })
-            .then((json) => console.log(json))
-            
+                .then((json) => console.log(json))
+
             updateStatus();
         }
     }
-    
+
     return (
         <div className="Register">
-            <RegisterForm onSubmit={onSubmit}/>
+            <RegisterForm onSubmit={onSubmit} />
         </div>
     )
 }
