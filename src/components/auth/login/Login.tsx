@@ -2,41 +2,41 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 import Cookies from "js-cookie";
-import EmailValidator from "./EmailValidator";
+import LoginValidator from "./LoginValidator";
 import PasswordValidator from "./PasswordValidator";
 import './Login.css';
 
 const Login = ({ updateStatus }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
+  const [login, setLogin] = useState<string>(""); 
   const [password, setPassword] = useState<string>("");
-  const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
+  const [isLoginValid, setIsLoginValid] = useState<boolean>(false); 
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isLoginFocused, setIsLoginFocused] = useState(false); 
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  // Activate the submit button only if both password and email are validated
+  // Activate the submit button only if both password and login are validated
   useEffect(() => {
-    if (isEmailValid && isPasswordValid) {
+    if (isLoginValid && isPasswordValid) {
       setIsButtonActive(true);
     } else {
       setIsButtonActive(false);
     }
-  }, [isEmailValid, isPasswordValid]);
+  }, [isLoginValid, isPasswordValid]);
 
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
+  const handleLogin = (e) => { 
+    setLogin(e.target.value);
   };
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleEmailFocus = () => {
-    if (!isEmailFocused) {
-      setIsEmailFocused(true);
+  const handleLoginFocus = () => {
+    if (!isLoginFocused) {
+      setIsLoginFocused(true);
     }
   };
 
@@ -48,7 +48,7 @@ const Login = ({ updateStatus }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEmailValid && isPasswordValid) {
+    if (isLoginValid && isPasswordValid) {
       try {
         const response = await fetch("http://172.21.40.127:12038/auth/login", {
           method: "POST",
@@ -56,7 +56,7 @@ const Login = ({ updateStatus }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ login, password }), 
         });
         if (!response.ok) {
           throw new Error("Invalid login data");
@@ -66,7 +66,7 @@ const Login = ({ updateStatus }) => {
 
         Cookies.set("username", data.Username);
         updateStatus();
-        setEmail("");
+        setLogin(""); 
         setPassword("");
         navigate("/"); // if login was successful, navigate to home page
       } catch (err) {
@@ -81,17 +81,17 @@ const Login = ({ updateStatus }) => {
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
           <InputField
-            type="email"
-            value={email}
-            handleChange={handleEmail}
-            onFocus={handleEmailFocus}
+            type="login" 
+            value={login}
+            handleChange={handleLogin}
+            onFocus={handleLoginFocus}
           >
-            Email:
+            Login:
           </InputField>
-          <EmailValidator
-            email={email}
-            isEmailFocused={isEmailFocused}
-            setIsEmailValid={setIsEmailValid}
+          <LoginValidator
+            login={login}
+            isLoginFocused={isLoginFocused} 
+            setIsLoginValid={setIsLoginValid}
           />
           <InputField
             type="password"
