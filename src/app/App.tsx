@@ -6,6 +6,7 @@ import Home from "../components/landingPage/Home";
 import Register from '../components/auth/register/Register';
 import Login from "../components/auth/login/Login";
 import NotFound from '../components/routeComponents/NotFound';
+import RestaurantRegister from "../components/restaurant/RestaurantRegister";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,8 +28,15 @@ function App() {
             path="/register"
             element={<Register updateStatus={updateStatus} />}
           />
+          <Route path="/restaurant">
+            <Route path="register"
+              element={<RestaurantRegister updateStatus={updateStatus} />}
+            />
+          </Route>
+
           <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}></Route>
           <Route path='*' element={<NotFound />} />
+
         </Routes>
       </BrowserRouter>
     </div>
