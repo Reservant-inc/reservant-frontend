@@ -1,7 +1,20 @@
 .container-login {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .container-links {
     text-align: center;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
 }
