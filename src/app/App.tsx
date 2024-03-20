@@ -26,7 +26,7 @@ function App() {
           />
           <Route
             path="/register"
-            element={<Register updateStatus={updateStatus}/>}
+            element={<Register/>}
           />
           <Route path="/restaurant">
             <Route
