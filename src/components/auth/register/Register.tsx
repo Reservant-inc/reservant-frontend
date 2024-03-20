@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
+import "dotenv/config";
 import "./Register.css";
 
 //TODO - username/login?
@@ -81,7 +82,7 @@ export default function Register() {
       setSubmitting(true);
       // Send data to server
       const response = await fetch(
-        "http://172.21.40.127:12038/auth/register-customer",
+        `${process.env.REACT_APP_SERVER_IP}/auth/register-customer`,
         {
           method: "POST",
           credentials: "include",

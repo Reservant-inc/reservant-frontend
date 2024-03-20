@@ -17,7 +17,7 @@ interface LoginProps {
 const validationSchema = yup.object({
   login: yup.string().required("login is required"),
   password: yup.string().required("password is required"),
-})
+});
 
 const Login = ({ updateStatus }: LoginProps) => {
   const navigate = useNavigate();
@@ -31,14 +31,17 @@ const Login = ({ updateStatus }: LoginProps) => {
       setSubmitting(true);
       console.log(values);
       // Send data to server
-      const response = await fetch("http://172.21.40.127:12038/auth/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_IP}/auth/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
         },
-        body: JSON.stringify(values),
-      })
+      );
 
       if (!response.ok) {
         throw new Error("Invalid login data");
@@ -58,7 +61,7 @@ const Login = ({ updateStatus }: LoginProps) => {
       // Set submitting state to false when form submission completes (whether it succeeded or failed)
       setSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="container-login">
@@ -97,7 +100,7 @@ const Login = ({ updateStatus }: LoginProps) => {
         <Link to="/">Reset password</Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
