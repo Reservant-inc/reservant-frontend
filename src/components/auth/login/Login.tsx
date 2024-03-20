@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "./Login.css";
+import { userInfo } from "os";
 
 const initialValues = {
   username: "",
@@ -15,9 +16,9 @@ interface LoginProps {
 
 // Set yup validation schema to validate defined fields and error messages
 const validationSchema = yup.object({
-  login: yup.string().required("login is required"),
+  username: yup.string().required("login is required"),
   password: yup.string().required("password is required"),
-})
+});
 
 const Login = ({ updateStatus }: LoginProps) => {
   const navigate = useNavigate();
@@ -26,26 +27,39 @@ const Login = ({ updateStatus }: LoginProps) => {
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
+
+    console.log(values)
+
     try {
       // Set submitting state to true to indicate form submission is in progress
       setSubmitting(true);
-      console.log(values);
       // Send data to server
-      const response = await fetch("http://172.21.40.127:12038/auth/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_IP}/auth/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: values.username,
+            password: values.password,
+            // TODO - plug in values after creating rememberMe Field
+            rememberMe: false
+          }),
         },
-        body: JSON.stringify(values),
-      })
+      );
 
       if (!response.ok) {
+        console.log(await response.json())
         throw new Error("Invalid login data");
       }
 
       // TODO - Kuba: add data to web local storage for further use
-      const data = await response.json();
+      const data = await response.json()
+      localStorage.setItem('userInfo', JSON.stringify(data))
+      console.log(localStorage.getItem("userInfo"))
 
       // Update auth status in App component
       updateStatus();
@@ -58,7 +72,7 @@ const Login = ({ updateStatus }: LoginProps) => {
       // Set submitting state to false when form submission completes (whether it succeeded or failed)
       setSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="container-login">
@@ -82,6 +96,10 @@ const Login = ({ updateStatus }: LoginProps) => {
                 <ErrorMessage name="password" component="div" />
               </div>
 
+              {
+                // TODO - rememberMe Field
+              }
+
               <button type="submit" disabled={!formik.isValid}>
                 Login
               </button>
@@ -97,7 +115,7 @@ const Login = ({ updateStatus }: LoginProps) => {
         <Link to="/">Reset password</Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
