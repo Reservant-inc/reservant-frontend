@@ -47,7 +47,6 @@ const RestaurantRegister = () => {
             }
       
             // TBD - is there data and what to do with it
-            const data = await response.json();
             
             //TODO - Kuba: Navigation to *some* path
             //navigate("/");
@@ -94,17 +93,17 @@ const RestaurantRegister = () => {
                     </div>
 
                     <div className="form-control">
-                        <label htmlFor="nip">Address:</label>
+                        <label htmlFor="nip">Nip:</label>
                         <Field type="text" id="nip" name="nip" />
                         <ErrorMessage name="nip" component="div" />
                     </div>
-
-                    {
-                        //VERY TODO
-                    }    
+                    
                     <div className="form-control">
-                        <label htmlFor="businessType">Address:</label>
-                        <Field type="text" id="businessTyp" name="businessType" />
+                        <label htmlFor="businessType">Business type:</label>
+                        <Field as="select" id="businessType" name="businessType">
+                          <option value="restaurant">Restaurant</option>
+                          <option value="bar">Bar</option>
+                        </Field>
                         <ErrorMessage name="businessType" component="div" />
                     </div>
 
