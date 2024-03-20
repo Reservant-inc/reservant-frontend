@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
-import "dotenv/config";
+import "dotenv/config"
 import "./Register.css";
 
 //TODO - username/login?
@@ -105,7 +105,6 @@ export default function Register() {
       }
 
       // TODO - add data to web local storage for further use
-      const data = await response.json();
 
       //TODO - nawigacja po rejestracji
       navigate("/");
