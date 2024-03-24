@@ -2,7 +2,7 @@
     "auth": {
         "firstName": "First name",
         "lastName": "Last name",
-        "phoneNumber": "Phone number",
+        "phoneNumber": "Phone number", 
         "birthDate": "Birth date:",
         "password": "Password",
         "confirmPassword": "Confirm password",
@@ -19,6 +19,11 @@
             "restaurant": "Restaurant",
             "caffe": "Caffe"
         },
+        "tin": "TIN",
+        "id": "ID",
+        "alcoholLicense": "Alcohol license (optional)",
+        "leaseAgreement": "Lease agreement (optional)",
+        "businessLicense": "Business license (optional)",
         "button": "Register restaurant"
     },
     "errors": {
@@ -59,7 +64,29 @@
             }
         },
         "restaurant-register": {
-
+            "name": { 
+                "required": "Name is required"
+            },
+            "address": {
+                "required": "Address is required"
+            },
+            "postalCode": {
+                "matches": "Postal codes must have XX-XXX format",
+                "required": "Postal code is required"
+            },
+            "city": {
+                "required": "City is required"
+            },
+            "tin": {
+                "matches": "TIN must have 11 numbers",
+                "required": "TIN is required"
+            },
+            "businessType": {
+                "required": "You must choose business type"
+            },
+            "id": {
+                "required": "ID is required"
+            }
         }
     }
 }
