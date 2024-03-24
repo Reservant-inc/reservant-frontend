@@ -135,7 +135,7 @@ export default function Register() {
               </div>
 
               <div className="form-control">
-                <label htmlFor="phoneNumber">{t("auth.phoneNumber"):</label>
+                <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
                 <PhoneInput
                   international
                   defaultCountry="PL"
