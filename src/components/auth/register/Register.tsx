@@ -2,7 +2,8 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
-import "dotenv/config"
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 import "./Register.css";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +11,6 @@ const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
-  diallingCode: "",
   phoneNumber: "",
   birthDate: "",
   password: "",
@@ -74,9 +74,7 @@ export default function Register() {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
-      // Set submitting state to true to indicate form submission is in progress
       setSubmitting(true);
-      // Send data to server
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_IP}/auth/register-customer`,
         {
@@ -89,7 +87,7 @@ export default function Register() {
             firstName: values.firstName,
             lastName: values.lastName,
             email: values.email,
-            phoneNumber: `${values.diallingCode}${values.phoneNumber}`,
+            phoneNumber: values.phoneNumber,
             birthDate: values.birthDate,
             password: values.password,
           }),
@@ -100,14 +98,10 @@ export default function Register() {
         throw new Error("Invalid login data");
       }
 
-      // TODO - add data to web local storage for further use
-
-      //TODO - nawigacja po rejestracji
       navigate("/");
     } catch (error) {
       console.log(error);
     } finally {
-      // Set submitting state to false when form submission completes (whether it succeeded or failed)
       setSubmitting(false);
     }
   };
@@ -120,8 +114,6 @@ export default function Register() {
         onSubmit={handleSubmit}
       >
         {(formik) => (
-          //TODO - add username/login?????????
-          //TODO - sposob na polaczenie prefixu numeru i numeru / jak uzyskac dostep do values
           <Form>
             <div className="form-container">
               <div className="form-control">
@@ -143,13 +135,16 @@ export default function Register() {
               </div>
 
               <div className="form-control">
-                <Field type="text" id="diallingCode" name="diallingCode" />
-                <ErrorMessage name="diallingCode" component="div" />
-              </div>
-
-              <div className="form-control">
-                <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
-                <Field type="text" id="phoneNumber" name="phoneNumber" />
+                <label htmlFor="phoneNumber">{t("auth.phoneNumber"):</label>
+                <PhoneInput
+                  international
+                  defaultCountry="PL"
+                  value={formik.values.phoneNumber}
+                  onChange={(value) =>
+                    formik.setFieldValue("phoneNumber", value)
+                  }
+                  className="phone-input"
+                />
                 <ErrorMessage name="phoneNumber" component="div" />
               </div>
 
