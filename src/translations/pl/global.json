@@ -47,7 +47,7 @@
             "birthDate": {
                 "min": "Podana data jest zbyt wczesna",
                 "max": "Podana data jest zbyt późna",
-                "required": "Birth date is required"
+                "required": "Data urodzenia jest wymagana"
             },
             "password": {
                 "matches": "Hasło musi zawierać 8 znaków, a w nich conajmniej: jedną małą oraz dużą literę, cyfrę oraz znak specjalny",
