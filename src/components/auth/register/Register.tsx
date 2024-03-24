@@ -2,57 +2,41 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
-import "dotenv/config"
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 import "./Register.css";
 
-//TODO - username/login?
 const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
-  diallingCode: "",
   phoneNumber: "",
   birthDate: "",
   password: "",
   confirmPassword: "",
 };
 
-// Set yup validation schema to validate defined fields and error messages
-/*
-TODO
-username/login - czekamy na koncowke
-phone number (co z tym na backu) + prefix
-trzeba zrobic lepszy regex dla maila
-jakaś aktualizująca się max date / min date
-imie/nazwisko - regex na ąę?
-to samo z telefonem(czy mozna zrobic pozniej trim?)
-*/
 const validationSchema = yup.object({
   firstName: yup
     .string()
-    .matches(/^[a-zA-Z]+$/, "first name can only contain letters.")
-    .required("first name is required"),
+    .matches(/^[a-zA-Z]+$/, "First name can only contain letters.")
+    .required("First name is required"),
 
   lastName: yup
     .string()
-    .matches(/^[a-zA-Z]+$/, "last name can only contain letters.")
-    .required("last name is required"),
+    .matches(/^[a-zA-Z]+$/, "Last name can only contain letters.")
+    .required("Last name is required"),
 
-  email: yup.string().email("invalid e-mail").required("e-mail is required"),
-
-  diallingCode: yup
-    .string()
-    .matches(/^\+[0-9]{2}$/, "invalid dialling code")
-    .required("dialling code is required"),
+  email: yup.string().email("Invalid e-mail").required("E-mail is required"),
 
   phoneNumber: yup
     .string()
-    .matches(/^[0-9]{9}$/, "invalid phone number")
-    .required("phone number is required"),
+    .matches(/^\+[1-9]\d{1,14}$/, "Invalid phone number")
+    .required("Phone number is required"),
 
   birthDate: yup
     .date()
-    .required("birth date is required")
+    .required("Birth date is required")
     .min("1969-11-13", "Date is too early")
     .max("2023-11-13", "Date is too late"),
 
@@ -60,14 +44,14 @@ const validationSchema = yup.object({
     .string()
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      "must contain 8 characters, one uppercase, one lowercase, one number and one special character",
+      "Must contain 8 characters, one uppercase, one lowercase, one number and one special character",
     )
-    .required("password is required"),
+    .required("Password is required"),
 
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password"), ""], "passwords must match")
-    .required("password confirmation is required"),
+    .oneOf([yup.ref("password"), ""], "Passwords must match")
+    .required("Password confirmation is required"),
 });
 
 export default function Register() {
@@ -78,9 +62,7 @@ export default function Register() {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
-      // Set submitting state to true to indicate form submission is in progress
       setSubmitting(true);
-      // Send data to server
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_IP}/auth/register-customer`,
         {
@@ -93,7 +75,7 @@ export default function Register() {
             firstName: values.firstName,
             lastName: values.lastName,
             email: values.email,
-            phoneNumber: `${values.diallingCode}${values.phoneNumber}`,
+            phoneNumber: values.phoneNumber,
             birthDate: values.birthDate,
             password: values.password,
           }),
@@ -104,14 +86,10 @@ export default function Register() {
         throw new Error("Invalid login data");
       }
 
-      // TODO - add data to web local storage for further use
-
-      //TODO - nawigacja po rejestracji
       navigate("/");
     } catch (error) {
       console.log(error);
     } finally {
-      // Set submitting state to false when form submission completes (whether it succeeded or failed)
       setSubmitting(false);
     }
   };
@@ -124,8 +102,6 @@ export default function Register() {
         onSubmit={handleSubmit}
       >
         {(formik) => (
-          //TODO - add username/login?????????
-          //TODO - sposob na polaczenie prefixu numeru i numeru / jak uzyskac dostep do values
           <Form>
             <div className="form-container">
               <div className="form-control">
@@ -147,14 +123,16 @@ export default function Register() {
               </div>
 
               <div className="form-control">
-                <label htmlFor="diallingCode">Dialling code:</label>
-                <Field type="text" id="diallingCode" name="diallingCode" />
-                <ErrorMessage name="diallingCode" component="div" />
-              </div>
-
-              <div className="form-control">
                 <label htmlFor="phoneNumber">Phone number:</label>
-                <Field type="text" id="phoneNumber" name="phoneNumber" />
+                <PhoneInput
+                  international
+                  defaultCountry="PL"
+                  value={formik.values.phoneNumber}
+                  onChange={(value) =>
+                    formik.setFieldValue("phoneNumber", value)
+                  }
+                  className="phone-input"
+                />
                 <ErrorMessage name="phoneNumber" component="div" />
               </div>
 
