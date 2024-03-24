@@ -136,11 +136,12 @@ export default function Register() {
 
               <div className="form-control">
                 <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
-                <PhoneInput
+                <Field as={PhoneInput}
                   international
                   defaultCountry="PL"
+                  name={"phoneNumber"}
                   value={formik.values.phoneNumber}
-                  onChange={(value) =>
+                  onChange={(value: string) =>
                     formik.setFieldValue("phoneNumber", value)
                   }
                   className="phone-input"
