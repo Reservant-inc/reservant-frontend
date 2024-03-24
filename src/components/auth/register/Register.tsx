@@ -5,6 +5,7 @@ import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "./Register.css";
+import { useTranslation } from "react-i18next";
 
 const initialValues = {
   firstName: "",
@@ -16,46 +17,57 @@ const initialValues = {
   confirmPassword: "",
 };
 
-const validationSchema = yup.object({
-  firstName: yup
-    .string()
-    .matches(/^[a-zA-Z]+$/, "First name can only contain letters.")
-    .required("First name is required"),
-
-  lastName: yup
-    .string()
-    .matches(/^[a-zA-Z]+$/, "Last name can only contain letters.")
-    .required("Last name is required"),
-
-  email: yup.string().email("Invalid e-mail").required("E-mail is required"),
-
-  phoneNumber: yup
-    .string()
-    .matches(/^\+[1-9]\d{1,14}$/, "Invalid phone number")
-    .required("Phone number is required"),
-
-  birthDate: yup
-    .date()
-    .required("Birth date is required")
-    .min("1969-11-13", "Date is too early")
-    .max("2023-11-13", "Date is too late"),
-
-  password: yup
-    .string()
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-      "Must contain 8 characters, one uppercase, one lowercase, one number and one special character",
-    )
-    .required("Password is required"),
-
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password"), ""], "Passwords must match")
-    .required("Password confirmation is required"),
-});
-
 export default function Register() {
+  
   const navigate = useNavigate();
+  
+  const [t, i18n] = useTranslation("global")
+  
+  const validationSchema = yup.object({
+    firstName: yup
+      .string()
+      .matches(/^[a-zA-Z]+$/, t("errors.user-register.firstName.matches"))
+      .required(t("errors.user-register.firstName.required")),
+  
+    lastName: yup
+      .string()
+      .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
+      .required(t("errors.user-register.lastName.required")),
+  
+    email: yup.string()
+      .email(t("errors.user-register.email.matches"))
+      .required(t("errors.user-register.email.required")),
+  
+    diallingCode: yup
+      .string()
+      .matches(/^\+[0-9]{2}$/, "invalid dialling code")
+      .required("dialling code is required"),
+  
+    phoneNumber: yup
+      .string()
+      .matches(/^[0-9]{9}$/, t("errors.user-register.phoneNumber.matches"))
+      .required(t("errors.user-register.phoneNumber.required")),
+  
+    birthDate: yup
+      .date()
+      .min("1969-11-13", t("errors.user-register.birthDate.min"))
+      .max("2023-11-13", t("errors.user-register.birthDate.max"))
+      .required(t("errors.user-register.birthDate.required")),
+  
+    password: yup
+      .string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        t("errors.user-register.password.matches"),
+      )
+      .required(t("errors.user-register.password.required")),
+  
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password"), ""], t("errors.user-register.confirmPassword.matches"))
+      .required(t("errors.user-register.confirmPassword.required")),
+  });
+  
 
   const handleSubmit = async (
     values: FormikValues,
@@ -105,13 +117,13 @@ export default function Register() {
           <Form>
             <div className="form-container">
               <div className="form-control">
-                <label htmlFor="firstName">First name:</label>
+                <label htmlFor="firstName">{t("auth.firstName")}:</label>
                 <Field type="text" id="firstName" name="firstName" />
                 <ErrorMessage name="firstName" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="lastName">Last name:</label>
+                <label htmlFor="lastName">{t("auth.lastName")}:</label>
                 <Field type="text" id="lastName" name="lastName" />
                 <ErrorMessage name="lastName" component="div" />
               </div>
@@ -123,7 +135,7 @@ export default function Register() {
               </div>
 
               <div className="form-control">
-                <label htmlFor="phoneNumber">Phone number:</label>
+                <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
                 <PhoneInput
                   international
                   defaultCountry="PL"
@@ -137,19 +149,19 @@ export default function Register() {
               </div>
 
               <div className="form-control">
-                <label htmlFor="birthDate">Birth date:</label>
+                <label htmlFor="birthDate">{t("auth.birthDate")}:</label>
                 <Field type="date" id="birthDate" name="birthDate" />
                 <ErrorMessage name="birthDate" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password">{t("auth.password")}:</label>
                 <Field type="password" id="password" name="password" />
                 <ErrorMessage name="password" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="confirmPassword">Confirm password:</label>
+                <label htmlFor="confirmPassword">{t("auth.confirmPassword")}:</label>
                 <Field
                   type="password"
                   id="confirmPassword"
@@ -159,7 +171,7 @@ export default function Register() {
               </div>
 
               <button type="submit" disabled={!formik.isValid}>
-                Register
+                {t("auth.registerButton")}
               </button>
             </div>
           </Form>

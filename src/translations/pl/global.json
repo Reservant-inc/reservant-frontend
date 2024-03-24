@@ -1,0 +1,65 @@
+{
+    "auth": {
+        "firstName": "Imie",
+        "lastName": "Nazwisko",
+        "phoneNumber": "Numer telefonu",
+        "birthDate": "Data urodzenia",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło",
+        "registerButton": "Zarejestruj się"
+    },
+    "restaurant-register": {
+        "name": "Nazwa",
+        "address": "Adres",
+        "postalCode": "Kod pocztowy",
+        "city": "Miasto",
+        "businessType": "Rodzaj biznesu",
+        "types": {
+            "bar": "Bar",
+            "restaurant": "Restauracja",
+            "caffe": "Kawiarnia"
+        },
+        "button": "Zarejestruj restaurację"
+    },
+    "errors": {
+        "login": {
+            "login": "Login is required",
+            "password": "Password is required"
+        },
+        "user-register": {
+            "firstName": {
+                "matches": "First name can only contain letters",
+                "required": "First name is required"
+            },
+            "lastName": {
+                "matches": "Last name can only contain letters",
+                "required": "Last name is required"
+            },
+            "email": {
+                "matches": "Invalid e-mail",
+                "required": "E-mail is required"
+            },
+            "diallingCode": "Dialling code is required",
+            "phoneNumber": {
+                "matches": "Phone number is required",
+                "required": "Phone number is required"
+            },
+            "birthDate": {
+                "min": "Date is too early",
+                "max": "Date is too late",
+                "required": "Birth date is required"
+            },
+            "password": {
+                "matches": "Password must contain 8 characters, one uppercase, one lowercase, one number and one special character",
+                "required": "Password is required"
+            },
+            "confirmPassword": {
+                "matches":"Passwords must match",
+                "required": "Password confirmation is required"
+            }
+        },
+        "restaurant-register": {
+
+        }
+    }
+}
