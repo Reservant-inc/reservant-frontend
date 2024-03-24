@@ -23,39 +23,39 @@
     },
     "errors": {
         "login": {
-            "login": "Login is required",
-            "password": "Password is required"
+            "login": "Login jest wymagany",
+            "password": "Hasło jest wymagane"
         },
         "user-register": {
             "firstName": {
-                "matches": "First name can only contain letters",
-                "required": "First name is required"
+                "matches": "Imię może składać się tylko z liter",
+                "required": "Imię jest wymagane"
             },
             "lastName": {
-                "matches": "Last name can only contain letters",
-                "required": "Last name is required"
+                "matches": "Nazwisko może składać się tylko z liter",
+                "required": "Nazwisko jest wymagane"
             },
             "email": {
-                "matches": "Invalid e-mail",
-                "required": "E-mail is required"
+                "matches": "Niepoprawny e-mail",
+                "required": "E-mail jest wymagany"
             },
-            "diallingCode": "Dialling code is required",
+            "diallingCode": "Numer kierunkowy jest wymagany",
             "phoneNumber": {
-                "matches": "Phone number is required",
-                "required": "Phone number is required"
+                "matches": "Numer telefonu jest wymagany",
+                "required": "Numer telefonu jest wymagany"
             },
             "birthDate": {
-                "min": "Date is too early",
-                "max": "Date is too late",
+                "min": "Podana data jest zbyt wczesna",
+                "max": "Podana data jest zbyt późna",
                 "required": "Birth date is required"
             },
             "password": {
-                "matches": "Password must contain 8 characters, one uppercase, one lowercase, one number and one special character",
-                "required": "Password is required"
+                "matches": "Hasło musi zawierać 8 znaków, a w nich conajmniej: jedną małą oraz dużą literę, cyfrę oraz znak specjalny",
+                "required": "Hasło jest wymagane"
             },
             "confirmPassword": {
-                "matches":"Passwords must match",
-                "required": "Password confirmation is required"
+                "matches":"Podane hasła muszą być zgodne",
+                "required": "Wymagane jest potwierdzenie hasła"
             }
         },
         "restaurant-register": {

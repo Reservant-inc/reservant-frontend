@@ -5,7 +5,8 @@
         "phoneNumber": "Phone number",
         "birthDate": "Birth date:",
         "password": "Password",
-        "confirmPassword": "Confirm password"
+        "confirmPassword": "Confirm password",
+        "registerButton": "Register"
     },
     "restaurant-register": {
         "name": "Name",
