@@ -1,0 +1,64 @@
+{
+    "auth": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phoneNumber": "Phone number",
+        "birthDate": "Birth date:",
+        "password": "Password",
+        "confirmPassword": "Confirm password"
+    },
+    "restaurant-register": {
+        "name": "Name",
+        "address": "Address",
+        "postalCode": "Postal code",
+        "city": "City",
+        "businessType": "Business type",
+        "types": {
+            "bar": "Bar",
+            "restaurant": "Restaurant",
+            "caffe": "Caffe"
+        },
+        "button": "Register restaurant"
+    },
+    "errors": {
+        "login": {
+            "login": "Login is required",
+            "password": "Password is required"
+        },
+        "user-register": {
+            "firstName": {
+                "matches": "First name can only contain letters",
+                "required": "First name is required"
+            },
+            "lastName": {
+                "matches": "Last name can only contain letters",
+                "required": "Last name is required"
+            },
+            "email": {
+                "matches": "Invalid e-mail",
+                "required": "E-mail is required"
+            },
+            "diallingCode": "Dialling code is required",
+            "phoneNumber": {
+                "matches": "Phone number is required",
+                "required": "Phone number is required"
+            },
+            "birthDate": {
+                "min": "Date is too early",
+                "max": "Date is too late",
+                "required": "Birth date is required"
+            },
+            "password": {
+                "matches": "Password must contain 8 characters, one uppercase, one lowercase, one number and one special character",
+                "required": "Password is required"
+            },
+            "confirmPassword": {
+                "matches":"Passwords must match",
+                "required": "Password confirmation is required"
+            }
+        },
+        "restaurant-register": {
+
+        }
+    }
+}

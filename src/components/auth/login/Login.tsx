@@ -3,10 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "./Login.css";
-import { userInfo } from "os";
+import { useTranslation } from "react-i18next";
 
 const initialValues = {
-  username: "",
+  login: "",
   password: "",
 };
 
@@ -15,13 +15,17 @@ interface LoginProps {
 }
 
 // Set yup validation schema to validate defined fields and error messages
-const validationSchema = yup.object({
-  username: yup.string().required("login is required"),
-  password: yup.string().required("password is required"),
-});
 
 const Login = ({ updateStatus }: LoginProps) => {
+  
   const navigate = useNavigate();
+  
+  const [t, i18n] = useTranslation("global")
+  
+  const validationSchema = yup.object({
+    login: yup.string().required(t("errors.login.login")),
+    password: yup.string().required(t("errors.login.password")),
+  });
 
   const onSubmit = async (
     values: FormikValues,
@@ -43,7 +47,7 @@ const Login = ({ updateStatus }: LoginProps) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: values.username,
+            email: values.login,
             password: values.password,
             // TODO - plug in values after creating rememberMe Field
             rememberMe: false
@@ -85,13 +89,13 @@ const Login = ({ updateStatus }: LoginProps) => {
           <Form>
             <div className="form-container">
               <div className="form-control">
-                <label htmlFor="username">Username:</label>
-                <Field type="text" id="username" name="username" />
-                <ErrorMessage name="username" component="div" />
+                <label htmlFor="login">Login:</label>
+                <Field type="text" id="login" name="login" />
+                <ErrorMessage name="login" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password">{t("auth.password")}:</label>
                 <Field type="password" id="password" name="password" />
                 <ErrorMessage name="password" component="div" />
               </div>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
+import { useTranslation } from "react-i18next";
 
 const initialValues = {
   name: "",
@@ -27,7 +28,10 @@ const validationSchema = yup.object({
 });
 
 const RestaurantRegister = () => {
+
   const navigate = useNavigate();
+  
+  const [t, i18n] = useTranslation("global")
 
   //template of a function responsible for sending data of user being registered
   const onSubmit = async (
@@ -75,46 +79,47 @@ const RestaurantRegister = () => {
           <Form>
             <div className="form-container">
               <div className="form-control">
-                <label htmlFor="name">Name:</label>
+                <label htmlFor="name">{t("restaurant-register.name")}:</label>
                 <Field type="text" id="name" name="name" />
                 <ErrorMessage name="name" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="address">Address:</label>
+                <label htmlFor="address">{t("restaurant-register.address")}:</label>
                 <Field type="text" id="address" name="address" />
                 <ErrorMessage name="address" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="postalCode">Postal code:</label>
+                <label htmlFor="postalCode">{t("restaurant-register.postalCode")}:</label>
                 <Field type="text" id="postalCode" name="postalCode" />
                 <ErrorMessage name="postalCode" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="city">city:</label>
+                <label htmlFor="city">{t("restaurant-register.city")}:</label>
                 <Field type="text" id="city" name="city" />
                 <ErrorMessage name="city" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="nip">Nip:</label>
+                <label htmlFor="nip">NIP:</label>
                 <Field type="text" id="nip" name="nip" />
                 <ErrorMessage name="nip" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="businessType">Business type:</label>
+                <label htmlFor="businessType">{t("restaurant-register.businessType")}:</label>
                 <Field as="select" id="businessType" name="businessType">
-                  <option value="restaurant">Restaurant</option>
-                  <option value="bar">Bar</option>
+                  <option value="restaurant">{t("restaurant-register.types.restaurant")}</option>
+                  <option value="bar">{t("restaurant-register.types.bar")}</option>
+                  <option value="caffe">{t("restaurant-register.types.caffe")}</option>
                 </Field>
                 <ErrorMessage name="businessType" component="div" />
               </div>
 
               <button type="submit" disabled={!formik.isValid}>
-                Register restaurant
+              {t("restaurant-register.button")}
               </button>
             </div>
           </Form>
