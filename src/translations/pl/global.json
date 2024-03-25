@@ -41,7 +41,7 @@
             },
             "diallingCode": "Numer kierunkowy jest wymagany",
             "phoneNumber": {
-                "matches": "Numer telefonu jest wymagany",
+                "matches": "Niepoprawny numer telefonu",
                 "required": "Numer telefonu jest wymagany"
             },
             "birthDate": {

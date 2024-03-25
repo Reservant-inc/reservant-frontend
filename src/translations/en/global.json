@@ -41,7 +41,7 @@
             },
             "diallingCode": "Dialling code is required",
             "phoneNumber": {
-                "matches": "Phone number is required",
+                "matches": "Invalid phone number",
                 "required": "Phone number is required"
             },
             "birthDate": {

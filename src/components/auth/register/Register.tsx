@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "react-phone-number-input/style.css";
@@ -17,11 +17,11 @@ const initialValues = {
   confirmPassword: "",
 };
 
-export default function Register() {
+const Register = () => {
   
   const navigate = useNavigate();
   
-  const [t, i18n] = useTranslation("global")
+  const [t] = useTranslation("global")
   
   const validationSchema = yup.object({
     firstName: yup
@@ -38,14 +38,9 @@ export default function Register() {
       .email(t("errors.user-register.email.matches"))
       .required(t("errors.user-register.email.required")),
   
-    diallingCode: yup
-      .string()
-      .matches(/^\+[0-9]{2}$/, "invalid dialling code")
-      .required("dialling code is required"),
-  
     phoneNumber: yup
       .string()
-      .matches(/^[0-9]{9}$/, t("errors.user-register.phoneNumber.matches"))
+      .matches(/^\+[0-9]{11,15}$/, t("errors.user-register.phoneNumber.matches"))
       .required(t("errors.user-register.phoneNumber.required")),
   
     birthDate: yup
@@ -141,7 +136,7 @@ export default function Register() {
                   defaultCountry="PL"
                   name={"phoneNumber"}
                   value={formik.values.phoneNumber}
-                  onChange={(value: string) =>
+                  onChange={(value: string) => 
                     formik.setFieldValue("phoneNumber", value)
                   }
                   className="phone-input"
@@ -181,3 +176,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Register

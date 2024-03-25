@@ -20,7 +20,7 @@ const Login = ({ updateStatus }: LoginProps) => {
   
   const navigate = useNavigate();
   
-  const [t, i18n] = useTranslation("global")
+  const [t] = useTranslation("global")
   
   const validationSchema = yup.object({
     login: yup.string().required(t("errors.login.login")),
