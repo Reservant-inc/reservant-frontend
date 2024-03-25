@@ -35,6 +35,9 @@
                 "matches": "Last name can only contain letters",
                 "required": "Last name is required"
             },
+            "login": {
+                "required": "Login is required"
+            },
             "email": {
                 "matches": "Invalid e-mail",
                 "required": "E-mail is required"

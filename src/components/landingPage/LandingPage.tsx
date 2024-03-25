@@ -10,12 +10,12 @@ const LandingPage = () => {
 
     //navigation to registration
     const handleRegisterClick = () => {
-        navigate("/register");
+        navigate("/auth/register");
     };
 
     //navigation to login
     const handleLoginClick = () => {
-        navigate("/login");
+        navigate("/auth/login");
     };
     return (
         <>

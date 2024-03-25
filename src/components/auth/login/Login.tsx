@@ -4,22 +4,17 @@ import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "./Login.css";
 import { useTranslation } from "react-i18next";
+import { AuthData } from "../AuthWrapper";
 
 const initialValues = {
   login: "",
   password: "",
 };
 
-interface LoginProps {
-  updateStatus: () => void;
-}
-
-// Set yup validation schema to validate defined fields and error messages
-
-const Login = ({ updateStatus }: LoginProps) => {
+const Login = () => {
   
+  const { login } = AuthData();
   const navigate = useNavigate();
-  
   const [t] = useTranslation("global")
   
   const validationSchema = yup.object({
@@ -32,48 +27,15 @@ const Login = ({ updateStatus }: LoginProps) => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
 
-    console.log(values)
-
     try {
-      // Set submitting state to true to indicate form submission is in progress
       setSubmitting(true);
-      // Send data to server
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_IP}/auth/login`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: values.login,
-            password: values.password,
-            // TODO - plug in values after creating rememberMe Field
-            rememberMe: false
-          }),
-        },
-      );
 
-      if (!response.ok) {
-        console.log(await response.json())
-        throw new Error("Invalid login data");
-      }
+      await login(values.login, values.password)
 
-      // TODO - Kuba: add data to web local storage for further use
-      const data = await response.json()
-      localStorage.setItem('userInfo', JSON.stringify(data))
-      console.log(localStorage.getItem("userInfo"))
-
-      // Update auth status in App component
-      updateStatus();
-
-      // TODO - Kuba: Navigate to home page after successful login
-      navigate("/");
+      navigate("/reservant/home");
     } catch (error) {
       console.log(error);
     } finally {
-      // Set submitting state to false when form submission completes (whether it succeeded or failed)
       setSubmitting(false);
     }
   };

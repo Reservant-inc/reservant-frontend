@@ -35,6 +35,9 @@
                 "matches": "Nazwisko może składać się tylko z liter",
                 "required": "Nazwisko jest wymagane"
             },
+            "login": {
+                "required": "Login jest wymagany"
+            },
             "email": {
                 "matches": "Niepoprawny e-mail",
                 "required": "E-mail jest wymagany"

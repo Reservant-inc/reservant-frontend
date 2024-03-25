@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 const initialValues = {
   firstName: "",
   lastName: "",
+  login: "",
   email: "",
   phoneNumber: "",
   birthDate: "",
@@ -33,6 +34,10 @@ const Register = () => {
       .string()
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
+
+    login: yup
+      .string()
+      .required(t("errors.user-register.login.required")),  
   
     email: yup.string()
       .email(t("errors.user-register.email.matches"))
@@ -81,6 +86,7 @@ const Register = () => {
           body: JSON.stringify({
             firstName: values.firstName,
             lastName: values.lastName,
+            login: values.login,
             email: values.email,
             phoneNumber: values.phoneNumber,
             birthDate: values.birthDate,
@@ -90,10 +96,11 @@ const Register = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Invalid login data");
+        console.log(await response.json())
+        throw new Error("Invalid register data");
       }
 
-      navigate("/");
+      navigate("/auth/login");
     } catch (error) {
       console.log(error);
     } finally {
@@ -121,6 +128,12 @@ const Register = () => {
                 <label htmlFor="lastName">{t("auth.lastName")}:</label>
                 <Field type="text" id="lastName" name="lastName" />
                 <ErrorMessage name="lastName" component="div" />
+              </div>
+              
+              <div className="form-control">
+                <label htmlFor="login">Login:</label>
+                <Field type="text" id="login" name="login" />
+                <ErrorMessage name="login" component="div" />
               </div>
 
               <div className="form-control">
