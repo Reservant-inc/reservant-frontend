@@ -7,6 +7,7 @@ import Register from "../components/auth/register/Register";
 import Login from "../components/auth/login/Login";
 import NotFound from "../components/routeComponents/NotFound";
 import RestaurantRegister from "../components/restaurant/register/RestaurantRegister";
+import ThemeButton from "../components/ThemeButton";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,7 +17,9 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="bg-white dark:bg-black dark:text-white">
+      {/* temporary place for theme button */}
+      <ThemeButton></ThemeButton>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
