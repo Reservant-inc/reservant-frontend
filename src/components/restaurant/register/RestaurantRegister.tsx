@@ -10,28 +10,39 @@ const initialValues = {
   address: "",
   postalCode: "",
   city: "",
-  nip: "",
+  tin: "", //Taxpayer Identification Number
   businessType: "",
+  id: "",
+  alcoholLicense: "",
+  leaseAgreement: "",
+  businessLicense: ""
   //TODO - logo, files
 };
 
-// Set yup validation schema to validate defined fields and error messages
-const validationSchema = yup.object({
-  name: yup.string().required("name is required"),
-  address: yup.string().required("address is required"),
-  postalCode: yup
-    .string()
-    .matches(/^[0-9]{2}-[0-9]{3}$/, "postal codes must have XX-XXXX format"),
-  city: yup.string().required("city is required"),
-  nip: yup.string().matches(/^[0-9]{11}$/, "wrong NIP number"),
-  businessType: yup.string().required("you must choose business type"),
-});
 
 const RestaurantRegister = () => {
 
   const navigate = useNavigate();
   
-  const [t, i18n] = useTranslation("global")
+  const [t, i18n] = useTranslation("global");
+
+  // Set yup validation schema to validate defined fields and error messages
+const validationSchema = yup.object({
+  name: yup.string().required(t("errors.restaurant-register.name.required")),
+  address: yup.string().required(t("errors.restaurant-register.address.required")),
+  postalCode: yup
+    .string()
+    .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
+    .required(t("errors.restaurant-register.postalCode.required")),
+  city: yup.string().required(t("errors.restaurant-register.city.required")),
+  tin: yup.string().matches(/^[0-9]{11}$/, t("errors.restaurant-register.tin.matches"))
+  .required(t("errors.restaurant-register.tin.required")),
+  businessType: yup.string().required(t("errors.restaurant-register.businessType.required")),
+  id: yup.string().required(t("errors.restaurant-register.id.required"))
+  /*
+  walidacja alcoholLicense leaseAgreement businessLicense nie wiem czy potrzebna
+  */
+}); 
 
   //template of a function responsible for sending data of user being registered
   const onSubmit = async (
@@ -103,9 +114,9 @@ const RestaurantRegister = () => {
               </div>
 
               <div className="form-control">
-                <label htmlFor="nip">NIP:</label>
-                <Field type="text" id="nip" name="nip" />
-                <ErrorMessage name="nip" component="div" />
+                <label htmlFor="tin">{t("restaurant-register.tin")}:</label>
+                <Field type="text" id="tin" name="tin" />
+                <ErrorMessage name="tin" component="div" />
               </div>
 
               <div className="form-control">
@@ -116,6 +127,27 @@ const RestaurantRegister = () => {
                   <option value="caffe">{t("restaurant-register.types.caffe")}</option>
                 </Field>
                 <ErrorMessage name="businessType" component="div" />
+              </div>
+
+              <div className="form-control">
+                <label htmlFor="id">{t("restaurant-register.id")}:</label>
+                <Field type="file" id="id" name="id"  accept=".png, .jpeg, .jpg"/>
+                <ErrorMessage name="id" component="div" />
+              </div>
+
+              <div className="form-control">
+                <label htmlFor="businessLicense">{t("restaurant-register.businessLicense")}:</label>
+                <Field type="file" businessLicense="businessLicense" name="businessLicense"  accept=".png, .jpeg, .jpg .pdf"/>
+              </div>
+
+              <div className="form-control">
+                <label htmlFor="leaseAgreement">{t("restaurant-register.leaseAgreement")}:</label>
+                <Field type="file" leaseAgreement="leaseAgreement" name="leaseAgreement"  accept=".png, .jpeg, .jpg .pdf"/>
+              </div>
+
+              <div className="form-control">
+                <label htmlFor="alcoholLicense">{t("restaurant-register.alcoholLicense")}:</label>
+                <Field type="file" alcoholLicense="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
               <button type="submit" disabled={!formik.isValid}>

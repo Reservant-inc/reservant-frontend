@@ -3,7 +3,7 @@
         "firstName": "Imie",
         "lastName": "Nazwisko",
         "phoneNumber": "Numer telefonu",
-        "birthDate": "Data urodzenia",
+        "birthDate": "Data urodzenia", 
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",
         "registerButton": "Zarejestruj się"
@@ -13,12 +13,17 @@
         "address": "Adres",
         "postalCode": "Kod pocztowy",
         "city": "Miasto",
-        "businessType": "Rodzaj biznesu",
+        "businessType": "Rodzaj działalności",
         "types": {
             "bar": "Bar",
             "restaurant": "Restauracja",
             "caffe": "Kawiarnia"
         },
+        "tin": "NIP",
+        "id": "Dowód osobisty",
+        "alcoholLicense": "Licencja na alkohol (opcjonalnie)",
+        "leaseAgreement": "Umowa najmu lokalu (opcjonalnie)",
+        "businessLicense": "Zgoda na prowadzenie działalności (opcjonalnie)",
         "button": "Zarejestruj restaurację"
     },
     "errors": {
@@ -59,7 +64,29 @@
             }
         },
         "restaurant-register": {
-
+            "name": { 
+                "required": "Nazwa jest wymagana"
+            },
+            "address": {
+                "required": "Adres jest wymagany"
+            },
+            "postalCode": {
+                "matches": "Kod pocztowy musi mieć format XX-XXX",
+                "required": "Kod pocztowy jest wymagany"
+            },
+            "city": {
+                "required": "Miasto jest wymagane"
+            },
+            "tin": {
+                "matches": "NIP musi mieć 11 cyfr",
+                "required": "NIP jest wymagany"
+            },
+            "businessType": {
+                "required": "Musisz wybrać rodzaj działalności"
+            },
+            "id": {
+                "required": "Dowód osobisty jest wymagany"
+            }
         }
     }
 }
