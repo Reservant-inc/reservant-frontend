@@ -28,9 +28,35 @@ const Login = () => {
   ) => {
 
     try {
-      setSubmitting(true);
+        setSubmitting(true);
 
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_IP}/auth/login`,
+          {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                  login: values.login,
+                  password: values.password,
+                  rememberMe: false
+              }),
+          },
+      );
+
+      if (!response.ok) {
+          const errorData = await response.json();
+          console.log(errorData);
+          throw new Error("Wrong login data")
+      }
+
+      const data = await response.json();
+      
       await login(values.login, values.password)
+      
+      localStorage.setItem('userInfo', JSON.stringify(data));
 
       navigate("/reservant/home");
     } catch (error) {

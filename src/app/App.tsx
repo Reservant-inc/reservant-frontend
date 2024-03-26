@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import React from "react";
 import NavBar from "../components/navigation/NavBar";
 import { AuthWrapper } from "../components/auth/AuthWrapper";
+import Cookies from "js-cookie";
 
 
 
