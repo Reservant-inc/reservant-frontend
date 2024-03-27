@@ -4,7 +4,12 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      'roboto': ['Roboto'],
+      'mont': ['Montserrat']
+    },
+    extend: {
+    },
     colors: {
       'white': '#fefefe',
       'cream': '#fffbf8',

@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { nav } from "../navigation/Navigation";
 import Cookies from "js-cookie";
 
 interface AuthContextValue {
-    isAuthenticated: boolean;
-    login: (login: string, password: string) => void;
+    isAuthorized: boolean;
+    login: (token: string) => void;
     logout: () => void;
 }
 
@@ -20,37 +20,46 @@ export const AuthData = (): AuthContextValue => {
     };
  
   export const AuthWrapper = () => {
+
+    const navigate = useNavigate()
+
+    const [isAuthorized, setIsAuthorized] = useState(!(Cookies.get("token") === undefined))
     
-    const [ isAuthenticated, setIsAuthenticated ] = useState<boolean>(false)
-
     useEffect(() => {
-        
-    }, [isAuthenticated])
+        console.log(isAuthorized)
+        console.log(Cookies.get("token"))
+        if(isAuthorized){
+            <Navigate to={"/home"} />
+        }
+    })
 
-    const login = (login: string) => {
-       setIsAuthenticated(true)
+    const login = (token: string) => {
+        Cookies.set("token", token, { expires: 1})
+        setIsAuthorized(true)
+        navigate("/home");
     }
 
     const logout = () => {
-        //TODO: logout
-        setIsAuthenticated(false)
+        Cookies.remove("token")
+        setIsAuthorized(false)
+        navigate("/")
     }
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, login, logout}}>
+        <AuthContext.Provider value={{isAuthorized, login, logout}}>
             <Routes>
             { 
 
                 nav.map((r, i) => {
                     
                     if (r.isPrivate) {
-                        if (isAuthenticated) {
+                        if (isAuthorized) {
                             return <Route key={i} path={r.path} element={r.element}/>
                         } else {
                             return <Route key={i} path={r.path} element={ <Navigate to={"/auth/login"}/> }/>
                         }
                     } else if (!r.isPrivate) {
-                        if (isAuthenticated) {
+                        if (isAuthorized) {
                             return <Route key={i} path={r.path} element={ <Navigate to={"/home"}/> }/>
                         } else {
                             return <Route key={i} path={r.path} element={r.element}/>

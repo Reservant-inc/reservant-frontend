@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
 import React from "react";
-import NavBar from "../components/navigation/NavBar";
+import NavBar from "../components/navigation/navbar/NavBar";
 import { AuthWrapper } from "../components/auth/AuthWrapper";
 import Cookies from "js-cookie";
+import Footer from "../components/navigation/navbar/Footer";
 
 
 
@@ -10,12 +11,15 @@ const App = () => {
 
   const location = useLocation();
 
-  const showNavBar = !["/login", "/register"].includes(location.pathname);
+  const showNavBar = !["/auth/login", "/auth/register"].includes(location.pathname);
 
   return (
       <div className="App">
         {showNavBar && <NavBar />}
-        <AuthWrapper />
+        <div className="flex flex-col items-center bg-cream h-screen">
+          <AuthWrapper />
+        </div>
+        <Footer />
       </div>  
     )
 }

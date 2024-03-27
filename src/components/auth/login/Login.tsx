@@ -5,6 +5,7 @@ import * as yup from "yup";
 import "./Login.css";
 import { useTranslation } from "react-i18next";
 import { AuthData } from "../AuthWrapper";
+import Cookies from "js-cookie";
 
 const initialValues = {
   login: "",
@@ -34,31 +35,25 @@ const Login = () => {
           `${process.env.REACT_APP_SERVER_IP}/auth/login`,
           {
               method: "POST",
-              credentials: "include",
               headers: {
                   "Content-Type": "application/json",
               },
-              body: JSON.stringify({
-                  login: values.login,
-                  password: values.password,
-                  rememberMe: false
-              }),
+              body: JSON.stringify(values),
           },
       );
 
       if (!response.ok) {
-          const errorData = await response.json();
+          const errorData = await response.json()
           console.log(errorData);
           throw new Error("Wrong login data")
       }
 
       const data = await response.json();
-      
-      await login(values.login, values.password)
+
+      login(data.token)
       
       localStorage.setItem('userInfo', JSON.stringify(data));
 
-      navigate("/reservant/home");
     } catch (error) {
       console.log(error);
     } finally {
