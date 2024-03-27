@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './app/App';
 import reportWebVitals from './other/reportWebVitals';
+import { BrowserRouter } from "react-router-dom";
 
 import global_en from "./translations/en/global.json" 
 import global_pl from "./translations/pl/global.json" 
@@ -28,7 +29,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18next}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </I18nextProvider>
   </React.StrictMode>
 );

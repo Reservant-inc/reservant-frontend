@@ -2,20 +2,20 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-export default function Home () {
+const LandingPage = () => {
 
     const navigate = useNavigate();
 
-    const [t, i18n] = useTranslation("global")
+    const [t] = useTranslation("global")
 
     //navigation to registration
     const handleRegisterClick = () => {
-        navigate("/register");
+        navigate("/auth/register");
     };
 
     //navigation to login
     const handleLoginClick = () => {
-        navigate("/login");
+        navigate("/auth/login");
     };
     return (
         <>
@@ -25,3 +25,5 @@ export default function Home () {
         </>
     )
 }
+
+export default LandingPage
