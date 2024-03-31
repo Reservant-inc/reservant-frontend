@@ -15,7 +15,6 @@ const initialValues = {
 const Login = () => {
   
   const { login } = AuthData();
-  const navigate = useNavigate();
   const [t] = useTranslation("global")
   
   const validationSchema = yup.object({

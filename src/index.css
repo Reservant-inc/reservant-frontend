@@ -12,11 +12,12 @@
 @font-face {
   font-family: 'Montserrat';
   font-weight: normal;
-  src: url(./assets/fonts/Montserrat-Regular.ttf)
+  src: url(./assets/fonts/Montserrat-Medium.ttf)
 }
 
 html {
   height: 100%;
+  font-family: 'Roboto';
 }
 
 body {

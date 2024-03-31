@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useLocation } from "react-router"
-import NavLandingPage from "./NavLandingPage"
-import NavHome from "./NavHome"
+import NavLandingPage from "./landingPage/NavLandingPage"
+import NavHome from "./home/NavHome"
 
 const NavBar = () => {
     const location = useLocation()
@@ -9,7 +9,7 @@ const NavBar = () => {
     const isLandingPage = location.pathname === "/"
 
     return (
-        <div className="h-20 w-full bg-blue">
+        <div className="h-[4.5rem] w-full bg-cream relative shadow-md">
             {isLandingPage ? <NavLandingPage /> : <NavHome />}
         </div>
     )

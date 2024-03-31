@@ -8,20 +8,9 @@ const LandingPage = () => {
 
     const [t] = useTranslation("global")
 
-    //navigation to registration
-    const handleRegisterClick = () => {
-        navigate("/auth/register");
-    };
-
-    //navigation to login
-    const handleLoginClick = () => {
-        navigate("/auth/login");
-    };
     return (
         <>
-            <h1>Reservant</h1>
-            <button onClick={handleRegisterClick}>Zarejestruj się</button>
-            <button onClick={handleLoginClick}>Zaloguj się</button>
+
         </>
     )
 }
