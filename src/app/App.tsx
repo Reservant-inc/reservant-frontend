@@ -11,12 +11,12 @@ const App = () => {
 
   const location = useLocation();
 
-  const showNavBar = !["/auth/login", "/auth/register"].includes(location.pathname);
+  const showNavBar = !["/user/login", "/user/register"].includes(location.pathname);
 
   return (
       <div className="App">
         {showNavBar && <NavBar />}
-        <div className="flex flex-col items-center bg-cream h-screen">
+        <div className="flex flex-col items-center bg-blue h-screen">
           <AuthWrapper />
         </div>
         <Footer />

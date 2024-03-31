@@ -26,8 +26,6 @@ export const AuthData = (): AuthContextValue => {
     const [isAuthorized, setIsAuthorized] = useState(!(Cookies.get("token") === undefined))
     
     useEffect(() => {
-        console.log(isAuthorized)
-        console.log(Cookies.get("token"))
         if(isAuthorized){
             <Navigate to={"/home"} />
         }
@@ -52,6 +50,8 @@ export const AuthData = (): AuthContextValue => {
 
                 nav.map((r, i) => {
                     
+                    //TODO: display by role, not by isAuth
+
                     if (r.isPrivate) {
                         if (isAuthorized) {
                             return <Route key={i} path={r.path} element={r.element}/>
