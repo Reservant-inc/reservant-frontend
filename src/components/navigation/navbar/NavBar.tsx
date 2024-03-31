@@ -9,7 +9,7 @@ const NavBar = () => {
     const isLandingPage = location.pathname === "/"
 
     return (
-        <div className="h-20 w-full bg-cream">
+        <div className="h-[4.5rem] w-full bg-cream relative shadow-md">
             {isLandingPage ? <NavLandingPage /> : <NavHome />}
         </div>
     )
