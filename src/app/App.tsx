@@ -1,48 +1,30 @@
-import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ProtectedRoute from "../components/routeComponents/ProtectedRoute";
+import { useLocation } from "react-router-dom";
 import React from "react";
-import Home from "../components/landingPage/Home";
-import Register from "../components/auth/register/Register";
-import Login from "../components/auth/login/Login";
-import NotFound from "../components/routeComponents/NotFound";
-import RestaurantRegister from "../components/restaurant/register/RestaurantRegister";
-import ThemeButton from "../components/ThemeButton";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+import NavBar from "../components/navigation/navbar/NavBar";
+import { AuthWrapper } from "../components/auth/AuthWrapper";
+import Footer from "../components/navigation/navbar/Footer";
 
-  const updateStatus = () => {
-    setIsLoggedIn((prev) => !prev);
-  };
+
+
+
+const App = () => {
+
+  const location = useLocation();
+
+  const showNavBar = !["/user/login", "/user/register"].includes(location.pathname);
 
   return (
-    <div className="bg-white dark:bg-black dark:text-white">
-      {/* temporary place for theme button */}
-      <ThemeButton></ThemeButton>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/login"
-            element={<Login updateStatus={updateStatus} />}
-          />
-          <Route
-            path="/register"
-            element={<Register/>}
-          />
-          <Route path="/restaurant">
-            <Route
-              path="register"
-              element={<RestaurantRegister/>}
-            />
-          </Route>
-          <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}></Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
+
+      <div className="App">
+        {showNavBar && <NavBar />}
+        <div className="flex flex-col items-center bg-l-grey h-screen">
+          <AuthWrapper />
+        </div>
+        <Footer />
+      </div>  
+    )
+
 }
 
-export default App;
+export default App

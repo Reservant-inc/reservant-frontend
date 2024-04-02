@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "react-phone-number-input/style.css";
@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 const initialValues = {
   firstName: "",
   lastName: "",
+  login: "",
   email: "",
   phoneNumber: "",
   birthDate: "",
@@ -17,11 +18,11 @@ const initialValues = {
   confirmPassword: "",
 };
 
-export default function Register() {
+const Register = () => {
   
   const navigate = useNavigate();
   
-  const [t, i18n] = useTranslation("global")
+  const [t] = useTranslation("global")
   
   const validationSchema = yup.object({
     firstName: yup
@@ -33,19 +34,18 @@ export default function Register() {
       .string()
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
+
+    login: yup
+      .string()
+      .required(t("errors.user-register.login.required")),  
   
     email: yup.string()
       .email(t("errors.user-register.email.matches"))
       .required(t("errors.user-register.email.required")),
   
-    diallingCode: yup
-      .string()
-      .matches(/^\+[0-9]{2}$/, "invalid dialling code")
-      .required("dialling code is required"),
-  
     phoneNumber: yup
       .string()
-      .matches(/^[0-9]{9}$/, t("errors.user-register.phoneNumber.matches"))
+      .matches(/^\+[0-9]{11,15}$/, t("errors.user-register.phoneNumber.matches"))
       .required(t("errors.user-register.phoneNumber.required")),
   
     birthDate: yup
@@ -86,6 +86,7 @@ export default function Register() {
           body: JSON.stringify({
             firstName: values.firstName,
             lastName: values.lastName,
+            login: values.login,
             email: values.email,
             phoneNumber: values.phoneNumber,
             birthDate: values.birthDate,
@@ -95,10 +96,11 @@ export default function Register() {
       );
 
       if (!response.ok) {
-        throw new Error("Invalid login data");
+        console.log(await response.json())
+        throw new Error("Invalid register data");
       }
 
-      navigate("/");
+      navigate("/auth/login");
     } catch (error) {
       console.log(error);
     } finally {
@@ -127,6 +129,12 @@ export default function Register() {
                 <Field type="text" id="lastName" name="lastName" />
                 <ErrorMessage name="lastName" component="div" />
               </div>
+              
+              <div className="form-control">
+                <label htmlFor="login">Login:</label>
+                <Field type="text" id="login" name="login" />
+                <ErrorMessage name="login" component="div" />
+              </div>
 
               <div className="form-control">
                 <label htmlFor="email">E-mail:</label>
@@ -141,7 +149,7 @@ export default function Register() {
                   defaultCountry="PL"
                   name={"phoneNumber"}
                   value={formik.values.phoneNumber}
-                  onChange={(value: string) =>
+                  onChange={(value: string) => 
                     formik.setFieldValue("phoneNumber", value)
                   }
                   className="phone-input"
@@ -181,3 +189,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Register

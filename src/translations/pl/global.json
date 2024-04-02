@@ -40,13 +40,16 @@
                 "matches": "Nazwisko może składać się tylko z liter",
                 "required": "Nazwisko jest wymagane"
             },
+            "login": {
+                "required": "Login jest wymagany"
+            },
             "email": {
                 "matches": "Niepoprawny e-mail",
                 "required": "E-mail jest wymagany"
             },
             "diallingCode": "Numer kierunkowy jest wymagany",
             "phoneNumber": {
-                "matches": "Numer telefonu jest wymagany",
+                "matches": "Niepoprawny numer telefonu",
                 "required": "Numer telefonu jest wymagany"
             },
             "birthDate": {
