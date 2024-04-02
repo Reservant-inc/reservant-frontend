@@ -96,7 +96,7 @@ const Login = () => {
 
       <div className="container-links">
         <p>
-          Don't have an account? <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/user/register">Register</Link>
         </p>
         <Link to="/">Reset password</Link>
       </div>
