@@ -1,8 +1,12 @@
 {
+    "login_button": "Sign in",
+    "register_button": "Sign up",
+    "no_account_text": "Don't have an account?",
+    "reset_password": "Reset password",
     "auth": {
         "firstName": "First name",
         "lastName": "Last name",
-        "phoneNumber": "Phone number", 
+        "phoneNumber": "Phone number",
         "birthDate": "Birth date:",
         "password": "Password",
         "confirmPassword": "Confirm password",
@@ -62,12 +66,12 @@
                 "required": "Password is required"
             },
             "confirmPassword": {
-                "matches":"Passwords must match",
+                "matches": "Passwords must match",
                 "required": "Password confirmation is required"
             }
         },
         "restaurant-register": {
-            "name": { 
+            "name": {
                 "required": "Name is required"
             },
             "address": {
