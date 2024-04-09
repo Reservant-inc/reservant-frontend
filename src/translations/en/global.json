@@ -8,6 +8,17 @@
         "confirmPassword": "Confirm password",
         "registerButton": "Register"
     },
+    "employee-register": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phoneNumber": "Phone number", 
+        "restaurantId": "Restaurant ID:",
+        "login": "Login",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "registerButton": "Register"
+    },
+    
     "restaurant-register": {
         "name": "Name",
         "address": "Address",
@@ -27,6 +38,36 @@
         "button": "Register restaurant"
     },
     "errors": {
+        "employee-register": {
+            "firstName": {
+                "matches": "First name can only contain letters",
+                "required": "First name is required"
+            },
+            "lastName": {
+                "matches": "Last name can only contain letters",
+                "required": "Last name is required"
+            },
+            "login": {
+                "required": "Login is required"
+            },
+            "diallingCode": "Dialling code is required",
+            "phoneNumber": {
+                "matches": "Invalid phone number",
+                "required": "Phone number is required"
+            },
+            "restaurantId" :{
+                "matches" : "Invalid restaurant ID",
+                "required" : "Restaurant ID is required"
+            },
+            "password": {
+                "matches": "Password must contain 8 characters, one uppercase, one lowercase, one number and one special character",
+                "required": "Password is required"
+            },
+            "confirmPassword": {
+                "matches":"Passwords must match",
+                "required": "Password confirmation is required"
+            }
+        },
         "login": {
             "login": "Login is required",
             "password": "Password is required"
