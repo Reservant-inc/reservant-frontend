@@ -96,7 +96,7 @@ const Login = () => {
 
       <div className="container-links">
         <p>
-          {t("no_account_text")} <Link to="/register">{t("register_button")}</Link>
+          {t("no_account_text")} <Link to="/user/register">{t("register_button")}</Link>
         </p>
         <Link to="/">{t("reset_password")}</Link>
       </div>
