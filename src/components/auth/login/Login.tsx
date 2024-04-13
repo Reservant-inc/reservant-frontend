@@ -51,7 +51,11 @@ const Login = () => {
 
       login(data.token)
       
-      localStorage.setItem('userInfo', JSON.stringify(data));
+      Cookies.set('userInfo', JSON.stringify({
+        firstName : data.firstName,
+        lastName: data.lastName,
+        roles: data.roles
+      }), { expires: 1 });
 
     } catch (error) {
       console.log(error);
