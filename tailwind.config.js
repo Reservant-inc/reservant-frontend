@@ -1,5 +1,8 @@
+const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
@@ -9,6 +12,7 @@ module.exports = {
       'mont': ['Montserrat']
     },
     extend: {
+
     },
     colors: {
       'white'   : '#fefefe',
@@ -22,6 +26,14 @@ module.exports = {
       'black'   : '#222222',
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addVariant }) {
+      addVariant('theme-spinner', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.theme.theme--spinner .${className}${separator}animate-spin`;
+        });
+      });
+    }),
+  ]
 }
 

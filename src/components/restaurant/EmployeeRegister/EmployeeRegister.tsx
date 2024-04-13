@@ -134,7 +134,7 @@ const AddEmp = () => {
               </div>
 
 
-                {/* //TODO jarek - prawdopodobnie zmienie na liste dostepnych restauracji, na razie tylko wpisywane */}
+                {/* //TODO jarek - bedziemy dostawać się do dodawania z poziomu ekranu zarządzania restauracja, ale skad wezmiemy to id..? */}
               <div className="form-control">
                 <label htmlFor="restaurantId">{t("employee-register.restaurantId")}</label>
                 <Field type="text" id="restaurantId" name="restaurantId" />
@@ -172,7 +172,7 @@ const AddEmp = () => {
                 <ErrorMessage name="confirmPassword" component="div" />
               </div>
 
-              
+              {/* //TODO jarek - dwa checkboxy? jeszcze nie do końca mam pomysł */}
 
               <button type="submit" disabled={!formik.isValid}>
                 {t("employee-register.registerButton")}
