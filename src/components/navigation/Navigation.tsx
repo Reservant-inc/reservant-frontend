@@ -4,6 +4,7 @@ import RestaurantRegister from "../restaurant/register/RestaurantRegister"
 import React from "react"
 import Register from "../auth/register/Register"
 import HomePage from "../HomePage"
+import MyGroups from "../groups/MyGroups"
 
 export const nav = [
      { path:     "/",                       element: <LandingPage />,          isPrivate: false,         roles: [""]                             },
@@ -11,5 +12,6 @@ export const nav = [
      { path:     "/user/register",          element: <Register />,             isPrivate: false,         roles: [""]                             },
      { path:     "/restaurant/register",    element: <RestaurantRegister />,   isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
      { path:     "/home",                   element: <HomePage />,             isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
-     { path:     "/:user/restaurant",       element: <HomePage />,             isPrivate: true,          roles: ["RestaurantOwner"]              },
+     { path:     "/:user/restaurant-groups",element: <MyGroups />,             isPrivate: true,         roles: ["RestaurantOwner"]              },
+     
 ]

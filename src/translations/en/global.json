@@ -97,5 +97,10 @@
                 "required": "ID is required"
             }
         }
+    },
+    "my-groups": {
+        "groups-header": "My Groups",
+        "add-group": "Add a Group",
+        "restaurants-count": "Restaurants count" 
     }
 }
