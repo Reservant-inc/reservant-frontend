@@ -13,8 +13,8 @@ const LanguageChange = () => {
 
     const setLanguage = (lang: string) => {
         i18next.changeLanguage(lang)
+        localStorage.setItem("i18nextLng", lang)
         setIsPressed(!isPressed)
-        console.log(i18next.language)
     }
 
     return (
