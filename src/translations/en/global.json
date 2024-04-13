@@ -1,8 +1,10 @@
 {
-    "login_button": "Sign in",
-    "register_button": "Sign up",
-    "no_account_text": "Don't have an account?",
-    "reset_password": "Reset password",
+    "landing-page": {
+        "loginButton": "Sign in",
+        "registerButton": "Sign up",
+        "notRegistered": "Don't have an account?",
+        "resetPassword": "Reset password"
+    },
     "auth": {
         "firstName": "First name",
         "lastName": "Last name",

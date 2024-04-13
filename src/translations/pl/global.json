@@ -1,8 +1,10 @@
 {
-    "login_button": "Zaloguj się",
-    "register_button": "Zarejestruj się",
-    "no_account_text": "Nie masz konta?",
-    "reset_password": "Zresetuj hasło",
+    "landing-page": {
+        "loginButton": "Zaloguj się",
+        "registerButton": "Zarejestruj się",
+        "notRegistered": "Nie masz konta?",
+        "resetPassword": "Zresetuj hasło"
+    },
     "auth": {
         "firstName": "Imię",
         "lastName": "Nazwisko",
