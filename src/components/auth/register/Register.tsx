@@ -100,7 +100,7 @@ const Register = () => {
         throw new Error("Invalid register data");
       }
 
-      navigate("/auth/login");
+      navigate("/user/login");
     } catch (error) {
       console.log(error);
     } finally {
