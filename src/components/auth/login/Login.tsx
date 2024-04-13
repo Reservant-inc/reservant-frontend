@@ -13,10 +13,10 @@ const initialValues = {
 };
 
 const Login = () => {
-  
+
   const { login } = AuthData();
   const [t] = useTranslation("global")
-  
+
   const validationSchema = yup.object({
     login: yup.string().required(t("errors.login.login")),
     password: yup.string().required(t("errors.login.password")),
@@ -28,29 +28,29 @@ const Login = () => {
   ) => {
 
     try {
-        setSubmitting(true);
+      setSubmitting(true);
 
-        const response = await fetch(
-          `${process.env.REACT_APP_SERVER_IP}/auth/login`,
-          {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify(values),
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_IP}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify(values),
+        },
       );
 
       if (!response.ok) {
-          const errorData = await response.json()
-          console.log(errorData);
-          throw new Error("Wrong login data")
+        const errorData = await response.json()
+        console.log(errorData);
+        throw new Error("Wrong login data")
       }
 
       const data = await response.json();
 
       login(data.token)
-      
+
       localStorage.setItem('userInfo', JSON.stringify(data));
 
     } catch (error) {
@@ -96,9 +96,9 @@ const Login = () => {
 
       <div className="container-links">
         <p>
-          Don't have an account? <Link to="/user/register">Register</Link>
+          {t("landing-page.notRegistered")} <Link to="/user/register">{t("landing-page.registerButton")}</Link>
         </p>
-        <Link to="/">Reset password</Link>
+        <Link to="/">{t("landing-page.resetPassword")}</Link>
       </div>
     </div>
   );
