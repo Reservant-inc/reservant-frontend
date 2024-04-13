@@ -30,8 +30,8 @@ const AuthItems = () => {
             {
                 isPressed &&
                 <div className="absolute w-48 h-28 bg-cream top-[5rem] right-[0.5rem] drop-shadow-xl rounded-2xl flex flex-col items-center justify-around">
-                    <button className="w-40 h-10 bg-l-grey hover:bg-blue hover:text-cream transition p-1 rounded-full" onClick={() => navigate("/user/login")}>{t("login_button")}</button>
-                    <button className="w-40 h-10 bg-l-grey hover:bg-blue hover:text-cream transition p-1 rounded-full" onClick={() => navigate("/user/register")}>{t("register_button")}</button>
+                    <button className="w-40 h-10 bg-l-grey hover:bg-blue hover:text-cream transition p-1 rounded-full" onClick={() => navigate("/user/login")}>{t("landing-page.loginButton")}</button>
+                    <button className="w-40 h-10 bg-l-grey hover:bg-blue hover:text-cream transition p-1 rounded-full" onClick={() => navigate("/user/register")}>{t("landing-page.registerButton")}</button>
                 </div>
             }
         </OutsideClickHandler>
