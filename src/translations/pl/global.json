@@ -30,7 +30,16 @@
         "alcoholLicense": "Licencja na alkohol (opcjonalnie)",
         "leaseAgreement": "Umowa najmu lokalu (opcjonalnie)",
         "businessLicense": "Zgoda na prowadzenie działalności (opcjonalnie)",
-        "button": "Zarejestruj restaurację"
+        "button": "Zarejestruj restaurację",
+        "tags": "Tagi",
+        "provideDelivery": "Zapewniona dostawa",
+        "logo": "Logo",
+        "photos": "Zdjęcia lokalu",
+        "description": "Opis lokalu",
+        "saveButton": "Zapisz",
+        "nextButton": "Dalej",
+        "backButton": "Wróć"
+        
     },
     "errors": {
         "login": {
@@ -95,6 +104,15 @@
             },
             "id": {
                 "required": "Dowód osobisty jest wymagany"
+            },
+            "description": {
+                "max": "Opis moze mieć maksymalnie 200 znaków"
+            },
+            "tags": {
+                "min": "Musisz zaznaczyć minimum trzy tagi"
+            },
+            "logo": {
+                "required": "Logo jest wymagane"
             }
         }
     }

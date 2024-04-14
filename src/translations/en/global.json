@@ -30,7 +30,16 @@
         "alcoholLicense": "Alcohol license (optional)",
         "leaseAgreement": "Lease agreement (optional)",
         "businessLicense": "Business license (optional)",
-        "button": "Register restaurant"
+        "button": "Register restaurant",
+        "tags": "Tags",
+        "provideDelivery": "Provided delivery",
+        "logo": "Logo",
+        "photos": "Photos of the premises",
+        "description": "Description of the premises",
+        "saveButton": "Save",
+        "nextButton": "Next",
+        "backButton": "Back"
+        
     },
     "errors": {
         "login": {
@@ -95,6 +104,15 @@
             },
             "id": {
                 "required": "ID is required"
+            },
+            "description": {
+                "max": "The description can have a maximum of 200 characters"
+            },
+            "tags": {
+                "min": "You must select a minimum of three tags"
+            },
+            "logo": {
+                "required": "Logo is required"
             }
         }
     }

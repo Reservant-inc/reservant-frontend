@@ -197,10 +197,10 @@ const RestaurantRegister = () => {
       )}
       {step === 2 && <RestaurantRegister2 />}
       {step === 1 && (
-        <button onClick={handleNext}>Next</button>
+        <button onClick={handleNext}>{t("restaurant-register.nextButton")}</button>
       )}
       {step === 2 && (
-        <button onClick={handleBack}>Back</button>
+        <button onClick={handleBack}>{t("restaurant-register.backButton")}</button>
       )}
 
     </div>
