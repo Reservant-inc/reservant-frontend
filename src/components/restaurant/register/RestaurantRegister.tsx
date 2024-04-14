@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
+import RestaurantRegister2 from "./RestaurantRegister2";
 
 const initialValues = {
   name: "",
@@ -13,39 +14,37 @@ const initialValues = {
   tin: "", //Taxpayer Identification Number
   businessType: "",
   id: "",
-  alcoholLicense: "",
-  leaseAgreement: "",
-  businessLicense: ""
+  alcoholLicense: null,
+  leaseAgreement: null,
+  businessLicense: null
   //TODO - logo, files
 };
 
-
 const RestaurantRegister = () => {
-
   const navigate = useNavigate();
-  
   const [t, i18n] = useTranslation("global");
+  const [step, setStep] = useState(1);
 
   // Set yup validation schema to validate defined fields and error messages
-const validationSchema = yup.object({
-  name: yup.string().required(t("errors.restaurant-register.name.required")),
-  address: yup.string().required(t("errors.restaurant-register.address.required")),
-  postalCode: yup
-    .string()
-    .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
-    .required(t("errors.restaurant-register.postalCode.required")),
-  city: yup.string().required(t("errors.restaurant-register.city.required")),
-  tin: yup.string().matches(/^[0-9]{11}$/, t("errors.restaurant-register.tin.matches"))
-  .required(t("errors.restaurant-register.tin.required")),
-  businessType: yup.string().required(t("errors.restaurant-register.businessType.required")),
-  id: yup.string().required(t("errors.restaurant-register.id.required"))
-  /*
-  walidacja alcoholLicense leaseAgreement businessLicense nie wiem czy potrzebna
-  */
-}); 
+  const validationSchema = yup.object({
+    name: yup.string().required(t("errors.restaurant-register.name.required")),
+    address: yup.string().required(t("errors.restaurant-register.address.required")),
+    postalCode: yup
+      .string()
+      .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
+      .required(t("errors.restaurant-register.postalCode.required")),
+    city: yup.string().required(t("errors.restaurant-register.city.required")),
+    tin: yup.string().matches(/^[0-9]{11}$/, t("errors.restaurant-register.tin.matches"))
+      .required(t("errors.restaurant-register.tin.required")),
+    businessType: yup.string().required(t("errors.restaurant-register.businessType.required")),
+    id: yup.string().required(t("errors.restaurant-register.id.required"))
+    /*
+    walidacja alcoholLicense leaseAgreement businessLicense nie wiem czy potrzebna
+    */
+  }); 
 
-  //template of a function responsible for sending data of user being registered
-  const onSubmit = async (
+   //template of a function responsible for sending data of user being registered
+   const onSubmit = async (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
@@ -53,19 +52,47 @@ const validationSchema = yup.object({
       // Set submitting state to true to indicate form submission is in progress
       setSubmitting(true);
       console.log(values);
-      // Send data to server
-      const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/??`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
 
-      if (!response.ok) {
-        throw new Error("Invalid login data");
-      }
+      const formData = new FormData();
+      formData.append('alcoholLicense', values.alcoholLicense);
+      formData.append('leaseAgreement', values.leaseAgreement);
+      formData.append('businessLicense', values.businessLicense);
+
+      // Send files to uploads endpoint
+    const uploadResponse = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+
+    if (!uploadResponse.ok) {
+      throw new Error("Failed to upload files");
+    }
+
+      // Send data to server
+      // const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
+      //   method: "POST",
+      //   credentials: "include",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Authorization": `Bearer ${authToken}`
+      //   },
+      //   body: JSON.stringify(values),
+      // });
+
+      // if (!response.ok) {
+      //   const errorData = await response.json()
+      //   console.log(errorData);
+      //   throw new Error("Wrong login data")
+      // }
+
+      // const data = await response.json();
+
+      // Cookies.set('restaurantInfo', JSON.stringify({
+      //   restaurantId: data.restaurantId,
+      //   name: data.name,
+      //   address: data.address,
+      // }), { expires: 1 });
 
       // TBD - is there data and what to do with it
 
@@ -79,8 +106,18 @@ const validationSchema = yup.object({
     }
   };
 
+  const handleNext = () => {
+    setStep(2);
+  };
+
+  const handleBack = () => {
+    setStep(1);
+  };
+
+
   return (
     <div className="container-login">
+      {step === 1 && (
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -137,26 +174,35 @@ const validationSchema = yup.object({
 
               <div className="form-control">
                 <label htmlFor="businessLicense">{t("restaurant-register.businessLicense")}:</label>
-                <Field type="file" businessLicense="businessLicense" name="businessLicense"  accept=".png, .jpeg, .jpg .pdf"/>
+                <Field type="file" id="businessLicense" name="businessLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
               <div className="form-control">
                 <label htmlFor="leaseAgreement">{t("restaurant-register.leaseAgreement")}:</label>
-                <Field type="file" leaseAgreement="leaseAgreement" name="leaseAgreement"  accept=".png, .jpeg, .jpg .pdf"/>
+                <Field type="file" id="leaseAgreement" name="leaseAgreement"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
               <div className="form-control">
                 <label htmlFor="alcoholLicense">{t("restaurant-register.alcoholLicense")}:</label>
-                <Field type="file" alcoholLicense="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
+                <Field type="file" id="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
               <button type="submit" disabled={!formik.isValid}>
-              {t("restaurant-register.button")}
+                {t("restaurant-register.button")}
               </button>
             </div>
           </Form>
         )}
       </Formik>
+      )}
+      {step === 2 && <RestaurantRegister2 />}
+      {step === 1 && (
+        <button onClick={handleNext}>Next</button>
+      )}
+      {step === 2 && (
+        <button onClick={handleBack}>Back</button>
+      )}
+
     </div>
   );
 };
