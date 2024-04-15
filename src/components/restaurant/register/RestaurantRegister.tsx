@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
+import OutsideClickHandler from "../../eventHandlers/OutsideClickHandler";
 
 const initialValues = {
   name: "",
@@ -15,7 +16,8 @@ const initialValues = {
   id: "",
   alcoholLicense: "",
   leaseAgreement: "",
-  businessLicense: ""
+  businessLicense: "",
+  groupId: null, // ?
   //TODO - logo, files
 };
 
@@ -25,6 +27,47 @@ const RestaurantRegister = () => {
   const navigate = useNavigate();
   
   const [t, i18n] = useTranslation("global");
+
+  const [isPressed, setIsPressed] = useState(false)
+  //dummy data
+  const [groups, setGroups] = useState([
+    {
+      "id": 0,
+      "name": "Group 1",
+      "restaurantCount": 1
+    },
+    {
+      "id": 1,
+      "name": "Group 2",
+      "restaurantCount": 2
+    },
+    {
+      "id": 2,
+      "name": "Group 3",
+      "restaurantCount": 3
+    }
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://172.21.40.127:12038/my-restaurant-groups/`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setGroups(data);
+      } catch (error) {
+        console.error('Error fetching groups: ', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const pressHandler = () => {
+    setIsPressed((isP) => !isP);
+  }
+
 
   // Set yup validation schema to validate defined fields and error messages
 const validationSchema = yup.object({
@@ -41,6 +84,7 @@ const validationSchema = yup.object({
   id: yup.string().required(t("errors.restaurant-register.id.required"))
   /*
   walidacja alcoholLicense leaseAgreement businessLicense nie wiem czy potrzebna
+  walidacja groupAssignment? optional, wiec nie wiem
   */
 }); 
 
@@ -150,6 +194,34 @@ const validationSchema = yup.object({
                 <Field type="file" alcoholLicense="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
+              <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
+              <div className="flex flex-col items-start border mt-2 py-2 px-4 rounded hover:cursor-pointer"
+              onClick={pressHandler} >
+
+                  {t("restaurant-register.group-assignment")}:
+
+                {isPressed && (
+                  <div className="form-control mt-2">
+                    <Field 
+                      as="select" 
+                      id="groupId" 
+                      name="groupId"  
+                      className="block w-full p-2 border rounded"
+                      onClick={(e: React.MouseEvent<HTMLSelectElement>) => e.stopPropagation()}
+                    >
+                      {/* have to fix that to null */}
+                      <option value="">{t("restaurant-register.no-group-assignment")}</option>
+                      {groups.map((group) => (
+                        <option key={group.id} value={group.id}>
+                          {group.name}
+                        </option>
+                      ))}
+                    </Field>
+                  </div>
+                )}
+              </div>
+              </OutsideClickHandler>
+              
               <button type="submit" disabled={!formik.isValid}>
               {t("restaurant-register.button")}
               </button>
