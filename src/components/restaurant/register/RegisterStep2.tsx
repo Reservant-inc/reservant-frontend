@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form, Field, ErrorMessage, FieldArray, FormikValues } from "formik";
-import "dotenv/config";
+// RegisterStep2.tsx
+import React, { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as yup from "yup";
+import { RestaurantData } from "./RestaurantRegister";
 import { useTranslation } from "react-i18next";
 
-const initialValues = {
-  tags: [],
-  provideDelivery: false,
-  logo: null,
-  photos: [],
-  description: "",
-};
+interface RegisterStep2Props {
+  onSubmit: (data: Partial<RestaurantData>) => void;
+  onBack: () => void;
+}
 
-const RestaurantRegister2 = () => {
-  const [tags, setTags] = useState([]);
-  const [t, i18n] = useTranslation("global");
+const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
+  const [t] = useTranslation("global");
+  // State for tags
+  const [tags, setTags] = useState<string[]>([]);
 
+  // Fetch tags from the server
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -33,36 +33,31 @@ const RestaurantRegister2 = () => {
     fetchTags();
   }, []);
 
+  // Initial values for step 2 form
+  const initialValues: Partial<RestaurantData> = {
+    tags: [],
+    provideDelivery: false,
+    logo: null,
+    photos: null,
+    description: "",
+  };
+
   const validationSchema = yup.object({
     description: yup.string().max(200, t("errors.restaurant-register.description.max")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
     logo: yup.mixed().required(t("errors.restaurant-register.logo.required"))
   });
 
-  const onSubmit = async (
-    values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
-  ) => {
-    try {
-      setSubmitting(true);
-      console.log(values);
-      // Przetwarzanie danych i wysyłka do serwera
-
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSubmitting(false);
-    }
+  // Handle submission of step 2 form
+  const handleSubmit = (values: Partial<RestaurantData>) => {
+    onSubmit(values);
   };
 
-
+//TODO: change h2 name
   return (
-    <div className="container-login">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
+    <div>
+      <h2>Step 2</h2>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {(formik) => (
           <Form>
             <div className="form-container">
@@ -126,9 +121,9 @@ const RestaurantRegister2 = () => {
           </Form>
         )}
       </Formik>
+      <button onClick={onBack}>Back</button>
     </div>
   );
 };
 
-export default RestaurantRegister2;
-
+export default RegisterStep2;
