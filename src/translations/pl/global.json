@@ -1,9 +1,15 @@
 {
+    "landing-page": {
+        "loginButton": "Zaloguj się",
+        "registerButton": "Zarejestruj się",
+        "notRegistered": "Nie masz konta?",
+        "resetPassword": "Zresetuj hasło"
+    },
     "auth": {
-        "firstName": "Imie",
+        "firstName": "Imię",
         "lastName": "Nazwisko",
         "phoneNumber": "Numer telefonu",
-        "birthDate": "Data urodzenia", 
+        "birthDate": "Data urodzenia",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",
         "registerButton": "Zarejestruj się"
@@ -62,12 +68,12 @@
                 "required": "Hasło jest wymagane"
             },
             "confirmPassword": {
-                "matches":"Podane hasła muszą być zgodne",
+                "matches": "Podane hasła muszą być zgodne",
                 "required": "Wymagane jest potwierdzenie hasła"
             }
         },
         "restaurant-register": {
-            "name": { 
+            "name": {
                 "required": "Nazwa jest wymagana"
             },
             "address": {

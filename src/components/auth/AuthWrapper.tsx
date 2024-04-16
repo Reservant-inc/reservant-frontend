@@ -50,13 +50,11 @@ export const AuthData = (): AuthContextValue => {
 
                 nav.map((r, i) => {
                     
-                    //TODO: display by role, not by isAuth
-
                     if (r.isPrivate) {
-                        if (isAuthorized) {
+                        if (isAuthorized && r.roles.some(item => JSON.parse(Cookies.get("userInfo") as string).roles.includes(item))) {
                             return <Route key={i} path={r.path} element={r.element}/>
                         } else {
-                            return <Route key={i} path={r.path} element={ <Navigate to={"/auth/login"}/> }/>
+                            return <Route key={i} path={r.path} element={ <Navigate to={"/user/login"}/> }/>
                         }
                     } else if (!r.isPrivate) {
                         if (isAuthorized) {
