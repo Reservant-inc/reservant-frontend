@@ -1,6 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage, FormikValues, FieldArray } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -11,16 +10,12 @@ const initialValues = {
   firstName: "",
   lastName: "",
   phoneNumber: "",
-  restaurandId: "",
   password: "",
-  confirmPassword: "",
-  isBackdoorEmployee: "",
-  isHallEmployee: ""
+  confirmPassword: ""
 };
 
-const AddEmp = () => {
+const RegisterEmp = () => {
   
-  const navigate = useNavigate();
   
   const [t] = useTranslation("global")
   
@@ -55,29 +50,8 @@ const AddEmp = () => {
     confirmPassword: yup
       .string()
       .oneOf([yup.ref("password"), ""], t("errors.user-register.confirmPassword.matches"))
-      .required(t("errors.user-register.confirmPassword.required")),
-
-    isBackdoorEmployee: yup
-      .boolean(),
-
-    isHallEmployee: yup
-      .boolean()
-    
-  }).test(
-    t("errors.employee-register.employeeRole.required"),
-    { context: { message: t("errors.employee-register.employeeRole.required") } }, 
-    (obj) => {
-      if (obj.isBackdoorEmployee || obj.isHallEmployee) {
-        return true;
-      }
-  
-      return new yup.ValidationError(
-        t("errors.employee-register.employeeRole.required"),
-        null,
-        'isHallEmployee'
-      );
-    }
-  );
+      .required(t("errors.user-register.confirmPassword.required"))
+  })
   
 
 
@@ -100,10 +74,7 @@ const AddEmp = () => {
             firstName: values.firstName,
             lastName: values.lastName,
             phoneNumber: values.phoneNumber,
-            restaurantId: values.restaurantId,
-            password: values.password,
-            isBackdoorEmployee: values.isBackdoorEmployee,
-            isHallEmployee: values.isHallEmployee,
+            password: values.password
           }),
         },
       );
@@ -179,26 +150,6 @@ const AddEmp = () => {
                 <ErrorMessage name="confirmPassword" component="div" />
               </div>
 
-              <div className="form-control">
-                <div className="employeeRole">
-
-                    <Field
-                      type="checkbox"
-                      id="isBackdoorEmployee"
-                      name="isBackdoorEmployee"
-                    />
-                  <label htmlFor="isBackdoorEmployee">{t("employee-register.isBackdoorEmployee")}</label>
-                    <Field
-                      type="checkbox"
-                      id="isHallEmployee"
-                      name="isHallEmployee"
-                    />
-                  <label htmlFor="isHallEmployee">{t("employee-register.isHallEmployee")}</label>
-
-                </div>
-                <ErrorMessage name="isHallEmployee" component="div" />
-              </div>
-
               <button type="submit" disabled={!formik.isValid}>
                 {t("auth.registerButton")}
               </button>
@@ -210,4 +161,4 @@ const AddEmp = () => {
   );
 }
 
-export default AddEmp
+export default RegisterEmp
