@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
+import Popup from "../../popup/Popup";
 
 const initialValues = {
   name: "",
@@ -149,7 +150,7 @@ const validationSchema = yup.object({
                 <label htmlFor="alcoholLicense">{t("restaurant-register.alcoholLicense")}:</label>
                 <Field type="file" alcoholLicense="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
-
+              
               <button type="submit" disabled={!formik.isValid}>
               {t("restaurant-register.button")}
               </button>
