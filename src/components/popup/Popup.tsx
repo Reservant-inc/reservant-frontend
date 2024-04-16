@@ -34,7 +34,7 @@ const Popup: React.FC<PopupProps> = ({ children, buttonText = "Click", bgColor =
             {isPopupPressed && (
                     <div className="fixed inset-0 flex items-center justify-center z-50">
                         <div className="absolute inset-0 bg-grey opacity-50"></div>
-                        <div className="relative bg-white p-8 rounded shadow-lg w-1/2">
+                        <div className="relative bg-white p-8 rounded shadow-lg w-1/2"  onClick={(e) => e.stopPropagation()}>
                                 <span
                                     className="absolute top-0 right-0 m-4 cursor-pointer text-xl"
                                     onClick={handlePopupToggle}

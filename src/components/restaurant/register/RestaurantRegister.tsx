@@ -150,6 +150,10 @@ const validationSchema = yup.object({
                 <label htmlFor="alcoholLicense">{t("restaurant-register.alcoholLicense")}:</label>
                 <Field type="file" alcoholLicense="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
+
+              <Popup buttonText="Assign to a Group" modalTitle="Group Assignment">
+                <div></div>
+              </Popup>
               
               <button type="submit" disabled={!formik.isValid}>
               {t("restaurant-register.button")}
