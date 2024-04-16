@@ -8,10 +8,11 @@
         "confirmPassword": "Confirm password",
         "registerButton": "Register"
     },
-    "employee-register": {
+    "add-employee": {
        
         "isBackdoorEmployee": "Backdoor employee",
-        "isHallEmployee": "Hall employee" 
+        "isHallEmployee": "Hall employee" ,
+        "addEmployee": "Add emploee"
         
     },
     
@@ -34,7 +35,7 @@
         "button": "Register restaurant"
     },
     "errors": {
-        "employee-register": {
+        "add-employee": {
             "employeeRole": {
                 "required" : "At least one role is required"
             }
