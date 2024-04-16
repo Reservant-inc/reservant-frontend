@@ -67,7 +67,8 @@ const RegisterEmp = () => {
         {
           method: "POST",
           headers: {
-            Authorization: Cookies.get("token") as string,
+            "Content-Type": "application/json",
+            Authorization: Cookies.get('token') as string,
           },
           body: JSON.stringify({
             login: values.login,
