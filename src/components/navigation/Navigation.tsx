@@ -21,5 +21,5 @@ export const nav = [
      { path:     "/user/register",          element: <Register />,             isPrivate: false  },
      { path:     "/restaurant/register",    element: <RestaurantRegister />,   isPrivate: true   },
      { path:     "/home",                   element: <HomePage />,             isPrivate: true   },
-     {path: "/addEmp", element: <EmployeeRegister/>, isPrivate: false}
+     {path: "/emp/register", element: <EmployeeRegister/>, isPrivate: false}
 ]
