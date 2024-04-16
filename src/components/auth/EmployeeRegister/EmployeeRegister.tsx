@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikValues, FieldArray } from "formik";
 import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -27,44 +27,59 @@ const AddEmp = () => {
   const validationSchema = yup.object({
     firstName: yup
       .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.employee-register.firstName.matches"))
-      .required(t("errors.employee-register.firstName.required")),
+      .matches(/^[a-zA-Z]+$/, t("errors.user-register.firstName.matches"))
+      .required(t("errors.user-register.firstName.required")),
   
     lastName: yup
       .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.employee-register.lastName.matches"))
-      .required(t("errors.employee-register.lastName.required")),
+      .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
+      .required(t("errors.user-register.lastName.required")),
 
     login: yup
       .string()
-      .required(t("errors.employee-register.login.required")),  
+      .required(t("errors.user-register.login.required")),  
   
     phoneNumber: yup
       .string()
-      .matches(/^\+[0-9]{11,15}$/, t("errors.employee-register.phoneNumber.matches"))
-      .required(t("errors.employee-register.phoneNumber.required")),
-
-
-    //TODO jarek - poprawić jak zrobie wybierane z listy
-    restaurantId: yup
-        .string()
-        .matches(/^[0-9]*$/, t("errors.employee-register.restaurantId.matches"))
-        .required(t("errors.employee-register.restaurantId.required")),
+      .matches(/^\+[0-9]{11,15}$/, t("errors.user-register.phoneNumber.matches"))
+      .required(t("errors.user-register.phoneNumber.required")),
 
     password: yup
       .string()
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-        t("errors.employee-register.password.matches"),
+        t("errors.user-register.password.matches"),
       )
-      .required(t("errors.employee-register.password.required")),
+      .required(t("errors.user-register.password.required")),
   
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), ""], t("errors.employee-register.confirmPassword.matches"))
-      .required(t("errors.employee-register.confirmPassword.required")),
-  });
+      .oneOf([yup.ref("password"), ""], t("errors.user-register.confirmPassword.matches"))
+      .required(t("errors.user-register.confirmPassword.required")),
+
+    isBackdoorEmployee: yup
+      .boolean(),
+
+    isHallEmployee: yup
+      .boolean()
+    
+  }).test(
+    t("errors.employee-register.employeeRole.required"),
+    { context: { message: t("errors.employee-register.employeeRole.required") } }, 
+    (obj) => {
+      if (obj.isBackdoorEmployee || obj.isHallEmployee) {
+        return true;
+      }
   
+      return new yup.ValidationError(
+        t("errors.employee-register.employeeRole.required"),
+        null,
+        'isHallEmployee'
+      );
+    }
+  );
+  
+
 
   const handleSubmit = async (
     values: FormikValues,
@@ -73,7 +88,7 @@ const AddEmp = () => {
     try {
       setSubmitting(true);
       const response = await fetch(
-        `${process.env.REACT_APP_SERVER_IP}/employee-register/register-customer`,
+        `${process.env.REACT_APP_SERVER_IP}/auth/register-restaurant-employee`,
         {
           method: "POST",
           credentials: "include",
@@ -116,33 +131,25 @@ const AddEmp = () => {
           <Form>
             <div className="form-container">
               <div className="form-control">
-                <label htmlFor="firstName">{t("employee-register.firstName")}:</label>
+                <label htmlFor="firstName">{t("auth.firstName")}:</label>
                 <Field type="text" id="firstName" name="firstName" />
                 <ErrorMessage name="firstName" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="lastName">{t("employee-register.lastName")}:</label>
+                <label htmlFor="lastName">{t("auth.lastName")}:</label>
                 <Field type="text" id="lastName" name="lastName" />
                 <ErrorMessage name="lastName" component="div" />
               </div>
               
               <div className="form-control">
-                <label htmlFor="login">{t("employee-register.login")}</label>
+                <label htmlFor="login">Login:</label>
                 <Field type="text" id="login" name="login" />
                 <ErrorMessage name="login" component="div" />
               </div>
 
-
-                {/* //TODO jarek - prawdopodobnie zmienie na liste dostepnych restauracji, na razie tylko wpisywane */}
               <div className="form-control">
-                <label htmlFor="restaurantId">{t("employee-register.restaurantId")}</label>
-                <Field type="text" id="restaurantId" name="restaurantId" />
-                <ErrorMessage name="restaurantId" component="div" />
-              </div>
-
-              <div className="form-control">
-                <label htmlFor="phoneNumber">{t("employee-register.phoneNumber")}:</label>
+                <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
                 <Field as={PhoneInput}
                   international
                   defaultCountry="PL"
@@ -157,13 +164,13 @@ const AddEmp = () => {
               </div>
 
               <div className="form-control">
-                <label htmlFor="password">{t("employee-register.password")}:</label>
+                <label htmlFor="password">{t("auth.password")}:</label>
                 <Field type="password" id="password" name="password" />
                 <ErrorMessage name="password" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="confirmPassword">{t("employee-register.confirmPassword")}:</label>
+                <label htmlFor="confirmPassword">{t("auth.confirmPassword")}:</label>
                 <Field
                   type="password"
                   id="confirmPassword"
@@ -172,10 +179,28 @@ const AddEmp = () => {
                 <ErrorMessage name="confirmPassword" component="div" />
               </div>
 
-              
+              <div className="form-control">
+                <div className="employeeRole">
+
+                    <Field
+                      type="checkbox"
+                      id="isBackdoorEmployee"
+                      name="isBackdoorEmployee"
+                    />
+                  <label htmlFor="isBackdoorEmployee">{t("employee-register.isBackdoorEmployee")}</label>
+                    <Field
+                      type="checkbox"
+                      id="isHallEmployee"
+                      name="isHallEmployee"
+                    />
+                  <label htmlFor="isHallEmployee">{t("employee-register.isHallEmployee")}</label>
+
+                </div>
+                <ErrorMessage name="isHallEmployee" component="div" />
+              </div>
 
               <button type="submit" disabled={!formik.isValid}>
-                {t("employee-register.registerButton")}
+                {t("auth.registerButton")}
               </button>
             </div>
           </Form>
