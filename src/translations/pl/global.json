@@ -38,7 +38,8 @@
         "description": "Opis lokalu",
         "saveButton": "Zapisz",
         "nextButton": "Dalej",
-        "backButton": "Wróć"
+        "backButton": "Wróć",
+        "header": "Zarejestruj lokal"
         
     },
     "errors": {

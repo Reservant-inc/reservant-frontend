@@ -1,7 +1,8 @@
-// RestaurantRegister.tsx
 import React, { useState } from "react";
 import RegisterStep1 from "./RegisterStep1";
 import RegisterStep2 from "./RegisterStep2";
+import { useTranslation } from "react-i18next";
+import Cookies from "js-cookie";
 
 export interface RestaurantData {
   name: string;
@@ -23,6 +24,8 @@ const RestaurantRegister: React.FC = () => {
   const [formDataStep1, setFormDataStep1] = useState<Partial<RestaurantData>>({});
   const [formDataStep2, setFormDataStep2] = useState<Partial<RestaurantData>>({});
 
+  const { t } = useTranslation("global"); // Destructure t from the useTranslation hook
+
   const handleStep1Submit = (data: Partial<RestaurantData>) => {
     setFormDataStep1((prevData) => ({ ...prevData, ...data }));
     setStep(2);
@@ -38,13 +41,38 @@ const RestaurantRegister: React.FC = () => {
     setStep(1);
   };
 
-  const handleSubmit = (data: Partial<RestaurantData>) => {
-    console.log("Dane do wysłania:", data);
-    //send collected data on server
+  const handleSubmit = async (data: Partial<RestaurantData>) => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+
+      const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      console.log("Data to send: ", data);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Failed to create restaurant");
+      }
+
+      console.log("Restaurant created successfully!");
+    } catch (error) {
+      console.error("Error while creating restaurant:", error);
+    }
   };
 
   return (
     <div className="container-login">
+      <h1 className="text-3xl text-center font-bold mb-8">{t("restaurant-register.header")}</h1>
       {step === 1 && <RegisterStep1 onSubmit={handleStep1Submit} />}
       {step === 2 && <RegisterStep2 onSubmit={handleStep2Submit} onBack={handleBack} />}
     </div>

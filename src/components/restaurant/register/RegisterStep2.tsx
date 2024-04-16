@@ -1,4 +1,3 @@
-// RegisterStep2.tsx
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as yup from "yup";
@@ -53,10 +52,8 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     onSubmit(values);
   };
 
-//TODO: change h2 name
   return (
     <div>
-      <h2>Step 2</h2>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {(formik) => (
           <Form>
@@ -101,12 +98,12 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
               </div>
               <div className="form-control">
                 <label htmlFor="logo">{t("restaurant-register.logo")}:</label>
-                <Field type="file" id="logo" name="logo" accept=".png, .jpeg, .jpg" />
+                <Field type="file" id="logo" name="logo" accept=".png, .jpeg, .jpg" value="" />
                 <ErrorMessage name="logo" component="div" />
               </div>
               <div className="form-control">
                 <label htmlFor="photos">{t("restaurant-register.photos")}:</label>
-                <Field type="file" id="photos" name="photos" multiple accept=".png, .jpeg, .jpg" />
+                <Field type="file" id="photos" name="photos" multiple accept=".png, .jpeg, .jpg" value="" />
                 <ErrorMessage name="photos" component="div" />
               </div>
               <div className="form-control">

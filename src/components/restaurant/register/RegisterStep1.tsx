@@ -50,7 +50,6 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
 //TODO: change h2 name
   return (
     <div>
-      <h2>Step 1</h2> 
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {(formik) => (
           <Form>

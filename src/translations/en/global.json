@@ -38,7 +38,8 @@
         "description": "Description of the premises",
         "saveButton": "Save",
         "nextButton": "Next",
-        "backButton": "Back"
+        "backButton": "Back",
+        "header": "Register your local"
         
     },
     "errors": {
