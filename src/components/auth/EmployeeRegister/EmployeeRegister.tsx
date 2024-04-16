@@ -4,6 +4,7 @@ import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
+import Cookies from "js-cookie";
 
 const initialValues = {
   login: "",
@@ -65,9 +66,8 @@ const RegisterEmp = () => {
         `${process.env.REACT_APP_SERVER_IP}/auth/register-restaurant-employee`,
         {
           method: "POST",
-          credentials: "include",
           headers: {
-            "Content-Type": "application/json",
+            Authorization: Cookies.get("token") as string,
           },
           body: JSON.stringify({
             login: values.login,
