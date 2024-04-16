@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikValues, FieldArray } from "formik";
 import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
@@ -33,7 +33,7 @@ const RestaurantAddEmp = () => {
       return new yup.ValidationError(
         t("errors.add-employee.employeeRole.required"),
         null,
-        'isHallEmployee'
+        'hasRole'
       );
     }
   );
@@ -86,7 +86,8 @@ const RestaurantAddEmp = () => {
             <div className="form-container">
               <div className="form-control">
                 <div className="employeeRole">
-
+                
+{/* todo przerobić na fieldArray */}
                     <Field
                       type="checkbox"
                       id="isBackdoorEmployee"
@@ -99,9 +100,10 @@ const RestaurantAddEmp = () => {
                       name="isHallEmployee"
                     />
                   <label htmlFor="isHallEmployee">{t("add-employee.isHallEmployee")}</label>
+              
 
+                <ErrorMessage name="hasRole" component="div" />
                 </div>
-                <ErrorMessage name="isHallEmployee" component="div" />
               </div>
 
               <button type="submit" disabled={!formik.isValid}>

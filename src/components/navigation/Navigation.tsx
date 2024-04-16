@@ -7,14 +7,11 @@ import Register from "../auth/register/Register"
 import HomePage from "../HomePage"
 
 export const nav = [
-
-    
-
      { path:     "/",                       element: <LandingPage />,          isPrivate: false,         roles: [""]                             },
      { path:     "/user/login",             element: <Login />,                isPrivate: false,         roles: [""]                             },
      { path:     "/user/register",          element: <Register />,             isPrivate: false,         roles: [""]                             },
      { path:     "/restaurant/register",    element: <RestaurantRegister />,   isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
      { path:     "/home",                   element: <HomePage />,             isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
      { path:     "/:user/restaurant",       element: <HomePage />,             isPrivate: true,          roles: ["RestaurantOwner"]              },
-     {path: "/addEmp", element: <AddEmployee/>, isPrivate: false}
+     {path: "/addEmp", element: <AddEmployee/>, isPrivate: true, roles:["RestaurantOwner"]}
 ]
