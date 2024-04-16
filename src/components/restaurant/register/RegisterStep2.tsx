@@ -11,8 +11,9 @@ interface RegisterStep2Props {
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   const [t] = useTranslation("global");
-  // State for tags
+  
   const [tags, setTags] = useState<string[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // Fetch tags from the server
   useEffect(() => {
@@ -37,19 +38,20 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     tags: [],
     provideDelivery: false,
     logo: null,
-    photos: null,
+    photos: [],
     description: "",
   };
 
   const validationSchema = yup.object({
     description: yup.string().max(200, t("errors.restaurant-register.description.max")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    logo: yup.mixed().required(t("errors.restaurant-register.logo.required"))
+    //logo: yup.mixed().required(t("errors.restaurant-register.logo.required"))
   });
 
   // Handle submission of step 2 form
   const handleSubmit = (values: Partial<RestaurantData>) => {
-    onSubmit(values);
+    const dataWithFile: Partial<RestaurantData> = { ...values, logo: selectedFile };
+    onSubmit(dataWithFile);
   };
 
   return (
@@ -98,12 +100,25 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
               </div>
               <div className="form-control">
                 <label htmlFor="logo">{t("restaurant-register.logo")}:</label>
-                <Field type="file" id="logo" name="logo" accept=".png, .jpeg, .jpg" value="" />
+                <input type="file" id="logo" name="logo" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
                 <ErrorMessage name="logo" component="div" />
               </div>
               <div className="form-control">
                 <label htmlFor="photos">{t("restaurant-register.photos")}:</label>
-                <Field type="file" id="photos" name="photos" multiple accept=".png, .jpeg, .jpg" value="" />
+                <input //should be Field but I cant
+                  type="file"
+                  id="photos"
+                  name="photos"
+                  multiple
+                  accept=".png, .jpeg, .jpg"
+                  onChange={(event) => {
+                    const files = event.target.files;
+                    if (files) {
+                      const selectedFiles = Array.from(files).map((file) => URL.createObjectURL(file));
+                      formik.setFieldValue("photos", selectedFiles);
+                    }
+                  }}
+                  />
                 <ErrorMessage name="photos" component="div" />
               </div>
               <div className="form-control">
@@ -118,7 +133,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
           </Form>
         )}
       </Formik>
-      <button onClick={onBack}>Back</button>
+      <button onClick={onBack}>{t("restaurant-register.backButton")}</button>
     </div>
   );
 };

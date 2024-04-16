@@ -7,16 +7,20 @@ import Cookies from "js-cookie";
 export interface RestaurantData {
   name: string;
   address: string;
-  postalCode: string;
+  postalIndex: string;
   city: string;
-  tin: string;
-  businessType: string;
-  id: File | null;
+  nip: string;
+  restaurantType: string;
+  idCard: File | null; //
+  businessPermission: string;
+  rentalContract: string;
+  alcoholLicense: string;
   tags: string[];
   provideDelivery: boolean;
-  logo: File | null;
-  photos: File | null;
+  logo: File | null
+  photos: string[];
   description: string;
+  groupId: number | null; 
 }
 
 const RestaurantRegister: React.FC = () => {
@@ -34,7 +38,7 @@ const RestaurantRegister: React.FC = () => {
 
   const handleStep2Submit = (data: Partial<RestaurantData>) => {
     setFormDataStep2((prevData) => ({ ...prevData, ...data }));
-    handleSubmit({ ...formDataStep1, ...data }); // Po zebraniu danych z kroku 2, wysyłamy wszystkie dane z kroków 1 i 2
+    handleSubmit({ ...formDataStep1, ...data });
   };
 
   const handleBack = () => {
@@ -47,8 +51,71 @@ const RestaurantRegister: React.FC = () => {
       if (!token) {
         throw new Error("User not authenticated");
       }
+    
+      //idCard upload
+      const formData = new FormData();
+      if (data.idCard) { 
+        formData.append("File", data.idCard);
+      }
 
-      const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      console.log("idCard uploaded successfully!");
+
+      const responseData = await response.json();
+
+      if (responseData && responseData.path) {
+        const imagePath = responseData.path;
+        console.log("Image path:", imagePath);
+      } else {
+        console.error("Path is undefined in responseData");
+      }
+
+  
+
+      //logo upload
+      const formData1 = new FormData();
+      if (data.logo) { 
+        formData1.append("File", data.logo);
+      }
+
+      const response1 = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData1,
+      });
+
+      if (!response1.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      console.log("logo uploaded successfully!");
+
+      const responseData1 = await response1.json();
+
+      if (responseData1 && responseData1.path) {
+        const imagePath = responseData1.path;
+        console.log("Image path:", imagePath);
+      } else {
+        console.error("Path is undefined in responseData");
+      }
+
+      console.log("Data to send: ", data);
+
+      // Wysyłamy dane restauracji na serwer
+      const restaurantResponse = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,20 +123,20 @@ const RestaurantRegister: React.FC = () => {
         },
         body: JSON.stringify(data),
       });
-
-      console.log("Data to send: ", data);
-
-      if (!response.ok) {
-        const errorData = await response.json();
+  
+      if (!restaurantResponse.ok) {
+        const errorData = await restaurantResponse.json();
         throw new Error(errorData.detail || "Failed to create restaurant");
       }
-
+  
       console.log("Restaurant created successfully!");
     } catch (error) {
       console.error("Error while creating restaurant:", error);
     }
   };
 
+  
+  
   return (
     <div className="container-login">
       <h1 className="text-3xl text-center font-bold mb-8">{t("restaurant-register.header")}</h1>

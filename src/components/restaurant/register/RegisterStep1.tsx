@@ -1,5 +1,5 @@
 // RegisterStep1.tsx
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { RestaurantData } from "./RestaurantRegister";
@@ -13,41 +13,45 @@ interface RegisterStep1Props {
 const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
     const [t] = useTranslation("global");
 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   // Initial values for step 1 form
   const initialValues: Partial<RestaurantData> = {
     name: "",
     address: "",
-    postalCode: "",
+    postalIndex: "",
     city: "",
-    tin: "",
-    businessType: "",
-    id: null,
-    tags: [],
-    provideDelivery: false,
-    logo: null,
-    photos: null,
-    description: "",
+    nip: "",
+    restaurantType: "",
+    idCard: null,
+    businessPermission: "",
+    rentalContract: "",
+    alcoholLicense: "",
+    groupId: null
   };
 
   const validationSchema = yup.object({
     name: yup.string().required(t("errors.restaurant-register.name.required")),
     address: yup.string().required(t("errors.restaurant-register.address.required")),
-    postalCode: yup
+    postalIndex: yup
       .string()
       .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
       .required(t("errors.restaurant-register.postalCode.required")),
     city: yup.string().required(t("errors.restaurant-register.city.required")),
-    tin: yup.string().matches(/^[0-9]{11}$/, t("errors.restaurant-register.tin.matches"))
+    nip: yup.string().matches(/^[0-9]{11}$/, t("errors.restaurant-register.tin.matches"))
       .required(t("errors.restaurant-register.tin.required")),
-    businessType: yup.string().required(t("errors.restaurant-register.businessType.required")),
-    id: yup.mixed().required(t("errors.restaurant-register.id.required"))
+    restaurantType: yup.string().required(t("errors.restaurant-register.businessType.required")),
+    //idCard: yup.mixed().required(t("errors.restaurant-register.id.required"))
   });
 
   // Handle submission of step 1 form
-  const handleSubmit = (values: Partial<RestaurantData>) => {
-    onSubmit(values);
+ const handleSubmit = (values: Partial<RestaurantData>) => {
+    // Dodanie selectedFile do danych formularza
+    const dataWithFile: Partial<RestaurantData> = { ...values, idCard: selectedFile };
+    onSubmit(dataWithFile);
   };
-//TODO: change h2 name
+  
+
   return (
     <div>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
@@ -67,9 +71,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
               </div>
 
               <div className="form-control">
-                <label htmlFor="postalCode">{t("restaurant-register.postalCode")}:</label>
-                <Field type="text" id="postalCode" name="postalCode" />
-                <ErrorMessage name="postalCode" component="div" />
+                <label htmlFor="postalIndex">{t("restaurant-register.postalCode")}:</label>
+                <Field type="text" id="postalIndex" name="postalIndex" />
+                <ErrorMessage name="postalIndex" component="div" />
               </div>
 
               <div className="form-control">
@@ -79,35 +83,35 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
               </div>
 
               <div className="form-control">
-                <label htmlFor="tin">{t("restaurant-register.tin")}:</label>
-                <Field type="text" id="tin" name="tin" />
-                <ErrorMessage name="tin" component="div" />
+                <label htmlFor="nip">{t("restaurant-register.tin")}:</label>
+                <Field type="text" id="nip" name="nip" />
+                <ErrorMessage name="nip" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="businessType">{t("restaurant-register.businessType")}:</label>
-                <Field as="select" id="businessType" name="businessType">
+                <label htmlFor="restaurantType">{t("restaurant-register.businessType")}:</label>
+                <Field as="select" id="restaurantType" name="restaurantType">
                   <option value="restaurant">{t("restaurant-register.types.restaurant")}</option>
                   <option value="bar">{t("restaurant-register.types.bar")}</option>
                   <option value="caffe">{t("restaurant-register.types.caffe")}</option>
                 </Field>
-                <ErrorMessage name="businessType" component="div" />
+                <ErrorMessage name="restaurantType" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="id">{t("restaurant-register.id")}:</label>
-                <Field type="file" id="id" name="id"  accept=".png, .jpeg, .jpg"/>
-                <ErrorMessage name="id" component="div" />
+                <label htmlFor="idCard">{t("restaurant-register.id")}:</label>
+                <input type="file" id="idCard" name="idCard" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
+                <ErrorMessage name="idCard" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="businessLicense">{t("restaurant-register.businessLicense")}:</label>
-                <Field type="file" id="businessLicense" name="businessLicense"  accept=".png, .jpeg, .jpg .pdf"/>
+                <label htmlFor="businessPermission">{t("restaurant-register.businessLicense")}:</label>
+                <Field type="file" id="businessPermission" name="businessPermission"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
               <div className="form-control">
-                <label htmlFor="leaseAgreement">{t("restaurant-register.leaseAgreement")}:</label>
-                <Field type="file" id="leaseAgreement" name="leaseAgreement"  accept=".png, .jpeg, .jpg .pdf"/>
+                <label htmlFor="rentalContract">{t("restaurant-register.leaseAgreement")}:</label>
+                <Field type="file" id="rentalContract" name="rentalContract"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
               <div className="form-control">
