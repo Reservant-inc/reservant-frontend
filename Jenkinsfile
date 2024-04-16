@@ -17,7 +17,7 @@ pipeline {
             }
             steps {
                 sh "docker stop skalmar || true"
-                sh "docker run --detach --rm --name skalmar -p 80:80 reservant-front"
+                sh "docker run --detach --rm -v	skalmar_nginx_config:/etc/nginx/conf.d --name skalmar -p 80:80 reservant-front"
             }
         }
     }

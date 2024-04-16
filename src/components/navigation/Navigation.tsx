@@ -5,12 +5,14 @@ import EmployeeRegister from "../auth/EmployeeRegister/EmployeeRegister"
 import React from "react"
 import Register from "../auth/register/Register"
 import HomePage from "../HomePage"
+import RestaurantManager from "../restaurant/management/RestaurantManager"
 
 export const nav = [
-     { path:     "/",                       element: <LandingPage />,          isPrivate: false  },
-     { path:     "/user/login",             element: <Login />,                isPrivate: false  },
-     { path:     "/user/register",          element: <Register />,             isPrivate: false  },
-     { path:     "/restaurant/register",    element: <RestaurantRegister />,   isPrivate: true   },
-     { path:     "/home",                   element: <HomePage />,             isPrivate: true   },
-     {path: "/emp/register", element: <EmployeeRegister/>, isPrivate: false}
+     { path:     "/",                       element: <LandingPage />,          isPrivate: false,         roles: [""]                             },
+     { path:     "/user/login",             element: <Login />,                isPrivate: false,         roles: [""]                             },
+     { path:     "/user/register",          element: <Register />,             isPrivate: false,         roles: [""]                             },
+     { path:     "/restaurant/register",    element: <RestaurantRegister />,   isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
+     { path:     "/home",                   element: <HomePage />,             isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
+     { path:     "/emp/register",           element: <EmployeeRegister/>,      isPrivate: false ,        roles: ["RestaurantOwner"]              },
+     { path:     "/:user/restaurants",      element: <RestaurantManager />,    isPrivate: true,          roles: ["RestaurantOwner"]              }
 ]
