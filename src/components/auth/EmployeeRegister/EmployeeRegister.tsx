@@ -61,14 +61,14 @@ const RegisterEmp = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
+
       setSubmitting(true);
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_IP}/auth/register-restaurant-employee`,
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: Cookies.get('token') as string,
+            Authorization: `Bearer ${Cookies.get('token') as string}`,
           },
           body: JSON.stringify({
             login: values.login,
