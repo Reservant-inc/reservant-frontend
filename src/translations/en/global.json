@@ -110,5 +110,12 @@
                 "required": "ID is required"
             }
         }
+    },
+    "restaurant-management": {
+        "groups": {
+            "counter": "Number of restaurants",
+            "add-button": "Add a new Group",
+            "header": "My Groups"
+        }
     }
 }
