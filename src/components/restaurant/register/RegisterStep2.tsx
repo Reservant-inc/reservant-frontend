@@ -14,6 +14,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   
   const [tags, setTags] = useState<string[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
 
   // Fetch tags from the server
   useEffect(() => {
@@ -38,7 +39,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     tags: [],
     provideDelivery: false,
     logoFile: null,
-    photos: [],
+    photosFile: [],
     description: "",
   };
 
@@ -50,7 +51,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
 
   // Handle submission of step 2 form
   const handleSubmit = (values: Partial<RestaurantData>) => {
-    const dataWithFile: Partial<RestaurantData> = { ...values, logoFile: selectedFile };
+    const dataWithFile: Partial<RestaurantData> = { ...values, logoFile: selectedFile, photosFile: selectedPhotos };
     onSubmit(dataWithFile);
   };
 
@@ -104,22 +105,22 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                 <ErrorMessage name="logoFile" component="div" />
               </div>
               <div className="form-control">
-                <label htmlFor="photos">{t("restaurant-register.photos")}:</label>
-                <input //should be Field but I cant
+                <label htmlFor="photosFile">{t("restaurant-register.photos")}:</label>
+                <input
                   type="file"
-                  id="photos"
-                  name="photos"
+                  id="photosFile"
+                  name="photosFile"
                   multiple
                   accept=".png, .jpeg, .jpg"
                   onChange={(event) => {
                     const files = event.target.files;
                     if (files) {
-                      const selectedFiles = Array.from(files).map((file) => URL.createObjectURL(file));
-                      formik.setFieldValue("photos", selectedFiles);
+                      const selectedPhotosArray = Array.from(files); 
+                      setSelectedPhotos(selectedPhotosArray); 
                     }
                   }}
-                  />
-                <ErrorMessage name="photos" component="div" />
+                />
+                <ErrorMessage name="photosFile" component="div" />
               </div>
               <div className="form-control">
                 <label htmlFor="description">{t("restaurant-register.description")}:</label>

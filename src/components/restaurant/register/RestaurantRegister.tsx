@@ -12,14 +12,16 @@ export interface RestaurantData {
   nip: string;
   restaurantType: string;
   idCardFile: File | null;
-  idCard: string | File;
-  businessPermission: string; //required
-  rentalContract: string | null;
-  alcoholLicense: string | null;
+  idCard: string;
+  businessPermissionFile: File | null; //required
+  businessPermission: string; 
+  rentalContractFile: File | null;
+  alcoholLicenseFile: File | null;
   tags: string[];
   provideDelivery: boolean;
   logoFile: File | null;
   logo: string;
+  photosFile: File[] | null;
   photos: string[];
   description: string;
   groupId: number | null; 
@@ -51,6 +53,8 @@ const RestaurantRegister: React.FC = () => {
       const dataToSend = { ...data };
       delete dataToSend.idCardFile;
       delete dataToSend.logoFile;
+      delete dataToSend.businessPermissionFile
+      delete dataToSend.photosFile;
 
       //idCard upload
       const formData = new FormData();
@@ -109,6 +113,67 @@ const RestaurantRegister: React.FC = () => {
       } else {
         console.error("Path is undefined in responseData");
       }
+
+      //businessPermission upload
+      const formData2 = new FormData();
+      if (data.businessPermissionFile) { 
+        formData2.append("File", data.businessPermissionFile);
+      }
+
+      
+      const response2 = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}` as string,
+        },
+        body: formData2,
+      });
+
+      if (!response2.ok) {
+        throw new Error("Failed to upload file");
+      }
+      
+      const responseData2 = await response2.json();
+
+      if (responseData2 && responseData2.path) {
+        const imagePath = responseData2.path;
+        dataToSend.businessPermission = imagePath;
+      } else {
+        console.error("Path is undefined in responseData");
+      }
+
+          // Initialize photos array if it's undefined
+      dataToSend.photos = dataToSend.photos ?? [];
+
+      // Loop through each photo file and upload it
+    if (data.photosFile && data.photosFile.length > 0) {
+      for (const photoFile of data.photosFile) {
+        const photoFormData = new FormData();
+        photoFormData.append("File", photoFile);
+
+        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}` as string,
+          },
+          body: photoFormData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload photo file");
+        }
+
+        const responseData = await response.json();
+
+        if (responseData && responseData.path) {
+          dataToSend.photos.push(responseData.path);
+        } else {
+          console.error("Path is undefined in responseData");
+        }
+      }
+    }
+
+      console.log("uploaded sucessfully")
 
       console.log(dataToSend)
       // Wysyłamy dane restauracji na serwer

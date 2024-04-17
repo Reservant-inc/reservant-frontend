@@ -13,7 +13,10 @@ interface RegisterStep1Props {
 const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
     const [t] = useTranslation("global");
 
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [selectedIdCard, setSelectedIdCard] = useState<File | null>(null);
+    const [selectedRentalContract, setSelectedRentalContract] = useState<File | null>(null);
+    const [selectedBusinessPermission, setSelectedBusinessPermission] = useState<File | null>(null);
+    const [selectedAlcoholLicense, setSelectedAlcoholLicense] = useState<File | null>(null);
 
   // Initial values for step 1 form
   const initialValues: Partial<RestaurantData> = {
@@ -24,9 +27,9 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
     nip: "",
     restaurantType: "",
     idCardFile: null,
-    businessPermission: "",
-    rentalContract: "",
-    alcoholLicense: "",
+    businessPermissionFile: null,
+    rentalContractFile: null,
+    alcoholLicenseFile: null,
     groupId: null
   };
 
@@ -47,7 +50,11 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
   // Handle submission of step 1 form
  const handleSubmit = (values: Partial<RestaurantData>) => {
     // Dodanie selectedFile do danych formularza
-    const dataWithFile: Partial<RestaurantData> = { ...values, idCardFile: selectedFile };
+    const dataWithFile: Partial<RestaurantData> = { ...values, idCardFile: selectedIdCard, 
+      rentalContractFile: selectedRentalContract,
+      businessPermissionFile: selectedBusinessPermission,
+      alcoholLicenseFile: selectedAlcoholLicense
+     };
     onSubmit(dataWithFile);
   };
   
@@ -100,23 +107,23 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
 
               <div className="form-control">
                 <label htmlFor="idCardFile">{t("restaurant-register.id")}:</label>
-                <input type="file" id="idCardFile" name="idCardFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
+                <input type="file" id="idCardFile" name="idCardFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedIdCard(e.target.files![0])} />
                 <ErrorMessage name="idCardFile" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="businessPermission">{t("restaurant-register.businessLicense")}:</label>
-                <Field type="file" id="businessPermission" name="businessPermission"  accept=".png, .jpeg, .jpg .pdf"/>
+                <label htmlFor="businessPermissionFile">{t("restaurant-register.businessLicense")}:</label>
+                <input type="file" id="businessPermissionFile" name="businessPermissionFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedBusinessPermission(e.target.files![0])} />
               </div>
 
               <div className="form-control">
-                <label htmlFor="rentalContract">{t("restaurant-register.leaseAgreement")}:</label>
-                <Field type="file" id="rentalContract" name="rentalContract"  accept=".png, .jpeg, .jpg .pdf"/>
+                <label htmlFor="rentalContractFile">{t("restaurant-register.leaseAgreement")}:</label>
+                <input type="file" id="rentalContractFile" name="rentalContractFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedRentalContract(e.target.files![0])} />
               </div>
 
               <div className="form-control">
-                <label htmlFor="alcoholLicense">{t("restaurant-register.alcoholLicense")}:</label>
-                <Field type="file" id="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
+                <label htmlFor="alcoholLicenseFile">{t("restaurant-register.alcoholLicense")}:</label>
+                <input type="file" id="alcoholLicenseFile" name="alcoholLicenseFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedAlcoholLicense(e.target.files![0])} />
               </div>
 
               <button type="submit" disabled={!formik.isValid}>
