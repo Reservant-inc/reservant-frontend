@@ -62,13 +62,16 @@ const RegisterEmp = () => {
   ) => {
     try {
       
+      const token = Cookies.get("token") as string
+
       setSubmitting(true);
       const response = await fetch(
         `${process.env.REACT_APP_SERVER_IP}/auth/register-restaurant-employee`,
         {
           method: "POST",
           headers: {
-            Authorization: Cookies.get('token') as string,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             login: values.login,
@@ -85,6 +88,7 @@ const RegisterEmp = () => {
         throw new Error("Invalid register data");
       }
 
+      console.log(response)
     } catch (error) {
       console.log(error);
     } finally {

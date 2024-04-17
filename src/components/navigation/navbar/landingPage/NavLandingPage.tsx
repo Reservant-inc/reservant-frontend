@@ -6,8 +6,6 @@ import AuthItems from "../navItems/AuthItems";
 import ThemeButton from "../navItems/ThemeButton"
 
 export default function NavLandingPage() {
-  const navigate = useNavigate();
-
   return (
     <div className="h-full">
       <div className="mx-4 flex flex-row justify-between h-full">
