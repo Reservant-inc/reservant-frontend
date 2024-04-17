@@ -36,6 +36,8 @@
         "alcoholLicense": "Alcohol license (optional)",
         "leaseAgreement": "Lease agreement (optional)",
         "businessLicense": "Business license (optional)",
+        "group-assignment": "Assign to a Group (optional)",
+        "no-group-assignment": "Do not assign",
         "button": "Register restaurant"
     },
     "errors": {

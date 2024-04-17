@@ -30,6 +30,8 @@
         "alcoholLicense": "Licencja na alkohol (opcjonalnie)",
         "leaseAgreement": "Umowa najmu lokalu (opcjonalnie)",
         "businessLicense": "Zgoda na prowadzenie działalności (opcjonalnie)",
+        "group-assignment": "Przypisz do Grupy (opcjonalnie)",
+        "no-group-assignment": "Nie przypisuj",
         "button": "Zarejestruj restaurację"
     },
     "errors": {
