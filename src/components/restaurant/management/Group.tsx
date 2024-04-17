@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 
@@ -36,7 +37,11 @@ const Group: React.FC<GroupProps> = ({ id, name, restaurantCount, handleChangeAc
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await fetch(`http://172.21.40.127:12038/my-restaurant-groups/${id}`);
+            const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurant-groups/${id}`, {
+              headers: {
+                Authorization: `Bearer ${Cookies.get("token")}` as string,
+              },
+            });
             if (!response.ok) {
               throw new Error('Network response was not ok');
             }
@@ -45,7 +50,6 @@ const Group: React.FC<GroupProps> = ({ id, name, restaurantCount, handleChangeAc
           } catch (error) {
             console.error('Error fetching groups: ', error);
           };
-          // fetchData();
         };
     
         fetchData();
@@ -66,7 +70,6 @@ const Group: React.FC<GroupProps> = ({ id, name, restaurantCount, handleChangeAc
             {restaurants.map((restaurant) => (
               <li key={restaurant.id} className="transition duration-300 block border rounded my-1">
                 <div 
-                  // to={`/restaurants/${restaurant.id}`} 
                   className={`flex justify-between items-center transition duration-300 hover:bg-blue cursor-pointer block p-1 ${activeRestaurantId === restaurant.id ? 'bg-blue' : 'bg-white'}`}
                   onClick={() => handleChangeActiveRestaurant(restaurant.id)}>
                   {restaurant.name}

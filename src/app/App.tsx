@@ -15,7 +15,6 @@ const App = () => {
 
   const showNavBar = !["/user/login", "/user/register"].includes(location.pathname);
 
-
   //sets theme as os preffered or chosen by user on page load
 
   useEffect(()=>{
@@ -26,7 +25,6 @@ const App = () => {
     }
   })
   
-
   return (
 
       <div className="App">

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import MyGroups from "./MyGroups";
 import RestaurantDetails from "./RestaurantDetails";
+import { Route, Routes } from "react-router";
 
 const RestaurantManager = () => {
     const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
 
-
-
     const handleChangeActiveRestaurant = (restaurantId: number) => {
-        restaurantId === activeRestaurantId ? setActiveRestaurantId(null) : setActiveRestaurantId(restaurantId);
+        setActiveRestaurantId(restaurantId);
     }
     
     return (
@@ -18,13 +17,11 @@ const RestaurantManager = () => {
             </div>
             <div className="md:w-5/6 mt-4 md:mr-4 w-full flex-grow">
                 <div className="h-full">
-                    <RestaurantDetails activeRestaurantId={activeRestaurantId}/>
+                   <RestaurantDetails activeRestaurantId={activeRestaurantId}/>
                 </div>
             </div>
         </div>
     );
-    
-    
 }
 
 export default RestaurantManager;
