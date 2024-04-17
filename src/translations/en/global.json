@@ -15,11 +15,9 @@
         "registerButton": "Register"
     },
     "add-employee": {
-       
         "isBackdoorEmployee": "Backdoor employee",
         "isHallEmployee": "Hall employee" ,
         "addEmployee": "Add emploee"
-        
     },
     
     "restaurant-register": {
