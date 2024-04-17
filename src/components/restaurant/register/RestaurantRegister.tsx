@@ -4,7 +4,8 @@ import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
-import OutsideClickHandler from "../../eventHandlers/OutsideClickHandler";
+import Popup from "../../popup/Popup";
+
 
 const initialValues = {
   name: "",
@@ -194,33 +195,9 @@ const validationSchema = yup.object({
                 <Field type="file" alcoholLicense="alcoholLicense" name="alcoholLicense"  accept=".png, .jpeg, .jpg .pdf"/>
               </div>
 
-              <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-              <div className="flex flex-col items-start border mt-2 py-2 px-4 rounded hover:cursor-pointer"
-              onClick={pressHandler} >
-
-                  {t("restaurant-register.group-assignment")}:
-
-                {isPressed && (
-                  <div className="form-control mt-2">
-                    <Field 
-                      as="select" 
-                      id="groupId" 
-                      name="groupId"  
-                      className="block w-full p-2 border rounded"
-                      onClick={(e: React.MouseEvent<HTMLSelectElement>) => e.stopPropagation()}
-                    >
-                      {/* have to fix that to null */}
-                      <option value="">{t("restaurant-register.no-group-assignment")}</option>
-                      {groups.map((group) => (
-                        <option key={group.id} value={group.id}>
-                          {group.name}
-                        </option>
-                      ))}
-                    </Field>
-                  </div>
-                )}
-              </div>
-              </OutsideClickHandler>
+              <Popup buttonText="Assign to a Group" modalTitle="Group Assignment">
+                <div></div>
+              </Popup>
               
               <button type="submit" disabled={!formik.isValid}>
               {t("restaurant-register.button")}
