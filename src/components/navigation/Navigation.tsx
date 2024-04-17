@@ -14,7 +14,7 @@ export const nav = [
      { path:     "/user/register",          element: <Register />,             isPrivate: false,         roles: [""]                             },
      { path:     "/restaurant/register",    element: <RestaurantRegister />,   isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
      { path:     "/home",                   element: <HomePage />,             isPrivate: true,          roles: ["Customer", "RestaurantOwner"]  },
-     { path:     "/:user/restaurant",       element: <HomePage />,             isPrivate: true,          roles: ["RestaurantOwner"]              },
+     { path:     "/:user/restaurants",      element: <RestaurantManager />,    isPrivate: true,          roles: ["RestaurantOwner"]              },
      { path:     "/addEmp",                 element: <AddEmployee/>,           isPrivate: true,          roles: ["RestaurantOwner"]              },
      { path:     "/emp",                    element: <EmployeeRegister/>,      isPrivate: true,          roles: ["RestaurantOwner"]              }
 ]
