@@ -23,7 +23,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
     city: "",
     nip: "",
     restaurantType: "",
-    idCard: null,
+    idCardFile: null,
     businessPermission: "",
     rentalContract: "",
     alcoholLicense: "",
@@ -38,7 +38,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
       .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
       .required(t("errors.restaurant-register.postalCode.required")),
     city: yup.string().required(t("errors.restaurant-register.city.required")),
-    nip: yup.string().matches(/^[0-9]{11}$/, t("errors.restaurant-register.tin.matches"))
+    nip: yup.string().matches(/^[0-9]{10}$/, t("errors.restaurant-register.tin.matches"))
       .required(t("errors.restaurant-register.tin.required")),
     restaurantType: yup.string().required(t("errors.restaurant-register.businessType.required")),
     //idCard: yup.mixed().required(t("errors.restaurant-register.id.required"))
@@ -47,7 +47,7 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
   // Handle submission of step 1 form
  const handleSubmit = (values: Partial<RestaurantData>) => {
     // Dodanie selectedFile do danych formularza
-    const dataWithFile: Partial<RestaurantData> = { ...values, idCard: selectedFile };
+    const dataWithFile: Partial<RestaurantData> = { ...values, idCardFile: selectedFile };
     onSubmit(dataWithFile);
   };
   
@@ -91,17 +91,17 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
               <div className="form-control">
                 <label htmlFor="restaurantType">{t("restaurant-register.businessType")}:</label>
                 <Field as="select" id="restaurantType" name="restaurantType">
-                  <option value="restaurant">{t("restaurant-register.types.restaurant")}</option>
-                  <option value="bar">{t("restaurant-register.types.bar")}</option>
-                  <option value="caffe">{t("restaurant-register.types.caffe")}</option>
+                  <option value="Restaurant">{t("restaurant-register.types.restaurant")}</option>
+                  <option value="Bar">{t("restaurant-register.types.bar")}</option>
+                  <option value="Cafe">{t("restaurant-register.types.caffe")}</option>
                 </Field>
                 <ErrorMessage name="restaurantType" component="div" />
               </div>
 
               <div className="form-control">
-                <label htmlFor="idCard">{t("restaurant-register.id")}:</label>
-                <input type="file" id="idCard" name="idCard" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
-                <ErrorMessage name="idCard" component="div" />
+                <label htmlFor="idCardFile">{t("restaurant-register.id")}:</label>
+                <input type="file" id="idCardFile" name="idCardFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
+                <ErrorMessage name="idCardFile" component="div" />
               </div>
 
               <div className="form-control">

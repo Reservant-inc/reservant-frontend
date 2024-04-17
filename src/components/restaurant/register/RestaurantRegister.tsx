@@ -11,13 +11,15 @@ export interface RestaurantData {
   city: string;
   nip: string;
   restaurantType: string;
-  idCard: File | null; //
-  businessPermission: string;
-  rentalContract: string;
-  alcoholLicense: string;
+  idCardFile: File | null;
+  idCard: string | File;
+  businessPermission: string; //required
+  rentalContract: string | null;
+  alcoholLicense: string | null;
   tags: string[];
   provideDelivery: boolean;
-  logo: File | null
+  logoFile: File | null;
+  logo: string;
   photos: string[];
   description: string;
   groupId: number | null; 
@@ -47,21 +49,22 @@ const RestaurantRegister: React.FC = () => {
 
   const handleSubmit = async (data: Partial<RestaurantData>) => {
     try {
-      const token = Cookies.get("token");
-      if (!token) {
-        throw new Error("User not authenticated");
-      }
-    
+      const dataToSend = { ...data };
+      delete dataToSend.idCardFile;
+      delete dataToSend.logoFile;
+
+      console.log(data.idCardFile)
       //idCard upload
       const formData = new FormData();
-      if (data.idCard) { 
-        formData.append("File", data.idCard);
+      if (data.idCardFile) { 
+        formData.append("File", data.idCardFile);
       }
 
+      
       const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}` as string,
         },
         body: formData,
       });
@@ -76,6 +79,7 @@ const RestaurantRegister: React.FC = () => {
 
       if (responseData && responseData.path) {
         const imagePath = responseData.path;
+        dataToSend.idCard = imagePath;
         console.log("Image path:", imagePath);
       } else {
         console.error("Path is undefined in responseData");
@@ -85,14 +89,14 @@ const RestaurantRegister: React.FC = () => {
 
       //logo upload
       const formData1 = new FormData();
-      if (data.logo) { 
-        formData1.append("File", data.logo);
+      if (data.logoFile) { 
+        formData1.append("File", data.logoFile);
       }
 
       const response1 = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}` as string,
         },
         body: formData1,
       });
@@ -107,21 +111,22 @@ const RestaurantRegister: React.FC = () => {
 
       if (responseData1 && responseData1.path) {
         const imagePath = responseData1.path;
+        dataToSend.logo = imagePath;
         console.log("Image path:", imagePath);
       } else {
         console.error("Path is undefined in responseData");
       }
 
-      console.log("Data to send: ", data);
+      console.log("Data to send: ", dataToSend);
 
       // Wysyłamy dane restauracji na serwer
       const restaurantResponse = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${Cookies.get("token")}` as string,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataToSend),
       });
   
       if (!restaurantResponse.ok) {

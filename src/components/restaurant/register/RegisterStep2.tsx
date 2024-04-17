@@ -37,7 +37,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   const initialValues: Partial<RestaurantData> = {
     tags: [],
     provideDelivery: false,
-    logo: null,
+    logoFile: null,
     photos: [],
     description: "",
   };
@@ -45,12 +45,12 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   const validationSchema = yup.object({
     description: yup.string().max(200, t("errors.restaurant-register.description.max")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    //logo: yup.mixed().required(t("errors.restaurant-register.logo.required"))
+    //logoFile: yup.mixed().required(t("errors.restaurant-register.logo.required"))
   });
 
   // Handle submission of step 2 form
   const handleSubmit = (values: Partial<RestaurantData>) => {
-    const dataWithFile: Partial<RestaurantData> = { ...values, logo: selectedFile };
+    const dataWithFile: Partial<RestaurantData> = { ...values, logoFile: selectedFile };
     onSubmit(dataWithFile);
   };
 
@@ -99,9 +99,9 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                 <Field type="checkbox" id="provideDelivery" name="provideDelivery" />
               </div>
               <div className="form-control">
-                <label htmlFor="logo">{t("restaurant-register.logo")}:</label>
-                <input type="file" id="logo" name="logo" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
-                <ErrorMessage name="logo" component="div" />
+                <label htmlFor="lologoFilego">{t("restaurant-register.logo")}:</label>
+                <input type="file" id="logoFile" name="logoFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
+                <ErrorMessage name="logoFile" component="div" />
               </div>
               <div className="form-control">
                 <label htmlFor="photos">{t("restaurant-register.photos")}:</label>
