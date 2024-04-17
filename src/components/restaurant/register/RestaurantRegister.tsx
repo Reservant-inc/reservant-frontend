@@ -35,7 +35,6 @@ const RestaurantRegister: React.FC = () => {
   const handleStep1Submit = (data: Partial<RestaurantData>) => {
     setFormDataStep1((prevData) => ({ ...prevData, ...data }));
     setStep(2);
-    console.log("Przeszliśmy do kroku 2");
   };
 
   const handleStep2Submit = (data: Partial<RestaurantData>) => {
@@ -53,7 +52,6 @@ const RestaurantRegister: React.FC = () => {
       delete dataToSend.idCardFile;
       delete dataToSend.logoFile;
 
-      console.log(data.idCardFile)
       //idCard upload
       const formData = new FormData();
       if (data.idCardFile) { 
@@ -73,14 +71,11 @@ const RestaurantRegister: React.FC = () => {
         throw new Error("Failed to upload file");
       }
 
-      console.log("idCard uploaded successfully!");
-
       const responseData = await response.json();
 
       if (responseData && responseData.path) {
         const imagePath = responseData.path;
         dataToSend.idCard = imagePath;
-        console.log("Image path:", imagePath);
       } else {
         console.error("Path is undefined in responseData");
       }
@@ -105,20 +100,17 @@ const RestaurantRegister: React.FC = () => {
         throw new Error("Failed to upload file");
       }
 
-      console.log("logo uploaded successfully!");
 
       const responseData1 = await response1.json();
 
       if (responseData1 && responseData1.path) {
         const imagePath = responseData1.path;
         dataToSend.logo = imagePath;
-        console.log("Image path:", imagePath);
       } else {
         console.error("Path is undefined in responseData");
       }
 
-      console.log("Data to send: ", dataToSend);
-
+      console.log(dataToSend)
       // Wysyłamy dane restauracji na serwer
       const restaurantResponse = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
         method: "POST",
@@ -131,10 +123,12 @@ const RestaurantRegister: React.FC = () => {
   
       if (!restaurantResponse.ok) {
         const errorData = await restaurantResponse.json();
+        console.log(errorData)
         throw new Error(errorData.detail || "Failed to create restaurant");
       }
-  
-      console.log("Restaurant created successfully!");
+
+      console.log('upload successful')
+
     } catch (error) {
       console.error("Error while creating restaurant:", error);
     }
