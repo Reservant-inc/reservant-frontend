@@ -34,7 +34,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     fetchTags();
   }, []);
 
-  // Initial values for step 2 form
+  
   const initialValues: Partial<RestaurantData> = {
     tags: [],
     provideDelivery: false,
@@ -49,7 +49,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     //logoFile: yup.mixed().required(t("errors.restaurant-register.logo.required"))
   });
 
-  // Handle submission of step 2 form
+  
   const handleSubmit = (values: Partial<RestaurantData>) => {
     const dataWithFile: Partial<RestaurantData> = { ...values, logoFile: selectedFile, photosFile: selectedPhotos };
     onSubmit(dataWithFile);
@@ -101,7 +101,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
               </div>
               <div className="form-control">
                 <label htmlFor="lologoFilego">{t("restaurant-register.logo")}:</label>
-                <input type="file" id="logoFile" name="logoFile" accept=".png, .jpeg, .jpg" onChange={(e) => setSelectedFile(e.target.files![0])} />
+                <input type="file" id="logoFile" name="logoFile" accept=".png, .jpeg, .jpg .pdf" onChange={(e) => setSelectedFile(e.target.files![0])} />
                 <ErrorMessage name="logoFile" component="div" />
               </div>
               <div className="form-control">

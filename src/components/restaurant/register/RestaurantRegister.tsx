@@ -77,14 +77,14 @@ const RestaurantRegister: React.FC = () => {
 
       const responseData = await response.json();
 
-      if (responseData && responseData.path) {
-        const imagePath = responseData.path;
+      if (responseData && responseData.fileName) {
+        const imagePath = responseData.fileName;
         dataToSend.idCard = imagePath;
       } else {
         console.error("Path is undefined in responseData");
       }
 
-  
+      
 
       //logo upload
       const formData1 = new FormData();
@@ -107,8 +107,8 @@ const RestaurantRegister: React.FC = () => {
 
       const responseData1 = await response1.json();
 
-      if (responseData1 && responseData1.path) {
-        const imagePath = responseData1.path;
+      if (responseData1 && responseData1.fileName) {
+        const imagePath = responseData1.fileName;
         dataToSend.logo = imagePath;
       } else {
         console.error("Path is undefined in responseData");
@@ -135,8 +135,8 @@ const RestaurantRegister: React.FC = () => {
       
       const responseData2 = await response2.json();
 
-      if (responseData2 && responseData2.path) {
-        const imagePath = responseData2.path;
+      if (responseData2 && responseData2.fileName) {
+        const imagePath = responseData2.fileName;
         dataToSend.businessPermission = imagePath;
       } else {
         console.error("Path is undefined in responseData");
@@ -165,18 +165,15 @@ const RestaurantRegister: React.FC = () => {
 
         const responseData = await response.json();
 
-        if (responseData && responseData.path) {
-          dataToSend.photos.push(responseData.path);
+        if (responseData && responseData.fileName) {
+          dataToSend.photos.push(responseData.fileName);
         } else {
           console.error("Path is undefined in responseData");
         }
       }
     }
 
-      console.log("uploaded sucessfully")
-
       console.log(dataToSend)
-      // Wysyłamy dane restauracji na serwer
       const restaurantResponse = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
         method: "POST",
         headers: {
