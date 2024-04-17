@@ -3,64 +3,53 @@ import Group from './Group';
 import "dotenv/config";
 import { useTranslation } from "react-i18next";
 import Popup from '../../popup/Popup';
+import Cookies from 'js-cookie';
 
 interface MyGroupsProps {
   handleChangeActiveRestaurant: (id: number) => void;
   activeRestaurantId: number | null;
 }
 
+type Group = {
+  id: number,
+  name: string,
+  restaurantCount: number
+}
+
 const MyGroups: React.FC<MyGroupsProps> = ({handleChangeActiveRestaurant, activeRestaurantId }) => {
     const [t] = useTranslation("global");
 
     //test dummy data - delete later
-    const [groups, setGroups] = useState([
-        {
-          id: 1,
-          name: 'Group 1',
-          restaurantCount: 3
-        },
-        {
-          id: 2,
-          name: 'Group 2',
-          restaurantCount: 2
-        },
-        {
-          id: 3,
-          name: 'Group 3',
-          restaurantCount: 1
-        }
-        ,
-        {
-          id: 4,
-          name: 'Group 4',
-          restaurantCount: 5
-        }
-      ]);
+    const [groups, setGroups] = useState<Group[]>([]);
       
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://172.21.40.127:12038/my-restaurant-groups');
+        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurant-groups`, {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}` as string,
+          },   
+        });
+
         if (!response.ok) {
+          const error = await response.json()
           throw new Error('Network response was not ok');
         }
+
         const data = await response.json();
+        console.log(data)
+
         setGroups(data);
       } catch (error) {
         console.error('Error fetching groups: ', error);
       };
-      // fetchData();
     };
 
     fetchData();
   }, []);
 
-  // const handleAddGroup = () => {
-  //   
-  //   console.log('Add a new group');
-  // };
   return (
     <div>
         <h1 className='font-bold'>{t("restaurant-management.groups.header")}</h1>

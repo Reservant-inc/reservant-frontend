@@ -7,6 +7,7 @@ import React from "react"
 import Register from "../auth/register/Register"
 import HomePage from "../HomePage"
 import RestaurantManager from "../restaurant/management/RestaurantManager"
+import RestaurantDetails from "../restaurant/management/RestaurantDetails"
 
 export const nav = [
      { path:     "/",                       element: <LandingPage />,          isPrivate: false,         roles: [""]                             },
