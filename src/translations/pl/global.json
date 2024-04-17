@@ -97,5 +97,12 @@
                 "required": "Dowód osobisty jest wymagany"
             }
         }
+    },
+    "restaurant-management": {
+        "groups": {
+            "counter": "Liczba lokali",
+            "add-button": "Dodaj Grupę",
+            "header": "Moje Grupy"
+        }
     }
 }

@@ -1,15 +1,73 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import RestaurantData from "./RestaurantData";
 
-const RestaurantDetails = () => {
-    return ( 
-        
-<div className="grid grid-cols-3 grid-rows-4 gap-4">
-    <div className="col-span-2 row-span-2 border">Integer feugiat scelerisque varius morbi enim nunc faucibus a. Ornare lectus sit amet est placerat in egestas erat imperdiet. Sollicitudin tempor id eu nisl. Tellus in metus vulputate eu. Habitant morbi tristique senectus et netus. Tempor commodo ullamcorper a lacus. Sagittis eu volutpat odio facilisis. Faucibus et molestie ac feugiat. Amet nisl purus in mollis. Risus viverra adipiscing at in tellus. Mattis enim ut tellus elementum sagittis. Metus vulputate eu scelerisque felis imperdiet. Quisque sagittis purus sit amet. Et malesuada fames ac turpis egestas sed tempus. Porttitor leo a diam sollicitudin tempor id eu. Donec pretium vulputate sapien nec sagittis aliquam. Sed vulputate odio ut enim blandit volutpat maecenas. Enim neque volutpat ac tincidunt vitae semper quis.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id volutpat lacus laoreet non curabitur gravida arcu ac. Fringilla urna porttitor rhoncus dolor purus non enim praesent elementum. Ut tellus elementum sagittis vitae et leo duis. Sed velit dignissim sodales ut eu sem integer. Odio facilisis mauris sit amet massa vitae tortor. Imperdiet sed euismod nisi porta. Aliquam ultrices sagittis orci a scelerisque purus semper eget duis. Condimentum lacinia quis vel eros donec ac odio tempor. Sed felis eget velit aliquet sagittis. Maecenas volutpat blandit aliquam etiam erat velit scelerisque in dictum. Amet aliquam id diam maecenas ultricies. Odio euismod lacinia at quis risus sed. Sit amet mauris commodo quis.</div>
-    <div className="row-span-2 col-start-3 border">Oceny</div>
-    <div className="col-span-2 row-span-2 row-start-3 border">Zarzadzanie pracownikami</div>
-</div>
+interface RestaurantDetailsProps {
+    activeRestaurantId: number | null;
+}
+
+const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({activeRestaurantId}) => {
+    //dummy data
+    const [restaurant, setRestaurant] = useState({
+        "id": 0,
+        "name": "McJohn's",
+        "restaurantType": "Restaurant",
+        "nip": "1231264550",
+        "address": "ul. Koszykowa 86",
+        "postalIndex": "00-000",
+        "city": "Warszawa",
+        "groupId": 0,
+        "groupName": "McJohn's Restaurant Group",
+        "rentalContract": "string",
+        "alcoholLicense": "string",
+        "businessPermission": "string",
+        "idCard": "string",
+        "tables": [
+          {
+            "id": 0,
+            "capacity": 10
+          }
+        ],
+        "provideDelivery": true,
+        "logo": "string",
+        "photos": [
+          "string"
+        ],
+        "description": "Restaurant description",
+        "tags": [
+          "string"
+        ]
+      });
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`http://172.21.40.127:12038/my-restaurants/${activeRestaurantId}`, );
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setRestaurant(data);
+          } catch (error) {
+            console.error('Error fetching groups: ', error);
+          };
+          // fetchData();
+        };
     
-     );
+        fetchData();
+      }, [activeRestaurantId]);
+
+    
+
+      return ( 
+        <div className="flex flex-col h-full">
+            <div className="flex-grow grid grid-cols-3 grid-rows-4 gap-4">
+                <div className="col-span-2 row-span-2 border w-full h-full"><RestaurantData restaurant={restaurant}/></div>
+                <div className="row-span-2 col-start-3 border w-full h-full">Oceny</div>
+                <div className="col-span-2 row-span-2 row-start-3 border w-full h-full">Zarzadzanie pracownikami</div>
+            </div>
+        </div>
+    );
+    
 }
  
 export default RestaurantDetails;

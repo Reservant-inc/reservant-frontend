@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Group from './Group';
 import "dotenv/config";
 import { useTranslation } from "react-i18next";
+import Popup from '../../popup/Popup';
 
-const MyGroups = () => {
-    const [t, i18n] = useTranslation("global");
+interface MyGroupsProps {
+  handleChangeActiveRestaurant: (id: number) => void;
+  activeRestaurantId: number | null;
+}
+
+const MyGroups: React.FC<MyGroupsProps> = ({handleChangeActiveRestaurant, activeRestaurantId }) => {
+    const [t] = useTranslation("global");
 
     //test dummy data - delete later
     const [groups, setGroups] = useState([
@@ -44,28 +50,28 @@ const MyGroups = () => {
         setGroups(data);
       } catch (error) {
         console.error('Error fetching groups: ', error);
-      }
+      };
+      // fetchData();
     };
 
     fetchData();
   }, []);
 
-  const handleAddGroup = () => {
-    // 
-    console.log('Add a new group');
-  };
+  // const handleAddGroup = () => {
+  //   
+  //   console.log('Add a new group');
+  // };
   return (
     <div>
-        <h1>{t("my-groups.groups-header")}</h1>
+        <h1 className='font-bold'>{t("restaurant-management.groups.header")}</h1>
         <div>
             {groups.map((group) => (
-                <Group key={group.id} {...group} />
+                <Group key={group.id} {...group} handleChangeActiveRestaurant={handleChangeActiveRestaurant} activeRestaurantId={activeRestaurantId}/>
             ))}
         </div>
-        <button onClick={handleAddGroup}>
-            <span>+</span>
-            <span>{t("my-groups.add-group")}</span>
-        </button>
+        <Popup buttonText={t("restaurant-management.groups.add-button")} bgColor="white">
+          <p>Form to create a group</p>
+        </Popup>
     </div>
 );
 };

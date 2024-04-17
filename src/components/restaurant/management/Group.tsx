@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 
 interface GroupProps {
   id: number;
   name: string;
-  restaurantCount: number;}
+  restaurantCount: number;
+  handleChangeActiveRestaurant: (id: number) => void;
+  activeRestaurantId: number | null;
+}
 
-const Group: React.FC<GroupProps> = ({ id, name, restaurantCount }) => {
-    const [t, i18n] = useTranslation("global");
+const Group: React.FC<GroupProps> = ({ id, name, restaurantCount, handleChangeActiveRestaurant, activeRestaurantId  }) => {
+    const [t] = useTranslation("global");
+    const [isPressed, setIsPressed] = useState<boolean>(false);
 
     //dummy data
     const [restaurants, setRestaurants] = useState([
@@ -22,7 +25,7 @@ const Group: React.FC<GroupProps> = ({ id, name, restaurantCount }) => {
           },
           {
             "id": 1,
-            "name": "McJohn's12312321",
+            "name": "McJohn's 123",
             "restaurantType": "Restaurant",
             "address": "ul. Koszykowa 8612312",
             "city": "Warszawa",
@@ -41,33 +44,38 @@ const Group: React.FC<GroupProps> = ({ id, name, restaurantCount }) => {
             setRestaurants(data.restaurants);
           } catch (error) {
             console.error('Error fetching groups: ', error);
-          }
+          };
+          // fetchData();
         };
     
         fetchData();
       }, [id]);
 
+      const handleIsPressed = (e: React.MouseEvent<HTMLHeadingElement>) => {
+        e.preventDefault();
+        setIsPressed((isPressed) => !isPressed);
+      }
 
-  return (
-    <div className="border p-4 rounded m-2">
-      <h2 className="text-xl font-semibold mb-2">{name}</h2>
-      <p className='text-sm'>{t("my-groups.restaurants-count")}: {restaurantCount}</p>
-      <ul>
-        {restaurants.map((restaurant) => (
-            <Link
-            to={`/my-restaurants/${restaurant.id}`}
-          >
-            <li key={restaurant.id} className="transition duration-300 border m-2 p-1 rounded hover:bg-blue">
-            
-                {restaurant.name}
-              
-          </li>
-          </Link>
-        ))}
-        
-      </ul>
-    </div>
-  );
+
+      return (
+        <div className="border p-2 rounded m-2 overflow-hidden">
+          <h2 className="text-xl font-semibold mb-2 truncate hover:cursor-pointer" onClick={handleIsPressed}>{name}</h2>
+
+          {isPressed && <><p className='text-sm'>{t("restaurant-management.groups.counter")}: {restaurantCount}</p>
+          <ul>
+            {restaurants.map((restaurant) => (
+              <li key={restaurant.id} className="transition duration-300 block border rounded my-1">
+                <div 
+                  // to={`/restaurants/${restaurant.id}`} 
+                  className={`flex justify-between items-center transition duration-300 hover:bg-blue cursor-pointer block p-1 ${activeRestaurantId === restaurant.id ? 'bg-blue' : 'bg-white'}`}
+                  onClick={() => handleChangeActiveRestaurant(restaurant.id)}>
+                  {restaurant.name}
+                </div>
+              </li>
+            ))}
+          </ul></>}
+        </div>
+    ); 
 };
 
 export default Group;
