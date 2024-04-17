@@ -7,8 +7,7 @@ const RestaurantManager = () => {
     const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
 
     const handleChangeActiveRestaurant = (restaurantId: number) => {
-        console.log("rerender")
-        restaurantId === activeRestaurantId ? setActiveRestaurantId(null) : setActiveRestaurantId(restaurantId);
+        setActiveRestaurantId(restaurantId);
     }
     
     return (

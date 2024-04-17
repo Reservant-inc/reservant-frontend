@@ -29,7 +29,6 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = ({activeRestaurant
             } catch (error) {
               console.error('Error fetching groups: ', error);
             };
-            // fetchData();
           };
       
           fetchData();

@@ -8,50 +8,30 @@ interface RestaurantDetailsProps {
 }
 
 type Restaurant = {
-  id: ,
-  name : string,
-  restaurantType : string,
-  address : string,
-  city : string,
-  groupId: number,
-  logo: string,
-  description: string,
+  id: number,
+  name: string,
+  restaurantType: string,
+  nip: string,
+  address: string,
+  postalIndex: string,
+  city: string,
+  groupId: 0,
+  groupName: string,
+  rentalContract: string,
+  alcoholLicense: string,
+  businessPermission: string,
+  idCard: string,
+  tables: [{}],
   provideDelivery: boolean,
+  logo: string,
+  photos: string[],
+  description: string,
   tags: string[]
 }
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({activeRestaurantId}) => {
     //dummy data
-    const [restaurant, setRestaurant] = useState<Restaurant>({
-      "id": 0,
-      "name": "McJohn's",
-      "restaurantType": "Restaurant",
-      "nip": "1231264550",
-      "address": "ul. Koszykowa 86",
-      "postalIndex": "00-000",
-      "city": "Warszawa",
-      "groupId": 0,
-      "groupName": "McJohn's Restaurant Group",
-      "rentalContract": "string",
-      "alcoholLicense": "string",
-      "businessPermission": "string",
-      "idCard": "string",
-      "tables": [
-        {
-          "id": 0,
-          "capacity": 10
-        }
-      ],
-      "provideDelivery": true,
-      "logo": "string",
-      "photos": [
-        "string"
-      ],
-      "description": "Restaurant description",
-      "tags": [
-        "string"
-      ]
-    });
+    const [restaurant, setRestaurant] = useState<Restaurant>()
 
     useEffect(() => {
       if(activeRestaurantId != null){
@@ -71,20 +51,17 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({activeRestaurantId
           } catch (error) {
             console.error('Error fetching groups: ', error);
           };
-          fetchData();
         };
-        
+
         fetchData();
       }
       }, [activeRestaurantId]);
-
-    
 
       return ( 
         <div className="flex flex-col h-full">
             {activeRestaurantId != null ? (
               <div className="flex-grow grid grid-cols-3 grid-rows-4 gap-4">
-                  <div className="col-span-2 row-span-2 border w-full h-full"><RestaurantData restaurant={restaurant}/></div>
+                  <div className="col-span-2 row-span-2 border w-full h-full"> {(restaurant != undefined) && <RestaurantData restaurant={restaurant}/>}</div>
                   <div className="row-span-2 col-start-3 border w-full h-full">Oceny</div>
                   <div className="col-span-2 row-span-2 row-start-3 border w-full h-full"><EmployeeManagement activeRestaurantId={activeRestaurantId} /></div>
               </div>
