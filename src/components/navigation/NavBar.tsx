@@ -1,7 +1,7 @@
 import React from "react"
 import { useLocation } from "react-router"
-import NavLandingPage from "./landingPage/NavLandingPage"
-import NavHome from "./home/NavHome"
+import NavLandingPage from "../../tmp/NavLandingPage"
+import NavHome from "../../tmp/NavHome"
 
 const NavBar = () => {
     const location = useLocation()

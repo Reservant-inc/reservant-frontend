@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
-import Popup from "../../popup/Popup";
+import Popup from "../reusableComponents/Popup";
 
 
 const initialValues = {

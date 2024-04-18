@@ -1,9 +1,9 @@
 import React from "react";
 import Logo from "../../../../assets/images/logo.png";
 import { useNavigate } from "react-router-dom";
-import LanguageChange from "../navItems/LanguageChange";
-import AuthItems from "../navItems/AuthItems";
-import ThemeButton from "../navItems/ThemeButton"
+import LanguageChange from "../components/navigation/navItems/LanguageChange";
+import AuthItems from "../components/navigation/navItems/AuthItems";
+import ThemeButton from "../components/navigation/navItems/ThemeButton"
 
 export default function NavLandingPage() {
   return (
