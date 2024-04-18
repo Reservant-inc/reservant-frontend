@@ -18,7 +18,7 @@ const initialValues = {
   confirmPassword: "",
 };
 
-const Register = () => {
+const UserRegister = () => {
   
   const navigate = useNavigate();
   
@@ -190,4 +190,4 @@ const Register = () => {
   );
 }
 
-export default Register
+export default UserRegister

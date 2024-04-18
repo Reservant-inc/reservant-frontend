@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { nav } from "../navigation/Navigation";
+import { nav } from "./Navigation";
 import Cookies from "js-cookie";
 
 interface AuthContextValue {

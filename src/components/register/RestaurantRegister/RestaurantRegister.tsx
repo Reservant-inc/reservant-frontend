@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
-import Popup from "../../popup/Popup";
+import Popup from "../../../reusableComponents/Popup";
 
 const initialValues = {
   name: "",
@@ -23,9 +23,7 @@ const initialValues = {
 
 const RestaurantRegister = () => {
 
-  const navigate = useNavigate();
-  
-  const [t, i18n] = useTranslation("global");
+  const [t] = useTranslation("global");
 
   // Set yup validation schema to validate defined fields and error messages
 const validationSchema = yup.object({
