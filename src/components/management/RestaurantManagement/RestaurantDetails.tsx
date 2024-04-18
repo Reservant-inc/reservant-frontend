@@ -1,59 +1,27 @@
 import React, { useEffect, useState } from "react";
 import RestaurantData from "./RestaurantData";
 import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
-import Cookies from "js-cookie";
-
-interface RestaurantDetailsProps {
-    activeRestaurantId: number | null;
-}
-
-type Restaurant = {
-  id: number,
-  name: string,
-  restaurantType: string,
-  nip: string,
-  address: string,
-  postalIndex: string,
-  city: string,
-  groupId: 0,
-  groupName: string,
-  rentalContract: string,
-  alcoholLicense: string,
-  businessPermission: string,
-  idCard: string,
-  tables: [{}],
-  provideDelivery: boolean,
-  logo: string,
-  photos: string[],
-  description: string,
-  tags: string[]
-}
+import { RestaurantDetailsProps } from "../../../services/interfaces";
+import { RestaurantDetailsType } from "../../../services/types";
+import { fetchGET } from "../../../services/APIconn";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({activeRestaurantId}) => {
-    //dummy data
-    const [restaurant, setRestaurant] = useState<Restaurant>()
+    const [restaurant, setRestaurant] = useState<RestaurantDetailsType>()
 
     useEffect(() => {
       if(activeRestaurantId != null){
         const fetchData = async () => {
           try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants/${activeRestaurantId}`, {
-              headers: {
-                Authorization: `Bearer ${Cookies.get("token")}`,
-              },   
-            });
-
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
+           
+            const data = await fetchGET(`/my-restaurants/${activeRestaurantId}`)
             setRestaurant(data);
+
           } catch (error) {
             console.error('Error fetching groups: ', error);
           };
         };
 
-        fetchData();
+        fetchData()
       }
       }, [activeRestaurantId]);
 

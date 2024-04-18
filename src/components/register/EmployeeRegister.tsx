@@ -1,10 +1,10 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
-import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
-import Cookies from "js-cookie";
+import { useValidationSchemas } from "../../hooks/useValidationSchema";
+import { fetchPOST } from "../../services/APIconn";
 
 const initialValues = {
   login: "",
@@ -15,80 +15,28 @@ const initialValues = {
   confirmPassword: ""
 };
 
-const RegisterEmp = () => {
-  
+const RegisterEmp: React.FC = () => {
   
   const [t] = useTranslation("global")
-  
-  const validationSchema = yup.object({
-    firstName: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.user-register.firstName.matches"))
-      .required(t("errors.user-register.firstName.required")),
-  
-    lastName: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
-      .required(t("errors.user-register.lastName.required")),
-
-    login: yup
-      .string()
-      .required(t("errors.user-register.login.required")),  
-  
-    phoneNumber: yup
-      .string()
-      .matches(/^\+[0-9]{11,15}$/, t("errors.user-register.phoneNumber.matches"))
-      .required(t("errors.user-register.phoneNumber.required")),
-
-    password: yup
-      .string()
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-        t("errors.user-register.password.matches"),
-      )
-      .required(t("errors.user-register.password.required")),
-  
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref("password"), ""], t("errors.user-register.confirmPassword.matches"))
-      .required(t("errors.user-register.confirmPassword.required"))
-  })
-  
-
+  const { employeeRegisterSchema } = useValidationSchemas()
 
   const handleSubmit = async (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
-      
-      const token = Cookies.get("token") as string
-
       setSubmitting(true);
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_IP}/auth/register-restaurant-employee`,
-        {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            login: values.login,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            phoneNumber: values.phoneNumber,
-            password: values.password
-          }),
-        },
-      );
+      
+      const body = JSON.stringify({
+        login: values.login,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phoneNumber: values.phoneNumber,
+        password: values.password
+      })
 
-      if (!response.ok) {
-        console.log(await response.json())
-        throw new Error("Invalid register data");
-      }
+      await fetchPOST("/auth/register-restaurant-employee", body)
 
-      console.log(response)
     } catch (error) {
       console.log(error);
     } finally {
@@ -100,7 +48,7 @@ const RegisterEmp = () => {
     <div className="container-register">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={employeeRegisterSchema}
         onSubmit={handleSubmit}
       >
         {(formik) => (

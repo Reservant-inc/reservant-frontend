@@ -1,8 +1,9 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage, FormikValues, FieldArray } from "formik";
-import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
+import { useValidationSchemas } from "../../../hooks/useValidationSchema";
+import { fetchPOST } from "../../../services/APIconn";
 
 const initialValues = {
   employeeId: "",
@@ -13,59 +14,24 @@ const initialValues = {
 const RestaurantAddEmp = () => {
   
   const [t] = useTranslation("global")
-  
-  const validationSchema = yup.object({
-
-    isBackdoorEmployee: yup
-      .boolean(),
-
-    isHallEmployee: yup
-      .boolean()
-    
-  }).test(
-    t("errors.add-employee.employeeRole.required"),
-    { context: { message: t("errors.employee-register.employeeRole.required") } }, 
-    (obj) => {
-      if (obj.isBackdoorEmployee || obj.isHallEmployee) {
-        return true;
-      }
-  
-      return new yup.ValidationError(
-        t("errors.add-employee.employeeRole.required"),
-        null,
-        'hasRole'
-      );
-    }
-  );
+  const { RestaurantAddEmployeeSchema } = useValidationSchemas()
   
   const id = 0;//do zmiany
 
   const handleSubmit = async (
     values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    { setSubmitting } : { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
       setSubmitting(true);
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_IP}/my-restaurants/${id}/employees`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            employeeId: values.employeeId,
-            isBackdoorEmployee: values.isBackdoorEmployee,
-            isHallEmployee: values.isHallEmployee,
-          }),
-        },
-      );
 
-      if (!response.ok) {
-        console.log(await response.json())
-        throw new Error("Invalid register data");
-      }
+      const body = JSON.stringify({
+        employeeId: values.employeeId,
+        isBackdoorEmployee: values.isBackdoorEmployee,
+        isHallEmployee: values.isHallEmployee,
+      })
+
+      await fetchPOST(`/my-restaurants/${id}/employees`, body)
 
     } catch (error) {
       console.log(error);
@@ -78,7 +44,7 @@ const RestaurantAddEmp = () => {
     <div className="container-register">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={RestaurantAddEmployeeSchema}
         onSubmit={handleSubmit}
       >
         {(formik) => (

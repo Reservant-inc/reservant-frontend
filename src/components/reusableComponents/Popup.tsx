@@ -1,13 +1,5 @@
-import React, { ReactNode, useState } from "react";
-
-// Flexible Popup Modal component, can add more props for more flexiblity in the future if neccessary
-
-interface PopupProps {
-    children: ReactNode;
-    buttonText?: String;
-    bgColor?: String;
-    modalTitle?: String;
-}
+import React, { useState } from "react";
+import { PopupProps } from "../../services/interfaces";
 
 const Popup: React.FC<PopupProps> = ({ children, buttonText = "Click", bgColor = "black", modalTitle = "" }) => {
     const [isPopupPressed, setIsPopupPressed] = useState<boolean>(false);

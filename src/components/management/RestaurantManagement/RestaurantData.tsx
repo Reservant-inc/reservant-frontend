@@ -1,17 +1,5 @@
 import React from "react";
-
-interface RestaurantDataProps {
-    restaurant: {
-        id: number;
-        name: String;
-        address: String;
-        postalIndex: String;
-        city: String;
-        logo: String;
-        description: String;
-        photos: String[];
-    }; // change later
-}
+import { RestaurantDataProps } from "../../../services/interfaces";
 
 const RestaurantData: React.FC<RestaurantDataProps> = ({restaurant}) => {
     return ( 
