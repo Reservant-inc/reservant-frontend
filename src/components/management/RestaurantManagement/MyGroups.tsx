@@ -4,44 +4,23 @@ import "dotenv/config";
 import { useTranslation } from "react-i18next";
 import Popup from '../../reusableComponents/Popup';
 import Cookies from 'js-cookie';
+import { GroupType } from '../../../services/types';
+import { MyGroupsProps } from '../../../services/interfaces';
+import { fetchGET } from '../../../services/APIconn';
 
-interface MyGroupsProps {
-  handleChangeActiveRestaurant: (id: number) => void;
-  activeRestaurantId: number | null;
-}
+const MyGroups: React.FC<MyGroupsProps> = ({handleChangeActiveRestaurant, activeRestaurantId }) => { 
 
-type Group = {
-  id: number,
-  name: string,
-  restaurantCount: number
-}
-
-const MyGroups: React.FC<MyGroupsProps> = ({handleChangeActiveRestaurant, activeRestaurantId }) => {
     const [t] = useTranslation("global");
 
-    //test dummy data - delete later
-    const [groups, setGroups] = useState<Group[]>([]);
+    const [groups, setGroups] = useState<GroupType[]>([]);
       
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurant-groups`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}` as string,
-          },   
-        });
+        
+        const response = await fetchGET('/my-restaurant-groups')
+        setGroups(response);
 
-        if (!response.ok) {
-          const error = await response.json()
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log(data)
-
-        setGroups(data);
       } catch (error) {
         console.error('Error fetching groups: ', error);
       };

@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
-import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
+import { useValidationSchemas } from "../../hooks/useValidationSchema";
+import { fetchPOST } from "../../services/APIconn";
 
 const initialValues = {
   firstName: "",
@@ -17,55 +18,13 @@ const initialValues = {
   confirmPassword: "",
 };
 
-const UserRegister = () => {
+const UserRegister: React.FC = () => {
   
-  const navigate = useNavigate();
-  
-  const [t] = useTranslation("global")
-  
-  const validationSchema = yup.object({
-    firstName: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.user-register.firstName.matches"))
-      .required(t("errors.user-register.firstName.required")),
-  
-    lastName: yup
-      .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
-      .required(t("errors.user-register.lastName.required")),
+  const navigate = useNavigate();  
 
-    login: yup
-      .string()
-      .required(t("errors.user-register.login.required")),  
-  
-    email: yup.string()
-      .email(t("errors.user-register.email.matches"))
-      .required(t("errors.user-register.email.required")),
-  
-    phoneNumber: yup
-      .string()
-      .matches(/^\+[0-9]{11,15}$/, t("errors.user-register.phoneNumber.matches"))
-      .required(t("errors.user-register.phoneNumber.required")),
-  
-    birthDate: yup
-      .date()
-      .min("1969-11-13", t("errors.user-register.birthDate.min"))
-      .max("2023-11-13", t("errors.user-register.birthDate.max"))
-      .required(t("errors.user-register.birthDate.required")),
-  
-    password: yup
-      .string()
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-        t("errors.user-register.password.matches"),
-      )
-      .required(t("errors.user-register.password.required")),
-  
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref("password"), ""], t("errors.user-register.confirmPassword.matches"))
-      .required(t("errors.user-register.confirmPassword.required")),
-  });
+  const [t] = useTranslation("global")
+
+  const { userRegisterSchema } = useValidationSchemas()
   
 
   const handleSubmit = async (
@@ -74,30 +33,18 @@ const UserRegister = () => {
   ) => {
     try {
       setSubmitting(true);
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_IP}/auth/register-customer`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName: values.firstName,
-            lastName: values.lastName,
-            login: values.login,
-            email: values.email,
-            phoneNumber: values.phoneNumber,
-            birthDate: values.birthDate,
-            password: values.password,
-          }),
-        },
-      );
+      
+      const body = JSON.stringify({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        login: values.login,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        birthDate: values.birthDate,
+        password: values.password,
+      })
 
-      if (!response.ok) {
-        console.log(await response.json())
-        throw new Error("Invalid register data");
-      }
+      await fetchPOST('/auth/register-customer', body)
 
       navigate("/user/login");
     } catch (error) {
@@ -111,7 +58,7 @@ const UserRegister = () => {
     <div className="container-register">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={userRegisterSchema}
         onSubmit={handleSubmit}
       >
         {(formik) => (

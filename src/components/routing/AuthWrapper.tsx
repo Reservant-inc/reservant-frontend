@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { nav } from "./Routing";
 import Cookies from "js-cookie";
-import { LoginResponse } from "../../services/types";
+import { LoginResponseType } from "../../services/types";
 import { AuthContextValue } from "../../services/interfaces";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -27,7 +27,7 @@ export const AuthData = (): AuthContextValue => {
         }
     })
 
-    const login = (data: LoginResponse) => {
+    const login = (data: LoginResponseType) => {
 
         Cookies.set("token", data.token, { expires: 1})
 

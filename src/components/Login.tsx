@@ -11,7 +11,7 @@ const initialValues = {
   password: "",
 };
 
-const Login = () => {
+const Login: React.FC = () => {
 
   const [t] = useTranslation("global");
   const { login } = AuthData();
@@ -24,9 +24,9 @@ const Login = () => {
     try {
       setSubmitting(true);
       
-      const data = await fetchPOST("/auth/login", JSON.stringify(values))
+      const response = await fetchPOST("/auth/login", JSON.stringify(values))
 
-      login(data)
+      login(response)
       
     } catch (error) {
       console.log(error);

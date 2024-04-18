@@ -3,7 +3,7 @@ import Language from "../../../assets/images/language.png";
 import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import i18next from "i18next";
 
-const LanguageChange = () => {
+const LanguageChange: React.FC = () => {
 
     const [isPressed, setIsPressed] = useState(false)
 

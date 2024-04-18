@@ -1,52 +1,22 @@
-import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-
-interface GroupProps {
-  id: number;
-  name: string;
-  restaurantCount: number;
-  handleChangeActiveRestaurant: (id: number) => void;
-  activeRestaurantId: number | null;
-}
+import { GroupProps } from '../../../services/interfaces';
+import { RestaurantType } from '../../../services/types';
+import { fetchGET } from '../../../services/APIconn';
 
 const Group: React.FC<GroupProps> = ({ id, name, restaurantCount, handleChangeActiveRestaurant, activeRestaurantId  }) => {
     const [t] = useTranslation("global");
     const [isPressed, setIsPressed] = useState<boolean>(false);
 
-    //dummy data
-    const [restaurants, setRestaurants] = useState([
-        {
-            "id": 0,
-            "name": "McJohn's",
-            "restaurantType": "Restaurant",
-            "address": "ul. Koszykowa 86",
-            "city": "Warszawa",
-            "groupId": 0
-          },
-          {
-            "id": 1,
-            "name": "McJohn's 123",
-            "restaurantType": "Restaurant",
-            "address": "ul. Koszykowa 8612312",
-            "city": "Warszawa",
-            "groupId": 0
-          }
-      ]);
+    const [restaurants, setRestaurants] = useState<RestaurantType[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurant-groups/${id}`, {
-              headers: {
-                Authorization: `Bearer ${Cookies.get("token")}` as string,
-              },
-            });
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            setRestaurants(data.restaurants);
+
+            const response = await fetchGET(`/my-restaurant-groups/${id}`)
+            setRestaurants(response.restaurants);
+
           } catch (error) {
             console.error('Error fetching groups: ', error);
           };
