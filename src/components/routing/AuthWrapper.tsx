@@ -1,13 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { nav } from "./Navigation";
+import { nav } from "./Routing";
 import Cookies from "js-cookie";
-
-interface AuthContextValue {
-    isAuthorized: boolean;
-    login: (token: string) => void;
-    logout: () => void;
-}
+import { LoginResponse } from "../../services/types";
+import { AuthContextValue } from "../../services/interfaces";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -31,8 +27,16 @@ export const AuthData = (): AuthContextValue => {
         }
     })
 
-    const login = (token: string) => {
-        Cookies.set("token", token, { expires: 1})
+    const login = (data: LoginResponse) => {
+
+        Cookies.set("token", data.token, { expires: 1})
+
+        Cookies.set('userInfo', JSON.stringify({
+            firstName : data.firstName,
+            lastName: data.lastName,
+            roles: data.roles
+        }), { expires: 1 });   
+        
         setIsAuthorized(true)
         navigate("/home");
     }
