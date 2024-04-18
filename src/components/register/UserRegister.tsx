@@ -4,7 +4,6 @@ import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import "./Register.css";
 import { useTranslation } from "react-i18next";
 
 const initialValues = {

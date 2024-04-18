@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RestaurantData from "./RestaurantData";
-import EmployeeManagement from "../../../tmp/employees/EmployeeManagement";
+import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
 import Cookies from "js-cookie";
 
 interface RestaurantDetailsProps {

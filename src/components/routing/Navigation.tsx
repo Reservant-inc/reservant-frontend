@@ -1,11 +1,11 @@
-import LandingPage from "../../tmp/landingPage/LandingPage"
+import LandingPage from "../LandingPage"
 import Login from "../Login"
 import RestaurantRegister from "../register/RestaurantRegister"
-import AddEmployee from "../../tmp/restaurant/RestaurantAddEmp"
+import AddEmployee from "../management/RestaurantManagement/RestaurantAddEmp"
 import EmployeeRegister from "../register/EmployeeRegister"
 import React from "react"
 import Register from "../register/UserRegister"
-import HomePage from "../../tmp/HomePage"
+import HomePage from "../HomePage"
 import RestaurantManager from "../management/RestaurantManagement/RestaurantManager"
 
 export const nav = [

@@ -1,6 +1,5 @@
 import React from "react";
-import Logo from "../../../../assets/images/logo.png";
-import { useNavigate } from "react-router-dom";
+import Logo from "../assets/images/logo.png";
 import LanguageChange from "../components/navigation/navItems/LanguageChange";
 import AuthItems from "../components/navigation/navItems/AuthItems";
 import ThemeButton from "../components/navigation/navItems/ThemeButton"
