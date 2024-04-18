@@ -1,10 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import * as yup from "yup";
-import "./Login.css";
 import { useTranslation } from "react-i18next";
-import { AuthData } from "../AuthWrapper";
+import { AuthData } from "./routing/AuthWrapper";
 import Cookies from "js-cookie";
 
 const initialValues = {

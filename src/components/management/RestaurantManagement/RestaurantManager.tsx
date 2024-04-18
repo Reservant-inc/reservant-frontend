@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import MyGroups from "./MyGroups";
 import RestaurantDetails from "./RestaurantDetails";
-import { Route, Routes } from "react-router";
 
 const RestaurantManager = () => {
     const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);

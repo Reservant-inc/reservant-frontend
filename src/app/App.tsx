@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
 import React, {useEffect, useState} from "react";
 
-import NavBar from "../components/navigation/navbar/NavBar";
-import { AuthWrapper } from "../components/auth/AuthWrapper";
-import Footer from "../components/navigation/navbar/Footer";
+import NavBar from "../components/navigation/NavBar";
+import { AuthWrapper } from "../components/routing/AuthWrapper";
+import Footer from "../components/navigation/Footer";
 
 
 

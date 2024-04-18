@@ -1,12 +1,12 @@
-import LandingPage from "../landingPage/LandingPage"
-import Login from "../auth/login/Login"
-import RestaurantRegister from "../restaurant/register/RestaurantRegister"
-import AddEmployee from "../restaurant/RestaurantAddEmp"
-import EmployeeRegister from "../auth/EmployeeRegister/EmployeeRegister"
+import LandingPage from "../LandingPage"
+import Login from "../Login"
+import RestaurantRegister from "../register/RestaurantRegister"
+import AddEmployee from "../management/RestaurantManagement/RestaurantAddEmp"
+import EmployeeRegister from "../register/EmployeeRegister"
 import React from "react"
-import Register from "../auth/register/Register"
+import Register from "../register/UserRegister"
 import HomePage from "../HomePage"
-import RestaurantManager from "../restaurant/management/RestaurantManager"
+import RestaurantManager from "../management/RestaurantManagement/RestaurantManager"
 
 export const nav = [
      { path:     "/",                       element: <LandingPage />,          isPrivate: false,         roles: [""]                             },

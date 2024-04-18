@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Group from './Group';
 import "dotenv/config";
 import { useTranslation } from "react-i18next";
-import Popup from '../../popup/Popup';
+import Popup from '../../reusableComponents/Popup';
 import Cookies from 'js-cookie';
 
 interface MyGroupsProps {
