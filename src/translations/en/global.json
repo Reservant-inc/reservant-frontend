@@ -28,8 +28,8 @@
         "tin": "TIN",
         "id": "ID",
         "alcoholLicense": "Alcohol license (optional)",
-        "leaseAgreement": "Lease agreement (optional)",
-        "businessLicense": "Business license (optional)",
+        "leaseAgreement": "Rental contract (optional)",
+        "businessLicense": "Business permission",
         "button": "Register restaurant",
         "tags": "Choose which ones describe your premises",
         "provideDelivery": "Provided delivery",
@@ -39,7 +39,8 @@
         "saveButton": "Save",
         "nextButton": "Next",
         "backButton": "Back",
-        "header": "Register your local"
+        "header": "Register your local",
+        "submitSuccessMessage": "The application has been sent"
         
     },
     "errors": {
@@ -97,7 +98,7 @@
                 "required": "City is required"
             },
             "tin": {
-                "matches": "TIN must have 11 numbers",
+                "matches": "TIN must have 10 numbers",
                 "required": "TIN is required"
             },
             "businessType": {
@@ -106,14 +107,22 @@
             "id": {
                 "required": "ID is required"
             },
+            "businessPermission": {
+                "required": "Business permission is required"
+            },
             "description": {
-                "max": "The description can have a maximum of 200 characters"
+                "max": "The description must have a maximum of 200 characters",
+                "min": "The description must have a minimum of 3 characters",
+                "required": "The description is required"
             },
             "tags": {
                 "min": "You must select a minimum of three tags"
             },
             "logo": {
                 "required": "Logo is required"
+            },
+            "photos": {
+                "required": "Photos are required"
             }
         }
     }

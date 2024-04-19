@@ -13,10 +13,12 @@ export interface RestaurantData {
   restaurantType: string;
   idCardFile: File | null;
   idCard: string;
-  businessPermissionFile: File | null; //required
+  businessPermissionFile: File | null;
   businessPermission: string; 
   rentalContractFile: File | null;
+  rentalContract: string;
   alcoholLicenseFile: File | null;
+  alcoholLicense: string;
   tags: string[];
   provideDelivery: boolean;
   logoFile: File | null;
@@ -53,97 +55,49 @@ const RestaurantRegister: React.FC = () => {
       const dataToSend = { ...data };
       delete dataToSend.idCardFile;
       delete dataToSend.logoFile;
-      delete dataToSend.businessPermissionFile
+      delete dataToSend.businessPermissionFile;
       delete dataToSend.photosFile;
+      delete dataToSend.rentalContractFile;
+      delete dataToSend.alcoholLicenseFile;
 
-      //idCard upload
-      const formData = new FormData();
-      if (data.idCardFile) { 
-        formData.append("File", data.idCardFile);
+      const filesToUpload: { name: keyof RestaurantData; key: keyof RestaurantData }[] = [
+        { name: "idCardFile", key: "idCard" },
+        { name: "logoFile", key: "logo" },
+        { name: "businessPermissionFile", key: "businessPermission" },
+        { name: "rentalContractFile", key: "rentalContract" },
+        { name: "alcoholLicenseFile", key: "alcoholLicense" }
+      ];
+  
+      for (const { name, key } of filesToUpload) {
+        const file = data[name] as File | null;
+        if (file) {
+          const formData = new FormData();
+          formData.append("File", file);
+  
+          const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token")}` as string,
+            },
+            body: formData,
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Failed to upload ${name}`);
+          }
+  
+          const responseData = await response.json();
+  
+          if (responseData && responseData.fileName) {
+            dataToSend[key] = responseData.fileName;
+          } else {
+            console.error(`Path is undefined in responseData for ${name}`);
+          }
+        }
       }
 
-      
-      const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}` as string,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-      const responseData = await response.json();
-
-      if (responseData && responseData.fileName) {
-        const imagePath = responseData.fileName;
-        dataToSend.idCard = imagePath;
-      } else {
-        console.error("Path is undefined in responseData");
-      }
-
-      
-
-      //logo upload
-      const formData1 = new FormData();
-      if (data.logoFile) { 
-        formData1.append("File", data.logoFile);
-      }
-
-      const response1 = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}` as string,
-        },
-        body: formData1,
-      });
-
-      if (!response1.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-
-      const responseData1 = await response1.json();
-
-      if (responseData1 && responseData1.fileName) {
-        const imagePath = responseData1.fileName;
-        dataToSend.logo = imagePath;
-      } else {
-        console.error("Path is undefined in responseData");
-      }
-
-      //businessPermission upload
-      const formData2 = new FormData();
-      if (data.businessPermissionFile) { 
-        formData2.append("File", data.businessPermissionFile);
-      }
-
-      
-      const response2 = await fetch(`${process.env.REACT_APP_SERVER_IP}/uploads`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}` as string,
-        },
-        body: formData2,
-      });
-
-      if (!response2.ok) {
-        throw new Error("Failed to upload file");
-      }
-      
-      const responseData2 = await response2.json();
-
-      if (responseData2 && responseData2.fileName) {
-        const imagePath = responseData2.fileName;
-        dataToSend.businessPermission = imagePath;
-      } else {
-        console.error("Path is undefined in responseData");
-      }
-
-          // Initialize photos array if it's undefined
-      dataToSend.photos = dataToSend.photos ?? [];
+      // Initialize photos array if it's undefined
+    dataToSend.photos = dataToSend.photos ?? [];
 
       // Loop through each photo file and upload it
     if (data.photosFile && data.photosFile.length > 0) {
@@ -173,7 +127,7 @@ const RestaurantRegister: React.FC = () => {
       }
     }
 
-      console.log(dataToSend)
+       console.log(dataToSend)
       const restaurantResponse = await fetch(`${process.env.REACT_APP_SERVER_IP}/my-restaurants`, {
         method: "POST",
         headers: {
@@ -201,7 +155,7 @@ const RestaurantRegister: React.FC = () => {
   return (
     <div className="container-login">
       <h1 className="text-3xl text-center font-bold mb-8">{t("restaurant-register.header")}</h1>
-      {step === 1 && <RegisterStep1 onSubmit={handleStep1Submit} />}
+      {step === 1 && <RegisterStep1 onSubmit={handleStep1Submit} initialValues={formDataStep1}/>}
       {step === 2 && <RegisterStep2 onSubmit={handleStep2Submit} onBack={handleBack} />}
     </div>
   );

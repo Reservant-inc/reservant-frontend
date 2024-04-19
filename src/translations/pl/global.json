@@ -29,7 +29,7 @@
         "id": "Dowód osobisty",
         "alcoholLicense": "Licencja na alkohol (opcjonalnie)",
         "leaseAgreement": "Umowa najmu lokalu (opcjonalnie)",
-        "businessLicense": "Zgoda na prowadzenie działalności (opcjonalnie)",
+        "businessLicense": "Zgoda na prowadzenie działalności",
         "button": "Zarejestruj restaurację",
         "tags": "Wybierz, które opisują twój lokal",
         "provideDelivery": "Zapewniona dostawa",
@@ -39,7 +39,8 @@
         "saveButton": "Zapisz",
         "nextButton": "Dalej",
         "backButton": "Wróć",
-        "header": "Zarejestruj lokal"
+        "header": "Zarejestruj lokal",
+        "submitSuccessMessage": "Zgłoszenie zostało wysłane"
         
     },
     "errors": {
@@ -97,7 +98,7 @@
                 "required": "Miasto jest wymagane"
             },
             "tin": {
-                "matches": "NIP musi mieć 11 cyfr",
+                "matches": "NIP musi mieć 10 cyfr",
                 "required": "NIP jest wymagany"
             },
             "businessType": {
@@ -106,14 +107,22 @@
             "id": {
                 "required": "Dowód osobisty jest wymagany"
             },
+            "businessPermission": {
+                "required": "Zgoda na prowadzenie działalności jest wymagana"
+            },
             "description": {
-                "max": "Opis moze mieć maksymalnie 200 znaków"
+                "max": "Opis musi mieć maksymalnie 200 znaków",
+                "min": "Opis musi mieć minimum 3 znaki",
+                "required": "Opis jest wymagany"
             },
             "tags": {
                 "min": "Musisz zaznaczyć minimum trzy tagi"
             },
             "logo": {
                 "required": "Logo jest wymagane"
+            },
+            "photos": {
+                "required": "Zdjęcia są wymagane"
             }
         }
     }

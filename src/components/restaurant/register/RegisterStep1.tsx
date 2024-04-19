@@ -1,5 +1,5 @@
 // RegisterStep1.tsx
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { RestaurantData } from "./RestaurantRegister";
@@ -8,32 +8,27 @@ import { useTranslation } from "react-i18next";
 
 interface RegisterStep1Props {
   onSubmit: (data: Partial<RestaurantData>) => void;
+  initialValues: Partial<RestaurantData>;
 }
 
-const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
+
+const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit, initialValues }) => {
     const [t] = useTranslation("global");
 
-    const [selectedIdCard, setSelectedIdCard] = useState<File | null>(null);
-    const [selectedRentalContract, setSelectedRentalContract] = useState<File | null>(null);
-    const [selectedBusinessPermission, setSelectedBusinessPermission] = useState<File | null>(null);
-    const [selectedAlcoholLicense, setSelectedAlcoholLicense] = useState<File | null>(null);
+    const defaultInitialValues: Partial<RestaurantData> = {
+      name: initialValues.name || "",
+      address: initialValues.address || "",
+      postalIndex: initialValues.postalIndex || "",
+      city: initialValues.city || "",
+      nip: initialValues.nip || "",
+      restaurantType: initialValues.restaurantType || "",
+      idCardFile: null,
+      businessPermissionFile: null,
+      rentalContractFile: null,
+      alcoholLicenseFile: null
+    };
 
-  
-  const initialValues: Partial<RestaurantData> = {
-    name: "",
-    address: "",
-    postalIndex: "",
-    city: "",
-    nip: "",
-    restaurantType: "",
-    idCardFile: null,
-    businessPermissionFile: null,
-    rentalContractFile: null,
-    alcoholLicenseFile: null,
-    groupId: null
-  };
-
-  const validationSchema = yup.object({
+    const validationSchema = yup.object({
     name: yup.string().required(t("errors.restaurant-register.name.required")),
     address: yup.string().required(t("errors.restaurant-register.address.required")),
     postalIndex: yup
@@ -44,23 +39,18 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
     nip: yup.string().matches(/^[0-9]{10}$/, t("errors.restaurant-register.tin.matches"))
       .required(t("errors.restaurant-register.tin.required")),
     restaurantType: yup.string().required(t("errors.restaurant-register.businessType.required")),
-    //idCard: yup.mixed().required(t("errors.restaurant-register.id.required"))
-  });
-
+    idCardFile: yup.mixed().required(t("errors.restaurant-register.id.required")),
+    businessPermissionFile: yup.mixed().required(t("errors.restaurant-register.businessPermission.required"))
+});
   
  const handleSubmit = (values: Partial<RestaurantData>) => {
-    const dataWithFile: Partial<RestaurantData> = { ...values, idCardFile: selectedIdCard, 
-      rentalContractFile: selectedRentalContract,
-      businessPermissionFile: selectedBusinessPermission,
-      alcoholLicenseFile: selectedAlcoholLicense
-     };
-    onSubmit(dataWithFile);
+    onSubmit(values);
   };
   
 
   return (
     <div>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+      <Formik initialValues={defaultInitialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {(formik) => (
           <Form>
             <div className="form-container">
@@ -106,23 +96,28 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit }) => {
 
               <div className="form-control">
                 <label htmlFor="idCardFile">{t("restaurant-register.id")}:</label>
-                <input type="file" id="idCardFile" name="idCardFile" accept=".pdf" onChange={(e) => setSelectedIdCard(e.target.files![0])} />
+                <input type="file" id="idCardFile" name="idCardFile" accept=".pdf" 
+                onChange={(e) => formik.setFieldValue("idCardFile", e.target.files && e.target.files[0])} />
                 <ErrorMessage name="idCardFile" component="div" />
               </div>
 
               <div className="form-control">
                 <label htmlFor="businessPermissionFile">{t("restaurant-register.businessLicense")}:</label>
-                <input type="file" id="businessPermissionFile" name="businessPermissionFile" accept=".pdf" onChange={(e) => setSelectedBusinessPermission(e.target.files![0])} />
+                <input type="file" id="businessPermissionFile" name="businessPermissionFile" accept=".pdf" 
+                onChange={(e) => formik.setFieldValue("businessPermissionFile", e.target.files && e.target.files[0])} />
+                <ErrorMessage name="businessPermissionFile" component="div" />
               </div>
 
-              <div className="form-control">
+              <div className="form-control"> 
                 <label htmlFor="rentalContractFile">{t("restaurant-register.leaseAgreement")}:</label>
-                <input type="file" id="rentalContractFile" name="rentalContractFile" accept=".pdf" onChange={(e) => setSelectedRentalContract(e.target.files![0])} />
+                <input type="file" id="rentalContractFile" name="rentalContractFile" accept=".pdf" 
+                onChange={(e) => formik.setFieldValue("rentalContractFile", e.target.files && e.target.files[0])} />
               </div>
 
               <div className="form-control">
                 <label htmlFor="alcoholLicenseFile">{t("restaurant-register.alcoholLicense")}:</label>
-                <input type="file" id="alcoholLicenseFile" name="alcoholLicenseFile" accept=".pdf" onChange={(e) => setSelectedAlcoholLicense(e.target.files![0])} />
+                <input type="file" id="alcoholLicenseFile" name="alcoholLicenseFile" accept=".pdf" 
+                onChange={(e) => formik.setFieldValue("alcoholLicenseFile", e.target.files && e.target.files[0])} />
               </div>
 
               <button type="submit" disabled={!formik.isValid}>

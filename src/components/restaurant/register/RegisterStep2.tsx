@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import * as yup from "yup";
 import { RestaurantData } from "./RestaurantRegister";
 import { useTranslation } from "react-i18next";
+import Snackbar from '@mui/material/Snackbar';
+import { useNavigate } from "react-router-dom";
 
 interface RegisterStep2Props {
   onSubmit: (data: Partial<RestaurantData>) => void;
@@ -10,11 +12,11 @@ interface RegisterStep2Props {
 }
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
-  const [t] = useTranslation("global");
-  
+  const [t] = useTranslation("global");;
+  const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   // Fetch tags from the server
   useEffect(() => {
@@ -44,15 +46,28 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   };
 
   const validationSchema = yup.object({
-    description: yup.string().max(200, t("errors.restaurant-register.description.max")),
+    description: yup.string().max(200, t("errors.restaurant-register.description.max")).
+    min(3, t("errors.restaurant-register.description.min"))
+    .required(t("errors.restaurant-register.description.required")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    //logoFile: yup.mixed().required(t("errors.restaurant-register.logo.required"))
+    logoFile: yup.mixed().required(t("errors.restaurant-register.logo.required")),
+    photosFile: yup.mixed().required(t("errors.restaurant-register.photos.required"))
   });
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+    navigate("/home");
+  };
 
   
   const handleSubmit = (values: Partial<RestaurantData>) => {
-    const dataWithFile: Partial<RestaurantData> = { ...values, logoFile: selectedFile, photosFile: selectedPhotos };
-    onSubmit(dataWithFile);
+    try {
+      onSubmit(values);
+      setSnackbarOpen(true);
+      setIsFormSubmitted(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -101,7 +116,8 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
               </div>
               <div className="form-control">
                 <label htmlFor="lologoFilego">{t("restaurant-register.logo")}:</label>
-                <input type="file" id="logoFile" name="logoFile" accept=".png, .jpeg, .jpg .pdf" onChange={(e) => setSelectedFile(e.target.files![0])} />
+                <input type="file" id="logoFile" name="logoFile" accept=".png, .jpeg, .jpg .pdf" 
+                onChange={(e) => formik.setFieldValue("logoFile", e.target.files && e.target.files[0])} />
                 <ErrorMessage name="logoFile" component="div" />
               </div>
               <div className="form-control">
@@ -112,11 +128,11 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                   name="photosFile"
                   multiple
                   accept=".png, .jpeg, .jpg"
-                  onChange={(event) => {
-                    const files = event.target.files;
+                  onChange={(e) => {
+                    const files = e.target.files;
                     if (files) {
-                      const selectedPhotosArray = Array.from(files); 
-                      setSelectedPhotos(selectedPhotosArray); 
+                      const selectedPhotosArray = Array.from(files);
+                      formik.setFieldValue("photosFile", selectedPhotosArray);
                     }
                   }}
                 />
@@ -127,14 +143,20 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                 <Field type="text" id="description" name="description" />
                 <ErrorMessage name="description" component="div" />
               </div>
-              <button type="submit" disabled={!formik.isValid}>
+              <button type="submit" disabled={!formik.isValid || isFormSubmitted}>
                 {t("restaurant-register.saveButton")}
               </button>
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={5000}
+                onClose={handleSnackbarClose}
+                message={t("restaurant-register.submitSuccessMessage")}
+            />
             </div>
           </Form>
         )}
       </Formik>
-      <button onClick={onBack}>{t("restaurant-register.backButton")}</button>
+      <button onClick={onBack} disabled={isFormSubmitted}>{t("restaurant-register.backButton")}</button>
     </div>
   );
 };
