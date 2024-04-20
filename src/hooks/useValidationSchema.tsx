@@ -106,10 +106,36 @@ export const useValidationSchemas = () => {
     }
   );
 
+  const RestaurantRegisterStep2Schema = yup.object({
+    description: yup.string().max(200, t("errors.restaurant-register.description.max")).
+    min(3, t("errors.restaurant-register.description.min"))
+    .required(t("errors.restaurant-register.description.required")),
+    tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
+    logoFile: yup.mixed().required(t("errors.restaurant-register.logo.required")),
+    photosFile: yup.mixed().required(t("errors.restaurant-register.photos.required"))
+  });
+
+  const RestaurantRegisterStep1Schema = yup.object({
+    name: yup.string().required(t("errors.restaurant-register.name.required")),
+    address: yup.string().required(t("errors.restaurant-register.address.required")),
+    postalIndex: yup
+      .string()
+      .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
+      .required(t("errors.restaurant-register.postalCode.required")),
+    city: yup.string().required(t("errors.restaurant-register.city.required")),
+    nip: yup.string().matches(/^[0-9]{10}$/, t("errors.restaurant-register.tin.matches"))
+      .required(t("errors.restaurant-register.tin.required")),
+    restaurantType: yup.string().required(t("errors.restaurant-register.businessType.required")),
+    idCardFile: yup.mixed().required(t("errors.restaurant-register.id.required")),
+    businessPermissionFile: yup.mixed().required(t("errors.restaurant-register.businessPermission.required"))
+});
+
   return {
     loginSchema,
     userRegisterSchema,
     employeeRegisterSchema,
-    RestaurantAddEmployeeSchema
+    RestaurantAddEmployeeSchema,
+    RestaurantRegisterStep1Schema,
+    RestaurantRegisterStep2Schema
   };
 };

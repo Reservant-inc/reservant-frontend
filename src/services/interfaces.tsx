@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { LoginResponseType } from "./types";
+import { LoginResponseType, RestaurantDataType } from "./types";
 
 export interface AuthContextValue {
     isAuthorized: boolean;
@@ -48,4 +48,14 @@ export interface GroupProps {
     restaurantCount: number;
     handleChangeActiveRestaurant: (id: number) => void;
     activeRestaurantId: number | null;
+  }
+
+export interface RegisterStep1Props {
+    onSubmit: (data: Partial<RestaurantDataType>) => void;
+    initialValues: Partial<RestaurantDataType>;
+}
+  
+export interface RegisterStep2Props {
+    onSubmit: (data: Partial<RestaurantDataType>) => void;
+    onBack: () => void;
   }

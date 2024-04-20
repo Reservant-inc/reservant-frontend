@@ -1,6 +1,6 @@
 import LandingPage from "../LandingPage"
 import Login from "../Login"
-import RestaurantRegister from "../register/RestaurantRegister"
+import RestaurantRegister from "../register/restaurantRegister/RestaurantRegister"
 import AddEmployee from "../management/RestaurantManagement/RestaurantAddEmp"
 import EmployeeRegister from "../register/EmployeeRegister"
 import React from "react"

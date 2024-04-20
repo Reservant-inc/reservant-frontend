@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import * as yup from "yup";
-import { RestaurantData } from "./RestaurantRegister";
+import { RestaurantDataType } from "../../../services/types";
 import { useTranslation } from "react-i18next";
 import Snackbar from '@mui/material/Snackbar';
 import { useNavigate } from "react-router-dom";
-
-interface RegisterStep2Props {
-  onSubmit: (data: Partial<RestaurantData>) => void;
-  onBack: () => void;
-}
+import { RegisterStep2Props } from "../../../services/interfaces";
+import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   const [t] = useTranslation("global");;
@@ -17,6 +13,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const { RestaurantRegisterStep2Schema } = useValidationSchemas()
 
   // Fetch tags from the server
   useEffect(() => {
@@ -37,7 +34,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
   }, []);
 
   
-  const initialValues: Partial<RestaurantData> = {
+  const initialValues: Partial<RestaurantDataType> = {
     tags: [],
     provideDelivery: false,
     logoFile: null,
@@ -45,22 +42,13 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     description: "",
   };
 
-  const validationSchema = yup.object({
-    description: yup.string().max(200, t("errors.restaurant-register.description.max")).
-    min(3, t("errors.restaurant-register.description.min"))
-    .required(t("errors.restaurant-register.description.required")),
-    tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    logoFile: yup.mixed().required(t("errors.restaurant-register.logo.required")),
-    photosFile: yup.mixed().required(t("errors.restaurant-register.photos.required"))
-  });
-
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
     navigate("/home");
   };
 
   
-  const handleSubmit = (values: Partial<RestaurantData>) => {
+  const handleSubmit = (values: Partial<RestaurantDataType>) => {
     try {
       onSubmit(values);
       setSnackbarOpen(true);
@@ -72,7 +60,7 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
 
   return (
     <div>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+      <Formik initialValues={initialValues} validationSchema={RestaurantRegisterStep2Schema} onSubmit={handleSubmit}>
         {(formik) => (
           <Form>
             <div className="form-container">

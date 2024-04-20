@@ -1,21 +1,16 @@
-// RegisterStep1.tsx
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { RestaurantData } from "./RestaurantRegister";
+import { RestaurantDataType } from "../../../services/types";
 import { useTranslation } from "react-i18next";
-
-
-interface RegisterStep1Props {
-  onSubmit: (data: Partial<RestaurantData>) => void;
-  initialValues: Partial<RestaurantData>;
-}
-
+import { RegisterStep1Props } from "../../../services/interfaces";
+import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 
 const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit, initialValues }) => {
     const [t] = useTranslation("global");
+    const { RestaurantRegisterStep1Schema } = useValidationSchemas()
 
-    const defaultInitialValues: Partial<RestaurantData> = {
+    const defaultInitialValues: Partial<RestaurantDataType> = {
       name: initialValues.name || "",
       address: initialValues.address || "",
       postalIndex: initialValues.postalIndex || "",
@@ -27,30 +22,15 @@ const RegisterStep1: React.FC<RegisterStep1Props> = ({ onSubmit, initialValues }
       rentalContractFile: null,
       alcoholLicenseFile: null
     };
-
-    const validationSchema = yup.object({
-    name: yup.string().required(t("errors.restaurant-register.name.required")),
-    address: yup.string().required(t("errors.restaurant-register.address.required")),
-    postalIndex: yup
-      .string()
-      .matches(/^[0-9]{2}-[0-9]{3}$/, t("errors.restaurant-register.postalCode.matches"))
-      .required(t("errors.restaurant-register.postalCode.required")),
-    city: yup.string().required(t("errors.restaurant-register.city.required")),
-    nip: yup.string().matches(/^[0-9]{10}$/, t("errors.restaurant-register.tin.matches"))
-      .required(t("errors.restaurant-register.tin.required")),
-    restaurantType: yup.string().required(t("errors.restaurant-register.businessType.required")),
-    idCardFile: yup.mixed().required(t("errors.restaurant-register.id.required")),
-    businessPermissionFile: yup.mixed().required(t("errors.restaurant-register.businessPermission.required"))
-});
   
- const handleSubmit = (values: Partial<RestaurantData>) => {
+ const handleSubmit = (values: Partial<RestaurantDataType>) => {
     onSubmit(values);
   };
   
 
   return (
     <div>
-      <Formik initialValues={defaultInitialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+      <Formik initialValues={defaultInitialValues} validationSchema={RestaurantRegisterStep1Schema} onSubmit={handleSubmit}>
         {(formik) => (
           <Form>
             <div className="form-container">

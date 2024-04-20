@@ -1,47 +1,23 @@
 import React, { useState } from "react";
 import RegisterStep1 from "./RegisterStep1";
 import RegisterStep2 from "./RegisterStep2";
+import { RestaurantDataType } from "../../../services/types";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
 
-export interface RestaurantData {
-  name: string;
-  address: string;
-  postalIndex: string;
-  city: string;
-  nip: string;
-  restaurantType: string;
-  idCardFile: File | null;
-  idCard: string;
-  businessPermissionFile: File | null;
-  businessPermission: string; 
-  rentalContractFile: File | null;
-  rentalContract: string;
-  alcoholLicenseFile: File | null;
-  alcoholLicense: string;
-  tags: string[];
-  provideDelivery: boolean;
-  logoFile: File | null;
-  logo: string;
-  photosFile: File[] | null;
-  photos: string[];
-  description: string;
-  groupId: number | null; 
-}
-
 const RestaurantRegister: React.FC = () => {
   const [step, setStep] = useState(1);
-  const [formDataStep1, setFormDataStep1] = useState<Partial<RestaurantData>>({});
-  const [formDataStep2, setFormDataStep2] = useState<Partial<RestaurantData>>({});
+  const [formDataStep1, setFormDataStep1] = useState<Partial<RestaurantDataType>>({});
+  const [formDataStep2, setFormDataStep2] = useState<Partial<RestaurantDataType>>({});
 
   const { t } = useTranslation("global"); // Destructure t from the useTranslation hook
 
-  const handleStep1Submit = (data: Partial<RestaurantData>) => {
+  const handleStep1Submit = (data: Partial<RestaurantDataType>) => {
     setFormDataStep1((prevData) => ({ ...prevData, ...data }));
     setStep(2);
   };
 
-  const handleStep2Submit = (data: Partial<RestaurantData>) => {
+  const handleStep2Submit = (data: Partial<RestaurantDataType>) => {
     setFormDataStep2((prevData) => ({ ...prevData, ...data }));
     handleSubmit({ ...formDataStep1, ...data });
   };
@@ -50,7 +26,7 @@ const RestaurantRegister: React.FC = () => {
     setStep(1);
   };
 
-  const handleSubmit = async (data: Partial<RestaurantData>) => {
+  const handleSubmit = async (data: Partial<RestaurantDataType>) => {
     try {
       const dataToSend = { ...data };
       delete dataToSend.idCardFile;
@@ -60,7 +36,7 @@ const RestaurantRegister: React.FC = () => {
       delete dataToSend.rentalContractFile;
       delete dataToSend.alcoholLicenseFile;
 
-      const filesToUpload: { name: keyof RestaurantData; key: keyof RestaurantData }[] = [
+      const filesToUpload: { name: keyof RestaurantDataType; key: keyof RestaurantDataType }[] = [
         { name: "idCardFile", key: "idCard" },
         { name: "logoFile", key: "logo" },
         { name: "businessPermissionFile", key: "businessPermission" },

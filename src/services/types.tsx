@@ -43,3 +43,28 @@ export type RestaurantDetailsType = {
     city: string,
     groupId: 0
   }
+
+  export type RestaurantDataType = {
+    name: string;
+    address: string;
+    postalIndex: string;
+    city: string;
+    nip: string;
+    restaurantType: string;
+    idCardFile: File | null;
+    idCard: string;
+    businessPermissionFile: File | null;
+    businessPermission: string; 
+    rentalContractFile: File | null;
+    rentalContract: string;
+    alcoholLicenseFile: File | null;
+    alcoholLicense: string;
+    tags: string[];
+    provideDelivery: boolean;
+    logoFile: File | null;
+    logo: string;
+    photosFile: File[] | null;
+    photos: string[];
+    description: string;
+    groupId: number | null; 
+  }
