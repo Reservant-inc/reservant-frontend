@@ -14,6 +14,12 @@
         "confirmPassword": "Confirm password",
         "registerButton": "Register"
     },
+    "add-employee": {
+        "isBackdoorEmployee": "Backdoor employee",
+        "isHallEmployee": "Hall employee" ,
+        "addEmployee": "Add emploee"
+    },
+    
     "restaurant-register": {
         "name": "Name",
         "address": "Address",
@@ -41,9 +47,13 @@
         "backButton": "Back",
         "header": "Register your local",
         "submitSuccessMessage": "The application has been sent"
-        
     },
     "errors": {
+        "add-employee": {
+            "employeeRole": {
+                "required" : "At least one role is required"
+            }
+        },
         "login": {
             "login": "Login is required",
             "password": "Password is required"
@@ -124,6 +134,13 @@
             "photos": {
                 "required": "Photos are required"
             }
+        }
+    },
+    "restaurant-management": {
+        "groups": {
+            "counter": "Number of restaurants",
+            "add-button": "Add a new Group",
+            "header": "My Groups"
         }
     }
 }

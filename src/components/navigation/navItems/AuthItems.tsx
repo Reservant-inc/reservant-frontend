@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import OutsideClickHandler from "../../../eventHandlers/OutsideClickHandler";
+import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const AuthItems = () => {
+const AuthItems: React.FC = () => {
 
     const navigate = useNavigate()
 

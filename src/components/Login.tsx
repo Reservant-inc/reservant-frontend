@@ -1,61 +1,33 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
-import * as yup from "yup";
-import "./Login.css";
 import { useTranslation } from "react-i18next";
-import { AuthData } from "../AuthWrapper";
-import Cookies from "js-cookie";
+import { AuthData } from "./routing/AuthWrapper";
+import { fetchPOST } from "../services/APIconn";
+import { useValidationSchemas } from "../hooks/useValidationSchema";
 
 const initialValues = {
   login: "",
   password: "",
 };
 
-const Login = () => {
+const Login: React.FC = () => {
 
+  const [t] = useTranslation("global");
   const { login } = AuthData();
-  const [t] = useTranslation("global")
-
-  const validationSchema = yup.object({
-    login: yup.string().required(t("errors.login.login")),
-    password: yup.string().required(t("errors.login.password")),
-  });
+  const { loginSchema } = useValidationSchemas()
 
   const onSubmit = async (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-
     try {
       setSubmitting(true);
+      
+      const response = await fetchPOST("/auth/login", JSON.stringify(values))
 
-      const response = await fetch(
-        `${process.env.REACT_APP_SERVER_IP}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        },
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        console.log(errorData);
-        throw new Error("Wrong login data")
-      }
-
-      const data = await response.json();
-
-      login(data.token)
-      Cookies.set('userInfo', JSON.stringify({
-        firstName : data.firstName,
-        lastName: data.lastName,
-        roles: data.roles
-      }), { expires: 1 });
-
+      login(response)
+      
     } catch (error) {
       console.log(error);
     } finally {
@@ -67,7 +39,7 @@ const Login = () => {
     <div className="container-login">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={loginSchema}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -84,10 +56,6 @@ const Login = () => {
                 <Field type="password" id="password" name="password" />
                 <ErrorMessage name="password" component="div" />
               </div>
-
-              {
-                // TODO - rememberMe Field
-              }
 
               <button type="submit" disabled={!formik.isValid}>
                 Login

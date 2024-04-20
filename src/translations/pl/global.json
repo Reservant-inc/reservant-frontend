@@ -41,7 +41,6 @@
         "backButton": "Wróć",
         "header": "Zarejestruj lokal",
         "submitSuccessMessage": "Zgłoszenie zostało wysłane"
-        
     },
     "errors": {
         "login": {
@@ -124,6 +123,13 @@
             "photos": {
                 "required": "Zdjęcia są wymagane"
             }
+        }
+    },
+    "restaurant-management": {
+        "groups": {
+            "counter": "Liczba lokali",
+            "add-button": "Dodaj Grupę",
+            "header": "Moje Grupy"
         }
     }
 }

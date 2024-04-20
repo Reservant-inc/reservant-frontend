@@ -1,9 +1,9 @@
 import { useLocation } from "react-router-dom";
 import React, {useEffect, useState} from "react";
 
-import NavBar from "../components/navigation/navbar/NavBar";
-import { AuthWrapper } from "../components/auth/AuthWrapper";
-import Footer from "../components/navigation/navbar/Footer";
+import NavBar from "../components/navigation/NavBar";
+import { AuthWrapper } from "../components/routing/AuthWrapper";
+import Footer from "../components/navigation/Footer";
 
 
 
@@ -15,7 +15,6 @@ const App = () => {
 
   const showNavBar = !["/user/login", "/user/register"].includes(location.pathname);
 
-
   //sets theme as os preffered or chosen by user on page load
 
   useEffect(()=>{
@@ -26,7 +25,6 @@ const App = () => {
     }
   })
   
-
   return (
 
       <div className="App">

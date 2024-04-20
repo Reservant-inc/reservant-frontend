@@ -1,10 +1,5 @@
-import React, { useRef, useEffect, ReactNode } from 'react';
-
-interface OutsideClickHandlerProps {
-  onOutsideClick: () => void
-  isPressed: boolean
-  children: ReactNode
-}
+import React, { useRef, useEffect } from 'react';
+import { OutsideClickHandlerProps } from '../../services/interfaces';
 
 const OutsideClickHandler: React.FC<OutsideClickHandlerProps> = ({ children, onOutsideClick, isPressed }) => {
   const ref = useRef<HTMLDivElement>(null);

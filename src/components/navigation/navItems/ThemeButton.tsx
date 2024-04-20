@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function ThemeButton() {
+const ThemeButton: React.FC = () => {
 
   const[isDark, setIsDark] = useState<boolean>(window.matchMedia('(prefers-color-scheme: dark)').matches);
 
