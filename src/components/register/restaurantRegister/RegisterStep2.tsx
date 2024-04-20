@@ -2,24 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
 import { RestaurantDataType } from "../../../services/types";
 import { useTranslation } from "react-i18next";
-import Snackbar from '@mui/material/Snackbar';
+import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { RegisterStep2Props } from "../../../services/interfaces";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 
 const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
-  const [t] = useTranslation("global");;
+  const [t] = useTranslation("global");
   const navigate = useNavigate();
   const [tags, setTags] = useState<string[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-  const { RestaurantRegisterStep2Schema } = useValidationSchemas()
+  const { RestaurantRegisterStep2Schema } = useValidationSchemas();
 
   // Fetch tags from the server
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_IP}/restaurant-tags`);
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER_IP}/restaurant-tags`,
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch tags");
         }
@@ -33,7 +35,6 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     fetchTags();
   }, []);
 
-  
   const initialValues: Partial<RestaurantDataType> = {
     tags: [],
     provideDelivery: false,
@@ -47,7 +48,6 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
     navigate("/home");
   };
 
-  
   const handleSubmit = (values: Partial<RestaurantDataType>) => {
     try {
       onSubmit(values);
@@ -60,7 +60,11 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
 
   return (
     <div>
-      <Formik initialValues={initialValues} validationSchema={RestaurantRegisterStep2Schema} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={RestaurantRegisterStep2Schema}
+        onSubmit={handleSubmit}
+      >
         {(formik) => (
           <Form>
             <div className="form-container">
@@ -78,13 +82,13 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                             onChange={(e) => {
                               const isChecked = e.target.checked;
                               if (isChecked) {
-                                form.setFieldValue(
-                                  "tags",
-                                  [...form.values.tags, tag]
-                                );
+                                form.setFieldValue("tags", [
+                                  ...form.values.tags,
+                                  tag,
+                                ]);
                               } else {
                                 const filteredTags = form.values.tags.filter(
-                                  (val: string) => val !== tag
+                                  (val: string) => val !== tag,
                                 );
                                 form.setFieldValue("tags", filteredTags);
                               }
@@ -99,17 +103,37 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                 <ErrorMessage name="tags" component="div" />
               </div>
               <div className="form-control">
-                <label htmlFor="provideDelivery">{t("restaurant-register.provideDelivery")}:</label>
-                <Field type="checkbox" id="provideDelivery" name="provideDelivery" />
+                <label htmlFor="provideDelivery">
+                  {t("restaurant-register.provideDelivery")}:
+                </label>
+                <Field
+                  type="checkbox"
+                  id="provideDelivery"
+                  name="provideDelivery"
+                />
               </div>
               <div className="form-control">
-                <label htmlFor="lologoFilego">{t("restaurant-register.logo")}:</label>
-                <input type="file" id="logoFile" name="logoFile" accept=".png, .jpeg, .jpg .pdf" 
-                onChange={(e) => formik.setFieldValue("logoFile", e.target.files && e.target.files[0])} />
+                <label htmlFor="lologoFilego">
+                  {t("restaurant-register.logo")}:
+                </label>
+                <input
+                  type="file"
+                  id="logoFile"
+                  name="logoFile"
+                  accept=".png, .jpeg, .jpg .pdf"
+                  onChange={(e) =>
+                    formik.setFieldValue(
+                      "logoFile",
+                      e.target.files && e.target.files[0],
+                    )
+                  }
+                />
                 <ErrorMessage name="logoFile" component="div" />
               </div>
               <div className="form-control">
-                <label htmlFor="photosFile">{t("restaurant-register.photos")}:</label>
+                <label htmlFor="photosFile">
+                  {t("restaurant-register.photos")}:
+                </label>
                 <input
                   type="file"
                   id="photosFile"
@@ -127,11 +151,16 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                 <ErrorMessage name="photosFile" component="div" />
               </div>
               <div className="form-control">
-                <label htmlFor="description">{t("restaurant-register.description")}:</label>
+                <label htmlFor="description">
+                  {t("restaurant-register.description")}:
+                </label>
                 <Field type="text" id="description" name="description" />
                 <ErrorMessage name="description" component="div" />
               </div>
-              <button type="submit" disabled={!formik.isValid || isFormSubmitted}>
+              <button
+                type="submit"
+                disabled={!formik.isValid || isFormSubmitted}
+              >
                 {t("restaurant-register.saveButton")}
               </button>
               <Snackbar
@@ -139,12 +168,14 @@ const RegisterStep2: React.FC<RegisterStep2Props> = ({ onSubmit, onBack }) => {
                 autoHideDuration={5000}
                 onClose={handleSnackbarClose}
                 message={t("restaurant-register.submitSuccessMessage")}
-            />
+              />
             </div>
           </Form>
         )}
       </Formik>
-      <button onClick={onBack} disabled={isFormSubmitted}>{t("restaurant-register.backButton")}</button>
+      <button onClick={onBack} disabled={isFormSubmitted}>
+        {t("restaurant-register.backButton")}
+      </button>
     </div>
   );
 };

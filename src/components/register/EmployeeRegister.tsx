@@ -12,13 +12,12 @@ const initialValues = {
   lastName: "",
   phoneNumber: "",
   password: "",
-  confirmPassword: ""
+  confirmPassword: "",
 };
 
 const RegisterEmp: React.FC = () => {
-  
-  const [t] = useTranslation("global")
-  const { employeeRegisterSchema } = useValidationSchemas()
+  const [t] = useTranslation("global");
+  const { employeeRegisterSchema } = useValidationSchemas();
 
   const handleSubmit = async (
     values: FormikValues,
@@ -26,17 +25,16 @@ const RegisterEmp: React.FC = () => {
   ) => {
     try {
       setSubmitting(true);
-      
+
       const body = JSON.stringify({
         login: values.login,
         firstName: values.firstName,
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
-        password: values.password
-      })
+        password: values.password,
+      });
 
-      await fetchPOST("/auth/register-restaurant-employee", body)
-
+      await fetchPOST("/auth/register-restaurant-employee", body);
     } catch (error) {
       console.log(error);
     } finally {
@@ -65,7 +63,7 @@ const RegisterEmp: React.FC = () => {
                 <Field type="text" id="lastName" name="lastName" />
                 <ErrorMessage name="lastName" component="div" />
               </div>
-              
+
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
                 <Field type="text" id="login" name="login" />
@@ -74,12 +72,13 @@ const RegisterEmp: React.FC = () => {
 
               <div className="form-control">
                 <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
-                <Field as={PhoneInput}
+                <Field
+                  as={PhoneInput}
                   international
                   defaultCountry="PL"
                   name={"phoneNumber"}
                   value={formik.values.phoneNumber}
-                  onChange={(value: string) => 
+                  onChange={(value: string) =>
                     formik.setFieldValue("phoneNumber", value)
                   }
                   className="phone-input"
@@ -94,7 +93,9 @@ const RegisterEmp: React.FC = () => {
               </div>
 
               <div className="form-control">
-                <label htmlFor="confirmPassword">{t("auth.confirmPassword")}:</label>
+                <label htmlFor="confirmPassword">
+                  {t("auth.confirmPassword")}:
+                </label>
                 <Field
                   type="password"
                   id="confirmPassword"
@@ -112,6 +113,6 @@ const RegisterEmp: React.FC = () => {
       </Formik>
     </div>
   );
-}
+};
 
-export default RegisterEmp
+export default RegisterEmp;
