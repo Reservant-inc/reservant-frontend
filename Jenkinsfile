@@ -7,7 +7,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh "docker build -t reservant-front ."
+                sh "docker build -t reservant-front:latest ."
             }
         }
 
@@ -16,8 +16,8 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh "docker stop skalmar || true"
-                sh "docker run --detach --rm -v	skalmar_nginx_config:/etc/nginx/conf.d --name skalmar -p 80:80 reservant-front"
+                sh "docker stop skalmar && docker rm skalmar || true"
+                sh "docker run --detach --restart=on-failure -v	skalmar_nginx_config:/etc/nginx/conf.d --name skalmar -p 80:80 reservant-front"
             }
         }
     }
