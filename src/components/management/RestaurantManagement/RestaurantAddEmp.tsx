@@ -4,6 +4,7 @@ import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchPOST } from "../../../services/APIconn";
+import ErrorMes from "../../ErrorMes"
 
 const initialValues = {
   employeeId: "",
@@ -68,7 +69,9 @@ const RestaurantAddEmp = () => {
                   <label htmlFor="isHallEmployee">{t("add-employee.isHallEmployee")}</label>
               
 
-                <ErrorMessage name="hasRole" component="div" />
+                  <ErrorMessage name="isHallEmployee">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>
                 </div>
               </div>
 

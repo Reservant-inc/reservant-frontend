@@ -101,7 +101,7 @@ export const useValidationSchemas = () => {
       return new yup.ValidationError(
         t("errors.add-employee.employeeRole.required"),
         null,
-        'hasRole'
+        'isHallEmployee'
       );
     }
   );

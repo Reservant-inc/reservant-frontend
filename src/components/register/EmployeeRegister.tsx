@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchPOST } from "../../services/APIconn";
+import ErrorMes from "../ErrorMes"
 
 const initialValues = {
   login: "",
@@ -56,20 +57,26 @@ const RegisterEmp: React.FC = () => {
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="firstName">{t("auth.firstName")}:</label>
-                <Field type="text" id="firstName" name="firstName" />
-                <ErrorMessage name="firstName" component="div" />
+                <Field type="text" id="firstName" name="firstName" className={!(formik.errors.firstName && formik.touched.firstName)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="firstName">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="lastName">{t("auth.lastName")}:</label>
-                <Field type="text" id="lastName" name="lastName" />
-                <ErrorMessage name="lastName" component="div" />
+                <Field type="text" id="lastName" name="lastName" className={!(formik.errors.lastName && formik.touched.lastName)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="lastName">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
               
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
-                <Field type="text" id="login" name="login" />
-                <ErrorMessage name="login" component="div" />
+                <Field type="text" id="login" name="login" className={!(formik.errors.login && formik.touched.login)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="login">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
@@ -82,15 +89,19 @@ const RegisterEmp: React.FC = () => {
                   onChange={(value: string) => 
                     formik.setFieldValue("phoneNumber", value)
                   }
-                  className="phone-input"
+                  className={!(formik.errors.phoneNumber && formik.touched.phoneNumber)?"border-none":"border-solid border-2 border-pink"}
                 />
-                <ErrorMessage name="phoneNumber" component="div" />
+                <ErrorMessage name="phoneNumber">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="password">{t("auth.password")}:</label>
-                <Field type="password" id="password" name="password" />
-                <ErrorMessage name="password" component="div" />
+                <Field type="password" id="password" name="password" className={!(formik.errors.password && formik.touched.password)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="password">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
@@ -99,8 +110,11 @@ const RegisterEmp: React.FC = () => {
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
+                  className={!(formik.errors.confirmPassword && formik.touched.confirmPassword)?"border-none":"border-solid border-2 border-pink"}
                 />
-                <ErrorMessage name="confirmPassword" component="div" />
+                <ErrorMessage name="confirmPassword">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <button type="submit" disabled={!formik.isValid}>

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
+import Error from "./ErrorMes"
 
 const initialValues = {
   login: "",
@@ -47,14 +48,18 @@ const Login: React.FC = () => {
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
-                <Field type="text" id="login" name="login" />
-                <ErrorMessage name="login" component="div" />
+                <Field type="text" id="login" name="login" className={!(formik.errors.login && formik.touched.login)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="login">
+                  { msg => <Error msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="password">{t("auth.password")}:</label>
-                <Field type="password" id="password" name="password" />
-                <ErrorMessage name="password" component="div" />
+                <Field type="password" id="password" name="password" className={!(formik.errors.password && formik.touched.password)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="password">
+                  { msg => <Error msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <button type="submit" disabled={!formik.isValid}>
