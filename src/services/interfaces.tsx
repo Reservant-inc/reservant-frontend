@@ -1,6 +1,11 @@
 import { ReactNode } from "react";
 import { LoginResponseType, RestaurantDataType } from "./types";
 
+export interface SectionProps {
+  name: string,
+  connString: string
+}
+
 export interface AuthContextValue {
   isAuthorized: boolean;
   login: (token: LoginResponseType) => void;
@@ -58,4 +63,9 @@ export interface RegisterStep1Props {
 export interface RegisterStep2Props {
   onSubmit: (data: Partial<RestaurantDataType>) => void;
   onBack: () => void;
+}
+
+export interface NavBarProps {
+  sections: React.FC,
+  menu: React.FC
 }
