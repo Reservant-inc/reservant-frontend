@@ -91,18 +91,17 @@ export const useValidationSchemas = () => {
     isBackdoorEmployee: yup.boolean(),
     isHallEmployee: yup.boolean() 
   }).test(
-    t("errors.add-employee.employeeRole.required"),
-    { context: { message: t("errors.employee-register.employeeRole.required") } }, 
+    "at-least-one-checkbox",
+    t("errors.employee-register.employeeRole.required"), 
     (obj) => {
       if (obj.isBackdoorEmployee || obj.isHallEmployee) {
         return true;
       }
-  
-      return new yup.ValidationError(
-        t("errors.add-employee.employeeRole.required"),
-        null,
-        'hasRole'
-      );
+      
+      return new yup.ValidationError([
+          new yup.ValidationError(t("errors.add-employee.employeeRole.required"),null,"isBackdoorEmployee"),
+          new yup.ValidationError(t("errors.add-employee.employeeRole.required"),null,"isHallEmployee"),
+        ])
     }
   );
 
