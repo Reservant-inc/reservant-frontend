@@ -12,17 +12,22 @@ module.exports = {
     extend: {
     },
     colors: {
-      'white'   : '#fefefe',
-      'cream'   : '#fffbf8',
-      'blue'    : '#3ab2c1',
-      'd-purple': '#382674',
-      'l-purple': '#5c4a9b',
-      'pink'    : '#c13a70',
-      'l-grey'  : '#f2f2f2',
-      'grey'    : '#333333',
-      'black'   : '#222222',
+      'primary'     : '#592836',
+      'primary-2'   : '#a94c79',
+      'primary-3'   : '#e38fb6',
+      'primary-4'   : '#f1c7da',
+      'secondary'   : '#64c3a6',
+      'secondary-2' : '#b1e1d2',
+      'white'       : '#fefefe',
+      'grey-1'      : '#eeeeee',
+      'grey-2'      : '#a6a6a6',
+      'grey-3'      : '#2b2b2b',
+      'grey-4'      : '#333333',
+      'black'       : '#222222',
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
 

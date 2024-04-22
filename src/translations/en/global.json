@@ -34,11 +34,19 @@
         "tin": "TIN",
         "id": "ID",
         "alcoholLicense": "Alcohol license (optional)",
-        "leaseAgreement": "Lease agreement (optional)",
-        "businessLicense": "Business license (optional)",
-        "group-assignment": "Assign to a Group (optional)",
-        "no-group-assignment": "Do not assign",
-        "button": "Register restaurant"
+        "leaseAgreement": "Rental contract (optional)",
+        "businessLicense": "Business permission",
+        "button": "Register restaurant",
+        "tags": "Choose which ones describe your premises",
+        "provideDelivery": "Provided delivery",
+        "logo": "Logo",
+        "photos": "Photos of the premises",
+        "description": "Description of the premises",
+        "saveButton": "Save",
+        "nextButton": "Next",
+        "backButton": "Back",
+        "header": "Register your local",
+        "submitSuccessMessage": "The application has been sent"
     },
     "errors": {
         "add-employee": {
@@ -100,7 +108,7 @@
                 "required": "City is required"
             },
             "tin": {
-                "matches": "TIN must have 11 numbers",
+                "matches": "TIN must have 10 numbers",
                 "required": "TIN is required"
             },
             "businessType": {
@@ -108,6 +116,23 @@
             },
             "id": {
                 "required": "ID is required"
+            },
+            "businessPermission": {
+                "required": "Business permission is required"
+            },
+            "description": {
+                "max": "The description must have a maximum of 200 characters",
+                "min": "The description must have a minimum of 3 characters",
+                "required": "The description is required"
+            },
+            "tags": {
+                "min": "You must select a minimum of three tags"
+            },
+            "logo": {
+                "required": "Logo is required"
+            },
+            "photos": {
+                "required": "Photos are required"
             }
         }
     },

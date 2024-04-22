@@ -12,10 +12,9 @@ const initialValues = {
 };
 
 const Login: React.FC = () => {
-
   const [t] = useTranslation("global");
   const { login } = AuthData();
-  const { loginSchema } = useValidationSchemas()
+  const { loginSchema } = useValidationSchemas();
 
   const onSubmit = async (
     values: FormikValues,
@@ -23,11 +22,10 @@ const Login: React.FC = () => {
   ) => {
     try {
       setSubmitting(true);
-      
-      const response = await fetchPOST("/auth/login", JSON.stringify(values))
 
-      login(response)
-      
+      const response = await fetchPOST("/auth/login", JSON.stringify(values));
+
+      login(response);
     } catch (error) {
       console.log(error);
     } finally {
@@ -67,7 +65,8 @@ const Login: React.FC = () => {
 
       <div className="container-links">
         <p>
-          {t("landing-page.notRegistered")} <Link to="/user/register">{t("landing-page.registerButton")}</Link>
+          {t("landing-page.notRegistered")}{" "}
+          <Link to="/user/register">{t("landing-page.registerButton")}</Link>
         </p>
         <Link to="/">{t("landing-page.resetPassword")}</Link>
       </div>
