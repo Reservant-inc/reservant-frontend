@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 
-const ThemeButton: React.FC = () => {
+export interface ThemeButtonProps {
+  setIsDark: Function
+}
 
-  const[isDark, setIsDark] = useState<boolean>(window.matchMedia('(prefers-color-scheme: dark)').matches);
+const ThemeButton: React.FC<ThemeButtonProps> = ({ setIsDark }) => {
 
     //changes local storage value of theme
   const toggleTheme = () => {

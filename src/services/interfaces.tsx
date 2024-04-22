@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { LoginResponseType, RestaurantDataType } from "./types";
 
 export interface SectionProps {
-  name: string,
+  component: ReactNode,
   connString: string
 }
 

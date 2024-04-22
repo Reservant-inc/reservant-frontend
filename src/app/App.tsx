@@ -13,7 +13,7 @@ const App = () => {
 
   return (
       <div className="App font-mont">
-        <div className="flex flex-col items-center bg-l-grey h-screen dark:bg-black">
+        <div className="flex flex-col items-center bg-l-grey h-screen">
           <AuthWrapper />
         </div>
         {/* <Footer /> */}

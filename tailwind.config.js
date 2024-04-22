@@ -19,10 +19,13 @@ module.exports = {
       'secondary'   : '#64c3a6',
       'secondary-2' : '#b1e1d2',
       'white'       : '#fefefe',
+      'icon'        : '#a6a6a6',
       'grey'        : '#333333',
       'black'       : '#222222',
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
 
