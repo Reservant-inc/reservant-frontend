@@ -10,11 +10,11 @@ const Section: React.FC<SectionProps> = ({ component, connString }) => {
     const isClicked = location.pathname === connString
 
     return(
-        <div>
-            <button className={'h-14 w-24 fill-icon hover:bg-[#2b2b2b] flex flex-col justify-center items-center' + (isClicked ? ' fill-primary dark:fill-secondary' : "")} onClick={() => navigate(connString)}>
+        <div className="relative h-14">
+            <button className={'h-12 mt-1 w-28 rounded-xl fill-icon flex flex-col justify-between items-center relative' + (isClicked ? ' fill-primary-2 dark:fill-secondary dark:hover:bg-none hover:bg-transpartent' : " dark:hover:bg-[#2b2b2b] hover:bg-[#eeeeee]")} onClick={() => navigate(connString)}>
                 { component }
             </button>
-            { isClicked && <span className="h-[2px] w-full bg-primary dark:color-secondary flex-end"/> }
+            { isClicked && <span className="h-[3px] w-full bg-primary-2 dark:bg-secondary absolute bottom-0 transition transform scale-y-100"/> }
         </div>
     )
 }
