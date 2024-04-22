@@ -4,6 +4,7 @@ import { nav } from "./Routing";
 import Cookies from "js-cookie";
 import { LoginResponseType } from "../../services/types";
 import { AuthContextValue } from "../../services/interfaces";
+import NavBar from "../navigation/NavBar";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -65,7 +66,14 @@ export const AuthWrapper = () => {
                 ),
               )
             ) {
-              return <Route key={i} path={r.path} element={r.element} />;
+              return(
+                  <Route key={i} path={r.path} element={
+                    <div className="w-full h-full">
+                      <NavBar />
+                      {r.element}
+                    </div>
+                  } />
+              ) 
             } else {
               return (
                 <Route

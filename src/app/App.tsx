@@ -1,15 +1,7 @@
-import { useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
-import NavBar from "../components/navigation/NavBar";
 import { AuthWrapper } from "../components/routing/AuthWrapper";
 
 const App = () => {
-
-  const location = useLocation();
-
-  const showNavBar = !["/user/login", "/user/register"].includes(location.pathname);
-
-  //sets theme as os preffered or chosen by user on page load
 
   useEffect(()=>{
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -20,9 +12,7 @@ const App = () => {
   })
 
   return (
-
-      <div className="App">
-        {showNavBar && <NavBar />}
+      <div className="App font-mont">
         <div className="flex flex-col items-center bg-l-grey h-screen dark:bg-black">
           <AuthWrapper />
         </div>

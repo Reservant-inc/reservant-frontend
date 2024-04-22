@@ -10,17 +10,17 @@ const NavBar: React.FC = () => {
 
     return (
         <div className="h-[4.5rem] w-full bg-cream relative shadow-md flex items-center">
-            <div className="w-full mx-2 flex justify-between">
-                <div>
-                    <img src={Logo} alt="logo" className="h-12" />
+            <div className="w-full mx-2 flex justify-between items-center">
+                <div className="flex-1 items-center">
+                    <img src={Logo} alt="logo" className="h-14" />
                 </div>
-                <div>
+                <div className="flex gap-1 items-center">
                     <Section name="Home" connString="/"/>
                     <Section name="My restaurants" connString={`/${JSON.parse(Cookies.get('userInfo') as string).login}/restaurants`}/>
                 </div>
-                <div className="flex">
+                <div className="flex-1 flex justify-end items-center">
                     <ThemeButton/>
-                    <LanguageChange />
+                    <LanguageChange/>
                     <AuthItems />
                 </div>
             </div>

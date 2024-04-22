@@ -7,8 +7,8 @@ const Section: React.FC<SectionProps> = ({ name, connString }) => {
     const navigate = useNavigate()
 
     return(
-        <button onClick={() => navigate(connString)}>
-            <h1>{name}</h1>
+        <button className="h-12 " onClick={() => navigate(connString)}>
+            <h1 className="p-2">{name}</h1>
         </button>
     )
 }
