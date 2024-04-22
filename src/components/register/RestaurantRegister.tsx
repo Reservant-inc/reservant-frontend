@@ -5,7 +5,7 @@ import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import Popup from "../reusableComponents/Popup";
-import ErrorMes from "../ErrorMes"
+import ErrorMes from "../reusableComponents/ErrorMessage"
 
 
 const initialValues = {

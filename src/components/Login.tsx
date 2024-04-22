@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
-import Error from "./ErrorMes"
+import Error from "./reusableComponents/ErrorMessage"
 
 const initialValues = {
   login: "",

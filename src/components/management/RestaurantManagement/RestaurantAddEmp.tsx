@@ -4,7 +4,7 @@ import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchPOST } from "../../../services/APIconn";
-import ErrorMes from "../../ErrorMes"
+import ErrorMes from "../../reusableComponents/ErrorMessage"
 
 const initialValues = {
   employeeId: "",
