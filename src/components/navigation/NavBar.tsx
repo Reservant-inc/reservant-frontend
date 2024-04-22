@@ -4,8 +4,9 @@ import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
 import ThemeButton from "./navItems/ThemeButton";
 import LanguageChange from "./navItems/LanguageChange";
 import AuthItems from "./navItems/AuthItems";
-import Section from "./navItems/Section";
+import Section from "./navItems/MenuSection";
 import Cookies from "js-cookie";
+import Tools from "./navItems/Tools";
 
 const NavBar: React.FC = () => {
 
@@ -49,10 +50,10 @@ const NavBar: React.FC = () => {
                         }  
                         connString={`/${JSON.parse(Cookies.get('userInfo') as string).login}/restaurants`}/>
                 </div>
-                <div className="flex-1 flex justify-end items-center">
+                <div className="flex-1 flex gap-2 justify-end items-center">
                     <ThemeButton setIsDark={setIsDark}/>
                     <LanguageChange/>
-                    <AuthItems />
+                    <Tools />
                 </div>
             </div>
         </div>
