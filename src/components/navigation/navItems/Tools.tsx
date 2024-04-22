@@ -16,7 +16,7 @@ const Tools: React.FC = () => {
                 className="h-10 w-10 flex justify-center items-center"
                 onClick={pressHandler}
             >
-                <img src={User} alt="logo" className="h-10 rounded-full" />
+                <img src={User} alt="logo" className="h-9 rounded-full" />
             </button>
             {
                 isPressed &&
