@@ -122,6 +122,7 @@
             },
             "photos": {
                 "required": "Zdjęcia są wymagane"
+
             }
         }
     },
