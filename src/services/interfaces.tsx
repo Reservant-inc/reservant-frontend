@@ -59,6 +59,13 @@ export interface RegisterStep2Props {
 }
 
 export interface NavBarProps {
-  sections: React.FC;
-  menu: React.FC;
+  sections: React.FC,
+  menu: React.FC
+}
+
+export interface ManagementSectionProps {
+  currentPage: number,
+  desiredPage: number,
+  setActivePage: Function,
+  component: ReactNode
 }
