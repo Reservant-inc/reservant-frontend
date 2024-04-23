@@ -7,7 +7,6 @@ import { fetchGET } from "../../../services/APIconn";
 const Group: React.FC<GroupProps> = ({
   id,
   name,
-  restaurantCount,
   handleChangeActiveRestaurant,
   activeRestaurantId,
 }) => {

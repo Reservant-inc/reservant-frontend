@@ -29,7 +29,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
   }, []);
 
   return (
-    <div className="h-full flex flex-col justify-between item-between">
+    <div className="h-full w-full flex flex-col justify-between item-between">
       <div>
         {groups.map((group) => (
           <Group

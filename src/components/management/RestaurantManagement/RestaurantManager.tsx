@@ -12,18 +12,14 @@ const RestaurantManager = () => {
   };
 
   return (
-    <div className="flex h-full w-full bg-grey-1 dark:bg-grey-4">
-      <div className="h-full  w-[14.6rem] bg-white dark:bg-[#272727]">
+    <div className="flex h-full w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
+      <div className="h-full mx-3 w-[14.6rem] bg-grey-1 dark:bg-grey-3">
         <MyGroups
           activeRestaurantId={activeRestaurantId}
           handleChangeActiveRestaurant={handleChangeActiveRestaurant}
         />
       </div>
-      {/* <div className="m-2 w-full bg-white dark:bg-black">
-        <div className="h-full">
-          <RestaurantDetails activeRestaurantId={activeRestaurantId} />
-        </div>
-      </div> */}
+      <RestaurantDetails activeRestaurantId={activeRestaurantId} />
     </div>
   );
 };
