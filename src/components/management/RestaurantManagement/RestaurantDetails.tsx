@@ -19,6 +19,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
   const [tags, setTags] = useState<string[]>([]);
+  const [myGroups, setMyGroups] = useState([]);
   const [t] = useTranslation("global");
   const { RestaurantEditSchema } = useValidationSchemas();
 
@@ -47,7 +48,22 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         }
       };
 
+      const fetchGroups = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_SERVER_IP}/my-restaurant-groups`,
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch groups");
+          }
+          const data = await response.json();
+          setMyGroups(data);
+        } catch (error) {
+          console.error("Error fetching groups:", error);
+        }
+      };
       fetchData();
+      fetchGroups();
       fetchTags();
     }
   }, [activeRestaurantId]);
@@ -55,11 +71,16 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const defaultInitialValues: Partial<RestaurantDataType> = {
     name: restaurant?.name,
     address: restaurant?.address,
+    city: restaurant?.city, // todo
     postalIndex: restaurant?.postalIndex,
-    city: restaurant?.city,
     restaurantType: restaurant?.restaurantType,
     description: restaurant?.description,
     tags: restaurant?.tags,
+    nip: restaurant?.nip,
+    groupId: restaurant?.groupId, //TODO
+    provideDelivery: restaurant?.provideDelivery, //todo
+    rentalContract: restaurant?.rentalContract, //todo
+    alcoholLicense: restaurant?.alcoholLicense, //todo
   };
 
   const handleSubmit = (values: Partial<RestaurantDataType>) => {
@@ -74,7 +95,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         <div className="h-full	w-full rounded-r-xl bg-white font-medium dark:bg-black dark:text-grey-1">
           {restaurant && (
             <>
-              <div className="mx-6 my-3 aspect-square overflow-hidden rounded-full bg-grey-1 dark:bg-grey-4">
+              <div className="mx-6 my-1 aspect-square overflow-hidden rounded-full bg-grey-1 dark:bg-grey-4">
                 <img src={restaurant.logo} alt="logo"></img>
               </div>
               <p className="m-1 p-1 text-center font-bold">
@@ -82,7 +103,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                 <span className="ml-5">
                   {editable ? (
                     <>
-                      <button className="mr-1 rounded-lg bg-primary-2 p-1 text-white dark:bg-secondary-2 dark:text-black">
+                      <button className="mr-1 rounded-lg bg-primary-2 p-1 text-white dark:bg-secondary dark:text-black">
                         Save
                       </button>
                       <button
@@ -112,7 +133,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                     {(formik) => (
                       <Form>
                         <div className="form-container flex flex-col p-1">
-                          <div className="form-control">
+                          <div className="form-control my-2 flex flex-col">
                             <label htmlFor="name">
                               {t("restaurant-register.name")}:
                             </label>
@@ -124,7 +145,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                             />
                             <ErrorMessage name="name" component="div" />
                           </div>
-                          <div className="form-control">
+                          <div className="form-control my-2 flex flex-col">
                             <label htmlFor="restaurantType">
                               {t("restaurant-register.businessType")}:
                             </label>
@@ -150,7 +171,20 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                             />
                           </div>
 
-                          <div className="form-control">
+                          <div className="form-control my-2 flex flex-col">
+                            <label htmlFor="city">
+                              {t("restaurant-register.city")}:
+                            </label>
+                            <Field
+                              type="text"
+                              id="city"
+                              name="city"
+                              className="dark:bg-grey-3"
+                            />
+                            <ErrorMessage name="city" component="div" />
+                          </div>
+
+                          <div className="form-control my-2 flex flex-col">
                             <label htmlFor="address">
                               {t("restaurant-register.address")}:
                             </label>
@@ -162,7 +196,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                             />
                             <ErrorMessage name="address" component="div" />
                           </div>
-                          <div className="form-control">
+                          <div className="form-control my-2 flex flex-col">
                             <label htmlFor="description">
                               {t("restaurant-register.description")}:
                             </label>
@@ -174,7 +208,19 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                             />
                             <ErrorMessage name="description" component="div" />
                           </div>
-                          <div className="form-control">
+                          <div className="form-control my-2 flex flex-col">
+                            <label htmlFor="nip">
+                              {t("restaurant-register.tin")}:
+                            </label>
+                            <Field
+                              type="text"
+                              id="nip"
+                              name="nip"
+                              className="dark:bg-grey-3"
+                            />
+                            <ErrorMessage name="nip" component="div" />
+                          </div>
+                          <div className="form-control my-2">
                             <label>{t("restaurant-register.tags")}:</label>
                             <FieldArray name="tags">
                               {({ form }) => (
@@ -204,13 +250,57 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                                           }
                                         }}
                                       />
-                                      {tag}
+                                      &nbsp;{tag}
                                     </label>
                                   ))}
                                 </span>
                               )}
                             </FieldArray>
                             <ErrorMessage name="tags" component="div" />
+                          </div>
+                          <div className="form-control my-2 flex flex-col">
+                            <label htmlFor="provideDelivery">
+                              {t("restaurant-register.provideDelivery")}:
+                            </label>
+                            <Field
+                              type="checkbox"
+                              id="provideDelivery"
+                              name="provideDelivery"
+                            />
+                          </div>
+                          <div className="form-control my-2 flex flex-col">
+                            <label htmlFor="rentalContractFile">
+                              {t("restaurant-register.leaseAgreement")}:
+                            </label>
+                            <input
+                              type="file"
+                              id="rentalContractFile"
+                              name="rentalContractFile"
+                              accept=".pdf"
+                              onChange={(e) =>
+                                formik.setFieldValue(
+                                  "rentalContractFile",
+                                  e.target.files && e.target.files[0],
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="form-control my-2 flex flex-col">
+                            <label htmlFor="alcoholLicenseFile">
+                              {t("restaurant-register.alcoholLicense")}:
+                            </label>
+                            <input
+                              type="file"
+                              id="alcoholLicenseFile"
+                              name="alcoholLicenseFile"
+                              accept=".pdf"
+                              onChange={(e) =>
+                                formik.setFieldValue(
+                                  "alcoholLicenseFile",
+                                  e.target.files && e.target.files[0],
+                                )
+                              }
+                            />
                           </div>
                         </div>
                       </Form>
@@ -219,14 +309,43 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                 </div>
               ) : (
                 <>
-                  <p className="m-1 mb-3">{restaurant.restaurantType}</p>
-                  <p className="m-1">{restaurant.city}</p>
-                  <p className="m-1">{restaurant.address}</p>
-                  <p className="m-1">{restaurant.postalIndex}</p>
-                  <p className="m-1 mt-4">Tables: {restaurant.tables.length}</p>
-                  <p className="mt-4">Description:</p>
-                  <p className="m-1">{restaurant.description}</p>
-                  <p className="m-1 mt-4">Tags: {restaurant.tags}</p>
+                  <p className="m-1 mb-3">
+                    Local type:{" "}
+                    <span className="font-semibold">
+                      {restaurant.restaurantType}
+                    </span>
+                  </p>
+                  <hr className="mx-auto my-2 w-4/5 border-primary dark:border-secondary" />
+                  <p className="m-1 mt-4">Address: </p>
+                  <p className="m-1 font-semibold">{restaurant.city}</p>
+                  <p className="m-1 font-semibold">{restaurant.address}</p>
+                  <p className="m-1 font-semibold">{restaurant.postalIndex}</p>
+                  <hr className="mx-auto my-2 w-4/5 border-primary dark:border-secondary" />
+                  <p className="m-1 mt-4">
+                    Tables:{" "}
+                    <span className="font-semibold">
+                      {restaurant.tables.length}
+                    </span>
+                  </p>
+                  <hr className="mx-auto my-2 w-4/5 border-primary dark:border-secondary" />
+                  <p className="m-1 mt-4">Description:</p>
+                  <p className="m-1 font-semibold">{restaurant.description}</p>
+                  <hr className="mx-auto my-2 w-4/5 border-primary dark:border-secondary" />
+                  <p className="m-1 mt-4">
+                    Tags:
+                    <span className="font-semibold"> {restaurant.tags}</span>
+                  </p>
+                  <hr className="mx-auto my-2 w-4/5 border-primary dark:border-secondary" />
+                  <p className="m-1 mt-4">
+                    NIP: <span className="font-semibold">{restaurant.nip}</span>
+                  </p>
+                  <hr className="mx-auto my-2 w-4/5 border-primary dark:border-secondary" />
+                  <p className="m-1 mt-4">
+                    Provide delivery?{" "}
+                    <span className="font-semibold">
+                      {restaurant.provideDelivery ? "YES" : "NO"}
+                    </span>
+                  </p>
                 </>
               )}
             </>
