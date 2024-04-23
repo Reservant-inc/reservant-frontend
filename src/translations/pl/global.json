@@ -23,7 +23,7 @@
         "types": {
             "bar": "Bar",
             "restaurant": "Restauracja",
-            "caffe": "Kawiarnia"
+            "cafe": "Kawiarnia"
         },
         "tin": "NIP",
         "id": "Dowód osobisty",
@@ -40,7 +40,10 @@
         "nextButton": "Dalej",
         "backButton": "Wróć",
         "header": "Zarejestruj lokal",
-        "submitSuccessMessage": "Zgłoszenie zostało wysłane"
+        "submitSuccessMessage": "Zgłoszenie zostało wysłane",
+        "step1": "Dane lokalu",
+        "step2": "Pozostałe informacje",
+        "submit":"Koniec"
     },
     "errors": {
         "login": {
@@ -122,6 +125,7 @@
             },
             "photos": {
                 "required": "Zdjęcia są wymagane"
+
             }
         }
     },
