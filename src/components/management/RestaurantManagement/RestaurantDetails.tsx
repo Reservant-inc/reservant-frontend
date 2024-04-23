@@ -3,7 +3,6 @@ import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
 import { RestaurantDetailsProps } from "../../../services/interfaces";
 import { RestaurantDetailsType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { useNavigate } from "react-router-dom";
 import Section from "./ManagementSection";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
