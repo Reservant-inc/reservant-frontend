@@ -6,8 +6,12 @@ const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(
     null,
   );
+  const [editable, setEditable] = useState<boolean>(false);
 
   const handleChangeActiveRestaurant = (restaurantId: number) => {
+    if (activeRestaurantId !== restaurantId) {
+      setEditable(false);
+    }
     setActiveRestaurantId(restaurantId);
   };
 
@@ -20,7 +24,11 @@ const RestaurantManager = () => {
           handleChangeActiveRestaurant={handleChangeActiveRestaurant}
         />
       </div>
-      <RestaurantDetails activeRestaurantId={activeRestaurantId} />
+      <RestaurantDetails
+        activeRestaurantId={activeRestaurantId}
+        editable={editable}
+        setEditable={setEditable}
+      />
     </div>
   );
 };
