@@ -1,5 +1,12 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage, FormikValues, FieldArray } from "formik";
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage,
+  FormikValues,
+  FieldArray,
+} from "formik";
 import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
@@ -9,19 +16,18 @@ import ErrorMes from "../../reusableComponents/ErrorMessage"
 const initialValues = {
   employeeId: "",
   isBackdoorEmployee: "",
-  isHallEmployee: ""
+  isHallEmployee: "",
 };
 
 const RestaurantAddEmp = () => {
-  
-  const [t] = useTranslation("global")
-  const { RestaurantAddEmployeeSchema } = useValidationSchemas()
-  
-  const id = 0;//do zmiany
+  const [t] = useTranslation("global");
+  const { RestaurantAddEmployeeSchema } = useValidationSchemas();
+
+  const id = 0; //do zmiany
 
   const handleSubmit = async (
     values: FormikValues,
-    { setSubmitting } : { setSubmitting: (isSubmitting: boolean) => void },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
       setSubmitting(true);
@@ -30,10 +36,9 @@ const RestaurantAddEmp = () => {
         employeeId: values.employeeId,
         isBackdoorEmployee: values.isBackdoorEmployee,
         isHallEmployee: values.isHallEmployee,
-      })
+      });
 
-      await fetchPOST(`/my-restaurants/${id}/employees`, body)
-
+      await fetchPOST(`/my-restaurants/${id}/employees`, body);
     } catch (error) {
       console.log(error);
     } finally {
@@ -53,25 +58,31 @@ const RestaurantAddEmp = () => {
             <div className="form-container">
               <div className="form-control">
                 <div className="employeeRole">
-                
-{/* todo przerobić na fieldArray */}
-                    <Field
-                      type="checkbox"
-                      id="isBackdoorEmployee"
-                      name="isBackdoorEmployee"
-                    />
-                  <label htmlFor="isBackdoorEmployee">{t("add-employee.isBackdoorEmployee")}</label>
-                    <Field
-                      type="checkbox"
-                      id="isHallEmployee"
-                      name="isHallEmployee"
-                    />
-                  <label htmlFor="isHallEmployee">{t("add-employee.isHallEmployee")}</label>
-              
+                  {/* todo przerobić na fieldArray */}
+                  <Field
+                    type="checkbox"
+                    id="isBackdoorEmployee"
+                    name="isBackdoorEmployee"
+                  />
+                  <label htmlFor="isBackdoorEmployee">
+                    {t("add-employee.isBackdoorEmployee")}
+                  </label>
+                  <Field
+                    type="checkbox"
+                    id="isHallEmployee"
+                    name="isHallEmployee"
+                  />
+                  <label htmlFor="isHallEmployee">
+                    {t("add-employee.isHallEmployee")}
+                  </label>
 
+<<<<<<< HEAD
                   <ErrorMessage name="isHallEmployee">
                     { msg => <ErrorMes msg={msg}/> }
                   </ErrorMessage>
+=======
+                  <ErrorMessage name="hasRole" component="div" />
+>>>>>>> main
                 </div>
               </div>
 
@@ -84,6 +95,6 @@ const RestaurantAddEmp = () => {
       </Formik>
     </div>
   );
-}
+};
 
-export default RestaurantAddEmp
+export default RestaurantAddEmp;
