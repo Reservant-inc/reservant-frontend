@@ -18,9 +18,9 @@ const NavBar: React.FC = () => {
                 <div className="flex-1 items-center">
                         {isDark ? 
                             (
-                                <img src={LogoLight} alt="logo" className="h-12" />     
+                                <img src={LogoLight} alt="logo" className="h-12 min-w-[155px]" />     
                                 ) : (   
-                                <img src={LogoDark} alt="logo" className="h-12" />     
+                                <img src={LogoDark} alt="logo" className="h-12 min-w-[155px]" />     
                             )
                         }
                 </div>

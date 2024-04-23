@@ -12,7 +12,7 @@ const App = () => {
   })
 
   return (
-      <div className="App font-mont">
+      <div className="App font-mont-l">
         <div className="h-screen">
           <AuthWrapper />
         </div>

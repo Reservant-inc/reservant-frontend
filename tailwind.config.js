@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     fontFamily: {
       'roboto': ['Roboto'],
-      'mont': ['Montserrat']
+      'mont-md': ['Montserrat-md'],
+      'mont-l': ['Montserrat-l']
     },
     extend: {
     },

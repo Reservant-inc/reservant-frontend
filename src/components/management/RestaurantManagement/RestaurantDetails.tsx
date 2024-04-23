@@ -26,25 +26,17 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   }, [activeRestaurantId]);
 
   return (
-    <div className="flex h-full flex-col">
-      {activeRestaurantId != null ? (
-        <div className="grid flex-grow grid-cols-3 grid-rows-4 gap-4">
-          <div className="col-span-2 row-span-2 h-full w-full border">
-            {" "}
-            {restaurant != undefined && (
-              <RestaurantData restaurant={restaurant} />
-            )}
-          </div>
-          <div className="col-start-3 row-span-2 h-full w-full border">
-            Oceny
-          </div>
-          <div className="col-span-2 row-span-2 row-start-3 h-full w-full border">
-            <EmployeeManagement activeRestaurantId={activeRestaurantId} />
-          </div>
+    <div className="flex h-full w-full flex rounded-xl py-4 px-4 gap-4">
+      <div className="h-full rounded-xl w-full dark:bg-black bg-white">
+
+      </div>
+      <div className="h-full w-[32rem] flex gap-1">
+        <div className="relative h-full w-[4rem] rounded-l-xl dark:bg-black bg-white flex items-center">
         </div>
-      ) : (
-        <h1>Select a restaurant</h1>
-      )}
+        <div className="h-full w-full rounded-r-xl dark:bg-black bg-white">
+
+        </div>
+      </div>
     </div>
   );
 };
