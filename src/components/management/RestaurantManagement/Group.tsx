@@ -35,27 +35,25 @@ const Group: React.FC<GroupProps> = ({
   };
 
   return (
-    <div className="m-2 text-white overflow-hidden rounded">
+    <div className={"mt-2 text-white overflow-hidden rounded"}>
       <h2
-        className="mb-2 truncate text-xl font-semibold hover:cursor-pointer"
+        className="mb-2 p-2 truncate text-xl text-base font-semibold hover:cursor-pointer"
         onClick={handleIsPressed}
       >
         {name}
       </h2>
 
       {isPressed && (
-        <>
-          <p className="text-sm">
-            {t("restaurant-management.groups.counter")}: {restaurantCount}
-          </p>
+        <div className="p-2"> 
           <ul>
             {restaurants.map((restaurant) => (
               <li
                 key={restaurant.id}
-                className="my-1 block rounded border transition duration-300"
+                className="ml-2 transition duration-300 flex"
               >
+                <span className="w-[2px] bg-secondary-2"> </span>
                 <div
-                  className={`block flex cursor-pointer items-center justify-between p-1 transition duration-300 hover:bg-blue ${activeRestaurantId === restaurant.id ? "bg-blue" : "bg-white"}`}
+                  className={`ml-5 my-1 flex w-full cursor-pointer dark:bg-grey-4 rounded items-center justify-between p-1 transition duration-300 ${activeRestaurantId === restaurant.id ? " dark:bg-secondary-2 dark:text-black dark:font-mont-md" : ""}`}
                   onClick={() => handleChangeActiveRestaurant(restaurant.id)}
                 >
                   {restaurant.name}
@@ -63,8 +61,9 @@ const Group: React.FC<GroupProps> = ({
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
+      <div className="w-full h-[1px] bg-grey-2 mt-5" />
     </div>
   );
 };
