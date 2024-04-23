@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
 import { useTranslation } from "react-i18next";
-import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { RestaurantDataType } from "../../../services/types";
 import { LocalType } from "../../../services/enums";
 import { fetchFilesPOST, fetchGET, fetchPOST } from "../../../services/APIconn";
 // Material-UI imports
+import Snackbar from "@mui/material/Snackbar";
 import LinearProgress from "@mui/material/LinearProgress";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -411,7 +411,6 @@ const RestaurantRegister: React.FC = () => {
                 value={formProgress}
                 sx={{ width: '100%', marginTop: '20px' }}
               />
-
               <Button
                 type="submit" 
                 variant="contained"
@@ -429,6 +428,7 @@ const RestaurantRegister: React.FC = () => {
                 >
                   {t("restaurant-register.backButton")}
                 </Button>
+
               )}
             </div>
           </Form>
