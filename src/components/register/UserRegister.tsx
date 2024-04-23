@@ -5,7 +5,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import { fetchPOST } from "../../services/APIconn";
+import { fetchPOST, fetchGET} from "../../services/APIconn";
 
 const initialValues = {
   firstName: "",
@@ -29,27 +29,33 @@ const UserRegister: React.FC = () => {
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
+
+    if(await fetchGET("/auth/is-unique-login?login="+values.login))
     try {
-      setSubmitting(true);
+        setSubmitting(true);
 
-      const body = JSON.stringify({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        login: values.login,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-        birthDate: values.birthDate,
-        password: values.password,
-      });
+        const body = JSON.stringify({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          login: values.login,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          birthDate: values.birthDate,
+          password: values.password,
+        })
 
-      await fetchPOST("/auth/register-customer", body);
+        await fetchPOST('/auth/register-customer', body)
 
-      navigate("/user/login");
+        navigate("/user/login");
     } catch (error) {
       console.log(error);
     } finally {
       setSubmitting(false);
     }
+    else{
+      console.log("login taken")
+    }
+
   };
 
   return (
