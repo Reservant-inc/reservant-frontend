@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import RestaurantData from "./RestaurantData";
 import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
 import { RestaurantDetailsProps } from "../../../services/interfaces";
 import { RestaurantDetailsType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import Section from "./ManagementSection";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
@@ -13,8 +11,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 }) => { 
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
   const [page, setActivePage] = useState<number>(0)
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (activeRestaurantId != null) {
@@ -34,7 +30,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   return (
     <div className="flex h-full w-full flex rounded-xl py-4 pr-4 pl-2 gap-4">
       <div className="h-full rounded-xl w-full dark:bg-black bg-white">
-        {
+        { 
           {
             0: <EmployeeManagement activeRestaurantId={activeRestaurantId} />,
             1: <div/>
