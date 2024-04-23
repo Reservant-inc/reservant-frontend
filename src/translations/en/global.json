@@ -29,7 +29,7 @@
         "types": {
             "bar": "Bar",
             "restaurant": "Restaurant",
-            "caffe": "Caffe"
+            "cafe": "Cafe"
         },
         "tin": "TIN",
         "id": "ID",
@@ -46,7 +46,10 @@
         "nextButton": "Next",
         "backButton": "Back",
         "header": "Register your local",
-        "submitSuccessMessage": "The application has been sent"
+        "submitSuccessMessage": "The application has been sent",
+        "step1": "Local data",
+        "step2": "More info",
+        "submit": "Finish" 
     },
     "errors": {
         "add-employee": {

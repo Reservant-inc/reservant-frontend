@@ -128,10 +128,10 @@ export const useValidationSchemas = () => {
       .min(3, t("errors.restaurant-register.description.min"))
       .required(t("errors.restaurant-register.description.required")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    logoFile: yup
+    logo: yup
       .mixed()
       .required(t("errors.restaurant-register.logo.required")),
-    photosFile: yup
+    photos: yup
       .mixed()
       .required(t("errors.restaurant-register.photos.required")),
   });
@@ -156,10 +156,10 @@ export const useValidationSchemas = () => {
     restaurantType: yup
       .string()
       .required(t("errors.restaurant-register.businessType.required")),
-    idCardFile: yup
+    idCard: yup
       .mixed()
       .required(t("errors.restaurant-register.id.required")),
-    businessPermissionFile: yup
+    businessPermission: yup
       .mixed()
       .required(t("errors.restaurant-register.businessPermission.required")),
   });

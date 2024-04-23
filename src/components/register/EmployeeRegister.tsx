@@ -27,7 +27,7 @@ const RegisterEmp: React.FC = () => {
       setSubmitting(true);
 
       const body = JSON.stringify({
-        login: values.login,
+        login: values.login, 
         firstName: values.firstName,
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
