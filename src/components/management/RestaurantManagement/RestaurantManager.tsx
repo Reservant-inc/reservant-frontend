@@ -3,26 +3,26 @@ import MyGroups from "./MyGroups";
 import RestaurantDetails from "./RestaurantDetails";
 
 const RestaurantManager = () => {
-    const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
+  const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(
+    null,
+  );
 
-    const handleChangeActiveRestaurant = (restaurantId: number) => {
-        setActiveRestaurantId(restaurantId);
-    }
-    
-    return (
-        <div className="flex flex-col md:flex-row min-h-screen w-full">
-            <div className="md:w-1/6 mx-4 bg-cream h-full w-full md:h-auto">
-                <MyGroups activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
-            </div>
-            <div className="md:w-5/6 mt-4 md:mr-4 w-full flex-grow">
-                <div className="h-full">
-                   <RestaurantDetails activeRestaurantId={activeRestaurantId}/>
-                </div>
-            </div>
-        </div>
-    );
-}
+  const handleChangeActiveRestaurant = (restaurantId: number) => {
+    setActiveRestaurantId(restaurantId);
+  };
+
+  return (
+    <div className="flex h-full w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
+      <div className="mx-3 w-[14.6rem] bg-grey-1 dark:bg-grey-3 flex flex-col items-center">
+        <button className="mt-5 mb-2 h-8 w-48 rounded-lg p-2 bg-primary-2 font-mont-md text-white dark:bg-secondary dark:text-black flex justify-center items-center">Add restaurant</button>
+        <MyGroups
+          activeRestaurantId={activeRestaurantId}
+          handleChangeActiveRestaurant={handleChangeActiveRestaurant}
+        />
+      </div>
+      <RestaurantDetails activeRestaurantId={activeRestaurantId} />
+    </div>
+  );
+};
 
 export default RestaurantManager;
-
- 
