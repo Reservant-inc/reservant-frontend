@@ -47,8 +47,8 @@ const MyGroups: React.FC<MyGroupsProps> = ({
         <p>Form to create a group</p>
       </Popup> */}
       <div className="flex flex-col font-thin text-md h-14 justify-center items-center">
-        <h1 className="text-secondary">MY GROUPS</h1>
-        <span className="h-[1px] flex-end w-full bg-secondary"/>
+        <h1 className="text-primary-2 font-mont-md dark:font-mont-l dark:text-secondary">MY GROUPS</h1>
+        <span className="h-[2px] dark:h-[1px] flex-end w-full bg-primary-2 dark:bg-secondary"/>
       </div>
     </div>
   );
