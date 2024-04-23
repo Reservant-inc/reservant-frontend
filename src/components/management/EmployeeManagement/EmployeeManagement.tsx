@@ -36,7 +36,7 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = ({activeRestaurant
 
 
     return(
-        <div className="bg-primary w-[300px] h-[300px]">
+        <div className="w-full h-full p-4">
           
         </div>
     )

@@ -24,9 +24,7 @@
   .scroll::-webkit-scrollbar {
     @apply w-[5px]
   }
-  .scroll::-webkit-scrollbar-track {
-    @apply bg-grey-3
-  }
+
   .scroll::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 5px;

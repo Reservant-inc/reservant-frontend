@@ -34,7 +34,7 @@ const Group: React.FC<GroupProps> = ({
   };
 
   return (
-    <div className={"mt-2 dark:text-white text-sm text-black overflow-hidden rounded"}>
+    <div className={"mt-2 dark:text-white text-sm text-black rounded"}>
       <div className="flex items-center justify-between hover:cursor-pointer" onClick={handleIsPressed}>
         <h2
           className="p-2 truncate font-semibold mr-1"

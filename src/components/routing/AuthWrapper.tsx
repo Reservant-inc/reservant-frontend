@@ -68,7 +68,7 @@ export const AuthWrapper = () => {
             ) {
               return(
                   <Route key={i} path={r.path} element={
-                    <div className="w-full h-full">
+                    <div className="w-full h-full flex flex-col">
                       <NavBar />
                       {r.element}
                     </div>

@@ -29,8 +29,8 @@ const MyGroups: React.FC<MyGroupsProps> = ({
   }, []);
 
   return (
-    <div className="h-full w-full flex flex-col justify-between item-between">
-      <div className="overflow-y-scroll test scroll">
+    <div className="h-full w-full flex flex-col justify-between items-between">
+      <div className="overflow-y-scroll scroll">
         {groups.map((group) => (
           <Group
             key={group.id}
