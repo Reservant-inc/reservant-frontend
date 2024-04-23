@@ -6,20 +6,28 @@ const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(
     null,
   );
+  const [editable, setEditable] = useState<boolean>(false);
 
   const handleChangeActiveRestaurant = (restaurantId: number) => {
+    if (activeRestaurantId !== restaurantId) {
+      setEditable(false);
+    }
     setActiveRestaurantId(restaurantId);
   };
 
   return (
     <div className="flex h-full w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
-      <div className="h-full mx-3 w-[14.6rem] bg-grey-1 dark:bg-grey-3">
+      <div className="mx-3 h-full w-[14.6rem] bg-grey-1 dark:bg-grey-3">
         <MyGroups
           activeRestaurantId={activeRestaurantId}
           handleChangeActiveRestaurant={handleChangeActiveRestaurant}
         />
       </div>
-      <RestaurantDetails activeRestaurantId={activeRestaurantId} />
+      <RestaurantDetails
+        activeRestaurantId={activeRestaurantId}
+        editable={editable}
+        setEditable={setEditable}
+      />
     </div>
   );
 };

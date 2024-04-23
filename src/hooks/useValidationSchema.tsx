@@ -164,6 +164,30 @@ export const useValidationSchemas = () => {
       .required(t("errors.restaurant-register.businessPermission.required")),
   });
 
+  const RestaurantEditSchema = yup.object({
+    name: yup.string().required(t("errors.restaurant-register.name.required")),
+    address: yup
+      .string()
+      .required(t("errors.restaurant-register.address.required")),
+    postalIndex: yup
+      .string()
+      .matches(
+        /^[0-9]{2}-[0-9]{3}$/,
+        t("errors.restaurant-register.postalCode.matches"),
+      )
+      .required(t("errors.restaurant-register.postalCode.required")),
+    city: yup.string().required(t("errors.restaurant-register.city.required")),
+    restaurantType: yup
+      .string()
+      .required(t("errors.restaurant-register.businessType.required")),
+    description: yup
+      .string()
+      .max(200, t("errors.restaurant-register.description.max"))
+      .min(3, t("errors.restaurant-register.description.min"))
+      .required(t("errors.restaurant-register.description.required")),
+    tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
+  });
+
   return {
     loginSchema,
     userRegisterSchema,
@@ -171,5 +195,6 @@ export const useValidationSchemas = () => {
     RestaurantAddEmployeeSchema,
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
+    RestaurantEditSchema,
   };
 };

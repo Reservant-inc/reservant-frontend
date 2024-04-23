@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 import { LoginResponseType, RestaurantDataType } from "./types";
 
 export interface SectionProps {
-  component: ReactNode,
-  connString: string
+  component: ReactNode;
+  connString: string;
 }
 
 export interface AuthContextValue {
@@ -27,19 +27,12 @@ export interface OutsideClickHandlerProps {
 
 export interface RestaurantDetailsProps {
   activeRestaurantId: number | null;
+  editable: boolean;
+  setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface RestaurantDataProps {
-  restaurant: {
-    id: number;
-    name: String;
-    address: String;
-    postalIndex: String;
-    city: String;
-    logo: String;
-    description: String;
-    photos: String[];
-  };
+  restaurant: RestaurantDataType;
 }
 
 export interface MyGroupsProps {
@@ -66,6 +59,6 @@ export interface RegisterStep2Props {
 }
 
 export interface NavBarProps {
-  sections: React.FC,
-  menu: React.FC
+  sections: React.FC;
+  menu: React.FC;
 }
