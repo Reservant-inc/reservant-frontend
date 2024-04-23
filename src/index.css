@@ -10,9 +10,15 @@
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: 'Montserrat-md';
   font-weight: normal;
   src: url(./assets/fonts/Montserrat-Medium.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-l';
+  font-weight: normal;
+  src: url(./assets/fonts/Montserrat-Light.ttf)
 }
 
 html {

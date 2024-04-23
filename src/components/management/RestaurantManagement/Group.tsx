@@ -35,7 +35,7 @@ const Group: React.FC<GroupProps> = ({
   };
 
   return (
-    <div className="m-2 overflow-hidden rounded border p-2">
+    <div className="m-2 text-white overflow-hidden rounded">
       <h2
         className="mb-2 truncate text-xl font-semibold hover:cursor-pointer"
         onClick={handleIsPressed}

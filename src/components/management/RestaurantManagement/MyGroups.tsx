@@ -3,7 +3,6 @@ import Group from "./Group";
 import "dotenv/config";
 import { useTranslation } from "react-i18next";
 import Popup from "../../reusableComponents/Popup";
-import Cookies from "js-cookie";
 import { GroupType } from "../../../services/types";
 import { MyGroupsProps } from "../../../services/interfaces";
 import { fetchGET } from "../../../services/APIconn";
@@ -30,8 +29,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
   }, []);
 
   return (
-    <div>
-      <h1 className="font-bold">{t("restaurant-management.groups.header")}</h1>
+    <div className="h-full flex flex-col justify-between item-between">
       <div>
         {groups.map((group) => (
           <Group
@@ -42,12 +40,16 @@ const MyGroups: React.FC<MyGroupsProps> = ({
           />
         ))}
       </div>
-      <Popup
+      {/* <Popup
         buttonText={t("restaurant-management.groups.add-button")}
         bgColor="white"
-      >
+        >
         <p>Form to create a group</p>
-      </Popup>
+      </Popup> */}
+      <div className="flex flex-col font-thin text-md h-14 justify-center items-center">
+        <h1 className="text-secondary">MY GROUPS</h1>
+        <span className="h-[1px] flex-end w-full bg-secondary"/>
+      </div>
     </div>
   );
 };
