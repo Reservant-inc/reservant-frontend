@@ -12,6 +12,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
+import Button from "@mui/material/Button";
 
 const RestaurantRegister: React.FC = () => {
   const [isStep1, setIsStep1] = useState(true);
@@ -24,6 +25,7 @@ const RestaurantRegister: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [formProgress, setFormProgress] = useState<number>(0);
 
   const { t } = useTranslation("global");
   const navigate = useNavigate();
@@ -37,17 +39,17 @@ const RestaurantRegister: React.FC = () => {
     city: formDataStep1.city || "",
     nip: formDataStep1.nip || "",
     restaurantType: formDataStep1.restaurantType || LocalType.Restaurant,
-    idCard: null,
-    businessPermission: null,
-    rentalContract: null,
-    alcoholLicense: null,
+    idCard: formDataStep1.idCard || null,
+    businessPermission: formDataStep1.businessPermission || null,
+    rentalContract: formDataStep1.rentalContract || null,
+    alcoholLicense: formDataStep1.alcoholLicense || null,
   };
 
   const initialValuesStep2: Partial<RestaurantDataType> = {
     tags: [],
     provideDelivery: formDataStep2.provideDelivery || false,
-    logo: null,
-    photos: [],
+    logo: formDataStep2.logo || null,
+    photos: formDataStep2.photos || [],
     description: formDataStep2.description || "",
   };
 
@@ -63,6 +65,20 @@ const RestaurantRegister: React.FC = () => {
 
     fetchTags();
   }, []);
+
+  useEffect(() => {
+    const calculateProgress = () => {
+      let progress = 0;
+      if (!isStep1 && !isFormSubmitted) {
+        progress = 50;
+      } else if (!isStep1 && isFormSubmitted) {
+        progress = 100;
+      }
+      setFormProgress(progress);
+    };
+  
+    calculateProgress();
+  }, [isStep1, isFormSubmitted]);
 
   const handleStep1Submit = (data: Partial<RestaurantDataType>) => {
     setFormDataStep1((prevData) => ({ ...prevData, ...data }));
@@ -182,7 +198,7 @@ const RestaurantRegister: React.FC = () => {
                       {t("restaurant-register.address")}:
                     </label>
                     <Field type="text" id="address" name="address" />
-                    <ErrorMessage name="address" component="div" />
+                    <ErrorMessage name="address" component="div" /> 
                   </div>
 
                   <div>
@@ -392,20 +408,27 @@ const RestaurantRegister: React.FC = () => {
 
               <LinearProgress
                 variant="determinate"
-                value={isStep1 ? 0 : 50}
+                value={formProgress}
                 sx={{ width: '100%', marginTop: '20px' }}
               />
 
-              <button type="submit" disabled={!formik.isValid || isFormSubmitted}>
-                {isStep1
-                  ? t("restaurant-register.nextButton")
-                  : t("restaurant-register.saveButton")}
-              </button>
+              <Button
+                type="submit" 
+                variant="contained"
+                color="primary"
+                disabled={!formik.isValid || isFormSubmitted}
+              >
+                {isStep1 ? t("restaurant-register.nextButton") : t("restaurant-register.saveButton")}
+              </Button>
 
               {!isStep1 && (
-                <button onClick={handleBack} disabled={isFormSubmitted}>
+                <Button
+                  variant="contained"
+                  onClick={handleBack}
+                  disabled={isFormSubmitted}
+                >
                   {t("restaurant-register.backButton")}
-                </button>
+                </Button>
               )}
             </div>
           </Form>
