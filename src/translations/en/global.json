@@ -144,6 +144,14 @@
             "counter": "Number of restaurants",
             "add-button": "Add a new Group",
             "header": "My Groups"
+        },
+        "menu": {
+            "addNewCategory": "Add new category",
+            "editCategory": "Edit category name",
+            "addNewMenuItem": "Add new menu position",
+            "menuItemName": "Name",
+            "menuItemPrice": "Price",
+            "menuItemAlcoholPercentage": "Alcohol percentage"
         }
     }
 }

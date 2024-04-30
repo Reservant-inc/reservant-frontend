@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
+import MenuManagement from "../MenuManagement/MenuMangement";
 import { RestaurantDetailsProps } from "../../../services/interfaces";
 import {
   RestaurantDataType,
@@ -95,7 +96,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         { 
           {
             0: <EmployeeManagement activeRestaurantId={activeRestaurantId} />,
-            1: <div/>
+            1: <MenuManagement activeRestaurantId={activeRestaurantId} />
           }[page]
         }
       </div>

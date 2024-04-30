@@ -134,6 +134,14 @@
             "counter": "Liczba lokali",
             "add-button": "Dodaj Grupę",
             "header": "Moje Grupy"
+        },
+        "menu": {
+            "addNewCategory": "Dodaj nową kategorię",
+            "editCategory": "Edytuj nazwę kategorii",
+            "addNewMenuItem": "Dodaj nową pozycję do menu",
+            "menuItemName": "Nazwa",
+            "menuItemPrice": "Cena",
+            "menuItemAlcoholPercentage": "Procent alkocholu"
         }
     }
 }
