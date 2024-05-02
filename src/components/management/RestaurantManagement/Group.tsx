@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { GroupProps } from "../../../services/interfaces";
 import { RestaurantType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
+import Loader from "../../Loader";
 
 const Group: React.FC<GroupProps> = ({
   id,
@@ -56,6 +57,9 @@ const Group: React.FC<GroupProps> = ({
 
       {isPressed && (
         <div className="p-2"> 
+        {
+          //odwrócić warunek, żeby zobaczyć loader, bo działa za szybko B)
+          !(restaurants.length===0)?(
           <ul>
             {restaurants.map((restaurant) => (
               <li
@@ -72,6 +76,11 @@ const Group: React.FC<GroupProps> = ({
               </li>
             ))}
           </ul>
+          ):(
+            <Loader/>
+          )
+        }
+          
         </div>
       )}
       <div className="w-full h-[1px] bg-grey-2 mt-2" />
