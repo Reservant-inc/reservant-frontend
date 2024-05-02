@@ -21,7 +21,7 @@ export const useValidationSchemas = () => {
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
-    login: yup.string().required(t("errors.user-register.login.required")).test('unique login', 'Login taken', (login)=>{ //TODO jeżyki
+    login: yup.string().required(t("errors.user-register.login.required")).test('unique login',  t("errors.user-register.login.taken"), (login)=>{
       
       return new Promise((resolve, reject) => {
         fetchGET(`/auth/is-unique-login?login=${login}`)
@@ -84,8 +84,7 @@ export const useValidationSchemas = () => {
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
-    login: yup.string().required(t("errors.user-register.login.required")).test('unique login', 'Login taken', (login)=>{ //TODO jeżyki
-      
+    login: yup.string().required(t("errors.user-register.login.required")).test('unique login', t("errors.user-register.login.taken"), (login)=>{
       return new Promise((resolve, reject) => {
         fetchGET(`/auth/is-unique-login?login=${login}`)
             .then((res) => {
