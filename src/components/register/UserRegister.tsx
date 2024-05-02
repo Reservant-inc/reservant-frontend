@@ -30,7 +30,6 @@ const UserRegister: React.FC = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
 
-    if(await fetchGET("/auth/is-unique-login?login="+values.login))
     try {
         setSubmitting(true);
 
@@ -52,9 +51,6 @@ const UserRegister: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
-    else{
-      console.log("login taken")
-    }
 
   };
 
@@ -64,6 +60,11 @@ const UserRegister: React.FC = () => {
         initialValues={initialValues}
         validationSchema={userRegisterSchema}
         onSubmit={handleSubmit}
+        //potencjalnie do rozważenia, więcej o tym w EmployeeRegister
+        /////////////////////////////////////////////////////////////
+        validateOnChange={false}
+        validateOnBlur={true}
+        /////////////////////////////////////////////////////////////
       >
         {(formik) => (
           <Form>

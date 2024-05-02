@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../services/APIconn";
+import Login from "../Login";
 
 const initialValues = {
   login: "",
@@ -23,7 +24,6 @@ const RegisterEmp: React.FC = () => {
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    if(await fetchGET("/auth/is-unique-login?login="+values.login))
     try {
       setSubmitting(true);
 
@@ -41,9 +41,6 @@ const RegisterEmp: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
-    else{
-      console.log("login taken")
-    }
   };
 
   return (
@@ -51,6 +48,11 @@ const RegisterEmp: React.FC = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={employeeRegisterSchema}
+        //potencjalnie do rozważenia, więcej o tym niżej
+        ////////////////////////////////////////////////
+        validateOnChange={false}
+        validateOnBlur={true}
+        ////////////////////////////////////////////////
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -70,7 +72,19 @@ const RegisterEmp: React.FC = () => {
 
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
-                <Field type="text" id="login" name="login" />
+                {/* 
+                
+                    @TODO ... ?
+
+                    nie moge nigdzie znalezc satysfakcjonującego rozwiązania pozwalającego na walidację tylko jednego pola w inny sposób (on blur zamiast on change).
+                    na razie zmieniam walidacje calego forma na validateOnBlur - mniej żądań będzie przy sprawdzaniu loginu
+                    
+                    update: 
+                      ig trzeba było wziąć angulara 
+                      https://stackoverflow.com/questions/68137377/how-to-validate-a-field-onblur-and-other-field-onchange-using-formik
+
+                */}
+                <Field type="text" id="login" name="login"/> 
                 <ErrorMessage name="login" component="div" />
               </div>
 
