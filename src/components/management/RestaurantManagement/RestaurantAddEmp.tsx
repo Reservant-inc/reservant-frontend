@@ -5,16 +5,15 @@ import {
   Field,
   ErrorMessage,
   FormikValues,
-  FieldArray,
-} from "formik";
+} 
+from "formik";
 import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchPOST } from "../../../services/APIconn";
-import ErrorMes from "../../reusableComponents/ErrorMessage"
+import ErrorMes from "../../reusableComponents/ErrorMessage";
 
 const initialValues = {
-  employeeId: "",
   isBackdoorEmployee: "",
   isHallEmployee: "",
 };
@@ -33,7 +32,7 @@ const RestaurantAddEmp = () => {
       setSubmitting(true);
 
       const body = JSON.stringify({
-        employeeId: values.employeeId,
+        employeeId: id, //do zmiany
         isBackdoorEmployee: values.isBackdoorEmployee,
         isHallEmployee: values.isHallEmployee,
       });
@@ -53,41 +52,54 @@ const RestaurantAddEmp = () => {
         validationSchema={RestaurantAddEmployeeSchema}
         onSubmit={handleSubmit}
       >
-        {(formik) => (
+        {(formik) => {
+          return (
           <Form>
             <div className="form-container">
-              <div className="form-control">
-                <div className="employeeRole">
-                  {/* todo przerobić na fieldArray */}
-                  <Field
-                    type="checkbox"
-                    id="isBackdoorEmployee"
-                    name="isBackdoorEmployee"
+              <div className="form-control flex flex-col">
+              <span className="">
+                <Field
+                  type="checkbox"
+                  id="isBackdoorEmployee"
+                  name="isBackdoorEmployee"
+                  className={!((formik.errors.isHallEmployee && formik.touched.isHallEmployee) || (formik.errors.isBackdoorEmployee && formik.touched.isBackdoorEmployee))
+                  ?"me-1":"outline me-1 outline-pink"}
                   />
                   <label htmlFor="isBackdoorEmployee">
                     {t("add-employee.isBackdoorEmployee")}
                   </label>
-                  <Field
-                    type="checkbox"
-                    id="isHallEmployee"
-                    name="isHallEmployee"
+              </span>
+              <span className="">
+                <Field
+                  type="checkbox"
+                  id="isHallEmployee"
+                  name="isHallEmployee"
+                  className={!((formik.errors.isHallEmployee && formik.touched.isHallEmployee) || (formik.errors.isBackdoorEmployee && formik.touched.isBackdoorEmployee))
+                  ?"me-1":"outline me-1 outline-pink"}
                   />
-                  <label htmlFor="isHallEmployee">
-                    {t("add-employee.isHallEmployee")}
-                  </label>
+                <label htmlFor="isHallEmployee">
+                  {t("add-employee.isHallEmployee")}
+                </label>
+              </span>
 
+                <ErrorMessage name="isBackdoorEmployee">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
+                {
+                  (!formik.touched.isBackdoorEmployee) && 
                   <ErrorMessage name="isHallEmployee">
                     { msg => <ErrorMes msg={msg}/> }
                   </ErrorMessage>
-                </div>
+                }
+     
               </div>
 
-              <button type="submit" disabled={!formik.isValid}>
+              <button type="submit" disabled={!formik.dirty || !formik.isValid}>
                 {t("add-employee.addEmployee")}
               </button>
             </div>
           </Form>
-        )}
+        )}}
       </Formik>
     </div>
   );
