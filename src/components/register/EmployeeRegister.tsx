@@ -24,7 +24,6 @@ const RegisterEmp: React.FC = () => {
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    if(await fetchGET("/auth/is-unique-login?login="+values.login))
     try {
       setSubmitting(true);
 
@@ -42,9 +41,6 @@ const RegisterEmp: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
-    else{
-      console.log("login taken")
-    }
   };
 
   return (
@@ -52,6 +48,11 @@ const RegisterEmp: React.FC = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={employeeRegisterSchema}
+        //potencjalnie do rozważenia, więcej o tym niżej
+        ////////////////////////////////////////////////
+        validateOnChange={false}
+        validateOnBlur={true}
+        ////////////////////////////////////////////////
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -75,10 +76,24 @@ const RegisterEmp: React.FC = () => {
 
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
+                {/* 
+                
+                    @TODO ... ?
+
+                    nie moge nigdzie znalezc satysfakcjonującego rozwiązania pozwalającego na walidację tylko jednego pola w inny sposób (on blur zamiast on change).
+                    na razie zmieniam walidacje calego forma na validateOnBlur - mniej żądań będzie przy sprawdzaniu loginu
+                    
+                    update: 
+                      ig trzeba było wziąć angulara 
+                      https://stackoverflow.com/questions/68137377/how-to-validate-a-field-onblur-and-other-field-onchange-using-formik
+
+                */}
+
                 <Field type="text" id="login" name="login" className={!(formik.errors.login && formik.touched.login)?"border-none":"border-solid border-2 border-pink"}/>
                 <ErrorMessage name="login">
                   { msg => <ErrorMes msg={msg}/> }
                 </ErrorMessage>
+
               </div>
 
               <div className="form-control">
