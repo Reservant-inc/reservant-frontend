@@ -16,7 +16,6 @@ export default function NavLandingPage() {
         </div>
         <div className="flex items-center justify-center gap-3">
 
-          <ThemeButton/>
           <LanguageChange />
           <AuthItems />
 

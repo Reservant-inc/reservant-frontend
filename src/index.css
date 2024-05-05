@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
   font-family: 'Roboto';
   font-weight: normal;
@@ -10,14 +9,34 @@
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: 'Montserrat-md';
   font-weight: normal;
-  src: url(./assets/fonts/Montserrat-Medium.ttf)
+  src: url(./assets/fonts/Montserrat-Medium.ttf) 
+}
+
+@font-face {
+  font-family: 'Montserrat-l';
+  font-weight: normal;
+  src: url(./assets/fonts/Montserrat-Light.ttf)
+}
+
+@layer base{
+  .scroll::-webkit-scrollbar {
+    @apply w-[5px]
+  }
+
+  .scroll::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+  
+  .scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }
 
 html {
   height: 100%;
-  font-family: 'Roboto';
 }
 
 body {

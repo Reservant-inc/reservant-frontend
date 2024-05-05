@@ -5,6 +5,7 @@ import "dotenv/config";
 import * as yup from "yup";
 import { useTranslation } from "react-i18next";
 import Popup from "../reusableComponents/Popup";
+import ErrorMes from "../reusableComponents/ErrorMessage"
 
 
 const initialValues = {
@@ -136,49 +137,58 @@ const validationSchema = yup.object({
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="name">{t("restaurant-register.name")}:</label>
-                <Field type="text" id="name" name="name" />
-                <ErrorMessage name="name" component="div" />
+                <Field type="text" id="name" name="name" className={!(formik.errors.name && formik.touched.name)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="name">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="address">{t("restaurant-register.address")}:</label>
-                <Field type="text" id="address" name="address" />
-                <ErrorMessage name="address" component="div" />
+                <Field type="text" id="address" name="address" className={!(formik.errors.address && formik.touched.address)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="address">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="postalCode">{t("restaurant-register.postalCode")}:</label>
-                <Field type="text" id="postalCode" name="postalCode" />
-                <ErrorMessage name="postalCode" component="div" />
-              </div>
+                <Field type="text" id="postalCode" name="postalCode" className={!(formik.errors.postalCode && formik.touched.postalCode)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="postalCode">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>              </div>
 
               <div className="form-control">
                 <label htmlFor="city">{t("restaurant-register.city")}:</label>
-                <Field type="text" id="city" name="city" />
-                <ErrorMessage name="city" component="div" />
-              </div>
+                <Field type="text" id="city" name="city" className={!(formik.errors.city && formik.touched.city)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="city">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>              </div>
 
               <div className="form-control">
                 <label htmlFor="tin">{t("restaurant-register.tin")}:</label>
-                <Field type="text" id="tin" name="tin" />
-                <ErrorMessage name="tin" component="div" />
-              </div>
+                <Field type="text" id="tin" name="tin" className={!(formik.errors.tin && formik.touched.tin)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="tin">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>              </div>
 
               <div className="form-control">
                 <label htmlFor="businessType">{t("restaurant-register.businessType")}:</label>
-                <Field as="select" id="businessType" name="businessType">
+                <Field as="select" id="businessType" name="businessType" className={!(formik.errors.businessType && formik.touched.businessType)?"border-none":"border-solid border-2 border-pink"}>
                   <option value="restaurant">{t("restaurant-register.types.restaurant")}</option>
                   <option value="bar">{t("restaurant-register.types.bar")}</option>
                   <option value="caffe">{t("restaurant-register.types.caffe")}</option>
                 </Field>
-                <ErrorMessage name="businessType" component="div" />
-              </div>
+                <ErrorMessage name="businessType">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>              </div>
 
               <div className="form-control">
                 <label htmlFor="id">{t("restaurant-register.id")}:</label>
-                <Field type="file" id="id" name="id"  accept=".png, .jpeg, .jpg"/>
-                <ErrorMessage name="id" component="div" />
-              </div>
+                <Field type="file" id="id" name="id"  accept=".png, .jpeg, .jpg" className={!(formik.errors.id && formik.touched.id)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="id">
+                    { msg => <ErrorMes msg={msg}/> }
+                  </ErrorMessage>              </div>
 
               <div className="form-control">
                 <label htmlFor="businessLicense">{t("restaurant-register.businessLicense")}:</label>

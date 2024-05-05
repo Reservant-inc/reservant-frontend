@@ -23,16 +23,27 @@
         "types": {
             "bar": "Bar",
             "restaurant": "Restauracja",
-            "caffe": "Kawiarnia"
+            "cafe": "Kawiarnia"
         },
         "tin": "NIP",
         "id": "Dowód osobisty",
         "alcoholLicense": "Licencja na alkohol (opcjonalnie)",
         "leaseAgreement": "Umowa najmu lokalu (opcjonalnie)",
-        "businessLicense": "Zgoda na prowadzenie działalności (opcjonalnie)",
-        "group-assignment": "Przypisz do Grupy (opcjonalnie)",
-        "no-group-assignment": "Nie przypisuj",
-        "button": "Zarejestruj restaurację"
+        "businessLicense": "Zgoda na prowadzenie działalności",
+        "button": "Zarejestruj restaurację",
+        "tags": "Wybierz, które opisują twój lokal",
+        "provideDelivery": "Zapewniona dostawa",
+        "logo": "Logo",
+        "photos": "Zdjęcia lokalu",
+        "description": "Opis lokalu",
+        "saveButton": "Zapisz",
+        "nextButton": "Dalej",
+        "backButton": "Wróć",
+        "header": "Zarejestruj lokal",
+        "submitSuccessMessage": "Zgłoszenie zostało wysłane",
+        "step1": "Dane lokalu",
+        "step2": "Pozostałe informacje",
+        "submit":"Koniec"
     },
     "errors": {
         "login": {
@@ -89,7 +100,7 @@
                 "required": "Miasto jest wymagane"
             },
             "tin": {
-                "matches": "NIP musi mieć 11 cyfr",
+                "matches": "NIP musi mieć 10 cyfr",
                 "required": "NIP jest wymagany"
             },
             "businessType": {
@@ -97,6 +108,24 @@
             },
             "id": {
                 "required": "Dowód osobisty jest wymagany"
+            },
+            "businessPermission": {
+                "required": "Zgoda na prowadzenie działalności jest wymagana"
+            },
+            "description": {
+                "max": "Opis musi mieć maksymalnie 200 znaków",
+                "min": "Opis musi mieć minimum 3 znaki",
+                "required": "Opis jest wymagany"
+            },
+            "tags": {
+                "min": "Musisz zaznaczyć minimum trzy tagi"
+            },
+            "logo": {
+                "required": "Logo jest wymagane"
+            },
+            "photos": {
+                "required": "Zdjęcia są wymagane"
+
             }
         }
     },
