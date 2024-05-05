@@ -96,30 +96,25 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.confirmPassword.required")),
   });
 
-  const RestaurantAddEmployeeSchema = yup
-    .object({
-      isBackdoorEmployee: yup.boolean(),
-      isHallEmployee: yup.boolean(),
-    })
-    .test(
-      t("errors.add-employee.employeeRole.required"),
-      {
-        context: {
-          message: t("errors.employee-register.employeeRole.required"),
-        },
-      },
-      (obj) => {
-        if (obj.isBackdoorEmployee || obj.isHallEmployee) {
-          return true;
-        }
+  const RestaurantAddEmployeeSchema = yup.object({
+    isBackdoorEmployee: yup.boolean(),
+    isHallEmployee: yup.boolean() 
+  }).test(
+    t("errors.add-employee.employeeRole.required"),
+    { context: { message: t("errors.employee-register.employeeRole.required") } }, 
+    (obj) => {
+      if (obj.isBackdoorEmployee || obj.isHallEmployee) {
+        return true;
+      }
+  
+      return new yup.ValidationError(
+        t("errors.add-employee.employeeRole.required"),
+        null,
+        'isHallEmployee'
+      );
+    }
+  );
 
-        return new yup.ValidationError(
-          t("errors.add-employee.employeeRole.required"),
-          null,
-          "hasRole",
-        );
-      },
-    );
 
   const RestaurantRegisterStep2Schema = yup.object({
     description: yup
