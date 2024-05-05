@@ -4,7 +4,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import { fetchPOST } from "../../services/APIconn";
+import { fetchGET, fetchPOST } from "../../services/APIconn";
 import ErrorMes from "../reusableComponents/ErrorMessage"
 
 const initialValues = {
@@ -24,11 +24,12 @@ const RegisterEmp: React.FC = () => {
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
+    if(await fetchGET("/auth/is-unique-login?login="+values.login))
     try {
       setSubmitting(true);
 
       const body = JSON.stringify({
-        login: values.login,
+        login: values.login, 
         firstName: values.firstName,
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
@@ -40,6 +41,9 @@ const RegisterEmp: React.FC = () => {
       console.log(error);
     } finally {
       setSubmitting(false);
+    }
+    else{
+      console.log("login taken")
     }
   };
 
