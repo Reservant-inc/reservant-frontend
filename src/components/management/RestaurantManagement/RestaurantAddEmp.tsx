@@ -76,13 +76,9 @@ const RestaurantAddEmp = () => {
                     {t("add-employee.isHallEmployee")}
                   </label>
 
-<<<<<<< HEAD
                   <ErrorMessage name="isHallEmployee">
                     { msg => <ErrorMes msg={msg}/> }
                   </ErrorMessage>
-=======
-                  <ErrorMessage name="hasRole" component="div" />
->>>>>>> main
                 </div>
               </div>
 
