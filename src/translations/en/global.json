@@ -1,149 +1,154 @@
 {
-    "landing-page": {
-        "loginButton": "Sign in",
-        "registerButton": "Sign up",
-        "notRegistered": "Don't have an account?",
-        "resetPassword": "Reset password"
+  "landing-page": {
+    "loginButton": "Sign in",
+    "registerButton": "Sign up",
+    "notRegistered": "Don't have an account?",
+    "resetPassword": "Reset password"
+  },
+  "auth": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phoneNumber": "Phone number",
+    "birthDate": "Birth date:",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "registerButton": "Register"
+  },
+  "add-employee": {
+    "isBackdoorEmployee": "Backdoor employee",
+    "isHallEmployee": "Hall employee",
+    "addEmployee": "Add emploee"
+  },
+
+  "restaurant-register": {
+    "name": "Name",
+    "address": "Address",
+    "postalCode": "Postal code",
+    "city": "City",
+    "businessType": "Business type",
+    "types": {
+      "bar": "Bar",
+      "restaurant": "Restaurant",
+      "cafe": "Cafe"
     },
-    "auth": {
-        "firstName": "First name",
-        "lastName": "Last name",
-        "phoneNumber": "Phone number",
-        "birthDate": "Birth date:",
-        "password": "Password",
-        "confirmPassword": "Confirm password",
-        "registerButton": "Register"
-    },
+    "tin": "TIN",
+    "id": "ID",
+    "alcoholLicense": "Alcohol license (optional)",
+    "leaseAgreement": "Rental contract (optional)",
+    "businessLicense": "Business permission",
+    "button": "Register restaurant",
+    "tags": "Choose which ones describe your premises",
+    "provideDelivery": "Provided delivery",
+    "logo": "Logo",
+    "photos": "Photos of the premises",
+    "description": "Description of the premises",
+    "saveButton": "Save",
+    "nextButton": "Next",
+    "backButton": "Back",
+    "header": "Register your local",
+    "submitSuccessMessage": "The application has been sent",
+    "step1": "Local data",
+    "step2": "More info",
+    "submit": "Finish"
+  },
+  "errors": {
     "add-employee": {
-        "isBackdoorEmployee": "Backdoor employee",
-        "isHallEmployee": "Hall employee" ,
-        "addEmployee": "Add emploee"
+      "employeeRole": {
+        "required": "At least one role is required"
+      }
     },
-    
+    "login": {
+      "login": "Login is required",
+      "password": "Password is required"
+    },
+    "user-register": {
+      "firstName": {
+        "matches": "First name can only contain letters",
+        "required": "First name is required"
+      },
+      "lastName": {
+        "matches": "Last name can only contain letters",
+        "required": "Last name is required"
+      },
+      "login": {
+        "required": "Login is required"
+      },
+      "email": {
+        "matches": "Invalid e-mail",
+        "required": "E-mail is required"
+      },
+      "diallingCode": "Dialling code is required",
+      "phoneNumber": {
+        "matches": "Invalid phone number",
+        "required": "Phone number is required"
+      },
+      "birthDate": {
+        "min": "Date is too early",
+        "max": "Date is too late",
+        "required": "Birth date is required"
+      },
+      "password": {
+        "matches": "Password must contain 8 characters, one uppercase, one lowercase, one number and one special character",
+        "required": "Password is required"
+      },
+      "confirmPassword": {
+        "matches": "Passwords must match",
+        "required": "Password confirmation is required"
+      }
+    },
     "restaurant-register": {
-        "name": "Name",
-        "address": "Address",
-        "postalCode": "Postal code",
-        "city": "City",
-        "businessType": "Business type",
-        "types": {
-            "bar": "Bar",
-            "restaurant": "Restaurant",
-            "cafe": "Cafe"
-        },
-        "tin": "TIN",
-        "id": "ID",
-        "alcoholLicense": "Alcohol license (optional)",
-        "leaseAgreement": "Rental contract (optional)",
-        "businessLicense": "Business permission",
-        "button": "Register restaurant",
-        "tags": "Choose which ones describe your premises",
-        "provideDelivery": "Provided delivery",
-        "logo": "Logo",
-        "photos": "Photos of the premises",
-        "description": "Description of the premises",
-        "saveButton": "Save",
-        "nextButton": "Next",
-        "backButton": "Back",
-        "header": "Register your local",
-        "submitSuccessMessage": "The application has been sent",
-        "step1": "Local data",
-        "step2": "More info",
-        "submit": "Finish"
-    },
-    "errors": {
-        "add-employee": {
-            "employeeRole": {
-                "required" : "At least one role is required"
-            }
-        },
-        "login": {
-            "login": "Login is required",
-            "password": "Password is required"
-        },
-        "user-register": {
-            "firstName": {
-                "matches": "First name can only contain letters",
-                "required": "First name is required"
-            },
-            "lastName": {
-                "matches": "Last name can only contain letters",
-                "required": "Last name is required"
-            },
-            "login": {
-                "required": "Login is required"
-            },
-            "email": {
-                "matches": "Invalid e-mail",
-                "required": "E-mail is required"
-            },
-            "diallingCode": "Dialling code is required",
-            "phoneNumber": {
-                "matches": "Invalid phone number",
-                "required": "Phone number is required"
-            },
-            "birthDate": {
-                "min": "Date is too early",
-                "max": "Date is too late",
-                "required": "Birth date is required"
-            },
-            "password": {
-                "matches": "Password must contain 8 characters, one uppercase, one lowercase, one number and one special character",
-                "required": "Password is required"
-            },
-            "confirmPassword": {
-                "matches": "Passwords must match",
-                "required": "Password confirmation is required"
-            }
-        },
-        "restaurant-register": {
-            "name": {
-                "required": "Name is required"
-            },
-            "address": {
-                "required": "Address is required"
-            },
-            "postalCode": {
-                "matches": "Postal codes must have XX-XXX format",
-                "required": "Postal code is required"
-            },
-            "city": {
-                "required": "City is required"
-            },
-            "tin": {
-                "matches": "TIN must have 10 numbers",
-                "required": "TIN is required"
-            },
-            "businessType": {
-                "required": "You must choose business type"
-            },
-            "id": {
-                "required": "ID is required"
-            },
-            "businessPermission": {
-                "required": "Business permission is required"
-            },
-            "description": {
-                "max": "The description must have a maximum of 200 characters",
-                "min": "The description must have a minimum of 3 characters",
-                "required": "The description is required"
-            },
-            "tags": {
-                "min": "You must select a minimum of three tags"
-            },
-            "logo": {
-                "required": "Logo is required"
-            },
-            "photos": {
-                "required": "Photos are required"
-            }
-        }
-    },
-    "restaurant-management": {
-        "groups": {
-            "counter": "Number of restaurants",
-            "add-button": "Add a new Group",
-            "header": "My Groups"
-        }
+      "name": {
+        "required": "Name is required"
+      },
+      "address": {
+        "required": "Address is required"
+      },
+      "postalCode": {
+        "matches": "Postal codes must have XX-XXX format",
+        "required": "Postal code is required"
+      },
+      "city": {
+        "required": "City is required"
+      },
+      "tin": {
+        "matches": "TIN must have 10 numbers",
+        "required": "TIN is required"
+      },
+      "businessType": {
+        "required": "You must choose business type"
+      },
+      "id": {
+        "required": "ID is required"
+      },
+      "businessPermission": {
+        "required": "Business permission is required"
+      },
+      "description": {
+        "max": "The description must have a maximum of 200 characters",
+        "min": "The description must have a minimum of 3 characters",
+        "required": "The description is required"
+      },
+      "tags": {
+        "min": "You must select a minimum of three tags"
+      },
+      "logo": {
+        "required": "Logo is required"
+      },
+      "photos": {
+        "required": "Photos are required"
+      }
     }
+  },
+  "restaurant-management": {
+    "groups": {
+      "counter": "Number of restaurants",
+      "add-button": "Add a new Group",
+      "header": "My Groups"
+    },
+    "restaurants": {
+      "delete": "Are you sure you want to delete ",
+      "confirm": "Yes",
+      "refuse": "No"
+    }
+  }
 }

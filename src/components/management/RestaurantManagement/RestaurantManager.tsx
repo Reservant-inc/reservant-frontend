@@ -17,8 +17,10 @@ const RestaurantManager = () => {
 
   return (
     <div className="flex h-full w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
-      <div className="mx-3 w-[14.6rem] bg-grey-1 dark:bg-grey-3 flex flex-col items-center">
-        <button className="mt-5 mb-2 h-8 w-48 rounded-lg p-2 bg-primary-2 font-mont-md text-white dark:bg-secondary dark:text-black flex justify-center items-center">Add restaurant</button>
+      <div className="mx-3 flex w-[14.6rem] flex-col items-center bg-grey-1 dark:bg-grey-3">
+        <button className="mb-2 mt-5 flex h-8 w-48 items-center justify-center rounded-lg bg-primary-2 p-2 font-mont-md text-white dark:bg-secondary dark:text-black">
+          Add restaurant
+        </button>
         <MyGroups
           activeRestaurantId={activeRestaurantId}
           handleChangeActiveRestaurant={handleChangeActiveRestaurant}
