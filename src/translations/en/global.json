@@ -151,7 +151,8 @@
             "addNewMenuItem": "Add new menu position",
             "menuItemName": "Name",
             "menuItemPrice": "Price",
-            "menuItemAlcoholPercentage": "Alcohol percentage"
+            "menuItemAlcoholPercentage": "Alcohol percentage",
+            "editMenuItem": "Edit menu position"
         }
     }
 }

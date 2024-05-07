@@ -141,7 +141,8 @@
             "addNewMenuItem": "Dodaj nową pozycję do menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Procent alkocholu"
+            "menuItemAlcoholPercentage": "Procent alkocholu",
+            "editMenuItem": "Edytuj pozycję menu"
         }
     }
 }

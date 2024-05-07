@@ -2,12 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MenuPopup, { MenuItem } from "./MenuPopup";
+import MenuPopup, { MenuItemInterface } from "./MenuPopup";
 import { useTranslation } from "react-i18next";
-import { fetchGET } from "../../../services/APIconn";
-import defaultImage from "../../../assets/images/defaulImage.jpeg"
-
-import { Card, CardContent } from "@mui/material";
+import { fetchGET, fetchPOST, fetchPUT } from "../../../services/APIconn";
+import MenuItem from "./MenuItem";
 
 interface MenuManagementProps {
     activeRestaurantId: number | null;
@@ -18,6 +16,14 @@ interface Menu {
     menuType: string;
     dateFrom: string;
     dateUntil: string | null;
+    menuItems: MenuItemData[];
+}
+
+interface MenuItemData {
+    id: number;
+    name: string;
+    price: number;
+    alcoholPercentage: number;
 }
 
 const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) => {
@@ -28,7 +34,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const [isCategoryPopupOpen, setIsCategoryPopupOpen] = useState(false);
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
     const [isMenuItemByCategoryPopupOpen, setIsMenuItemByCategoryPopupOpen] = useState(false);
+    const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
     const [editCategoryName, setEditCategoryName] = useState<string>("");
+    const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(null);
     const [menus, setMenus] = useState<any[]>([]);
 
     const popupRef = useRef<HTMLDivElement>(null);
@@ -40,21 +48,64 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeRestaurantId]);
 
+    useEffect (() => {
+        fetchMenuForSelectedCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMenuItemEditPopupOpen, isMenuItemByCategoryPopupOpen])
+    
+    useEffect(() => {
+        const isMenuFetched = selectedCategoryIndex !== null && menus.length > selectedCategoryIndex && menus[selectedCategoryIndex].menuItems.length > 0;
+
+    if (!isMenuFetched) {
+        fetchMenuForSelectedCategory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [menus, selectedCategoryIndex, setIsMenuItemEditPopupOpen]);
+
+    const fetchMenuForSelectedCategory = async () => {
+        if (selectedCategoryIndex !== null && menus.length > selectedCategoryIndex) {
+            const menuId = menus[selectedCategoryIndex].id;
+            try {
+                const menuData = await fetchGET(`/menus/${menuId}`);
+                
+                console.log("Menu for selected category:", menuData);
+                if (!menuData.menuItems || menuData.menuItems.length === 0) {
+                    return;
+                }
+                setMenus(prevMenus => {
+                    const updatedMenus = [...prevMenus];
+                    updatedMenus[selectedCategoryIndex] = {
+                        ...updatedMenus[selectedCategoryIndex],
+                        menuItems: menuData.menuItems || []
+                    };
+                    return updatedMenus;
+                });
+            } catch (error) {
+                console.error("Error fetching menu for selected category:", error);
+            }
+        }
+    };
+
     const fetchMenus = async (restaurantId: number): Promise<Menu[]> => {
         try {
             const menusData: Menu[] = await fetchGET(`/my-restaurants/${restaurantId}/menus`);
             console.log("Menus data:", menusData);
-            setMenus(menusData);
-            const uniqueMenuTypes = menusData.filter((menu, index, self) => self.findIndex(m => m.menuType === menu.menuType) === index).map(menu => menu.menuType);
-            setCategoriesByRestaurant({ [activeRestaurantId || 0]: uniqueMenuTypes });
-            return menusData;
+            const validatedMenusData = menusData.map(menu => ({
+                ...menu,
+                menuItems: menu.menuItems || [], // Jeśli brakuje menuItems, ustaw na pustą tablicę
+            }));
+    
+            const allMenuTypes = validatedMenusData.map(menu => menu.menuType);
+    
+            setMenus(validatedMenusData);
+            setCategoriesByRestaurant({ [activeRestaurantId || 0]: allMenuTypes });
+            return validatedMenusData;
         } catch (error) {
             console.error("Error fetching menus:", error);
             return [];
         }
     };
-
-   
+    
 
     const handleEditCategory = () => {
         if (selectedCategoryIndex !== null && categoriesByRestaurant[activeRestaurantId || 0]) {
@@ -63,56 +114,104 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             setIsEditPopupOpen(true);
         }
     };
-    const handleSaveNewCategory = (values: { [key: string]: string }) => {
+    const handleSaveNewCategory = async (values: { [key: string]: string }) => {
         const categoryValue = Object.values(values)[0];
         console.log(categoryValue);
-
-        const updatedCategoriesByRestaurant = {
-            ...categoriesByRestaurant,
-            [activeRestaurantId || 0]: [
-                ...(categoriesByRestaurant[activeRestaurantId || 0] || []), // Aktualne kategorie + nowa kategoria
-                categoryValue
-            ]
-        };
     
-        setCategoriesByRestaurant(updatedCategoriesByRestaurant);
-        setIsCategoryPopupOpen(false);
+        try {
+            const response = await fetchPOST('/menus', JSON.stringify({ restaurantId: activeRestaurantId, menuType: categoryValue }));
+            console.log("Response:", response);
+
+            setIsCategoryPopupOpen(false);
+
+            if (activeRestaurantId !== null) {
+                fetchMenus(activeRestaurantId);
+            }
+        } catch (error) {
+            console.error("Error saving new category:", error);
+        }
     };
     
 
-    const handleSaveEditedCategory = (values: { [key: string]: string }) => {
+    const handleSaveEditedCategory = async (values: { [key: string]: string }) => {
         if (selectedCategoryIndex !== null && categoriesByRestaurant[activeRestaurantId || 0]) {
             const categoryValue = Object.values(values)[0];
-            const updatedCategories = [...categoriesByRestaurant[activeRestaurantId || 0]];
-            updatedCategories[selectedCategoryIndex] = categoryValue;
-            const updatedCategoriesByRestaurant = {
-                ...categoriesByRestaurant,
-                [activeRestaurantId || 0]: updatedCategories
-            };
+            console.log(categoryValue);
 
-            setCategoriesByRestaurant(updatedCategoriesByRestaurant);
-            setIsEditPopupOpen(false);
+            try {
+                const menuId = menus[selectedCategoryIndex].id;
+                const response = await fetchPUT(`/menus/${menuId}` , JSON.stringify({ menuType: categoryValue }));
+                console.log("Response:", response);
+    
+                setIsEditPopupOpen(false);
+    
+                if (activeRestaurantId !== null) {
+                    fetchMenus(activeRestaurantId);
+                }
+            } catch (error) {
+                console.error("Error while editing category:", error);
+            }
+            
         }
     };
 
-    const handleSaveNewMenuItem = (values: { [key: string]: string }) => {
+    const handleSaveNewMenuItem = async (values: { [key: string]: string }) => {
+        try {
+            const body = JSON.stringify({ restaurantId: activeRestaurantId, name: values.Name, price: values.Price, alcoholPercentage: values["Alcohol percentage"]});
+            const response = await fetchPOST('/menu-items' , body);
+            console.log("Response:", response);
+            if (selectedCategoryIndex !== null && menus[selectedCategoryIndex]) { // Dodaj warunek sprawdzający, czy selectedCategoryIndex nie jest null
+                const menuItemId = response.id;
+                const menuId = menus[selectedCategoryIndex].id;
+                const response2 = await fetchPOST(`/menus/${menuId}/items` , JSON.stringify({ itemIds: [menuItemId]}));
+                console.log(response2);
+                setIsMenuItemByCategoryPopupOpen(false);
+            }
+        }catch (error) {
+            console.error("error while posting ne menu item:", error)
+        }
 
     };
 
-    const menuCategories: MenuItem[] = [
+    const handleEditMenuItem = (menuItem: MenuItemData) => {
+        setEditedMenuItem(menuItem);
+        setIsMenuItemEditPopupOpen(true);
+    };
+
+    const handleSaveEditedMenuItem = async (values: { [key: string]: string }) => {
+        try {
+            if (editedMenuItem) {
+                const { id } = editedMenuItem;
+                console.log(values);
+                const body = JSON.stringify({ name: values.Name, price: values.Price, alcoholPercentage: values["Alcohol percentage"]});
+                const response = await fetchPUT(`/menu-items/${id}`, body);
+                console.log(response);
+                setIsMenuItemEditPopupOpen(false);
+            }
+        } catch (error) {
+            console.error("Error while saving edited menu item:", error);
+        }
+    };
+
+
+    const handleDeleteMenuItem = () => {
+        //brak końcówki 
+    }
+
+    const menuCategories: MenuItemInterface[] = [
         {
             header: t("restaurant-management.menu.addNewCategory"),
         }
     ];
 
-    const editMenuCategories: MenuItem[] = [
+    const editMenuCategories: MenuItemInterface[] = [
         {
             header: t("restaurant-management.menu.editCategory"),
             initialValue: editCategoryName
         }
     ];
 
-    const menuItems: MenuItem[] = [
+    const menuItems: MenuItemInterface[] = [
     {
         header: t("restaurant-management.menu.menuItemName")
     },
@@ -123,8 +222,21 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         header: t("restaurant-management.menu.menuItemAlcoholPercentage")
     }
 ];
-
-
+const editedMenuItems: MenuItemInterface[] = [
+    {
+        header: t("restaurant-management.menu.menuItemName"),
+        initialValue: editedMenuItem?.name || ""
+    },
+    {
+        header: t("restaurant-management.menu.menuItemPrice"),
+        initialValue: editedMenuItem?.price.toString() || ""
+    },
+    {
+        header: t("restaurant-management.menu.menuItemAlcoholPercentage"),
+       initialValue: editedMenuItem?.alcoholPercentage?.toString() || ""
+    }
+];
+   
     return (
         <div ref={popupRef}className="w-full h-full p-2  flex-col space-y-2">
             <div className="flex items-center justify-center">
@@ -172,9 +284,20 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                         items={menuItems}
                         mainHeader={t("restaurant-management.menu.addNewMenuItem")}
                         onClose={() => setIsMenuItemByCategoryPopupOpen(false)}
-                        onSave= {() => setIsMenuItemByCategoryPopupOpen(false)}
+                        onSave= {handleSaveNewMenuItem}
                     />
                 )}
+                {isMenuItemEditPopupOpen && (
+                    <MenuPopup
+                        items={editedMenuItems}
+                        mainHeader={t("restaurant-management.menu.editMenuItem")}
+                        onClose={() => {
+                            setIsMenuItemEditPopupOpen(false);
+                        }}
+                        onSave={handleSaveEditedMenuItem}
+                    />
+                )}
+
             </div>
             <div>
                 <button
@@ -184,30 +307,22 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                     <AddIcon />
                 </button>
             </div>
-            <div>
-            <Card className="w-64 dark:bg-grey-4 dark:text-grey-1">
-                    <img src={defaultImage} alt="default" className="w-full h-48 object-cover" />
-                    <CardContent>
-                        <div className="flex justify-between">
-                            <h2 className="text-lg font-medium">Nazwa</h2>
-                            <div>
-                               <button
-                                    className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
-                                    >
-                                    <EditIcon />
-                                </button>
-                                <button
-                                    className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
-                                    >
-                                    <DeleteIcon />
-                                </button>
-                            </div>
-                        </div>
-                        <p className="text-sm">Cena</p>
-                        <p className="text-xs">Zawartość alkoholu: 0.5%</p>
-                    </CardContent>
-                </Card>
-            </div>
+                <div className="flex flex-wrap m-1">
+                    {selectedCategoryIndex !== null && menus[selectedCategoryIndex] && (
+                        <>
+                            {menus[selectedCategoryIndex]?.menuItems.map((menuItem: MenuItemData) => (
+                                <MenuItem 
+                                    key={menuItem.id} 
+                                    name={menuItem.name} 
+                                    price={menuItem.price} 
+                                    alcoholPercentage={menuItem.alcoholPercentage} 
+                                    onDelete={handleDeleteMenuItem} 
+                                    onEdit={() => handleEditMenuItem(menuItem)}
+                                />
+                            ))}
+                         </>
+                    )}
+                </div>
         </div>
     );
 };
