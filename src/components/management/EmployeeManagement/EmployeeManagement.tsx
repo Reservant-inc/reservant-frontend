@@ -297,14 +297,21 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantI
   
     useEffect(() => {
         const fetchData = async () => {
+
             try {
               const employees = await fetchGET("/user/employees");
+
+              console.log(employees)
+
+              console.log(employees[0].employments[0].restaurantId)
 
               const data = []
 
               for (const [index, emp] of employees.entries()) {
 
-                const isEmployed: boolean = emp.employments[0].restaurantId === activeRestaurantId
+                console.log(emp.employments[0], index)
+
+                const isEmployed: boolean = emp.employments.length === 0 ? false : emp.employments[0].restaurantId === activeRestaurantId
 
                 data.push(createData(
                   index,
@@ -314,8 +321,8 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantI
                   emp.lastName,
                   emp.phoneNumber,
                   isEmployed,
-                  emp.employments[0].isBackdoorEmployee,
-                  emp.employments[0].isHallEmployee
+                  false,
+                  false
                 ));
               }
 
@@ -375,10 +382,6 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantI
     ) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
-    };
-  
-    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDense(event.target.checked);
     };
   
     const isSelected = (id: number) => selected.indexOf(id) !== -1;

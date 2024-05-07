@@ -23,11 +23,17 @@ const RestaurantManager = () => {
           handleChangeActiveRestaurant={handleChangeActiveRestaurant}
         />
       </div>
-      <RestaurantDetails
-        activeRestaurantId={activeRestaurantId}
-        editable={editable}
-        setEditable={setEditable}
-      />
+      {
+        activeRestaurantId === null ? (
+          <h1> pick a restaurant </h1>
+        ) : (
+          <RestaurantDetails
+            activeRestaurantId={activeRestaurantId}
+            editable={editable}
+            setEditable={setEditable}
+          />
+        )
+      }
     </div>
   );
 };
