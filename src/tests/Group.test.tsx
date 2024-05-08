@@ -27,7 +27,7 @@ describe("Group component", () => {
       />,
     );
 
-    fireEvent.click(screen.getByText("Test Group"));
+    fireEvent.click(screen.getByText("Test Group 2"));
 
     await waitFor(() => {
       expect(screen.getByText("Test Group")).toBeInTheDocument();
