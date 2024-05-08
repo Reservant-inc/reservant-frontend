@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
+import MenuManagement from "../MenuManagement/MenuMangement";
 import { RestaurantDetailsProps } from "../../../services/interfaces";
 import {
   RestaurantDataType,
@@ -90,7 +91,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="flex w-full flex rounded-l-sm py-4 pr-4 gap-4">
+    <div className="flex w-full flex rounded-xl py-4 pr-4 gap-4">
       <div className="w-[32rem] flex gap-[2px]">
         <div className="h-full w-full rounded-l-sm bg-white font-medium dark:bg-black dark:text-grey-1">
         {restaurant && (
@@ -424,7 +425,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         { 
           {
             0: <EmployeeManagement activeRestaurantId={activeRestaurantId as number} />,
-            1: <div/>
+            1: <MenuManagement activeRestaurantId={activeRestaurantId} />
           }[page]
         }
       </div>
