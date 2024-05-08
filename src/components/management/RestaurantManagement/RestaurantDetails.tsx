@@ -25,6 +25,7 @@ import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import Section from "./ManagementSection";
 import { useNavigate } from "react-router-dom";
 import RestaurantEditForm from "./RestaurantEditForm";
+import Cookies from "js-cookie";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,
@@ -98,10 +99,15 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         `/my-restaurants/${activeRestaurantId}`,
         JSON.stringify(activeRestaurantId),
       );
+      console.log(response);
     } catch (error) {
       console.log(error);
     } finally {
-      navigate("/my-restaurants");
+      setShowDeletePopup(false);
+      navigate(
+        // "/",
+        `/${JSON.parse(Cookies.get("userInfo") as string).login}/restaurants`,
+      );
     }
   };
 
