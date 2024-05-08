@@ -60,7 +60,8 @@
                 "required": "Nazwisko jest wymagane"
             },
             "login": {
-                "required": "Login jest wymagany"
+                "required": "Login jest wymagany",
+                "taken": "Login jest już zajęty"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",

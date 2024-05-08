@@ -29,7 +29,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
   }, []);
 
   return (
-    <div className="h-full w-full flex flex-col justify-between items-between">
+    <div className="h-full p-2 w-full flex flex-col justify-between items-between">
       <div className="overflow-y-scroll scroll">
         {groups.map((group) => (
           <Group

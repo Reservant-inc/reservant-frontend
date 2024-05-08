@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
+import { fetchGET } from "../services/APIconn";
 
 export const useValidationSchemas = () => {
   const [t] = useTranslation("global");
@@ -20,7 +21,21 @@ export const useValidationSchemas = () => {
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
-    login: yup.string().required(t("errors.user-register.login.required")),
+    login: yup.string().required(t("errors.user-register.login.required")).test('unique login',  t("errors.user-register.login.taken"), (login)=>{
+      
+      return new Promise((resolve, reject) => {
+        fetchGET(`/auth/is-unique-login?login=${login}`)
+            .then((res) => {
+                if(res)
+                  resolve(true)
+                else
+                  resolve(false)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+      })
+    }),
 
     email: yup
       .string()
@@ -69,7 +84,20 @@ export const useValidationSchemas = () => {
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
-    login: yup.string().required(t("errors.user-register.login.required")),
+    login: yup.string().required(t("errors.user-register.login.required")).test('unique login', t("errors.user-register.login.taken"), (login)=>{
+      return new Promise((resolve, reject) => {
+        fetchGET(`/auth/is-unique-login?login=${login}`)
+            .then((res) => {
+                if(res)
+                  resolve(true)
+                else
+                  resolve(false)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+      })
+    }),
 
     phoneNumber: yup
       .string()
@@ -96,30 +124,24 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.confirmPassword.required")),
   });
 
-  const RestaurantAddEmployeeSchema = yup
-    .object({
-      isBackdoorEmployee: yup.boolean(),
-      isHallEmployee: yup.boolean(),
-    })
-    .test(
-      t("errors.add-employee.employeeRole.required"),
-      {
-        context: {
-          message: t("errors.employee-register.employeeRole.required"),
-        },
-      },
-      (obj) => {
-        if (obj.isBackdoorEmployee || obj.isHallEmployee) {
-          return true;
-        }
+  const RestaurantAddEmployeeSchema = yup.object({
+    isBackdoorEmployee: yup.boolean(),
+    isHallEmployee: yup.boolean() 
+  }).test(
+    "at-least-one-checkbox",
+    t("errors.employee-register.employeeRole.required"), 
+    (obj) => {
+      if (obj.isBackdoorEmployee || obj.isHallEmployee) {
+        return true;
+      }
+      
+      return new yup.ValidationError([
+          new yup.ValidationError(t("errors.add-employee.employeeRole.required"),null,"isBackdoorEmployee"),
+          new yup.ValidationError(t("errors.add-employee.employeeRole.required"),null,"isHallEmployee"),
+        ])
+    }
+  );
 
-        return new yup.ValidationError(
-          t("errors.add-employee.employeeRole.required"),
-          null,
-          "hasRole",
-        );
-      },
-    );
 
   const RestaurantRegisterStep2Schema = yup.object({
     description: yup

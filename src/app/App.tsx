@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { AuthWrapper } from "../components/routing/AuthWrapper";
 
 const App = () => {
-
+//test
   useEffect(()=>{
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark')

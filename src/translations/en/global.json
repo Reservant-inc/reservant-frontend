@@ -71,7 +71,8 @@
                 "required": "Last name is required"
             },
             "login": {
-                "required": "Login is required"
+                "required": "Login is required",
+                "taken": "Login is already taken"
             },
             "email": {
                 "matches": "Invalid e-mail",

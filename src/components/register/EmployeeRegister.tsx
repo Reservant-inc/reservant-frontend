@@ -5,6 +5,7 @@ import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../services/APIconn";
+import ErrorMes from "../reusableComponents/ErrorMessage"
 
 const initialValues = {
   login: "",
@@ -23,7 +24,6 @@ const RegisterEmp: React.FC = () => {
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    if(await fetchGET("/auth/is-unique-login?login="+values.login))
     try {
       setSubmitting(true);
 
@@ -41,9 +41,6 @@ const RegisterEmp: React.FC = () => {
     } finally {
       setSubmitting(false);
     }
-    else{
-      console.log("login taken")
-    }
   };
 
   return (
@@ -51,6 +48,11 @@ const RegisterEmp: React.FC = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={employeeRegisterSchema}
+        //potencjalnie do rozważenia, więcej o tym niżej
+        ////////////////////////////////////////////////
+        validateOnChange={false}
+        validateOnBlur={true}
+        ////////////////////////////////////////////////
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -58,20 +60,40 @@ const RegisterEmp: React.FC = () => {
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="firstName">{t("auth.firstName")}:</label>
-                <Field type="text" id="firstName" name="firstName" />
-                <ErrorMessage name="firstName" component="div" />
+                <Field type="text" id="firstName" name="firstName" className={!(formik.errors.firstName && formik.touched.firstName)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="firstName">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="lastName">{t("auth.lastName")}:</label>
-                <Field type="text" id="lastName" name="lastName" />
-                <ErrorMessage name="lastName" component="div" />
+                <Field type="text" id="lastName" name="lastName" className={!(formik.errors.lastName && formik.touched.lastName)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="lastName">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
-                <Field type="text" id="login" name="login" />
-                <ErrorMessage name="login" component="div" />
+                {/* 
+                
+                    @TODO ... ?
+
+                    nie moge nigdzie znalezc satysfakcjonującego rozwiązania pozwalającego na walidację tylko jednego pola w inny sposób (on blur zamiast on change).
+                    na razie zmieniam walidacje calego forma na validateOnBlur - mniej żądań będzie przy sprawdzaniu loginu
+                    
+                    update: 
+                      ig trzeba było wziąć angulara 
+                      https://stackoverflow.com/questions/68137377/how-to-validate-a-field-onblur-and-other-field-onchange-using-formik
+
+                */}
+
+                <Field type="text" id="login" name="login" className={!(formik.errors.login && formik.touched.login)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="login">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
+
               </div>
 
               <div className="form-control">
@@ -85,15 +107,19 @@ const RegisterEmp: React.FC = () => {
                   onChange={(value: string) =>
                     formik.setFieldValue("phoneNumber", value)
                   }
-                  className="phone-input"
+                  className={!(formik.errors.phoneNumber && formik.touched.phoneNumber)?"border-none":"border-solid border-2 border-pink"}
                 />
-                <ErrorMessage name="phoneNumber" component="div" />
+                <ErrorMessage name="phoneNumber">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="password">{t("auth.password")}:</label>
-                <Field type="password" id="password" name="password" />
-                <ErrorMessage name="password" component="div" />
+                <Field type="password" id="password" name="password" className={!(formik.errors.password && formik.touched.password)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="password">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <div className="form-control">
@@ -104,8 +130,11 @@ const RegisterEmp: React.FC = () => {
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
+                  className={!(formik.errors.confirmPassword && formik.touched.confirmPassword)?"border-none":"border-solid border-2 border-pink"}
                 />
-                <ErrorMessage name="confirmPassword" component="div" />
+                <ErrorMessage name="confirmPassword">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
               </div>
 
               <button type="submit" disabled={!formik.isValid}>
