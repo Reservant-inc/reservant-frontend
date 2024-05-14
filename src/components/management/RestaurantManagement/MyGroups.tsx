@@ -6,6 +6,7 @@ import Popup from "../../reusableComponents/Popup";
 import { GroupType } from "../../../services/types";
 import { MyGroupsProps } from "../../../services/interfaces";
 import { fetchGET } from "../../../services/APIconn";
+import { List, ListSubheader } from "@mui/material";
 
 const MyGroups: React.FC<MyGroupsProps> = ({
   handleChangeActiveRestaurant,
@@ -29,8 +30,18 @@ const MyGroups: React.FC<MyGroupsProps> = ({
   }, []);
 
   return (
-    <div className="h-full p-2 w-full flex flex-col justify-between items-between">
+    <div className="h-full w-full flex flex-col justify-between items-between">
       <div className="overflow-y-scroll scroll">
+      <List
+        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            Nested List Items
+          </ListSubheader>
+        }
+      >
         {groups.map((group) => (
           <Group
             key={group.id}
@@ -39,6 +50,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
             activeRestaurantId={activeRestaurantId}
           />
         ))}
+       </List> 
       </div>
       {/* <Popup
         buttonText={t("restaurant-management.groups.add-button")}
