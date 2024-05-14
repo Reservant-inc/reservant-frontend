@@ -33,13 +33,13 @@ const MyGroups: React.FC<MyGroupsProps> = ({
     <div className="h-full w-full flex flex-col justify-between items-between">
       <div className="overflow-y-scroll scroll">
       <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        className="dark:bg-black font-mont-md"
+        sx={{ width: "100%", maxWidth: 360 }}
         component="nav"
-        aria-labelledby="nested-list-subheader"
         subheader={
-          <ListSubheader component="div" id="nested-list-subheader">
-            Nested List Items
-          </ListSubheader>
+          <div className="flex flex-col font-thin text-md h-14 justify-center items-center">
+            <h1 className="text-primary-2 font-mont-md dark:text-secondary">MY GROUPS</h1>
+          </div>
         }
       >
         {groups.map((group) => (
@@ -58,10 +58,6 @@ const MyGroups: React.FC<MyGroupsProps> = ({
         >
         <p>Form to create a group</p>
       </Popup> */}
-      <div className="flex flex-col font-thin text-md h-14 justify-center items-center">
-        <h1 className="text-primary-2 font-mont-md dark:font-mont-l dark:text-secondary">MY GROUPS</h1>
-        <span className="h-[1px] dark:h-[1px] flex-end w-full bg-primary-2 dark:bg-secondary"/>
-      </div>
     </div>
   );
 };
