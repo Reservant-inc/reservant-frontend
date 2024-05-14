@@ -146,13 +146,19 @@
             "header": "My Groups"
         },
         "menu": {
-            "addNewCategory": "Add new category",
-            "editCategory": "Edit category name",
+            "addNewMenu": "Add new menu",
+            "editMenu": "Edit menu",
+            "name": "Name",
+            "alternateName": "Alternate name",
+            "type": "Type",
+            "dateFrom": "Date from",
+            "dateUntil": "Date until",
             "addNewMenuItem": "Add new menu position",
+            "editMenuItem": "Edit menu position",
             "menuItemName": "Name",
             "menuItemPrice": "Price",
-            "menuItemAlcoholPercentage": "Alcohol percentage",
-            "editMenuItem": "Edit menu position"
+            "menuItemAlcoholPercentage": "Alcohol percentage"
+            
         }
     }
 }

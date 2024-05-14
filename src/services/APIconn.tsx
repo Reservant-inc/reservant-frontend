@@ -75,6 +75,31 @@ export const fetchPUT = async (connString: string, body: string) => {
   return data;
 };
 
+export const fetchDELETE = async (connString: string) => {
+  const token = Cookies.get("token");
+
+  const response = await fetch(
+    `${process.env.REACT_APP_SERVER_IP}${connString}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token as string}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.log(errorData);
+    throw new Error(errorData);
+  }
+
+  const data = await response.json();
+
+  return data;
+};
+
+
 
 export const fetchFilesPOST = async (connString: string, file: File) => {
   const token = Cookies.get("token");

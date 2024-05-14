@@ -136,13 +136,19 @@
             "header": "Moje Grupy"
         },
         "menu": {
-            "addNewCategory": "Dodaj nową kategorię",
-            "editCategory": "Edytuj nazwę kategorii",
+            "addNewMenu": "Dodaj nowe menu",
+            "editMenu": "Edytuj menu",
+            "name": "Nazwa",
+            "alternateName": "Alternatywna nazwa",
+            "type": "Typ",
+            "dateFrom": "Data rozpoczęcia",
+            "dateUntil": "Date zakończenia",
             "addNewMenuItem": "Dodaj nową pozycję do menu",
+            "editMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Procent alkocholu",
-            "editMenuItem": "Edytuj pozycję menu"
+            "menuItemAlcoholPercentage": "Procent alkocholu"
+            
         }
     }
 }
