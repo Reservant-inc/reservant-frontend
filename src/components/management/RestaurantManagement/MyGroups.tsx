@@ -31,10 +31,10 @@ const MyGroups: React.FC<MyGroupsProps> = ({
 
   return (
     <div className="h-full w-full flex flex-col justify-between items-between">
-      <div className="overflow-y-scroll scroll">
+      <div className="overflow-y-scroll scroll pl-1">
       <List
         className="dark:bg-black font-mont-md"
-        sx={{ width: "100%", maxWidth: 360 }}
+        sx={{ width: "100%"}}
         component="nav"
         subheader={
           <div className="flex flex-col font-thin text-md h-14 justify-center items-center">

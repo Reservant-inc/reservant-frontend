@@ -22,6 +22,7 @@ const Group: React.FC<GroupProps> = ({
   const [t] = useTranslation("global");
   const [isPressed, setIsPressed] = useState<boolean>(false);
 
+  const [open, setOpen] = React.useState(false);
   const [restaurants, setRestaurants] = useState<RestaurantType[]>([]);
 
   useEffect(() => {
@@ -37,7 +38,6 @@ const Group: React.FC<GroupProps> = ({
     fetchData();
   }, [id]);
 
-  const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -58,12 +58,17 @@ const Group: React.FC<GroupProps> = ({
                   <ListItemButton
                     sx={{ pl: 4 }}
                     key={restaurant.id}
-                    onClick={() => handleChangeActiveRestaurant(restaurant.id)}
+                    onClick={() => {
+                      handleChangeActiveRestaurant(restaurant.id)
+                      setIsPressed(!isPressed)
+                    }}
                   >
                     <ListItemIcon>
                       <RemoveSharpIcon className="dark:fill-white"/>
                     </ListItemIcon>
-                    {restaurant.name}
+                    <h1 className={activeRestaurantId === restaurant.id ? "dark:text-secondary text-primary-2 font-mont-md" : ""}>
+                      {restaurant.name}
+                    </h1>
                   </ListItemButton>
                 ))}
               </>
