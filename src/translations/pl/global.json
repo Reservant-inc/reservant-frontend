@@ -1,4 +1,7 @@
 {
+    "general": {
+        "search": "Szukaj..."
+    },
     "landing-page": {
         "loginButton": "Zaloguj się",
         "registerButton": "Zarejestruj się",

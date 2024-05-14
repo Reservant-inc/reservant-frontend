@@ -3,11 +3,13 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MenuPopup, { MenuItemInterface } from "./MenuPopup";
 import { useTranslation } from "react-i18next";
 import { fetchDELETE, fetchGET, fetchPOST, fetchPUT } from "../../../services/APIconn";
 import MenuItem from "./MenuItem";
 import MyModal from "../../reusableComponents/MyModal";
+import { Button, Menu, MenuItem as MyMenuItem } from "@mui/material";
 
 interface MenuManagementProps {
     activeRestaurantId: number | null;
@@ -312,7 +314,7 @@ const editedMenuItems: MenuItemInterface[] = [
         const priceMatch = menuItem.price.toString().toLowerCase().includes(searchText.toLowerCase());
         return nameMatch || priceMatch;
     }) : [];
-    
+
    
     return (
         <div className="w-full h-full p-2  flex-col space-y-2">
@@ -396,10 +398,10 @@ const editedMenuItems: MenuItemInterface[] = [
                 </button>
                 <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder={t("general.search")}
                     value={searchText}
                     onChange={handleSearchInputChange}
-                    className="rounded-lg p-1 dark:text-black"
+                    className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
                 />
             </div>
                 <div className="flex flex-wrap m-1">

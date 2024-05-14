@@ -1,4 +1,7 @@
 {
+    "general": {
+        "search": "Search..."
+    },
     "landing-page": {
         "loginButton": "Sign in",
         "registerButton": "Sign up",
@@ -18,8 +21,7 @@
         "isBackdoorEmployee": "Backdoor employee",
         "isHallEmployee": "Hall employee" ,
         "addEmployee": "Add emploee"
-    },
-    
+    },    
     "restaurant-register": {
         "name": "Name",
         "address": "Address",
