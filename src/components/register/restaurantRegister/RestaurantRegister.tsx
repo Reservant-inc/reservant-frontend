@@ -144,7 +144,7 @@ const RestaurantRegister: React.FC = () => {
 
       console.log(data);
 
-      //await fetchPOST("/my-restaurants", JSON.stringify(data));
+      await fetchPOST("/my-restaurants", JSON.stringify(data));
   
       setIsFormSubmitted(true);
       setSnackbarOpen(true);

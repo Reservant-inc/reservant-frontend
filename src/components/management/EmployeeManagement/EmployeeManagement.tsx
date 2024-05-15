@@ -33,7 +33,6 @@ interface Data {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    isEmployed: boolean;
     isBackdoorEmployee: boolean;
     isHallEmployee: boolean;
   }
@@ -45,7 +44,6 @@ interface Data {
     firstName: string,
     lastName: string,
     phoneNumber: string,
-    isEmployed: boolean,
     isBackdoorEmployee: boolean,
     isHallEmployee: boolean
   ): Data {
@@ -56,7 +54,6 @@ interface Data {
       firstName,
       lastName,
       phoneNumber,
-      isEmployed,
       isBackdoorEmployee,
       isHallEmployee,
     };
@@ -142,12 +139,6 @@ interface Data {
       numeric: false,
       disablePadding: false,
       label: 'CPhone number',
-    },
-    {
-      id: 'isEmployed',
-      numeric: false,
-      disablePadding: false,
-      label: 'Employed in this restaurant',
     },
     {
       id: 'isBackdoorEmployee',
@@ -266,7 +257,7 @@ interface Data {
             id="tableTitle"
             component="div"
           >
-            Nutrition
+            Employees
           </Typography>
         )}
         {numSelected > 0 ? (
@@ -286,7 +277,7 @@ interface Data {
     );
   }
 
-const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantId) => {
+const EmployeeManagement: React.FC = () => {
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Data>('login');
     const [selected, setSelected] = useState<readonly number[]>([]);
@@ -301,17 +292,9 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantI
             try {
               const employees = await fetchGET("/user/employees");
 
-              console.log(employees)
-
-              console.log(employees[0].employments[0].restaurantId)
-
               const data = []
 
               for (const [index, emp] of employees.entries()) {
-
-                console.log(emp.employments[0], index)
-
-                const isEmployed: boolean = emp.employments.length === 0 ? false : emp.employments[0].restaurantId === activeRestaurantId
 
                 data.push(createData(
                   index,
@@ -320,7 +303,6 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantI
                   emp.firstName,
                   emp.lastName,
                   emp.phoneNumber,
-                  isEmployed,
                   false,
                   false
                 ));
@@ -460,9 +442,6 @@ const EmployeeManagement: React.FC<EmployeeManagementProps> = (activeRestaurantI
                                     <TableCell align="left">{row.firstName}</TableCell>
                                     <TableCell align="left">{row.lastName}</TableCell>
                                     <TableCell align="left">{row.phoneNumber}</TableCell>
-                                    <TableCell align="left">
-                                    <Checkbox checked={row.isEmployed as boolean} />
-                                    </TableCell>
                                     <TableCell align="left">
                                     <Checkbox checked={row.isBackdoorEmployee as boolean} />
                                     </TableCell>
