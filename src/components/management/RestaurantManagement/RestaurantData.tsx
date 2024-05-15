@@ -1,26 +1,23 @@
 import React from "react";
 import { RestaurantDataProps } from "../../../services/interfaces";
+import EditSharpIcon from '@mui/icons-material/EditSharp';
 
 const RestaurantData: React.FC<RestaurantDataProps> = ({ restaurant }) => {
+
   return (
-    <div className="grid h-full grid-cols-3 grid-rows-2 gap-1">
-      <div className="border">
-        <p>Logo</p>
-        <p className="font-bold">{restaurant.name}</p>
-        <p>{restaurant.address}</p>
-        <p>{restaurant.city}</p>
-        <p>{restaurant.postalIndex}</p>
+    <div className="w-full h-full flex flex-col">
+      <div className="flex items-center gap-6 p-3">
+        <img src={`${process.env.REACT_APP_SERVER_IP}${restaurant.logo}`} alt="heh" className="w-16 h-16 bg-grey-1 rounded-full shadow-lg"/>
+        <h1 className="text-lg text-primary-2 dark:text-secondary font-mont-md">{restaurant.name}</h1>
+        <EditSharpIcon
+          sx={{
+            height: '16px'
+          }}
+        />
       </div>
-      <div className="border">
-        <p>{restaurant.description}</p>
-      </div>
-      <div className="flex border">
-        <div className="flex-1 border">Zdjecie 1</div>
-        <div className="flex-1 border">Popup withe the rest of the Gallery</div>
-      </div>
-      <div className="border"></div>
-      <div className="col-span-2 border">
-        <p></p>
+      <div className="w-auto h-[3px] bg-grey-1 mx-2"/>
+      <div className="w-full h-full flex gap-2 p-4">
+          {restaurant.description}
       </div>
     </div>
   );
