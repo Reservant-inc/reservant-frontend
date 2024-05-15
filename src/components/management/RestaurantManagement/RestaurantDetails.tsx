@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import Section from "./ManagementSection";
 import RestaurantData from "./RestaurantData";
+import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,
@@ -59,7 +60,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           }
         </div>
         <div className="bg-white w-full rounded-md shadow-md h-full">
-          reviews will be here
+          <RestaurantReviewsList />
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full h-full">
