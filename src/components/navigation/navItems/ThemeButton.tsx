@@ -26,7 +26,7 @@ const ThemeButton: React.FC<ThemeButtonProps> = ({ setIsDark }) => {
   return (
     <div className="flex flex-col justify-center ml-3">
     <input type="checkbox" name="light-switch" className="light-switch sr-only" />
-    <button className="h-10 w-10 flex justify-center items-center rounded-full bg-grey-1 dark:bg-grey-3" onClick={toggleTheme}>
+    <button id="ThemeButtonToggleThemeButton" className="h-10 w-10 flex justify-center items-center rounded-full bg-grey-1 dark:bg-grey-3" onClick={toggleTheme}>
       <label className="relative cursor-pointer p-2" htmlFor="light-switch">
           <svg className="dark:hidden h-5 fill-grey-3" viewBox="0 0 24 24"xmlns="http://www.w3.org/2000/svg">
             <path d="M11 1C11 0.447715 11.4477 0 12 0C12.5523 0 13 0.447715 13 1V3C13 3.55228 12.5523 4 12 4C11.4477 4 11 3.55228 11 3V1Z"/>

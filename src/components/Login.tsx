@@ -60,7 +60,7 @@ const Login: React.FC = () => {
                 </ErrorMessage>
               </div>
 
-              <button type="submit" disabled={!formik.isValid}>
+              <button id="LoginLoginButton" type="submit" disabled={!formik.isValid}>
                 Login
               </button>
             </div>

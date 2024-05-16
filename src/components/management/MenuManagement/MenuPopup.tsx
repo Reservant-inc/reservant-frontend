@@ -41,10 +41,10 @@ const MenuPopup: React.FC<MenuPopupProps> = ({ items, mainHeader, onClose, onSav
             <div className="bg-white p-6 rounded-lg w-96">
                 {mainHeader && <h1 className="text-xl font-bold mb-6">{mainHeader}</h1>}
                 <div className="flex space-x-2">
-                    <button onClick={onClose}>
+                    <button onClick={onClose} id="MenuPopupCancelButton">
                         <CancelIcon />
                     </button>
-                    <button onClick={handleSave} disabled={!isModified}>
+                    <button onClick={handleSave} disabled={!isModified} id="MenuPopupSaveButton">
                         <SaveIcon />
                     </button>
                 </div>

@@ -151,7 +151,7 @@ const UserRegister: React.FC = () => {
                 </ErrorMessage>
               </div>
 
-              <button type="submit" disabled={!formik.isValid}>
+              <button id="UserRegisterSubmitButton" type="submit" disabled={!formik.isValid}>
                 {t("auth.registerButton")}
               </button>
             </div>

@@ -241,12 +241,14 @@ const editedMenuItems: MenuItemInterface[] = [
         <div ref={popupRef}className="w-full h-full p-2  flex-col space-y-2">
             <div className="flex items-center justify-center">
                 <button
+                    id="MenuManagementAddCategoryButton" //do czego to w sumie jest...?
                     className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
                     onClick={() => setIsCategoryPopupOpen(true)}
                 >
                     <AddIcon />
                 </button>
                 <button
+                    id="MenuManagementEditCategoryButton"
                     className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
                     onClick={handleEditCategory}
                     disabled={selectedCategoryIndex === null}
@@ -256,6 +258,7 @@ const editedMenuItems: MenuItemInterface[] = [
                 {(activeRestaurantId !== null && categoriesByRestaurant[activeRestaurantId]) ? (
                     categoriesByRestaurant[activeRestaurantId].map((category: string, index: number) => (
                         <button
+                            id="MenuManagementCategorySelectButton"
                             key={index}
                             className={`mr-1 rounded-lg p-1 dark:text-black ${index === selectedCategoryIndex ? 'dark:bg-secondary' : 'dark:bg-secondary-2'}`}
                             onClick={() => setSelectedCategoryIndex(index === selectedCategoryIndex ? null : index)}
@@ -301,6 +304,7 @@ const editedMenuItems: MenuItemInterface[] = [
             </div>
             <div>
                 <button
+                    id="MenuManagementAddButton" //to też nie wiem do czego w zasadzie
                     className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
                     onClick={() => {setIsMenuItemByCategoryPopupOpen(true)}}
                 >

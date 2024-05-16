@@ -65,10 +65,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       </div>
       <div className="flex flex-col gap-2 w-full h-full">
         <div className="w-full h-[5%] flex gap-2">
-          <button className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white" onClick={() => setActivePage(0)}>Employee management</button>
-          <button className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white" onClick={() => setActivePage(1)}>Menu management</button>
-          <button className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white">Statistics</button>
-          <button className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white">Shipment management</button>
+          <button id="RestaurantDetailsFirstActivePageButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white" onClick={() => setActivePage(0)}>Employee management</button>
+          <button id="RestaurantDetailsSecondActivePageButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white" onClick={() => setActivePage(1)}>Menu management</button>
+          <button id="RestaurantDetailsStatisticsButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white">Statistics</button>
+          <button id="RestaurantDetailsShipmentButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white">Shipment management</button>
         </div>
         <div className="bg-white shadow-md rounded-md w-full h-full">
           { 

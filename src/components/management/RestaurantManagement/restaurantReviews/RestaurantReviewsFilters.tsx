@@ -65,6 +65,7 @@ const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
         </Select>
       </FormControl>
       <Button
+        id="RestaurantReviewsFiltersClearButton"
         onClick={handleCleanFilter}
         variant="contained"
         sx={{
