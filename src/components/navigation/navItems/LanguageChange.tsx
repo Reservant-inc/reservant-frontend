@@ -20,6 +20,7 @@ const LanguageChange: React.FC = () => {
     return (
         <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
             <button
+                id="LanguageChangeSelectionMenuButton"
                 className={"flex justify-center items-center h-10 w-10 rounded-full bg-grey-1 dark:bg-grey-3" + (isPressed ? " bg-l-grey" : "")}
                 onClick={pressHandler}
             >
@@ -39,10 +40,10 @@ const LanguageChange: React.FC = () => {
             {
                 isPressed &&
                 <div className="absolute w-32 h-20  bg-white text-black dark:bg-black dark:text-white top-[4rem] right-[0.5rem] drop-shadow-xl rounded flex flex-col items-center justify-around">
-                    <button className={"w-[95%] h-5/12 dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary-2 rounded-sm transition text-left p-1" +
+                    <button id="LanguageChangeEnglishButton" className={"w-[95%] h-5/12 dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary-2 rounded-sm transition text-left p-1" +
                         (i18next.language === "en" ? " dark:bg-secondary bg-primary-2 dark:text-black text-white" : "")} onClick={() => setLanguage("en")}>English
                     </button>
-                    <button className={"w-[95%] h-5/12 dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary-2 rounded-sm transition text-left p-1" +
+                    <button id="LanguageChangePolishButton" className={"w-[95%] h-5/12 dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary-2 rounded-sm transition text-left p-1" +
                         (i18next.language === "pl" ? " dark:bg-secondary bg-primary-2 dark:text-black text-white" : "")} onClick={() => setLanguage("pl")}>Polski
                     </button>
                 </div>

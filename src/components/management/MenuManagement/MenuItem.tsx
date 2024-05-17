@@ -19,12 +19,14 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, price, alcoholPercentage, onD
                     <h2 className="text-lg font-medium">{name}</h2>
                     <div>
                         <button
+                            id="MenuItemEditButton"
                             className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
                             onClick={onEdit}
                         >
                             <EditIcon />
                         </button>
                         <button
+                            id="MenuItemDeleteButton"
                             className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
                             onClick={onDelete}
                         >

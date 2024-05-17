@@ -27,6 +27,7 @@ const Popup: React.FC<PopupProps> = ({
       onClick={handleBackgroundToggle}
     >
       <button
+        id="PopupTogglePopupButton"
         className={`my-2 rounded-lg border px-10 py-1.5 bg-${bgColor} text-black`}
         onClick={handlePopupToggle}
       >
