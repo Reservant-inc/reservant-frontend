@@ -26,6 +26,7 @@ const NavBar: React.FC = () => {
                 </div>
                 <div className="h-full flex gap-3 items-center">
                     <Section 
+                        id="NavbarHomeSectionButton"
                         component=
                         {
                             <svg className="h-6 absolute top-1/2 transform -translate-y-1/2" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
@@ -38,6 +39,7 @@ const NavBar: React.FC = () => {
                         } 
                         connString="/home"/>
                     <Section 
+                        id="NavbarRestaurantsSectionButton"
                         component=
                         {
                             <svg className="h-6 absolute top-1/2 transform -translate-y-1/2" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
