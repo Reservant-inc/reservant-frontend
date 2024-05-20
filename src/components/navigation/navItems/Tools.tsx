@@ -15,10 +15,10 @@ const Tools: React.FC = () => {
 
     const [activeMenu, setActiveMenu] = useState("main");
 
-    const [menuHeight, setMenuHeight] = useState(288);
+    const [menuHeight, setMenuHeight] = useState(288 + 16);
 
     function calcHeight(el: any){
-        const height = el.offsetHeight;
+        const height = el.offsetHeight + 16;
         setMenuHeight(height);
     }
 
@@ -47,7 +47,7 @@ const Tools: React.FC = () => {
         }
         return(   
             <div className=" p-2 ">
-            <a href="#" className={props.className?props.className:"menu-item rounded-xl hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex"} onClick={onClicked}>
+            <a href="#" id={props.id} className={props.className?props.className:"menu-item rounded-xl hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex"} onClick={onClicked}>
                 <span className="icon-button">{props.leftIcon}</span>
                     <div className="p-1">
                         {props.children}
@@ -80,10 +80,10 @@ const Tools: React.FC = () => {
                         onEnter={calcHeight}
                         >
                         <div className="w-full" >   
-                            <DropdownItem leftIcon={<AccountCircle />} > Profile </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight />} goToMenu="settings"> Settings </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages"> Language </DropdownItem>
-                            <DropdownItem leftIcon={<Logout />} logout={true}> Sign out </DropdownItem>
+                            <DropdownItem leftIcon={<AccountCircle />} id="profileDropdownItem" > Profile </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight /> }id="settingsDropdownItem" goToMenu="settings"> Settings </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages" id="languagesDropdownItem"> Language </DropdownItem>
+                            <DropdownItem leftIcon={<Logout />} id="logoutDropdownItem" logout={true}> Sign out </DropdownItem>
                             
                         </div>
                     </CSSTransition>    
@@ -97,11 +97,11 @@ const Tools: React.FC = () => {
 
                         >
                         <div className="w-full" >   
-                            <DropdownItem leftIcon={<ChevronLeft />} goToMenu="main"/>
-                            <DropdownItem leftIcon={<Settings />}> SettingFiller1 </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />}> SettingFiller2 </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />}> SettingFiller3 </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />}> SettingFiller4 </DropdownItem>
+                            <DropdownItem leftIcon={<ChevronLeft />} id="backFromSettingsDropdownItem" goToMenu="main"/>
+                            <DropdownItem leftIcon={<Settings />} id="SettingFiller1DropdownItem"> SettingFiller1 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller2DropdownItem"> SettingFiller2 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller3DropdownItem"> SettingFiller3 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller4DropdownItem"> SettingFiller4 </DropdownItem>
                         </div>
                     </CSSTransition>
 
@@ -114,9 +114,9 @@ const Tools: React.FC = () => {
 
                         >
                         <div className="w-full" >   
-                            <DropdownItem leftIcon={<ChevronLeft />} goToMenu="main"/>
-                            <DropdownItem leftIcon={<Language />} language="en" className={i18next.language === "en" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> English </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} language="pl" className={i18next.language === "pl" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> Polski </DropdownItem>
+                            <DropdownItem leftIcon={<ChevronLeft />}id="backFromLanguagesDropdownItem" goToMenu="main"/>
+                            <DropdownItem leftIcon={<Language />} id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> Polski </DropdownItem>
                         </div>
                     </CSSTransition>        
                 </div>
