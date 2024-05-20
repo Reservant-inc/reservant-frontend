@@ -15,12 +15,11 @@ body {
 
 .dropdownMenu{
   display: flex; 
-  /* padding: 1rem;  */
   overflow: hidden; 
   position: absolute; 
   flex-direction: column; 
   border-radius: 0.25rem; 
-  width:9rem;
+  width:300px;
   color: #000000; 
   background-color: #ffffff; 
   filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08)); 

@@ -11,10 +11,11 @@ import i18next from "i18next";
 const Tools: React.FC = () => {
 
     const [isPressed, setIsPressed] = useState(false)
+    const [isChanged, setIsChanged] = useState(false)
 
     const [activeMenu, setActiveMenu] = useState("main");
 
-    const [menuHeight, setMenuHeight] = useState(224);
+    const [menuHeight, setMenuHeight] = useState(288);
 
     function calcHeight(el: any){
         const height = el.offsetHeight;
@@ -28,7 +29,7 @@ const Tools: React.FC = () => {
     const setLanguage = (lang: string) => {
         i18next.changeLanguage(lang)
         localStorage.setItem("i18nextLng", lang)
-        setIsPressed(!isPressed)
+        setIsChanged(!isChanged)
     }
 
     function DropdownItem(props: any){
@@ -45,13 +46,15 @@ const Tools: React.FC = () => {
             
         }
         return(   
-            <a href="#" className={"menu-item items-center h-14 hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black p-2 flex "+props.className} onClick={onClicked}>
+            <div className=" p-2 ">
+            <a href="#" className={props.className?props.className:"menu-item rounded-xl hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex"} onClick={onClicked}>
                 <span className="icon-button">{props.leftIcon}</span>
                     <div className="p-1">
                         {props.children}
                     </div>
                 <span className="icon-right ml-auto">{props.rightIcon}</span>
             </a>
+            </div>
             
         )
     }
@@ -112,8 +115,8 @@ const Tools: React.FC = () => {
                         >
                         <div className="w-full" >   
                             <DropdownItem leftIcon={<ChevronLeft />} goToMenu="main"/>
-                            <DropdownItem leftIcon={<Language />} language="en" className={i18next.language === "en" ?"dark:bg-secondary bg-primary-2 dark:text-black text-white":""}> English </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} language="pl" className={i18next.language === "pl" ?"dark:bg-secondary bg-primary-2 dark:text-black text-white":""}> Polski </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} language="en" className={i18next.language === "en" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} language="pl" className={i18next.language === "pl" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> Polski </DropdownItem>
                         </div>
                     </CSSTransition>        
                 </div>
