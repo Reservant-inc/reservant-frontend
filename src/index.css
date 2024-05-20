@@ -1,3 +1,77 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+}
+
+:root{
+  --speed: 500ms;
+}
+
+
+
+.dropdownMenu{
+  display: flex; 
+  /* padding: 1rem;  */
+  overflow: hidden; 
+  position: absolute; 
+  flex-direction: column; 
+  border-radius: 0.25rem; 
+  width:9rem;
+  color: #000000; 
+  background-color: #ffffff; 
+  filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08)); 
+  top: 4rem;
+  right: 0.5rem;
+  transition: height var(--speed) ease;
+}
+
+
+.menu-primary-enter{
+  transform: translateX(-100%);
+  position: absolute;
+}
+
+.menu-primary-enter-active{
+
+  transform: translateX(0%);
+  transition: all var(--speed) ease;
+}
+
+.menu-primary-exit{
+  position: absolute;
+}
+
+.menu-primary-exit-active{
+  transform: translateX(-100%);
+  transition: all var(--speed) ease;
+}
+
+.menu-secondary-enter{
+  
+  transform: translateX(100%);
+}
+
+.menu-secondary-enter-active{
+  transform: translateX(0%);
+  transition: all var(--speed) ease;
+}
+
+.menu-secondary-exit{
+ 
+}
+
+.menu-secondary-exit-active{
+  transform: translateX(100%);
+  transition: all var(--speed) ease;
+}
+
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,68 +109,3 @@
   }
 }
 
-html {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  height: 100%;
-}
-
-:root{
-  --speed: 500ms;
-}
-
-.dropdownMenu{
-  display: flex; 
-  overflow: hidden; 
-  position: absolute; 
-  padding: 1rem; 
-  flex-direction: column; 
-  border-radius: 0.25rem; 
-  width: 9rem; 
-  color: #000000; 
-  background-color: #ffffff; 
-  filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08)); 
-  top: 4rem;
-  right: 0.5rem;
-}
-
-
-.menu-primary-enter{
-  position: absolute;
-  transform: translateX(-110%);
-}
-
-.menu-primary-enter-active{
-  transform: translateX(0%);
-  transition: all var(--speed) ease;
-}
-
-.menu-primary-exit{
-  position: absolute;
-}
-
-.menu-primary-exit-active{
-  transform: translateX(-110%);
-  transition: all var(--speed) ease;
-}
-
-.menu-secondary-enter{
-  transform: translateX(110%);
-}
-
-.menu-secondary-enter-active{
-  transform: translateX(0%);
-  transition: all var(--speed) ease;
-}
-
-.menu-secondary-exit{
- 
-}
-
-.menu-secondary-exit-active{
-  transform: translateX(110%);
-  transition: all var(--speed) ease;
-}

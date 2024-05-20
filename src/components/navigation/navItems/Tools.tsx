@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import User from "../../../assets/images/user.jpg"
 import { Icon } from "@mui/material";
-import { ArrowForward, ChevronLeft, ChevronRight, Error } from "@mui/icons-material";
+import { AccountCircle, ArrowForward, ChevronLeft, ChevronRight, Error, Language, Logout, Settings } from "@mui/icons-material";
 import Edit from "@mui/icons-material/Edit";
 import { CSSTransition } from "react-transition-group";
+import { redirect } from "react-router-dom";
+import i18next from "i18next";
 
 const Tools: React.FC = () => {
 
@@ -12,7 +14,7 @@ const Tools: React.FC = () => {
 
     const [activeMenu, setActiveMenu] = useState("main");
 
-    const [menuHeight, setMenuHeight] = useState(600);
+    const [menuHeight, setMenuHeight] = useState(224);
 
     function calcHeight(el: any){
         const height = el.offsetHeight;
@@ -23,13 +25,34 @@ const Tools: React.FC = () => {
         setIsPressed(!isPressed)
     }
 
+    const setLanguage = (lang: string) => {
+        i18next.changeLanguage(lang)
+        localStorage.setItem("i18nextLng", lang)
+        setIsPressed(!isPressed)
+    }
+
     function DropdownItem(props: any){
-        return(
-            <a href="#" className="menu-item hover:bg-secondary p-2 flex " onClick={()=> props.goToMenu && setActiveMenu(props.goToMenu)}>
+
+        const onClicked = () => {
+            if(props.logout===true){
+                //sign out logic
+            }
+            if(props.language)
+                setLanguage(props.language)
+            
+            
+            props.goToMenu && setActiveMenu(props.goToMenu)
+            
+        }
+        return(   
+            <a href="#" className={"menu-item items-center h-14 hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black p-2 flex "+props.className} onClick={onClicked}>
                 <span className="icon-button">{props.leftIcon}</span>
-                {props.children}
+                    <div className="p-1">
+                        {props.children}
+                    </div>
                 <span className="icon-right ml-auto">{props.rightIcon}</span>
             </a>
+            
         )
     }
     
@@ -44,18 +67,21 @@ const Tools: React.FC = () => {
             </button>
             {
                 isPressed &&
-                <div style={{height: menuHeight}} className='absolute w-36 bg-white text-black dark:bg-black dark:text-white top-[4rem] right-[0.5rem] drop-shadow-xl rounded flex flex-col align-center justify-top overflow-hidden p-4'>
+                <div style={{height: menuHeight}} className='dropdownMenu dark:bg-black'>
                     
                     <CSSTransition 
                         in={activeMenu === 'main'} 
                         unmountOnExit 
                         timeout={500}
-                        className="menu-primary"
+                        classNames="menu-primary"
                         onEnter={calcHeight}
                         >
-                        <div className="menu" >   
-                            <DropdownItem leftIcon={<Error />} rightIcon={<ChevronRight />} goToMenu="settings"> asd </DropdownItem>
-                            <DropdownItem leftIcon={<Error />} > a </DropdownItem>
+                        <div className="w-full" >   
+                            <DropdownItem leftIcon={<AccountCircle />} > Profile </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight />} goToMenu="settings"> Settings </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages"> Language </DropdownItem>
+                            <DropdownItem leftIcon={<Logout />} logout={true}> Sign out </DropdownItem>
+                            
                         </div>
                     </CSSTransition>    
 
@@ -63,22 +89,33 @@ const Tools: React.FC = () => {
                         in={activeMenu === 'settings'} 
                         unmountOnExit 
                         timeout={500}
-                        className="menu-secondary"
+                        classNames="menu-secondary"
                         onEnter={calcHeight}
 
                         >
-                        <div className="menu" >   
+                        <div className="w-full" >   
                             <DropdownItem leftIcon={<ChevronLeft />} goToMenu="main"/>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
-                            <DropdownItem leftIcon={<Error />}> a </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}> SettingFiller1 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}> SettingFiller2 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}> SettingFiller3 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}> SettingFiller4 </DropdownItem>
                         </div>
-                    </CSSTransition>    
+                    </CSSTransition>
+
+                    <CSSTransition 
+                        in={activeMenu === 'languages'} 
+                        unmountOnExit 
+                        timeout={500}
+                        classNames="menu-secondary"
+                        onEnter={calcHeight}
+
+                        >
+                        <div className="w-full" >   
+                            <DropdownItem leftIcon={<ChevronLeft />} goToMenu="main"/>
+                            <DropdownItem leftIcon={<Language />} language="en" className={i18next.language === "en" ?"dark:bg-secondary bg-primary-2 dark:text-black text-white":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} language="pl" className={i18next.language === "pl" ?"dark:bg-secondary bg-primary-2 dark:text-black text-white":""}> Polski </DropdownItem>
+                        </div>
+                    </CSSTransition>        
                 </div>
             
             }
