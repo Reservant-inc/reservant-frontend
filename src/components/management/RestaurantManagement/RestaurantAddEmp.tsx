@@ -94,7 +94,7 @@ const RestaurantAddEmp = () => {
      
               </div>
 
-              <button type="submit" disabled={!formik.dirty || !formik.isValid}>
+              <button id="RestaurantAddEmpSubmitButton" type="submit" disabled={!formik.dirty || !formik.isValid}>
                 {t("add-employee.addEmployee")}
               </button>
             </div>

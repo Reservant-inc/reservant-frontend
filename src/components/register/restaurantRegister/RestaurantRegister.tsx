@@ -144,7 +144,7 @@ const RestaurantRegister: React.FC = () => {
 
       console.log(data);
 
-      //await fetchPOST("/my-restaurants", JSON.stringify(data));
+      await fetchPOST("/my-restaurants", JSON.stringify(data));
   
       setIsFormSubmitted(true);
       setSnackbarOpen(true);
@@ -412,6 +412,7 @@ const RestaurantRegister: React.FC = () => {
                 sx={{ width: '100%', marginTop: '20px' }}
               />
               <Button
+                id="RestaurantRegisterNextButton"
                 type="submit" 
                 variant="contained"
                 color="primary"
@@ -422,6 +423,7 @@ const RestaurantRegister: React.FC = () => {
 
               {!isStep1 && (
                 <Button
+                  id="RestaurantRegisterBackButton"
                   variant="contained"
                   onClick={handleBack}
                   disabled={isFormSubmitted}

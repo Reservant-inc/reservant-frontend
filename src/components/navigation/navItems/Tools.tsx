@@ -63,6 +63,8 @@ const Tools: React.FC = () => {
     return (
         <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
             <button
+            //do czego..
+                id="ToolsButton"
                 className="h-10 w-10 flex justify-center items-center"
                 onClick={pressHandler}
             >

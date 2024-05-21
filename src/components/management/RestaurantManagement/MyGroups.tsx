@@ -6,6 +6,7 @@ import Popup from "../../reusableComponents/Popup";
 import { GroupType } from "../../../services/types";
 import { MyGroupsProps } from "../../../services/interfaces";
 import { fetchGET } from "../../../services/APIconn";
+import { List, ListSubheader } from "@mui/material";
 
 const MyGroups: React.FC<MyGroupsProps> = ({
   handleChangeActiveRestaurant,
@@ -29,8 +30,18 @@ const MyGroups: React.FC<MyGroupsProps> = ({
   }, []);
 
   return (
-    <div className="h-full p-2 w-full flex flex-col justify-between items-between">
-      <div className="overflow-y-scroll scroll">
+    <div className="h-full w-full flex flex-col justify-between items-between">
+      <div className="overflow-y-scroll scroll pl-1">
+      <List
+        className="dark:bg-black font-mont-md"
+        sx={{ width: "100%"}}
+        component="nav"
+        subheader={
+          <div className="flex flex-col font-thin text-md h-14 justify-center items-center">
+            <h1 className="text-primary-2 font-mont-md dark:text-secondary">MY GROUPS</h1>
+          </div>
+        }
+      >
         {groups.map((group) => (
           <Group
             key={group.id}
@@ -39,6 +50,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
             activeRestaurantId={activeRestaurantId}
           />
         ))}
+       </List> 
       </div>
       {/* <Popup
         buttonText={t("restaurant-management.groups.add-button")}
@@ -46,10 +58,6 @@ const MyGroups: React.FC<MyGroupsProps> = ({
         >
         <p>Form to create a group</p>
       </Popup> */}
-      <div className="flex flex-col font-thin text-md h-14 justify-center items-center">
-        <h1 className="text-primary-2 font-mont-md dark:font-mont-l dark:text-secondary">MY GROUPS</h1>
-        <span className="h-[1px] dark:h-[1px] flex-end w-full bg-primary-2 dark:bg-secondary"/>
-      </div>
     </div>
   );
 };

@@ -209,7 +209,7 @@ const validationSchema = yup.object({
                 <div></div>
               </Popup>
               
-              <button type="submit" disabled={!formik.isValid}>
+              <button id="RestaurantRegisterSubmitButton" type="submit" disabled={!formik.isValid}>
               {t("restaurant-register.button")}
               </button>
             </div>
