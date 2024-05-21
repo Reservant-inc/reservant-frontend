@@ -63,3 +63,14 @@ export type RestaurantDataType = {
   description: string;
   groupId: number | null;
 };
+
+export type EmployeeType = {
+  id: number,
+  empID: string,
+  login: string,
+  firstName: string,
+  lastName: string,
+  phoneNumber: string,
+  role: string,
+  restaurant: string
+}
