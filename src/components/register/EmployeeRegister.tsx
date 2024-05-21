@@ -16,7 +16,11 @@ const initialValues = {
   confirmPassword: "",
 };
 
-const RegisterEmp: React.FC = () => {
+interface RegisterEmpProps{
+  setIsModalOpen: Function
+}
+
+const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
   const [t] = useTranslation("global");
   const { employeeRegisterSchema } = useValidationSchemas();
 
@@ -36,6 +40,8 @@ const RegisterEmp: React.FC = () => {
       });
 
       await fetchPOST("/auth/register-restaurant-employee", body);
+
+      setIsModalOpen(false)
     } catch (error) {
       console.log(error);
     } finally {
