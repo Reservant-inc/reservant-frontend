@@ -54,7 +54,7 @@ export default function EmployeeManagement() {
         
         employees.push({
           id: Number(i),
-          empID: response[i].id,
+          empID: response[i].userId,
           login: response[i].login,
           firstName: response[i].firstName,
           lastName: response[i].lastName,

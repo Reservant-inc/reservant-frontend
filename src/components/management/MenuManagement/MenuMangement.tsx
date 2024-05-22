@@ -12,7 +12,7 @@ interface MenuManagementProps {
 }
 
 interface Menu {
-    id: number;
+    menuId: number;
     menuType: string;
     dateFrom: string;
     dateUntil: string | null;
@@ -20,7 +20,7 @@ interface Menu {
 }
 
 interface MenuItemData {
-    id: number;
+    menuItemId: number;
     name: string;
     price: number;
     alcoholPercentage: number;
@@ -43,6 +43,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     useEffect(() => {
         if (activeRestaurantId !== null) {
+            console.log(activeRestaurantId)
             fetchMenus(activeRestaurantId);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,7 +65,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     const fetchMenuForSelectedCategory = async () => {
         if (selectedCategoryIndex !== null && menus.length > selectedCategoryIndex) {
-            const menuId = menus[selectedCategoryIndex].id;
+            const menuId = menus[selectedCategoryIndex].menuId;
             try {
                 const menuData = await fetchGET(`/menus/${menuId}`);
                 
@@ -181,7 +182,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const handleSaveEditedMenuItem = async (values: { [key: string]: string }) => {
         try {
             if (editedMenuItem) {
-                const { id } = editedMenuItem;
+                const { menuItemId: id } = editedMenuItem;
                 console.log(values);
                 const body = JSON.stringify({ name: values.Name, price: values.Price, alcoholPercentage: values["Alcohol percentage"]});
                 const response = await fetchPUT(`/menu-items/${id}`, body);
@@ -316,7 +317,7 @@ const editedMenuItems: MenuItemInterface[] = [
                         <>
                             {menus[selectedCategoryIndex]?.menuItems.map((menuItem: MenuItemData) => (
                                 <MenuItem 
-                                    key={menuItem.id} 
+                                    key={menuItem.menuItemId} 
                                     name={menuItem.name} 
                                     price={menuItem.price} 
                                     alcoholPercentage={menuItem.alcoholPercentage} 

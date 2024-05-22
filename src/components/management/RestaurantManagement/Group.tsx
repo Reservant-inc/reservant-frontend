@@ -14,7 +14,7 @@ import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
 import { ListItemIcon } from "@mui/material";
 
 const Group: React.FC<GroupProps> = ({
-  id,
+  restaurantGroupId,
   name,
   handleChangeActiveRestaurant,
   activeRestaurantId,
@@ -28,7 +28,7 @@ const Group: React.FC<GroupProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchGET(`/my-restaurant-groups/${id}`);
+        const response = await fetchGET(`/my-restaurant-groups/${restaurantGroupId}`);
         setRestaurants(response.restaurants);
       } catch (error) {
         console.error("Error fetching groups: ", error);
@@ -36,7 +36,7 @@ const Group: React.FC<GroupProps> = ({
     };
 
     fetchData();
-  }, [id]);
+  }, [restaurantGroupId]);
 
 
   const handleClick = () => {
@@ -57,16 +57,16 @@ const Group: React.FC<GroupProps> = ({
                 {restaurants.map((restaurant) => (
                   <ListItemButton
                     sx={{ pl: 4 }}
-                    key={restaurant.id}
+                    key={restaurant.restaurantId}
                     onClick={() => {
-                      handleChangeActiveRestaurant(restaurant.id)
+                      handleChangeActiveRestaurant(restaurant.restaurantId)
                       setIsPressed(!isPressed)
                     }}
                   >
                     <ListItemIcon>
                       <RemoveSharpIcon className="dark:fill-white"/>
                     </ListItemIcon>
-                    <h1 className={activeRestaurantId === restaurant.id ? "dark:text-secondary text-primary-2 font-mont-md" : ""}>
+                    <h1 className={activeRestaurantId === restaurant.restaurantId ? "dark:text-secondary text-primary-2 font-mont-md" : ""}>
                       {restaurant.name}
                     </h1>
                   </ListItemButton>
