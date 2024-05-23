@@ -3,9 +3,7 @@ import LogoDark from "../../assets/images/LOGO-CLEAN-DARK.png";
 import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
 import ThemeButton from "./navItems/ThemeButton";
 import LanguageChange from "./navItems/LanguageChange";
-import AuthItems from "./navItems/AuthItems";
 import Sections from "./navItems/MenuSections";
-import Cookies from "js-cookie";
 import Tools from "./navItems/Tools";
 
 const NavBar: React.FC = () => {

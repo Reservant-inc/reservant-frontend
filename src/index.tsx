@@ -4,10 +4,9 @@ import './index.css';
 import App from './app/App';
 import reportWebVitals from './other/reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
-
-import global_en from "./translations/en/global.json" 
-import global_pl from "./translations/pl/global.json" 
-import i18next from "i18next"
+import global_en from "./translations/en/global.json"; 
+import global_pl from "./translations/pl/global.json"; 
+import i18next from "i18next";
 import { I18nextProvider } from "react-i18next";
 
 i18next.init({

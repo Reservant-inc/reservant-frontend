@@ -7,11 +7,7 @@ import {
   RestaurantDetailsType,
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useValidationSchemas } from "../../../hooks/useValidationSchema";
-import Section from "./ManagementSection";
 import RestaurantData from "./RestaurantData";
 import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 
