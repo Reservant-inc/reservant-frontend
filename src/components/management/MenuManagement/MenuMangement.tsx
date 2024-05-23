@@ -8,10 +8,10 @@ import MenuPopup, { MenuItemInterface } from "./MenuPopup";
 import { useTranslation } from "react-i18next";
 import { fetchDELETE, fetchGET, fetchPOST, fetchPUT } from "../../../services/APIconn";
 import MenuItem from "./MenuItem";
-import MyModal from "../../reusableComponents/MyModal";
+
 import { Button, IconButton, Menu, MenuItem as MyMenuItem } from "@mui/material";
 import MoreActions from "../../reusableComponents/MoreActions";
-import NewMenuDialog from "./NewMenuDialog"; // Import the new dialog component
+import NewMenuDialog from "./NewMenuDialog";
 
 interface MenuManagementProps {
     activeRestaurantId: number | null;
