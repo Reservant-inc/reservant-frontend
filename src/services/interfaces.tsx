@@ -68,3 +68,4 @@ export interface ManagementSectionProps {
   setActivePage: Function,
   component: ReactNode
 }
+

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-interface NewMenuDialogProps {
+interface MenuDialogProps {
     open: boolean;
     onClose: () => void;
     onSave: (values: { [key: string]: string }) => void;
     editedMenu?: { [key: string]: string } | null; // Dodany props dla edytowanego menu
 }
 
-const NewMenuDialog: React.FC<NewMenuDialogProps> = ({ open, onClose, onSave, editedMenu = null }) => {
+const MenuDialog: React.FC<MenuDialogProps> = ({ open, onClose, onSave, editedMenu = null }) => {
     const { t } = useTranslation("global");
     const [values, setValues] = useState<{ [key: string]: string }>({
         name: "",
@@ -103,4 +103,4 @@ const NewMenuDialog: React.FC<NewMenuDialogProps> = ({ open, onClose, onSave, ed
     );
 };
 
-export default NewMenuDialog;
+export default MenuDialog;

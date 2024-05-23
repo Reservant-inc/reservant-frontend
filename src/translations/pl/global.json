@@ -1,4 +1,9 @@
 {
+    "general": {
+        "search": "Szukaj...",
+        "cancel": "Anuluj",
+        "save": "Zapisz"
+    },
     "landing-page": {
         "loginButton": "Zaloguj się",
         "registerButton": "Zarejestruj się",
@@ -60,8 +65,7 @@
                 "required": "Nazwisko jest wymagane"
             },
             "login": {
-                "required": "Login jest wymagany",
-                "taken": "Login jest już zajęty"
+                "required": "Login jest wymagany"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",
@@ -137,13 +141,19 @@
             "header": "Moje Grupy"
         },
         "menu": {
-            "addNewCategory": "Dodaj nową kategorię",
-            "editCategory": "Edytuj nazwę kategorii",
-            "addNewMenuItem": "Dodaj nową pozycję do menu",
+            "newMenu": "Dodaj nowe",
+            "editedMenu": "Edytuj menu",
+            "name": "Nazwa",
+            "alternateName": "Alternatywna nazwa",
+            "type": "Typ",
+            "dateFrom": "Data rozpoczęcia",
+            "dateUntil": "Date zakończenia",
+            "newMenuItem": "Dodaj nowa pozycję menu",
+            "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Procent alkocholu",
-            "editMenuItem": "Edytuj pozycję menu"
+            "menuItemAlcoholPercentage": "Procent alkocholu"
+            
         }
     }
 }

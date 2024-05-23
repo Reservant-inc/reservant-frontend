@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { fetchDELETE, fetchGET, fetchPOST, fetchPUT } from "../../../services/APIconn";
+
+import MoreActions from "../../reusableComponents/MoreActions";
+import MenuDialog from "./MenuDialog";
+import MenuItemDialog from "./MenuItemDialog";
+import MenuItem from "./MenuItem";
+
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import MenuPopup, { MenuItemInterface } from "./MenuPopup";
-import { useTranslation } from "react-i18next";
-import { fetchDELETE, fetchGET, fetchPOST, fetchPUT } from "../../../services/APIconn";
-import MenuItem from "./MenuItem";
-
 import { Button, IconButton, Menu, MenuItem as MyMenuItem } from "@mui/material";
-import MoreActions from "../../reusableComponents/MoreActions";
-import NewMenuDialog from "./NewMenuDialog";
 
 interface MenuManagementProps {
     activeRestaurantId: number | null;
 }
 
 interface Menu {
-    id: number;
+    menuId: number;
     name: string;
     alternateName: string
     menuType: string;
@@ -28,10 +28,12 @@ interface Menu {
 }
 
 interface MenuItemData {
-    id: number;
+    menuItemId: number;
     name: string;
+    alternateName: string;
     price: number;
     alcoholPercentage: number;
+    photo: string;
 }
 
 const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) => {
@@ -54,11 +56,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeRestaurantId]);
-
-    useEffect (() => {
-        fetchMenuIemsForSelectedMenu();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMenuItemEditPopupOpen, isMenuItemPopupOpen]);
     
     useEffect(() => {
         const isMenuFetched = selectedMenuIndex !== null && menus.length > selectedMenuIndex && menus[selectedMenuIndex].menuItems.length > 0;
@@ -67,11 +64,11 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             fetchMenuIemsForSelectedMenu();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [menus, selectedMenuIndex, setIsMenuItemEditPopupOpen]);
+    }, [menus, selectedMenuIndex]);
 
     const fetchMenuIemsForSelectedMenu = async () => {
         if (selectedMenuIndex !== null && menus.length > selectedMenuIndex) {
-            const menuId = menus[selectedMenuIndex].id;
+            const menuId = menus[selectedMenuIndex].menuId;
             try {
                 const menuData = await fetchGET(`/menus/${menuId}`);
                 console.log("Menu items for selected menu:", menuData);
@@ -110,19 +107,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const handleEditMenu = () => {
-        if (selectedMenuIndex !== null && menuNamesByRestaurant[activeRestaurantId || 0]) {
-            const selectedMenu = menus[selectedMenuIndex];
-            setEditMenu(selectedMenu);
-            setIsEditMenuPopupOpen(true);
-        }
-    };
-
     const handleSaveNewMenu = async (values: { [key: string]: string }) => {
         console.log('New menu values:', values);
     
-    
-        // Dodaj pole 'req' jeśli jest wymagane przez API
         const body = JSON.stringify({
             restaurantId: activeRestaurantId,
             name: values.name,
@@ -144,6 +131,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
     
+    const handleEditMenu = () => {
+        if (selectedMenuIndex !== null && menuNamesByRestaurant[activeRestaurantId || 0]) {
+            const selectedMenu = menus[selectedMenuIndex];
+            setEditMenu(selectedMenu);
+            setIsEditMenuPopupOpen(true);
+        }
+    };
 
     const handleSaveEditedMenu = async (values: { [key: string]: string }) => {
         if (selectedMenuIndex !== null && menuNamesByRestaurant[activeRestaurantId || 0]) {
@@ -155,7 +149,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                 dateUntil: values.dateUntil
             });
             try {
-                const menuId = menus[selectedMenuIndex].id;
+                const menuId = menus[selectedMenuIndex].menuId;
                 const response = await fetchPUT(`/menus/${menuId}`, body);
                 console.log("Response:", response);
                 setIsEditMenuPopupOpen(false);
@@ -171,7 +165,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const handleDeleteMenu = async () => {
         try {
             if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
-                const menuId = menus[selectedMenuIndex].id;
+                const menuId = menus[selectedMenuIndex].menuId;
                 const response = await fetchDELETE(`/menus/${menuId}`);
                 console.log(response);
                 setSelectedMenuIndex(null);
@@ -188,20 +182,24 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     const handleSaveNewMenuItem = async (values: { [key: string]: string }) => {
         try {
+            console.log(values);
             const body = JSON.stringify({
                 restaurantId: activeRestaurantId,
                 name: values.name,
+                alternateName: values.alternateName,
                 price: values.price,
-                alcoholPercentage: values.alcoholPercentage
+                alcoholPercentage: values.alcoholPercentage || null,
+                photofileName: values.photo // Ensure this is set correctly
             });
             const response = await fetchPOST('/menu-items', body);
             console.log("Response:", response);
             if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
-                const menuItemId = response.id;
-                const menuId = menus[selectedMenuIndex].id;
+                const menuItemId = response.menuItemId;
+                const menuId = menus[selectedMenuIndex].menuId;
                 const response2 = await fetchPOST(`/menus/${menuId}/items`, JSON.stringify({ itemIds: [menuItemId] }));
                 console.log(response2);
                 setIsMenuItemPopupOpen(false);
+                fetchMenuIemsForSelectedMenu();
             }
         } catch (error) {
             console.error("error while posting new menu item:", error);
@@ -216,16 +214,19 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const handleSaveEditedMenuItem = async (values: { [key: string]: string }) => {
         try {
             if (editedMenuItem) {
-                const { id } = editedMenuItem;
-                console.log(values);
+                const { menuItemId } = editedMenuItem;
                 const body = JSON.stringify({
                     name: values.name,
                     price: values.price,
-                    alcoholPercentage: values.alcoholPercentage
+                    alcoholPercentage: values.alcoholPercentage || null,
+                    photofileName: values.photo
                 });
-                const response = await fetchPUT(`/menu-items/${id}`, body);
+                console.log(body);
+                const response = await fetchPUT(`/menu-items/${menuItemId}`, body);
                 console.log(response);
                 setIsMenuItemEditPopupOpen(false);
+
+                fetchMenuIemsForSelectedMenu();
             }
         } catch (error) {
             console.error("Error while saving edited menu item:", error);
@@ -234,58 +235,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     const handleDeleteMenuItem = async (menuItem: MenuItemData) => {
         try {
-            const { id } = menuItem;
-            const response = await fetchDELETE(`/menu-items/${id}`);
+            const { menuItemId } = menuItem;
+            const response = await fetchDELETE(`/menu-items/${menuItemId}`);
             console.log(response);
         } catch (error) {
             console.error("Error while deleting menu item:", error);
         }
         fetchMenuIemsForSelectedMenu();
     };
-
-
-    const editedMenu = editMenu ? {
-        name: editMenu.name,
-        alternateName: editMenu.alternateName,
-        type: editMenu.menuType,
-        dateFrom: editMenu.dateFrom,
-        dateUntil: editMenu.dateUntil || "" // Zamień null na pusty ciąg znaków
-    } : null;
-
-    const menuItems: MenuItemInterface[] = [
-        {
-            header: t("restaurant-management.menu.menuItemName"),
-            initialValue: ""
-        },
-        {
-            header: t("restaurant-management.menu.menuItemPrice"),
-            initialValue: ""
-        },
-        {
-            header: t("restaurant-management.menu.menuItemAlcoholPercentage"),
-            initialValue: ""
-        }
-    ];
-
-    const editedMenuItems: MenuItemInterface[] = [
-        {
-            header: t("restaurant-management.menu.menuItemName"),
-            initialValue: editedMenuItem?.name || ""
-        },
-        {
-            header: t("restaurant-management.menu.menuItemPrice"),
-            initialValue: editedMenuItem?.price.toString() || ""
-        },
-        {
-            header: t("restaurant-management.menu.menuItemAlcoholPercentage"),
-            initialValue: editedMenuItem?.alcoholPercentage?.toString() || ""
-        }
-    ];
-
-    const actions = [
-        { icon: <EditIcon />, name: 'Edit', onClick: handleEditMenu },
-        { icon: <DeleteIcon />, name: 'Delete', onClick: handleDeleteMenu }
-    ];
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -298,6 +255,19 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
+
+    const editedMenu = editMenu ? {
+        name: editMenu.name,
+        alternateName: editMenu.alternateName,
+        type: editMenu.menuType,
+        dateFrom: editMenu.dateFrom,
+        dateUntil: editMenu.dateUntil || ""
+    } : null;
+
+    const actions = [
+        { icon: <EditIcon />, name: 'Edit', onClick: handleEditMenu },
+        { icon: <DeleteIcon />, name: 'Delete', onClick: handleDeleteMenu }
+    ];
 
     const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
         const nameMatch = menuItem.name.toLowerCase().includes(searchText.toLowerCase());
@@ -356,9 +326,10 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                     <>
                         {filteredMenuItems.map((menuItem: MenuItemData) => (
                             <MenuItem
-                                key={menuItem.id}
+                                key={menuItem.menuItemId}
                                 name={menuItem.name}
                                 price={menuItem.price}
+                                photo={menuItem.photo}
                                 alcoholPercentage={menuItem.alcoholPercentage}
                                 menuType={menus[selectedMenuIndex].menuType}
                                 onDelete={() => handleDeleteMenuItem(menuItem)}
@@ -368,16 +339,29 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                     </>
                 )}
             </div>
-            <NewMenuDialog
+            <MenuDialog
                 open={isMenuPopupOpen}
                 onClose={() => setIsMenuPopupOpen(false)}
                 onSave={handleSaveNewMenu}
             />
-            <NewMenuDialog
+            <MenuDialog
                 open={isEditMenuPopupOpen}
                 onClose={() => setIsEditMenuPopupOpen(false)}
                 onSave={handleSaveEditedMenu}
                 editedMenu={editedMenu}
+            />
+            <MenuItemDialog
+                open={isMenuItemPopupOpen}
+                onClose={() => setIsMenuItemPopupOpen(false)}
+                onSave={handleSaveNewMenuItem}
+                menuType={selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuType || "" : ""}
+            />
+            <MenuItemDialog
+                open={isMenuItemEditPopupOpen}
+                onClose={() => setIsMenuItemEditPopupOpen(false)}
+                onSave={handleSaveEditedMenuItem}
+                menuType={selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuType || "" : ""}
+                editedMenuItem={editedMenuItem}
             />
         </div>
     );
