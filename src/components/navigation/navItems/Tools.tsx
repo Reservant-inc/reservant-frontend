@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import User from "../../../assets/images/user.jpg"
 import { Icon, Switch, alpha, createTheme, styled } from "@mui/material";
@@ -6,6 +6,7 @@ import { AccountCircle, ChevronLeft, ChevronRight, DarkMode, Language, LightMode
 import { CSSTransition } from "react-transition-group";
 import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
+import { AuthContext } from "../../routing/AuthWrapper";
 
 export interface ToolsProps {
     setIsDark: Function
@@ -19,6 +20,10 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     const [activeMenu, setActiveMenu] = useState("main");
 
     const [menuHeight, setMenuHeight] = useState(360 + 16);
+    const { setAuthorized } = useContext(AuthContext);
+
+    const handleLogout = () => setAuthorized(false);
+
     const theme = createTheme({
         components: {
           MuiSwitch: {
@@ -81,7 +86,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
             const eqPos = cookie.indexOf("=");
             const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
             document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-            
+            handleLogout();
         }
     }
 

@@ -8,7 +8,7 @@ export interface SectionProps {
 export interface AuthContextValue {
   isAuthorized: boolean;
   login: (token: LoginResponseType) => void;
-  logout: () => void;
+  setIsAuthorized: ()=>{}
 }
 
 export interface PopupProps {
