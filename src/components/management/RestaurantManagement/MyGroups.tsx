@@ -44,7 +44,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
       >
         {groups.map((group) => (
           <Group
-            key={group.id}
+            key={group.restaurantGroupId}
             {...group}
             handleChangeActiveRestaurant={handleChangeActiveRestaurant}
             activeRestaurantId={activeRestaurantId}

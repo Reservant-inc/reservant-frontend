@@ -31,13 +31,13 @@ export type RestaurantDetailsType = {
 };
 
 export type GroupType = {
-  id: number;
+  restaurantGroupId: number;
   name: string;
   restaurantCount: number;
 };
 
 export type RestaurantType = {
-  id: number;
+  restaurantId: number;
   name: string;
   restaurantType: LocalType;
   address: string;

@@ -35,15 +35,15 @@ export interface RestaurantDataProps {
 }
 
 export interface MyGroupsProps {
-  handleChangeActiveRestaurant: (id: number) => void;
+  handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
 }
 
 export interface GroupProps {
-  id: number;
+  restaurantGroupId: number;
   name: string;
   restaurantCount: number;
-  handleChangeActiveRestaurant: (id: number) => void;
+  handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
 }
 
