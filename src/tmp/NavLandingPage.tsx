@@ -2,7 +2,6 @@ import React from "react";
 import Logo from "../assets/images/logo.png";
 import LanguageChange from "../components/navigation/navItems/LanguageChange";
 import AuthItems from "../components/navigation/navItems/AuthItems";
-import ThemeButton from "../components/navigation/navItems/ThemeButton"
 
 export default function NavLandingPage() {
   return (

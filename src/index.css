@@ -11,7 +11,13 @@ body {
   --speed: 500ms;
 }
 
+.ToolsThemeSwitch.Mui-checked {
+  color: #64c3a6;
+}
 
+.ToolsThemeSwitch.Mui-error :hover {
+  color: #b1e1d2;
+}
 
 .dropdownMenu{
   display: flex; 

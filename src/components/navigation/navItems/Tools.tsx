@@ -1,21 +1,62 @@
 import React, { useState } from "react";
 import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import User from "../../../assets/images/user.jpg"
-import { Icon } from "@mui/material";
-import { AccountCircle, ArrowForward, ChevronLeft, ChevronRight, Error, Language, Logout, Settings } from "@mui/icons-material";
-import Edit from "@mui/icons-material/Edit";
+import { Icon, Switch, alpha, createTheme, styled } from "@mui/material";
+import { AccountCircle, ChevronLeft, ChevronRight, DarkMode, Language, LightMode, Logout, Settings } from "@mui/icons-material";
 import { CSSTransition } from "react-transition-group";
-import { redirect } from "react-router-dom";
 import i18next from "i18next";
+import { ThemeProvider } from "@emotion/react";
 
-const Tools: React.FC = () => {
 
+
+export interface ToolsProps {
+    setIsDark: Function
+}
+
+const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
+    const[isThemeAreaHovered, setIsThemeAreaHovered] = useState(false);
+    
     const [isPressed, setIsPressed] = useState(false)
     const [isChanged, setIsChanged] = useState(false)
-
     const [activeMenu, setActiveMenu] = useState("main");
 
-    const [menuHeight, setMenuHeight] = useState(288 + 16);
+    const [menuHeight, setMenuHeight] = useState(360 + 16);
+    const theme = createTheme({
+        components: {
+          MuiSwitch: {
+            styleOverrides: {
+              switchBase: {
+                color: isThemeAreaHovered?"#fefefe":"#222222",
+              },
+              colorPrimary: {
+                "&.Mui-checked": {
+                color: isThemeAreaHovered?"#222222":"#64c3a6",
+                }
+              },
+              track: {
+                backgroundColor: isThemeAreaHovered?"#fefefe":"#222222",
+                ".Mui-checked.Mui-checked + &": {
+                    backgroundColor: isThemeAreaHovered?"#222222":"#b1e1d2",
+                }
+              }
+            }
+          }
+        }
+    })
+    const toggleTheme = () => {
+        if(!(document.documentElement.className==="dark"))
+        {
+          localStorage.theme = "dark";
+          document.documentElement.classList.add('dark')
+    
+          setIsDark(true);
+          return;
+        }
+        localStorage.theme="light";
+        document.documentElement.classList.remove('dark')
+        setIsDark(false);
+      };
+    
 
     function calcHeight(el: any){
         const height = el.offsetHeight + 16;
@@ -32,28 +73,41 @@ const Tools: React.FC = () => {
         setIsChanged(!isChanged)
     }
 
+    
+
+    function deleteAllCookies() {
+        const cookies = document.cookie.split(";");
+
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i];
+            const eqPos = cookie.indexOf("=");
+            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        }
+    }
+
     function DropdownItem(props: any){
 
         const onClicked = () => {
             if(props.logout===true){
-                //sign out logic
+                deleteAllCookies()
             }
             if(props.language)
                 setLanguage(props.language)
             
-            
             props.goToMenu && setActiveMenu(props.goToMenu)
             
         }
+
         return(   
             <div className=" p-2 ">
-            <a href="#" id={props.id} className={props.className?props.className:"menu-item rounded-xl hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex"} onClick={onClicked}>
-                <span className="icon-button">{props.leftIcon}</span>
-                    <div className="p-1">
-                        {props.children}
-                    </div>
-                <span className="icon-right ml-auto">{props.rightIcon}</span>
-            </a>
+                <a onMouseEnter={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(true)}}}onMouseLeave={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(false)}}} href="#" id={props.id} className={props.className?props.className:"menu-item rounded-xl hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex" } onClick={onClicked}>
+                    <span className="icon-button">{props.leftIcon}</span>
+                        <div className="p-1">
+                            {props.children}
+                        </div>
+                    <span className="icon-right ml-auto">{props.rightIcon}</span>
+                </a>
             </div>
             
         )
@@ -82,11 +136,16 @@ const Tools: React.FC = () => {
                         onEnter={calcHeight}
                         >
                         <div className="w-full" >   
+                        <ThemeProvider theme={theme}>
+                        
                             <DropdownItem leftIcon={<AccountCircle />} id="profileDropdownItem" > Profile </DropdownItem>
                             <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight /> }id="settingsDropdownItem" goToMenu="settings"> Settings </DropdownItem>
                             <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages" id="languagesDropdownItem"> Language </DropdownItem>
+                            <DropdownItem className="menu-item rounded-xl cursor-default hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex"
+                                leftIcon={document.documentElement.className==="dark"?<DarkMode/>:<LightMode/>} rightIcon={<Switch onClick={toggleTheme} id="ToolsThemeSwitch" className="ToolsThemeSwitch" defaultChecked={document.documentElement.className==="dark"} />}  id="ThemeDropdownItem"> Dark mode </DropdownItem>
                             <DropdownItem leftIcon={<Logout />} id="logoutDropdownItem" logout={true}> Sign out </DropdownItem>
-                            
+                        </ThemeProvider>
+                       
                         </div>
                     </CSSTransition>    
 
