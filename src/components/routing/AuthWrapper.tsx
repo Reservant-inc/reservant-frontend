@@ -8,7 +8,7 @@ import NavBar from "../navigation/NavBar";
 export const AuthContext = createContext({
   authorized: false,
   login: (token: LoginResponseType) => {},
-  setAuthorized: (auth:boolean) => {}
+  setAuthorized: (auth: boolean) => {},
 });
 
 export const AuthData = () => {
@@ -69,14 +69,18 @@ export const AuthWrapper = () => {
                 ),
               )
             ) {
-              return(
-                  <Route key={i} path={r.path} element={
-                    <div className="w-full h-full flex flex-col">
+              return (
+                <Route
+                  key={i}
+                  path={r.path}
+                  element={
+                    <div className="flex h-full w-full flex-col">
                       <NavBar />
                       {r.element}
                     </div>
-                  } />
-              ) 
+                  }
+                />
+              );
             } else {
               return (
                 <Route

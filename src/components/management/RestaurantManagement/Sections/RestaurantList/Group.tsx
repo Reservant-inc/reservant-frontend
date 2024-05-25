@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { GroupProps } from "../../../services/interfaces";
-import { RestaurantType } from "../../../services/types";
-import { fetchGET } from "../../../services/APIconn";
-import Loader from "../../Loader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import RemoveSharpIcon from '@mui/icons-material/RemoveSharp';
+import RemoveSharpIcon from "@mui/icons-material/RemoveSharp";
 import { ListItemIcon } from "@mui/material";
+import { fetchGET } from "../../../../../services/APIconn";
+import { GroupProps } from "../../../../../services/interfaces";
+import { RestaurantType } from "../../../../../services/types";
+import Loader from "../../../../Loader";
 
 const Group: React.FC<GroupProps> = ({
   restaurantGroupId,
@@ -28,7 +28,9 @@ const Group: React.FC<GroupProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchGET(`/my-restaurant-groups/${restaurantGroupId}`);
+        const response = await fetchGET(
+          `/my-restaurant-groups/${restaurantGroupId}`,
+        );
         setRestaurants(response.restaurants);
       } catch (error) {
         console.error("Error fetching groups: ", error);
@@ -37,7 +39,6 @@ const Group: React.FC<GroupProps> = ({
 
     fetchData();
   }, [restaurantGroupId]);
-
 
   const handleClick = () => {
     setOpen(!open);
@@ -59,14 +60,14 @@ const Group: React.FC<GroupProps> = ({
                     sx={{ pl: 4 }}
                     key={restaurant.restaurantId}
                     onClick={() => {
-                      handleChangeActiveRestaurant(restaurant.restaurantId)
-                      setIsPressed(!isPressed)
+                      handleChangeActiveRestaurant(restaurant.restaurantId);
+                      setIsPressed(!isPressed);
                     }}
                   >
                     <ListItemIcon>
-                      <RemoveSharpIcon className="dark:fill-white"/>
+                      <RemoveSharpIcon className="dark:fill-white" />
                     </ListItemIcon>
-                    <h1 className={activeRestaurantId === restaurant.restaurantId ? "dark:text-secondary text-primary-2 font-mont-md" : ""}>
+                    <h1>
                       {restaurant.name}
                     </h1>
                   </ListItemButton>
@@ -78,7 +79,7 @@ const Group: React.FC<GroupProps> = ({
           </div>
         </List>
       </Collapse>
-      <div className="w-full h-[2px] bg-grey-1"/>
+      <div className="h-[2px] w-full bg-grey-1" />
     </div>
   );
 };

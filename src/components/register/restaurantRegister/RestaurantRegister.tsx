@@ -16,12 +16,12 @@ import Button from "@mui/material/Button";
 
 const RestaurantRegister: React.FC = () => {
   const [isStep1, setIsStep1] = useState(true);
-  const [formDataStep1, setFormDataStep1] = useState<Partial<RestaurantDataType>>(
-    {}
-  );
-  const [formDataStep2, setFormDataStep2] = useState<Partial<RestaurantDataType>>(
-    {}
-  );
+  const [formDataStep1, setFormDataStep1] = useState<
+    Partial<RestaurantDataType>
+  >({});
+  const [formDataStep2, setFormDataStep2] = useState<
+    Partial<RestaurantDataType>
+  >({});
   const [tags, setTags] = useState<string[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -56,7 +56,7 @@ const RestaurantRegister: React.FC = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const tagsData = await fetchGET("/restaurant-tags"); 
+        const tagsData = await fetchGET("/restaurant-tags");
         setTags(tagsData);
       } catch (error) {
         console.error("Error fetching tags:", error);
@@ -76,7 +76,7 @@ const RestaurantRegister: React.FC = () => {
       }
       setFormProgress(progress);
     };
-  
+
     calculateProgress();
   }, [isStep1, isFormSubmitted]);
 
@@ -104,7 +104,7 @@ const RestaurantRegister: React.FC = () => {
         { name: "rentalContract" },
         { name: "alcoholLicense" },
       ];
-  
+
       for (const { name } of filesToUpload) {
         const file = data[name] as File | null;
         if (file) {
@@ -127,14 +127,14 @@ const RestaurantRegister: React.FC = () => {
             } catch (error) {
               console.error("Failed to upload photo file:", error);
             }
-          } else if (typeof photoFile === 'string') {
+          } else if (typeof photoFile === "string") {
             photosToUpload.push(photoFile);
           } else {
             console.error("Invalid photo file:", photoFile);
           }
         }
         const photoFileNames: string[] = photosToUpload
-          .filter((item) => typeof item === 'string')
+          .filter((item) => typeof item === "string")
           .map((item) => item as string);
 
         data.photos = photoFileNames;
@@ -145,14 +145,13 @@ const RestaurantRegister: React.FC = () => {
       console.log(data);
 
       await fetchPOST("/my-restaurants", JSON.stringify(data));
-  
+
       setIsFormSubmitted(true);
       setSnackbarOpen(true);
     } catch (error) {
       console.error("Error while creating restaurant:", error);
     }
   };
-  
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -164,7 +163,10 @@ const RestaurantRegister: React.FC = () => {
       <h1 className="mb-8 text-center text-3xl font-bold">
         {t("restaurant-register.header")}
       </h1>
-      <Stepper activeStep={isStep1 ? 0 : isFormSubmitted ? 2 : 1} alternativeLabel>
+      <Stepper
+        activeStep={isStep1 ? 0 : isFormSubmitted ? 2 : 1}
+        alternativeLabel
+      >
         <Step>
           <StepLabel>{t("restaurant-register.step1")}</StepLabel>
         </Step>
@@ -178,7 +180,9 @@ const RestaurantRegister: React.FC = () => {
       <Formik
         initialValues={isStep1 ? initialValuesStep1 : initialValuesStep2}
         validationSchema={
-          isStep1 ? RestaurantRegisterStep1Schema : RestaurantRegisterStep2Schema
+          isStep1
+            ? RestaurantRegisterStep1Schema
+            : RestaurantRegisterStep2Schema
         }
         onSubmit={isStep1 ? handleStep1Submit : handleStep2Submit}
       >
@@ -188,7 +192,9 @@ const RestaurantRegister: React.FC = () => {
               {isStep1 && (
                 <>
                   <div>
-                    <label htmlFor="name">{t("restaurant-register.name")}:</label>
+                    <label htmlFor="name">
+                      {t("restaurant-register.name")}:
+                    </label>
                     <Field type="text" id="name" name="name" />
                     <ErrorMessage name="name" component="div" />
                   </div>
@@ -198,7 +204,7 @@ const RestaurantRegister: React.FC = () => {
                       {t("restaurant-register.address")}:
                     </label>
                     <Field type="text" id="address" name="address" />
-                    <ErrorMessage name="address" component="div" /> 
+                    <ErrorMessage name="address" component="div" />
                   </div>
 
                   <div>
@@ -210,7 +216,9 @@ const RestaurantRegister: React.FC = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="city">{t("restaurant-register.city")}:</label>
+                    <label htmlFor="city">
+                      {t("restaurant-register.city")}:
+                    </label>
                     <Field type="text" id="city" name="city" />
                     <ErrorMessage name="city" component="div" />
                   </div>
@@ -225,18 +233,28 @@ const RestaurantRegister: React.FC = () => {
                     <label htmlFor="restaurantType">
                       {t("restaurant-register.businessType")}:
                     </label>
-                    <Field as="select" id="restaurantType" name="restaurantType">
+                    <Field
+                      as="select"
+                      id="restaurantType"
+                      name="restaurantType"
+                    >
                       <option value={LocalType.Restaurant}>
                         {t("restaurant-register.types.restaurant")}
                       </option>
-                      <option value={LocalType.Bar}>{t("restaurant-register.types.bar")}</option>
-                      <option value={LocalType.Cafe}>{t("restaurant-register.types.cafe")}</option>
+                      <option value={LocalType.Bar}>
+                        {t("restaurant-register.types.bar")}
+                      </option>
+                      <option value={LocalType.Cafe}>
+                        {t("restaurant-register.types.cafe")}
+                      </option>
                     </Field>
                     <ErrorMessage name="restaurantType" component="div" />
                   </div>
 
                   <div>
-                    <label htmlFor="idCard">{t("restaurant-register.id")}:</label>
+                    <label htmlFor="idCard">
+                      {t("restaurant-register.id")}:
+                    </label>
                     <input
                       type="file"
                       id="idCard"
@@ -315,28 +333,32 @@ const RestaurantRegister: React.FC = () => {
                     <label>{t("restaurant-register.tags")}:</label>
                     <FieldArray name="tags">
                       {({ push, remove }) => (
-                      <>
-                        {tags.map((tag, index) => (
-                          <div key={tag}>
-                            <label>
-                              <Field
-                                type="checkbox"
-                                name={`tags.${index}`}
-                                value={tag}
-                                checked={(formik.values.tags || []).includes(tag)}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                  if (e.target.checked) {
-                                    push(tag);
-                                  } else {
-                                    remove(index);
-                                  }
-                                }}
-                              />
-                              {tag}
-                            </label>
-                           </div>
-                        ))}
-                      </>
+                        <>
+                          {tags.map((tag, index) => (
+                            <div key={tag}>
+                              <label>
+                                <Field
+                                  type="checkbox"
+                                  name={`tags.${index}`}
+                                  value={tag}
+                                  checked={(formik.values.tags || []).includes(
+                                    tag,
+                                  )}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>,
+                                  ) => {
+                                    if (e.target.checked) {
+                                      push(tag);
+                                    } else {
+                                      remove(index);
+                                    }
+                                  }}
+                                />
+                                {tag}
+                              </label>
+                            </div>
+                          ))}
+                        </>
                       )}
                     </FieldArray>
                     <ErrorMessage name="tags" component="div" />
@@ -354,7 +376,9 @@ const RestaurantRegister: React.FC = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="logo">{t("restaurant-register.logo")}:</label>
+                    <label htmlFor="logo">
+                      {t("restaurant-register.logo")}:
+                    </label>
                     <input
                       type="file"
                       id="logo"
@@ -409,16 +433,18 @@ const RestaurantRegister: React.FC = () => {
               <LinearProgress
                 variant="determinate"
                 value={formProgress}
-                sx={{ width: '100%', marginTop: '20px' }}
+                sx={{ width: "100%", marginTop: "20px" }}
               />
               <Button
                 id="RestaurantRegisterNextButton"
-                type="submit" 
+                type="submit"
                 variant="contained"
                 color="primary"
                 disabled={!formik.isValid || isFormSubmitted}
               >
-                {isStep1 ? t("restaurant-register.nextButton") : t("restaurant-register.saveButton")}
+                {isStep1
+                  ? t("restaurant-register.nextButton")
+                  : t("restaurant-register.saveButton")}
               </Button>
 
               {!isStep1 && (
@@ -430,7 +456,6 @@ const RestaurantRegister: React.FC = () => {
                 >
                   {t("restaurant-register.backButton")}
                 </Button>
-
               )}
             </div>
           </Form>

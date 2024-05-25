@@ -59,18 +59,18 @@ export type RestaurantDataType = {
   tags: string[];
   provideDelivery: boolean;
   logo: File | null | string;
-  photos: File[] | null | string [];
+  photos: File[] | null | string[];
   description: string;
   groupId: number | null;
 };
 
 export type EmployeeType = {
-  id: number,
-  empID: string,
-  login: string,
-  firstName: string,
-  lastName: string,
-  phoneNumber: string,
-  role: string,
-  restaurant: string
-}
+  id: number;
+  empID: string;
+  login: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  role: string;
+  restaurant: string;
+};

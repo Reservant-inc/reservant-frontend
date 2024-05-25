@@ -5,7 +5,7 @@ import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../services/APIconn";
-import ErrorMes from "../reusableComponents/ErrorMessage"
+import ErrorMes from "../reusableComponents/ErrorMessage";
 
 const initialValues = {
   login: "",
@@ -16,8 +16,8 @@ const initialValues = {
   confirmPassword: "",
 };
 
-interface RegisterEmpProps{
-  setIsModalOpen: Function
+interface RegisterEmpProps {
+  setIsModalOpen: Function;
 }
 
 const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
@@ -32,7 +32,7 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
       setSubmitting(true);
 
       const body = JSON.stringify({
-        login: values.login, 
+        login: values.login,
         firstName: values.firstName,
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
@@ -41,7 +41,7 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
 
       await fetchPOST("/auth/register-restaurant-employee", body);
 
-      setIsModalOpen(false)
+      setIsModalOpen(false);
     } catch (error) {
       console.log(error);
     } finally {
@@ -66,17 +66,35 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="firstName">{t("auth.firstName")}:</label>
-                <Field type="text" id="firstName" name="firstName" className={!(formik.errors.firstName && formik.touched.firstName)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  className={
+                    !(formik.errors.firstName && formik.touched.firstName)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
+                />
                 <ErrorMessage name="firstName">
-                  { msg => <ErrorMes msg={msg}/> }
+                  {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="lastName">{t("auth.lastName")}:</label>
-                <Field type="text" id="lastName" name="lastName" className={!(formik.errors.lastName && formik.touched.lastName)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  className={
+                    !(formik.errors.lastName && formik.touched.lastName)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
+                />
                 <ErrorMessage name="lastName">
-                  { msg => <ErrorMes msg={msg}/> }
+                  {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
@@ -95,11 +113,19 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
 
                 */}
 
-                <Field type="text" id="login" name="login" className={!(formik.errors.login && formik.touched.login)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field
+                  type="text"
+                  id="login"
+                  name="login"
+                  className={
+                    !(formik.errors.login && formik.touched.login)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
+                />
                 <ErrorMessage name="login">
-                  { msg => <ErrorMes msg={msg}/> }
+                  {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
-
               </div>
 
               <div className="form-control">
@@ -113,18 +139,31 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
                   onChange={(value: string) =>
                     formik.setFieldValue("phoneNumber", value)
                   }
-                  className={!(formik.errors.phoneNumber && formik.touched.phoneNumber)?"border-none":"border-solid border-2 border-pink"}
+                  className={
+                    !(formik.errors.phoneNumber && formik.touched.phoneNumber)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
                 />
                 <ErrorMessage name="phoneNumber">
-                  { msg => <ErrorMes msg={msg}/> }
+                  {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="password">{t("auth.password")}:</label>
-                <Field type="password" id="password" name="password" className={!(formik.errors.password && formik.touched.password)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field
+                  type="password"
+                  id="password"
+                  name="password"
+                  className={
+                    !(formik.errors.password && formik.touched.password)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
+                />
                 <ErrorMessage name="password">
-                  { msg => <ErrorMes msg={msg}/> }
+                  {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
@@ -136,14 +175,25 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
-                  className={!(formik.errors.confirmPassword && formik.touched.confirmPassword)?"border-none":"border-solid border-2 border-pink"}
+                  className={
+                    !(
+                      formik.errors.confirmPassword &&
+                      formik.touched.confirmPassword
+                    )
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
                 />
                 <ErrorMessage name="confirmPassword">
-                  { msg => <ErrorMes msg={msg}/> }
+                  {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <button id="EmployeeRegisterSubmitButton" type="submit" disabled={!formik.isValid}>
+              <button
+                id="EmployeeRegisterSubmitButton"
+                type="submit"
+                disabled={!formik.isValid}
+              >
                 {t("auth.registerButton")}
               </button>
             </div>

@@ -4,39 +4,49 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const AuthItems: React.FC = () => {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  const [t] = useTranslation("global");
 
-    const [t] = useTranslation("global")
+  const [isPressed, setIsPressed] = useState(false);
 
-    const [isPressed, setIsPressed] = useState(false)
+  const pressHandler = () => {
+    setIsPressed(!isPressed);
+  };
 
-    const pressHandler = () => {
-        setIsPressed(!isPressed)
-    }
+  return (
+    <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
+      <button
+        id="AuthItemsHamburgerButton"
+        className="hover:bg-l-grey flex h-10 w-10 items-center justify-center rounded-full"
+        onClick={pressHandler}
+      >
+        <div className="flex h-5 w-5 flex-col items-center justify-center gap-[6px]">
+          <span className="bg-grey h-[2px] w-5 rounded" />
+          <span className="bg-grey h-[2px] w-5 rounded" />
+          <span className="bg-grey h-[2px] w-5 rounded" />
+        </div>
+      </button>
+      {isPressed && (
+        <div className="bg-cream absolute right-[0.5rem] top-[5rem] flex h-28 w-48 flex-col items-center justify-around rounded-2xl drop-shadow-xl">
+          <button
+            id="AuthItemsLoginButton"
+            className="bg-l-grey hover:bg-blue hover:text-cream h-10 w-40 rounded-full p-1 transition"
+            onClick={() => navigate("/user/login")}
+          >
+            {t("landing-page.loginButton")}
+          </button>
+          <button
+            id="AuthItemsRegisterButton"
+            className="bg-l-grey hover:bg-blue hover:text-cream h-10 w-40 rounded-full p-1 transition"
+            onClick={() => navigate("/user/register")}
+          >
+            {t("landing-page.registerButton")}
+          </button>
+        </div>
+      )}
+    </OutsideClickHandler>
+  );
+};
 
-    return (
-        <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-            <button
-                id="AuthItemsHamburgerButton"
-                className="flex justify-center items-center h-10 w-10 rounded-full hover:bg-l-grey"
-                onClick={pressHandler}
-            >
-                <div className="flex flex-col justify-center items-center gap-[6px] h-5 w-5">
-                    <span className="bg-grey w-5 h-[2px] rounded" />
-                    <span className="bg-grey w-5 h-[2px] rounded" />
-                    <span className="bg-grey w-5 h-[2px] rounded" />
-                </div>
-            </button>
-            {
-                isPressed &&
-                <div className="absolute w-48 h-28 bg-cream top-[5rem] right-[0.5rem] drop-shadow-xl rounded-2xl flex flex-col items-center justify-around">
-                    <button id="AuthItemsLoginButton" className="w-40 h-10 bg-l-grey hover:bg-blue hover:text-cream transition p-1 rounded-full" onClick={() => navigate("/user/login")}>{t("landing-page.loginButton")}</button>
-                    <button id="AuthItemsRegisterButton" className="w-40 h-10 bg-l-grey hover:bg-blue hover:text-cream transition p-1 rounded-full" onClick={() => navigate("/user/register")}>{t("landing-page.registerButton")}</button>
-                </div>
-            }
-        </OutsideClickHandler>
-    )
-}
-
-export default AuthItems
+export default AuthItems;
