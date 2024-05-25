@@ -13,17 +13,17 @@ const initialValues = {
 const ComplaintForm = () => {
     const [t] = useTranslation("global");
 
-    const { userRegisterSchema } = useValidationSchemas();
+    const { complaintSchema } = useValidationSchemas();
     
     const handleSubmit = () => {
-        
+
     }
 
     return(
     <div className="container-register">
       <Formik
         initialValues={initialValues}
-        validationSchema={userRegisterSchema}
+        validationSchema={complaintSchema}
         onSubmit={handleSubmit}
         validateOnChange={false}
         validateOnBlur={true}
@@ -72,7 +72,9 @@ const ComplaintForm = () => {
                 </ErrorMessage>
               </div>
 
-              <button id="ComplaintFormSubmitButton" type="submit" disabled={!formik.isValid}>
+              <button id="ComplaintFormSubmitButton" type="submit" 
+                disabled={!formik.isValid}
+              >
                 Submit
               </button>
             </div>
