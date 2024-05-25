@@ -6,9 +6,7 @@ export const useValidationSchemas = () => {
   const [t] = useTranslation("global");
 
   const complaintSchema = yup.object({
-    category: yup.string(),
-    topic: yup.string(),
-    content: yup.string(),
+    description: yup.string().required("description required"),
   });
 
   const loginSchema = yup.object({

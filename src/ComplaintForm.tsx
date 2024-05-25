@@ -7,8 +7,7 @@ import ErrorMes from "./components/reusableComponents/ErrorMessage";
 const initialValues = {
     category: "",
     visit: "",
-    topic: "",
-    content: "",
+    description: "",
 };
 
 const ComplaintForm = () => {
@@ -34,43 +33,41 @@ const ComplaintForm = () => {
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="category">Category:</label>
-                <Field type="text" id="category" name="category" className={!(formik.errors.category && formik.touched.category)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field as="select" id="category" name="category" className={!(formik.errors.category && formik.touched.category)?"border-none":"border-solid border-2 border-pink"}>
+                  
+                  <option value="lostItem" label="lost item"/>
+
+                  <option value="technical" label="technical"/>
+                   
+                  <option value="customerReport" label="report customer"/>
+                   
+                  <option value="employeeReport" label="report employee"/>
+                   
+                </Field>
                 <ErrorMessage name="category">
                   { msg => <ErrorMes msg={msg}/> }
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
+              {formik.values.category!=="technical" &&
+
+                
+                <div className="form-control">
                 <label htmlFor="category">Visit:</label>
-                <select id="visit" name="visit" className={!(formik.errors.visit && formik.touched.visit)?"border-none":"border-solid border-2 border-pink"}>
-                  <option value="" label="none">
-                    none{" "}
-                  </option>
-                  <option value="visit1" label="visit1">
-                    {" "}
-                    visit1
-                  </option>
-                  <option value="visit2" label="visit2">
-                    visit2
-                  </option>
-                </select>
+                <Field as="select" id="visit" name="visit" className={!(formik.errors.visit && formik.touched.visit)?"border-none":"border-solid border-2 border-pink"}>
+                  <option value="visit1" label="visit1"/>
+                  <option value="visit2" label="visit2"/>
+                </Field>
                 <ErrorMessage name="category">
                   { msg => <ErrorMes msg={msg}/> }
                 </ErrorMessage>
-              </div>
+                </div>
+              }
 
               <div className="form-control">
-                <label htmlFor="topic">Topic:</label>
-                <Field type="text" id="topic" name="topic" className={!(formik.errors.topic && formik.touched.topic)?"border-none":"border-solid border-2 border-pink"}/>
-                <ErrorMessage name="topic">
-                  { msg => <ErrorMes msg={msg}/> }
-                </ErrorMessage>
-              </div>
-
-              <div className="form-control">
-                <label htmlFor="content">Content:</label>
-                <Field type="text" id="content" name="content" className={!(formik.errors.content && formik.touched.content)?"border-none":"border-solid border-2 border-pink"}/>
-                <ErrorMessage name="content">
+                <label htmlFor="content">Description:</label>
+                <Field as="textarea" cols='30' rows='10' id="description" name="description" className={!(formik.errors.description && formik.touched.description)?"border-none":"border-solid border-2 border-pink"}/>
+                <ErrorMessage name="description">
                   { msg => <ErrorMes msg={msg}/> }
                 </ErrorMessage>
               </div>
