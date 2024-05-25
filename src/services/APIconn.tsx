@@ -75,7 +75,6 @@ export const fetchPUT = async (connString: string, body: string) => {
   return data;
 };
 
-
 export const fetchFilesPOST = async (connString: string, file: File) => {
   const token = Cookies.get("token");
 
