@@ -6,6 +6,7 @@ import ErrorMes from "./components/reusableComponents/ErrorMessage";
 
 const initialValues = {
     category: "",
+    visit: "",
     topic: "",
     content: "",
 };
@@ -40,6 +41,25 @@ const ComplaintForm = () => {
               </div>
 
               <div className="form-control">
+                <label htmlFor="category">Visit:</label>
+                <select id="visit" name="visit" className={!(formik.errors.visit && formik.touched.visit)?"border-none":"border-solid border-2 border-pink"}>
+                  <option value="" label="none">
+                    none{" "}
+                  </option>
+                  <option value="visit1" label="visit1">
+                    {" "}
+                    visit1
+                  </option>
+                  <option value="visit2" label="visit2">
+                    visit2
+                  </option>
+                </select>
+                <ErrorMessage name="category">
+                  { msg => <ErrorMes msg={msg}/> }
+                </ErrorMessage>
+              </div>
+
+              <div className="form-control">
                 <label htmlFor="topic">Topic:</label>
                 <Field type="text" id="topic" name="topic" className={!(formik.errors.topic && formik.touched.topic)?"border-none":"border-solid border-2 border-pink"}/>
                 <ErrorMessage name="topic">
@@ -55,7 +75,7 @@ const ComplaintForm = () => {
                 </ErrorMessage>
               </div>
 
-              <button id="UserRegisterSubmitButton" type="submit" disabled={!formik.isValid}>
+              <button id="ComplaintFormSubmitButton" type="submit" disabled={!formik.isValid}>
                 Submit
               </button>
             </div>
