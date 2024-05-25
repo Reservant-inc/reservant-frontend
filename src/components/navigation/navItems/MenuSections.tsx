@@ -14,7 +14,7 @@ const Sections: React.FC<SectionProps> = () => {
     return(
         <div className="h-full flex gap-3 items-center">
                 <div className="relative h-14">
-                <button id="NavbarRestaurantsSectionButton" className={'h-12 mt-1 w-28 rounded-xl fill-grey-2 flex flex-col justify-between items-center relative' + (isClickedHome ? ' fill-primary-2 dark:fill-secondary dark:hover:bg-none hover:bg-transpartent' : " dark:hover:bg-grey-4 hover:bg-grey-1")} onClick={() => navigate( "/home")}>   
+                <button id="NavbarHomeSectionButton" className={'h-12 mt-1 w-28 rounded-xl fill-grey-2 flex flex-col justify-between items-center relative' + (isClickedHome ? ' fill-primary-2 dark:fill-secondary dark:hover:bg-none hover:bg-transpartent' : " dark:hover:bg-grey-4 hover:bg-grey-1")} onClick={() => navigate( "/home")}>   
 
                     <svg className="h-6 absolute top-1/2 transform -translate-y-1/2" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                         <g id="Dribbble-Light-Preview" transform="translate(-419.000000, -720.000000)">

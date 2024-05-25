@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,11 +18,15 @@ import {
   GridRowModel,
   GridRowEditStopReasons,
   GridSlots,
+  gridRowsDataRowIdToIdLookupSelector,
+  selectedGridRowsSelector,
 } from '@mui/x-data-grid';
 import { EmployeeType } from '../../../services/types';
 import { fetchGET } from '../../../services/APIconn';
 import { Modal } from '@mui/material';
 import EmployeeRegister from '../../register/EmployeeRegister';
+import { number } from 'yup';
+import { getRowIdFromRowModel } from '@mui/x-data-grid/internals';
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -79,7 +82,7 @@ export default function EmployeeManagement() {
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} onClick={() => setIsModalOpen(true)}>
+        <Button color="primary" id="EmployeeManagementAddEmployeeButton" startIcon={<AddIcon />} onClick={() => setIsModalOpen(true)}>
           Add Employee
         </Button>
       </GridToolbarContainer>
@@ -181,14 +184,14 @@ export default function EmployeeManagement() {
       headerName: 'Actions',
       width: 100,
       cellClassName: 'actions',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
+      getActions: ({id}) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit; 
         if (isInEditMode) {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
+              id={"EmployeeManagementSaveButton"+rows[parseInt(id.toString())].login}
               sx={{
                 color: 'primary.main',
               }}
@@ -196,6 +199,7 @@ export default function EmployeeManagement() {
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
+              id={"EmployeeManagementCancelEditButton"+rows[parseInt(id.toString())].login}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -208,12 +212,15 @@ export default function EmployeeManagement() {
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
+            id={"EmployeeManagementEditButton"+rows[parseInt(id.toString())].login}
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
+            id={"EmployeeManagementDeleteButton"+rows[parseInt(id.toString())].login}
+
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"

@@ -1,16 +1,14 @@
 import React, { useState } from "react"
 import LogoDark from "../../assets/images/LOGO-CLEAN-DARK.png";
 import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
-import ThemeButton from "./navItems/ThemeButton";
 import LanguageChange from "./navItems/LanguageChange";
-import AuthItems from "./navItems/AuthItems";
 import Sections from "./navItems/MenuSections";
-import Cookies from "js-cookie";
 import Tools from "./navItems/Tools";
 
 const NavBar: React.FC = () => {
 
     const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
+
 
     return (
         <div className="h-14 w-full z-[2] shadow-md flex items-center dark:bg-black">
@@ -29,9 +27,7 @@ const NavBar: React.FC = () => {
                        
                         
                 <div className="flex-1 flex gap-2 justify-end items-center">
-                    <ThemeButton setIsDark={setIsDark}/>
-                    <LanguageChange/>
-                    <Tools />
+                    <Tools setIsDark={setIsDark}/>
                 </div>
             </div>
         </div>
