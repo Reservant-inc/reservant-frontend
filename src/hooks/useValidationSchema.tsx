@@ -5,6 +5,12 @@ import { fetchGET } from "../services/APIconn";
 export const useValidationSchemas = () => {
   const [t] = useTranslation("global");
 
+  const complaintSchema = yup.object({
+    category: yup.string(),
+    topic: yup.string(),
+    content: yup.string(),
+  });
+
   const loginSchema = yup.object({
     login: yup.string().required(t("errors.login.login")),
     password: yup.string().required(t("errors.login.password")),
@@ -218,5 +224,6 @@ export const useValidationSchemas = () => {
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
     RestaurantEditSchema,
+    complaintSchema,
   };
 };
