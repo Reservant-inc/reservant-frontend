@@ -155,5 +155,12 @@
             "menuItemAlcoholPercentage": "Alcohol percentage",
             "editMenuItem": "Edit menu position"
         }
+    },
+    "tools": {
+        "profile":"Profile",
+        "settings":"Settings",
+        "language":"Language",
+        "mode":"Dark mode",
+        "signout":"Sign out"
     }
 }
