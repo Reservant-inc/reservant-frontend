@@ -16,7 +16,7 @@ export interface ToolsProps {
 const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     const[isThemeAreaHovered, setIsThemeAreaHovered] = useState(false);
     const [t, i18n] = useTranslation("global");
-
+    
     const [isPressed, setIsPressed] = useState(false)
     const [isChanged, setIsChanged] = useState(false)
     const [activeMenu, setActiveMenu] = useState("main");
@@ -192,5 +192,6 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
         </OutsideClickHandler>
     )
 }
+
 
 export default Tools
