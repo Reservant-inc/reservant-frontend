@@ -153,7 +153,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                             <DropdownItem leftIcon={<AccountCircle/>} id="profileDropdownItem" > {t("tools.main.profile")} </DropdownItem>
                             <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight /> }id="settingsDropdownItem" goToMenu="settings"> {t("tools.main.settings")} </DropdownItem>
                             <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages" id="languagesDropdownItem"> {t("tools.main.language")} </DropdownItem>
-                            <DropdownItem className="menu-item cursor-default hover:bg-grey-1 text-black dark:text-grey-1 dark:hover:bg-grey-4 items-center h-14  p-2 flex flex"
+                            <DropdownItem className="menu-item rounded-lg cursor-default hover:bg-grey-1 text-black dark:text-grey-1 dark:hover:bg-grey-4 items-center h-14  p-2 flex flex"
                                 leftIcon={document.documentElement.className==="dark"?<DarkMode/>:<LightMode/>} rightIcon={<Switch onClick={toggleTheme} id="ToolsThemeSwitch" className="ToolsThemeSwitch" defaultChecked={document.documentElement.className==="dark"} />}  id="ThemeDropdownItem"> {t("tools.main.mode")} </DropdownItem>
                             <DropdownItem leftIcon={<Logout />} id="logoutDropdownItem" logout={true}> {t("tools.main.signout")} </DropdownItem>
                         </ThemeProvider>
@@ -188,8 +188,8 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                         >
                         <div className="w-full" >   
                             <DropdownItem leftIcon={<ChevronLeft />}id="backFromLanguagesDropdownItem" goToMenu="main"/>
-                            <DropdownItem leftIcon={<Language />} id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 dark:text-grey-1 text-black ":""}> English </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 text-black dark:text-grey-1 ":""}> Polski </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 dark:text-grey-1 text-black ":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 text-black dark:text-grey-1 ":""}> Polski </DropdownItem>
                         </div>
                     </CSSTransition>        
                 </div>
