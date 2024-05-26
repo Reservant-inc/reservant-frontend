@@ -29,7 +29,7 @@ const Group: React.FC<GroupProps> = ({
     <div className={"text-sm text-black dark:text-white"}>
       <ListItemButton onClick={handleClick}>
         <ListItemText primary={name} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {open ?  <ExpandMore /> : <ExpandLess />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
               <div className="flex w-full p-2 gap-4">
