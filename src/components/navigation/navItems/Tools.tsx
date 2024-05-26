@@ -1,8 +1,17 @@
 import React, { useContext, useState } from "react";
 import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
-import User from "../../../assets/images/user.jpg"
+import User from "../../../assets/images/user.jpg";
 import { Icon, Switch, alpha, createTheme, styled } from "@mui/material";
-import { AccountCircle, ChevronLeft, ChevronRight, DarkMode, Language, LightMode, Logout, Settings } from "@mui/icons-material";
+import {
+  AccountCircle,
+  ChevronLeft,
+  ChevronRight,
+  DarkMode,
+  Language,
+  LightMode,
+  Logout,
+  Settings,
+} from "@mui/icons-material";
 import { CSSTransition } from "react-transition-group";
 import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
@@ -10,7 +19,7 @@ import { AuthContext } from "../../routing/AuthWrapper";
 import { useTranslation } from "react-i18next";
 
 export interface ToolsProps {
-    setIsDark: Function
+  setIsDark: Function;
 }
 
 const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
@@ -23,8 +32,6 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
 
     const [menuHeight, setMenuHeight] = useState(360);
     const { setAuthorized } = useContext(AuthContext);
-
-    const handleLogout = () => setAuthorized(false);
 
     const theme = createTheme({
         components: {
@@ -48,50 +55,49 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
           }
         }
     })
-    const toggleTheme = () => {
-        if(!(document.documentElement.className==="dark"))
-        {
-          localStorage.theme = "dark";
-          document.documentElement.classList.add('dark')
-    
-          setIsDark(true);
-          return;
-        }
-        localStorage.theme="light";
-        document.documentElement.classList.remove('dark')
-        setIsDark(false);
-      };
-    
+  const toggleTheme = () => {
+      if(!(document.documentElement.className==="dark"))
+      {
+        localStorage.theme = "dark";
+        document.documentElement.classList.add('dark')
+  
+        setIsDark(true);
+        return;
+      }
+      localStorage.theme="light";
+      document.documentElement.classList.remove('dark')
+      setIsDark(false);
+    };
+  
 
-    function calcHeight(el: any){
-        const height = el.offsetHeight;
-        setMenuHeight(height);
+  function calcHeight(el: any){
+      const height = el.offsetHeight;
+      setMenuHeight(height);
+  }
+      
+  const handleLogout = () => setAuthorized(false);
+
+  const pressHandler = () => {
+    setIsPressed(!isPressed);
+  };
+
+  const setLanguage = (lang: string) => {
+    i18next.changeLanguage(lang);
+    localStorage.setItem("i18nextLng", lang);
+    setIsChanged(!isChanged);
+  };
+
+  function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      handleLogout();
     }
-
-    const pressHandler = () => {
-        setIsPressed(!isPressed)
-    }
-
-    const setLanguage = (lang: string) => {
-        i18next.changeLanguage(lang)
-        localStorage.setItem("i18nextLng", lang)
-        setIsChanged(!isChanged)
-    }
-
-    
-
-    function deleteAllCookies() {
-        const cookies = document.cookie.split(";");
-
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i];
-            const eqPos = cookie.indexOf("=");
-            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-            handleLogout();
-        }
-    }
-
+  }
     function DropdownItem(props: any){
 
         const onClicked = () => {
@@ -189,9 +195,9 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                 </div>
             
             }
-        </OutsideClickHandler>
-    )
-}
+            </OutsideClickHandler>
+    );
+  }
 
 
 export default Tools

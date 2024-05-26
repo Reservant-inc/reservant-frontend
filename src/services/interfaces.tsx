@@ -33,7 +33,6 @@ export interface RestaurantDataProps {
 }
 
 export interface MyGroupsProps {
-  val: string
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
 }

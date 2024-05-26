@@ -7,7 +7,6 @@ import RestaurantRegister from "../../../../register/restaurantRegister/Restaura
 const RestaurantListSection: React.FC = () => {
     const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-    const [val, setVal] = useState<string>("")
 
       const handleChangeActiveRestaurant = (restaurantId: number) => {
         setActiveRestaurantId(restaurantId);
@@ -37,11 +36,11 @@ const RestaurantListSection: React.FC = () => {
                     Add restaurant
                 </button>
                 <div>
-                    <input type="text" value={val} onChange={(e) => setVal(e.target.value)}/>
+                    
                 </div>
             </div>
             <div className="h-[90%] w-full">
-                <MyGroups val={val} activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
+                <MyGroups activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
             </div>
             <Modal
                 open={isModalOpen}
