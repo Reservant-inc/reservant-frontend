@@ -12,10 +12,10 @@ const RestaurantListSection: React.FC = () => {
 
     return(
         <div className="h-full w-full">
-            <div className="h-[4rem] w-full z-1 shadow-sm">
+            <div className="h-[10%] w-full z-1 shadow-sm">
 
             </div>
-            <div className="h-full w-full">
+            <div className="h-[90%] w-full">
                 <MyGroups activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
             </div>
         </div>
