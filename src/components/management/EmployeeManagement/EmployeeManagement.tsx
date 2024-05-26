@@ -274,7 +274,6 @@ export default function EmployeeManagement() {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="h-full"
       />
       <Modal
         open={isModalOpen}
