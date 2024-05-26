@@ -11,12 +11,14 @@ import Group from "./Group";
 const MyGroups: React.FC<MyGroupsProps> = ({
   handleChangeActiveRestaurant,
   activeRestaurantId,
+  val
 }) => {
   const [t] = useTranslation("global");
 
   const [groups, setGroups] = useState<GroupType[]>([]);
 
   useEffect(() => {
+    console.log('asd')
     const fetchData = async () => {
       try {
         const response = await fetchGET("/my-restaurant-groups");
@@ -27,7 +29,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
     };
 
     fetchData();
-  }, []);
+  }, [val]);
 
   return (
       <div className="h-full pl-1 overflow-y-scroll scroll">

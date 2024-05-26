@@ -102,3 +102,7 @@ export const fetchFilesPOST = async (connString: string, file: File) => {
 
   return data;
 };
+
+export const getImage = (path: string) => {
+  return `${process.env.REACT_APP_SERVER_IP}${path}`
+}

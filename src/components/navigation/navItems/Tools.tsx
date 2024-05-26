@@ -107,7 +107,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
 
         return(   
             <div className=" p-2 ">
-                <a onMouseEnter={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(true)}}}onMouseLeave={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(false)}}} href="#" id={props.id} className={props.className?props.className:"menu-item hover:bg-grey-1 text-black  dark:text-grey-1 dark:hover:bg-grey-4 items-center h-14  p-2 flex flex" } onClick={onClicked}>
+                <a onMouseEnter={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(true)}}}onMouseLeave={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(false)}}} href="#" id={props.id} className={props.className?props.className:"rounded-lg menu-item hover:bg-grey-1 text-black dark:text-grey-1 dark:hover:bg-grey-4 items-center h-14 p-2 flex flex" } onClick={onClicked}>
                     <span className="icon-button">{props.leftIcon}</span>
                         <div className="p-1">
                             {props.children}
@@ -125,10 +125,10 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
             <button
             //do czego..
                 id="ToolsButton"
-                className="h-10 w-10 flex justify-center items-center"
+                className="h-[95%] w-10 flex justify-center items-center"
                 onClick={pressHandler}
             >
-                <img src={User} alt="logo" className="h-9 rounded-full" />
+                <img src={User} alt="logo" className="h-[100%] rounded-full" />
             </button>
             {
                 isPressed &&

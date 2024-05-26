@@ -42,6 +42,7 @@ export type RestaurantType = {
   restaurantType: LocalType;
   address: string;
   city: string;
+  logo: string;
   groupId: 0;
 };
 

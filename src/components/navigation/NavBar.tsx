@@ -10,18 +10,18 @@ const NavBar: React.FC = () => {
 
   return (
     <div className="z-[2] flex h-[6%] w-full items-center shadow-md dark:bg-black">
-      <div className="mx-2 flex w-full items-center">
-        <div className="flex-1 items-center">
+      <div className="mx-2 flex h-full w-full items-center">
+        <div className="flex-1 h-full items-center">
           {isDark ? (
             <img src={LogoLight} alt="logo" className="h-12 min-w-[155px]" />
           ) : (
-            <img src={LogoDark} alt="logo" className="h-12 min-w-[155px]" />
+            <img src={LogoDark} alt="logo" className="h-[95%]" />
           )}
         </div>
 
         <Sections />
 
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="h-full flex flex-1 items-center justify-end gap-2">
           <Tools setIsDark={setIsDark} />
         </div>
       </div>

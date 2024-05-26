@@ -33,7 +33,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
         <List>
             <ListItem>
                 <ListItemButton
-                    className={selectedIndex === 0 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 0 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 0, `Hello, ${JSON.parse(Cookies.get("userInfo") as string).firstName}`)}
                 >
                 <ListItemIcon>
@@ -44,7 +44,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
             <ListItem >
                 <ListItemButton
-                    className={selectedIndex === 1 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 1 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 1, 'My restaurants')}
                 >
                 <ListItemIcon>
@@ -55,7 +55,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
             <ListItem >
                 <ListItemButton
-                    className={selectedIndex === 2 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 2 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 2, 'Employee management')}
                 >
                 <ListItemIcon>
@@ -66,7 +66,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
             <ListItem >
                 <ListItemButton
-                    className={selectedIndex === 3 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 3 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 3, 'Menu management')}
                 >
                 <ListItemIcon>
@@ -77,7 +77,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
             <ListItem >
                 <ListItemButton
-                    className={selectedIndex === 4 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 4 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 4, 'Shipment management')}
                 >
                 <ListItemIcon>
@@ -88,7 +88,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
             <ListItem >
                 <ListItemButton
-                    className={selectedIndex === 5 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 5 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 5, 'Statistics')}
                 >
                 <ListItemIcon>
@@ -99,7 +99,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
             <ListItem >
                 <ListItemButton
-                    className={selectedIndex === 6 ? "bg-grey-1" : ""}
+                    className={`rounded-lg ${selectedIndex === 6 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 6, 'Reservation history')}
                 >
                 <ListItemIcon>

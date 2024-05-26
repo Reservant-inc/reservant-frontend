@@ -1,26 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import RemoveSharpIcon from "@mui/icons-material/RemoveSharp";
-import { ListItemIcon } from "@mui/material";
-import { fetchGET } from "../../../../../services/APIconn";
+import { fetchGET, getImage } from "../../../../../services/APIconn";
 import { GroupProps } from "../../../../../services/interfaces";
 import { RestaurantType } from "../../../../../services/types";
-import Loader from "../../../../Loader";
 
 const Group: React.FC<GroupProps> = ({
   restaurantGroupId,
-  name,
-  handleChangeActiveRestaurant,
-  activeRestaurantId,
+  name
 }) => {
   const [t] = useTranslation("global");
-  const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const [open, setOpen] = React.useState(false);
   const [restaurants, setRestaurants] = useState<RestaurantType[]>([]);
@@ -51,33 +44,16 @@ const Group: React.FC<GroupProps> = ({
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <div className="p-2">
-            {!(restaurants.length === 0) ? (
-              <>
+              <div className="flex w-full p-2 gap-4">
                 {restaurants.map((restaurant) => (
-                  <ListItemButton
-                    sx={{ pl: 4 }}
-                    key={restaurant.restaurantId}
-                    onClick={() => {
-                      handleChangeActiveRestaurant(restaurant.restaurantId);
-                      setIsPressed(!isPressed);
-                    }}
-                  >
-                    <ListItemIcon>
-                      <RemoveSharpIcon className="dark:fill-white" />
-                    </ListItemIcon>
-                    <h1>
-                      {restaurant.name}
-                    </h1>
-                  </ListItemButton>
+                  <button className="h-[12rem] w-[9rem] z-1 shadow-md cursor-pointer flex flex-col rounded-lg p-2 transform hover:scale-105 transition">
+                    <img className="h-3/4 w-full rounded-lg" src={getImage(restaurant.logo)}/>
+                    <div className="h-1/4 w-full flex items-center justify-center text-md">
+                      <h1>{restaurant.name}</h1>
+                    </div>
+                  </button>
                 ))}
-              </>
-            ) : (
-              <Loader />
-            )}
-          </div>
-        </List>
+              </div>
       </Collapse>
       <div className="h-[2px] w-full bg-grey-1" />
     </div>
