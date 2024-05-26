@@ -7,6 +7,7 @@ import { CSSTransition } from "react-transition-group";
 import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
 import { AuthContext } from "../../routing/AuthWrapper";
+import { useTranslation } from "react-i18next";
 
 export interface ToolsProps {
     setIsDark: Function
@@ -14,12 +15,13 @@ export interface ToolsProps {
 
 const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     const[isThemeAreaHovered, setIsThemeAreaHovered] = useState(false);
+    const [t, i18n] = useTranslation("global");
     
     const [isPressed, setIsPressed] = useState(false)
     const [isChanged, setIsChanged] = useState(false)
     const [activeMenu, setActiveMenu] = useState("main");
 
-    const [menuHeight, setMenuHeight] = useState(360 + 16);
+    const [menuHeight, setMenuHeight] = useState(360);
     const { setAuthorized } = useContext(AuthContext);
 
     const handleLogout = () => setAuthorized(false);
@@ -29,17 +31,17 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
           MuiSwitch: {
             styleOverrides: {
               switchBase: {
-                color: isThemeAreaHovered?"#fefefe":"#222222",
+                color: "#222222",
               },
               colorPrimary: {
                 "&.Mui-checked": {
-                color: isThemeAreaHovered?"#222222":"#64c3a6",
+                color: "#64c3a6",
                 }
               },
               track: {
-                backgroundColor: isThemeAreaHovered?"#fefefe":"#222222",
+                backgroundColor: "#222222",
                 ".Mui-checked.Mui-checked + &": {
-                    backgroundColor: isThemeAreaHovered?"#222222":"#b1e1d2",
+                    backgroundColor: "#b1e1d2",
                 }
               }
             }
@@ -62,7 +64,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     
 
     function calcHeight(el: any){
-        const height = el.offsetHeight + 16;
+        const height = el.offsetHeight;
         setMenuHeight(height);
     }
 
@@ -105,7 +107,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
 
         return(   
             <div className=" p-2 ">
-                <a onMouseEnter={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(true)}}}onMouseLeave={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(false)}}} href="#" id={props.id} className={props.className?props.className:"menu-item rounded-xl hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex" } onClick={onClicked}>
+                <a onMouseEnter={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(true)}}}onMouseLeave={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(false)}}} href="#" id={props.id} className={props.className?props.className:"menu-item hover:bg-grey-1 text-black  dark:text-grey-1 dark:hover:bg-grey-4 items-center h-14  p-2 flex flex" } onClick={onClicked}>
                     <span className="icon-button">{props.leftIcon}</span>
                         <div className="p-1">
                             {props.children}
@@ -142,12 +144,12 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                         <div className="w-full" >   
                         <ThemeProvider theme={theme}>
                         
-                            <DropdownItem leftIcon={<AccountCircle />} id="profileDropdownItem" > Profile </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight /> }id="settingsDropdownItem" goToMenu="settings"> Settings </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages" id="languagesDropdownItem"> Language </DropdownItem>
-                            <DropdownItem className="menu-item rounded-xl cursor-default hover:bg-primary-2 text-black hover:text-white dark:text-grey-1 dark:hover:bg-secondary dark:hover:text-black  items-center h-14  p-2 flex flex"
-                                leftIcon={document.documentElement.className==="dark"?<DarkMode/>:<LightMode/>} rightIcon={<Switch onClick={toggleTheme} id="ToolsThemeSwitch" className="ToolsThemeSwitch" defaultChecked={document.documentElement.className==="dark"} />}  id="ThemeDropdownItem"> Dark mode </DropdownItem>
-                            <DropdownItem leftIcon={<Logout />} id="logoutDropdownItem" logout={true}> Sign out </DropdownItem>
+                            <DropdownItem leftIcon={<AccountCircle/>} id="profileDropdownItem" > {t("tools.main.profile")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight /> }id="settingsDropdownItem" goToMenu="settings"> {t("tools.main.settings")} </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages" id="languagesDropdownItem"> {t("tools.main.language")} </DropdownItem>
+                            <DropdownItem className="menu-item cursor-default hover:bg-grey-1 text-black dark:text-grey-1 dark:hover:bg-grey-4 items-center h-14  p-2 flex flex"
+                                leftIcon={document.documentElement.className==="dark"?<DarkMode/>:<LightMode/>} rightIcon={<Switch onClick={toggleTheme} id="ToolsThemeSwitch" className="ToolsThemeSwitch" defaultChecked={document.documentElement.className==="dark"} />}  id="ThemeDropdownItem"> {t("tools.main.mode")} </DropdownItem>
+                            <DropdownItem leftIcon={<Logout />} id="logoutDropdownItem" logout={true}> {t("tools.main.signout")} </DropdownItem>
                         </ThemeProvider>
                        
                         </div>
@@ -163,10 +165,10 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                         >
                         <div className="w-full" >   
                             <DropdownItem leftIcon={<ChevronLeft />} id="backFromSettingsDropdownItem" goToMenu="main"/>
-                            <DropdownItem leftIcon={<Settings />} id="SettingFiller1DropdownItem"> SettingFiller1 </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />}id="SettingFiller2DropdownItem"> SettingFiller2 </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />}id="SettingFiller3DropdownItem"> SettingFiller3 </DropdownItem>
-                            <DropdownItem leftIcon={<Settings />}id="SettingFiller4DropdownItem"> SettingFiller4 </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />} id="SettingFiller1DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller2DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller3DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller4DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
                         </div>
                     </CSSTransition>
 
@@ -180,8 +182,8 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                         >
                         <div className="w-full" >   
                             <DropdownItem leftIcon={<ChevronLeft />}id="backFromLanguagesDropdownItem" goToMenu="main"/>
-                            <DropdownItem leftIcon={<Language />} id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> English </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item rounded-xl text-gray-1 cursor-default items-center h-14  p-2 flex flex dark:bg-secondary bg-primary-2 dark:text-black text-white ":""}> Polski </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 dark:text-grey-1 text-black ":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 text-black dark:text-grey-1 ":""}> Polski </DropdownItem>
                         </div>
                     </CSSTransition>        
                 </div>
@@ -190,5 +192,6 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
         </OutsideClickHandler>
     )
 }
+
 
 export default Tools
