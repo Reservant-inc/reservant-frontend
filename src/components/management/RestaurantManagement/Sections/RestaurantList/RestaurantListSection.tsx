@@ -7,6 +7,7 @@ import RestaurantRegister from "../../../../register/restaurantRegister/Restaura
 const RestaurantListSection: React.FC = () => {
     const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+    const [filter, setFilter] = useState<string>("")
 
       const handleChangeActiveRestaurant = (restaurantId: number) => {
         setActiveRestaurantId(restaurantId);
@@ -36,11 +37,11 @@ const RestaurantListSection: React.FC = () => {
                     Add restaurant
                 </button>
                 <div>
-                    
+                    <input type="text" value={filter} onChange={(e)=>{setFilter(e.target.value)}} />
                 </div>
             </div>
             <div className="h-[90%] w-full">
-                <MyGroups activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
+                <MyGroups filter={filter} activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
             </div>
             <Modal
                 open={isModalOpen}

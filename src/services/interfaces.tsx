@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { LoginResponseType, RestaurantDataType } from "./types";
+import { LoginResponseType, RestaurantDataType, RestaurantType } from "./types";
 
 export interface SectionProps {}
 
@@ -35,12 +35,14 @@ export interface RestaurantDataProps {
 export interface MyGroupsProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
+  filter: string;
 }
 
 export interface GroupProps {
   restaurantGroupId: number;
   name: string;
-  restaurantCount: number;
+  filter: string,
+  restaurants: RestaurantType[];
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
 }

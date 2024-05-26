@@ -11,31 +11,19 @@ import { RestaurantType } from "../../../../../services/types";
 
 const Group: React.FC<GroupProps> = ({
   restaurantGroupId,
-  name
+  name,
+  restaurants,
+  filter
 }) => {
   const [t] = useTranslation("global");
 
-  const [open, setOpen] = React.useState(false);
-  const [restaurants, setRestaurants] = useState<RestaurantType[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchGET(
-          `/my-restaurant-groups/${restaurantGroupId}`,
-        );
-        setRestaurants(response.restaurants);
-      } catch (error) {
-        console.error("Error fetching groups: ", error);
-      }
-    };
-
-    fetchData();
-  }, [restaurantGroupId]);
+  const [open, setOpen] = React.useState(filter!=="");
 
   const handleClick = () => {
     setOpen(!open);
   };
+
+  useEffect(()=>{setOpen(filter!=="")},[filter])
 
   return (
     <div className={"text-sm text-black dark:text-white"}>
