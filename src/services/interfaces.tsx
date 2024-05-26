@@ -1,14 +1,12 @@
 import { ReactNode } from "react";
 import { LoginResponseType, RestaurantDataType } from "./types";
 
-export interface SectionProps {
-
-}
+export interface SectionProps {}
 
 export interface AuthContextValue {
   isAuthorized: boolean;
   login: (token: LoginResponseType) => void;
-  setIsAuthorized: ()=>{}
+  setIsAuthorized: () => {};
 }
 
 export interface PopupProps {
@@ -58,13 +56,13 @@ export interface RegisterStep2Props {
 }
 
 export interface NavBarProps {
-  sections: React.FC,
-  menu: React.FC
+  sections: React.FC;
+  menu: React.FC;
 }
 
 export interface ManagementSectionProps {
-  currentPage: number,
-  desiredPage: number,
-  setActivePage: Function,
-  component: ReactNode
+  currentPage: number;
+  desiredPage: number;
+  setActivePage: Function;
+  component: ReactNode;
 }

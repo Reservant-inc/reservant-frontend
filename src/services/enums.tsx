@@ -1,5 +1,5 @@
 export enum LocalType {
-    Restaurant = 'Restaurant',
-    Bar = 'Bar',
-    Cafe = 'Cafe'
+  Restaurant = "Restaurant",
+  Bar = "Bar",
+  Cafe = "Cafe",
 }
