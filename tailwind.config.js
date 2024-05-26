@@ -25,6 +25,7 @@ module.exports = {
       'grey-3'      : '#2b2b2b',
       'grey-4'      : '#333333',
       'black'       : '#222222',
+      'pink': '#d50000',
     },
   },
   plugins: [
