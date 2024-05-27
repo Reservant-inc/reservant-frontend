@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
 import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
-import RestaurantListSection from "./restaurants/restaurants/RestaurantListSection";
+import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
@@ -20,7 +20,7 @@ const RestaurantManager = () => {
   };
 
   return (
-    <div className="flex h-[94%] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
+    <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
       <div className="z-[0] flex w-full">
         <div className="flex h-full w-[16%] flex-col gap-2 bg-white shadow-md dark:bg-black">
           <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName} setActiveRestaurantId={setActiveRestaurantId}/>
@@ -36,7 +36,7 @@ const RestaurantManager = () => {
               <img className="h-14 w-14 rounded-full" src="https://l-ldesign.com.au/2016/wp-content/uploads/2020/01/profile-pic-katie-square.jpg"/>
             </div>
           </div>
-          <div className="h-[calc(90%-1.5rem)] w-full bg-white rounded-lg shadow-md">
+          <div className="h-[calc(90%-1.5rem)] w-full rounded-lg">
           {
             {
               0: <RestaurantDashboardSection />,

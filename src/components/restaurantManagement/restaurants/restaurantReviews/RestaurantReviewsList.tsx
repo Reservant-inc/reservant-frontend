@@ -76,16 +76,20 @@ const RestaurantReviewsList = () => {
         )
       : handleSort(reviews);
 
+    const reviewsPreview = () => {
+      return filteredAndSortedReviews.slice(0, 2)
+    }  
+
   return (
-    <div className="flex w-[422px] flex-col dark:text-grey-1">
-      <RestaurantReviewsFilters
+    <div className="h-full w-full flex flex-col dark:text-grey-1">
+      {/* <RestaurantReviewsFilters
         sort={sort}
         setSort={setSort}
         filterText={filterText}
         setFilterText={setFilterText}
-      />
+      /> */}
       {filteredAndSortedReviews.length > 0 ? (
-        filteredAndSortedReviews.map((review) => (
+        reviewsPreview().map((review) => (
           <RestaurantReview key={review.id} {...review} />
         ))
       ) : (

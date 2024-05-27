@@ -27,7 +27,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
       };
 
     return(
-        <div className="h-full w-full">
+        <div className="h-full w-full bg-white rounded-lg">
             <div className="h-[10%] w-full z-1 shadow-md flex justify-between items-center px-3">
                 <button
                     id="RestaurantListAddRestaurantButton"

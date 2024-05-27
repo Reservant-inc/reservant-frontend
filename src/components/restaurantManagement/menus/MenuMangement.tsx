@@ -284,7 +284,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   ];
 
   return (
-    <div ref={popupRef} className="h-full w-full flex-col  space-y-2 p-2">
+    <div ref={popupRef} className="h-full w-full bg-white rounded-lg shadow-md flex-col  space-y-2 p-2">
       <div className="flex items-center justify-center">
         <button
           id="MenuManagementAddCategoryButton" //do czego to w sumie jest...?

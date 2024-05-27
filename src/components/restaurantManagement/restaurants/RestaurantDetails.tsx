@@ -6,13 +6,13 @@ import {
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
+import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
   const [t] = useTranslation("global");
-  const [page, setActivePage] = useState<number>(0);
 
   useEffect(() => {
     if (activeRestaurantId != null) {
@@ -44,8 +44,24 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div>
-      
+    <div className="w-full h-full flex flex-col gap-4">
+      <div className="w-full h-[50%] bg-white rounded-lg shadow-md">
+
+      </div>
+      <div className="w-full h-[50%] flex gap-4">
+        <div className="h-full w-[50%] bg-white rounded-lg shadow-md">
+
+        </div>
+        <div className="h-full w-[50%] bg-white rounded-lg shadow-md p-2">
+          <h1 className="h-[2rem] w-full">Customers opinions</h1>
+          <div className="h-[calc(100%-4rem)]">
+            <RestaurantReviewsList/>
+          </div>
+          <div className="h-[2rem] w-full">
+
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
