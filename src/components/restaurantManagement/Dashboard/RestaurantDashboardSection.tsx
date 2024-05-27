@@ -7,5 +7,5 @@ const RestaurantDashboardSection = () => {
     </div>
   )
 };
-
+ 
 export default RestaurantDashboardSection;
