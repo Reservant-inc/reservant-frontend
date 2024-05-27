@@ -288,14 +288,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       <div className="flex items-center justify-center">
         <button
           id="MenuManagementAddCategoryButton" //do czego to w sumie jest...?
-          className="mr-1 h-8 w-8 rounded-lg bg-primary-2 p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
+          className="mr-1 h-8 w-8 rounded-lg bg-primary p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
           onClick={() => setIsCategoryPopupOpen(true)}
         >
           <AddIcon />
         </button>
         <button
           id="MenuManagementEditCategoryButton"
-          className="mr-1 h-8 w-8 rounded-lg bg-primary-2 p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
+          className="mr-1 h-8 w-8 rounded-lg bg-primary p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
           onClick={handleEditCategory}
           disabled={selectedCategoryIndex === null}
         >
@@ -356,7 +356,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       <div>
         <button
           id="MenuManagementAddButton" //to też nie wiem do czego w zasadzie
-          className="mr-1 h-8 w-8 rounded-lg bg-primary-2 p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
+          className="mr-1 h-8 w-8 rounded-lg bg-primary p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
           onClick={() => {
             setIsMenuItemByCategoryPopupOpen(true);
           }}

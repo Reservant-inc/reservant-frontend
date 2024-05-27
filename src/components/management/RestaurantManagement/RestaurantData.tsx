@@ -11,7 +11,7 @@ const RestaurantData: React.FC<RestaurantDataProps> = ({ restaurant }) => {
           alt="heh"
           className="h-16 w-16 rounded-full bg-grey-1 shadow-lg"
         />
-        <h1 className="font-mont-md text-lg text-primary-2 dark:text-secondary">
+        <h1 className="font-mont-md text-lg text-primary dark:text-secondary">
           {restaurant.name}
         </h1>
         <EditSharpIcon

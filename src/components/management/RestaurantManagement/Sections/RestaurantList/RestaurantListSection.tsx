@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import MyGroups from "./MyGroups";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RestaurantRegister from "../../../../register/restaurantRegister/RestaurantRegister";
+import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
 const RestaurantListSection: React.FC = () => {
     const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
@@ -27,17 +28,18 @@ const RestaurantListSection: React.FC = () => {
 
     return(
         <div className="h-full w-full">
-            <div className="h-[10%] w-full z-1 shadow-md flex items-center px-3">
+            <div className="h-[10%] w-full z-1 shadow-md flex justify-between items-center px-3">
                 <button
                     id="RestaurantListAddRestaurantButton"
                     onClick={() => setIsModalOpen(true)}
-                    className="h-[60%] w-[11%] rounded-lg text-primary-2 font-bold justify-center items-center flex gap-2 hover:bg-grey-1"
+                    className="h-[60%] w-40 rounded-lg text-primary font-bold justify-center items-center flex  gap-2 hover:bg-grey-1"
                 >
                     <AddIcon />
                     Add restaurant
                 </button>
-                <div>
-                    <input type="text" value={filter} onChange={(e)=>{setFilter(e.target.value)}} />
+                <div className="flex gap-2 items-center">
+                    <SearchSharpIcon className="text-primary"/>
+                    <input className="rounded-full border-1 border-grey-1 ring-0 focus:bg-grey-0 w-40 h-10" type="text" value={filter} onChange={(e)=>{setFilter(e.target.value)}} /> 
                 </div>
             </div>
             <div className="h-[90%] w-full">

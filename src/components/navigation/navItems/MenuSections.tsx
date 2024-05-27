@@ -20,7 +20,7 @@ const Sections: React.FC<SectionProps> = () => {
           className={
             "relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl fill-grey-2" +
             (isClickedHome
-              ? " hover:bg-transpartent fill-primary-2 dark:fill-secondary dark:hover:bg-none"
+              ? " hover:bg-transpartent fill-primary dark:fill-secondary dark:hover:bg-none"
               : " hover:bg-grey-1 dark:hover:bg-grey-4")
           }
           onClick={() => navigate("/home")}
@@ -46,7 +46,7 @@ const Sections: React.FC<SectionProps> = () => {
           </svg>
         </button>
         {isClickedHome && (
-          <span className="absolute bottom-0 h-[3px] w-full scale-y-100 transform bg-primary-2 transition dark:bg-secondary" />
+          <span className="absolute bottom-0 h-[3px] w-full scale-y-100 transform bg-primary transition dark:bg-secondary" />
         )}
       </div>
       <div className="relative h-14">
@@ -55,7 +55,7 @@ const Sections: React.FC<SectionProps> = () => {
           className={
             "relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl fill-grey-2" +
             (isClickedRestaurants
-              ? " hover:bg-transpartent fill-primary-2 dark:fill-secondary dark:hover:bg-none"
+              ? " hover:bg-transpartent fill-primary dark:fill-secondary dark:hover:bg-none"
               : " hover:bg-grey-1 dark:hover:bg-grey-4")
           }
           onClick={() =>
@@ -85,7 +85,7 @@ const Sections: React.FC<SectionProps> = () => {
           </svg>
         </button>
         {isClickedRestaurants && (
-          <span className="absolute bottom-0 h-[3px] w-full scale-y-100 transform bg-primary-2 transition dark:bg-secondary" />
+          <span className="absolute bottom-0 h-[3px] w-full scale-y-100 transform bg-primary transition dark:bg-secondary" />
         )}
       </div>
     </div>

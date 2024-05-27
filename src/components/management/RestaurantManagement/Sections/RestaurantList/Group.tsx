@@ -34,11 +34,8 @@ const Group: React.FC<GroupProps> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
               <div className="flex w-full p-2 gap-4">
                 {restaurants.map((restaurant) => (
-                  <button className="h-[12rem] w-[9rem] z-1 shadow-md cursor-pointer flex flex-col rounded-lg p-2 transform hover:scale-105 transition">
-                    <img className="h-3/4 w-full rounded-lg" src={getImage(restaurant.logo)}/>
-                    <div className="h-1/4 w-full flex items-center justify-center text-md">
-                      <h1>{restaurant.name}</h1>
-                    </div>
+                  <button className="h-12 w-48 shadow-md cursor-pointer flex items-center justify-center rounded-lg p-2 gap-4 transform hover:scale-105 transition border border-grey-1">
+                    <h1 className="text-md">{restaurant.name}</h1>
                   </button>
                 ))}
               </div>

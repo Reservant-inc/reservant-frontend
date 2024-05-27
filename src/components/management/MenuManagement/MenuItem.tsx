@@ -26,14 +26,14 @@ const MenuItem: React.FC<MenuItemProps> = ({
           <div>
             <button
               id="MenuItemEditButton"
-              className="mr-1 h-8 w-8 rounded-lg bg-primary-2 p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
+              className="mr-1 h-8 w-8 rounded-lg bg-primary p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
               onClick={onEdit}
             >
               <EditIcon />
             </button>
             <button
               id="MenuItemDeleteButton"
-              className="mr-1 h-8 w-8 rounded-lg bg-primary-2 p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
+              className="mr-1 h-8 w-8 rounded-lg bg-primary p-1 dark:bg-secondary-2 dark:text-black dark:hover:bg-secondary"
               onClick={onDelete}
             >
               <DeleteIcon />

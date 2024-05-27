@@ -63,27 +63,27 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         <div className="flex h-[5%] w-full gap-2">
           <button
             id="RestaurantDetailsFirstActivePageButton"
-            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary hover:text-white"
             onClick={() => setActivePage(0)}
           >
             Employee management
           </button>
           <button
             id="RestaurantDetailsSecondActivePageButton"
-            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary hover:text-white"
             onClick={() => setActivePage(1)}
           >
             Menu management
           </button>
           <button
             id="RestaurantDetailsStatisticsButton"
-            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary hover:text-white"
           >
             Statistics
           </button>
           <button
             id="RestaurantDetailsShipmentButton"
-            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary hover:text-white"
           >
             Shipment management
           </button>
