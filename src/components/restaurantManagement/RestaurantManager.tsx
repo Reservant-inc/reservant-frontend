@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
+import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurants/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import MenuManagement from "./menus/MenuMangement";
