@@ -1,23 +1,29 @@
 import React, { useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
-import RestaurantListSection from "./RestaurantsManagement/restaurants/RestaurantListSection";
-import EmployeeManagement from "./EmployeeManagement/EmployeeManagement";
-import MenuManagement from "./MenuManagement/MenuMangement";
+import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
+import RestaurantListSection from "./restaurants/restaurants/RestaurantListSection";
+import EmployeeManagement from "./employees/EmployeeManagement";
+import MenuManagement from "./menus/MenuMangement";
+import RestaurantDetails from "./restaurants/RestaurantDetails";
 
 const RestaurantManager = () => {
+  const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
   const [activePage, setActivePage] = useState<number>(0)
 
   const user = JSON.parse(Cookies.get("userInfo") as string)
 
   const [activeSectionName, setActiveSectionName] = useState<string>(`Hello, ${user.firstName}`)
 
+  const handleChangeActiveRestaurant = (restaurantId: number) => {
+    setActiveRestaurantId(restaurantId);
+  };
+
   return (
     <div className="flex h-[94%] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
       <div className="z-[0] flex w-full">
         <div className="flex h-full w-[16%] flex-col gap-2 bg-white shadow-md dark:bg-black">
-          <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName}/>
+          <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName} setActiveRestaurantId={setActiveRestaurantId}/>
         </div>
         <div className="flex h-full w-[84%] flex-col gap-6 p-6">
           <div className="h-[10%] w-full flex justify-between items-center">
@@ -34,9 +40,9 @@ const RestaurantManager = () => {
           {
             {
               0: <RestaurantDashboardSection />,
-              1: <RestaurantListSection />,
+              1: activeRestaurantId === null ? <RestaurantListSection handleChangeActiveRestaurant={handleChangeActiveRestaurant} setActiveSectionName={setActiveSectionName}/> : <RestaurantDetails activeRestaurantId={activeRestaurantId} />,
               2: <EmployeeManagement />,
-              3: <MenuManagement activeRestaurantId={1} />
+              3: <MenuManagement activeRestaurantId={1}/>
             }[activePage]
           }
           </div>

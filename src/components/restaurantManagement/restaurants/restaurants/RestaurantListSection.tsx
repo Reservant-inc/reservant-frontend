@@ -5,14 +5,14 @@ import AddIcon from "@mui/icons-material/Add";
 import RestaurantRegister from "../../../register/restaurantRegister/RestaurantRegister";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
-const RestaurantListSection: React.FC = () => {
-    const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
+interface RestaurantListSectionProps {
+    handleChangeActiveRestaurant: (restaurantGroupId: number) => void
+    setActiveSectionName: (sectionName: string) => void
+}
+
+const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant, setActiveSectionName }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [filter, setFilter] = useState<string>("")
-
-      const handleChangeActiveRestaurant = (restaurantId: number) => {
-        setActiveRestaurantId(restaurantId);
-      };
 
       const style = {
         position: 'absolute' as 'absolute',
@@ -43,7 +43,7 @@ const RestaurantListSection: React.FC = () => {
                 </div>
             </div>
             <div className="h-[90%] w-full">
-                <MyGroups filter={filter} activeRestaurantId={activeRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
+                <MyGroups filter={filter} handleChangeActiveRestaurant={handleChangeActiveRestaurant} setActiveSectionName={setActiveSectionName}/>
             </div>
             <Modal
                 open={isModalOpen}

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
-import MenuManagement from "../MenuManagement/MenuMangement";
 import { RestaurantDetailsProps } from "../../../services/interfaces";
 import {
   RestaurantDataType,
@@ -8,8 +6,6 @@ import {
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
-import RestaurantData from "./RestaurantData";
-import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,

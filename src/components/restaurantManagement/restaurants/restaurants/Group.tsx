@@ -5,14 +5,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { GroupProps } from "../../../../../services/interfaces";
+import { GroupProps } from "../../../../services/interfaces";
 import { Button } from "@mui/material";
 
 const Group: React.FC<GroupProps> = ({
-  restaurantGroupId,
   name,
   restaurants,
-  filter
+  filter,
+  handleChangeActiveRestaurant,
+  setActiveSectionName
 }) => {
   const [t] = useTranslation("global");
 
@@ -21,6 +22,11 @@ const Group: React.FC<GroupProps> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const handleSubmit = (id: number, name: string) => {
+    setActiveSectionName(name)
+    handleChangeActiveRestaurant(id)  
+  }
 
   useEffect(()=>{setOpen(filter!=="")},[filter])
 
@@ -33,7 +39,7 @@ const Group: React.FC<GroupProps> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
               <div className="flex w-full px-2 pb-2 gap-4">
                 {restaurants.map((restaurant) => (
-                  <Button className="border-2 border-grey-1 text-black hover:bg-grey-0 w-[10rem] h-10" variant="outlined">{restaurant.name}</Button>
+                  <Button className="border-2 border-grey-1 text-black hover:bg-grey-0 w-[10rem] h-10" variant="outlined" onClick={() => handleSubmit(restaurant.restaurantId, restaurant.name)}>{restaurant.name}</Button>
                 ))}
               </div>
       </Collapse>

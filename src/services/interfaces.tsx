@@ -24,8 +24,6 @@ export interface OutsideClickHandlerProps {
 
 export interface RestaurantDetailsProps {
   activeRestaurantId: number | null;
-  editable: boolean;
-  setEditable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface RestaurantDataProps {
@@ -34,17 +32,16 @@ export interface RestaurantDataProps {
 
 export interface MyGroupsProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
-  activeRestaurantId: number | null;
+  setActiveSectionName: (sectionName: string) => void
   filter: string;
 }
 
 export interface GroupProps {
-  restaurantGroupId: number;
   name: string;
   filter: string,
   restaurants: RestaurantType[];
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
-  activeRestaurantId: number | null;
+  setActiveSectionName: (sectionName: string) => void
 }
 
 export interface RegisterStep1Props {
