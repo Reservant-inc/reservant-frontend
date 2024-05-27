@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import { userInfo } from "os";
-import RestaurantDashboardSection from "./Sections/RestaurantDashboardSection";
-import RestaurantListSection from "./Sections/RestaurantList/RestaurantListSection";
-import EmployeeManagement from "../EmployeeManagement/EmployeeManagement";
-import MenuManagement from "../MenuManagement/MenuMangement";
+import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
+import RestaurantListSection from "./RestaurantsManagement/restaurants/RestaurantListSection";
+import EmployeeManagement from "./EmployeeManagement/EmployeeManagement";
+import MenuManagement from "./MenuManagement/MenuMangement";
 
 const RestaurantManager = () => {
-  const [editable, setEditable] = useState<boolean>(false);
   const [activePage, setActivePage] = useState<number>(0)
 
   const user = JSON.parse(Cookies.get("userInfo") as string)

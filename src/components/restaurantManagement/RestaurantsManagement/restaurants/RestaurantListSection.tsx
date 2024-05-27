@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MyGroups from "./MyGroups";
 import { Box, Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import RestaurantRegister from "../../../../register/restaurantRegister/RestaurantRegister";
+import RestaurantRegister from "../../../register/restaurantRegister/RestaurantRegister";
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 
 const RestaurantListSection: React.FC = () => {
