@@ -8,8 +8,9 @@ module.exports = {
   theme: {
     fontFamily: {
       'roboto': ['Roboto'],
+      'mont-l': ['Montserrat-l'],
       'mont-md': ['Montserrat-md'],
-      'mont-l': ['Montserrat-l']
+      'mont-bd': ['Montserrat-bold'],
     },
     extend: {
     },

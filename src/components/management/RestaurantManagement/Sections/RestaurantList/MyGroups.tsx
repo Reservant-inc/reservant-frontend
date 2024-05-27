@@ -29,21 +29,15 @@ const MyGroups: React.FC<MyGroupsProps> = ({
           
           const response2 = await fetchGET(`/my-restaurant-groups/${group.restaurantGroupId}`);
       
-          // console.log(response2)
-
           response2.restaurants = response2.restaurants.filter((restaurant: RestaurantType)=>{   
             return (response2.name.toLowerCase().includes(filter.toLowerCase())||restaurant.name.toLowerCase().includes(filter.toLowerCase()))
           })
 
-          // console.log(response2)
           if(response2.restaurants.length)
             tmp.push(response2)
         }
 
         setGroups(tmp);
-        // console.log(tmp);
-
-
 
       } catch (error) {
         console.error("Error fetching groups: ", error);
@@ -52,9 +46,6 @@ const MyGroups: React.FC<MyGroupsProps> = ({
 
     fetchData();
   }, [filter]);
-
-  
-
 
   return (
       <div className="h-full pl-1 overflow-y-scroll scroll">

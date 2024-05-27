@@ -5,9 +5,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { fetchGET, getImage } from "../../../../../services/APIconn";
 import { GroupProps } from "../../../../../services/interfaces";
-import { RestaurantType } from "../../../../../services/types";
+import { Button } from "@mui/material";
 
 const Group: React.FC<GroupProps> = ({
   restaurantGroupId,
@@ -32,11 +31,9 @@ const Group: React.FC<GroupProps> = ({
         {open ?  <ExpandMore /> : <ExpandLess />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-              <div className="flex w-full p-2 gap-4">
+              <div className="flex w-full px-2 pb-2 gap-4">
                 {restaurants.map((restaurant) => (
-                  <button className="h-12 w-48 shadow-md cursor-pointer flex items-center justify-center rounded-lg p-2 gap-4 transform hover:scale-105 transition border border-grey-1">
-                    <h1 className="text-md">{restaurant.name}</h1>
-                  </button>
+                  <Button className="border-2 border-grey-1 text-black hover:bg-grey-0 w-[10rem] h-10" variant="outlined">{restaurant.name}</Button>
                 ))}
               </div>
       </Collapse>
