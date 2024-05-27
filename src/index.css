@@ -19,7 +19,7 @@ body {
   flex-direction: column; 
   /* padding-top: 8px; */
   /* padding-bottom: 8px; */
-  /* border-radius: 0.25rem;  */
+  border-radius: 0.5rem; 
   width:300px;
   color: #000000; 
   background-color: #ffffff; 

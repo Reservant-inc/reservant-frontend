@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "dotenv/config";
 import { useTranslation } from "react-i18next";
 import Popup from "../../../../reusableComponents/Popup";
-import { GroupType } from "../../../../../services/types";
+import { GroupType, RestaurantType } from "../../../../../services/types";
 import { MyGroupsProps } from "../../../../../services/interfaces";
 import { fetchGET } from "../../../../../services/APIconn";
 import { List, ListSubheader } from "@mui/material";
@@ -11,6 +11,7 @@ import Group from "./Group";
 const MyGroups: React.FC<MyGroupsProps> = ({
   handleChangeActiveRestaurant,
   activeRestaurantId,
+  filter
 }) => {
   const [t] = useTranslation("global");
 
@@ -20,14 +21,40 @@ const MyGroups: React.FC<MyGroupsProps> = ({
     const fetchData = async () => {
       try {
         const response = await fetchGET("/my-restaurant-groups");
-        setGroups(response);
+        const tmp: GroupType[] = [];
+      
+
+        for (const group of response) {
+          
+          
+          const response2 = await fetchGET(`/my-restaurant-groups/${group.restaurantGroupId}`);
+      
+          // console.log(response2)
+
+          response2.restaurants = response2.restaurants.filter((restaurant: RestaurantType)=>{   
+            return (response2.name.toLowerCase().includes(filter.toLowerCase())||restaurant.name.toLowerCase().includes(filter.toLowerCase()))
+          })
+
+          // console.log(response2)
+          if(response2.restaurants.length)
+            tmp.push(response2)
+        }
+
+        setGroups(tmp);
+        // console.log(tmp);
+
+
+
       } catch (error) {
         console.error("Error fetching groups: ", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [filter]);
+
+  
+
 
   return (
       <div className="h-full pl-1 overflow-y-scroll scroll">
@@ -38,6 +65,7 @@ const MyGroups: React.FC<MyGroupsProps> = ({
         >
           {groups.map((group) => (
             <Group
+              filter={filter}
               key={group.restaurantGroupId}
               {...group}
               handleChangeActiveRestaurant={handleChangeActiveRestaurant}

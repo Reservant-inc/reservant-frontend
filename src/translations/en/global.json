@@ -157,10 +157,16 @@
         }
     },
     "tools": {
-        "profile":"Profile",
-        "settings":"Settings",
-        "language":"Language",
-        "mode":"Dark mode",
-        "signout":"Sign out"
+        "main":{
+
+            "profile":"Profile",
+            "settings":"Settings",
+            "language":"Language",
+            "mode":"Dark mode",
+            "signout":"Sign out"
+        },
+        "settings":{
+            "setting":"SettingFiller"
+        }
     }
 }

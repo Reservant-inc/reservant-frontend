@@ -33,7 +33,7 @@ export type RestaurantDetailsType = {
 export type GroupType = {
   restaurantGroupId: number;
   name: string;
-  restaurantCount: number;
+  restaurants: RestaurantType[];
 };
 
 export type RestaurantType = {
