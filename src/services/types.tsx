@@ -31,17 +31,18 @@ export type RestaurantDetailsType = {
 };
 
 export type GroupType = {
-  id: number;
+  restaurantGroupId: number;
   name: string;
-  restaurantCount: number;
+  restaurants: RestaurantType[];
 };
 
 export type RestaurantType = {
-  id: number;
+  restaurantId: number;
   name: string;
   restaurantType: LocalType;
   address: string;
   city: string;
+  logo: string;
   groupId: 0;
 };
 
@@ -59,18 +60,18 @@ export type RestaurantDataType = {
   tags: string[];
   provideDelivery: boolean;
   logo: File | null | string;
-  photos: File[] | null | string [];
+  photos: File[] | null | string[];
   description: string;
   groupId: number | null;
 };
 
 export type EmployeeType = {
-  id: number,
-  empID: string,
-  login: string,
-  firstName: string,
-  lastName: string,
-  phoneNumber: string,
-  role: string,
-  restaurant: string
-}
+  id: number;
+  empID: string;
+  login: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  role: string;
+  restaurant: string;
+};

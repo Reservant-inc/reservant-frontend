@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
-import { LoginResponseType, RestaurantDataType } from "./types";
+import { LoginResponseType, RestaurantDataType, RestaurantType } from "./types";
 
 export interface SectionProps {}
 
 export interface AuthContextValue {
   isAuthorized: boolean;
   login: (token: LoginResponseType) => void;
-  logout: () => void;
+  setIsAuthorized: () => {};
 }
 
 export interface PopupProps {
@@ -33,15 +33,17 @@ export interface RestaurantDataProps {
 }
 
 export interface MyGroupsProps {
-  handleChangeActiveRestaurant: (id: number) => void;
+  handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
+  filter: string;
 }
 
 export interface GroupProps {
-  id: number;
+  restaurantGroupId: number;
   name: string;
-  restaurantCount: number;
-  handleChangeActiveRestaurant: (id: number) => void;
+  filter: string,
+  restaurants: RestaurantType[];
+  handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
 }
 
@@ -83,3 +85,4 @@ export interface MenuItem {
   alcoholPercentage?: number;
   photo?: string;
 }
+
