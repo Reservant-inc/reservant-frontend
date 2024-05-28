@@ -66,3 +66,20 @@ export interface ManagementSectionProps {
   component: ReactNode;
 }
 
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  alternateName?: string;
+  alcoholPercentage?: number;
+  photo?: string;
+}
+
