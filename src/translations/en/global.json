@@ -1,4 +1,9 @@
 {
+    "general": {
+        "search": "Search...",
+        "cancel": "Cancel",
+        "save": "Save"
+    },
     "landing-page": {
         "loginButton": "Sign in",
         "registerButton": "Sign up",
@@ -18,8 +23,7 @@
         "isBackdoorEmployee": "Backdoor employee",
         "isHallEmployee": "Hall employee" ,
         "addEmployee": "Add emploee"
-    },
-    
+    },    
     "restaurant-register": {
         "name": "Name",
         "address": "Address",
@@ -71,8 +75,7 @@
                 "required": "Last name is required"
             },
             "login": {
-                "required": "Login is required",
-                "taken": "Login is already taken"
+                "required": "Login is required"
             },
             "email": {
                 "matches": "Invalid e-mail",
@@ -147,13 +150,19 @@
             "header": "My Groups"
         },
         "menu": {
-            "addNewCategory": "Add new category",
-            "editCategory": "Edit category name",
-            "addNewMenuItem": "Add new menu position",
+            "newMenu": "Add new menu",
+            "editedMenu": "Edit menu",
+            "name": "Name",
+            "alternateName": "Alternate name",
+            "type": "Type",
+            "dateFrom": "Date from",
+            "dateUntil": "Date until",
+            "newMenuItem": "Add new menu item",
+            "editedMenuItem": "Edit menu position",
             "menuItemName": "Name",
             "menuItemPrice": "Price",
-            "menuItemAlcoholPercentage": "Alcohol percentage",
-            "editMenuItem": "Edit menu position"
+            "menuItemAlcoholPercentage": "Alcohol percentage"
+            
         }
     },
     "tools": {

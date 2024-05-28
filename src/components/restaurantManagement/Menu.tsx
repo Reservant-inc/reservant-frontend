@@ -8,15 +8,16 @@ import MovingSharpIcon from '@mui/icons-material/MovingSharp';
 import ScheduleSharpIcon from '@mui/icons-material/ScheduleSharp';
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import Cookies from "js-cookie";
-import useWindowDimensions from "../../../hooks/useWindowResize";
+import useWindowDimensions from "../../hooks/useWindowResize";
 
 interface MenuInterface {
     setActivePage: Function
     activePage: Number
     setActiveSectionName: Function
+    setActiveRestaurantId: Function
 }
 
-const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName }) => {
+const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, setActiveRestaurantId }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(activePage);
 
     const handleListItemClick = (
@@ -24,6 +25,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
         index: number,
         name: string
     ) => {
+        setActiveRestaurantId(null)
         setActiveSectionName(name)
         setActivePage(index)
         setSelectedIndex(index);

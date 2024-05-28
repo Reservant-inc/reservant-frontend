@@ -254,7 +254,7 @@ export default function EmployeeManagement() {
   ];
 
   return (
-    <div className="h-full">
+    <div className="h-full w-full bg-white rounded-lg shadow-md">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -274,6 +274,7 @@ export default function EmployeeManagement() {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
+        className="border-0"
       />
       <Modal
         open={isModalOpen}

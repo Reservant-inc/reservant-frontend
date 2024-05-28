@@ -83,6 +83,12 @@ body {
 }
 
 @font-face {
+  font-family: 'Montserrat-bold';
+  font-weight: normal;
+  src: url(./assets/fonts/Montserrat-Bold.ttf) 
+}
+
+@font-face {
   font-family: 'Montserrat-md';
   font-weight: normal;
   src: url(./assets/fonts/Montserrat-Medium.ttf) 
