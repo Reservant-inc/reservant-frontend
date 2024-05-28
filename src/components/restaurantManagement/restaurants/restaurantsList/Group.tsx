@@ -5,15 +5,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { fetchGET, getImage } from "../../../../../services/APIconn";
-import { GroupProps } from "../../../../../services/interfaces";
-import { RestaurantType } from "../../../../../services/types";
+import { GroupProps } from "../../../../services/interfaces";
+import { Button } from "@mui/material";
 
 const Group: React.FC<GroupProps> = ({
-  restaurantGroupId,
   name,
   restaurants,
-  filter
+  filter,
+  handleChangeActiveRestaurant,
+  setActiveSectionName
 }) => {
   const [t] = useTranslation("global");
 
@@ -22,6 +22,11 @@ const Group: React.FC<GroupProps> = ({
   const handleClick = () => {
     setOpen(!open);
   };
+
+  const handleSubmit = (id: number, name: string) => {
+    setActiveSectionName(name)
+    handleChangeActiveRestaurant(id)  
+  }
 
   useEffect(()=>{setOpen(filter!=="")},[filter])
 
@@ -32,14 +37,9 @@ const Group: React.FC<GroupProps> = ({
         {open ?  <ExpandMore /> : <ExpandLess />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-              <div className="flex w-full p-2 gap-4">
+              <div className="flex w-full px-2 pb-2 gap-4">
                 {restaurants.map((restaurant) => (
-                  <button className="h-[12rem] w-[9rem] z-1 shadow-md cursor-pointer flex flex-col rounded-lg p-2 transform hover:scale-105 transition">
-                    <img className="h-3/4 w-full rounded-lg" src={getImage(restaurant.logo)}/>
-                    <div className="h-1/4 w-full flex items-center justify-center text-md">
-                      <h1>{restaurant.name}</h1>
-                    </div>
-                  </button>
+                  <Button className="border-2 border-grey-1 text-black hover:bg-grey-0 w-[10rem] h-10" variant="outlined" onClick={() => handleSubmit(restaurant.restaurantId, restaurant.name)}>{restaurant.name}</Button>
                 ))}
               </div>
       </Collapse>

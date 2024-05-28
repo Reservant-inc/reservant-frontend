@@ -4,8 +4,8 @@ import RestaurantRegister from "../register/restaurantRegister/RestaurantRegiste
 import React from "react";
 import Register from "../register/UserRegister";
 import HomePage from "../HomePage";
-import RestaurantManager from "../management/RestaurantManagement/RestaurantManager";
 import RestaurantView from "../restaurant/view/RestaurantView";
+import RestaurantManager from "../restaurantManagement/RestaurantManager";
 
 export const nav = [
   { path: "/", element: <LandingPage />, isPrivate: false, roles: [""] },

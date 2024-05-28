@@ -30,7 +30,7 @@ const LanguageChange: React.FC = () => {
           className={
             "h-5" +
             (isPressed
-              ? " fill-primary-2 dark:fill-secondary"
+              ? " fill-primary dark:fill-secondary"
               : " fill-grey-3 dark:fill-grey-2")
           }
           version="1.1"
@@ -59,9 +59,9 @@ const LanguageChange: React.FC = () => {
           <button
             id="LanguageChangeEnglishButton"
             className={
-              "h-5/12 w-[95%] rounded-sm p-1 text-left transition hover:bg-primary-2 hover:text-white dark:hover:bg-secondary dark:hover:text-black" +
+              "h-5/12 w-[95%] rounded-sm p-1 text-left transition hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black" +
               (i18next.language === "en"
-                ? " bg-primary-2 text-white dark:bg-secondary dark:text-black"
+                ? " bg-primary text-white dark:bg-secondary dark:text-black"
                 : "")
             }
             onClick={() => setLanguage("en")}
@@ -71,9 +71,9 @@ const LanguageChange: React.FC = () => {
           <button
             id="LanguageChangePolishButton"
             className={
-              "h-5/12 w-[95%] rounded-sm p-1 text-left transition hover:bg-primary-2 hover:text-white dark:hover:bg-secondary dark:hover:text-black" +
+              "h-5/12 w-[95%] rounded-sm p-1 text-left transition hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black" +
               (i18next.language === "pl"
-                ? " bg-primary-2 text-white dark:bg-secondary dark:text-black"
+                ? " bg-primary text-white dark:bg-secondary dark:text-black"
                 : "")
             }
             onClick={() => setLanguage("pl")}
