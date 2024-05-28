@@ -7,11 +7,27 @@ import {
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
 import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
+import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
+
+
+// const style = {
+//   position: 'absolute' as 'absolute',
+//   top: '50%',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   width: 1200,
+//   height: 800,
+//   bgcolor: '#fefefe',
+//   borderRadius: '0.5rem',
+//   boxShadow: 24,
+//   p: 2,
+// };
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const [t] = useTranslation("global");
 
   useEffect(() => {
@@ -27,6 +43,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       fetchData();
     }
   }, [activeRestaurantId]);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   const defaultInitialValues: Partial<RestaurantDataType> = {
     name: restaurant?.name,
@@ -52,16 +76,29 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         <div className="h-full w-[50%] bg-white rounded-lg shadow-md">
 
         </div>
-        <div className="h-full w-[50%] bg-white rounded-lg shadow-md p-2">
-          <h1 className="h-[2rem] w-full">Customers opinions</h1>
-          <div className="h-[calc(100%-4rem)]">
-            <RestaurantReviewsList/>
+        <div className="h-full w-[50%] bg-white rounded-lg shadow-md flex flex-col justify-between p-4 gap-4">
+          <div className="h-[2rem] flex items-center">
+            <h1 className="text-xl font-mont-md">Customers opinions</h1>
           </div>
-          <div className="h-[2rem] w-full">
-
+          <div className="h-[calc(100%-6rem)]">
+            <RestaurantReviewsList isPreview={true}/>
+          </div>
+          <div className="h-[2rem] flex items-center justify-end">
+            <Button className="text-md font-mont-md text-grey-2 rounded-lg" onClick={handleOpen}>Show all</Button>
           </div>
         </div>
       </div>
+      <Modal
+        open={isOpen}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="flex justify-center items-center"
+      >
+        <Box className="h-[800px] w-[1200px] bg-white p-4 rounded-lg">
+          <RestaurantReviewsList isPreview={false}/>
+        </Box>
+      </Modal>
     </div>
   );
 };

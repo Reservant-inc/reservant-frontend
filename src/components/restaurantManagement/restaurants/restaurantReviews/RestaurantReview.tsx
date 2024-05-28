@@ -43,7 +43,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       : description;
 
   return (
-    <div className="flex h-1/2 flex-col rounded-lg p-1 dark:bg-grey-3 p-2 gap-2">
+    <div className="flex flex-col rounded-lg justify-between p-1 dark:bg-grey-3 gap-2 border-grey-0 h-[10rem]">
       <div className="flex items-center space-x-4 justify-between items-center">
         <div className="flex items-center gap-4">
           <Avatar className="h-8 w-8">A</Avatar>
@@ -61,25 +61,12 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           }
         />
       </div>
-      <div className="flex flex-col items-start space-y-2">
+      <div className="flex flex-col items-start">
         {reducedDescription.replace(/\s/g, "").length > 0 ? (
           <p>{reducedDescription}</p>
         ) : (
           <p className="italic">No description.</p>
         )}
-        <div className="flex w-full justify-end">
-          <Button
-            id="RestaurantReviewMoreButton"
-            onClick={handleOpen}
-            sx={{
-              color: document.documentElement.classList.contains("dark")
-                ? "#64c3a6"
-                : "#a94c79",
-            }}
-          >
-            More...
-          </Button>
-        </div>
         <div className="flex justify-end">
           <Modal
             open={areDetailsOpen}
@@ -137,6 +124,16 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           </Modal>
         </div>
       </div>
+      <div className="flex w-full justify-end">
+        <Button
+          id="RestaurantReviewMoreButton"
+          onClick={handleOpen}
+          className="text-primary rounded-lg"
+        >
+          Respond
+        </Button>
+      </div>
+      <div className="h-[2px] w-full bg-grey-1" />
     </div>
   );
 };

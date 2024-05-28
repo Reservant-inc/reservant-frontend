@@ -20,7 +20,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 800,
-        bgcolor: 'background.paper',
+        bgcolor: '#fefefe',
         borderRadius: '0.5rem',
         boxShadow: 24,
         p: 4,
