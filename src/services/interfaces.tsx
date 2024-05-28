@@ -1,9 +1,7 @@
 import { ReactNode } from "react";
 import { LoginResponseType, RestaurantDataType } from "./types";
 
-export interface SectionProps {
-
-}
+export interface SectionProps {}
 
 export interface AuthContextValue {
   isAuthorized: boolean;
@@ -58,13 +56,30 @@ export interface RegisterStep2Props {
 }
 
 export interface NavBarProps {
-  sections: React.FC,
-  menu: React.FC
+  sections: React.FC;
+  menu: React.FC;
 }
 
 export interface ManagementSectionProps {
-  currentPage: number,
-  desiredPage: number,
-  setActivePage: Function,
-  component: ReactNode
+  currentPage: number;
+  desiredPage: number;
+  setActivePage: Function;
+  component: ReactNode;
+}
+
+export interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  alternateName?: string;
+  alcoholPercentage?: number;
+  photo?: string;
 }

@@ -1,10 +1,13 @@
-import { Box, IconButton, Modal } from "@mui/material";
 import React, { useState } from "react";
+import { Box, IconButton, Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import InfoIcon from "@mui/icons-material/Info";
+import defaultImage from "../../../assets/images/defaulImage.jpeg";
+import { MenuItem as MenuItemType } from "../../../services/interfaces";
 
 interface MenuItemComponentProps {
-  item: any;
+  item: MenuItemType;
+  addToCart: (item: Omit<MenuItemType, "quantity">) => void;
 }
 
 const style = {
@@ -19,7 +22,10 @@ const style = {
   p: 4,
 };
 
-const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item }) => {
+const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
+  item,
+  addToCart,
+}) => {
   const [areDetailsOpen, setAreDetailsOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
@@ -32,10 +38,10 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item }) => {
 
   return (
     <>
-      <div className="my-4 flex justify-between rounded bg-white p-4	">
+      <div className="mx-auto my-4 flex max-w-3xl justify-between rounded bg-white px-6 py-4">
         <div>
-          <p className="font-bold">
-            {item.name}{" "}
+          <p className="flex items-center font-bold">
+            {item.name}
             <IconButton
               onClick={handleOpen}
               sx={{
@@ -43,6 +49,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item }) => {
                 color: "#fefefe",
                 height: 30,
                 width: 30,
+                ml: 2,
               }}
             >
               <InfoIcon />
@@ -55,17 +62,19 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item }) => {
             <p className="italic">Brak opisu.</p>
           )}
         </div>
-        <div className="flex space-x-4">
+        <div className="flex items-center">
           <Box
-            className="rounded"
+            className="mr-4 rounded"
             component="img"
             sx={{
-              height: 80,
+              height: 90,
+              width: 100,
             }}
-            src="https://source.unsplash.com/grilled-fish-cooked-vegetables-and-fork-on-plate-bpPTlXWTOvg"
-            alt=""
+            src={defaultImage}
+            alt="default image"
           />
           <IconButton
+            onClick={() => addToCart(item)}
             sx={{ bgcolor: "#a94c79", color: "#fefefe", height: 30, width: 30 }}
           >
             <AddIcon />
@@ -81,7 +90,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({ item }) => {
         >
           <Box sx={style}>
             <div className="flex items-center justify-start space-x-4">
-              Informacje o składnikach, alergenach(?)
+              Informacje o składnikach
             </div>
           </Box>
         </Modal>

@@ -1,8 +1,15 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import MenuItemComponent from "./MenuItemComponent";
+import { MenuItem } from "../../../services/interfaces";
 
-const RestaurantMenuView = () => {
+interface RestaurantMenuViewProps {
+  addToCart: (item: MenuItem) => void;
+}
+
+const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
+  addToCart,
+}) => {
   const [menus, setMenus] = useState([
     {
       id: 0,
@@ -29,6 +36,15 @@ const RestaurantMenuView = () => {
           alcoholPercentage: 0,
           photo: "string",
           description: "Opis 2",
+        },
+        {
+          id: 2,
+          price: 10,
+          name: "Dish 3",
+          alternateName: "string",
+          alcoholPercentage: 0,
+          photo: "string",
+          description: "Opis 3",
         },
       ],
     },
@@ -71,7 +87,6 @@ const RestaurantMenuView = () => {
 
   return (
     <div className="m-2">
-      <h2 className="mb-3 text-2xl font-semibold">Menu</h2>
       <div className="space-x-2">
         {menus.map((menu) => (
           <Button
@@ -106,7 +121,11 @@ const RestaurantMenuView = () => {
           <div key={menu.id} className="m-4 bg-grey-1 p-5">
             <h3 className="text-xl font-medium">{menu.name}</h3>
             {menu.menuItems.map((item) => (
-              <MenuItemComponent key={item.id} item={item} />
+              <MenuItemComponent
+                key={item.id}
+                item={item}
+                addToCart={addToCart}
+              />
             ))}
           </div>
         ) : null,
