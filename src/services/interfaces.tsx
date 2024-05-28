@@ -41,7 +41,8 @@ export interface MyGroupsProps {
 export interface GroupProps {
   restaurantGroupId: number;
   name: string;
-  restaurantCount: number;
+  filter: string,
+  restaurants: RestaurantType[];
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
   activeRestaurantId: number | null;
 }
