@@ -141,10 +141,17 @@ export default function EmployeeManagement() {
   };
 
   const columns: GridColDef[] = [
-    { field: "empID", headerName: "ID", width: 180, editable: false },
+    {
+      field: "empID", 
+      headerClassName: "dark:bg-black dark:text-grey-1", 
+      headerName: "ID", 
+      width: 180,
+      editable: false,
+    },
     {
       field: "login",
       headerName: "Login",
+      headerClassName: "dark:bg-black dark:text-grey-1",   
       type: "string",
       width: 180,
       align: "left",
@@ -154,6 +161,7 @@ export default function EmployeeManagement() {
     {
       field: "firstName",
       headerName: "Name",
+      headerClassName: "dark:bg-black dark:text-grey-1", 
       type: "string",
       width: 180,
       editable: true,
@@ -161,6 +169,7 @@ export default function EmployeeManagement() {
     {
       field: "lastName",
       headerName: "Surname",
+      headerClassName: "dark:bg-black dark:text-grey-1",
       type: "string",
       width: 180,
       editable: true,
@@ -168,6 +177,7 @@ export default function EmployeeManagement() {
     {
       field: "phoneNumber",
       headerName: "Phone Number",
+      headerClassName: "dark:bg-black dark:text-grey-1",
       type: "string",
       width: 180,
       align: "left",
@@ -177,6 +187,7 @@ export default function EmployeeManagement() {
     {
       field: "role",
       headerName: "Role",
+      headerClassName: "dark:bg-black dark:text-grey-1",
       width: 180,
       editable: true,
       type: "singleSelect",
@@ -185,6 +196,7 @@ export default function EmployeeManagement() {
     {
       field: "restaurant",
       headerName: "Restaurant",
+      headerClassName: "dark:bg-black dark:text-grey-1",
       width: 180,
       editable: true,
       type: "singleSelect",
@@ -194,6 +206,7 @@ export default function EmployeeManagement() {
       field: "actions",
       type: "actions",
       headerName: "Actions",
+      headerClassName: "dark:bg-black dark:text-grey-1",
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
@@ -249,13 +262,14 @@ export default function EmployeeManagement() {
             color="inherit"
           />,
         ];
+        
       },
     },
   ];
 
   return (
-    <div className="h-full">
-      <DataGrid
+    <div className="h-full ">
+      <DataGrid className="dark:text-grey-1 dark:border-grey-4 "
         rows={rows}
         columns={columns}
         editMode="row"
@@ -264,6 +278,7 @@ export default function EmployeeManagement() {
         onRowEditStop={handleRowEditStop}
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
+        
         initialState={{
           pagination: { paginationModel: { pageSize: 5 } },
         }}

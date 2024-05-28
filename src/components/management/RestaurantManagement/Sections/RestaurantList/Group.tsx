@@ -26,7 +26,7 @@ const Group: React.FC<GroupProps> = ({
   useEffect(()=>{setOpen(filter!=="")},[filter])
 
   return (
-    <div className={"text-sm text-black dark:text-white"}>
+    <div className={"text-sm text-black dark:text-grey-1"}>
       <ListItemButton onClick={handleClick}>
         <ListItemText primary={name} />
         {open ?  <ExpandMore /> : <ExpandLess />}
@@ -43,7 +43,7 @@ const Group: React.FC<GroupProps> = ({
                 ))}
               </div>
       </Collapse>
-      <div className="h-[2px] w-full bg-grey-1" />
+      <div className="h-[2px] w-full bg-grey-1 dark:bg-grey-4" />
     </div>
   );
 };
