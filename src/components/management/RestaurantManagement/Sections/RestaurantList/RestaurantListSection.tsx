@@ -31,13 +31,13 @@ const RestaurantListSection: React.FC = () => {
                 <button
                     id="RestaurantListAddRestaurantButton"
                     onClick={() => setIsModalOpen(true)}
-                    className="h-[60%] w-[11%] rounded-lg text-primary-2 font-bold justify-center items-center flex gap-2 hover:bg-grey-1"
+                    className="h-[60%] w-[11%] rounded-lg text-black dark:text-grey-1 dark:hover:bg-grey-4 font-bold justify-center items-center flex gap-2 hover:bg-grey-1"
                 >
                     <AddIcon />
                     Add restaurant
                 </button>
                 <div>
-                    <input type="text" value={filter} onChange={(e)=>{setFilter(e.target.value)}} />
+                    <input className="ml-3 rounded-lg dark:text-grey-1 dark:bg-grey-3 dark:border-grey-4" type="text" value={filter} onChange={(e)=>{setFilter(e.target.value)}} />
                 </div>
             </div>
             <div className="h-[90%] w-full">
