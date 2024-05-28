@@ -168,7 +168,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
                 const menuId = menus[selectedMenuIndex].menuId;
                 const response = await fetchDELETE(`/menus/${menuId}`);
-                console.log(response);
                 setSelectedMenuIndex(null);
             } else {
                 console.error("No menu selected to delete");
@@ -183,7 +182,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     const handleSaveNewMenuItem = async (values: { [key: string]: string }) => {
         try {
-            console.log(values);
+
+            console.log(activeRestaurantId)
+
             const body = JSON.stringify({
                 restaurantId: activeRestaurantId,
                 name: values.name,
@@ -193,7 +194,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                 photofileName: values.photo // Ensure this is set correctly
             });
             const response = await fetchPOST('/menu-items', body);
-            console.log("Response:", response);
             if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
                 const menuItemId = response.menuItemId;
                 const menuId = menus[selectedMenuIndex].menuId;
