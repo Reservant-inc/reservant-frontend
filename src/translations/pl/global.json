@@ -155,5 +155,17 @@
             "menuItemAlcoholPercentage": "Procent alkocholu"
             
         }
+    },
+    "tools": {
+        "main":{
+            "profile":"Profil",
+            "settings":"Ustawienia",
+            "language":"Język",
+            "mode":"Tryb ciemny",
+            "signout":"Wylogowanie"
+        },
+        "settings":{
+            "setting":"SettingFiller"
+        }
     }
 }

@@ -123,7 +123,11 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
                   minRows={3}
                   placeholder="Comment..."
                 />
-                <Button variant="contained" sx={{ bgcolor: "#64c3a6" }} id="RestaurantReviewAddButton">
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: "#64c3a6" }}
+                  id="RestaurantReviewAddButton"
+                >
                   Add
                 </Button>
               </div>

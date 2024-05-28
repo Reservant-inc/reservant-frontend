@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
-import Error from "./reusableComponents/ErrorMessage"
+import Error from "./reusableComponents/ErrorMessage";
 
 const initialValues = {
   login: "",
@@ -46,21 +46,43 @@ const Login: React.FC = () => {
             <div className="form-container">
               <div className="form-control">
                 <label htmlFor="login">Login:</label>
-                <Field type="text" id="login" name="login" className={!(formik.errors.login && formik.touched.login)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field
+                  type="text"
+                  id="login"
+                  name="login"
+                  className={
+                    !(formik.errors.login && formik.touched.login)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
+                />
                 <ErrorMessage name="login">
-                  { msg => <Error msg={msg}/> }
+                  {(msg) => <Error msg={msg} />}
                 </ErrorMessage>
               </div>
 
               <div className="form-control">
                 <label htmlFor="password">{t("auth.password")}:</label>
-                <Field type="password" id="password" name="password" className={!(formik.errors.password && formik.touched.password)?"border-none":"border-solid border-2 border-pink"}/>
+                <Field
+                  type="password"
+                  id="password"
+                  name="password"
+                  className={
+                    !(formik.errors.password && formik.touched.password)
+                      ? "border-none"
+                      : "border-pink border-2 border-solid"
+                  }
+                />
                 <ErrorMessage name="password">
-                  { msg => <Error msg={msg}/> }
+                  {(msg) => <Error msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <button id="LoginLoginButton" type="submit" disabled={!formik.isValid}>
+              <button
+                id="LoginLoginButton"
+                type="submit"
+                disabled={!formik.isValid}
+              >
                 Login
               </button>
             </div>

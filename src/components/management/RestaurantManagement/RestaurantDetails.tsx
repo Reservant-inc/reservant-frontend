@@ -7,11 +7,7 @@ import {
   RestaurantDetailsType,
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { Formik, Form, Field, ErrorMessage, FieldArray } from "formik";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useValidationSchemas } from "../../../hooks/useValidationSchema";
-import Section from "./ManagementSection";
 import RestaurantData from "./RestaurantData";
 import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 
@@ -20,7 +16,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
   const [t] = useTranslation("global");
-  const [page, setActivePage] = useState<number>(0)
+  const [page, setActivePage] = useState<number>(0);
 
   useEffect(() => {
     if (activeRestaurantId != null) {
@@ -31,9 +27,9 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         } catch (error) {
           console.error("Error fetching restaurant: ", error);
         }
-      }
+      };
       fetchData();
-  }
+    }
   }, [activeRestaurantId]);
 
   const defaultInitialValues: Partial<RestaurantDataType> = {
@@ -52,28 +48,50 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="flex w-full h-full flex gap-2">
-      <div className="flex flex-col gap-2 w-[35rem] h-full">
-        <div className="bg-white w-full rounded-md shadow-md h-[30rem]">
-          {
-            restaurant != null && <RestaurantData restaurant={restaurant as RestaurantDetailsType}/>
-          }
+    <div className="flex flex h-full w-full gap-2">
+      <div className="flex h-full w-[35rem] flex-col gap-2">
+        <div className="h-[30rem] w-full rounded-md bg-white shadow-md">
+          {restaurant != null && (
+            <RestaurantData restaurant={restaurant as RestaurantDetailsType} />
+          )}
         </div>
-        <div className="bg-white w-full rounded-md shadow-md h-full">
+        <div className="h-full w-full rounded-md bg-white shadow-md">
           <RestaurantReviewsList />
         </div>
       </div>
-      <div className="flex flex-col gap-2 w-full h-full">
-        <div className="w-full h-[5%] flex gap-2">
-          <button id="RestaurantDetailsFirstActivePageButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white" onClick={() => setActivePage(0)}>Employee management</button>
-          <button id="RestaurantDetailsSecondActivePageButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white" onClick={() => setActivePage(1)}>Menu management</button>
-          <button id="RestaurantDetailsStatisticsButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white">Statistics</button>
-          <button id="RestaurantDetailsShipmentButton" className="p-2 h-full bg-white rounded-full shadom-lg hover:bg-primary-2 hover:text-white">Shipment management</button>
+      <div className="flex h-full w-full flex-col gap-2">
+        <div className="flex h-[5%] w-full gap-2">
+          <button
+            id="RestaurantDetailsFirstActivePageButton"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+            onClick={() => setActivePage(0)}
+          >
+            Employee management
+          </button>
+          <button
+            id="RestaurantDetailsSecondActivePageButton"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+            onClick={() => setActivePage(1)}
+          >
+            Menu management
+          </button>
+          <button
+            id="RestaurantDetailsStatisticsButton"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+          >
+            Statistics
+          </button>
+          <button
+            id="RestaurantDetailsShipmentButton"
+            className="shadom-lg h-full rounded-full bg-white p-2 hover:bg-primary-2 hover:text-white"
+          >
+            Shipment management
+          </button>
         </div>
-        <div className="bg-white shadow-md rounded-md w-full h-full">
-          { 
+        <div className="h-full w-full rounded-md bg-white shadow-md">
+          {
             {
-              1: <MenuManagement activeRestaurantId={activeRestaurantId} />
+              1: <MenuManagement activeRestaurantId={activeRestaurantId} />,
             }[page]
           }
         </div>

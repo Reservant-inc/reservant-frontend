@@ -164,5 +164,18 @@
             "menuItemAlcoholPercentage": "Alcohol percentage"
             
         }
+    },
+    "tools": {
+        "main":{
+
+            "profile":"Profile",
+            "settings":"Settings",
+            "language":"Language",
+            "mode":"Dark mode",
+            "signout":"Sign out"
+        },
+        "settings":{
+            "setting":"SettingFiller"
+        }
     }
 }

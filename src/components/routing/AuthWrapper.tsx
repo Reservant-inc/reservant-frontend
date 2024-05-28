@@ -3,12 +3,15 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { nav } from "./Routing";
 import Cookies from "js-cookie";
 import { LoginResponseType } from "../../services/types";
-import { AuthContextValue } from "../../services/interfaces";
 import NavBar from "../navigation/NavBar";
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+export const AuthContext = createContext({
+  authorized: false,
+  login: (token: LoginResponseType) => {},
+  setAuthorized: (auth: boolean) => {},
+});
 
-export const AuthData = (): AuthContextValue => {
+export const AuthData = () => {
   const authData = useContext(AuthContext);
   if (!authData) {
     throw new Error("useAuthData must be used within an AuthProvider");
@@ -19,12 +22,12 @@ export const AuthData = (): AuthContextValue => {
 export const AuthWrapper = () => {
   const navigate = useNavigate();
 
-  const [isAuthorized, setIsAuthorized] = useState(
+  const [authorized, setAuthorized] = useState(
     !(Cookies.get("token") === undefined),
   );
 
   useEffect(() => {
-    if (isAuthorized) {
+    if (authorized) {
       <Navigate to={"/home"} />;
     }
   });
@@ -43,37 +46,41 @@ export const AuthWrapper = () => {
       { expires: 1 },
     );
 
-    setIsAuthorized(true);
+    setAuthorized(true);
     navigate("/home");
   };
 
   const logout = () => {
     Cookies.remove("token");
-    setIsAuthorized(false);
+    setAuthorized(false);
     navigate("/");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthorized, login, logout }}>
+    <AuthContext.Provider value={{ authorized, login, setAuthorized }}>
       <Routes>
         {nav.map((r, i) => {
           if (r.isPrivate) {
             if (
-              isAuthorized &&
+              authorized &&
               r.roles.some((item) =>
                 JSON.parse(Cookies.get("userInfo") as string).roles.includes(
                   item,
                 ),
               )
             ) {
-              return(
-                  <Route key={i} path={r.path} element={
-                    <div className="w-full h-full flex flex-col">
+              return (
+                <Route
+                  key={i}
+                  path={r.path}
+                  element={
+                    <div className="flex h-full w-full flex-col">
                       <NavBar />
                       {r.element}
                     </div>
-                  } />
-              ) 
+                  }
+                />
+              );
             } else {
               return (
                 <Route
@@ -84,7 +91,7 @@ export const AuthWrapper = () => {
               );
             }
           } else if (!r.isPrivate) {
-            if (isAuthorized) {
+            if (authorized) {
               return (
                 <Route
                   key={i}

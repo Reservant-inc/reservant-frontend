@@ -21,21 +21,21 @@ export const useValidationSchemas = () => {
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
-    login: yup.string().required(t("errors.user-register.login.required")).test('unique login',  t("errors.user-register.login.taken"), (login)=>{
-      
-      return new Promise((resolve, reject) => {
-        fetchGET(`/auth/is-unique-login?login=${login}`)
+    login: yup
+      .string()
+      .required(t("errors.user-register.login.required"))
+      .test("unique login", t("errors.user-register.login.taken"), (login) => {
+        return new Promise((resolve, reject) => {
+          fetchGET(`/auth/is-unique-login?login=${login}`)
             .then((res) => {
-                if(res)
-                  resolve(true)
-                else
-                  resolve(false)
+              if (res) resolve(true);
+              else resolve(false);
             })
             .catch((error) => {
-                console.log(error)
-            })
-      })
-    }),
+              console.log(error);
+            });
+        });
+      }),
 
     email: yup
       .string()
@@ -84,20 +84,21 @@ export const useValidationSchemas = () => {
       .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
-    login: yup.string().required(t("errors.user-register.login.required")).test('unique login', t("errors.user-register.login.taken"), (login)=>{
-      return new Promise((resolve, reject) => {
-        fetchGET(`/auth/is-unique-login?login=${login}`)
+    login: yup
+      .string()
+      .required(t("errors.user-register.login.required"))
+      .test("unique login", t("errors.user-register.login.taken"), (login) => {
+        return new Promise((resolve, reject) => {
+          fetchGET(`/auth/is-unique-login?login=${login}`)
             .then((res) => {
-                if(res)
-                  resolve(true)
-                else
-                  resolve(false)
+              if (res) resolve(true);
+              else resolve(false);
             })
             .catch((error) => {
-                console.log(error)
-            })
-      })
-    }),
+              console.log(error);
+            });
+        });
+      }),
 
     phoneNumber: yup
       .string()
@@ -124,24 +125,33 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.confirmPassword.required")),
   });
 
-  const RestaurantAddEmployeeSchema = yup.object({
-    isBackdoorEmployee: yup.boolean(),
-    isHallEmployee: yup.boolean() 
-  }).test(
-    "at-least-one-checkbox",
-    t("errors.employee-register.employeeRole.required"), 
-    (obj) => {
-      if (obj.isBackdoorEmployee || obj.isHallEmployee) {
-        return true;
-      }
-      
-      return new yup.ValidationError([
-          new yup.ValidationError(t("errors.add-employee.employeeRole.required"),null,"isBackdoorEmployee"),
-          new yup.ValidationError(t("errors.add-employee.employeeRole.required"),null,"isHallEmployee"),
-        ])
-    }
-  );
+  const RestaurantAddEmployeeSchema = yup
+    .object({
+      isBackdoorEmployee: yup.boolean(),
+      isHallEmployee: yup.boolean(),
+    })
+    .test(
+      "at-least-one-checkbox",
+      t("errors.employee-register.employeeRole.required"),
+      (obj) => {
+        if (obj.isBackdoorEmployee || obj.isHallEmployee) {
+          return true;
+        }
 
+        return new yup.ValidationError([
+          new yup.ValidationError(
+            t("errors.add-employee.employeeRole.required"),
+            null,
+            "isBackdoorEmployee",
+          ),
+          new yup.ValidationError(
+            t("errors.add-employee.employeeRole.required"),
+            null,
+            "isHallEmployee",
+          ),
+        ]);
+      },
+    );
 
   const RestaurantRegisterStep2Schema = yup.object({
     description: yup
@@ -150,9 +160,7 @@ export const useValidationSchemas = () => {
       .min(3, t("errors.restaurant-register.description.min"))
       .required(t("errors.restaurant-register.description.required")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    logo: yup
-      .mixed()
-      .required(t("errors.restaurant-register.logo.required")),
+    logo: yup.mixed().required(t("errors.restaurant-register.logo.required")),
     photos: yup
       .mixed()
       .required(t("errors.restaurant-register.photos.required")),
@@ -178,9 +186,7 @@ export const useValidationSchemas = () => {
     restaurantType: yup
       .string()
       .required(t("errors.restaurant-register.businessType.required")),
-    idCard: yup
-      .mixed()
-      .required(t("errors.restaurant-register.id.required")),
+    idCard: yup.mixed().required(t("errors.restaurant-register.id.required")),
     businessPermission: yup
       .mixed()
       .required(t("errors.restaurant-register.businessPermission.required")),

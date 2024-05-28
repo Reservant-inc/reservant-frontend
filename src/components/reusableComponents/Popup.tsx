@@ -35,7 +35,7 @@ const Popup: React.FC<PopupProps> = ({
       </button>
       {isPopupPressed && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-grey opacity-50"></div>
+          <div className="bg-grey absolute inset-0 opacity-50"></div>
           <div
             className="relative w-1/2 rounded bg-white p-8 shadow-lg"
             onClick={(e) => e.stopPropagation()}

@@ -14,7 +14,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Button, IconButton, Menu, MenuItem as MyMenuItem } from "@mui/material";
 
 interface MenuManagementProps {
-    activeRestaurantId: number | null;
+  activeRestaurantId: number | null;
 }
 
 interface Menu {
@@ -50,10 +50,11 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
     const [searchText, setSearchText] = useState<string>("");
 
-    useEffect(() => {
-        if (activeRestaurantId !== null) {
-            fetchMenus(activeRestaurantId);
-        }
+  useEffect(() => {
+    if (activeRestaurantId !== null) {
+      console.log(activeRestaurantId);
+      fetchMenus(activeRestaurantId);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeRestaurantId]);
     
@@ -311,7 +312,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                     className="mr-1 mx-4 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
                     onClick={() => { setIsMenuItemPopupOpen(true) }}
                 >
-                    <AddIcon />
                 </button>
                 <input
                     type="text"
