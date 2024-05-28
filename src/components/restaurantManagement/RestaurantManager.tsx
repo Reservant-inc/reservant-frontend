@@ -6,6 +6,7 @@ import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListS
 import EmployeeManagement from "./employees/EmployeeManagement";
 import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
+import OrderHistory from "./reservations/OrderHistory";
 
 const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
@@ -42,7 +43,8 @@ const RestaurantManager = () => {
               0: <RestaurantDashboardSection />,
               1: activeRestaurantId === null ? <RestaurantListSection handleChangeActiveRestaurant={handleChangeActiveRestaurant} setActiveSectionName={setActiveSectionName}/> : <RestaurantDetails activeRestaurantId={activeRestaurantId} />,
               2: <EmployeeManagement />,
-              3: <MenuManagement activeRestaurantId={1}/>
+              3: <MenuManagement activeRestaurantId={1}/>,
+              6: <OrderHistory activeRestaurantId={1}/>  //order history ma być częścią reservations??? 
             }[activePage]
           }
           </div>
