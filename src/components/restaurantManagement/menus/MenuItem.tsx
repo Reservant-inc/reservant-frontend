@@ -39,9 +39,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, price, alcoholPercentage, men
     };
     
     return (
-        <Card className="w-64 dark:bg-grey-4 dark:text-grey-1 m-1">
+        <Card className="w-64 dark:bg-grey-4 dark:text-grey-1 m-1 rounded-lg">
             <CardContent className="flex flex-col">
-                <img src={getImage(imagePath)} alt="MenuItemImage" className="w-full h-auto mb-2" />
+                <img src={getImage("/uploads/660d8373-056e-4206-945b-ac82a170403b.jpg")} alt="MenuItemImage" className="w-full h-auto mb-2 rounded-lg" />
                 <div className="flex justify-between items-start">
                     <h2 className="text-lg font-medium flex-grow">{name}</h2>
                     <div className="flex space-x-1">
