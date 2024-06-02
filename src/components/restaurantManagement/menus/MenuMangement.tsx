@@ -279,8 +279,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     return (
         <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
             <div>
-                <div className="flex items-ends justify-between">
-                    <h1 className="text-2xl font-bold text-primary-2 dark:text-secondary mx-5">Menu Management</h1>
+                <div className="flex-end items-ends justify-between">
+                    
                     <IconButton onClick={handleMenuOpen} disabled={selectedMenuIndex === null}>
                         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
                             <MoreActions actions={actions} name={menus[selectedMenuIndex].name} />
