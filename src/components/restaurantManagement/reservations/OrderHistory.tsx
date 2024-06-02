@@ -49,7 +49,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
     const populateRows = async () => {
       try {
         const response = await fetchGET(`/restaurants/${activeRestaurantId}/orders`);
-
+        console.log(response);
         
       } catch (error) {
         console.error("Error populating table", error);
