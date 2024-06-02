@@ -17,8 +17,6 @@ body {
   overflow: hidden; 
   position: absolute; 
   flex-direction: column; 
-  /* padding-top: 8px; */
-  /* padding-bottom: 8px; */
   border-radius: 0.5rem; 
   width:300px;
   color: #000000; 
@@ -60,17 +58,15 @@ body {
   transition: all var(--speed) ease;
 }
 
-.menu-secondary-exit{
- 
-}
-
 .menu-secondary-exit-active{
   transform: translateX(100%);
   transition: all var(--speed) ease;
 }
 
-
-
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
 
 @tailwind base;
 @tailwind components;
