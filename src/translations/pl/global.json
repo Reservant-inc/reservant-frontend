@@ -19,6 +19,11 @@
         "confirmPassword": "Potwierdź hasło",
         "registerButton": "Zarejestruj się"
     },
+    "add-employee": {
+        "isBackdoorEmployee": "Pracownik zaplecza",
+        "isHallEmployee": "Parcownik sali" ,
+        "addEmployee": "Dodaj zatrudnienie"
+    },  
     "restaurant-register": {
         "name": "Nazwa",
         "address": "Adres",

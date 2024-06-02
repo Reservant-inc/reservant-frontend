@@ -95,7 +95,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <h1 className="text-xl font-mont-md">Employee management</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
-          <EmployeeManagement/>
+          <EmployeeManagement restaurantFilter={restaurant?.name + ""}/>
         </div>
       </div>
       <div className="w-full h-full bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">

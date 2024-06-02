@@ -1,21 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
 import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
-import { fetchPOST } from "../../../services/APIconn";
+import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import ErrorMes from "../../reusableComponents/ErrorMessage";
+import { RestaurantDataProps } from "../../../services/interfaces";
 
 const initialValues = {
   isBackdoorEmployee: "",
   isHallEmployee: "",
 };
 
-const RestaurantAddEmp = () => {
+type restaurant = {
+  name: string,
+  id: string
+}
+
+const RestaurantAddEmp = ({setIsModalOpen, id}:{setIsModalOpen: Function, id: string}) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
+  const [restaurants, setRestaurants] = useState<restaurant[]>([]);
 
-  const id = 0; //do zmiany
+  useEffect(()=>{
+    const getRestaurants = async () => {
+      try {
+  
+        const response = await fetchGET("/my-restaurants");
+        const tmp: restaurant[] = [];
+  
+        for (const restaurant of response) {
+          tmp.push({
+              id: restaurant.restaurantID,
+              name: restaurant.name
+            });
+      }
+      console.log(tmp)
+      setRestaurants(tmp)
+      } catch (error) {
+        console.error("Error fetching restaurants", error);
+      }
+    }
+    getRestaurants();
+  },[])
+
 
   const handleSubmit = async (
     values: FormikValues,
@@ -25,12 +53,15 @@ const RestaurantAddEmp = () => {
       setSubmitting(true);
 
       const body = JSON.stringify({
-        employeeId: id, //do zmiany
+        employeeId: id,
         isBackdoorEmployee: values.isBackdoorEmployee,
         isHallEmployee: values.isHallEmployee,
       });
 
       await fetchPOST(`/my-restaurants/${id}/employees`, body);
+
+      setIsModalOpen(false);
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -50,6 +81,11 @@ const RestaurantAddEmp = () => {
             <Form>
               <div className="form-container">
                 <div className="form-control flex flex-col">
+                  <Field component="select">
+                   
+                    <option> restaurants </option>
+                    
+                  </Field>
                   <span className="">
                     <Field
                       type="checkbox"

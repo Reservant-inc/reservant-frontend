@@ -37,7 +37,7 @@ export type GroupType = {
 };
 
 export type RestaurantType = {
-  id: number
+  id: number;
   groupName: string;
   restaurantId: number;
   name: string;
@@ -73,6 +73,8 @@ export type EmployeeType = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  role: string;
-  restaurant: string;
+  restaurantId: string,
+  isBackdoorEmployee: string,
+  isHallEmployee: string,
+  restaurantName: string
 };

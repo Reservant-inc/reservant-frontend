@@ -18,10 +18,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import { EmployeeType } from "../../../services/types";
+import { EmployeeType, RestaurantType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
+import { Restaurant } from "@mui/icons-material";
+import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -30,17 +32,21 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmployeeManagement() {
+export default function EmployeeManagement({restaurantFilter}:{restaurantFilter: string}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  
+  const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
+  const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const populateRows = async () => {
       try {
+    
         const response = await fetchGET("/user/employees");
 
-        const employees: EmployeeType[] = [];
+        let employees: EmployeeType[] = [];
 
         if (response.length)
           for (const i in response) {
@@ -51,18 +57,56 @@ export default function EmployeeManagement() {
               firstName: response[i].firstName,
               lastName: response[i].lastName,
               phoneNumber: response[i].phoneNumber,
-              role: "asd",
-              restaurant: "asd",
+              restaurantId: response[i].employments.restaurantId,
+              isBackdoorEmployee: response[i].employments.isBackdoorEmployee,
+              isHallEmployee: response[i].employments.isHallEmployee,
+              restaurantName: response[i].employments.restaurantName
+               
             });
           }
-
+        console.log(employees)
+        employees = employees.filter((employee: EmployeeType) => {
+          return employee.restaurantName!==undefined ? 
+                  employee.restaurantName.toLowerCase().includes(restaurantFilter) : 
+                  restaurantFilter!==""?
+                    false:
+                    true;
+        });
+          
         setRows(employees);
       } catch (error) {
         console.error("Error populating table", error);
       }
     };
     populateRows();
+    
+    
   }, []);
+
+  const getRestaurants = async (id:string) => {
+    try {
+
+      const response = await fetchGET("/my-restaurant-groups");
+      const tmp: string[] = [];
+
+      for (const group of response) {
+      
+      const response2 = await fetchGET(`/my-restaurant-groups/${group.restaurantGroupId}`);
+
+          console.log(response2)
+
+          for (const i in response2.restaurants) {
+              tmp.push(
+                response2.restaurants[i].name
+              );
+          }
+      }
+      console.log(tmp)
+
+    } catch (error) {
+      console.error("Error fetching restaurants", error);
+    }
+  }
 
   const EditToolbar = (props: EditToolbarProps) => {
     return (
@@ -91,6 +135,11 @@ export default function EmployeeManagement() {
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleEmploymentClick = (id: string) => () => {
+    setIsEmploymentOpen(true);
+    setSelectedId(id);
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
@@ -122,6 +171,8 @@ export default function EmployeeManagement() {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+
+
 
   const columns: GridColDef[] = [
     { field: "empID", headerName: "ID", width: 180, editable: false },
@@ -156,22 +207,6 @@ export default function EmployeeManagement() {
       align: "left",
       headerAlign: "left",
       editable: true,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      width: 180,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: ["Hall", "Backdoor", "Hall and Backdoor", "None"],
-    },
-    {
-      field: "restaurant",
-      headerName: "Restaurant",
-      width: 180,
-      editable: true,
-      type: "singleSelect",
-      valueOptions: [],
     },
     {
       field: "actions",
@@ -210,6 +245,17 @@ export default function EmployeeManagement() {
         }
 
         return [
+          <GridActionsCellItem
+            icon={<Restaurant />}
+            label="Employments"
+            id={
+              "EmployeeManagementEmploymentButton" +
+              rows[parseInt(id.toString())].login
+            }
+            className="textPrimary"
+            onClick={handleEmploymentClick(rows[parseInt(id.toString())].empID)}
+            color="inherit"
+          />,
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
@@ -266,6 +312,15 @@ export default function EmployeeManagement() {
       >
         <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
           <EmployeeRegister setIsModalOpen={setIsModalOpen} />
+        </div>
+      </Modal>
+      <Modal
+        open={isEmploymentOpen}
+        onClose={() => setIsEmploymentOpen(false)}
+        className="flex items-center justify-center"
+      >
+        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
+          <RestaurantAddEmp setIsModalOpen={setIsEmploymentOpen} id={selectedId}/>
         </div>
       </Modal>
     </div>

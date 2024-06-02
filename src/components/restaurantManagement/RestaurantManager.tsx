@@ -42,7 +42,7 @@ const RestaurantManager = () => {
             {
               0: <RestaurantDashboardSection />,
               1: activeRestaurantId === null ? <RestaurantListSection handleChangeActiveRestaurant={handleChangeActiveRestaurant} setActiveSectionName={setActiveSectionName}/> : <RestaurantDetails activeRestaurantId={activeRestaurantId} />,
-              2: <EmployeeManagement />,
+              2: <EmployeeManagement restaurantFilter=""/>,
               3: <MenuManagement activeRestaurantId={1}/>,
               6: <OrderHistory activeRestaurantId={1}/>  //order history ma być częścią reservations??? 
             }[activePage]
