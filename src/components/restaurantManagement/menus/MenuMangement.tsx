@@ -11,7 +11,8 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, IconButton, Menu, MenuItem as MyMenuItem } from "@mui/material";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { Box, Button, IconButton, InputAdornment, Menu, MenuItem as MyMenuItem, TextField } from "@mui/material";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
@@ -266,8 +267,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     } : null;
 
     const actions = [
-        { icon: <EditIcon />, name: 'Edit', onClick: handleEditMenu },
-        { icon: <DeleteIcon />, name: 'Delete', onClick: handleDeleteMenu }
+        { icon: <AddIcon />, name: 'Add menu', onClick:() => setIsMenuPopupOpen(true) },
+        { icon: <EditIcon />, name: 'Edit menu', onClick: handleEditMenu },
+        { icon: <DeleteIcon />, name: 'Delete menu', onClick: handleDeleteMenu }
     ];
 
     const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
@@ -277,49 +279,61 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     }) : [];
 
     return (
-        <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg shadow-md">
+        <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg ">
             <div>
-                <div className="flex-end items-ends justify-between">
-                    
+                {selectedMenuIndex === null && (
+                <div className="flex justify-start">
+                    <IconButton onClick= {() => setIsMenuPopupOpen(true)} >
+                        <AddIcon className="text-secondary-2"/>
+                        <span className="ml-1 text-black dark:text-white">ADD MENU</span>
+                    </IconButton>
+                </div>
+                 )}
+                 <div className="float-end">
                     <IconButton onClick={handleMenuOpen} disabled={selectedMenuIndex === null}>
                         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-                            <MoreActions actions={actions} name={menus[selectedMenuIndex].name} />
+                        <MoreActions actions={actions} name={menus[selectedMenuIndex].name} />
                         )}
                     </IconButton>
                 </div>
-                <div className="flex justify-center">
-                    <button
-                        className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
-                        onClick={() => setIsMenuPopupOpen(true)}
-                    >
-                        <AddIcon />
-                    </button>
+                <div className="flex justify-start">
                     {(activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId]) ? (
-                        menuNamesByRestaurant[activeRestaurantId].map((category: string, index: number) => (
+                        menuNamesByRestaurant[activeRestaurantId].map((name: string, index: number) => (
                             <button
                                 key={index}
-                                className={`mr-1 rounded-lg p-1 font-bold ${index === selectedMenuIndex ? 'dark:text-black text-white dark:bg-secondary bg-primary-2' : 'border dark:border-secondary dark:text-secondary border-primary-2 text-primary-2'}`}
+                                className={`mr-1 text-2xl p-1 font-bold ${index === selectedMenuIndex ? 'dark:text-black text-primary dark:text-secondary-2 ' : 'text-gray-2'}`}
                                 onClick={() => setSelectedMenuIndex(index === selectedMenuIndex ? null : index)}
                             >
-                                {category}
+                                {name}
                             </button>
                         ))
                     ) : null}
                 </div>
             </div>
-            <div>
-                <button
-                    className="mr-1 mx-4 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
-                    onClick={() => { setIsMenuItemPopupOpen(true) }}
-                >
-                </button>
-                <input
-                    type="text"
-                    placeholder={t("general.search")}
-                    value={searchText}
-                    onChange={handleSearchInputChange}
-                    className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
-                />
+            <div className="flex items-center">
+                {selectedMenuIndex !== null && (
+                    <button
+                        className="mr-1 p-1 flex items-center"
+                        onClick={() => { setIsMenuItemPopupOpen(true) }}
+                    >
+                        <AddIcon className="text-secondary-2" />
+                        <span className="ml-1 text-black dark:text-white">ADD MENU ITEM</span>
+                    </button>
+                )}
+                <div className="float-end">
+                {selectedMenuIndex !== null && (
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                        <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                        <TextField
+                            type="text"
+                            label={t("general.search")}
+                            onChange={handleSearchInputChange}
+                            variant="standard"
+                            className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
+                        />
+                        </Box>
+                    )}
+                </div>
             </div>
             <div className="flex flex-wrap m-1">
                 {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
@@ -328,6 +342,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                             <MenuItem
                                 key={menuItem.menuItemId}
                                 name={menuItem.name}
+                                alternateName={menuItem.alternateName}
                                 price={menuItem.price}
                                 photo={menuItem.photo}
                                 alcoholPercentage={menuItem.alcoholPercentage}

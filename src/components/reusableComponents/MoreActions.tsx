@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ConfirmationDialog from './ConfirmationDialog';
 
 interface Action {
+  icon: React.ReactNode;
   name: string;
   onClick: () => void;
 }
@@ -27,7 +28,9 @@ const MoreActions: React.FC<MoreActionsProps> = ({ actions, name }) => {
   };
 
   const handleDeleteClick = (onDelete: () => void) => {
+    
     setOnDeleteAction(() => onDelete);
+    console.log("i'm here")
     setOpenConfirmation(true);
     handleMenuClose();
   };
@@ -52,9 +55,13 @@ const MoreActions: React.FC<MoreActionsProps> = ({ actions, name }) => {
         onClose={handleMenuClose}
       >
         {actions.map((action, index) => (
-          <MenuItem key={index} onClick={action.name === 'Delete' ? () => handleDeleteClick(action.onClick) : action.onClick}>
-            {action.name}
-          </MenuItem>
+          <MenuItem
+          key={index}
+          onClick={action.name === 'Delete' ? () => handleDeleteClick(action.onClick) : action.onClick}
+        >
+          <ListItemIcon>{action.icon}</ListItemIcon>
+          <ListItemText primary={action.name} />
+        </MenuItem>
         ))}
       </Menu>
       <ConfirmationDialog
