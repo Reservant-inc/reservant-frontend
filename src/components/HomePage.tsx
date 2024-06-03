@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Map from "./map/Map";
 import { List, ListItemButton, ListItemText, ListSubheader } from "@mui/material";
+import RestaurantView from "./restaurant/view/RestaurantView";
 
 const dummy = [
   {
@@ -84,9 +85,16 @@ export default function HomePage() {
           ))}
         </List>
         </div>
-        <div className="absolute w-[500px] h-[calc(100%-40px)] bg-white z-[1] left-[calc(15%+20px)] top-[20px] rounded-lg shadow-md">
+        {
+          activeRestaurant && 
+          <div className="absolute w-[500px] h-[calc(100%-40px)] bg-white z-[1] left-[calc(15%+20px)] top-[20px] rounded-lg shadow-md">
 
-        </div>
+            {
+            //restaurant view or details
+            }
+
+          </div>  
+        }
         <div className="h-full w-[85%] z-[0]">
           <Map activeRestaurant={activeRestaurant} restaurants={restaurants} setActiveRestaurant={setActiveRestaurant}/>
         </div>
