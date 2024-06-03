@@ -64,7 +64,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
+    <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3 relative">
         <div className="h-full w-[15%] bg-white shadow-md">
           <input type="text"/>
           <List
@@ -84,7 +84,10 @@ export default function HomePage() {
           ))}
         </List>
         </div>
-        <div className="h-full w-[85%]">
+        <div className="absolute w-[500px] h-[calc(100%-40px)] bg-white z-[1] left-[calc(15%+20px)] top-[20px] rounded-lg shadow-md">
+
+        </div>
+        <div className="h-full w-[85%] z-[0]">
           <Map activeRestaurant={activeRestaurant} restaurants={restaurants} setActiveRestaurant={setActiveRestaurant}/>
         </div>
     </div>

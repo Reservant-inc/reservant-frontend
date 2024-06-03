@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
+import L from "leaflet";
 
 interface MapProps {
     activeRestaurant: any
@@ -12,9 +13,14 @@ const Map: React.FC<MapProps> = ({ restaurants, activeRestaurant, setActiveResta
 
     const MapViewUpdater = () => {
 
-        const map = useMap();
-    
+      const map = useMap();
+
+      map.zoomControl.setPosition('bottomright')
+      map.setMinZoom(13)
+      map.setMaxZoom(17)
+
         useEffect(() => {
+
           if (activeRestaurant) {
             const { latitude, longitude } = activeRestaurant.location;
             map.setView([latitude, longitude], 13);
