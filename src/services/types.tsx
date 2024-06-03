@@ -73,8 +73,25 @@ export type EmployeeType = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  employments: EmploymentType[]
+};
+export type EmployeeEmployedType = {
+  id: number;
+  empID: string;
+  login: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  isBackdoorEmployee: string,
+  isHallEmployee: string,
+  dateFrom: string,
+  dateUntil: string,
+  employmentId: string
+};
+export type EmploymentType = {
+  id:number,
   restaurantId: string,
   isBackdoorEmployee: string,
   isHallEmployee: string,
   restaurantName: string
-};
+}

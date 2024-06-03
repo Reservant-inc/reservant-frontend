@@ -8,16 +8,17 @@ import ErrorMes from "../../reusableComponents/ErrorMessage";
 import { RestaurantDataProps } from "../../../services/interfaces";
 
 const initialValues = {
-  isBackdoorEmployee: "",
-  isHallEmployee: "",
+  selectedRestaurant: "",
+  isBackdoorEmployee: "false",
+  isHallEmployee: "false",
 };
 
 type restaurant = {
   name: string,
-  id: string
+  restaurantID: string
 }
 
-const RestaurantAddEmp = ({setIsModalOpen, id}:{setIsModalOpen: Function, id: string}) => {
+const RestaurantAddEmp = ({id}:{id: string}) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
   const [restaurants, setRestaurants] = useState<restaurant[]>([]);
@@ -31,7 +32,7 @@ const RestaurantAddEmp = ({setIsModalOpen, id}:{setIsModalOpen: Function, id: st
   
         for (const restaurant of response) {
           tmp.push({
-              id: restaurant.restaurantID,
+              restaurantID: restaurant.restaurantId,
               name: restaurant.name
             });
       }
@@ -51,16 +52,18 @@ const RestaurantAddEmp = ({setIsModalOpen, id}:{setIsModalOpen: Function, id: st
   ) => {
     try {
       setSubmitting(true);
-
-      const body = JSON.stringify({
+      // console.log(id)
+      const body = JSON.stringify([{
         employeeId: id,
-        isBackdoorEmployee: values.isBackdoorEmployee,
         isHallEmployee: values.isHallEmployee,
-      });
+        isBackdoorEmployee: values.isBackdoorEmployee,
+      }]);
 
-      await fetchPOST(`/my-restaurants/${id}/employees`, body);
+      console.log(body)
+      // console.log("AAAAAAAA"+values.selectedRestaurant)
+      // console.log(`/my-restaurants/${values.selectedRestaurant}/employees`)
+      await fetchPOST(`/my-restaurants/${values.selectedRestaurant}/employees`, body);
 
-      setIsModalOpen(false);
 
     } catch (error) {
       console.log(error);
@@ -68,6 +71,8 @@ const RestaurantAddEmp = ({setIsModalOpen, id}:{setIsModalOpen: Function, id: st
       setSubmitting(false);
     }
   };
+
+ 
 
   return (
     <div className="container-register">
@@ -81,9 +86,10 @@ const RestaurantAddEmp = ({setIsModalOpen, id}:{setIsModalOpen: Function, id: st
             <Form>
               <div className="form-container">
                 <div className="form-control flex flex-col">
-                  <Field component="select">
-                   
-                    <option> restaurants </option>
+                  <Field id="selectedRestaurant" name="selectedRestaurant" component="select">
+                   {
+                    restaurants.map((restaurant) => <option> {restaurant.restaurantID} </option>)
+                   }
                     
                   </Field>
                   <span className="">

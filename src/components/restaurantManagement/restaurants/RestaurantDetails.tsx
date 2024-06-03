@@ -10,6 +10,7 @@ import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
 import EmployeeManagement from "../employees/EmployeeManagement";
 import MenuManagement from "../menus/MenuMangement";
+import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
 
 
 // const style = {
@@ -95,7 +96,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <h1 className="text-xl font-mont-md">Employee management</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
-          <EmployeeManagement restaurantFilter={restaurant?.name + ""}/>
+          <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId + ""}/>
         </div>
       </div>
       <div className="w-full h-full bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">

@@ -24,7 +24,6 @@ import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
-import EmploymentsManagement from "./EmploymentsManagement";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -33,7 +32,7 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmployeeManagement() {
+export default function EmploymentsManagement({id}:{id:string}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -43,67 +42,40 @@ export default function EmployeeManagement() {
 
   useEffect(() => {
     const populateRows = async () => {
-      try {
-    
-        const response = await fetchGET("/user/employees");
-        
-        let employees: EmployeeType[] = [];
-        
-        if (response.length)
-          for (const i in response) {
-        
-            const tmp: EmploymentType[] = [];
-            for (const j in response[i].employments){
-              tmp.push({
-                id: Number(i),
-                restaurantId: response[i].employments[j].restaurantId,
-                isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
-                isHallEmployee: response[i].employments[j].isHallEmployee,
-                restaurantName: response[i].employments[j].restaurantName
-              })
-            }
-            employees.push({
-              id: Number(i),
-              empID: response[i].userId,
-              login: response[i].login,
-              firstName: response[i].firstName,
-              lastName: response[i].lastName,
-              phoneNumber: response[i].phoneNumber,
-              employments: tmp.slice()
-            });
-      }
-      console.log(employees)
+        try {
       
-      setRows(employees);
-    
-      } catch (error) {
-        console.error("Error populating table", error);
-      }
-    };
-    
-    populateRows();
+          const response = await fetchGET("/user/employees");
+          const tmp: EmploymentType[] = [];
+          
+          if (response.length)
+            for (const i in response) {
+                console.log("KURWAAAAAAAAAAAAAAAAAAAAAAAA" + id)
+              if(response[i].userId===id)
+              for (const j in response[i].employments){
+                tmp.push({
+                  id: Number(i),
+                  restaurantId: response[i].employments[j].restaurantId,
+                  isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+                  isHallEmployee: response[i].employments[j].isHallEmployee,
+                  restaurantName: response[i].employments[j].restaurantName
+                })
+              }
+        }
+        console.log(tmp)
+        
+        setRows(tmp);
+      
+        } catch (error) {
+          console.error("Error populating table", error);
+        }
+      };
+      
+      populateRows();
 
     
   }, []);
 
-  
 
-  const EditToolbar = (props: EditToolbarProps) => {
-    return (
-      <GridToolbarContainer>
-        <div className="h-[3rem] w-full z-1 flex items-center">
-                <button
-                    id="RestaurantListAddRestaurantButton"
-                    onClick={() => setIsModalOpen(true)}
-                    className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2"
-                >
-                    <AddIcon />
-                    <h1 className="text-lg font-mont-md">Add employee</h1>
-                </button>
-            </div>
-      </GridToolbarContainer>
-    );
-  };
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
     event,
@@ -155,10 +127,10 @@ export default function EmployeeManagement() {
 
 
   const columns: GridColDef[] = [
-    { field: "empID", headerName: "ID", width: 180, editable: false },
+    { field: "restaurantId", headerName: "ID", width: 180, editable: false },
     {
-      field: "login",
-      headerName: "Login",
+      field: "restaurantName",
+      headerName: "restaurantName",
       type: "string",
       width: 180,
       align: "left",
@@ -166,28 +138,20 @@ export default function EmployeeManagement() {
       editable: true,
     },
     {
-      field: "firstName",
-      headerName: "Name",
-      type: "string",
+      field: "isHallEmployee",
+      headerName: "isHallEmployee",
+      type: "boolean",
       width: 180,
       editable: true,
     },
     {
-      field: "lastName",
-      headerName: "Surname",
-      type: "string",
+      field: "isBackdoorEmployee",
+      headerName: "isBackdoorEmployee",
+      type: "boolean",
       width: 180,
       editable: true,
     },
-    {
-      field: "phoneNumber",
-      headerName: "Phone Number",
-      type: "string",
-      width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-    },
+    
     {
       field: "actions",
       type: "actions",
@@ -202,8 +166,8 @@ export default function EmployeeManagement() {
               icon={<SaveIcon />}
               label="Save"
               id={
-                "EmployeeManagementSaveButton" +
-                rows[parseInt(id.toString())].login
+                "EmployeeManagementSaveButtonPopup" +
+                id
               }
               sx={{
                 color: "primary.main",
@@ -213,8 +177,8 @@ export default function EmployeeManagement() {
             <GridActionsCellItem
               icon={<CancelIcon />}
               id={
-                "EmployeeManagementCancelEditButton" +
-                rows[parseInt(id.toString())].login
+                "EmployeeManagementCancelEditButtonPopup" +
+                id
               }
               label="Cancel"
               className="textPrimary"
@@ -225,23 +189,13 @@ export default function EmployeeManagement() {
         }
 
         return [
-          <GridActionsCellItem
-            icon={<Restaurant />}
-            label="Employments"
-            id={
-              "EmployeeManagementEmploymentButton" +
-              rows[parseInt(id.toString())].login
-            }
-            className="textPrimary"
-            onClick={handleEmploymentClick(rows[parseInt(id.toString())].empID)}
-            color="inherit"
-          />,
+         
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
             id={
-              "EmployeeManagementEditButton" +
-              rows[parseInt(id.toString())].login
+              "EmployeeManagementEditButtonPopup" +
+              id
             }
             className="textPrimary"
             onClick={handleEditClick(id)}
@@ -250,8 +204,8 @@ export default function EmployeeManagement() {
           <GridActionsCellItem
             icon={<DeleteIcon />}
             id={
-              "EmployeeManagementDeleteButton" +
-              rows[parseInt(id.toString())].login
+              "EmployeeManagementDeleteButtonPopup" +
+              id
             }
             label="Delete"
             onClick={handleDeleteClick(id)}
@@ -279,33 +233,13 @@ export default function EmployeeManagement() {
           pagination: { paginationModel: { pageSize: 5 } },
         }}
         pageSizeOptions={[5, 10, 25]}
-        slots={{
-          toolbar: EditToolbar as GridSlots["toolbar"],
-        }}
+       
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
         className="border-0"
       />
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        className="flex items-center justify-center"
-      >
-        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
-          <EmployeeRegister setIsModalOpen={setIsModalOpen} />
-        </div>
-      </Modal>
-      <Modal
-        open={isEmploymentOpen}
-        onClose={() => setIsEmploymentOpen(false)}
-        className="flex items-center justify-center"
-      >
-        <div className=" rounded-xl bg-white p-3">
-          <RestaurantAddEmp id={selectedId}/>
-          <EmploymentsManagement id={selectedId}/>
-        </div>
-      </Modal>
+      
     </div>
   );
 }
