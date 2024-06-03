@@ -26,7 +26,7 @@ export const nav = [
     // do testowania
     // HomePage element
     path: "/home",
-    element: <RestaurantView />,
+    element: <HomePage />,
     isPrivate: true,
     roles: ["Customer", "RestaurantOwner"],
   },
