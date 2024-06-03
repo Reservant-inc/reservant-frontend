@@ -19,7 +19,7 @@ import {
   GridSlots,
 } from "@mui/x-data-grid";
 import { EmployeeEmployedType, EmployeeType, EmploymentType, RestaurantType } from "../../../services/types";
-import { fetchGET } from "../../../services/APIconn";
+import { fetchDELETE, fetchGET, fetchPUT } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
@@ -94,12 +94,19 @@ export default function EmploymentsManagement({id}:{id:string}) {
     setSelectedId(id);
   };
 
-  const handleSaveClick = (id: GridRowId) => () => {
+  const handleSaveClick = (id: GridRowId) => async () => {
+    const body =JSON.stringify({
+      employmentId: 0,
+      isHallEmployee: rows.find((row)=>row.id===id)?.isHallEmployee,
+      isBackdoorEmployee: rows.find((row)=>row.id===id)?.isBackdoorEmployee
+    })
+    console.log(body)
+    await fetchPUT("/employments", body)
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    await fetchDELETE(`/employments/${id}`)
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -135,7 +142,7 @@ export default function EmploymentsManagement({id}:{id:string}) {
       width: 180,
       align: "left",
       headerAlign: "left",
-      editable: true,
+      editable: false,
     },
     {
       field: "isHallEmployee",
