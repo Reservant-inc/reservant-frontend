@@ -94,7 +94,6 @@ const MenuDialog: React.FC<MenuDialogProps> = ({ open, onClose, onSave, editedMe
                     onChange={handleChange}
                 />
                 <TextField
-                    autoFocus
                     required
                     margin="dense"
                     name="type"

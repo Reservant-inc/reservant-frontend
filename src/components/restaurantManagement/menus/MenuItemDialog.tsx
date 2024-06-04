@@ -133,7 +133,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, 
             </DialogTitle>
             <DialogContent>
                 <TextField
-                    autoFocus
                     margin="dense"
                     name="name"
                     label={t("restaurant-management.menu.menuItemName")}
@@ -145,7 +144,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, 
                     helperText={errors.name}
                 />
                 <TextField
-                    autoFocus
                     required
                     margin="dense"
                     name="alternateName"

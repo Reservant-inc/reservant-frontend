@@ -52,6 +52,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState(false);
     const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
     const [searchText, setSearchText] = useState<string>("");
+    const [openConfirmation, setOpenConfirmation] = useState(false);
 
   useEffect(() => {
     if (activeRestaurantId !== null) {
@@ -175,6 +176,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             } else {
                 console.error("No menu selected to delete");
             }
+            
         } catch (error) {
             console.error("Error while deleting menu:", error);
         }
