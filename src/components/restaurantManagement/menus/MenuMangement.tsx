@@ -170,6 +170,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     const handleDeleteMenu = async () => {
         try {
+            
             if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
                 const menuId = menus[selectedMenuIndex].menuId;
                 const response = await fetchDELETE(`/menus/${menuId}`);
@@ -452,7 +453,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
              <ConfirmationDialog
                 open={openConfirmation}
                 onClose={() => setOpenConfirmation(false)}
-                onConfirm={handleDeleteMenu} // Obsługa potwierdzenia usunięcia menu
+                onConfirm={handleDeleteMenu}
                 confirmationText={`Are you sure you want to delete this menu?`} 
             />
         </div>
