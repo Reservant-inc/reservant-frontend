@@ -14,6 +14,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Box, Button, IconButton, InputAdornment, Menu, MenuItem as MyMenuItem, TextField } from "@mui/material";
 import FilterMenu from "./FilterMenu";
+import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
@@ -221,11 +222,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         try {
             if (editedMenuItem) {
                 const { menuItemId } = editedMenuItem;
+                const photoFileName = values.photo.startsWith("/uploads/") ? values.photo.slice(9) : values.photo;
                 const body = JSON.stringify({
                     name: values.name,
+                    alternateName:  values.alternateName,
                     price: values.price,
                     alcoholPercentage: values.alcoholPercentage || null,
-                    photofileName: values.photo
+                    photofileName: photoFileName
                 });
                 console.log(body);
                 const response = await fetchPUT(`/menu-items/${menuItemId}`, body);
@@ -281,7 +284,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const actions = [
         { icon: <AddIcon />, name: 'Add menu', onClick:() => setIsMenuPopupOpen(true) },
         { icon: <EditIcon />, name: 'Edit menu', onClick: handleEditMenu },
-        { icon: <DeleteIcon />, name: 'Delete menu', onClick: handleDeleteMenu }
+        { icon: <DeleteIcon />, name: 'Delete menu', onClick:() => setOpenConfirmation(true) }
     ];
 
     const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
@@ -343,7 +346,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                  <div className="float-end">
                     <IconButton onClick={handleMenuOpen} disabled={selectedMenuIndex === null}>
                         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-                        <MoreActions actions={actions} name={menus[selectedMenuIndex].name} />
+                        <MoreActions actions={actions} />
                         )}
                     </IconButton>
                 </div>
@@ -445,6 +448,12 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                 onSave={handleSaveEditedMenuItem}
                 menuType={selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuType || "" : ""}
                 editedMenuItem={editedMenuItem}
+            />
+             <ConfirmationDialog
+                open={openConfirmation}
+                onClose={() => setOpenConfirmation(false)}
+                onConfirm={handleDeleteMenu} // Obsługa potwierdzenia usunięcia menu
+                confirmationText={`Are you sure you want to delete this menu?`} 
             />
         </div>
     );

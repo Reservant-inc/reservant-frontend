@@ -43,9 +43,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, 
                     alternateName: alternateName || "",
                     price: price.toString() || "",
                     alcoholPercentage: alcoholPercentage ? alcoholPercentage.toString() : "",
-                    photo: photo || ""
+                    photo: ""
                 });
-                setPhotoFileName(photo || null); // Ustawienie nazwy pliku tylko w trybie edycji
+                setPhotoFileName(null); // Usuń nazwę pliku, ponieważ nie wybrano nowego pliku
             } else {
                 setValues({
                     name: "",
@@ -54,7 +54,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, 
                     alcoholPercentage: "",
                     photo: ""
                 });
-                setPhotoFileName(null); // Usunięcie nazwy pliku w trybie dodawania nowego elementu
+                setPhotoFileName(null);
             }
         }
     }, [open, editedMenuItem]);
@@ -108,7 +108,20 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, 
                 console.error("Error uploading photo:", error);
                 return;
             }
-        } else {
+        } else if (photoFile) { // Tutaj sprawdzamy, czy istnieje nowy plik, jeśli tak, użyj go zamiast pliku z editedMenuItem
+            try {
+                const photoUrl = await fetchFilesPOST("/uploads", photoFile);
+                const updatedValues = {
+                    ...values,
+                    photo: photoUrl.fileName
+                };
+                onSave(updatedValues);
+                onClose();
+            } catch (error) {
+                console.error("Error uploading photo:", error);
+                return;
+            }
+        } else { // Jeśli nie ma nowego pliku, użyj pliku z editedMenuItem
             onSave(values);
             onClose();
         }
