@@ -141,18 +141,27 @@
             "header": "Moje Grupy"
         },
         "menu": {
-            "newMenu": "Dodaj nowe",
+            "newMenu": "Dodaj nowe menu",
             "editedMenu": "Edytuj menu",
             "name": "Nazwa",
             "alternateName": "Alternatywna nazwa",
             "type": "Typ",
+            "typeFood": "Jedzenie",
+            "typeAlcohol": "Alkohol",
+            "typeDrink": "Napoje",
+            "typeDessert": "Desery",
             "dateFrom": "Data rozpoczęcia",
             "dateUntil": "Date zakończenia",
             "newMenuItem": "Dodaj nowa pozycję menu",
             "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Procent alkocholu"
+            "menuItemAlcoholPercentage": "Procent alkocholu",
+            "menuItemNameRequired": "Nazwa jest wymagana",
+            "menuItemPriceRequired": "Cena jest wymagana",
+            "menuItemPriceMustBeNumber": "Cena musi być liczbą",
+            "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
+            "selectedFile": "Wybrano plik"
             
         }
     },

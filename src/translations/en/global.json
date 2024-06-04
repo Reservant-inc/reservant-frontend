@@ -155,14 +155,23 @@
             "name": "Name",
             "alternateName": "Alternate name",
             "type": "Type",
+            "typeFood": "Food",
+            "typeAlcohol": "Alcohol",
+            "typeDrink": "Drinks",
+            "typeDessert": "Desserts",
             "dateFrom": "Date from",
             "dateUntil": "Date until",
             "newMenuItem": "Add new menu item",
             "editedMenuItem": "Edit menu position",
             "menuItemName": "Name",
             "menuItemPrice": "Price",
-            "menuItemAlcoholPercentage": "Alcohol percentage"
-            
+            "menuItemAlcoholPercentage": "Alcohol percentage",
+            "menuItemNameRequired": "Name is required",
+            "menuItemPriceRequired": "Price is required",
+            "menuItemPriceMustBeNumber": "Price must be number",
+            "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
+            "selectedFile": "Selected file"
+        
         }
     },
     "tools": {

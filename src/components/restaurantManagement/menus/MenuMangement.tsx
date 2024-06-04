@@ -13,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Box, Button, IconButton, InputAdornment, Menu, MenuItem as MyMenuItem, TextField } from "@mui/material";
+import FilterMenu from "./FilterMenu";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
@@ -40,6 +41,7 @@ interface MenuItemData {
 const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) => {
     const { t } = useTranslation("global");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
     const [menus, setMenus] = useState<Menu[]>([]);
     const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{ [key: number]: string[] }>({});
     const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(0);
@@ -254,6 +256,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         setAnchorEl(null);
     };
 
+    const handleFilterOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setFilterAnchorEl(event.currentTarget);
+    };
+
+    const handleFilterClose = () => {
+        setFilterAnchorEl(null);
+    };
+
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
@@ -278,6 +288,45 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         return nameMatch || priceMatch;
     }) : [];
 
+    const sortMenuItems = (sortFunction: (a: MenuItemData, b: MenuItemData) => number) => {
+        if (selectedMenuIndex !== null) {
+            const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(sortFunction);
+            setMenus(prevMenus => {
+                const updatedMenus = [...prevMenus];
+                updatedMenus[selectedMenuIndex] = {
+                    ...updatedMenus[selectedMenuIndex],
+                    menuItems: sortedMenuItems
+                };
+                return updatedMenus;
+            });
+            handleFilterClose();
+        }
+    };
+    
+    const handleSortAlphabetically = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.name.localeCompare(b.name));
+    };
+    
+    const handleSortPriceAsc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.price - b.price);
+    };
+    
+    const handleSortPriceDesc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => b.price - a.price);
+    };
+    
+    const handleSortAlcoholAsc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0));
+    };
+    
+    const handleSortAlcoholDesc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0));
+    };
+
+    const handleClearFilters = () => {
+        fetchMenuIemsForSelectedMenu();
+    };
+    
     return (
         <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg ">
             <div>
@@ -299,42 +348,59 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                 <div className="flex justify-start">
                     {(activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId]) ? (
                         menuNamesByRestaurant[activeRestaurantId].map((name: string, index: number) => (
-                            <button
+                            <Button
+                                variant="text"
                                 key={index}
-                                className={`mr-1 text-2xl p-1 font-bold ${index === selectedMenuIndex ? 'dark:text-black text-primary dark:text-secondary-2 ' : 'text-gray-2'}`}
+                                className={`mr-1 text-2xl p-1 font-bold  ${index === selectedMenuIndex ? 'text-primary dark:text-secondary-2 bg-gray-200 ' : 'text-grey-2'}`}
                                 onClick={() => setSelectedMenuIndex(index === selectedMenuIndex ? null : index)}
                             >
                                 {name}
-                            </button>
+                            </Button>
                         ))
                     ) : null}
                 </div>
             </div>
-            <div className="flex items-center">
+
+            <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
                 {selectedMenuIndex !== null && (
-                    <button
-                        className="mr-1 p-1 flex items-center"
-                        onClick={() => { setIsMenuItemPopupOpen(true) }}
-                    >
-                        <AddIcon className="text-secondary-2" />
-                        <span className="ml-1 text-black dark:text-white">ADD MENU ITEM</span>
-                    </button>
+                        <Button
+                            startIcon={<AddIcon className="text-secondary-2" />}
+                            onClick={() => { setIsMenuItemPopupOpen(true) }}
+                        >
+                            <span className="ml-1 text-black dark:text-white">ADD MENU ITEM</span>
+                        </Button>
+                    )}
+                {selectedMenuIndex !== null && (
+                    <FilterMenu
+                        filterAnchorEl={filterAnchorEl}
+                        handleFilterOpen={handleFilterOpen}
+                        handleFilterClose={handleFilterClose}
+                        handleSortAlphabetically={handleSortAlphabetically}
+                        handleSortPriceAsc={handleSortPriceAsc}
+                        handleSortPriceDesc={handleSortPriceDesc}
+                        handleSortAlcoholAsc={handleSortAlcoholAsc}
+                        handleSortAlcoholDesc={handleSortAlcoholDesc}
+                        handleClearFilters={handleClearFilters}
+                    />
                 )}
-                <div className="float-end">
-                {selectedMenuIndex !== null && (
-                        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                        <TextField
-                            type="text"
-                            label={t("general.search")}
-                            onChange={handleSearchInputChange}
-                            variant="standard"
-                            className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
-                        />
+                </div>
+                <div className="flex-grow">
+                    {selectedMenuIndex !== null && (
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                            <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                            <TextField
+                                type="text"
+                                label={t("general.search")}
+                                onChange={handleSearchInputChange}
+                                variant="standard"
+                                className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
+                            />
                         </Box>
                     )}
                 </div>
             </div>
+
             <div className="flex flex-wrap m-1">
                 {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
                     <>
