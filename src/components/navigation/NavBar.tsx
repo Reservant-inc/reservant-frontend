@@ -4,6 +4,8 @@ import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
 import LanguageChange from "./navItems/LanguageChange";
 import Sections from "./navItems/MenuSections";
 import Tools from "./navItems/Tools";
+import NotificationsButton from "./navItems/NotificationsButton";
+import FriendSearchBar from "./navItems/FriendSearchBar";
 
 const NavBar: React.FC = () => {
   const [isDark, setIsDark] = useState(localStorage.theme === "dark");
@@ -11,7 +13,7 @@ const NavBar: React.FC = () => {
   return (
     <div className="z-[2] flex h-14 w-full items-center shadow-md dark:bg-black">
       <div className="mx-2 flex h-full w-full items-center">
-        <div className="flex-1 h-full items-center">
+        <div className="h-full flex-1 items-center">
           {isDark ? (
             <img src={LogoLight} alt="logo" className="h-12 min-w-[155px]" />
           ) : (
@@ -21,7 +23,9 @@ const NavBar: React.FC = () => {
 
         <Sections />
 
-        <div className="h-full flex flex-1 items-center justify-end gap-2">
+        <div className="flex h-full flex-1 items-center justify-end gap-2">
+          <FriendSearchBar />
+          <NotificationsButton isDark={isDark} />
           <Tools setIsDark={setIsDark} />
         </div>
       </div>
