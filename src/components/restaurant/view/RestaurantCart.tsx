@@ -49,7 +49,7 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
   });
 
   return (
-    <Box className="mr-20 flex min-h-screen w-full flex-col items-center justify-start rounded-xl bg-grey-1 p-6">
+    <Box className="mr-20 flex min-h-[500px] w-full flex-col items-center justify-start rounded-xl bg-grey-1 p-6">
       <Box className="mb-4 flex space-x-2">
         <Button
           variant="outlined"

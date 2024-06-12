@@ -31,6 +31,48 @@ const dummyReviews = [
     description: "Excellent stay! The food was great.",
     managerResponse: null,
   },
+  {
+    id: 4,
+    score: 5,
+    date: "2024-05-12",
+    description: "Excellent stay! The food was great.",
+    managerResponse: null,
+  },
+  {
+    id: 5,
+    score: 5,
+    date: "2024-05-12",
+    description: "Excellent stay! The food was great.",
+    managerResponse: null,
+  },
+  {
+    id: 6,
+    score: 5,
+    date: "2024-05-12",
+    description: "Excellent stay! The food was great.",
+    managerResponse: null,
+  },
+  {
+    id: 7,
+    score: 5,
+    date: "2024-05-12",
+    description: "Excellent stay! The food was great.",
+    managerResponse: null,
+  },
+  {
+    id: 8,
+    score: 5,
+    date: "2024-05-12",
+    description: "Excellent stay! The food was great.",
+    managerResponse: null,
+  },
+  {
+    id: 9,
+    score: 5,
+    date: "2024-05-12",
+    description: "Excellent stay! The food was great.",
+    managerResponse: null,
+  },
 ];
 
 interface FocusedRestaurantReviewsListProps {

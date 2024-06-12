@@ -20,7 +20,6 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
         const menusData = await fetchGET(
           `/my-restaurants/${restaurantId}/menus`,
         );
-        // console.log(menusData);
         setMenus(menusData || []);
       } catch (error) {
         console.error("Error fetching menus:", error);
@@ -36,10 +35,6 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
       if (activeMenuId !== null) {
         try {
           const menuData = await fetchGET(`/menus/${activeMenuId}`);
-          //   console.log(
-          //     `Fetched menu items for menuId ${activeMenuId}:`,
-          //     menuData,
-          //   );
           setMenus((prevMenus) => {
             const updatedMenus = [...prevMenus];
             const menuIndex = updatedMenus.findIndex(
@@ -72,7 +67,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
   const isDarkMode = document.documentElement.classList.contains("dark");
 
   return (
-    <div className="m-2">
+    <div className="flex h-full w-full flex-col gap-2">
       <div className="space-x-2">
         {menus.map((menu) => (
           <Button
@@ -108,7 +103,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
         activeMenuId === menu.menuId ? (
           <div
             key={menu.menuId}
-            className="m-4 max-h-[400px] overflow-y-auto rounded-lg bg-grey-1 p-5"
+            className="m-4 h-full w-full overflow-y-auto rounded-lg bg-grey-1 p-5"
           >
             <h3 className="text-xl font-medium">{menu.name}</h3>
             {menu.menuItems ? (

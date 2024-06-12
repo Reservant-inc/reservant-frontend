@@ -116,14 +116,14 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         );
       case TABS.REVIEWS:
         return (
-          <div className="h-[calc(100%-180px)] overflow-y-auto p-4">
+          <div className="h-full w-full overflow-y-auto p-4">
             <FocusedRestaurantReviewsList isPreview={false} />
           </div>
         );
       case TABS.MENU:
       default:
         return (
-          <div className="h-[calc(100%-180px)] overflow-y-auto p-4">
+          <div className="h-full w-full overflow-y-auto p-4">
             <FocusedRestaurantMenuList restaurantId={restaurantId} />
           </div>
         );
@@ -131,7 +131,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="absolute left-[calc(15%+20px)] top-[20px] z-[1] h-[calc(100%-40px)] w-[500px] rounded-lg bg-white shadow-md">
+    <div className="absolute left-[calc(15%+20px)] top-[20px] z-[1] h-[calc(95%-40px)] w-[500px] overflow-y-auto rounded-lg bg-white shadow-md">
       <div className="relative">
         <IconButton
           onClick={onClose}
@@ -146,7 +146,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           className="h-50 w-full rounded-t-lg object-cover"
         />
       </div>
-      <div className="p-4">
+      <div className="h-full p-4">
         <h2 className="text-xl font-bold">{restaurant.name}</h2>
         <div className="my-3 flex items-center space-x-2">
           <Rating

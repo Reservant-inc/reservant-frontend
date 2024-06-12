@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RestaurantMenuView from "./RestaurantMenuView";
 import RestaurantReviewsView from "./RestaurantReviewsView";
 import RestaurantEventsView from "./RestaurantEventsView";
+import { fetchGET, getImage } from "../../../services/APIconn";
 import {
   Box,
   Chip,
@@ -13,8 +14,9 @@ import {
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
-import defaultImage from "../../../assets/images/defaulImage.jpeg";
 import { MenuItem } from "../../../services/interfaces";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import CustomMarker from "../../map/CustomMarker";
 
 const TABS = {
   MENU: "menu",
@@ -27,40 +29,31 @@ interface RestaurantDetailsProps {
 }
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
-  const [itemData, setItemData] = useState([
-    {
-      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-      title: "dummyData",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-      title: "dummyData",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-      title: "dummyData",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-      title: "dummyData",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-      title: "dummyData",
-    },
-  ]);
-
-  const [tags, setTags] = useState([
-    { name: "Burgery" },
-    { name: "Na wynos" },
-    { name: "Alkohol" },
-  ]);
-
+  const [restaurant, setRestaurant] = useState<any>(null);
   const [activeTab, setActiveTab] = useState(TABS.MENU);
   const [openModal, setOpenModal] = useState(false);
+  const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchRestaurantDetails = async () => {
+      try {
+        const data = await fetchGET(`/my-restaurants/1`);
+        setRestaurant(data);
+        setActiveRestaurant(data);
+      } catch (error) {
+        console.error("Error fetching restaurant details:", error);
+      }
+    };
+
+    fetchRestaurantDetails();
+  }, []);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  if (!restaurant) {
+    return <div>Loading...</div>;
+  }
 
   const renderActiveTab = () => {
     switch (activeTab) {
@@ -75,88 +68,130 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
     }
   };
 
+  const center: [number, number] = [
+    restaurant.location.latitude,
+    restaurant.location.longitude,
+  ];
+  const zoom = 17;
+
+  const MapViewUpdater = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      map.setMinZoom(15);
+      map.setMaxZoom(18);
+      map.setView(center, zoom);
+    }, [center, map]);
+
+    map.on("zoomend", () => {
+      map.setView(center, map.getZoom());
+    });
+
+    return null;
+  };
+
   return (
-    <div className="mx-60 mt-20 flex flex-col space-y-5 rounded-xl bg-grey-1 p-6">
-      <div className="flex items-center space-x-10">
-        <div>
-          <h2 className="text-3xl font-extrabold text-primary-2">
-            Restaurant name
+    <div className="mx-auto mt-10 flex flex-col space-y-5 rounded-xl bg-grey-1 lg:mx-40 lg:mt-20">
+      <div className="relative mb-40 border-l-4 border-r-4 border-t-4 border-primary lg:mb-32">
+        <Box
+          component="img"
+          src={getImage(restaurant.logo as string)}
+          alt="Restaurant logo"
+          className="w-full object-cover lg:h-96"
+        />
+        <div className="absolute left-1/2 top-[90%] w-4/5 -translate-x-1/2 -translate-y-1/2 transform rounded-lg border-2 border-primary bg-white px-4 py-4 shadow-lg lg:w-1/3 lg:px-10 lg:py-6">
+          <h2 className="text-center text-2xl font-extrabold text-primary-2 lg:text-3xl">
+            {restaurant.name}
           </h2>
-          <div>
-            <div className="my-3 flex items-center justify-center space-x-2">
-              <div>
-                <Rating
-                  name="read-only"
-                  value={4.5}
-                  precision={0.5}
-                  readOnly
-                  emptyIcon={
-                    <StarBorderIcon
-                      fontSize="inherit"
-                      className="text-grey-2 dark:text-grey-1"
-                    />
-                  }
+          <div className="my-2 flex items-center justify-center space-x-2 lg:my-3">
+            <Rating
+              name="read-only"
+              value={4.5} // placeholder
+              precision={0.5}
+              readOnly
+              emptyIcon={
+                <StarBorderIcon
+                  fontSize="inherit"
+                  className="text-grey-2 dark:text-grey-1"
                 />
-              </div>
-              <div>(200+ opinii)</div>
+              }
+            />
+            <div>(200+ opinii)</div> {/* placeholder */}
+          </div>
+          {restaurant.provideDelivery ? (
+            <div className="my-2 flex items-center justify-center space-x-2 lg:my-3">
+              <MopedIcon />
+              <div>Koszt dostawy 5,99 zł</div>
             </div>
-            <div className="my-3">
-              <MopedIcon /> Koszt dostawy 5,99 zł
+          ) : (
+            <div className="my-2 flex items-center justify-center space-x-2 lg:my-3">
+              <MopedIcon />
+              <div>Nie zapewnia dostawy</div>
             </div>
-            <div className="my-3">Restauracja</div>
-            <div className="my-3">Adres</div>
-            <div className="my-3 space-x-1">
-              {tags.map((tag) => (
-                <Chip
-                  key={tag.name}
-                  label={tag.name}
-                  sx={{
-                    borderColor: "#a94c79",
-                  }}
-                />
-              ))}
-            </div>
+          )}
+          <div className="mt-2 text-center lg:mt-3">{restaurant.address}</div>
+          <div className="text-center">{restaurant.postalIndex}</div>
+          <div className="text-center">{restaurant.city}</div>
+          <div className="my-2 text-center lg:my-3">
+            {restaurant.restaurantType}
+          </div>
+          <div className="my-2 flex flex-wrap justify-center gap-1 lg:my-3">
+            {restaurant.tags?.map((tag: string, index: number) => (
+              <Chip
+                key={index}
+                label={tag}
+                style={{
+                  backgroundColor: "#e0f7fa",
+                  color: "#00796b",
+                  fontWeight: "bold",
+                  fontSize: "0.875rem",
+                }}
+              />
+            ))}
           </div>
         </div>
-        <div className="flex grow justify-center">
-          <Box
-            className="rounded-xl bg-grey-2"
-            component="img"
-            sx={{
-              height: 233,
-              width: 350,
-            }}
-            alt="Picture of a dish"
-            src={defaultImage}
+      </div>
+      <div className="relative mx-4 mb-40 mt-64 h-80 overflow-hidden bg-grey-2 lg:mx-10 lg:mb-32 lg:mt-56">
+        <MapContainer
+          center={center}
+          zoom={zoom}
+          style={{ height: "100%", width: "100%" }}
+          scrollWheelZoom={true}
+          dragging={false}
+          doubleClickZoom={false}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        </div>
+          <CustomMarker
+            position={center}
+            restaurant={restaurant}
+            activeRestaurant={activeRestaurant}
+            setActiveRestaurant={setActiveRestaurant}
+          />
+          <MapViewUpdater />
+        </MapContainer>
       </div>
-      <div className="relative h-80 overflow-hidden bg-grey-2">
-        <img
-          className="absolute inset-0 h-full w-full object-cover"
-          alt="map example"
-          src="https://streetsmn.s3.us-east-2.amazonaws.com/wp-content/uploads/2013/10/Screen-shot-2013-10-27-at-10.51.49-PM.png"
-        />
-      </div>
-
-      <div className="flex w-full justify-center">
-        <ImageList sx={{ width: 750, height: 210 }} cols={4} rowHeight={164}>
-          {itemData.slice(0, 3).map((item) => (
-            <ImageListItem
-              key={item.img}
-              sx={{ width: "100%", height: "100%" }}
-            >
+      <div className="mb-20 flex w-full justify-center lg:mb-16">
+        <ImageList sx={{ width: "100%", height: 400 }} cols={4} gap={8}>
+          {restaurant.photos?.slice(0, 3).map((img: string, index: number) => (
+            <ImageListItem key={index} sx={{ width: "100%", height: "100%" }}>
               <img
                 className="bg-grey-2"
-                srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                alt={item.title}
+                srcSet={getImage(
+                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                src={getImage(
+                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                alt={`Restaurant image ${index + 1}`}
                 loading="lazy"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </ImageListItem>
           ))}
-          {itemData.length > 3 && (
+          {restaurant.photos?.length > 4 && (
             <ImageListItem
               key="show-more"
               onClick={handleOpenModal}
@@ -169,9 +204,13 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
             >
               <img
                 className="bg-grey-2"
-                srcSet={`${itemData[3].img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                src={`${itemData[3].img}?w=164&h=164&fit=crop&auto=format`}
-                alt={itemData[3].title}
+                srcSet={getImage(
+                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                src={getImage(
+                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                alt="Show more"
                 loading="lazy"
                 style={{
                   filter: "grayscale(100%)",
@@ -182,46 +221,45 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
                 }}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <Typography variant="h3">+</Typography>
-                <Typography variant="h6">Wyświetl Galerię</Typography>
+                <Typography variant="h5">Wyświetl Galerię</Typography>
               </div>
             </ImageListItem>
           )}
         </ImageList>
       </div>
-      <div className="flex space-x-10 px-6">
+      <div className="mb-20 flex justify-center space-x-10 px-6 lg:mb-16">
         <h3
-          className={`cursor-pointer ${
+          className={`cursor-pointer py-3 ${
             activeTab === TABS.MENU
-              ? "text-2xl text-primary-2 underline"
-              : "text-2xl text-grey-2"
+              ? "text-2xl font-extrabold text-primary underline"
+              : "text-2xl text-grey-4"
           }`}
           onClick={() => setActiveTab(TABS.MENU)}
         >
           Menu
         </h3>
         <h3
-          className={`cursor-pointer ${
+          className={`cursor-pointer py-3 ${
             activeTab === TABS.EVENTS
-              ? "text-2xl text-primary-2 underline"
-              : "text-2xl text-grey-2"
+              ? "text-2xl font-extrabold text-primary underline"
+              : "text-2xl text-grey-4"
           }`}
           onClick={() => setActiveTab(TABS.EVENTS)}
         >
           Wydarzenia
         </h3>
         <h3
-          className={`cursor-pointer ${
+          className={`cursor-pointer py-3 ${
             activeTab === TABS.REVIEWS
-              ? "text-2xl text-primary-2 underline"
-              : "text-2xl text-grey-2"
+              ? "text-2xl font-extrabold text-primary underline"
+              : "text-2xl text-grey-4"
           }`}
           onClick={() => setActiveTab(TABS.REVIEWS)}
         >
           Oceny
         </h3>
       </div>
-      {renderActiveTab()}
+      <div className="px-6 pb-6">{renderActiveTab()}</div>
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box
           sx={{
@@ -237,16 +275,25 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
             overflowY: "auto",
           }}
         >
-          <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            sx={{ mb: 2 }}
+            className="font-bold text-primary"
+          >
             Galeria
           </Typography>
-          <ImageList sx={{ width: "100%", height: "auto" }} cols={1}>
-            {itemData.map((item) => (
-              <ImageListItem key={item.img}>
+          <ImageList sx={{ width: "100%", height: "auto" }} cols={1} gap={8}>
+            {restaurant.photos?.map((img: string, index: number) => (
+              <ImageListItem key={index}>
                 <img
-                  srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                  src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                  alt={item.title}
+                  srcSet={getImage(
+                    `${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x` as string,
+                  )}
+                  src={getImage(
+                    `${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x` as string,
+                  )}
+                  alt={`Restaurant image ${index + 1}`}
                   loading="lazy"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
