@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -18,15 +17,11 @@ import {
   GridRowModel,
   GridRowEditStopReasons,
   GridSlots,
-  gridRowsDataRowIdToIdLookupSelector,
-  selectedGridRowsSelector,
 } from "@mui/x-data-grid";
 import { EmployeeType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
-import { number } from "yup";
-import { getRowIdFromRowModel } from "@mui/x-data-grid/internals";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -47,19 +42,6 @@ export default function EmployeeManagement() {
 
         const employees: EmployeeType[] = [];
 
-        const getRole = (employment: {
-          isBackdoorEmployee: boolean;
-          isHallEmployee: boolean;
-        }): string => {
-          return employment.isBackdoorEmployee
-            ? employment.isHallEmployee
-              ? "Hall and Backdoor"
-              : "Backdoor"
-            : employment.isHallEmployee
-              ? "Hall"
-              : "None";
-        };
-
         if (response.length)
           for (const i in response) {
             employees.push({
@@ -70,7 +52,6 @@ export default function EmployeeManagement() {
               lastName: response[i].lastName,
               phoneNumber: response[i].phoneNumber,
               role: "asd",
-              // getRole(response[i]?.employments[0]),
               restaurant: "asd",
             });
           }
@@ -86,14 +67,16 @@ export default function EmployeeManagement() {
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <Button
-          color="primary"
-          id="EmployeeManagementAddEmployeeButton"
-          startIcon={<AddIcon />}
-          onClick={() => setIsModalOpen(true)}
-        >
-          Add Employee
-        </Button>
+        <div className="h-[3rem] w-full z-1 flex items-center">
+                <button
+                    id="RestaurantListAddRestaurantButton"
+                    onClick={() => setIsModalOpen(true)}
+                    className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2"
+                >
+                    <AddIcon />
+                    <h1 className="text-lg font-mont-md">Add employee</h1>
+                </button>
+            </div>
       </GridToolbarContainer>
     );
   };
@@ -254,7 +237,7 @@ export default function EmployeeManagement() {
   ];
 
   return (
-    <div className="h-full w-full bg-white rounded-lg shadow-md">
+    <div className="h-full w-full bg-white rounded-lg ">
       <DataGrid
         rows={rows}
         columns={columns}

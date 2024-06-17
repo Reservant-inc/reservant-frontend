@@ -8,6 +8,8 @@ import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
 import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
+import EmployeeManagement from "../employees/EmployeeManagement";
+import MenuManagement from "../menus/MenuMangement";
 
 
 // const style = {
@@ -68,15 +70,15 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col gap-4">
-      <div className="w-full h-[50%] bg-white rounded-lg shadow-md">
+    <div className="w-full h-full gap-4 overflow-y-auto scroll space-y-4">
+      <div className="w-full h-1/2 bg-white rounded-lg shadow-md">
 
       </div>
-      <div className="w-full h-[50%] flex gap-4">
+      <div className="w-full h-1/2 flex gap-4">
         <div className="h-full w-[50%] bg-white rounded-lg shadow-md">
 
         </div>
-        <div className="h-full w-[50%] bg-white rounded-lg shadow-md flex flex-col justify-between p-4 gap-4">
+        <div className="h-full w-[50%] bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">
           <div className="h-[2rem] flex items-center">
             <h1 className="text-xl font-mont-md">Customers opinions</h1>
           </div>
@@ -87,6 +89,31 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             <Button className="text-md font-mont-md text-grey-2 rounded-lg" onClick={handleOpen}>Show all</Button>
           </div>
         </div>
+      </div>
+      <div className="w-full h-full bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">
+        <div className="h-[2rem] flex items-center">
+          <h1 className="text-xl font-mont-md">Employee management</h1>
+        </div>
+        <div className="h-[calc(100%-6rem)]">
+          <EmployeeManagement/>
+        </div>
+      </div>
+      <div className="w-full h-full bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">
+        <div className="h-[2rem] flex items-center">
+          <h1 className="text-xl font-mont-md">Menus</h1>
+        </div>
+        <div className="h-[calc(100%-6rem)]">
+          <MenuManagement activeRestaurantId={activeRestaurantId}/>
+        </div>
+      </div>
+      <div className="w-full h-full bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">
+        
+      </div>
+      <div className="w-full h-full bg-white rounded-lg shadow-md">
+      
+      </div>
+      <div className="w-full h-full bg-white rounded-lg shadow-md">
+      
       </div>
       <Modal
         open={isOpen}

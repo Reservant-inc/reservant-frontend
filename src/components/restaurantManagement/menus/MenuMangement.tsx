@@ -277,7 +277,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     }) : [];
 
     return (
-        <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg shadow-md">
+        <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
             <div>
                 <div className="flex-end items-ends justify-between">
                     

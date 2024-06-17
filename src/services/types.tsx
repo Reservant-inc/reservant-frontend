@@ -37,13 +37,14 @@ export type GroupType = {
 };
 
 export type RestaurantType = {
+  id: number
+  groupName: string;
   restaurantId: number;
   name: string;
   restaurantType: LocalType;
   address: string;
   city: string;
-  logo: string;
-  groupId: 0;
+  isVerified: boolean
 };
 
 export type RestaurantDataType = {

@@ -37,7 +37,7 @@ const RestaurantManager = () => {
               <img className="h-14 w-14 rounded-full" src="https://l-ldesign.com.au/2016/wp-content/uploads/2020/01/profile-pic-katie-square.jpg"/>
             </div>
           </div>
-          <div className="h-[calc(90%-1.5rem)] w-full rounded-lg">
+          <div className="h-[calc(90%-1.5rem)] w-full rounded-lg shadow-md">
           {
             {
               0: <RestaurantDashboardSection />,
