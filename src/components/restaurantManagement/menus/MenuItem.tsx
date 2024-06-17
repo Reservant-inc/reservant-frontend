@@ -10,6 +10,7 @@ import { getImage } from "../../../services/APIconn";
 
 interface MenuItemProps {
     name: string;
+    alternateName: string;
     price: number;
     alcoholPercentage: number;
     menuType: string;
@@ -18,7 +19,7 @@ interface MenuItemProps {
     onEdit: () => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ name, price, alcoholPercentage, menuType, photo, onDelete, onEdit }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ name, alternateName, price, alcoholPercentage, menuType, photo, onDelete, onEdit }) => {
     const { t } = useTranslation("global");
     const defaultImage = menuType === 'Alcohol' ? DefaultDrinkItem : DefaultMenuItem;
     const imagePath = photo || defaultImage;
@@ -41,18 +42,23 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, price, alcoholPercentage, men
     return (
         <Card className="w-64 dark:bg-grey-4 dark:text-grey-1 m-1 rounded-lg">
             <CardContent className="flex flex-col">
-                <img src={getImage("/uploads/660d8373-056e-4206-945b-ac82a170403b.jpg")} alt="MenuItemImage" className="w-full h-auto mb-2 rounded-lg" />
+                <img src={getImage(imagePath)} alt="MenuItemImage" className="w-full h-36 mb-2 rounded-lg" />
                 <div className="flex justify-between items-start">
-                    <h2 className="text-lg font-medium flex-grow">{name}</h2>
+                    <div className="flex flex-col">
+                        <h2 className="font-bold">{name}</h2>
+                        {alternateName !== name && (
+                            <h3 className="font-medium">{alternateName}</h3>
+                        )}
+                    </div>
                     <div className="flex space-x-1">
                         <button
-                            className="rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
+                            className="text-primary"
                             onClick={onEdit}
                         >
                             <EditIcon />
                         </button>
                         <button
-                            className="rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
+                            className="text-primary"
                             onClick={handleDeleteConfirmation}
                         >
                             <DeleteIcon />

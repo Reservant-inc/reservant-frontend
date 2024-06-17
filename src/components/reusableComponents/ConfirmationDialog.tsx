@@ -8,7 +8,14 @@ interface ConfirmationDialogProps {
   confirmationText: string; 
 }
 
+
+
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ open, onClose, onConfirm, confirmationText }) => {
+
+  const handleConfirm = () => {
+    onConfirm();
+    onClose();
+  };
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Confirmation</DialogTitle>
@@ -19,7 +26,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ open, onClose, 
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={onConfirm} color="error">
+        <Button onClick={handleConfirm} color="error">
           Yes
         </Button>
       </DialogActions>
