@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import React from 'react';
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ConfirmationDialog from './ConfirmationDialog';
 
 interface Action {
+  icon: React.ReactNode;
   name: string;
   onClick: () => void;
 }
 
 interface MoreActionsProps {
   actions: Action[];
-  name: string;
 }
 
-const MoreActions: React.FC<MoreActionsProps> = ({ actions, name }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-  const [onDeleteAction, setOnDeleteAction] = useState<() => void>(() => () => {});
+const MoreActions: React.FC<MoreActionsProps> = ({ actions }) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,25 +23,10 @@ const MoreActions: React.FC<MoreActionsProps> = ({ actions, name }) => {
     setAnchorEl(null);
   };
 
-  const handleDeleteClick = (onDelete: () => void) => {
-    setOnDeleteAction(() => onDelete);
-    setOpenConfirmation(true);
-    handleMenuClose();
-  };
-
-  const handleConfirmationClose = () => {
-    setOpenConfirmation(false);
-  };
-
-  const handleConfirmDelete = () => {
-    onDeleteAction();
-    setOpenConfirmation(false);
-  };
-
   return (
     <>
       <IconButton onClick={handleMenuOpen}>
-        <MoreVertIcon className="text-black dark:text-grey-2" />
+        <MoreVertIcon />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -52,17 +34,12 @@ const MoreActions: React.FC<MoreActionsProps> = ({ actions, name }) => {
         onClose={handleMenuClose}
       >
         {actions.map((action, index) => (
-          <MenuItem key={index} onClick={action.name === 'Delete' ? () => handleDeleteClick(action.onClick) : action.onClick}>
-            {action.name}
+          <MenuItem key={index} onClick={action.onClick}>
+            <ListItemIcon>{action.icon}</ListItemIcon>
+            <ListItemText primary={action.name} />
           </MenuItem>
         ))}
       </Menu>
-      <ConfirmationDialog
-        open={openConfirmation}
-        onClose={handleConfirmationClose}
-        onConfirm={handleConfirmDelete}
-        confirmationText={`Are you sure you want to delete ${name} ?`}
-      />
     </>
   );
 };

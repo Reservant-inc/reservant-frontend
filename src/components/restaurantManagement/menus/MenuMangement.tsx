@@ -11,7 +11,10 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, IconButton, Menu, MenuItem as MyMenuItem } from "@mui/material";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { Box, Button, IconButton, InputAdornment, Menu, MenuItem as MyMenuItem, TextField } from "@mui/material";
+import FilterMenu from "./FilterMenu";
+import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
@@ -39,6 +42,7 @@ interface MenuItemData {
 const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) => {
     const { t } = useTranslation("global");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
     const [menus, setMenus] = useState<Menu[]>([]);
     const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{ [key: number]: string[] }>({});
     const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(0);
@@ -49,6 +53,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState(false);
     const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
     const [searchText, setSearchText] = useState<string>("");
+    const [openConfirmation, setOpenConfirmation] = useState(false);
 
   useEffect(() => {
     if (activeRestaurantId !== null) {
@@ -165,6 +170,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
 
     const handleDeleteMenu = async () => {
         try {
+            
             if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
                 const menuId = menus[selectedMenuIndex].menuId;
                 const response = await fetchDELETE(`/menus/${menuId}`);
@@ -172,6 +178,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             } else {
                 console.error("No menu selected to delete");
             }
+            
         } catch (error) {
             console.error("Error while deleting menu:", error);
         }
@@ -216,11 +223,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         try {
             if (editedMenuItem) {
                 const { menuItemId } = editedMenuItem;
+                const photoFileName = values.photo.startsWith("/uploads/") ? values.photo.slice(9) : values.photo;
                 const body = JSON.stringify({
                     name: values.name,
+                    alternateName:  values.alternateName,
                     price: values.price,
                     alcoholPercentage: values.alcoholPercentage || null,
-                    photofileName: values.photo
+                    photofileName: photoFileName
                 });
                 console.log(body);
                 const response = await fetchPUT(`/menu-items/${menuItemId}`, body);
@@ -253,6 +262,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         setAnchorEl(null);
     };
 
+    const handleFilterOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setFilterAnchorEl(event.currentTarget);
+    };
+
+    const handleFilterClose = () => {
+        setFilterAnchorEl(null);
+    };
+
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
@@ -266,8 +283,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     } : null;
 
     const actions = [
-        { icon: <EditIcon />, name: 'Edit', onClick: handleEditMenu },
-        { icon: <DeleteIcon />, name: 'Delete', onClick: handleDeleteMenu }
+        { icon: <AddIcon />, name: 'Add menu', onClick:() => setIsMenuPopupOpen(true) },
+        { icon: <EditIcon />, name: 'Edit menu', onClick: handleEditMenu },
+        { icon: <DeleteIcon />, name: 'Delete menu', onClick:() => setOpenConfirmation(true) }
     ];
 
     const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
@@ -276,51 +294,119 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         return nameMatch || priceMatch;
     }) : [];
 
+    const sortMenuItems = (sortFunction: (a: MenuItemData, b: MenuItemData) => number) => {
+        if (selectedMenuIndex !== null) {
+            const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(sortFunction);
+            setMenus(prevMenus => {
+                const updatedMenus = [...prevMenus];
+                updatedMenus[selectedMenuIndex] = {
+                    ...updatedMenus[selectedMenuIndex],
+                    menuItems: sortedMenuItems
+                };
+                return updatedMenus;
+            });
+            handleFilterClose();
+        }
+    };
+    
+    const handleSortAlphabetically = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.name.localeCompare(b.name));
+    };
+    
+    const handleSortPriceAsc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.price - b.price);
+    };
+    
+    const handleSortPriceDesc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => b.price - a.price);
+    };
+    
+    const handleSortAlcoholAsc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0));
+    };
+    
+    const handleSortAlcoholDesc = () => {
+        sortMenuItems((a: MenuItemData, b: MenuItemData) => (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0));
+    };
+
+    const handleClearFilters = () => {
+        fetchMenuIemsForSelectedMenu();
+    };
+    
     return (
         <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
             <div>
-                <div className="flex-end items-ends justify-between">
-                    
+                {selectedMenuIndex === null && (
+                <div className="flex justify-start">
+                    <IconButton onClick= {() => setIsMenuPopupOpen(true)} >
+                        <AddIcon className="text-secondary-2"/>
+                        <span className="ml-1 text-black dark:text-white">ADD MENU</span>
+                    </IconButton>
+                </div>
+                 )}
+                 <div className="float-end">
                     <IconButton onClick={handleMenuOpen} disabled={selectedMenuIndex === null}>
                         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-                            <MoreActions actions={actions} name={menus[selectedMenuIndex].name} />
+                        <MoreActions actions={actions} />
                         )}
                     </IconButton>
                 </div>
-                <div className="flex justify-center">
-                    <button
-                        className="mr-1 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
-                        onClick={() => setIsMenuPopupOpen(true)}
-                    >
-                        <AddIcon />
-                    </button>
+                <div className="flex justify-start">
                     {(activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId]) ? (
-                        menuNamesByRestaurant[activeRestaurantId].map((category: string, index: number) => (
-                            <button
+                        menuNamesByRestaurant[activeRestaurantId].map((name: string, index: number) => (
+                            <Button
+                                variant="text"
                                 key={index}
-                                className={`mr-1 rounded-lg p-1 font-bold ${index === selectedMenuIndex ? 'dark:text-black text-white dark:bg-secondary bg-primary-2' : 'border dark:border-secondary dark:text-secondary border-primary-2 text-primary-2'}`}
+                                className={`mr-1 text-2xl p-1 font-bold  ${index === selectedMenuIndex ? 'text-primary dark:text-secondary-2 bg-gray-200 ' : 'text-grey-2'}`}
                                 onClick={() => setSelectedMenuIndex(index === selectedMenuIndex ? null : index)}
                             >
-                                {category}
-                            </button>
+                                {name}
+                            </Button>
                         ))
                     ) : null}
                 </div>
             </div>
-            <div>
-                <button
-                    className="mr-1 mx-4 rounded-lg bg-primary-2 p-1 w-8 h-8 dark:bg-secondary-2 dark:hover:bg-secondary dark:text-black"
-                    onClick={() => { setIsMenuItemPopupOpen(true) }}
-                >
-                </button>
-                <input
-                    type="text"
-                    placeholder={t("general.search")}
-                    value={searchText}
-                    onChange={handleSearchInputChange}
-                    className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
-                />
+
+            <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+                {selectedMenuIndex !== null && (
+                        <Button
+                            startIcon={<AddIcon className="text-secondary-2" />}
+                            onClick={() => { setIsMenuItemPopupOpen(true) }}
+                        >
+                            <span className="ml-1 text-black dark:text-white">ADD MENU ITEM</span>
+                        </Button>
+                    )}
+                {selectedMenuIndex !== null && (
+                    <FilterMenu
+                        filterAnchorEl={filterAnchorEl}
+                        handleFilterOpen={handleFilterOpen}
+                        handleFilterClose={handleFilterClose}
+                        handleSortAlphabetically={handleSortAlphabetically}
+                        handleSortPriceAsc={handleSortPriceAsc}
+                        handleSortPriceDesc={handleSortPriceDesc}
+                        handleSortAlcoholAsc={handleSortAlcoholAsc}
+                        handleSortAlcoholDesc={handleSortAlcoholDesc}
+                        handleClearFilters={handleClearFilters}
+                    />
+                )}
+                </div>
+                <div className="flex-grow">
+                    {selectedMenuIndex !== null && (
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                            <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+                            <TextField
+                                type="text"
+                                label={t("general.search")}
+                                onChange={handleSearchInputChange}
+                                variant="standard"
+                                className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
+                            />
+                        </Box>
+                    )}
+                </div>
             </div>
+
             <div className="flex flex-wrap m-1">
                 {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
                     <>
@@ -328,6 +414,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                             <MenuItem
                                 key={menuItem.menuItemId}
                                 name={menuItem.name}
+                                alternateName={menuItem.alternateName}
                                 price={menuItem.price}
                                 photo={menuItem.photo}
                                 alcoholPercentage={menuItem.alcoholPercentage}
@@ -362,6 +449,12 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                 onSave={handleSaveEditedMenuItem}
                 menuType={selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuType || "" : ""}
                 editedMenuItem={editedMenuItem}
+            />
+             <ConfirmationDialog
+                open={openConfirmation}
+                onClose={() => setOpenConfirmation(false)}
+                onConfirm={handleDeleteMenu}
+                confirmationText={`Are you sure you want to delete this menu?`} 
             />
         </div>
     );
