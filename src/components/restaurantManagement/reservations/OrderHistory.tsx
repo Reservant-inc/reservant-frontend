@@ -16,11 +16,17 @@ import CancelIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DetailsIcon from "@mui/icons-material/Details";
-import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, Select, MenuItem } from "@mui/material";
 import { fetchGET } from "../../../services/APIconn";
 
 interface OrderHistoryProps {
   activeRestaurantId: number | null;
+}
+
+interface Employee {
+  login: string;
+  firstName: string;
+  lastName: string;
 }
 
 const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
@@ -35,6 +41,13 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+
+  const statusOptions = [
+    { value: 'Completed', label: 'Completed' },
+    { value: 'Pending', label: 'Pending' },
+    { value: 'Cancelled', label: 'Cancelled' },
+  ];
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -48,15 +61,50 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
   useEffect(() => {
     const populateRows = async () => {
       try {
-        const response = await fetchGET(`/restaurants/${activeRestaurantId}/orders`);
+        const activeRestaurantId = 2
+        const returnFinished = true; 
+        const page = 1; 
+        const perPage = 10; 
+        const orderBy = 'DateAsc';
+
+        // Construct query parameters
+        const queryParams = new URLSearchParams({
+          returnFinished: returnFinished.toString(),
+          page: page.toString(),
+          perPage: perPage.toString(),
+          orderBy
+        });
+  
+        // Construct the full URL
+        const url = `/restaurants/${activeRestaurantId}/orders?${queryParams.toString()}`;
+  
+        const response = await fetchGET(url);
         console.log(response);
-        
       } catch (error) {
         console.error("Error populating table", error);
       }
     };
-    populateRows();
+    
+  
+    //populateRows();
   }, []);
+
+  useEffect(() => {
+    const fetchEmployess = async () => {
+      const response = await fetchGET("/user/employees");
+      console.log(response);
+      if (response) {
+        const mappedEmployees = response.map((emp: any) => ({
+          login:  emp.login,
+          firstName: emp.firstName,
+          lastName: emp.lastName
+        }));
+        setEmployees(mappedEmployees);
+      }
+      console.log(employees);
+    }
+    fetchEmployess();
+  }, []);  
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -104,12 +152,61 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
     setRowModesModel(newRowModesModel);
   };
 
+  const handleStatusChange = (id: GridRowId, newStatus: string) => {
+    const updatedRows = rows.map((row) =>
+      row.id === id ? { ...row, status: newStatus } : row
+    );
+    setRows(updatedRows);
+  };
+
+  const handleEmployeeChange = (id: GridRowId, employeeId: string) => {
+    const updatedRows = rows.map((row) =>
+      row.id === id ? { ...row, employeeId } : row
+    );
+    setRows(updatedRows);
+  };
+  
+
   const columns: GridColDef[] = [
-    { field: "orderId", headerName: "Order ID", width: 150, editable: false },
-    { field: "visitId", headerName: "Visit Date", width: 150, editable: false },
-    { field: "cost", headerName: "Cost", width: 150, editable: true },
-    { field: "status", headerName: "Status", width: 150, editable: true },
-    { field: "employeeId", headerName: "Employee", width: 150, editable: true },
+    { field: "orderId", headerName: "Order ID", width: 220, editable: false },
+    { field: "visitId", headerName: "Visit Date", width: 220, editable: false },
+    { field: "cost", headerName: "Cost", width: 220, editable: true },
+    { field: "status", headerName: "Status", width: 220, renderCell: (params) => {
+      const isInEditMode = rowModesModel[params.id]?.mode === GridRowModes.Edit;
+      return isInEditMode ? (
+        <Select
+          value={params.value}
+          onChange={(e) => handleStatusChange(params.id as GridRowId, e.target.value as string)}
+          className="border-none"
+        >
+          {statusOptions.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        <div>{params.value}</div>
+      );
+    }},
+    { field: "employeeId", headerName: "Employee", width: 220,renderCell: (params) => {
+      const isInEditMode = rowModesModel[params.id]?.mode === GridRowModes.Edit;
+      return isInEditMode ? (
+        <Select
+          value={params.value}
+          onChange={(e) => handleEmployeeChange(params.id as GridRowId, e.target.value as string)}
+          className="border-none"
+        >
+          {employees.map((option) => (
+            <MenuItem key={option.login} value= {`${option.firstName} ${option.lastName}`}>
+              {`${option.firstName} ${option.lastName}`}
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        <div>{params.value}</div>
+      );
+    } },
     {
       field: "actions",
       type: "actions",
