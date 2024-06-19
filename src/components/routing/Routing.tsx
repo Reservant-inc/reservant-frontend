@@ -23,10 +23,10 @@ export const nav = [
     roles: ["Customer", "RestaurantOwner"],
   },
   {
-    // do testowania
+    // do testowania RestaurantView
     // HomePage element
     path: "/home",
-    element: <HomePage />,
+    element: <RestaurantView />,
     isPrivate: true,
     roles: ["Customer", "RestaurantOwner"],
   },

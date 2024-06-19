@@ -43,11 +43,11 @@ const RestaurantView: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="basis-2/3">
+    <div className="flex h-screen flex-col lg:flex-row">
+      <div className="w-full lg:w-2/3">
         <RestaurantDetails addToCart={addToCart} />
       </div>
-      <div className="mt-20 flex h-full min-h-screen basis-1/3 items-center justify-center">
+      <div className="mt-10 flex h-full min-h-screen w-full items-start justify-center lg:mt-20 lg:w-1/3">
         <RestaurantCart
           cart={cart}
           incrementQuantity={incrementQuantity}
