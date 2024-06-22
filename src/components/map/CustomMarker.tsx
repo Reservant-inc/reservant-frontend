@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MarkerBlack from "../../assets/images/location-black.svg";
 import MarkerPrimary from "../../assets/images/location-primary.svg";
-import { Marker, useMap } from "react-leaflet";
+import { Marker, Tooltip, useMap } from "react-leaflet";
 
 interface CustomMarkerProps {
   position: L.LatLngExpression;
@@ -20,18 +20,22 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activ
 
   const customIcon = L.icon({
     iconUrl: marker,
-    iconSize: [50, 50],
+    iconSize: [40, 40],
     iconAnchor: [25, 50],
   });
 
   return (
-    <Marker position={position} icon={customIcon}
-    eventHandlers={{
-        click: (e) => {
-          setActiveRestaurant(restaurant)
-        },
-      }}
-    />
+      <Marker position={position} icon={customIcon} 
+      eventHandlers={{
+          click: (e) => {
+            setActiveRestaurant(restaurant)
+          },
+        }}
+      >
+      <Tooltip direction="bottom" offset={[-5, -10]} opacity={1} permanent className="bg-trans font-mont-bd text-[14px] border-none shadow-none bg-trans::after"> 
+        {restaurant.name}
+      </Tooltip>
+      </Marker>
   );
 };
 

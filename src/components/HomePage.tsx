@@ -7,71 +7,34 @@ import {
   ListSubheader,
 } from "@mui/material";
 import FocusedRestaurantDetails from "./restaurant/view/FocusedRestaurantDetails";
-
-const dummy = [
-  {
-    name: "Johns Doe's 1",
-    location: {
-      latitude: 52.396255,
-      longitude: 21.00044,
-    },
-  },
-  {
-    name: "Johns Doe's 2",
-    location: {
-      latitude: 52.227209,
-      longitude: 21.021726,
-    },
-  },
-  {
-    name: "Johns Doe's 3",
-    location: {
-      latitude: 52.227315,
-      longitude: 21.00765,
-    },
-  },
-  {
-    name: "Mactruck",
-    location: {
-      latitude: 52.232572,
-      longitude: 20.998209,
-    },
-  },
-  {
-    name: "Rybsko",
-    location: {
-      latitude: 52.221741,
-      longitude: 21.012285,
-    },
-  },
-  {
-    name: "Kubel pomyj",
-    location: {
-      latitude: 52.221426,
-      longitude: 21.001642,
-    },
-  },
-  {
-    name: "Mordor",
-    location: {
-      latitude: 52.223938,
-      longitude: 20.990953,
-    },
-  },
-];
+import { fetchGET } from "../services/APIconn";
 
 export default function HomePage() {
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
+  const [bounds, setBounds] = useState<any>({
+    lat1: 52.25255454924618,
+    lat2: 52.20718589303197,
+    lon1: 21.06353759765625,
+    lon2: 20.959854125976566
+  });
 
   useEffect(() => {
-    setRestaurants(dummy);
-  }, []);
+    const getRestaurants = async () => {
+      try {
+        const response = await fetchGET(`/restaurants/in-area?lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}`);
+        setRestaurants(response);
+      } catch (error) {
+        console.error("Error getting restaurants", error);
+      }
+    };
+    getRestaurants();
+  }, [bounds]);
 
   return (
     <div className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3">
-      <div className="h-full w-[15%] bg-white shadow-md">
-        <input type="text" />
+      <div className="h-full w-[15%] bg-white shadow-md p-3">
+        <input type="text" className="rounded-full w-full"/>
         <List
           className="font-mont-md dark:bg-black"
           sx={{ width: "100%" }}
@@ -94,7 +57,7 @@ export default function HomePage() {
       </div>
       {activeRestaurant && (
         <FocusedRestaurantDetails
-          restaurantId={1} // Replace with actual restaurant ID
+          restaurantId={activeRestaurant.ID}
           onClose={() => setActiveRestaurant(null)}
         />
       )}
@@ -103,6 +66,7 @@ export default function HomePage() {
           activeRestaurant={activeRestaurant}
           restaurants={restaurants}
           setActiveRestaurant={setActiveRestaurant}
+          setBounds={setBounds}
         />
       </div>
     </div>
