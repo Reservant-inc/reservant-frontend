@@ -44,6 +44,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
+        //tu nie moze byc my-restaurants
         const data = await fetchGET(`/my-restaurants/1`);
         setRestaurant(data);
       } catch (error) {
@@ -55,7 +56,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   }, [restaurantId]);
 
   if (!restaurant) {
-    return <div>Loading...</div>;
+    return <div></div>
   }
 
   const renderActiveTab = () => {
