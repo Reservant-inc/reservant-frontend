@@ -19,7 +19,7 @@ import {
   GridSlots,
 } from "@mui/x-data-grid";
 import { EmployeeEmployedType, EmployeeType, RestaurantType } from "../../../services/types";
-import { fetchGET } from "../../../services/APIconn";
+import { fetchDELETE, fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
@@ -61,7 +61,7 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
             isHallEmployee: response[i].isHallEmployee,
             dateFrom: response[i].dateFrom,
             dateUntil: response[i].dateUntil,
-            employmentId: response[i].employmentID
+            employmentId: response[i].employmentId
             });
         }
         console.log(employees)
@@ -122,6 +122,7 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
+    
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -332,7 +333,7 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
         className="flex items-center justify-center"
       >
         <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
-          <RestaurantAddEmp  id={selectedId}/>
+          <RestaurantAddEmp  empid={selectedId}/>
         </div>
       </Modal>
     </div>

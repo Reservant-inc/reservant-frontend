@@ -89,7 +89,7 @@ export type EmployeeEmployedType = {
   employmentId: string
 };
 export type EmploymentType = {
-  id:number,
+  id: string,
   restaurantId: string,
   isBackdoorEmployee: string,
   isHallEmployee: string,

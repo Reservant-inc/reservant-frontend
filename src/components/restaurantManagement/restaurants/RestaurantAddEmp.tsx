@@ -6,11 +6,12 @@ import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import ErrorMes from "../../reusableComponents/ErrorMessage";
 import { RestaurantDataProps } from "../../../services/interfaces";
+import { EmploymentType } from "../../../services/types";
 
 const initialValues = {
   selectedRestaurant: "",
-  isBackdoorEmployee: "false",
-  isHallEmployee: "false",
+  isBackdoorEmployee: "",
+  isHallEmployee: "",
 };
 
 type restaurant = {
@@ -18,7 +19,7 @@ type restaurant = {
   restaurantID: string
 }
 
-const RestaurantAddEmp = ({id}:{id: string}) => {
+const RestaurantAddEmp = ({empid}:{empid: string}) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
   const [restaurants, setRestaurants] = useState<restaurant[]>([]);
@@ -27,17 +28,44 @@ const RestaurantAddEmp = ({id}:{id: string}) => {
     const getRestaurants = async () => {
       try {
   
-        const response = await fetchGET("/my-restaurants");
-        const tmp: restaurant[] = [];
+          const response = await fetchGET("/user/employees");
+          const tmp: EmploymentType[] = [];
+          
+          if (response.length)
+            for (const i in response) {
+              if(response[i].userId===empid)
+              for (const j in response[i].employments){
+                tmp.push({
+                  id: response[i].employments[j].employmentId,
+                  restaurantName: response[i].employments[j].restaurantName,
+                  restaurantId: response[i].employments[j].restaurantId,
+                  isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+                  isHallEmployee: response[i].employments[j].isHallEmployee,
+                })
+              }
+            }
+
+        const response1 = await fetchGET("/my-restaurants");
+        let tmp1: restaurant[] = [];
   
-        for (const restaurant of response) {
-          tmp.push({
+
+        for (const restaurant of response1) {
+          tmp1.push({
               restaurantID: restaurant.restaurantId,
               name: restaurant.name
             });
       }
-      console.log(tmp)
-      setRestaurants(tmp)
+
+      tmp1 = tmp1.filter((e)=>{
+        for(const i in tmp){
+          console.log(e.restaurantID === tmp[i].restaurantId)
+          if(e.restaurantID===tmp[i].restaurantId)
+            return false;
+        }
+          return true;
+      });
+      console.log(tmp1)
+      setRestaurants(tmp1)
       } catch (error) {
         console.error("Error fetching restaurants", error);
       }
@@ -54,14 +82,14 @@ const RestaurantAddEmp = ({id}:{id: string}) => {
       setSubmitting(true);
       // console.log(id)
       const body = JSON.stringify([{
-        employeeId: id,
-        isHallEmployee: values.isHallEmployee,
-        isBackdoorEmployee: values.isBackdoorEmployee,
+        employeeId: empid,
+        isHallEmployee: values.isHallEmployee===""?false:values.isHallEmployee,
+        isBackdoorEmployee: values.isBackdoorEmployee===""?false:values.isBackdoorEmployee,
       }]);
 
       console.log(body)
       // console.log("AAAAAAAA"+values.selectedRestaurant)
-      // console.log(`/my-restaurants/${values.selectedRestaurant}/employees`)
+      console.log(`/my-restaurants/${values.selectedRestaurant}/employees`)
       await fetchPOST(`/my-restaurants/${values.selectedRestaurant}/employees`, body);
 
 
@@ -75,7 +103,7 @@ const RestaurantAddEmp = ({id}:{id: string}) => {
  
 
   return (
-    <div className="container-register">
+    <div id="restaurantAddEmp-container-register" className="container-register">
       <Formik
         initialValues={initialValues}
         validationSchema={RestaurantAddEmployeeSchema}
@@ -86,10 +114,11 @@ const RestaurantAddEmp = ({id}:{id: string}) => {
             <Form>
               <div className="form-container">
                 <div className="form-control flex flex-col">
-                  <Field id="selectedRestaurant" name="selectedRestaurant" component="select">
-                   {
-                    restaurants.map((restaurant) => <option> {restaurant.restaurantID} </option>)
-                   }
+                  <Field id="selectedRestaurant" default="Select a restaurant" name="selectedRestaurant" component="select">
+                    <option value="" id="addEmp-option-default">Select a restaurant</option>
+                    {
+                      restaurants.map((restaurant) => <option value={restaurant.restaurantID}> {restaurant.name} </option>)
+                    }
                     
                   </Field>
                   <span className="">
@@ -97,6 +126,7 @@ const RestaurantAddEmp = ({id}:{id: string}) => {
                       type="checkbox"
                       id="isBackdoorEmployee"
                       name="isBackdoorEmployee"
+                      checked={formik.values.isBackdoorEmployee}
                       className={
                         !(
                           (formik.errors.isHallEmployee &&
@@ -117,6 +147,7 @@ const RestaurantAddEmp = ({id}:{id: string}) => {
                       type="checkbox"
                       id="isHallEmployee"
                       name="isHallEmployee"
+                      checked={formik.values.isHallEmployee}
                       className={
                         !(
                           (formik.errors.isHallEmployee &&

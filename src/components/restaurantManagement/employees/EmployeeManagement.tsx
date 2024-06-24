@@ -55,7 +55,7 @@ export default function EmployeeManagement() {
             const tmp: EmploymentType[] = [];
             for (const j in response[i].employments){
               tmp.push({
-                id: Number(i),
+                id: response[i].employments[j].employmentId,
                 restaurantId: response[i].employments[j].restaurantId,
                 isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
                 isHallEmployee: response[i].employments[j].isHallEmployee,
@@ -302,8 +302,10 @@ export default function EmployeeManagement() {
         className="flex items-center justify-center"
       >
         <div className=" rounded-xl bg-white p-3">
-          <RestaurantAddEmp id={selectedId}/>
-          <EmploymentsManagement id={selectedId}/>
+          <h1 className="text-center" id="employeeManagement-modal-header">Employments</h1>
+
+          <RestaurantAddEmp empid={selectedId}/>
+          <EmploymentsManagement empid={selectedId}/>
         </div>
       </Modal>
     </div>

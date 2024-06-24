@@ -32,7 +32,7 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmploymentsManagement({id}:{id:string}) {
+export default function EmploymentsManagement({empid}:{empid:string}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -49,15 +49,15 @@ export default function EmploymentsManagement({id}:{id:string}) {
           
           if (response.length)
             for (const i in response) {
-                console.log("KURWAAAAAAAAAAAAAAAAAAAAAAAA" + id)
-              if(response[i].userId===id)
+                console.log("KURWAAAAAAAAAAAAAAAAAAAAAAAA" + empid)
+              if(response[i].userId===empid)
               for (const j in response[i].employments){
                 tmp.push({
-                  id: Number(i),
+                  id: response[i].employments[j].employmentId,
+                  restaurantName: response[i].employments[j].restaurantName,
                   restaurantId: response[i].employments[j].restaurantId,
                   isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
                   isHallEmployee: response[i].employments[j].isHallEmployee,
-                  restaurantName: response[i].employments[j].restaurantName
                 })
               }
         }
@@ -96,7 +96,7 @@ export default function EmploymentsManagement({id}:{id:string}) {
 
   const handleSaveClick = (id: GridRowId) => async () => {
     const body =JSON.stringify({
-      employmentId: 0,
+      employmentId: id,
       isHallEmployee: rows.find((row)=>row.id===id)?.isHallEmployee,
       isBackdoorEmployee: rows.find((row)=>row.id===id)?.isBackdoorEmployee
     })
@@ -106,6 +106,8 @@ export default function EmploymentsManagement({id}:{id:string}) {
   };
 
   const handleDeleteClick = (id: GridRowId) => async () => {
+    setRows(rows.filter((row) => row.id !== id));
+
     await fetchDELETE(`/employments/${id}`)
   };
 
@@ -134,7 +136,7 @@ export default function EmploymentsManagement({id}:{id:string}) {
 
 
   const columns: GridColDef[] = [
-    { field: "restaurantId", headerName: "ID", width: 180, editable: false },
+    { field: "id", headerName: "ID", width: 180, editable: false },
     {
       field: "restaurantName",
       headerName: "restaurantName",
@@ -226,7 +228,7 @@ export default function EmploymentsManagement({id}:{id:string}) {
   
 
   return (
-    <div className="h-full w-full bg-white rounded-lg ">
+    <div id="employmentsManagement-wrapper" className="h-full w-full bg-white rounded-lg ">
       <DataGrid
         rows={rows}
         columns={columns}

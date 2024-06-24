@@ -125,11 +125,14 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.confirmPassword.required")),
   });
 
-  const RestaurantAddEmployeeSchema = yup
+  const RestaurantAddEmployeeSchema = 
+  yup
     .object({
       isBackdoorEmployee: yup.boolean(),
-      isHallEmployee: yup.boolean(),
-    })
+      isHallEmployee: yup.boolean(),    
+      selectedRestaurant: yup.string().required("please select one of the available restaurants"),
+    },
+  )
     .test(
       "at-least-one-checkbox",
       t("errors.employee-register.employeeRole.required"),
@@ -137,6 +140,7 @@ export const useValidationSchemas = () => {
         if (obj.isBackdoorEmployee || obj.isHallEmployee) {
           return true;
         }
+
 
         return new yup.ValidationError([
           new yup.ValidationError(
