@@ -52,8 +52,8 @@ export const useValidationSchemas = () => {
 
     birthDate: yup
       .date()
-      .min("1969-11-13", t("errors.user-register.birthDate.min"))
-      .max("2023-11-13", t("errors.user-register.birthDate.max"))
+      .min("1900-01-01", t("errors.user-register.birthDate.min"))
+      .max("2024-06-24", t("errors.user-register.birthDate.max"))
       .required(t("errors.user-register.birthDate.required")),
 
     password: yup
