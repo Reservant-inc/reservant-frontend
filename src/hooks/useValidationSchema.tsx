@@ -13,12 +13,12 @@ export const useValidationSchemas = () => {
   const userRegisterSchema = yup.object({
     firstName: yup
       .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.user-register.firstName.matches"))
+      .matches(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/, t("errors.user-register.firstName.matches"))
       .required(t("errors.user-register.firstName.required")),
 
     lastName: yup
       .string()
-      .matches(/^[a-zA-Z]+$/, t("errors.user-register.lastName.matches"))
+      .matches(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/, t("errors.user-register.lastName.matches"))
       .required(t("errors.user-register.lastName.required")),
 
     login: yup
