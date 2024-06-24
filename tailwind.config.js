@@ -27,7 +27,8 @@ module.exports = {
       'grey-3'      : '#2b2b2b',
       'grey-4'      : '#333333',
       'black'       : '#222222',
-      'trans'       : 'rgba(0,0,0,0)'
+      'trans'       : 'rgba(0,0,0,0)',
+      'pink'        : '#ff0000',
     },
   },
   plugins: [
