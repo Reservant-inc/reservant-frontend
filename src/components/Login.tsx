@@ -35,17 +35,18 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="container-login">
+    <div id="loginWrapper" className="container-login">
       <Formik
+        id="login-formik"
         initialValues={initialValues}
         validationSchema={loginSchema}
         onSubmit={onSubmit}
       >
         {(formik) => (
           <Form>
-            <div className="form-container">
-              <div className="form-control">
-                <label htmlFor="login">Login:</label>
+            <div id="login-form-containter" className="form-container">
+              <div id="login-login-form-control" className="form-control">
+                <label id="login-login-label" htmlFor="login">Login:</label>
                 <Field
                   type="text"
                   id="login"
@@ -56,13 +57,13 @@ const Login: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="login">
+                <ErrorMessage id="login-login-error-message" name="login">
                   {(msg) => <Error msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="password">{t("auth.password")}:</label>
+              <div id="login-password-form-control" className="form-control">
+                <label id="login-password-label" htmlFor="password">{t("auth.password")}:</label>
                 <Field
                   type="password"
                   id="password"
@@ -73,7 +74,7 @@ const Login: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="password">
+                <ErrorMessage id="login-password-error-message" name="password">
                   {(msg) => <Error msg={msg} />}
                 </ErrorMessage>
               </div>
@@ -90,12 +91,12 @@ const Login: React.FC = () => {
         )}
       </Formik>
 
-      <div className="container-links">
-        <p>
+      <div id="login-container-links" className="container-links">
+        <p id="login-notRegistered-link-wrap">
           {t("landing-page.notRegistered")}{" "}
-          <Link to="/user/register">{t("landing-page.registerButton")}</Link>
+          <Link id="login-notRegistered-link" to="/user/register">{t("landing-page.registerButton")}</Link>
         </p>
-        <Link to="/">{t("landing-page.resetPassword")}</Link>
+        <Link id="login-resetPass-link" to="/">{t("landing-page.resetPassword")}</Link>
       </div>
     </div>
   );

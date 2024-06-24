@@ -33,94 +33,105 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
     const size = useWindowDimensions();
 
     return(
-    <div className="">
-        <List>
-            <ListItem className="">
+    <div id="menu-wrapper" className="">
+        <List id="menu-list">
+            <ListItem id="menu-listItem-dash" className="">
                 <ListItemButton
+                    id="menu-listItem-dash-button"
                     className={`rounded-lg ${selectedIndex === 0 ? "bg-grey-1" : ""}`}
                     onClick={(event) => handleListItemClick(event, 0, `Hello, ${JSON.parse(Cookies.get("userInfo") as string).firstName}`)}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-dash-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                         <AppsSharpIcon/>
                     </ListItemIcon>
                     {size.width > 1330 &&
-                        <ListItemText primary="Restaurant Dashboard"/>
+                        <ListItemText id="menu-listItem-dash-text" primary="Restaurant Dashboard"/>
                     }
                 </ListItemButton>
             </ListItem>
-            <ListItem >
+            <ListItem id="menu-listItem-restaurants">
                 <ListItemButton
+                    id="menu-listItem-restaurants-button"
                     className={`rounded-lg ${selectedIndex === 1 ? "bg-grey-1" : ""} `}
                     onClick={(event) => handleListItemClick(event, 1, 'My restaurants')}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-restaurants-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                     <LocalDiningSharpIcon/>
                 </ListItemIcon>
                 {size.width > 1330 &&
-                <ListItemText primary="Restaurants" />}
+                <ListItemText id="menu-listItem-restaurants-text" primary="Restaurants" />}
                 </ListItemButton>
             </ListItem>
-            <ListItem >
+            <ListItem id="menu-listItem-employees">
                 <ListItemButton
+                id="menu-listItem-employees-button"
                     className={`rounded-lg ${selectedIndex === 2 ? "bg-grey-1" : ""}  `}
                     onClick={(event) => handleListItemClick(event, 2, 'Employee management')}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-emp-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                     <PeopleAltSharpIcon/>
                 </ListItemIcon>
                 {size.width > 1330 &&
-                <ListItemText primary="Employee management" />}
+                <ListItemText id="menu-listItem-emp-text" primary="Employee management" />}
                 </ListItemButton>
             </ListItem>
-            <ListItem >
+            <ListItem id="menu-listItem-menuManagement">
                 <ListItemButton
+                    id="menu-listItem-menuManagement-button"
+
                     className={`rounded-lg ${selectedIndex === 3 ? "bg-grey-1" : ""} `}
                     onClick={(event) => handleListItemClick(event, 3, 'Menu management')}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-menuManagement-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                     <MenuBookSharpIcon/>
                 </ListItemIcon>
                 {size.width > 1330 &&
-                <ListItemText primary="Menu management" />
+                <ListItemText id="menu-listItem-menuManagement-text" primary="Menu management" />
 }
                 </ListItemButton>
             </ListItem>
-            <ListItem >
+            <ListItem id="menu-listItem-shipment">
                 <ListItemButton
+                    id="menu-listItem-Shipment-button"
+
                     className={`rounded-lg ${selectedIndex === 4 ? "bg-grey-1" : ""}  `}
                     onClick={(event) => handleListItemClick(event, 4, 'Shipment management')}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-shipment-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                     <InventorySharpIcon/>
                 </ListItemIcon>
                 {size.width > 1330 &&
-                <ListItemText primary="Shipment management" />
+                <ListItemText id="menu-listItem-shipment-text" primary="Shipment management" />
 }
                 </ListItemButton>
             </ListItem>
-            <ListItem >
+            <ListItem id="menu-listItem-stats">
                 <ListItemButton
+                    id="menu-listItem-Statistics-button"
+
                     className={`rounded-lg ${selectedIndex === 5 ? "bg-grey-1" : ""}  `}
                     onClick={(event) => handleListItemClick(event, 5, 'Statistics')}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-stats-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                     <MovingSharpIcon/>
                 </ListItemIcon>
                 {size.width > 1330 &&
-                <ListItemText primary="Statistics" />
+                <ListItemText id="menu-listItem-stats-text" primary="Statistics" />
 }
                 </ListItemButton>
             </ListItem>
-            <ListItem >
+            <ListItem id="menu-listItem-history">
                 <ListItemButton
+                    id="menu-listItem-history-button"
+
                     className={`rounded-lg ${selectedIndex === 6 ? "bg-grey-1" : ""} `}
                     onClick={(event) => handleListItemClick(event, 6, 'Reservation history')}
                 >
-                    <ListItemIcon className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
+                    <ListItemIcon id="menu-listItem-history-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                     <ScheduleSharpIcon/>
                 </ListItemIcon>
                 {size.width > 1330 &&
-                <ListItemText primary="Reservation history" />}
+                <ListItemText id="menu-listItem-history-text" primary="Reservation history" />}
                 </ListItemButton>
             </ListItem>
         </List>

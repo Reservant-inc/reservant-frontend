@@ -159,25 +159,27 @@ const RestaurantRegister: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1 className="mb-8 text-center text-3xl font-bold">
+    <div id="restaurantRegister-div-wrapper">
+      <h1 id="restaurantRegister-header" className="mb-8 text-center text-3xl font-bold">
         {t("restaurant-register.header")}
       </h1>
       <Stepper
+        id="restuarantRegister-stepper"
         activeStep={isStep1 ? 0 : isFormSubmitted ? 2 : 1}
         alternativeLabel
       >
-        <Step>
-          <StepLabel>{t("restaurant-register.step1")}</StepLabel>
+        <Step id="restaurantRegister-step1">
+          <StepLabel id="restaurantRegister-step1-label">{t("restaurant-register.step1")}</StepLabel>
         </Step>
-        <Step>
-          <StepLabel>{t("restaurant-register.step2")}</StepLabel>
+        <Step id="restaurantRegister-step2">
+          <StepLabel id="restaurantRegister-step2-label">{t("restaurant-register.step2")}</StepLabel>
         </Step>
-        <Step>
-          <StepLabel>{t("restaurant-register.submit")}</StepLabel>
+        <Step id="restaurantRegister-step3">
+          <StepLabel id="restaurantRegister-step3-label">{t("restaurant-register.submit")}</StepLabel>
         </Step>
       </Stepper>
       <Formik
+        id="restaurantRegister-formik"
         initialValues={isStep1 ? initialValuesStep1 : initialValuesStep2}
         validationSchema={
           isStep1
@@ -187,50 +189,50 @@ const RestaurantRegister: React.FC = () => {
         onSubmit={isStep1 ? handleStep1Submit : handleStep2Submit}
       >
         {(formik) => (
-          <Form>
-            <div>
+          <Form id="restaurantRegister-form">
+            <div id="restaurantRegister-stepsWrapper">
               {isStep1 && (
                 <>
-                  <div>
-                    <label htmlFor="name">
+                  <div id="restuarantRegister-form-control-name">
+                    <label id="restaurantRegister-label-name" htmlFor="name">
                       {t("restaurant-register.name")}:
                     </label>
                     <Field type="text" id="name" name="name" />
-                    <ErrorMessage name="name" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-name" name="name" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="address">
+                  <div id="restuarantRegister-form-control-address">
+                    <label id="restaurantRegister-label-address" htmlFor="address">
                       {t("restaurant-register.address")}:
                     </label>
                     <Field type="text" id="address" name="address" />
-                    <ErrorMessage name="address" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-address" name="address" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="postalIndex">
+                  <div id="restuarantRegister-form-control-postalIndex">
+                    <label id="restaurantRegister-label-postalIndex" htmlFor="postalIndex">
                       {t("restaurant-register.postalCode")}:
                     </label>
                     <Field type="text" id="postalIndex" name="postalIndex" />
-                    <ErrorMessage name="postalIndex" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-postalIndex" name="postalIndex" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="city">
+                  <div id="restuarantRegister-form-control-city">
+                    <label id="restaurantRegister-label-city" htmlFor="city">
                       {t("restaurant-register.city")}:
                     </label>
                     <Field type="text" id="city" name="city" />
-                    <ErrorMessage name="city" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-city" name="city" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="nip">{t("restaurant-register.tin")}:</label>
+                  <div id="restuarantRegister-form-control-nip">
+                    <label id="restaurantRegister-label-nip" htmlFor="nip">{t("restaurant-register.tin")}:</label>
                     <Field type="text" id="nip" name="nip" />
-                    <ErrorMessage name="nip" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-nip" name="nip" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="restaurantType">
+                  <div id="restuarantRegister-form-control-restaurantType">
+                    <label id="restaurantRegister-label-restaurantType" htmlFor="restaurantType">
                       {t("restaurant-register.businessType")}:
                     </label>
                     <Field
@@ -238,21 +240,21 @@ const RestaurantRegister: React.FC = () => {
                       id="restaurantType"
                       name="restaurantType"
                     >
-                      <option value={LocalType.Restaurant}>
+                      <option id="restaurantRegister-opt-restaurant" value={LocalType.Restaurant}>
                         {t("restaurant-register.types.restaurant")}
                       </option>
-                      <option value={LocalType.Bar}>
+                      <option id="restaurantRegister-opt-bar" value={LocalType.Bar}>
                         {t("restaurant-register.types.bar")}
                       </option>
-                      <option value={LocalType.Cafe}>
+                      <option id="restaurantRegister-opt-cafe" value={LocalType.Cafe}>
                         {t("restaurant-register.types.cafe")}
                       </option>
                     </Field>
-                    <ErrorMessage name="restaurantType" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-restaurantType" name="restaurantType" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="idCard">
+                  <div id="restuarantRegister-form-control-idCard">
+                    <label id="restaurantRegister-label-idCard" htmlFor="idCard">
                       {t("restaurant-register.id")}:
                     </label>
                     <input
@@ -267,11 +269,11 @@ const RestaurantRegister: React.FC = () => {
                         )
                       }
                     />
-                    <ErrorMessage name="idCard" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-idCard" name="idCard" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="businessPermission">
+                  <div id="restuarantRegister-form-control-businessPermission">
+                    <label id="restaurantRegister-label-businessPermission" htmlFor="businessPermission">
                       {t("restaurant-register.businessLicense")}:
                     </label>
                     <input
@@ -286,11 +288,11 @@ const RestaurantRegister: React.FC = () => {
                         )
                       }
                     />
-                    <ErrorMessage name="businessPermission" component="div" />
+                    <ErrorMessage id="restaruantRegister-errorMessage-businessPermission" name="businessPermission" component="div" />
                   </div>
-
-                  <div>
-                    <label htmlFor="rentalContract">
+ 
+                  <div id="restuarantRegister-form-control-rentalContract">
+                    <label id="restaurantRegister-label-rentalContract" htmlFor="rentalContract">
                       {t("restaurant-register.leaseAgreement")}:
                     </label>
                     <input
@@ -307,8 +309,8 @@ const RestaurantRegister: React.FC = () => {
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="alcoholLicense">
+                  <div id="restuarantRegister-form-control-alcoholLicense">
+                    <label id="restaurantRegister-label-alcoholLicense" htmlFor="alcoholLicense">
                       {t("restaurant-register.alcoholLicense")}:
                     </label>
                     <input
@@ -329,17 +331,18 @@ const RestaurantRegister: React.FC = () => {
 
               {!isStep1 && (
                 <>
-                  <div>
-                    <label>{t("restaurant-register.tags")}:</label>
+                  <div id="restaurantRegister-from-control-tags">
+                    <label id="restaurantRegister-label-tags">{t("restaurant-register.tags")}:</label>
                     <FieldArray name="tags">
                       {({ push, remove }) => (
                         <>
                           {tags.map((tag, index) => (
                             <div key={tag}>
-                              <label>
+                              <label id="restaurantRegister-wrapper-tags">
                                 <Field
                                   type="checkbox"
                                   name={`tags.${index}`}
+                                  id={`tags.${index}`}
                                   value={tag}
                                   checked={(formik.values.tags || []).includes(
                                     tag,
@@ -364,8 +367,8 @@ const RestaurantRegister: React.FC = () => {
                     <ErrorMessage name="tags" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="provideDelivery">
+                  <div id="restaurantRegister-from-control-provideDelivery">
+                    <label id="restaurantRegister-label-provideDelivery" htmlFor="provideDelivery">
                       {t("restaurant-register.provideDelivery")}:
                     </label>
                     <Field
@@ -375,8 +378,8 @@ const RestaurantRegister: React.FC = () => {
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="logo">
+                  <div id="restaurantRegister-from-control-logo">
+                    <label id="restaurantRegister-label-logo" htmlFor="logo">
                       {t("restaurant-register.logo")}:
                     </label>
                     <input
@@ -391,11 +394,11 @@ const RestaurantRegister: React.FC = () => {
                         )
                       }
                     />
-                    <ErrorMessage name="logo" component="div" />
+                    <ErrorMessage id="restaurantRegister-errorMessage-provideDelivery" name="logo" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="photos">
+                  <div id="restaurantRegister-from-control-photos">
+                    <label id="restaurantRegister-label-photos" htmlFor="photos">
                       {t("restaurant-register.photos")}:
                     </label>
                     <input
@@ -412,11 +415,11 @@ const RestaurantRegister: React.FC = () => {
                         }
                       }}
                     />
-                    <ErrorMessage name="photos" component="div" />
+                    <ErrorMessage id="restaurantRegister-errorMessage-photos" name="photos" component="div" />
                   </div>
 
-                  <div>
-                    <label htmlFor="description">
+                  <div id="restaurantRegister-from-control-description">
+                    <label id="restaurantRegister-label-description" htmlFor="description">
                       {t("restaurant-register.description")}:
                     </label>
                     <Field
@@ -425,12 +428,13 @@ const RestaurantRegister: React.FC = () => {
                       name="description"
                       value={formik.values.description || ""} // Tutaj zmiana
                     />
-                    <ErrorMessage name="description" component="div" />
+                    <ErrorMessage id="restaurantRegister-errorMessage-provideDelivery" name="description" component="div" />
                   </div>
                 </>
               )}
 
               <LinearProgress
+                id="restaurantRegister-proggresBar"
                 variant="determinate"
                 value={formProgress}
                 sx={{ width: "100%", marginTop: "20px" }}
@@ -463,6 +467,7 @@ const RestaurantRegister: React.FC = () => {
       </Formik>
 
       <Snackbar
+        id="restaurantRegister-snackBar"
         open={snackbarOpen}
         autoHideDuration={5000}
         onClose={handleSnackbarClose}
