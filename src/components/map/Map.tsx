@@ -24,7 +24,7 @@ const Map: React.FC<MapProps> = ({
     mapRef.current = map;
 
     map.zoomControl.setPosition("bottomright");
-    map.setMinZoom(14);
+    map.setMinZoom(10);
     map.setMaxZoom(17);
 
     useEffect(() => {
@@ -44,10 +44,10 @@ const Map: React.FC<MapProps> = ({
       const northEast = bounds.getNorthEast();
   
       setBounds({
-        lat1: southWest.lat,
-        lat2: northEast.lat,
-        lon1: southWest.lng,
-        lon2: northEast.lng,
+        lat1: southWest.lat+1,
+        lat2: northEast.lat-1,
+        lon1: southWest.lng+1,
+        lon2: northEast.lng-1,
       });
     }
   };
