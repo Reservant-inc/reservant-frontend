@@ -28,7 +28,7 @@ export const nav = [
     path: "/home",
     element: <HomePage />,
     isPrivate: true,
-    roles: ["Customer", "RestaurantOwner"],
+    roles: ["Customer", "RestaurantOwner", "RestaurantEmployee"],
   },
   {
     path: "/:user/restaurants",

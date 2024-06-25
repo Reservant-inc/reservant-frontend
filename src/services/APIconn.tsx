@@ -23,19 +23,26 @@ export const fetchGET = async (connString: string) => {
   return data;
 };
 
-export const fetchPOST = async (connString: string, body: string) => {
+export const fetchPOST = async (connString: string, body?: string) => {
   const token = Cookies.get("token");
+
+  const fetchOptions: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token as string}`,
+    },
+  };
+
+  // czasem jest post bez body i jest error jezeli doda sie body, wiec
+  // conditionally dodawanie body
+  if (body) {
+    fetchOptions.body = body;
+  }
 
   const response = await fetch(
     `${process.env.REACT_APP_SERVER_IP}${connString}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token as string}`,
-      },
-      body: body,
-    },
+    fetchOptions,
   );
 
   if (!response.ok) {
@@ -44,7 +51,12 @@ export const fetchPOST = async (connString: string, body: string) => {
     throw new Error(errorData);
   }
 
-  const data = await response.json();
+  const text = await response.text();
+  if (!text) {
+    return {};
+  }
+
+  const data = JSON.parse(text);
 
   return data;
 };
@@ -99,7 +111,6 @@ export const fetchDELETE = async (connString: string) => {
   return data;
 };
 
-
 export const fetchFilesPOST = async (connString: string, file: File) => {
   const token = Cookies.get("token");
 
@@ -129,5 +140,5 @@ export const fetchFilesPOST = async (connString: string, file: File) => {
 };
 
 export const getImage = (path: string) => {
-  return `${process.env.REACT_APP_SERVER_IP}${path}`
-}
+  return `${process.env.REACT_APP_SERVER_IP}${path}`;
+};

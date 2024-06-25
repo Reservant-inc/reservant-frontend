@@ -1,24 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
-  TextField,
   List,
+  Paper,
   ListItem,
   ListItemText,
   Button,
-  Paper,
-  Avatar,
-  ListItemAvatar,
+  CircularProgress,
+  Box,
 } from "@mui/material";
+import { fetchGET, fetchPOST, fetchDELETE } from "../../../services/APIconn";
+import SendFriendRequest from "./SendFriendRequest";
+import NotificationList from "./NotificationList";
 
-interface FriendSearchBarProps {
-  // moze potem jakies propry sie pojawia, na teraz wstawiam zeby dzialalo
+interface FriendSearchBarProps {}
+
+interface User {
+  senderId: string;
+  senderName: string;
 }
 
 const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [outgoingRequests, setOutgoingRequests] = useState<any[]>([]);
+  const [friends, setFriends] = useState<any[]>([]);
+  const [incomingRequests, setIncomingRequests] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [userId, setUserId] = useState<string>("");
 
+  useEffect(() => {
+    fetchUserData();
+    fetchRequests();
+    fetchFriends();
+    fetchIncomingRequests();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetchGET("/user");
+      console.log("User Data:", response);
+      setUserId(response.userId);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  const fetchRequests = async () => {
+    try {
+      setLoading(true);
+      const outgoing = await fetchGET("/friends/outgoing");
+      console.log("Outgoing Requests:", outgoing.items);
+      setOutgoingRequests(outgoing.items);
+    } catch (error) {
+      console.error("Error fetching outgoing requests:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchFriends = async () => {
+    try {
+      const response = await fetchGET("/friends");
+      setFriends(response.items);
+    } catch (error) {
+      console.error("Error fetching friends list:", error);
+    }
+  };
+
+  const fetchIncomingRequests = async () => {
+    try {
+      const response = await fetchGET("/friends/incoming");
+      setIncomingRequests(response.items);
+    } catch (error) {
+      console.error("Error fetching incoming requests:", error);
+    }
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+
+    if (value.length >= 3) {
+      const results = mockFetchUsers(value);
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  // tego nie uzywam ale niech zostanie na razie, potem usune
   const mockUsers = [
     { id: 1, name: "Leanne Graham" },
     { id: 2, name: "Ervin Howell" },
@@ -39,72 +110,167 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
     { id: 17, name: "Leanne Graham7" },
   ];
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-
-    if (value.length >= 3) {
-      const results = mockFetchUsers(value);
-      setSearchResults(results);
-    } else {
-      setSearchResults([]);
-    }
-  };
-
   const mockFetchUsers = (query: string) => {
     return mockUsers
       .filter((user) => user.name.toLowerCase().includes(query.toLowerCase()))
       .slice(0, 5);
   };
 
+  const handleInvite = useCallback(async (userId: string) => {
+    try {
+      await fetchPOST(
+        `/friends/${userId}/send-request`,
+        JSON.stringify({ userId }),
+      );
+      fetchRequests();
+      fetchFriends();
+    } catch (error) {
+      console.error("Error sending friend request:", error);
+    }
+  }, []);
+
+  const handleCancelInvite = useCallback(async (userId: string) => {
+    try {
+      await fetchDELETE(`/friends/${userId}`);
+      fetchRequests();
+      fetchFriends();
+    } catch (error) {
+      console.error("Error canceling friend request:", error);
+    }
+  }, []);
+
+  const handleRemoveFriend = useCallback(async (userId: string) => {
+    try {
+      await fetchDELETE(`/friends/${userId}`);
+      fetchFriends();
+    } catch (error) {
+      console.error("Error removing friend:", error);
+    }
+  }, []);
+
+  const isRequestSent = (userId: string) => {
+    return outgoingRequests.find((request) => request.receiverId === userId);
+  };
+
+  const isRequestReceived = (userId: string) => {
+    return incomingRequests.find((request) => request.senderId === userId);
+  };
+
+  const isFriend = (userId: string) => {
+    return friends.find(
+      (friend) => friend.senderId === userId || friend.receiverId === userId,
+    );
+  };
+
   return (
     <div className="relative">
-      <TextField
-        label="Szukaj znajomych"
-        variant="outlined"
-        size="small"
+      <input
+        type="text"
+        placeholder="Szukaj znajomych"
         value={searchTerm}
         onChange={handleSearch}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setTimeout(() => setIsFocused(false), 100)}
-        className="w-60"
+        className="w-80 rounded-full border p-2 focus:outline-none"
       />
-      {isFocused && searchTerm.length >= 3 && (
+      {isFocused && (
         <Paper className="absolute left-0 z-10 mt-1 w-full">
-          <List>
-            {searchResults.length > 0 ? (
-              searchResults.map((user) => (
-                <ListItem key={user.id} button>
-                  <ListItemAvatar>
-                    <Avatar />
-                  </ListItemAvatar>
-                  <ListItemText primary={user.name} />
-                  <Button
-                    variant="contained"
-                    style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
-                  >
-                    Zaproś
-                  </Button>
-                </ListItem>
-              ))
-            ) : (
-              <ListItem>
-                <ListItemText primary="Brak pasujących użytkowników" />
-              </ListItem>
-            )}
-            {searchResults.length > 0 && (
-              <ListItem button>
-                <Button
-                  variant="text"
-                  color="primary"
-                  fullWidth
-                  style={{ color: "#a94c79" }}
-                >
-                  Wyświetl wszystkich
-                </Button>
-              </ListItem>
-            )}
-          </List>
+          {loading ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100px"
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <List>
+              {[
+                {
+                  senderId: "e5779baf-5c9b-4638-b9e7-ec285e57b367",
+                  senderName: "JD",
+                },
+                {
+                  senderId: "22781e02-d83a-44ef-8cf4-735e95d9a0b2",
+                  senderName: "JD+hall",
+                },
+                {
+                  senderId: "06c12721-e59e-402f-aafb-2b43a4dd23f2",
+                  senderName: "JD+backdoors",
+                },
+                {
+                  senderId: "f1b1b494-85f2-4dc7-856d-d04d1ce50d65",
+                  senderName: "JD+employee",
+                },
+                {
+                  senderId: "558614c5-ba9f-4c1a-ba1c-07b2b67c37e9",
+                  senderName: "KK",
+                },
+                {
+                  senderId: "e08ff043-f8d2-45d2-b89c-aec4eb6a1f29",
+                  senderName: "customer",
+                },
+                {
+                  senderId: "86a24e58-cb06-4db0-a346-f75125722edd",
+                  senderName: "customer2",
+                },
+                {
+                  senderId: "a79631a0-a3bf-43fa-8fbe-46e5ee697eeb",
+                  senderName: "customer3",
+                },
+              ]
+                .filter((user) => user.senderId !== userId)
+                .map((user) => (
+                  <SendFriendRequest
+                    key={user.senderId}
+                    user={user}
+                    request={isRequestSent(user.senderId)}
+                    isFriend={isFriend(user.senderId)}
+                    isRequestReceived={isRequestReceived(user.senderId)}
+                    handleInvite={handleInvite}
+                    handleCancelInvite={handleCancelInvite}
+                    handleRemoveFriend={handleRemoveFriend}
+                  />
+                ))}
+              {searchTerm.length >= 3 && (
+                <>
+                  {searchResults.length > 0 ? (
+                    searchResults
+                      .filter((user) => user.id !== userId)
+                      .map((user) => (
+                        <SendFriendRequest
+                          key={user.id}
+                          user={{ senderId: user.id, senderName: user.name }}
+                          request={isRequestSent(user.id)}
+                          isFriend={isFriend(user.id)}
+                          isRequestReceived={isRequestReceived(user.id)}
+                          handleInvite={handleInvite}
+                          handleCancelInvite={handleCancelInvite}
+                          handleRemoveFriend={handleRemoveFriend}
+                        />
+                      ))
+                  ) : (
+                    <ListItem>
+                      <ListItemText primary="Brak pasujących użytkowników" />
+                    </ListItem>
+                  )}
+                  {searchResults.length > 0 && (
+                    <ListItem button>
+                      <Button
+                        variant="text"
+                        color="primary"
+                        fullWidth
+                        style={{ color: "#a94c79" }}
+                      >
+                        Wyświetl wszystkich
+                      </Button>
+                    </ListItem>
+                  )}
+                </>
+              )}
+            </List>
+          )}
         </Paper>
       )}
     </div>
