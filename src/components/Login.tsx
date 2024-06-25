@@ -6,6 +6,7 @@ import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
 import Error from "./reusableComponents/ErrorMessage";
+import LogoLight from "../assets/images/LOGO-CLEAN-DARK.png"
 
 const initialValues = {
   login: "",
@@ -35,68 +36,65 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div id="loginWrapper" className="container-login">
-      <Formik
-        id="login-formik"
-        initialValues={initialValues}
-        validationSchema={loginSchema}
-        onSubmit={onSubmit}
-      >
-        {(formik) => (
-          <Form>
-            <div id="login-form-containter" className="form-container">
-              <div id="login-login-form-control" className="form-control">
-                <label id="login-login-label" htmlFor="login">Login:</label>
-                <Field
-                  type="text"
-                  id="login"
-                  name="login"
-                  className={
-                    !(formik.errors.login && formik.touched.login)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="login-login-error-message" name="login">
-                  {(msg) => <Error msg={msg} />}
-                </ErrorMessage>
-              </div>
+    <div id="loginWrapper" className="h-full w-full bg-gradient-to-br from-[#a94c79] via-[#b05a83] via-[#b86b90] via-[#c585a4] to-[#cc93ae] flex flex-col justify-center items-center">
+      <div className="w-[600px] h-[600px] bg-white rounded-2xl p-4 flex flex-col shadow-2xl">
+        <div className="w-full h-1/4 flex items-center justify-center">
+          {/* <img src={LogoLight} alt="logo" className="h-12"/> */}
+          <h1 className="font-mont-md text-[30px] ">LOGIN</h1>
+        </div>
+        <div className="w-full h-3/5 flex justify-center items-center">
+          <Formik
+            id="login-formik"
+            initialValues={initialValues}
+            validationSchema={loginSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => (
+              <Form className="w-full h-full">
+                <div id="login-form-containter" className="form-container h-full flex flex-col justify-around items-center">
+                  <div className="flex flex-col w-full items-center gap-4">
+                    <Field
+                      type="text"
+                      id="login"
+                      name="login"
+                      placeholder={
+                        formik.errors.login && formik.touched.login ? formik.errors.login : 'login'
+                      }
+                      className={`w-4/5 h-[60px] ring-0 rounded-md ${!(formik.errors.login && formik.touched.login) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
 
-              <div id="login-password-form-control" className="form-control">
-                <label id="login-password-label" htmlFor="password">{t("auth.password")}:</label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={
-                    !(formik.errors.password && formik.touched.password)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="login-password-error-message" name="password">
-                  {(msg) => <Error msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    />
 
-              <button
-                id="LoginLoginButton"
-                type="submit"
-                disabled={!formik.isValid}
-              >
-                Login
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
+                    <Field
+                      type="password"
+                      id="password"
+                      name="password"
+                      placeholder={
+                        formik.errors.password && formik.touched.password ? formik.errors.password : 'password'
+                      }
+                      className={`w-4/5 h-[60px] ring-0 rounded-md ${!(formik.errors.password && formik.touched.password) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
+                  </div>
 
-      <div id="login-container-links" className="container-links">
-        <p id="login-notRegistered-link-wrap">
-          {t("landing-page.notRegistered")}{" "}
-          <Link id="login-notRegistered-link" to="/user/register">{t("landing-page.registerButton")}</Link>
-        </p>
-        <Link id="login-resetPass-link" to="/">{t("landing-page.resetPassword")}</Link>
+                  <button
+                    id="LoginLoginButton"
+                    type="submit"
+                    disabled={!formik.isValid}
+                    className={`pointer w-32 h-10 rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+                  >
+                    Login
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+        <div id="login-container-links" className="h-1/5 w-full flex items-center justify-center">
+          <p id="login-notRegistered-link-wrap">
+            {t("landing-page.notRegistered")}{" "}
+            <Link id="login-notRegistered-link" to="/user/register" className="text-primary font-mont-md">{t("landing-page.registerButton")}</Link>
+          </p>
+          {/* <Link id="login-resetPass-link" to="/">{t("landing-page.resetPassword")}</Link> */}
+        </div> 
       </div>
     </div>
   );

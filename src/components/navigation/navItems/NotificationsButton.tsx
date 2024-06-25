@@ -3,7 +3,6 @@ import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import { Notifications } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../services/APIconn";
-import { Button, Box, CircularProgress } from "@mui/material";
 
 interface NotificationsButtonProps {
   isDark: boolean;

@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { fetchGET, fetchPOST, fetchDELETE } from "../../../services/APIconn";
 import SendFriendRequest from "./SendFriendRequest";
-import NotificationList from "./NotificationList";
 
 interface FriendSearchBarProps {}
 
