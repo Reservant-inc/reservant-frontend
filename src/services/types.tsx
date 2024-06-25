@@ -37,7 +37,7 @@ export type GroupType = {
 };
 
 export type RestaurantType = {
-  id: number
+  id: number;
   groupName: string;
   restaurantId: number;
   name: string;
@@ -73,6 +73,25 @@ export type EmployeeType = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  role: string;
-  restaurant: string;
+  employments: EmploymentType[]
 };
+export type EmployeeEmployedType = {
+  id: number;
+  empID: string;
+  login: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  isBackdoorEmployee: string,
+  isHallEmployee: string,
+  dateFrom: string,
+  dateUntil: string,
+  employmentId: string
+};
+export type EmploymentType = {
+  id: string,
+  restaurantId: string,
+  isBackdoorEmployee: string,
+  isHallEmployee: string,
+  restaurantName: string
+}

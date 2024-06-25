@@ -22,7 +22,7 @@
     "add-employee": {
         "isBackdoorEmployee": "Backdoor employee",
         "isHallEmployee": "Hall employee" ,
-        "addEmployee": "Add emploee"
+        "addEmployee": "Assign employee"
     },    
     "restaurant-register": {
         "name": "Name",

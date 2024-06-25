@@ -18,13 +18,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import { EmployeeEmployedType, EmployeeType, EmploymentType, RestaurantType } from "../../../services/types";
-import { fetchGET } from "../../../services/APIconn";
+import { EmployeeEmployedType, EmployeeType, RestaurantType } from "../../../services/types";
+import { fetchDELETE, fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
-import EmploymentsManagement from "./EmploymentsManagement";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -33,7 +32,7 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmployeeManagement() {
+export default function EmployeeRestaurantManagement({activeRestaurantId}:{activeRestaurantId: string}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -44,38 +43,33 @@ export default function EmployeeManagement() {
   useEffect(() => {
     const populateRows = async () => {
       try {
-    
-        const response = await fetchGET("/user/employees");
-        
-        let employees: EmployeeType[] = [];
-        
+        console.log(activeRestaurantId)
+        const response = await fetchGET(`/my-restaurants/${activeRestaurantId}/employees`);
+
+        let employees: EmployeeEmployedType[] = [];
+
         if (response.length)
-          for (const i in response) {
-        
-            const tmp: EmploymentType[] = [];
-            for (const j in response[i].employments){
-              tmp.push({
-                id: response[i].employments[j].employmentId,
-                restaurantId: response[i].employments[j].restaurantId,
-                isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
-                isHallEmployee: response[i].employments[j].isHallEmployee,
-                restaurantName: response[i].employments[j].restaurantName
-              })
-            }
+        for (const i in response) {
             employees.push({
-              id: Number(i),
-              empID: response[i].userId,
-              login: response[i].login,
-              firstName: response[i].firstName,
-              lastName: response[i].lastName,
-              phoneNumber: response[i].phoneNumber,
-              employments: tmp.slice()
+            id: Number(i),
+            empID: response[i].employeeId,
+            login: response[i].login,
+            firstName: response[i].firstName,
+            lastName: response[i].lastName,
+            phoneNumber: response[i].phoneNumber,
+            isBackdoorEmployee: response[i].isBackdoorEmployee,
+            isHallEmployee: response[i].isHallEmployee,
+            dateFrom: response[i].dateFrom,
+            dateUntil: response[i].dateUntil,
+            employmentId: response[i].employmentId
             });
-      }
-      console.log(employees)
-      
-      setRows(employees);
-    
+        }
+        console.log(employees)
+        
+        setRows(employees);
+          
+          
+        
       } catch (error) {
         console.error("Error populating table", error);
       }
@@ -128,6 +122,7 @@ export default function EmployeeManagement() {
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
+    
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -187,6 +182,42 @@ export default function EmployeeManagement() {
       align: "left",
       headerAlign: "left",
       editable: true,
+    },
+    {
+        field: "isHallEmployee",
+        headerName: "Hall role",
+        type: "boolean",
+        width: 180,
+        align: "left",
+        headerAlign: "left",
+        editable: false,
+      },
+    {
+        field: "isBackdoorEmployee",
+        headerName: "Backdoor role",
+        type: "boolean",
+        width: 180,
+        align: "left",
+        headerAlign: "left",
+        editable: false,
+      },
+    {
+        field: "dateFrom",
+        headerName: "Assigned since",
+        type: "string",
+        width: 180,
+        align: "left",
+        headerAlign: "left",
+        editable: false,
+    },
+    {
+        field: "dateUntil",
+        headerName: "Assigned until",
+        type: "string",
+        width: 180,
+        align: "left",
+        headerAlign: "left",
+        editable: true,
     },
     {
       field: "actions",
@@ -301,11 +332,8 @@ export default function EmployeeManagement() {
         onClose={() => setIsEmploymentOpen(false)}
         className="flex items-center justify-center"
       >
-        <div className=" rounded-xl bg-white p-3">
-          <h1 className="text-center" id="employeeManagement-modal-header">Employments</h1>
-
-          <RestaurantAddEmp empid={selectedId}/>
-          <EmploymentsManagement empid={selectedId}/>
+        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
+          <RestaurantAddEmp  empid={selectedId}/>
         </div>
       </Modal>
     </div>
