@@ -1,217 +1,254 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowModes,
-  DataGrid,
-  GridColDef,
-  GridActionsCellItem,
-  GridEventListener,
-  GridRowId,
-  GridRowModel,
-  GridRowEditStopReasons,
-} from "@mui/x-data-grid";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import DetailsIcon from "@mui/icons-material/Details";
-import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from "@mui/material";
-import { fetchGET } from "../../../services/APIconn";
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  IconButton,
+  Box,
+  Typography,
+  Paper,
+  TablePagination
+} from "@mui/material";
+import {
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Save as SaveIcon,
+  Close as CancelIcon
+} from "@mui/icons-material";
 
 interface OrderHistoryProps {
   activeRestaurantId: number | null;
 }
 
+interface OrderRowProps {
+  row: any;
+  isEditing: boolean;
+  onEdit: () => void;
+  onSave: () => void;
+  onCancel: () => void;
+  onDelete: () => void;
+}
+
+interface MenuItem {
+  name: string;
+  amount: number;
+  price: number;
+  status: string;
+}
+
+const OrderRow: React.FC<OrderRowProps> = ({
+  row,
+  isEditing,
+  onEdit,
+  onSave,
+  onCancel,
+  onDelete
+}) => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDetails = () => {
+    setOpen(!open);
+  };
+
+  return (
+    <>
+      <TableRow>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={toggleDetails}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell>{row.orderId}</TableCell>
+        <TableCell>{row.visitId}</TableCell>
+        <TableCell>{row.cost}</TableCell>
+        <TableCell>{row.status}</TableCell>
+        <TableCell>{row.clientName}</TableCell>
+        <TableCell>
+          {isEditing ? (
+            <>
+              <IconButton onClick={onSave}>
+                <SaveIcon />
+              </IconButton>
+              <IconButton onClick={onCancel}>
+                <CancelIcon />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <IconButton onClick={onEdit}>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={onDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          )}
+        </TableCell>
+      </TableRow>
+      {open && (
+        <>
+          <TableRow>
+            <TableCell colSpan={7}>
+              <Box display="flex">
+                <Box flex={1}>
+                  <Typography variant="h6" gutterBottom component="div">
+                    Client Info
+                  </Typography>
+                  <Typography>Client: {row.clientName}</Typography>
+                  <Typography>Address: {row.address}</Typography>
+                  <Typography>Note: {row.notes}</Typography>
+                </Box>
+                <Box flex={1}>
+                  <Typography variant="h6" gutterBottom component="div">
+                    Order Info
+                  </Typography>
+                  <Table size="small" aria-label="menu items">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Name of Menu Item</TableCell>
+                        <TableCell>Amount</TableCell>
+                        <TableCell>Price</TableCell>
+                        <TableCell>Status</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {row.menuItems.map((menuItem: MenuItem, index: number) => (
+                        <TableRow key={index}>
+                          <TableCell>{menuItem.name}</TableCell>
+                          <TableCell>{menuItem.amount}</TableCell>
+                          <TableCell>{menuItem.price}</TableCell>
+                          <TableCell>{menuItem.status}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </Box>
+            </TableCell>
+          </TableRow>
+        </>
+      )}
+    </>
+  );
+};
+
 const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
-  const [rows, setRows] = useState<GridRowsProp>([
-    { id: 1, orderId: 'ORD001', visitId: "2024-05-29", cost: 50.0, status: 'Completed', employeeId: 'John Smith' },
-    { id: 2, orderId: 'ORD002', visitId: "2024-05-29", cost: 75.0, status: 'Pending', employeeId: 'Emily Johnson' },
-    { id: 3, orderId: 'ORD003', visitId: "2024-05-30", cost: 100.0, status: 'Cancelled', employeeId: 'Michael Davis' },
-    { id: 4, orderId: 'ORD004', visitId: "2024-06-01", cost: 25.0, status: 'Completed', employeeId: 'Sarah Brown' },
-    { id: 5, orderId: 'ORD005', visitId: "2024-06-01", cost: 60.0, status: 'Pending', employeeId: 'David Wilson' },
-  ]);    
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-    params,
-    event
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const [rows, setRows] = useState([
+    {
+      id: 1,
+      orderId: "ORD001",
+      visitId: "2024-05-29",
+      cost: 50.0,
+      status: "Completed",
+      clientName: "John Smith",
+      clientId: "C001",
+      address: "123 Main St",
+      notes: "No allergies",
+      menuItems: [
+        { name: "Pizza", amount: 3, price: 30, status: "Completed" },
+        { name: "Burger", amount: 2, price: 25, status: "In Progress" }
+      ]
+    },
+    {
+      id: 2,
+      orderId: "ORD002",
+      visitId: "2024-05-29",
+      cost: 75.0,
+      status: "Pending",
+      clientName: "Emily Johnson",
+      clientId: "C002",
+      address: "456 Oak Ave",
+      notes: "Extra ketchup",
+      menuItems: [
+        { name: "Pasta", amount: 1, price: 15, status: "Completed" },
+        { name: "Salad", amount: 2, price: 10, status: "Pending" }
+      ]
     }
+    // Add more orders as needed
+  ]);
+
+  const [isEditing, setIsEditing] = useState<{ [key: number]: boolean }>({});
+
+  const handleEditClick = (id: number) => () => {
+    setIsEditing({ ...isEditing, [id]: true });
   };
 
-  useEffect(() => {
-    const populateRows = async () => {
-      try {
-        const response = await fetchGET(`/restaurants/${activeRestaurantId}/orders`);
-        console.log(response);
-        
-      } catch (error) {
-        console.error("Error populating table", error);
-      }
-    };
-    populateRows();
-  }, []);
-
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  const handleSaveClick = (id: number) => () => {
+    setIsEditing({ ...isEditing, [id]: false });
   };
 
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id: GridRowId) => () => {
+  const handleDeleteClick = (id: number) => () => {
     setRows(rows.filter((row) => row.id !== id));
   };
 
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
+  const handleCancelClick = (id: number) => () => {
+    setIsEditing({ ...isEditing, [id]: false });
   };
-
-  const handleDetailsClick = (orderId: string) => () => {
-    setSelectedOrderId(orderId);
-    setOpenDialog(true);
-    // Tutaj możesz wykonać żądanie API, aby pobrać szczegóły zamówienia na podstawie orderId
-    // fetchOrderDetails(orderId);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setSelectedOrderId(null);
-  };
-
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
-
-  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    setRowModesModel(newRowModesModel);
-  };
-
-  const columns: GridColDef[] = [
-    { field: "orderId", headerName: "Order ID", width: 150, editable: false },
-    { field: "visitId", headerName: "Visit Date", width: 150, editable: false },
-    { field: "cost", headerName: "Cost", width: 150, editable: true },
-    { field: "status", headerName: "Status", width: 150, editable: true },
-    { field: "employeeId", headerName: "Employee", width: 150, editable: true },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
-      width: 150,
-      cellClassName: "actions",
-      getActions: ({ id, row }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            icon={<DetailsIcon />}
-            label="Details"
-            onClick={handleDetailsClick(row.orderId)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
 
   return (
-    <div className="h-full w-full bg-white rounded-lg shadow-md">
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-       
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        disableRowSelectionOnClick
-        processRowUpdate={processRowUpdate}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5 } },
-        }}
-        pageSizeOptions={[5, 10, 25]}
-        className="border-0"
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell>Order ID</TableCell>
+            <TableCell>Visit Date</TableCell>
+            <TableCell>Total Cost</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Client Name</TableCell>
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row) => (
+            <OrderRow
+              key={row.id}
+              row={row}
+              isEditing={!!isEditing[row.id]}
+              onEdit={handleEditClick(row.id)}
+              onSave={handleSaveClick(row.id)}
+              onCancel={handleCancelClick(row.id)}
+              onDelete={handleDeleteClick(row.id)}
+            />
+          ))}
+        </TableBody>
+      </Table>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Order Details</DialogTitle>
-        <DialogContent>
-          <List>
-            <ListItem>
-              <ListItemText primary="Order ID:" secondary={selectedOrderId} />
-            </ListItem>
-            {selectedOrderId && (
-              <ListItem>
-                <ListItemText primary="Visit Date:" secondary={rows.find(row => row.orderId === selectedOrderId)?.visitId} />
-              </ListItem>
-            )}
-            {selectedOrderId && (
-              <ListItem>
-                <ListItemText primary="Items:" secondary=" items..." />
-              </ListItem>
-            )}
-            {selectedOrderId && (
-              <ListItem>
-                <ListItemText primary="Cost:" secondary={rows.find(row => row.orderId === selectedOrderId)?.cost} />
-              </ListItem>
-            )}
-            {selectedOrderId && (
-              <ListItem>
-                <ListItemText primary="Status:" secondary={rows.find(row => row.orderId === selectedOrderId)?.status} />
-              </ListItem>
-            )}
-            {selectedOrderId && (
-              <ListItem>
-                <ListItemText primary="Employee:" secondary={rows.find(row => row.orderId === selectedOrderId)?.employeeId} />
-              </ListItem>
-            )}
-          </List>
-        </DialogContent>
-      </Dialog>
-    </div>
+    </TableContainer>
   );
 };
 
