@@ -32,10 +32,11 @@ export default function HomePage() {
   }, [bounds]);
 
   return (
-    <div className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3">
-      <div className="h-full w-[15%] bg-white shadow-md p-3">
-        <input type="text" className="rounded-full w-full"/>
+    <div id="homePage-wrapper" className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3">
+      <div id="homePage-restaurantList-wrapper" className="h-full w-[15%] bg-white shadow-md p-3">
+        <input id="homePage-restaurantList-searchField" type="text" className="rounded-full w-full"/>
         <List
+          id="homePage-restaurantList"
           className="font-mont-md dark:bg-black"
           sx={{ width: "100%" }}
           component="nav"
@@ -46,11 +47,11 @@ export default function HomePage() {
           }
         >
           {restaurants.map((restaurant, index) => (
-            <ListItemButton
+            <ListItemButton id="homePage-listItemButton"
               onClick={() => setActiveRestaurant(restaurant)}
               key={index}
             >
-              <ListItemText primary={restaurant.name} />
+              <ListItemText id="homePage-listItemText" primary={restaurant.name} />
             </ListItemButton>
           ))}
         </List>
@@ -61,7 +62,7 @@ export default function HomePage() {
           onClose={() => setActiveRestaurant(null)}
         />
       )}
-      <div className="z-[0] h-full w-[85%]">
+      <div id="map" className="z-[0] h-full w-[85%]">
         <Map
           activeRestaurant={activeRestaurant}
           restaurants={restaurants}

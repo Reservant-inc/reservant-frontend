@@ -16,8 +16,8 @@ const App = () => {
   });
 
   return (
-    <div className="App font-mont-l">
-      <div className="h-screen">
+    <div id="AppWrapper" className="App font-mont-l">
+      <div id="AppMainSection" className="h-screen">
         <AuthWrapper />
       </div>
       {/* <Footer /> */}

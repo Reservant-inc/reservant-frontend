@@ -54,8 +54,9 @@ const UserRegister: React.FC = () => {
   };
 
   return (
-    <div className="container-register">
+    <div  id="userRegister-container-register" className="container-register">
       <Formik
+        id="iserRegister-formik"
         initialValues={initialValues}
         validationSchema={userRegisterSchema}
         onSubmit={handleSubmit}
@@ -67,9 +68,9 @@ const UserRegister: React.FC = () => {
       >
         {(formik) => (
           <Form>
-            <div className="form-container">
-              <div className="form-control">
-                <label htmlFor="firstName">{t("auth.firstName")}:</label>
+            <div id="userRegister-form-container" className="form-container">
+              <div id="userRegister-firstName-form-control" className="form-control">
+                <label id="userRegister-firstName-label" htmlFor="firstName">{t("auth.firstName")}:</label>
                 <Field
                   type="text"
                   id="firstName"
@@ -80,13 +81,13 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="firstName">
+                <ErrorMessage id="userRegister-firstName-errorMessage" name="firstName">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="lastName">{t("auth.lastName")}:</label>
+              <div id="userRegister-lastName-form-control" className="form-control">
+                <label id="userRegister-lastName-label" htmlFor="lastName">{t("auth.lastName")}:</label>
                 <Field
                   type="text"
                   id="lastName"
@@ -97,13 +98,13 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="lastName">
+                <ErrorMessage id="userRegister-lastName-errorMessage" name="lastName">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="login">Login:</label>
+              <div id="userRegister-login-form-control" className="form-control">
+                <label id="userRegister-login-label" htmlFor="login">Login:</label>
                 <Field
                   type="text"
                   id="login"
@@ -114,12 +115,12 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="login">
+                <ErrorMessage id="userRegister-login-errorMessage" name="login">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
+              <div id="userRegister-email-form-control" className="form-control">
                 <label htmlFor="email">E-mail:</label>
                 <Field
                   type="email"
@@ -131,17 +132,18 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="email">
+                <ErrorMessage id="userRegister-email-errorMessage" name="email">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
+              <div id="userRegister-phoneNumber-form-control" className="form-control">
+                <label id="userRegister-phoneNumber-label" htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
                 <Field
                   as={PhoneInput}
                   international
                   defaultCountry="PL"
+                  id="userRegister-phoneNumber-field"
                   name={"phoneNumber"}
                   value={formik.values.phoneNumber}
                   onChange={(value: string) =>
@@ -153,13 +155,13 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="phoneNumber">
+                <ErrorMessage id="userRegister-phoneNumber-errorMessage" name="phoneNumber">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="birthDate">{t("auth.birthDate")}:</label>
+              <div className="form-control" id="userRegister-birthDate-formControl">
+                <label id="userRegister-birthDate-label" htmlFor="birthDate">{t("auth.birthDate")}:</label>
                 <Field
                   type="date"
                   id="birthDate"
@@ -170,13 +172,13 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="birthDate">
+                <ErrorMessage id="userRegister-birthDate-errorMessage" name="birthDate">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="password">{t("auth.password")}:</label>
+              <div id="userRegister-password-form-control" className="form-control">
+                <label id="userREgister-password-label" htmlFor="password">{t("auth.password")}:</label>
                 <Field
                   type="password"
                   id="password"
@@ -187,13 +189,13 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="password">
+                <ErrorMessage id="userRegister-password-errorMessage" name="password">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="confirmPassword">
+              <div id="userRegister-confirmPassword-form-control" className="form-control">
+                <label id="userRegister-confirmPassword-label" htmlFor="confirmPassword">
                   {t("auth.confirmPassword")}:
                 </label>
                 <Field
@@ -209,7 +211,7 @@ const UserRegister: React.FC = () => {
                       : "border-pink border-2 border-solid"
                   }
                 />
-                <ErrorMessage name="confirmPassword">
+                <ErrorMessage id="userRegister-confirmPassword-errorMessage" name="confirmPassword">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
