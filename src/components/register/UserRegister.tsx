@@ -5,7 +5,6 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import ErrorMes from "../reusableComponents/ErrorMessage";
 import { fetchPOST, fetchGET } from "../../services/APIconn";
 
 const initialValues = {
@@ -54,179 +53,126 @@ const UserRegister: React.FC = () => {
   };
 
   return (
-    <div  id="userRegister-container-register" className="container-register">
-      <Formik
-        id="iserRegister-formik"
-        initialValues={initialValues}
-        validationSchema={userRegisterSchema}
-        onSubmit={handleSubmit}
-        //potencjalnie do rozważenia, więcej o tym w EmployeeRegister
-        /////////////////////////////////////////////////////////////
-        validateOnChange={false}
-        validateOnBlur={true}
-        /////////////////////////////////////////////////////////////
-      >
-        {(formik) => (
-          <Form>
-            <div id="userRegister-form-container" className="form-container">
-              <div id="userRegister-firstName-form-control" className="form-control">
-                <label id="userRegister-firstName-label" htmlFor="firstName">{t("auth.firstName")}:</label>
-                <Field
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  className={
-                    !(formik.errors.firstName && formik.touched.firstName)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-firstName-errorMessage" name="firstName">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+    <div  id="userRegister-container-register" className="h-full w-full bg-gradient-to-br from-[#a94c79] via-[#b05a83] via-[#b86b90] via-[#c585a4] to-[#cc93ae] flex flex-col justify-center items-center">
+      <div className="w-[600px] h-[800px] bg-white rounded-2xl p-4 flex flex-col shadow-2xl">
+        <div className="w-full h-1/4 flex items-center justify-center">
+          {/* <img src={LogoLight} alt="logo" className="h-12"/> */}
+          <h1 className="font-mont-md text-[30px] ">REGISTER</h1>
+        </div>
+        <div className="w-full h-4/5 flex justify-center items-center">
+          <Formik
+            id="iserRegister-formik"
+            initialValues={initialValues}
+            validationSchema={userRegisterSchema}
+            onSubmit={handleSubmit}
+            validateOnChange={false}
+            validateOnBlur={true}
+          >
+            {(formik) => (
+              <Form className="w-full h-full">
+                <div id="userRegister-form-container" className="form-container">
+                  <div className="flex flex-col w-full items-center gap-4">
+                    <Field
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      placeholder={
+                        formik.errors.firstName && formik.touched.firstName ? formik.errors.firstName : 'First Name'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.firstName && formik.touched.firstName) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div id="userRegister-lastName-form-control" className="form-control">
-                <label id="userRegister-lastName-label" htmlFor="lastName">{t("auth.lastName")}:</label>
-                <Field
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  className={
-                    !(formik.errors.lastName && formik.touched.lastName)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-lastName-errorMessage" name="lastName">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      placeholder={
+                        formik.errors.lastName && formik.touched.lastName ? formik.errors.lastName : 'Last name'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.lastName && formik.touched.lastName) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div id="userRegister-login-form-control" className="form-control">
-                <label id="userRegister-login-label" htmlFor="login">Login:</label>
-                <Field
-                  type="text"
-                  id="login"
-                  name="login"
-                  className={
-                    !(formik.errors.login && formik.touched.login)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-login-errorMessage" name="login">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      type="text"
+                      id="login"
+                      name="login"
+                      placeholder={
+                        formik.errors.login && formik.touched.login ? formik.errors.login : 'Login'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.login && formik.touched.login) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div id="userRegister-email-form-control" className="form-control">
-                <label htmlFor="email">E-mail:</label>
-                <Field
-                  type="email"
-                  id="email"
-                  name="email"
-                  className={
-                    !(formik.errors.email && formik.touched.email)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-email-errorMessage" name="email">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder={
+                        formik.errors.email && formik.touched.email ? formik.errors.email : 'Email'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.email && formik.touched.email) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div id="userRegister-phoneNumber-form-control" className="form-control">
-                <label id="userRegister-phoneNumber-label" htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
-                <Field
-                  as={PhoneInput}
-                  international
-                  defaultCountry="PL"
-                  id="userRegister-phoneNumber-field"
-                  name={"phoneNumber"}
-                  value={formik.values.phoneNumber}
-                  onChange={(value: string) =>
-                    formik.setFieldValue("phoneNumber", value)
-                  }
-                  className={
-                    !(formik.errors.phoneNumber && formik.touched.phoneNumber)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-phoneNumber-errorMessage" name="phoneNumber">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      as={PhoneInput}
+                      international
+                      defaultCountry="PL"
+                      id="userRegister-phoneNumber-field"
+                      name={"phoneNumber"}
+                      value={formik.values.phoneNumber}
+                      onChange={(value: string) =>
+                        formik.setFieldValue("phoneNumber", value)
+                      }
+                      placeholder={
+                        formik.errors.phoneNumber && formik.touched.phoneNumber ? formik.errors.phoneNumber : 'Phone number'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.phoneNumber && formik.touched.phoneNumber) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div className="form-control" id="userRegister-birthDate-formControl">
-                <label id="userRegister-birthDate-label" htmlFor="birthDate">{t("auth.birthDate")}:</label>
-                <Field
-                  type="date"
-                  id="birthDate"
-                  name="birthDate"
-                  className={
-                    !(formik.errors.birthDate && formik.touched.birthDate)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-birthDate-errorMessage" name="birthDate">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      type="date"
+                      id="birthDate"
+                      name="birthDate"
+                      placeholder={
+                        formik.errors.birthDate && formik.touched.birthDate ? formik.errors.birthDate : 'Birth date'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.birthDate && formik.touched.birthDate) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div id="userRegister-password-form-control" className="form-control">
-                <label id="userREgister-password-label" htmlFor="password">{t("auth.password")}:</label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={
-                    !(formik.errors.password && formik.touched.password)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-password-errorMessage" name="password">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      type="password"
+                      id="password"
+                      name="password"
+                      placeholder={
+                        formik.errors.password && formik.touched.password ? formik.errors.password : 'Password'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.password && formik.touched.password) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <div id="userRegister-confirmPassword-form-control" className="form-control">
-                <label id="userRegister-confirmPassword-label" htmlFor="confirmPassword">
-                  {t("auth.confirmPassword")}:
-                </label>
-                <Field
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  className={
-                    !(
-                      formik.errors.confirmPassword &&
-                      formik.touched.confirmPassword
-                    )
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
-                <ErrorMessage id="userRegister-confirmPassword-errorMessage" name="confirmPassword">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-              </div>
+                    <Field
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder={
+                        formik.errors.confirmPassword && formik.touched.confirmPassword ? formik.errors.confirmPassword : 'Confir password'
+                      }
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.confirmPassword && formik.touched.confirmPassword) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                    />
 
-              <button
-                id="UserRegisterSubmitButton"
-                type="submit"
-                disabled={!formik.isValid}
-              >
-                {t("auth.registerButton")}
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
+                    <button
+                      id="UserRegisterSubmitButton"
+                      type="submit"
+                      disabled={!formik.isValid}
+                      className={`pointer w-32 h-10 rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+                    >
+                      {t("auth.registerButton")}
+                    </button>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
     </div>
   );
 };

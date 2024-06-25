@@ -61,7 +61,6 @@ const Login: React.FC = () => {
                         formik.errors.login && formik.touched.login ? formik.errors.login : 'login'
                       }
                       className={`w-4/5 h-[60px] ring-0 rounded-md ${!(formik.errors.login && formik.touched.login) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-
                     />
 
                     <Field
