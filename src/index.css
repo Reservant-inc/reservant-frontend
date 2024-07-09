@@ -101,12 +101,15 @@ body {
 
 @layer base{
   .scroll::-webkit-scrollbar {
-    @apply w-[5px]
+    @apply w-[6px]
   }
 
   .scroll::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 5px;
+  }
+
+  .scroll::-webkit-scrollbar-track {
+    background: #EEE;
   }
   
   .scroll::-webkit-scrollbar-thumb:hover {

@@ -1,23 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
 import { Button } from "@mui/material";
-import { Map as LeafletMap } from "leaflet"; // Import the Map type from Leaflet
+import { Map as LeafletMap, LatLngBounds } from "leaflet"; // Import LatLngBounds
 
 interface MapProps {
   activeRestaurant: any;
   restaurants: any[];
   setActiveRestaurant: Function;
   setBounds: Function;
+  setUserMovedMap: Function;
+  userMovedMap: Boolean;
 }
 
 const Map: React.FC<MapProps> = ({
   restaurants,
   activeRestaurant,
   setActiveRestaurant,
-  setBounds
+  setBounds,
+  setUserMovedMap,
+  userMovedMap
 }) => {
   const mapRef = useRef<LeafletMap | null>(null); // Type the ref
+  const previousBoundsRef = useRef<LatLngBounds | null>(null); // Add ref to track previous bounds
 
   const MapViewUpdater = () => {
     const map = useMap();
@@ -28,11 +33,30 @@ const Map: React.FC<MapProps> = ({
     map.setMaxZoom(17);
 
     useEffect(() => {
-      if (activeRestaurant) {
+      if (activeRestaurant && !userMovedMap) {
         const { latitude, longitude } = activeRestaurant.location;
         map.flyTo([latitude, longitude - 0.02], 14);
       }
-    }, [activeRestaurant, map]);
+    }, [activeRestaurant, map, userMovedMap]);
+
+    useEffect(() => {
+      const onMoveEnd = () => {
+        if (mapRef.current) {
+          const bounds = mapRef.current.getBounds();
+          if (!previousBoundsRef.current || !previousBoundsRef.current.equals(bounds)) {
+            sendBounds();
+            setUserMovedMap(true)
+            previousBoundsRef.current = bounds;
+          }
+        }
+      };
+
+      map.on("moveend", onMoveEnd);
+
+      return () => {
+        map.off("moveend", onMoveEnd);
+      };
+    }, [map]);
 
     return null;
   };
@@ -42,26 +66,18 @@ const Map: React.FC<MapProps> = ({
       const bounds = mapRef.current.getBounds();
       const southWest = bounds.getSouthWest();
       const northEast = bounds.getNorthEast();
-  
+
       setBounds({
-        lat1: southWest.lat+1,
-        lat2: northEast.lat-1,
-        lon1: southWest.lng+1,
-        lon2: northEast.lng-1,
+        lat1: southWest.lat - 0.05,
+        lat2: northEast.lat + 0.05,
+        lon1: southWest.lng - 0.05,
+        lon2: northEast.lng + 0.05,
       });
     }
   };
 
   return (
     <div className="relative h-full w-full">
-      <div className="z-[1] absolute w-60 h-10 top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <Button
-          className="h-full w-full rounded-full bg-white font-mont-md p-2 text-black text-[12px] shadow-md"
-          onClick={sendBounds}
-        >
-          Wyszukaj w tym obszarze
-        </Button>
-      </div>
       <MapContainer
         center={
           activeRestaurant != null
@@ -89,6 +105,7 @@ const Map: React.FC<MapProps> = ({
             restaurant={restaurant}
             activeRestaurant={activeRestaurant}
             setActiveRestaurant={setActiveRestaurant}
+            setUserMovedMap={setUserMovedMap}
           />
         ))}
         <MapViewUpdater />

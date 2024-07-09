@@ -37,7 +37,7 @@ const Login: React.FC = () => {
 
   return (
     <div id="loginWrapper" className="h-full w-full bg-gradient-to-br from-[#a94c79] via-[#b05a83] via-[#b86b90] via-[#c585a4] to-[#cc93ae] flex flex-col justify-center items-center">
-      <div className="w-[600px] h-[600px] bg-white rounded-2xl p-4 flex flex-col shadow-2xl">
+      <div className="w-[600px] h-[600px] bg-[rgba(255,255,255,0.3)] rounded-2xl p-4 flex flex-col shadow-2xl">
         <div className="w-full h-1/4 flex items-center justify-center">
           {/* <img src={LogoLight} alt="logo" className="h-12"/> */}
           <h1 className="font-mont-md text-[30px] ">LOGIN</h1>
