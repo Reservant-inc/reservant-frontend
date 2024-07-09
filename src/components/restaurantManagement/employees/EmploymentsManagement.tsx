@@ -95,14 +95,14 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
   };
 
   const handleSaveClick = (id: GridRowId) => async () => {
-    const body =JSON.stringify({
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
+    const body =JSON.stringify([{
       employmentId: id,
+      isBackdoorEmployee: rows.find((row)=>row.id===id)?.isBackdoorEmployee,
       isHallEmployee: rows.find((row)=>row.id===id)?.isHallEmployee,
-      isBackdoorEmployee: rows.find((row)=>row.id===id)?.isBackdoorEmployee
-    })
+    }])
     console.log(body)
     await fetchPUT("/employments", body)
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const handleDeleteClick = (id: GridRowId) => async () => {

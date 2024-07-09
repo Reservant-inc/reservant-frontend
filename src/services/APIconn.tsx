@@ -82,9 +82,7 @@ export const fetchPUT = async (connString: string, body: string) => {
     throw new Error(errorData);
   }
 
-  const data = await response.json();
-
-  return data;
+  
 };
 
 export const fetchDELETE = async (connString: string) => {
@@ -105,6 +103,7 @@ export const fetchDELETE = async (connString: string) => {
     console.log(errorData);
     throw new Error(errorData);
   }
+
 
   const data = await response.json();
 
