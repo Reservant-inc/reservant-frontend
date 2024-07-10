@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import RestaurantMenuView from "./RestaurantMenuView";
 import RestaurantReviewsView from "./RestaurantReviewsView";
 import RestaurantEventsView from "./RestaurantEventsView";
-import { fetchGET, getImage } from "../../../services/APIconn";
+import { fetchGET, getImage } from "../../../../services/APIconn";
 import {
   Box,
   Chip,
@@ -14,9 +14,9 @@ import {
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
-import { MenuItem } from "../../../services/interfaces";
+import { MenuItem } from "../../../../services/interfaces";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
-import CustomMarker from "../../map/CustomMarker";
+import CustomMarker from "../../../map/CustomMarker";
 
 const TABS = {
   MENU: "menu",
@@ -37,7 +37,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
-        const data = await fetchGET(`/my-restaurants/1`);
+        const data = await fetchGET(`/my-restaurants/2`);
         setRestaurant(data);
         setActiveRestaurant(data);
       } catch (error) {

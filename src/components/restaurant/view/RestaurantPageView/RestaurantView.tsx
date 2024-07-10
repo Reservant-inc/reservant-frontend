@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
 import RestaurantCart from "./RestaurantCart";
-import { CartItem, MenuItem } from "../../../services/interfaces";
+import { CartItem, MenuItem } from "../../../../services/interfaces";
 
 const RestaurantView: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);

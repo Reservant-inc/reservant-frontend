@@ -6,7 +6,7 @@ import {
   ListItemText,
   ListSubheader,
 } from "@mui/material";
-import FocusedRestaurantDetails from "./restaurant/view/FocusedRestaurantDetails";
+import FocusedRestaurantDetails from "./restaurant/view/OnMapView/FocusedRestaurantDetails";
 import { fetchGET } from "../services/APIconn";
 
 export default function HomePage() {
@@ -16,13 +16,15 @@ export default function HomePage() {
     lat1: 52.25255454924618,
     lat2: 52.20718589303197,
     lon1: 21.06353759765625,
-    lon2: 20.959854125976566
+    lon2: 20.959854125976566,
   });
 
   useEffect(() => {
     const getRestaurants = async () => {
       try {
-        const response = await fetchGET(`/restaurants/in-area?lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}`);
+        const response = await fetchGET(
+          `/restaurants/in-area?lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}`,
+        );
         setRestaurants(response);
       } catch (error) {
         console.error("Error getting restaurants", error);
@@ -32,9 +34,19 @@ export default function HomePage() {
   }, [bounds]);
 
   return (
-    <div id="homePage-wrapper" className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3">
-      <div id="homePage-restaurantList-wrapper" className="h-full w-[15%] bg-white shadow-md p-3">
-        <input id="homePage-restaurantList-searchField" type="text" className="rounded-full w-full"/>
+    <div
+      id="homePage-wrapper"
+      className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3"
+    >
+      <div
+        id="homePage-restaurantList-wrapper"
+        className="h-full w-[15%] bg-white p-3 shadow-md"
+      >
+        <input
+          id="homePage-restaurantList-searchField"
+          type="text"
+          className="w-full rounded-full"
+        />
         <List
           id="homePage-restaurantList"
           className="font-mont-md dark:bg-black"
@@ -47,11 +59,15 @@ export default function HomePage() {
           }
         >
           {restaurants.map((restaurant, index) => (
-            <ListItemButton id="homePage-listItemButton"
+            <ListItemButton
+              id="homePage-listItemButton"
               onClick={() => setActiveRestaurant(restaurant)}
               key={index}
             >
-              <ListItemText id="homePage-listItemText" primary={restaurant.name} />
+              <ListItemText
+                id="homePage-listItemText"
+                primary={restaurant.name}
+              />
             </ListItemButton>
           ))}
         </List>
