@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import LogoDark from "../../assets/images/LOGO-CLEAN-DARK.png";
 import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
-import LanguageChange from "./navItems/LanguageChange";
 import Sections from "./navItems/MenuSections";
 import Tools from "./navItems/Tools";
 import NotificationsButton from "./navItems/NotificationsButton";

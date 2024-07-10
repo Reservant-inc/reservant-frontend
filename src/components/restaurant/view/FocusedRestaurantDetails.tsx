@@ -132,7 +132,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="absolute left-[calc(17.5%+20px)] bottom-[25px] z-[1] h-[calc(95%-50px)] w-[450px] overflow-y-auto rounded-lg bg-white shadow-md scroll">
+    <div className="absolute left-[calc(17.5%+15px)] top-[70px] z-[1] h-[calc(95%-50px)] w-[450px] overflow-y-auto rounded-lg bg-white shadow-md scroll">
       <div className="relative">
         <IconButton
           onClick={onClose}

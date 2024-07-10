@@ -8,18 +8,24 @@ import {
   ListItemButton,
   ListItemText,
   ListSubheader,
+  Rating,
+  Typography,
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp';
 import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp';
 import FocusedRestaurantDetails from "./restaurant/view/FocusedRestaurantDetails";
 import { fetchGET } from "../services/APIconn";
+import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
 
 export default function HomePage() {
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(new Set());
-  const [userMovedMap, setUserMovedMap] = useState<Boolean>(false);
+  const [userMovedMap, setUserMovedMap] = useState<boolean>(false);
+  const [isReviewFilterPressed, setIsReviewFilterPressed] = useState<boolean>(false)
+  const [isTagFilterPressed, setIsTagFilterPressed] = useState<boolean>(false)
+  const [reviewFilter, setReviewFilter] = useState<number>(0)
 
   //center of warsaw, cant get users location without https
   const [bounds, setBounds] = useState<any>({
@@ -51,6 +57,14 @@ export default function HomePage() {
     getRestaurants();
   }, [bounds]);
 
+  const reviewsPressHandler = () => {
+    setIsReviewFilterPressed(!isReviewFilterPressed)
+  }
+
+  const tagsPressHandler = () => {
+    setIsTagFilterPressed(!isTagFilterPressed)
+  }
+
   return (
     <div id="homePage-wrapper" className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3">
       <div id="homePage-restaurantList-wrapper" className="h-full w-[17.5%] bg-white shadow-md p-3">
@@ -62,8 +76,7 @@ export default function HomePage() {
       </IconButton>
         <List
           id="homePage-restaurantList"
-          className="font-mont-md dark:bg-black"
-          sx={{ width: "100%" }}
+          className="font-mont-md dark:bg-black w-full"
           component="nav"
           subheader={
             <ListSubheader component="div" id="nested-list-subheader">
@@ -100,15 +113,63 @@ export default function HomePage() {
           userMovedMap={userMovedMap}
         />
       </div>
-      <div className="absolute left-[calc(17.5%+20px)] h-[40px] w-[450px] top-[15px] flex items-center gap-4">
-        <Button className="h-full rounded-lg bg-white shadow-md p-2 flex gap-2 text-black">
-          <StarPurple500SharpIcon className="h-6"/>
-          Reviews
-        </Button>
-        <Button className="h-full rounded-lg bg-white shadow-md p-2 flex gap-2 text-black">
-          <LocalOfferSharpIcon className="h-6"/>
-          Tags
-        </Button>
+      <div className="absolute left-[calc(17.5%+15px)] h-[40px] w-[450px] top-[15px] flex items-center gap-4">
+          <OutsideClickHandler onOutsideClick={reviewsPressHandler} isPressed={isReviewFilterPressed}>
+            <Button id="homePage-reviewsFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 " + (reviewFilter != 0 ? "bg-primary text-white" : "bg-white text-black")}
+              onClick={reviewsPressHandler}
+            >
+              <StarPurple500SharpIcon className="h-6"/>
+              {   
+              reviewFilter === 0 ? "Reviews" : `${reviewFilter}.0 or more`
+              } 
+            </Button>
+              {isReviewFilterPressed && (
+                <div className="absolute top-[55px] bg-white z-[2] shadow-2xl rounded-lg">
+                  <List
+                    id="homePage-restaurantList"
+                    className="font-mont-md dark:bg-black w-full"
+                  >
+                    <ListItemButton
+                      id="homePage-listItemButton"
+                      className="flex gap-2 justify-center items-center"
+                      onClick={() => {
+                        setReviewFilter(0)
+                        setIsReviewFilterPressed(false)
+                      }}
+                    >
+                      <Typography component="legend">Any rating</Typography>
+                    </ListItemButton>
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <ListItemButton
+                        id="homePage-listItemButton"
+                        className="flex gap-2 justify-center items-center"
+                        onClick={() => {
+                          setReviewFilter(value)
+                          setIsReviewFilterPressed(false)
+                        }}
+                        key={value}
+                      >
+                        <Typography component="legend">{value}.0</Typography>
+                        <Rating name="read-only" value={value} readOnly />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </div>  
+              )}
+          </OutsideClickHandler>
+          <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
+            <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 bg-white text-black"}
+              onClick={tagsPressHandler}
+            >
+              <LocalOfferSharpIcon className="h-6"/>
+              Tags
+            </Button>
+              {isTagFilterPressed && (
+                <div className="absolute top-[55px] bg-white z-[2] shadow-2xl rounded-lg w-24 h-24">
+
+                </div>  
+              )}
+          </OutsideClickHandler>
       </div>
     </div>
   );
