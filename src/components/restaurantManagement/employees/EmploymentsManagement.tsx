@@ -49,7 +49,6 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
           
           if (response.length)
             for (const i in response) {
-                console.log("KURWAAAAAAAAAAAAAAAAAAAAAAAA" + empid)
               if(response[i].userId===empid)
               for (const j in response[i].employments){
                 tmp.push({
@@ -61,7 +60,6 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
                 })
               }
         }
-        console.log(tmp)
         
         setRows(tmp);
       
@@ -94,16 +92,7 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
     setSelectedId(id);
   };
 
-  const handleSaveClick = (id: GridRowId) => async () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-    const body =JSON.stringify([{
-      employmentId: id,
-      isBackdoorEmployee: rows.find((row)=>row.id===id)?.isBackdoorEmployee,
-      isHallEmployee: rows.find((row)=>row.id===id)?.isHallEmployee,
-    }])
-    console.log(body)
-    await fetchPUT("/employments", body)
-  };
+ 
 
   const handleDeleteClick = (id: GridRowId) => async () => {
     setRows(rows.filter((row) => row.id !== id));
@@ -123,17 +112,34 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
     }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows?.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
-
+  
+  
+  const processRowUpdate = async (newRow: GridRowModel) => {
+    if(!(newRow.isHallEmployee||newRow.isBackdoorEmployee)) return;
+    const updatedRow = { ...newRow, isNew: false}
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
+    const body =JSON.stringify([{
+      employmentId: newRow.id,
+      isBackdoorEmployee: newRow.isBackdoorEmployee,
+      isHallEmployee: newRow.isHallEmployee,
+    }])
+    console.log(body)
+    await fetchPUT("/employments", body)
+    return updatedRow
+  }
+  
+  
+ 
+  const handleSaveClick = (id: GridRowId) => async () => {
+    
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
+    
+  };
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 180, editable: false },
@@ -181,7 +187,8 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
               sx={{
                 color: "primary.main",
               }}
-              onClick={handleSaveClick(id)}
+              onClick={handleSaveClick(id)
+              }
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}

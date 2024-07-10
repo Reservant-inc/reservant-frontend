@@ -76,13 +76,19 @@ export const fetchPUT = async (connString: string, body: string) => {
     },
   );
 
+  if(!(response.json.length > 0)){
+    return
+  }
+
   if (!response.ok) {
     const errorData = await response.json();
     console.log(errorData);
     throw new Error(errorData);
   }
 
-  
+  const data = await response.json();
+
+  return data;
 };
 
 export const fetchDELETE = async (connString: string) => {
@@ -98,12 +104,15 @@ export const fetchDELETE = async (connString: string) => {
     },
   );
 
+  if(!(response.json.length > 0)){
+    return
+  }
+
   if (!response.ok) {
     const errorData = await response.json();
     console.log(errorData);
     throw new Error(errorData);
   }
-
 
   const data = await response.json();
 
