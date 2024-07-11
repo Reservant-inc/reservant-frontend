@@ -15,7 +15,6 @@ body {
   --speed: 500ms;
 }
 
-
 .dropdownMenu{
   display: flex; 
   overflow: hidden; 
@@ -52,7 +51,6 @@ body {
 }
 
 .menu-secondary-enter{
-  
   transform: translateX(100%);
 }
 
@@ -72,6 +70,30 @@ body {
 }
 
 @tailwind base;
+
+@layer base{
+  .clean-input {
+    @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans;
+  }
+
+  .scroll::-webkit-scrollbar {
+    @apply w-[6px]
+  }
+
+  .scroll::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  .scroll::-webkit-scrollbar-track {
+    background: #EEE;
+  }
+  
+  .scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+}
+
 @tailwind components;
 @tailwind utilities;
 
@@ -99,24 +121,6 @@ body {
   src: url(./assets/fonts/Montserrat-Light.ttf)
 }
 
-@layer base{
-  .scroll::-webkit-scrollbar {
-    @apply w-[6px]
-  }
-
-  .scroll::-webkit-scrollbar-thumb {
-    background: #888;
-  }
-
-  .scroll::-webkit-scrollbar-track {
-    background: #EEE;
-  }
-  
-  .scroll::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-  
-}
 
 
 
