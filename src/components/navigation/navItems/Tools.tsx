@@ -15,7 +15,7 @@ import {
 import { CSSTransition } from "react-transition-group";
 import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
-import { AuthContext } from "../../routing/AuthWrapper";
+import { AuthContext, AuthData } from "../../routing/AuthWrapper";
 import { useTranslation } from "react-i18next";
 
 export interface ToolsProps {
@@ -31,7 +31,8 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     const [activeMenu, setActiveMenu] = useState("main");
 
     const [menuHeight, setMenuHeight] = useState(360);
-    const { setAuthorized } = useContext(AuthContext);
+
+    const { logout } = AuthData();
 
     const theme = createTheme({
         components: {
@@ -75,7 +76,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
       setMenuHeight(height);
   }
       
-  const handleLogout = () => setAuthorized(false);
+  const handleLogout = () => logout();
 
   const pressHandler = () => {
     setIsPressed(!isPressed);

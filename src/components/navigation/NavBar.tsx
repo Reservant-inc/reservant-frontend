@@ -11,7 +11,7 @@ const NavBar: React.FC = () => {
 
   return (
     <div className="z-[2] flex h-14 w-full items-center shadow-md dark:bg-black">
-      <div className="mx-2 flex h-full w-full items-center">
+      <div className="flex h-full w-full items-center p-1">
         <div className="h-full flex-1 items-center">
           {isDark ? (
             <img src={LogoDark} alt="logo" className="h-12 min-w-[155px]" />

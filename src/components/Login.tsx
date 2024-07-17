@@ -6,6 +6,7 @@ import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
 import LogoLight from "../assets/images/LOGO-CLEAN-LIGHT.png"
+import CircularProgress from '@mui/material/CircularProgress';
 import { FetchError } from '../services/Errors';
 
 const initialValues = {
@@ -18,6 +19,7 @@ const Login: React.FC = () => {
   const { login } = AuthData();
   const { loginSchema } = useValidationSchemas();
   const [ loginError, setLoginError ] = useState<string>("")
+  const [ requestLoading, setRequestLoading ] = useState<boolean>(false)
 
   const onSubmit = async (
     values: FormikValues,
@@ -25,6 +27,7 @@ const Login: React.FC = () => {
   ) => {
     try {
       setSubmitting(true);
+      setRequestLoading(true)
 
       const response = await fetchPOST("/auth/login", JSON.stringify(values));
 
@@ -36,7 +39,8 @@ const Login: React.FC = () => {
         console.log("Unexpected error:", error);
       }
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
+      setRequestLoading(false)
     }
   };
 
@@ -86,15 +90,17 @@ const Login: React.FC = () => {
                     id="LoginLoginButton"
                     type="submit"
                     disabled={!formik.isValid}
-                    className={`pointer w-4/5 h-[50px] rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+                    className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
                   >
-                    Login
+                    {
+                      requestLoading ? <CircularProgress className="text-grey-0 h-8 w-8"/> : "LOGIN"
+                    }
                   </button>
 
                   {
                     loginError.length > 0 && <h1 className="text-pink">{loginError}</h1>
                   } 
-                     
+
                   <div id="login-container-links" className="w-full flex items-center justify-center">
                     <p id="login-notRegistered-link-wrap">
                       {t("landing-page.notRegistered")}{" "}
