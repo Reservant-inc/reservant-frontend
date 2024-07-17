@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
+import { Formik, Form, Field, FormikValues } from "formik";
 import { useTranslation } from "react-i18next";
 import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
 import LogoLight from "../assets/images/LOGO-CLEAN-LIGHT.png"
+import { FetchError } from '../services/Errors';
 
 const initialValues = {
   login: "",
@@ -16,6 +17,7 @@ const Login: React.FC = () => {
   const [t] = useTranslation("global");
   const { login } = AuthData();
   const { loginSchema } = useValidationSchemas();
+  const [ loginError, setLoginError ] = useState<string>("")
 
   const onSubmit = async (
     values: FormikValues,
@@ -28,7 +30,11 @@ const Login: React.FC = () => {
 
       login(response);
     } catch (error) {
-      console.log(error);
+      if (error instanceof FetchError) {
+        setLoginError(error.message)
+      } else {
+        console.log("Unexpected error:", error);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -85,6 +91,10 @@ const Login: React.FC = () => {
                     Login
                   </button>
 
+                  {
+                    loginError.length > 0 && <h1 className="text-pink">{loginError}</h1>
+                  } 
+                     
                   <div id="login-container-links" className="w-full flex items-center justify-center">
                     <p id="login-notRegistered-link-wrap">
                       {t("landing-page.notRegistered")}{" "}
@@ -92,6 +102,7 @@ const Login: React.FC = () => {
                     </p>
                     {/* <Link id="login-resetPass-link" to="/">{t("landing-page.resetPassword")}</Link> */}
                   </div> 
+
                 </div>
               </Form>
             )}

@@ -57,6 +57,8 @@ export default function HomePage() {
 
         const newRestaurants = response.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
         
+        //const filteredRestaurants = [...restaurants, ...newRestaurants].filter((restaurant: any) => chosenTags.every((tag: string) => restaurant.tags.includes(tag)))
+
         setRestaurants([...restaurants, ...newRestaurants]);
         
         setLoadedRestaurantIds(prevIds => {
