@@ -5,8 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AuthData } from "./routing/AuthWrapper";
 import { fetchPOST } from "../services/APIconn";
 import { useValidationSchemas } from "../hooks/useValidationSchema";
-import Error from "./reusableComponents/ErrorMessage";
-import LogoLight from "../assets/images/LOGO-CLEAN-DARK.png"
+import LogoLight from "../assets/images/LOGO-CLEAN-LIGHT.png"
 
 const initialValues = {
   login: "",
@@ -36,13 +35,13 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div id="loginWrapper" className="h-full w-full bg-gradient-to-br from-[#a94c79] via-[#b05a83] via-[#b86b90] via-[#c585a4] to-[#cc93ae] flex flex-col justify-center items-center">
-      <div className="w-[600px] h-[600px] bg-[rgba(255,255,255,0.3)] rounded-2xl p-4 flex flex-col shadow-2xl">
-        <div className="w-full h-1/4 flex items-center justify-center">
-          {/* <img src={LogoLight} alt="logo" className="h-12"/> */}
-          <h1 className="font-mont-md text-[30px] ">LOGIN</h1>
+    <div className="flex justify-center items-center w-full h-full bg-grey-0">
+      <div className="w-[800px] h-[500px] shadow-2xl rounded-lg bg-white flex items-center">
+        <div className="w-1/3 h-full flex justify-center items-center">
+          <img src={LogoLight} className="h-40"/>
         </div>
-        <div className="w-full h-3/5 flex justify-center items-center">
+        <div className="h-[80%] w-[2px] bg-grey-1"></div>
+        <div className="w-2/3 h-full rounded-r-lg flex flex-col justify-center items-center gap-12">
           <Formik
             id="login-formik"
             initialValues={initialValues}
@@ -50,9 +49,12 @@ const Login: React.FC = () => {
             onSubmit={onSubmit}
           >
             {(formik) => (
-              <Form className="w-full h-full">
-                <div id="login-form-containter" className="form-container h-full flex flex-col justify-around items-center">
-                  <div className="flex flex-col w-full items-center gap-4">
+              <Form className="w-full">
+                <div id="login-form-containter" className="form-container h-full flex flex-col items-center gap-8">
+                  <div className="flex flex-col w-full items-center gap-8">
+                    
+                    <h1 className="text-xl font-mont-md dont-semibold">LOGIN</h1>
+
                     <Field
                       type="text"
                       id="login"
@@ -60,7 +62,7 @@ const Login: React.FC = () => {
                       placeholder={
                         formik.errors.login && formik.touched.login ? formik.errors.login : 'login'
                       }
-                      className={`w-4/5 h-[60px] ring-0 rounded-md ${!(formik.errors.login && formik.touched.login) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.login && formik.touched.login) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
                     />
 
                     <Field
@@ -70,7 +72,7 @@ const Login: React.FC = () => {
                       placeholder={
                         formik.errors.password && formik.touched.password ? formik.errors.password : 'password'
                       }
-                      className={`w-4/5 h-[60px] ring-0 rounded-md ${!(formik.errors.password && formik.touched.password) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
+                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.password && formik.touched.password) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
                     />
                   </div>
 
@@ -78,22 +80,23 @@ const Login: React.FC = () => {
                     id="LoginLoginButton"
                     type="submit"
                     disabled={!formik.isValid}
-                    className={`pointer w-32 h-10 rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+                    className={`pointer w-4/5 h-[50px] rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
                   >
                     Login
                   </button>
+
+                  <div id="login-container-links" className="w-full flex items-center justify-center">
+                    <p id="login-notRegistered-link-wrap">
+                      {t("landing-page.notRegistered")}{" "}
+                      <Link id="login-notRegistered-link" to="/user/register" className="text-primary font-mont-md font-semibold">{t("landing-page.registerButton")}</Link>
+                    </p>
+                    {/* <Link id="login-resetPass-link" to="/">{t("landing-page.resetPassword")}</Link> */}
+                  </div> 
                 </div>
               </Form>
             )}
           </Formik>
         </div>
-        <div id="login-container-links" className="h-1/5 w-full flex items-center justify-center">
-          <p id="login-notRegistered-link-wrap">
-            {t("landing-page.notRegistered")}{" "}
-            <Link id="login-notRegistered-link" to="/user/register" className="text-primary font-mont-md">{t("landing-page.registerButton")}</Link>
-          </p>
-          {/* <Link id="login-resetPass-link" to="/">{t("landing-page.resetPassword")}</Link> */}
-        </div> 
       </div>
     </div>
   );

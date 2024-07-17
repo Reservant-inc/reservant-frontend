@@ -3,11 +3,8 @@ import Map from "./map/Map";
 import {
   Button,
   IconButton,
-  InputBase,
   List,
   ListItemButton,
-  ListItemText,
-  ListSubheader,
   Rating,
   Typography,
 } from "@mui/material";
@@ -15,6 +12,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp';
 import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp';
 import FocusedRestaurantDetails from "./restaurant/view/FocusedRestaurantDetails";
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import { fetchGET, getImage } from "../services/APIconn";
 import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
 
@@ -28,7 +26,7 @@ export default function HomePage() {
   const [isTagFilterPressed, setIsTagFilterPressed] = useState<boolean>(false)
   const [reviewFilter, setReviewFilter] = useState<number>(0)
   const [tags, setTags] = useState<string[]>([])
-  const [chosenTags, setChosenTags] = useState<number[]>([])
+  const [chosenTags, setChosenTags] = useState<string[]>([])
 
   //center of warsaw, cant get users location without https
   const [bounds, setBounds] = useState<any>({
@@ -39,28 +37,7 @@ export default function HomePage() {
   });
 
   useEffect(() => {
-    const getRestaurants = async () => {
-      try {
-        const response = await fetchGET(`/restaurants/in-area?lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}`);
-        const newRestaurants = response.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
-        console.log(response)
-        if (newRestaurants.length > 0) {
-          setRestaurants([...restaurants, ...newRestaurants]);
-          setLoadedRestaurantIds(prev => {
-            const updated = new Set(prev);
-            newRestaurants.forEach((restaurant: any) => updated.add(restaurant.restaurantId));
-            return updated;
-          });
-        }
-      } catch (error) {
-        console.error("Error getting restaurants", error);
-      }
-    };
-    getRestaurants();
-  }, [bounds]);
-
-  useEffect(() => {
-    const getRestaurants = async () => {
+    const getTags = async () => {
       try {
         const response = await fetchGET('/restaurant-tags');
         setTags(response)
@@ -68,16 +45,64 @@ export default function HomePage() {
         console.error("Error getting restaurants", error);
       }
     };
-    getRestaurants();
+    getTags();
   }, [])
 
+  useEffect(() => {
+    const getRestaurants = async () => {
+      try {
+        const response = await fetchGET(`/restaurants/in-area?lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}&tags=${chosenTags.join(',')}&minRating=${reviewFilter}`);
+        
+        console.log(loadedRestaurantIds)
+
+        const newRestaurants = response.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
+        
+        setRestaurants([...restaurants, ...newRestaurants]);
+        
+        setLoadedRestaurantIds(prevIds => {
+          const newIds = new Set(prevIds);
+          newRestaurants.forEach((restaurant: any) => newIds.add(restaurant.restaurantId));
+          return newIds;
+        });
+      } catch (error) {
+        console.error("Error getting restaurants", error);
+      }
+    };
+    getRestaurants();
+  }, [bounds, chosenTags, reviewFilter]);
+
+  useEffect(() => {
+    const getTags = async () => {
+      try {
+        const response = await fetchGET('/restaurant-tags');
+        setTags(response);
+      } catch (error) {
+        console.error("Error getting tags", error);
+      }
+    };
+    getTags();
+  }, []);
+
   const reviewsPressHandler = () => {
-    setIsReviewFilterPressed(!isReviewFilterPressed)
-  }
+    setIsReviewFilterPressed(!isReviewFilterPressed);
+  };
 
   const tagsPressHandler = () => {
-    setIsTagFilterPressed(!isTagFilterPressed)
-  }
+    setIsTagFilterPressed(!isTagFilterPressed);
+  };
+
+  const handleTagSelection = (tag: string) => {
+    setChosenTags(prevTags => {
+      const updatedTags = prevTags.includes(tag)
+        ? prevTags.filter(t => t !== tag)
+        : [...prevTags, tag];
+      
+      // Reset restaurants and loaded IDs
+      setRestaurants([]);
+      setLoadedRestaurantIds(new Set());
+      return updatedTags;
+    });
+  };
 
   return (
     <div id="homePage-wrapper" className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3">
@@ -86,7 +111,7 @@ export default function HomePage() {
             <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2">
             <input 
               type="text"
-              placeholder="Search"
+              placeholder="Search for restaurants"
               className="w-full clean-input"
             />
             <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
@@ -113,16 +138,19 @@ export default function HomePage() {
                   <div className="flex flex-col gap-1">
                     <h1 className="font-mont-md text-md">{restaurant.name}</h1>
                     <div className="flex">
-                      <h1 className="text-sm">5</h1>
-                      <Rating name="read-only" value={5} readOnly className="text-[18px]"/>
+                      <h1 className="text-sm">{restaurant.rating}</h1>
+                      <Rating name="read-only" value={restaurant.rating} readOnly className="text-[18px]"/>
+                      <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
                     </div>
                     <h1 className="text-sm font-mont-l">{restaurant.address}</h1>
                     <h1 className="text-sm font-mont-l">{restaurant.provideDelivery ? "Provides delivery" : "No delivery"}</h1>
-                    {
-                      restaurant.tags.map((tag : string) => (
-                        <h1>{tag}</h1>
-                      ))
-                    }
+                    <div className="flex gap-2">
+                      {
+                        restaurant.tags.map((tag : string) => (
+                          <h1 className="text-sm font-mont-md bg-grey-0 rounded-full p-1 border-[1px] border-grey-1">{tag}</h1>
+                        ))
+                      }
+                    </div>
                   </div>
                   <img src={getImage(restaurant.logo)} alt="logo" className="h-24 w-24 rounded-lg"/>
                 </div>
@@ -193,13 +221,16 @@ export default function HomePage() {
               )}
           </OutsideClickHandler>
           <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
-            <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
+            <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
               onClick={tagsPressHandler}
             >
               <LocalOfferSharpIcon className="h-6"/>
               {   
               chosenTags.length > 0 ? chosenTags.length === 1 ? `${chosenTags.length} tag` : `${chosenTags.length} tags` : "Tags"
               } 
+              {
+              chosenTags.length > 0 && <button className="h-[30px] w-[30px] rounded-full" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[30px]"/></button>  
+              }
             </Button>
               {isTagFilterPressed && (
                 <div className="absolute top-[55px] bg-white z-[2] shadow-2xl rounded-lg w-44 flex flex-wrap justify-start p-3 gap-2">
@@ -207,15 +238,8 @@ export default function HomePage() {
                     tags.map((tag, i) => (
                       <button
                         key={i}
-                        className={`rounded-full border-[1px] border-grey-2 p-2 text-[12px] font-mont-md ${chosenTags.includes(i) ? "text-white bg-primary" : "text-black bg-white"}`}
-                        onClick={() => {
-                          if (chosenTags.includes(i)) {
-                            const updatedTags = chosenTags.filter(tagIndex => tagIndex !== i);
-                            setChosenTags(updatedTags);
-                          } else {
-                            setChosenTags([...chosenTags, i]);
-                          }
-                        }}
+                        className={`rounded-full border-[1px] border-grey-2 p-2 text-[12px] font-mont-md ${chosenTags.includes(tag) ? "text-white bg-primary" : "text-black bg-white"}`}
+                        onClick={() => handleTagSelection(tag)}
                       >
                         {tag.toUpperCase()}
                       </button>
