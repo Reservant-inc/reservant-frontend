@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../services/APIconn";
+import { fetchGET } from "../../../../services/APIconn";
 import FocusedRestaurantMenuItem from "./FocusedRestaurantMenuItem";
-import { MenuItem } from "../../../services/interfaces";
+import { MenuItem } from "../../../../services/interfaces";
 
 interface FocusedRestaurantMenuListProps {
   restaurantId: number;
@@ -17,9 +17,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const menusData = await fetchGET(
-          `/my-restaurants/${restaurantId}/menus`,
-        );
+        const menusData = await fetchGET(`/my-restaurants/2/menus`);
         setMenus(menusData || []);
       } catch (error) {
         console.error("Error fetching menus:", error);

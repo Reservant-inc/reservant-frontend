@@ -17,15 +17,15 @@ const style = {
 };
 
 interface RestaurantReviewProps {
-  date: string;
-  score: number;
-  description: string;
+  createdAt: string;
+  stars: number;
+  contents: string;
 }
 
 const RestaurantReview: React.FC<RestaurantReviewProps> = ({
-  score,
-  date,
-  description,
+  stars,
+  createdAt,
+  contents,
 }) => {
   const [areDetailsOpen, setAreDetailsOpen] = useState<boolean>(false);
 
@@ -38,20 +38,18 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   };
 
   const reducedDescription =
-    description.length > 100
-      ? description.substring(0, 100) + "..."
-      : description;
+    contents.length > 100 ? contents.substring(0, 100) + "..." : contents;
 
   return (
-    <div className="flex flex-col rounded-lg justify-between p-1 dark:bg-grey-3 gap-2 border-grey-0 h-[10rem]">
-      <div className="flex items-center space-x-4 justify-between items-center">
+    <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-1 dark:bg-grey-3">
+      <div className="flex items-center items-center justify-between space-x-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-8 w-8">A</Avatar>
-          <p>{date}</p>
+          <p>{new Date(createdAt).toLocaleDateString()}</p>
         </div>
         <Rating
           name="read-only"
-          value={score}
+          value={stars}
           readOnly
           emptyIcon={
             <StarBorderIcon
@@ -77,11 +75,11 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             <Box sx={style}>
               <div className="flex items-center justify-start space-x-4">
                 <Avatar>A</Avatar>
-                <div className="">
-                  <div>{date}</div>
+                <div>
+                  <div>{new Date(createdAt).toLocaleDateString()}</div>
                   <Rating
                     name="read-only"
-                    value={score}
+                    value={stars}
                     readOnly
                     emptyIcon={
                       <StarBorderIcon
@@ -93,8 +91,8 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
                 </div>
               </div>
               <div className="mt-3 break-words">
-                {description.replace(/\s/g, "").length > 0 ? (
-                  <p>{description}</p>
+                {contents.replace(/\s/g, "").length > 0 ? (
+                  <p>{contents}</p>
                 ) : (
                   <p className="italic">No description.</p>
                 )}
@@ -128,7 +126,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
         <Button
           id="RestaurantReviewMoreButton"
           onClick={handleOpen}
-          className="text-primary rounded-lg"
+          className="rounded-lg text-primary"
         >
           Respond
         </Button>

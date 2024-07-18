@@ -1,8 +1,8 @@
 import { Button, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MenuItemComponent from "./MenuItemComponent";
-import { MenuItem } from "../../../services/interfaces";
-import { fetchGET, getImage } from "../../../services/APIconn";
+import MenuItemComponent from "../MenuItemComponent";
+import { MenuItem } from "../../../../services/interfaces";
+import { fetchGET, getImage } from "../../../../services/APIconn";
 
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItem) => void;
@@ -13,7 +13,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
 }) => {
   const [menus, setMenus] = useState<any[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
-  const restaurantId = 1; // na razie hardcoded, jak bedzie wiadomo co przekierowuje na te strone to sie wezmie z koncowki useParam
+  const restaurantId = 2; // na razie hardcoded, jak bedzie wiadomo co przekierowuje na te strone to sie wezmie z koncowki useParam
 
   useEffect(() => {
     const fetchMenus = async () => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { MenuItem } from "../../../services/interfaces";
-import { getImage } from "../../../services/APIconn";
+import { MenuItem } from "../../../../services/interfaces";
+import { getImage } from "../../../../services/APIconn";
 
 interface FocusedRestaurantMenuItemProps {
   item: MenuItem;
