@@ -53,8 +53,6 @@ export default function HomePage() {
       try {
         const response = await fetchGET(`/restaurants/in-area?lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}&tags=${chosenTags.join(',')}&minRating=${reviewFilter}`);
         
-        console.log(loadedRestaurantIds)
-
         const newRestaurants = response.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
         
         //const filteredRestaurants = [...restaurants, ...newRestaurants].filter((restaurant: any) => chosenTags.every((tag: string) => restaurant.tags.includes(tag)))
@@ -119,8 +117,8 @@ export default function HomePage() {
             <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
               <SearchIcon />
             </IconButton>
+            </div>
           </div>
-        </div>
         <List
           id="homePage-restaurantList"
           className="font-mont-md dark:bg-black w-full"

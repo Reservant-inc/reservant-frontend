@@ -7,9 +7,11 @@ import {
   Button,
   CircularProgress,
   Box,
+  IconButton,
 } from "@mui/material";
 import { fetchGET, fetchPOST, fetchDELETE } from "../../../services/APIconn";
 import SendFriendRequest from "./SendFriendRequest";
+import SearchIcon from '@mui/icons-material/Search';
 
 interface FriendSearchBarProps {}
 
@@ -163,15 +165,20 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
 
   return (
     <div className="relative">
-      <input
-        type="text"
-        placeholder="Szukaj znajomych"
-        value={searchTerm}
-        onChange={handleSearch}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setTimeout(() => setIsFocused(false), 100)}
-        className="w-80 rounded-full border p-2 focus:outline-none"
-      />
+      <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2 h-10">
+        <input
+          type="text"
+          placeholder="Szukaj znajomych"
+          value={searchTerm}
+          onChange={handleSearch}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 100)}
+          className="w-80 p-2 clean-input h-10"
+          />
+        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+          <SearchIcon />
+        </IconButton>
+      </div>
       {isFocused && (
         <Paper className="absolute left-0 z-10 mt-1 w-full">
           {loading ? (
