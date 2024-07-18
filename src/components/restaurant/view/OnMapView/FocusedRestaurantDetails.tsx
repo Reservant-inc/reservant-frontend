@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../services/APIconn";
+import { fetchGET } from "../../../../services/APIconn";
 import {
   Box,
   Chip,
@@ -30,6 +30,14 @@ interface FocusedRestaurantDetailsProps {
   onClose: () => void;
 }
 
+const dummyImage = "https://images.unsplash.com/photo-1551782450-a2132b4ba21d";
+
+const getOpinionsText = (count: number) => {
+  if (count === 1) return `${count} opinia`;
+  if (count > 1 && count < 5) return `${count} opinie`;
+  return `${count} opinii`;
+};
+
 const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   restaurantId,
   onClose,
@@ -37,27 +45,38 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [restaurant, setRestaurant] = useState<any>(null);
   const [activeTab, setActiveTab] = useState(TABS.MENU);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const dummyRating = 4.5;
-  const dummyImage =
-    "https://images.unsplash.com/photo-1551782450-a2132b4ba21d";
+  const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
-        //tu nie moze byc my-restaurants
-        const data = await fetchGET(`/my-restaurants/1`);
+        const data = await fetchGET(`/restaurants/2`);
         setRestaurant(data);
       } catch (error) {
         console.error("Error fetching restaurant details:", error);
       }
     };
 
+    const fetchRestaurantReviews = async () => {
+      try {
+        const data = await fetchGET(`/restaurants/2/reviews`);
+        setReviews(data.items || []);
+      } catch (error) {
+        console.error("Error fetching restaurant reviews:", error);
+      }
+    };
+
     fetchRestaurantDetails();
+    fetchRestaurantReviews();
   }, [restaurantId]);
 
   if (!restaurant) {
-    return <div></div>
+    return <div></div>;
   }
+
+  const averageRating = reviews.length
+    ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
+    : 0;
 
   const renderActiveTab = () => {
     switch (activeTab) {
@@ -118,7 +137,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       case TABS.REVIEWS:
         return (
           <div className="h-full w-full overflow-y-auto p-4">
-            <FocusedRestaurantReviewsList isPreview={false} />
+            <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} />
           </div>
         );
       case TABS.MENU:
@@ -152,12 +171,14 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         <div className="my-3 flex items-center space-x-2">
           <Rating
             name="read-only"
-            value={dummyRating}
-            precision={0.5}
+            value={averageRating}
+            precision={0.25}
             readOnly
             emptyIcon={<StarBorderIcon fontSize="inherit" />}
           />
-          <Typography variant="body2">(200+ opinii)</Typography>
+          <Typography variant="body2">
+            {averageRating.toFixed(2)} ({getOpinionsText(reviews.length)})
+          </Typography>
         </div>
         <Typography variant="body2" className="my-1">
           {restaurant.address}, {restaurant.city}

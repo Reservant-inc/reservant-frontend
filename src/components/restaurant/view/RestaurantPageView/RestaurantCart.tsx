@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import NewReservationDetailsView from "./NewReservationDetailsView";
 import RestaurantCartView from "./RestaurantCartView";
-import { CartItem } from "../../../services/interfaces";
+import { CartItem } from "../../../../services/interfaces";
 
 interface RestaurantCartProps {
   cart: CartItem[];
