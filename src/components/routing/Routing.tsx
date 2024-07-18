@@ -4,7 +4,6 @@ import RestaurantRegister from "../register/restaurantRegister/RestaurantRegiste
 import React from "react";
 import Register from "../register/UserRegister";
 import HomePage from "../HomePage";
-import RestaurantView from "../restaurant/view/RestaurantPageView/RestaurantView";
 import RestaurantManager from "../restaurantManagement/RestaurantManager";
 
 export const nav = [
