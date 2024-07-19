@@ -16,7 +16,7 @@ body {
 }
 
 .login-gradient{
-  background: radial-gradient(circle, rgba(255,255,255,0.0) 40%, rgba(169,76,121,0.4) 80%, rgba(103,45,73,0.8) 10%);
+  background: radial-gradient(circle, rgba(255,255,255,0.0) 40%, rgba(169,76,121,0.4) 100%, rgba(103,45,73,0.8) 100%);
 }
 
 .dropdownMenu{
