@@ -165,7 +165,7 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
 
   return (
     <div className="relative">
-      <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2 h-10">
+      <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2 h-10 items-center">
         <input
           type="text"
           placeholder="Szukaj znajomych"
@@ -173,9 +173,9 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
           onChange={handleSearch}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 100)}
-          className="w-80 p-2 clean-input h-10"
+          className="w-60 p-2 clean-input h-8"
           />
-        <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+        <IconButton type="button" sx={{ p: '10px' }} aria-label="search" className="h-8 w-8">
           <SearchIcon />
         </IconButton>
       </div>

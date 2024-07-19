@@ -45,7 +45,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
     const [menus, setMenus] = useState<Menu[]>([]);
     const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{ [key: number]: string[] }>({});
-    const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(0);
+    const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null);
     const [editMenu, setEditMenu] = useState<Menu | null>(null);
     const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(null);
     const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
