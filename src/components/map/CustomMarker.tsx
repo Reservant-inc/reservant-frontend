@@ -9,10 +9,11 @@ interface CustomMarkerProps {
   position: L.LatLngExpression;
   restaurant: {name: string}
   activeRestaurant: any
-  setActiveRestaurant: Function
+  setActiveRestaurant: Function,
+  setUserMovedMap?: Function
 }
 
-const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activeRestaurant, setActiveRestaurant }) => {
+const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activeRestaurant, setActiveRestaurant, setUserMovedMap }) => {
 
   let marker: any = MarkerBlack;
   if(activeRestaurant != null)  
@@ -29,6 +30,9 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activ
       eventHandlers={{
           click: (e) => {
             setActiveRestaurant(restaurant)
+    if (setUserMovedMap != undefined ) {
+      setUserMovedMap(false)
+    }
           },
         }}
       >

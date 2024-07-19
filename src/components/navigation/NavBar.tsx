@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import LogoDark from "../../assets/images/LOGO-CLEAN-DARK.png";
-import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
-import LanguageChange from "./navItems/LanguageChange";
+import LogoDark from "../../assets/images/LOGO-DARK.png";
+import LogoLight from "../../assets/images/LOGO-LIGHT.png";
 import Sections from "./navItems/MenuSections";
 import Tools from "./navItems/Tools";
 import NotificationsButton from "./navItems/NotificationsButton";
@@ -12,12 +11,12 @@ const NavBar: React.FC = () => {
 
   return (
     <div className="z-[2] flex h-14 w-full items-center shadow-md dark:bg-black">
-      <div className="mx-2 flex h-full w-full items-center">
+      <div className="flex h-full w-full items-center p-1">
         <div className="h-full flex-1 items-center">
           {isDark ? (
-            <img src={LogoLight} alt="logo" className="h-12 min-w-[155px]" />
+            <img src={LogoDark} alt="logo" className="h-12 min-w-[155px]" />
           ) : (
-            <img src={LogoDark} alt="logo" className="h-[95%]" />
+            <img src={LogoLight} alt="logo" className="h-[95%]" />
           )}
         </div>
 

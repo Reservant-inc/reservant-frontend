@@ -28,11 +28,15 @@ module.exports = {
       'grey-4'      : '#333333',
       'black'       : '#222222',
       'trans'       : 'rgba(0,0,0,0)',
-      'pink'        : '#ff0000',
+      'error'        : '#ff4747',
     },
   },
   plugins: [
     require('@tailwindcss/forms'),
+    function ({ addVariant }) {
+      addVariant('child', '& > *');
+      addVariant('child-hover', '& > *:hover');
+  }
   ],
 }
 

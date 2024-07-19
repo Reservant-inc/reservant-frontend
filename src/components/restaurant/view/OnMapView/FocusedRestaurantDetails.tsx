@@ -151,11 +151,11 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="absolute left-[calc(15%+20px)] top-[20px] z-[1] h-[calc(95%-40px)] w-[500px] overflow-y-auto rounded-lg bg-white shadow-md">
+    <div className="absolute left-[calc(20%)] top-[70px] z-[1] h-[calc(95%-50px)] w-[400px] overflow-y-auto rounded-lg bg-white shadow-md scroll">
       <div className="relative">
         <IconButton
           onClick={onClose}
-          className="absolute right-2 top-2 z-10 bg-white"
+          className="absolute right-2 top-2 z-10 bg-white h-8 w-8"
         >
           <CloseIcon />
         </IconButton>
@@ -163,7 +163,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           component="img"
           src={dummyImage}
           alt="Restaurant"
-          className="h-50 w-full rounded-t-lg object-cover"
+          className="h-50 w-full object-cover"
         />
       </div>
       <div className="h-full p-4">

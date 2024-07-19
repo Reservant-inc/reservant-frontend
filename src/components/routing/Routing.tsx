@@ -1,10 +1,9 @@
 import LandingPage from "../LandingPage";
-import Login from "../Login";
+import Login from "../SignInSignUp/Login";
 import RestaurantRegister from "../register/restaurantRegister/RestaurantRegister";
 import React from "react";
-import Register from "../register/UserRegister";
+import UserRegister from "../SignInSignUp/UserRegister";
 import HomePage from "../HomePage";
-import RestaurantView from "../restaurant/view/RestaurantPageView/RestaurantView";
 import RestaurantManager from "../restaurantManagement/RestaurantManager";
 
 export const nav = [
@@ -12,7 +11,7 @@ export const nav = [
   { path: "/user/login", element: <Login />, isPrivate: false, roles: [""] },
   {
     path: "/user/register",
-    element: <Register />,
+    element: <UserRegister />,
     isPrivate: false,
     roles: [""],
   },

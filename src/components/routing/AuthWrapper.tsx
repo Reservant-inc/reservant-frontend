@@ -8,6 +8,7 @@ import NavBar from "../navigation/NavBar";
 export const AuthContext = createContext({
   authorized: false,
   login: (token: LoginResponseType) => {},
+  logout: () => {},
   setAuthorized: (auth: boolean) => {},
 });
 
@@ -52,12 +53,13 @@ export const AuthWrapper = () => {
 
   const logout = () => {
     Cookies.remove("token");
+    Cookies.remove("userInfo");
     setAuthorized(false);
     navigate("/");
   };
 
   return (
-    <AuthContext.Provider value={{ authorized, login, setAuthorized }}>
+    <AuthContext.Provider value={{ authorized, login, setAuthorized, logout }}>
       <Routes>
         {nav.map((r, i) => {
           if (r.isPrivate) {
