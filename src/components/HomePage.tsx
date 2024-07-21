@@ -53,12 +53,14 @@ export default function HomePage() {
   useEffect(() => {
     const getRestaurants = async () => {
       try {
-        const response = await fetchGET(`/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}&tags=${chosenTags.join(',')}&minRating=${reviewFilter}&page=${page}&perPage=${itemsPerPage}`);
+        const tagsQuery = chosenTags.map((tag) => {
+          return `&tags=${tag}`
+        }).join('')
+
+        const response = await fetchGET(`/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&page=${page}&perPage=${itemsPerPage}`);
 
         const newRestaurants = response.items.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
         
-        //const filteredRestaurants = [...restaurants, ...newRestaurants].filter((restaurant: any) => chosenTags.every((tag: string) => restaurant.tags.includes(tag)))
-
         setRestaurants([...restaurants, ...newRestaurants]);
         
         setLoadedRestaurantIds(prevIds => {
