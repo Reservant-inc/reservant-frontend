@@ -30,7 +30,9 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     const [isChanged, setIsChanged] = useState(false)
     const [activeMenu, setActiveMenu] = useState("main");
 
-    const [menuHeight, setMenuHeight] = useState(360);
+    const mainHeight=360
+
+    const [menuHeight, setMenuHeight] = useState(mainHeight);
 
     const { logout } = AuthData();
 
@@ -105,11 +107,16 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
             if(props.logout===true){
                 deleteAllCookies()
             }
-            if(props.language)
-                setLanguage(props.language)
             
             props.goToMenu && setActiveMenu(props.goToMenu)
             
+            
+            if(props.language){
+              setLanguage(props.language)
+              setIsPressed(false)
+              setMenuHeight(mainHeight);
+            }
+
         }
 
         return(   
@@ -189,8 +196,8 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
                         >
                         <div className="w-full" >   
                             <DropdownItem leftIcon={<ChevronLeft />}id="backFromLanguagesDropdownItem" goToMenu="main"/>
-                            <DropdownItem leftIcon={<Language />} id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 dark:text-grey-1 text-black ":""}> English </DropdownItem>
-                            <DropdownItem leftIcon={<Language />} id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 text-black dark:text-grey-1 ":""}> Polski </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} goToMenu="main" id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 dark:text-grey-1 text-black ":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} goToMenu="main" id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-4 bg-grey-1 text-black dark:text-grey-1 ":""}> Polski </DropdownItem>
                         </div>
                     </CSSTransition>        
                 </div>
