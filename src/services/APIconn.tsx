@@ -76,6 +76,10 @@ export const fetchPUT = async (connString: string, body: string) => {
     },
   );
 
+  if(!(response.json.length > 0)){
+    return
+  }
+
   if (!response.ok) {
     const errorData = await response.json();
     console.log(errorData);
@@ -99,6 +103,10 @@ export const fetchDELETE = async (connString: string) => {
       },
     },
   );
+
+  if(!(response.json.length > 0)){
+    return
+  }
 
   if (!response.ok) {
     const errorData = await response.json();
