@@ -75,6 +75,7 @@ export type EmployeeType = {
   phoneNumber: string;
   employments: EmploymentType[]
 };
+
 export type EmployeeEmployedType = {
   id: number;
   empID: string;
@@ -88,6 +89,7 @@ export type EmployeeEmployedType = {
   dateUntil: string,
   employmentId: string
 };
+
 export type EmploymentType = {
   id: string,
   restaurantId: string,
