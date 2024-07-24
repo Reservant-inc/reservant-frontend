@@ -148,7 +148,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="absolute left-[calc(20%)] top-[70px] z-[1] h-[calc(95%-50px)] w-[400px] overflow-y-auto rounded-lg bg-white shadow-md scroll">
+    <div className="absolute left-[370px] top-[70px] z-[1] h-[calc(95%-50px)] w-[400px] overflow-y-auto rounded-lg bg-white shadow-md scroll">
       {!restaurant ? (
         <CircularProgress className="text-grey-0 h-8 w-8"/>
       ) : (

@@ -98,7 +98,7 @@ export default function HomePage() {
 
   return (
     <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3 relative">
-      <div id="homePage-restaurantList-wrapper" className="relative h-full w-[20%] min-w-[300px] bg-white shadow-md overflow-y-auto scroll">
+      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-md overflow-y-auto overflow-x-hidden scroll">
         <div className="p-3">
           <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2">
             <input 
@@ -151,79 +151,79 @@ export default function HomePage() {
             </>
           ))}
         </List>
-        <div className="absolute right-[-450px] h-[40px] w-[450px] top-[15px] flex items-center gap-4 z-[2] bg-black">
-          <OutsideClickHandler onOutsideClick={reviewsPressHandler} isPressed={isReviewFilterPressed}>
-            <Button id="homePage-reviewsFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 " + (reviewFilter !== 0 ? "bg-primary text-white" : "bg-white text-black")}
-              onClick={reviewsPressHandler}
-            >
-              <StarPurple500SharpIcon className="h-6"/>
-              {   
-              reviewFilter === 0 ? "Reviews" : `${reviewFilter}.0 or more`
-              } 
-            </Button>
-            {isReviewFilterPressed && (
-              <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg">
-                <List
-                  id="homePage-restaurantList"
-                  className="font-mont-md dark:bg-black w-full"
+      </div>
+      <div className="absolute left-[370px] h-[40px] w-[450px] top-[15px] flex items-center gap-4 z-[2]">
+        <OutsideClickHandler onOutsideClick={reviewsPressHandler} isPressed={isReviewFilterPressed}>
+          <Button id="homePage-reviewsFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 " + (reviewFilter !== 0 ? "bg-primary text-white" : "bg-white text-black")}
+            onClick={reviewsPressHandler}
+          >
+            <StarPurple500SharpIcon className="h-6"/>
+            {   
+            reviewFilter === 0 ? "Reviews" : `${reviewFilter}.0 or more`
+            } 
+          </Button>
+          {isReviewFilterPressed && (
+            <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg">
+              <List
+                id="homePage-restaurantList"
+                className="font-mont-md dark:bg-black w-full"
+              >
+                <ListItemButton
+                  id="homePage-listItemButton"
+                  className="flex gap-2 justify-center items-center"
+                  onClick={() => {
+                    setReviewFilter(0);
+                    setIsReviewFilterPressed(false);
+                  }}
                 >
+                  <Typography component="legend">Any rating</Typography>
+                </ListItemButton>
+                {[2, 3, 4, 5].map((value, index) => (
                   <ListItemButton
                     id="homePage-listItemButton"
                     className="flex gap-2 justify-center items-center"
                     onClick={() => {
-                      setReviewFilter(0);
+                      setReviewFilter(value);
                       setIsReviewFilterPressed(false);
                     }}
+                    key={index}
                   >
-                    <Typography component="legend">Any rating</Typography>
+                    <Typography component="legend">{value}.0</Typography>
+                    <Rating name="read-only" value={value} readOnly />
                   </ListItemButton>
-                  {[2, 3, 4, 5].map((value, index) => (
-                    <ListItemButton
-                      id="homePage-listItemButton"
-                      className="flex gap-2 justify-center items-center"
-                      onClick={() => {
-                        setReviewFilter(value);
-                        setIsReviewFilterPressed(false);
-                      }}
-                      key={index}
-                    >
-                      <Typography component="legend">{value}.0</Typography>
-                      <Rating name="read-only" value={value} readOnly />
-                    </ListItemButton>
-                  ))}
-                </List>
-              </div>  
-            )}
-          </OutsideClickHandler>
-          <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
-            <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
-              onClick={tagsPressHandler}
-            >
-              <LocalOfferSharpIcon className="h-6"/>
-              {   
-              chosenTags.length > 0 ? chosenTags.length === 1 ? `${chosenTags.length} tag` : `${chosenTags.length} tags` : "Tags"
-              } 
+                ))}
+              </List>
+            </div>  
+          )}
+        </OutsideClickHandler>
+        <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
+          <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
+            onClick={tagsPressHandler}
+          >
+            <LocalOfferSharpIcon className="h-6"/>
+            {   
+            chosenTags.length > 0 ? chosenTags.length === 1 ? `${chosenTags.length} tag` : `${chosenTags.length} tags` : "Tags"
+            } 
+            {
+            chosenTags.length > 0 && <button className="h-[30px] w-[30px] rounded-full" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[30px]"/></button>  
+            }
+          </Button>
+          {isTagFilterPressed && (
+            <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg w-44 flex flex-wrap justify-start p-3 gap-2">
               {
-              chosenTags.length > 0 && <button className="h-[30px] w-[30px] rounded-full" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[30px]"/></button>  
+                tags.map((tag, i) => (
+                  <button
+                    key={i}
+                    className={`rounded-full border-[1px] border-grey-2 p-2 text-[12px] font-mont-md ${chosenTags.includes(tag) ? "text-white bg-primary" : "text-black bg-white"}`}
+                    onClick={() => handleTagSelection(tag)}
+                  >
+                    {tag.toUpperCase()}
+                  </button>
+                ))
               }
-            </Button>
-            {isTagFilterPressed && (
-              <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg w-44 flex flex-wrap justify-start p-3 gap-2">
-                {
-                  tags.map((tag, i) => (
-                    <button
-                      key={i}
-                      className={`rounded-full border-[1px] border-grey-2 p-2 text-[12px] font-mont-md ${chosenTags.includes(tag) ? "text-white bg-primary" : "text-black bg-white"}`}
-                      onClick={() => handleTagSelection(tag)}
-                    >
-                      {tag.toUpperCase()}
-                    </button>
-                  ))
-                }
-              </div>  
-            )}
-          </OutsideClickHandler>
-        </div>
+            </div>  
+          )}
+        </OutsideClickHandler>
       </div>
       {activeRestaurant && (
         <FocusedRestaurantDetails

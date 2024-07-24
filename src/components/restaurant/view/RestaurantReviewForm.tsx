@@ -32,7 +32,7 @@ const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
 
     try {
       const response = await fetchPOST(
-        "/restaurants/2/reviews",
+        "/restaurants/4/reviews",
         JSON.stringify(review),
       );
       if (response) {
