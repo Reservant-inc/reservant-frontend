@@ -91,6 +91,7 @@ const UserRegister: React.FC = () => {
                             name="firstName"
                             label="FIRST NAME"
                             variant="standard"
+                            helperText={(formik.errors.firstName && formik.touched.firstName) && formik.errors.firstName} 
                             className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                               !(
                                 formik.errors.firstName &&
@@ -108,6 +109,7 @@ const UserRegister: React.FC = () => {
                             name="lastName"
                             label="LAST NAME"
                             variant="standard"
+                            helperText={(formik.errors.lastName && formik.touched.lastName) && formik.errors.lastName} 
                             className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                               !(
                                 formik.errors.lastName &&
@@ -125,6 +127,7 @@ const UserRegister: React.FC = () => {
                             name="login"
                             label="LOGIN"
                             variant="standard"
+                            helperText={(formik.errors.login && formik.touched.login) && formik.errors.login} 
                             className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                               !(
                                 formik.errors.login &&
@@ -142,6 +145,7 @@ const UserRegister: React.FC = () => {
                             name="email"
                             label="EMAIL"
                             variant="standard"
+                            helperText={(formik.errors.email && formik.touched.email) && formik.errors.email} 
                             className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                               !(
                                 formik.errors.email &&
@@ -244,6 +248,7 @@ const UserRegister: React.FC = () => {
                           name="password"
                           label="PASSWORD"
                           variant="standard"
+                          helperText={(formik.errors.password && formik.touched.password) && formik.errors.password} 
                           className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.password &&
@@ -261,6 +266,7 @@ const UserRegister: React.FC = () => {
                           name="confirmPassword"
                           label="CONFIRM PASSWORD"
                           variant="standard"
+                          helperText={(formik.errors.confirmPassword && formik.touched.confirmPassword) && formik.errors.confirmPassword} 
                           className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.confirmPassword &&
