@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Zaproponuj nowy ekran lub funkcjonalność
 title: "[FEATURE]: "
 labels: enhancement
 assignees: KubaBili001
