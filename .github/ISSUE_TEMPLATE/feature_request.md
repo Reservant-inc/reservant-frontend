@@ -4,6 +4,7 @@ about: Zaproponuj nowy ekran lub funkcjonalność
 title: "[FEATURE]: "
 labels: enhancement
 assignees: KubaBili001
+
 ---
 
 ## Czy prośba o funkcję jest związana z problemem? Opisz go

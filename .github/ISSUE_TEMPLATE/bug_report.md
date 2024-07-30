@@ -3,7 +3,8 @@ name: Bug report
 about: Zgłoś rzecz o poprawy
 title: "[BUG]: "
 labels: bug
-assignees: KubaBili001 
+assignees: KubaBili001
+
 ---
 
 - [ ] **__Sprawdziłem i nikt nie zgłosił takiego błędu na issues__**
