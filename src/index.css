@@ -74,6 +74,11 @@ body {
   width: 100%;
 }
 
+.transition-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
 /* marker cluster custom css */
 
 .marker-cluster-small {
