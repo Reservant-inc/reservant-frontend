@@ -26,10 +26,15 @@ const TABS = {
 
 interface RestaurantDetailsProps {
   addToCart: (item: MenuItem) => void;
+  restaurantId: string | undefined;
 }
 
-const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
+const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
+  addToCart,
+  restaurantId,
+}) => {
   const [restaurant, setRestaurant] = useState<any>(null);
+  const [events, setEvents] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState(TABS.MENU);
   const [openModal, setOpenModal] = useState(false);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
@@ -37,7 +42,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
-        const data = await fetchGET(`/my-restaurants/2`);
+        const data = await fetchGET(`/restaurants/${restaurantId}`);
         setRestaurant(data);
         setActiveRestaurant(data);
       } catch (error) {
@@ -46,7 +51,22 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
     };
 
     fetchRestaurantDetails();
-  }, []);
+  }, [restaurantId]);
+
+  useEffect(() => {
+    if (activeTab === TABS.EVENTS) {
+      const fetchRestaurantEvents = async () => {
+        try {
+          const data = await fetchGET(`/restaurants/${restaurantId}/events`);
+          setEvents(data.items || []);
+        } catch (error) {
+          console.error("Error fetching restaurant events:", error);
+        }
+      };
+
+      fetchRestaurantEvents();
+    }
+  }, [activeTab, restaurantId]);
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -60,7 +80,13 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ addToCart }) => {
       case TABS.MENU:
         return <RestaurantMenuView addToCart={addToCart} />;
       case TABS.EVENTS:
-        return <RestaurantEventsView />;
+        return (
+          <RestaurantEventsView
+            restaurantId={restaurant.restaurantId}
+            events={events}
+            restaurantName={restaurant.name}
+          />
+        );
       case TABS.REVIEWS:
         return <RestaurantReviewsView />;
       default:

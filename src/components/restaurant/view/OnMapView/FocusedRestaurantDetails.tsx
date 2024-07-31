@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../../services/APIconn";
+import { fetchGET, getImage } from "../../../../services/APIconn";
 import {
   Box,
   Chip,
@@ -14,6 +14,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
+import { useNavigate } from "react-router-dom";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -30,8 +31,6 @@ interface FocusedRestaurantDetailsProps {
   onClose: () => void;
 }
 
-const dummyImage = "https://images.unsplash.com/photo-1551782450-a2132b4ba21d";
-
 const getOpinionsText = (count: number) => {
   if (count === 1) return `${count} opinia`;
   if (count > 1 && count < 5) return `${count} opinie`;
@@ -46,11 +45,12 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [activeTab, setActiveTab] = useState(TABS.MENU);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [reviews, setReviews] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
-        const data = await fetchGET(`/restaurants/2`);
+        const data = await fetchGET(`/restaurants/${restaurantId}`);
         setRestaurant(data);
       } catch (error) {
         console.error("Error fetching restaurant details:", error);
@@ -59,7 +59,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
     const fetchRestaurantReviews = async () => {
       try {
-        const data = await fetchGET(`/restaurants/2/reviews`);
+        const data = await fetchGET(`/restaurants/${restaurantId}/reviews`);
         setReviews(data.items || []);
       } catch (error) {
         console.error("Error fetching restaurant reviews:", error);
@@ -84,23 +84,22 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         return (
           <div className="p-4">
             <ImageList variant="masonry" cols={3} gap={8}>
-              {Array(6)
-                .fill(dummyImage)
-                .map((photo: string, index: number) => (
-                  <ImageListItem
-                    key={index}
-                    onClick={() => setSelectedImage(photo)}
-                  >
-                    <img
-                      src={`${photo}?w=248&fit=crop&auto=format`}
-                      srcSet={`${photo}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                      alt={`Gallery photo ${index + 1}`}
-                      loading="lazy"
-                      style={{ borderRadius: "8px", cursor: "pointer" }}
-                    />
-                  </ImageListItem>
-                ))}
+              {restaurant.photos.map((photo: string, index: number) => (
+                <ImageListItem
+                  key={index}
+                  onClick={() => setSelectedImage(getImage(photo as string))}
+                >
+                  <img
+                    src={`${getImage(photo as string)}?w=248&fit=crop&auto=format`}
+                    srcSet={`${getImage(photo as string)}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    alt={`Gallery photo ${index + 1}`}
+                    loading="lazy"
+                    style={{ borderRadius: "8px", cursor: "pointer" }}
+                  />
+                </ImageListItem>
+              ))}
             </ImageList>
+
             <Modal
               open={!!selectedImage}
               onClose={() => setSelectedImage(null)}
@@ -150,18 +149,22 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     }
   };
 
+  const handleRestaurantPageRedirect = () => {
+    navigate(`/restaurants/${restaurantId}`);
+  };
+
   return (
-    <div className="absolute left-[calc(20%)] top-[70px] z-[1] h-[calc(95%-50px)] w-[400px] overflow-y-auto rounded-lg bg-white shadow-md scroll">
+    <div className="scroll absolute left-[calc(20%)] top-[70px] z-[1] h-[calc(95%-50px)] w-[400px] overflow-y-auto rounded-lg bg-white shadow-md">
       <div className="relative">
         <IconButton
           onClick={onClose}
-          className="absolute right-2 top-2 z-10 bg-white h-8 w-8"
+          className="absolute right-2 top-2 z-10 h-8 w-8 bg-white"
         >
           <CloseIcon />
         </IconButton>
         <Box
           component="img"
-          src={dummyImage}
+          src={getImage(restaurant.logo as string)}
           alt="Restaurant"
           className="h-50 w-full object-cover"
         />
@@ -222,6 +225,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           <Button
             variant="contained"
             style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
+            onClick={handleRestaurantPageRedirect} // Add onClick handler
           >
             Przejdź do strony restauracji
           </Button>

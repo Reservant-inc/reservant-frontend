@@ -5,6 +5,7 @@ import React from "react";
 import UserRegister from "../SignInSignUp/UserRegister";
 import HomePage from "../HomePage";
 import RestaurantManager from "../restaurantManagement/RestaurantManager";
+import RestaurantView from "../restaurant/view/RestaurantPageView/RestaurantView";
 
 export const nav = [
   { path: "/", element: <LandingPage />, isPrivate: false, roles: [""] },
@@ -34,5 +35,11 @@ export const nav = [
     element: <RestaurantManager />,
     isPrivate: true,
     roles: ["RestaurantOwner"],
+  },
+  {
+    path: "/restaurants/:id",
+    element: <RestaurantView />,
+    isPrivate: true,
+    roles: ["RestaurantOwner", "Customer", "RestaurantEmployee"],
   },
 ];
