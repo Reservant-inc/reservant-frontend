@@ -2,9 +2,6 @@ html {
   height: 100%;
 }
 
-.leaflet-tooltip-bottom:before {
-  border-bottom-color: transparent !important
-}
 
 body {
   margin: 0;
@@ -15,9 +12,13 @@ body {
   --speed: 500ms;
 }
 
+/* login and register page bg gradient */
+
 .login-gradient{
-  background: radial-gradient(circle, rgba(255,255,255,0.0) 40%, rgba(169,76,121,0.4) 100%, rgba(103,45,73,0.8) 100%);
+  background: radial-gradient(circle,  rgba(0,0,0,1) 20%, rgba(255,255,255,0.0) 70%, rgba(169,76,121,0.2) 100%);
 }
+
+/* tool section animate */
 
 .dropdownMenu{
   display: flex; 
@@ -40,7 +41,7 @@ body {
 }
 
 .menu-primary-enter-active{
-
+  
   transform: translateX(0%);
   transition: all var(--speed) ease;
 }
@@ -73,18 +74,45 @@ body {
   width: 100%;
 }
 
+/* marker cluster custom css */
+
+.marker-cluster-small {
+	background-color: rgba(0,0,0,0.8) !important
+}
+
+.marker-cluster-small div {
+	background-color: rgba(181, 226, 140, 1) !important
+	}
+
+.marker-cluster div {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  margin-top: 5px;
+
+  text-align: center;
+  border-radius: 15px;
+  font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  }
+
+/* leaflet custom css */
+
+.leaflet-tooltip-bottom:before {
+  border-bottom-color: transparent !important
+}
+
 @tailwind base;
 
 @layer base{
-
+  
   input[type], input:focus {
     @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans;
   }
-
+  
   .scroll::-webkit-scrollbar {
     @apply w-[6px]
   }
-
+  
   .scroll::-webkit-scrollbar-thumb {
     background: #888;
   }

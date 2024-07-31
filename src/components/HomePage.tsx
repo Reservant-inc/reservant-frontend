@@ -24,14 +24,13 @@ export default function HomePage() {
     new Set(),
   );
   const [userMovedMap, setUserMovedMap] = useState<boolean>(false);
-  const [isReviewFilterPressed, setIsReviewFilterPressed] =
-    useState<boolean>(false);
+  const [isReviewFilterPressed, setIsReviewFilterPressed] = useState<boolean>(false);
   const [isTagFilterPressed, setIsTagFilterPressed] = useState<boolean>(false);
   const [reviewFilter, setReviewFilter] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [chosenTags, setChosenTags] = useState<string[]>([]);
   const [page, setPage] = useState<number>(0);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const itemsPerPage = 10;
 
   //center of warsaw, cant get users location without https
   const [bounds, setBounds] = useState<any>({
@@ -44,7 +43,7 @@ export default function HomePage() {
   useEffect(() => {
     const getTags = async () => {
       try {
-        const response = await fetchGET("/restaurant-tags");
+        const response = await fetchGET('/restaurant-tags');
         setTags(response);
       } catch (error) {
         console.error("Error getting restaurants", error);
@@ -56,24 +55,19 @@ export default function HomePage() {
   useEffect(() => {
     const getRestaurants = async () => {
       try {
-        const tagsQuery = chosenTags
-          .map((tag) => {
-            return `&tags=${tag}`;
-          })
-          .join("");
+        const tagsQuery = chosenTags.map((tag) => {
+          return `&tags=${tag}`;
+        }).join('');
 
         const response = await fetchGET(
           `/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&page=${page}&perPage=${itemsPerPage}`,
         );
 
-        const newRestaurants = response.items.filter(
-          (restaurant: any) =>
-            !loadedRestaurantIds.has(restaurant.restaurantId),
-        );
+        const newRestaurants = response.items.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
 
         setRestaurants([...restaurants, ...newRestaurants]);
 
-        setLoadedRestaurantIds((prevIds) => {
+        setLoadedRestaurantIds(prevIds => {
           const newIds = new Set(prevIds);
           newRestaurants.forEach((restaurant: any) =>
             newIds.add(restaurant.restaurantId),
@@ -85,19 +79,7 @@ export default function HomePage() {
       }
     };
     getRestaurants();
-  }, [bounds, chosenTags, reviewFilter]);
-
-  useEffect(() => {
-    const getTags = async () => {
-      try {
-        const response = await fetchGET("/restaurant-tags");
-        setTags(response);
-      } catch (error) {
-        console.error("Error getting tags", error);
-      }
-    };
-    getTags();
-  }, []);
+  }, [bounds, chosenTags, reviewFilter, page]);
 
   const reviewsPressHandler = () => {
     setIsReviewFilterPressed(!isReviewFilterPressed);
@@ -121,17 +103,11 @@ export default function HomePage() {
   };
 
   return (
-    <div
-      id="homePage-wrapper"
-      className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3"
-    >
-      <div
-        id="homePage-restaurantList-wrapper"
-        className="scroll h-full w-[20%] min-w-[300px] overflow-y-scroll bg-white shadow-md"
-      >
+    <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3 relative">
+      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-md overflow-y-auto overflow-x-hidden scroll">
         <div className="p-3">
-          <div className="flex w-full rounded-full border-[1px] border-grey-2 px-2">
-            <input
+          <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2">
+            <input 
               type="text"
               placeholder="Search for restaurants"
               className="clean-input w-full"
@@ -163,13 +139,8 @@ export default function HomePage() {
                   <div className="flex flex-col gap-1">
                     <h1 className="text-md font-mont-md">{restaurant.name}</h1>
                     <div className="flex">
-                      <h1 className="text-sm">{restaurant.rating}</h1>
-                      <Rating
-                        name="read-only"
-                        value={restaurant.rating}
-                        readOnly
-                        className="text-[18px]"
-                      />
+                      <h1 className="text-sm">{Math.round((restaurant.rating + Number.EPSILON) * 100) / 100}</h1>
+                      <Rating name="read-only" value={restaurant.rating} readOnly className="text-[18px]"/>
                       <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
                     </div>
                     <h1 className="font-mont-l text-sm">
@@ -181,11 +152,11 @@ export default function HomePage() {
                         : "No delivery"}
                     </h1>
                     <div className="flex gap-2">
-                      {restaurant.tags.map((tag: string) => (
-                        <h1 className="rounded-full border-[1px] border-grey-1 bg-grey-0 p-1 font-mont-md text-sm">
-                          {tag}
-                        </h1>
-                      ))}
+                      {
+                        restaurant.tags.map((tag: string, index: number) => (
+                          <h1 className="text-sm font-mont-md bg-grey-0 rounded-full p-1 border-[1px] border-grey-1" key={index}>{tag}</h1>
+                        ))
+                      }
                     </div>
                   </div>
                   <img
@@ -200,13 +171,86 @@ export default function HomePage() {
           ))}
         </List>
       </div>
+      <div className="absolute left-[370px] h-[40px] w-[450px] top-[15px] flex items-center gap-4 z-[2]">
+        <OutsideClickHandler onOutsideClick={reviewsPressHandler} isPressed={isReviewFilterPressed}>
+          <Button id="homePage-reviewsFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 " + (reviewFilter !== 0 ? "bg-primary text-white" : "bg-white text-black")}
+            onClick={reviewsPressHandler}
+          >
+            <StarPurple500SharpIcon className="h-6"/>
+            {   
+            reviewFilter === 0 ? "Reviews" : `${reviewFilter}.0 or more`
+            } 
+          </Button>
+          {isReviewFilterPressed && (
+            <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg">
+              <List
+                id="homePage-restaurantList"
+                className="font-mont-md dark:bg-black w-full"
+              >
+                <ListItemButton
+                  id="homePage-listItemButton"
+                  className="flex gap-2 justify-center items-center"
+                  onClick={() => {
+                    setReviewFilter(0);
+                    setIsReviewFilterPressed(false);
+                  }}
+                >
+                  <Typography component="legend">Any rating</Typography>
+                </ListItemButton>
+                {[2, 3, 4, 5].map((value, index) => (
+                  <ListItemButton
+                    id="homePage-listItemButton"
+                    className="flex gap-2 justify-center items-center"
+                    onClick={() => {
+                      setReviewFilter(value);
+                      setIsReviewFilterPressed(false);
+                    }}
+                    key={index}
+                  >
+                    <Typography component="legend">{value}.0</Typography>
+                    <Rating name="read-only" value={value} readOnly />
+                  </ListItemButton>
+                ))}
+              </List>
+            </div>  
+          )}
+        </OutsideClickHandler>
+        <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
+          <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
+            onClick={tagsPressHandler}
+          >
+            <LocalOfferSharpIcon className="h-6"/>
+            {   
+            chosenTags.length > 0 ? chosenTags.length === 1 ? `${chosenTags.length} tag` : `${chosenTags.length} tags` : "Tags"
+            } 
+            {
+            chosenTags.length > 0 && <button className="h-[30px] w-[30px] rounded-full" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[30px]"/></button>  
+            }
+          </Button>
+          {isTagFilterPressed && (
+            <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg w-44 flex flex-wrap justify-start p-3 gap-2">
+              {
+                tags.map((tag, i) => (
+                  <button
+                    key={i}
+                    className={`rounded-full border-[1px] border-grey-2 p-2 text-[12px] font-mont-md ${chosenTags.includes(tag) ? "text-white bg-primary" : "text-black bg-white"}`}
+                    onClick={() => handleTagSelection(tag)}
+                  >
+                    {tag.toUpperCase()}
+                  </button>
+                ))
+              }
+            </div>  
+          )}
+        </OutsideClickHandler>
+      </div>
       {activeRestaurant && (
         <FocusedRestaurantDetails
           restaurantId={activeRestaurant.restaurantId}
           onClose={() => setActiveRestaurant(null)}
         />
       )}
-      <div id="map" className="z-[0] h-full w-[85%]">
+      <div id="map" className="z-[0] h-full w-[85%] relative">
         <Map
           activeRestaurant={activeRestaurant}
           restaurants={restaurants}
@@ -215,102 +259,6 @@ export default function HomePage() {
           setUserMovedMap={setUserMovedMap}
           userMovedMap={userMovedMap}
         />
-      </div>
-      <div className="min-left-[300px] absolute left-[20%] top-[15px] flex h-[40px] w-[450px] items-center gap-4">
-        <OutsideClickHandler
-          onOutsideClick={reviewsPressHandler}
-          isPressed={isReviewFilterPressed}
-        >
-          <Button
-            id="homePage-reviewsFilter"
-            className={
-              "flex h-full gap-2 rounded-lg p-2 shadow-md " +
-              (reviewFilter != 0
-                ? "bg-primary text-white"
-                : "bg-white text-black")
-            }
-            onClick={reviewsPressHandler}
-          >
-            <StarPurple500SharpIcon className="h-6" />
-            {reviewFilter === 0 ? "Reviews" : `${reviewFilter}.0 or more`}
-          </Button>
-          {isReviewFilterPressed && (
-            <div className="absolute top-[55px] z-[2] rounded-lg bg-white shadow-2xl">
-              <List
-                id="homePage-restaurantList"
-                className="w-full font-mont-md dark:bg-black"
-              >
-                <ListItemButton
-                  id="homePage-listItemButton"
-                  className="flex items-center justify-center gap-2"
-                  onClick={() => {
-                    setReviewFilter(0);
-                    setIsReviewFilterPressed(false);
-                  }}
-                >
-                  <Typography component="legend">Any rating</Typography>
-                </ListItemButton>
-                {[2, 3, 4, 5].map((value) => (
-                  <ListItemButton
-                    id="homePage-listItemButton"
-                    className="flex items-center justify-center gap-2"
-                    onClick={() => {
-                      setReviewFilter(value);
-                      setIsReviewFilterPressed(false);
-                    }}
-                    key={value}
-                  >
-                    <Typography component="legend">{value}.0</Typography>
-                    <Rating name="read-only" value={value} readOnly />
-                  </ListItemButton>
-                ))}
-              </List>
-            </div>
-          )}
-        </OutsideClickHandler>
-        <OutsideClickHandler
-          onOutsideClick={tagsPressHandler}
-          isPressed={isTagFilterPressed}
-        >
-          <Button
-            id="homePage-tagssFilter"
-            className={
-              "flex h-full items-center gap-2 rounded-lg p-2 shadow-md " +
-              (chosenTags.length > 0
-                ? "bg-primary text-white"
-                : "bg-white text-black")
-            }
-            onClick={tagsPressHandler}
-          >
-            <LocalOfferSharpIcon className="h-6" />
-            {chosenTags.length > 0
-              ? chosenTags.length === 1
-                ? `${chosenTags.length} tag`
-                : `${chosenTags.length} tags`
-              : "Tags"}
-            {chosenTags.length > 0 && (
-              <button
-                className="h-[30px] w-[30px] rounded-full"
-                onClick={() => setChosenTags([])}
-              >
-                <CloseSharpIcon className="w-[30px]" />
-              </button>
-            )}
-          </Button>
-          {isTagFilterPressed && (
-            <div className="absolute top-[55px] z-[2] flex w-44 flex-wrap justify-start gap-2 rounded-lg bg-white p-3 shadow-2xl">
-              {tags.map((tag, i) => (
-                <button
-                  key={i}
-                  className={`rounded-full border-[1px] border-grey-2 p-2 font-mont-md text-[12px] ${chosenTags.includes(tag) ? "bg-primary text-white" : "bg-white text-black"}`}
-                  onClick={() => handleTagSelection(tag)}
-                >
-                  {tag.toUpperCase()}
-                </button>
-              ))}
-            </div>
-          )}
-        </OutsideClickHandler>
       </div>
     </div>
   );

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
-import { Button } from "@mui/material";
-import { Map as LeafletMap, LatLngBounds } from "leaflet"; // Import LatLngBounds
+import MarkerClusterGroup from 'react-leaflet-cluster'
+import { Map as LeafletMap, LatLngBounds } from "leaflet";
 
 interface MapProps {
   activeRestaurant: any;
@@ -21,8 +21,8 @@ const Map: React.FC<MapProps> = ({
   setUserMovedMap,
   userMovedMap
 }) => {
-  const mapRef = useRef<LeafletMap | null>(null); // Type the ref
-  const previousBoundsRef = useRef<LatLngBounds | null>(null); // Add ref to track previous bounds
+  const mapRef = useRef<LeafletMap | null>(null); 
+  const previousBoundsRef = useRef<LatLngBounds | null>(null);
 
   const MapViewUpdater = () => {
     const map = useMap();
@@ -89,25 +89,28 @@ const Map: React.FC<MapProps> = ({
         }
         zoom={14}
         scrollWheelZoom={true}
-        className="z-0"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
-        {restaurants.map((restaurant, index) => (
-          <CustomMarker
-            position={[
-              restaurant.location.latitude,
-              restaurant.location.longitude,
-            ]}
-            key={index}
-            restaurant={restaurant}
-            activeRestaurant={activeRestaurant}
-            setActiveRestaurant={setActiveRestaurant}
-            setUserMovedMap={setUserMovedMap}
-          />
-        ))}
+        <MarkerClusterGroup
+          
+        >
+          {restaurants.map((restaurant, index) => (
+            <CustomMarker
+              position={[
+                restaurant.location.latitude,
+                restaurant.location.longitude,
+              ]}
+              key={index}
+              restaurant={restaurant}
+              activeRestaurant={activeRestaurant}
+              setActiveRestaurant={setActiveRestaurant}
+              setUserMovedMap={setUserMovedMap}
+            />
+          ))}
+        </MarkerClusterGroup>
         <MapViewUpdater />
       </MapContainer>
     </div>

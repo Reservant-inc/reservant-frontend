@@ -40,7 +40,6 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
   const fetchUserData = async () => {
     try {
       const response = await fetchGET("/user");
-      console.log("User Data:", response);
       setUserId(response.userId);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -51,7 +50,6 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
     try {
       setLoading(true);
       const outgoing = await fetchGET("/friends/outgoing");
-      console.log("Outgoing Requests:", outgoing.items);
       setOutgoingRequests(outgoing.items);
     } catch (error) {
       console.error("Error fetching outgoing requests:", error);
