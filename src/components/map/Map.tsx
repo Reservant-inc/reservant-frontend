@@ -95,7 +95,7 @@ const Map: React.FC<MapProps> = ({
           url="https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
         <MarkerClusterGroup
-          
+          showCoverageOnHover={false}
         >
           {restaurants.map((restaurant, index) => (
             <CustomMarker

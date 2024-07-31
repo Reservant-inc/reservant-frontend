@@ -15,10 +15,12 @@ import FocusedRestaurantDetails from "./restaurant/view/OnMapView/FocusedRestaur
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { fetchGET, getImage } from "../services/APIconn";
 import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
+import { RestaurantType } from "../services/types";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
   const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [allRestaurants, setAllRestaurants] = useState<any[]>([]);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
     new Set(),
@@ -66,6 +68,7 @@ export default function HomePage() {
         const newRestaurants = response.items.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
 
         setRestaurants([...restaurants, ...newRestaurants]);
+        setAllRestaurants([...allRestaurants, ...newRestaurants]);
 
         setLoadedRestaurantIds(prevIds => {
           const newIds = new Set(prevIds);
@@ -111,6 +114,11 @@ export default function HomePage() {
               type="text"
               placeholder="Search for restaurants"
               className="clean-input w-full"
+              onChange={(e)=>{
+                setRestaurants(allRestaurants.filter((restaurant: any)=>{
+                  return (restaurant.name.toLowerCase().includes(e.target.value.toLowerCase()))
+                }))
+              }}
             />
             <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
