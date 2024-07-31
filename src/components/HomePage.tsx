@@ -8,11 +8,11 @@ import {
   Rating,
   Typography,
 } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
-import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp';
-import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp';
+import SearchIcon from "@mui/icons-material/Search";
+import StarPurple500SharpIcon from "@mui/icons-material/StarPurple500Sharp";
+import LocalOfferSharpIcon from "@mui/icons-material/LocalOfferSharp";
 import FocusedRestaurantDetails from "./restaurant/view/OnMapView/FocusedRestaurantDetails";
-import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { fetchGET, getImage } from "../services/APIconn";
 import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
 
@@ -20,7 +20,9 @@ export default function HomePage() {
   //change from any once backend finishes the API endpoint
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
-  const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(new Set());
+  const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
+    new Set(),
+  );
   const [userMovedMap, setUserMovedMap] = useState<boolean>(false);
   const [isReviewFilterPressed, setIsReviewFilterPressed] = useState<boolean>(false);
   const [isTagFilterPressed, setIsTagFilterPressed] = useState<boolean>(false);
@@ -57,7 +59,9 @@ export default function HomePage() {
           return `&tags=${tag}`;
         }).join('');
 
-        const response = await fetchGET(`/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&page=${page}&perPage=${itemsPerPage}`);
+        const response = await fetchGET(
+          `/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&page=${page}&perPage=${itemsPerPage}`,
+        );
 
         const newRestaurants = response.items.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
 
@@ -65,7 +69,9 @@ export default function HomePage() {
 
         setLoadedRestaurantIds(prevIds => {
           const newIds = new Set(prevIds);
-          newRestaurants.forEach((restaurant: any) => newIds.add(restaurant.restaurantId));
+          newRestaurants.forEach((restaurant: any) =>
+            newIds.add(restaurant.restaurantId),
+          );
           return newIds;
         });
       } catch (error) {
@@ -84,9 +90,9 @@ export default function HomePage() {
   };
 
   const handleTagSelection = (tag: string) => {
-    setChosenTags(prevTags => {
+    setChosenTags((prevTags) => {
       const updatedTags = prevTags.includes(tag)
-        ? prevTags.filter(t => t !== tag)
+        ? prevTags.filter((t) => t !== tag)
         : [...prevTags, tag];
 
       // Reset restaurants and loaded IDs
@@ -104,38 +110,47 @@ export default function HomePage() {
             <input 
               type="text"
               placeholder="Search for restaurants"
-              className="w-full clean-input"
+              className="clean-input w-full"
             />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
             </IconButton>
           </div>
         </div>
         <List
           id="homePage-restaurantList"
-          className="font-mont-md dark:bg-black w-full"
+          className="w-full font-mont-md dark:bg-black"
           component="nav"
         >
           {restaurants.map((restaurant, index) => (
             <>
-              <ListItemButton id="homePage-listItemButton"
+              <ListItemButton
+                id="homePage-listItemButton"
                 onClick={() => {
                   setUserMovedMap(false);
                   setActiveRestaurant(restaurant);
                 }}
                 key={index}
-                className={activeRestaurant === restaurant ? "bg-grey-1" : "bg-white"}
+                className={
+                  activeRestaurant === restaurant ? "bg-grey-1" : "bg-white"
+                }
               >
-                <div className="flex items-start justify-between w-full py-3">
+                <div className="flex w-full items-start justify-between py-3">
                   <div className="flex flex-col gap-1">
-                    <h1 className="font-mont-md text-md">{restaurant.name}</h1>
+                    <h1 className="text-md font-mont-md">{restaurant.name}</h1>
                     <div className="flex">
                       <h1 className="text-sm">{Math.round((restaurant.rating + Number.EPSILON) * 100) / 100}</h1>
                       <Rating name="read-only" value={restaurant.rating} readOnly className="text-[18px]"/>
                       <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
                     </div>
-                    <h1 className="text-sm font-mont-l">{restaurant.address}</h1>
-                    <h1 className="text-sm font-mont-l">{restaurant.provideDelivery ? "Provides delivery" : "No delivery"}</h1>
+                    <h1 className="font-mont-l text-sm">
+                      {restaurant.address}
+                    </h1>
+                    <h1 className="font-mont-l text-sm">
+                      {restaurant.provideDelivery
+                        ? "Provides delivery"
+                        : "No delivery"}
+                    </h1>
                     <div className="flex gap-2">
                       {
                         restaurant.tags.map((tag: string, index: number) => (
@@ -144,10 +159,14 @@ export default function HomePage() {
                       }
                     </div>
                   </div>
-                  <img src={getImage(restaurant.logo)} alt="logo" className="h-24 w-24 rounded-lg"/>
+                  <img
+                    src={getImage(restaurant.logo)}
+                    alt="logo"
+                    className="h-24 w-24 rounded-lg"
+                  />
                 </div>
               </ListItemButton>
-              <div className="w-full h-0 border-b-[1px] border-grey-1"></div>
+              <div className="h-0 w-full border-b-[1px] border-grey-1"></div>
             </>
           ))}
         </List>

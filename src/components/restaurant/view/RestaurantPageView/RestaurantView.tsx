@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
 import RestaurantCart from "./RestaurantCart";
 import { CartItem, MenuItem } from "../../../../services/interfaces";
+import { useParams } from "react-router-dom";
 
 const RestaurantView: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const addToCart = (item: MenuItem) => {
@@ -45,7 +47,7 @@ const RestaurantView: React.FC = () => {
   return (
     <div className="flex h-screen flex-col lg:flex-row">
       <div className="w-full lg:w-2/3">
-        <RestaurantDetails addToCart={addToCart} />
+        <RestaurantDetails addToCart={addToCart} restaurantId={id} />
       </div>
       <div className="mt-10 flex h-full min-h-screen w-full items-start justify-center lg:mt-20 lg:w-1/3">
         <RestaurantCart
