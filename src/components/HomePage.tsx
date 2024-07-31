@@ -130,7 +130,7 @@ export default function HomePage() {
                   <div className="flex flex-col gap-1">
                     <h1 className="font-mont-md text-md">{restaurant.name}</h1>
                     <div className="flex">
-                      <h1 className="text-sm">{restaurant.rating}</h1>
+                      <h1 className="text-sm">{Math.round((restaurant.rating + Number.EPSILON) * 100) / 100}</h1>
                       <Rating name="read-only" value={restaurant.rating} readOnly className="text-[18px]"/>
                       <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
                     </div>
