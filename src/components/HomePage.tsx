@@ -104,22 +104,20 @@ export default function HomePage() {
 
   return (
     <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3 relative">
-      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-md overflow-y-auto overflow-x-hidden scroll">
+      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-2xl overflow-y-auto overflow-x-hidden scroll">
         <div className="p-3">
-          <div className="w-full flex px-2 rounded-full border-[1px] border-grey-2">
+          <div className="w-full flex px-1 rounded-full bg-grey-0 border-[1px] border-grey-1 font-mont-md items-center">
             <input 
               type="text"
               placeholder="Search for restaurants"
               className="clean-input w-full"
             />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
+            <SearchIcon className="hover:cursor-pointer h-[25px] w-[25px]"/>
           </div>
         </div>
         <List
           id="homePage-restaurantList"
-          className="w-full font-mont-md dark:bg-black"
+          className="w-full font-mont-md dark:bg-black p-0"
           component="nav"
         >
           {restaurants.map((restaurant, index) => (
@@ -132,7 +130,7 @@ export default function HomePage() {
                 }}
                 key={index}
                 className={
-                  activeRestaurant === restaurant ? "bg-grey-1" : "bg-white"
+                  activeRestaurant === restaurant ? "bg-grey-1" : "bg-white hover:bg-grey-1"
                 }
               >
                 <div className="flex w-full items-start justify-between py-3">
@@ -154,7 +152,7 @@ export default function HomePage() {
                     <div className="flex gap-2">
                       {
                         restaurant.tags.map((tag: string, index: number) => (
-                          <h1 className="text-sm font-mont-md bg-grey-0 rounded-full p-1 border-[1px] border-grey-1" key={index}>{tag}</h1>
+                          <h1 className="text-sm font-mont-md" key={index}>{tag}</h1>
                         ))
                       }
                     </div>
@@ -166,7 +164,7 @@ export default function HomePage() {
                   />
                 </div>
               </ListItemButton>
-              <div className="h-0 w-full border-b-[1px] border-grey-1"></div>
+              <div className="h-[1px] w-full bg-grey-1"></div>
             </>
           ))}
         </List>

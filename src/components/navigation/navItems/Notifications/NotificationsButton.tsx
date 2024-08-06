@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
+import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
 import { Notifications } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
-import { fetchGET } from "../../../services/APIconn";
+import { fetchGET } from "../../../../services/APIconn";
 
 interface NotificationsButtonProps {
   isDark: boolean;
@@ -39,10 +39,10 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
       <button
         id="NotificationsButton"
-        className="relative flex h-[95%] w-10 items-center justify-center"
+        className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
         onClick={pressHandler}
       >
-        <Notifications fontSize="large" />
+        <Notifications className="h-[30px] w-[30px]" />
         {hasNotifications && !loading && (
           <span className="absolute right-1 top-0 h-3 w-3 rounded-full bg-primary"></span>
         )}

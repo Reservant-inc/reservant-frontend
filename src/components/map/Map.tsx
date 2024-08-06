@@ -28,7 +28,7 @@ const Map: React.FC<MapProps> = ({
     const map = useMap();
     mapRef.current = map;
 
-    map.zoomControl.setPosition("bottomright");
+    map.zoomControl.setPosition("topright");
     map.setMinZoom(10);
     map.setMaxZoom(17);
 
