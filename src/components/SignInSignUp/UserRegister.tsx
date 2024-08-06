@@ -9,6 +9,7 @@ import { TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { CSSTransition } from "react-transition-group";
 
+
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -26,7 +27,7 @@ const UserRegister: React.FC = () => {
   const { userRegisterSchema } = useValidationSchemas();
   const [requestLoading, setRequestLoading] = useState<boolean>(false);
   const [registerError, setRegisterError] = useState<string>("");
-  const [activeStep, setActiveStep] = useState("first");
+  const [activeStep, setActiveStep] = useState<number>(1);
 
   const handleSubmit = async (
     values: FormikValues,
@@ -58,6 +59,11 @@ const UserRegister: React.FC = () => {
     }
   };
 
+  const test = () => {
+    console.log("step2")
+    console.log(initialValues)
+  }
+
   return (
     <div className="w-full h-full bg-[url('/src/assets/images/bg.png')] bg-cover">
       <div className="flex justify-center items-center w-full h-full login-gradient bg-opacity-20">
@@ -68,14 +74,12 @@ const UserRegister: React.FC = () => {
               initialValues={initialValues}
               validationSchema={userRegisterSchema}
               onSubmit={handleSubmit}
-              validateOnChange={false}
-              validateOnBlur={true}
             >
               {(formik) => (
                 <Form className="w-full">
                   <div className="form-container h-full flex flex-col items-center gap-4">
                     <CSSTransition
-                      in={activeStep === "first"}
+                      in={activeStep === 1}
                       timeout={300}
                       classNames="menu-primary"
                       unmountOnExit
@@ -158,8 +162,8 @@ const UserRegister: React.FC = () => {
                           as={TextField}
                         />
                           <button
-                            type="button"
-                            onClick={() => setActiveStep("second")}
+                          type="button"
+                            onClick={ () => setActiveStep(2)}
                             disabled={
                               !(
                                 !formik.errors.login &&
@@ -194,7 +198,7 @@ const UserRegister: React.FC = () => {
                     </CSSTransition>
 
                     <CSSTransition
-                      in={activeStep === "second"}
+                      in={activeStep === 2}
                       timeout={300}
                       classNames="menu-secondary"
                       unmountOnExit
@@ -236,6 +240,7 @@ const UserRegister: React.FC = () => {
                             color="primary"
                             as={TextField}
                           />
+
                           <Field
                           as={PhoneInput}
                           international
@@ -261,6 +266,7 @@ const UserRegister: React.FC = () => {
                               : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
                           }`}
                         />
+
                         <Field
                           type="date"
                           id="birthDate"
@@ -278,28 +284,30 @@ const UserRegister: React.FC = () => {
                           color="primary"
                           as={TextField}
                         />
-                        <button
-                          type="button"
-                          onClick={() => setActiveStep("first")}
-                          className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-grey-1 text-white`}
-                        >
-                          BACK
-                        </button>
-                        <button
-                          type="submit"
-                          disabled={!formik.isValid || requestLoading}
-                          className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
-                            formik.isValid
-                              ? "bg-primary text-white"
-                              : "bg-grey-1"
-                          }`}
-                        >
-                          {requestLoading ? (
-                            <CircularProgress color="secondary" />
-                          ) : (
-                            "SUBMIT"
-                          )}
-                        </button>
+                        <div className="flex gap-5 w-4/5">
+                          <button
+                            type="button"
+                            onClick={() => setActiveStep(1)}
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-grey-1 text-black`}
+                          >
+                            BACK
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={!formik.isValid || requestLoading}
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
+                              formik.isValid
+                                ? "bg-primary text-white"
+                                : "bg-grey-1"
+                            }`}
+                          >
+                            {requestLoading ? (
+                              <CircularProgress color="secondary" />
+                            ) : (
+                              "SUBMIT"
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </CSSTransition>
 

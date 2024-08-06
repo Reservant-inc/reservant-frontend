@@ -92,7 +92,7 @@ const Login: React.FC = () => {
                       id="LoginLoginButton"
                       type="submit"
                       disabled={!formik.isValid}
-                      className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+                      className={`cursor-pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
                     >
                       {
                         requestLoading ? <CircularProgress className="text-grey-0 h-8 w-8"/> : "LOGIN"
