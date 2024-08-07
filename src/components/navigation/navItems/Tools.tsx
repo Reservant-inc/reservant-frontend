@@ -139,10 +139,10 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
             <button
             //do czego..
                 id="ToolsButton"
-                className="h-[95%] w-10 flex justify-center items-center"
+                className="h-10 w-10 flex justify-center items-center"
                 onClick={pressHandler}
             >
-                <img src={User} alt="logo" className="h-[100%] rounded-full" />
+                <img src={User} alt="logo" className="rounded-full" />
             </button>
             {
                 isPressed &&

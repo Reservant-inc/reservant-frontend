@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, Button } from "@mui/material";
-import { fetchPOST, fetchDELETE } from "../../../services/APIconn";
+import { fetchPOST, fetchDELETE } from "../../../../services/APIconn";
 
 interface FriendRequestProps {
   senderId: string;
