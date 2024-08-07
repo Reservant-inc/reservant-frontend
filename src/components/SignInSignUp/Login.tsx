@@ -12,7 +12,7 @@ import { TextField } from "@mui/material";
 
 const initialValues = {
   login: "",
-  password: "",
+  password: "", 
 };
 
 const Login: React.FC = () => {

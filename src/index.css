@@ -68,6 +68,13 @@ body {
   transform: translateX(100%);
   transition: all var(--speed) ease;
 }
+.transition-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+
+
 
 .leaflet-container {
   height: 100%;
