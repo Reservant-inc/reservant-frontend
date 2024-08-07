@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography, TextField } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { fetchPOST } from "../../../../services/APIconn";
 
 interface RestaurantCreateEventProps {

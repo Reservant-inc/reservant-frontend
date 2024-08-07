@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage, FormikValues } from "formik";
-import "react-phone-number-input/style.css";
+import { Formik, Form, Field, FormikValues } from "formik";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import { fetchPOST, fetchGET } from "../../services/APIconn";
+import { fetchPOST } from "../../services/APIconn";
+import { TextField } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import { CSSTransition } from "react-transition-group";
+
 
 const initialValues = {
   firstName: "",
@@ -20,17 +23,19 @@ const initialValues = {
 
 const UserRegister: React.FC = () => {
   const navigate = useNavigate();
-
   const [t] = useTranslation("global");
-
   const { userRegisterSchema } = useValidationSchemas();
+  const [requestLoading, setRequestLoading] = useState<boolean>(false);
+  const [registerError, setRegisterError] = useState<string>("");
+  const [activeStep, setActiveStep] = useState<number>(1);
 
   const handleSubmit = async (
     values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
       setSubmitting(true);
+      setRequestLoading(true);
 
       const body = JSON.stringify({
         firstName: values.firstName,
@@ -47,130 +52,275 @@ const UserRegister: React.FC = () => {
       navigate("/user/login");
     } catch (error) {
       console.log(error);
+      setRegisterError("Registration failed. Please try again.");
     } finally {
       setSubmitting(false);
+      setRequestLoading(false);
     }
   };
 
+  const test = () => {
+    console.log("step2")
+    console.log(initialValues)
+  }
+
   return (
-    <div  id="userRegister-container-register" className="h-full w-full bg-gradient-to-br from-[#a94c79] via-[#b05a83] via-[#b86b90] via-[#c585a4] to-[#cc93ae] flex flex-col justify-center items-center">
-      <div className="w-[600px] h-[800px] bg-white rounded-2xl p-4 flex flex-col shadow-2xl">
-        <div className="w-full h-1/4 flex items-center justify-center">
-          {/* <img src={LogoLight} alt="logo" className="h-12"/> */}
-          <h1 className="font-mont-md text-[30px] ">REGISTER</h1>
-        </div>
-        <div className="w-full h-4/5 flex justify-center items-center">
-          <Formik
-            id="iserRegister-formik"
-            initialValues={initialValues}
-            validationSchema={userRegisterSchema}
-            onSubmit={handleSubmit}
-            validateOnChange={false}
-            validateOnBlur={true}
-          >
-            {(formik) => (
-              <Form className="w-full h-full">
-                <div id="userRegister-form-container" className="form-container">
-                  <div className="flex flex-col w-full items-center gap-4">
-                    <Field
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      placeholder={
-                        formik.errors.firstName && formik.touched.firstName ? formik.errors.firstName : 'First Name'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.firstName && formik.touched.firstName) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      placeholder={
-                        formik.errors.lastName && formik.touched.lastName ? formik.errors.lastName : 'Last name'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.lastName && formik.touched.lastName) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      type="text"
-                      id="login"
-                      name="login"
-                      placeholder={
-                        formik.errors.login && formik.touched.login ? formik.errors.login : 'Login'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.login && formik.touched.login) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      type="email"
-                      id="email"
-                      name="email"
-                      placeholder={
-                        formik.errors.email && formik.touched.email ? formik.errors.email : 'Email'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.email && formik.touched.email) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      as={PhoneInput}
-                      international
-                      defaultCountry="PL"
-                      id="userRegister-phoneNumber-field"
-                      name={"phoneNumber"}
-                      value={formik.values.phoneNumber}
-                      onChange={(value: string) =>
-                        formik.setFieldValue("phoneNumber", value)
-                      }
-                      placeholder={
-                        formik.errors.phoneNumber && formik.touched.phoneNumber ? formik.errors.phoneNumber : 'Phone number'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.phoneNumber && formik.touched.phoneNumber) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      type="date"
-                      id="birthDate"
-                      name="birthDate"
-                      placeholder={
-                        formik.errors.birthDate && formik.touched.birthDate ? formik.errors.birthDate : 'Birth date'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.birthDate && formik.touched.birthDate) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      type="password"
-                      id="password"
-                      name="password"
-                      placeholder={
-                        formik.errors.password && formik.touched.password ? formik.errors.password : 'Password'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.password && formik.touched.password) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <Field
-                      type="password"
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      placeholder={
-                        formik.errors.confirmPassword && formik.touched.confirmPassword ? formik.errors.confirmPassword : 'Confir password'
-                      }
-                      className={`w-4/5 h-[50px] ring-0 rounded-md ${!(formik.errors.confirmPassword && formik.touched.confirmPassword) ? "focus:border-black" : "border-pink border-1 border-solid placeholder-pink"}`}
-                    />
-
-                    <button
-                      id="UserRegisterSubmitButton"
-                      type="submit"
-                      disabled={!formik.isValid}
-                      className={`pointer w-32 h-10 rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+    <div className="w-full h-full bg-[url('/src/assets/images/bg.png')] bg-cover">
+      <div className="flex justify-center items-center w-full h-full login-gradient bg-opacity-20">
+        <div className="w-[600px] h-[500px] shadow-2xl rounded-lg flex items-center bg-black bg-opacity-60 backdrop-blur-md border-2 border-white">
+          <div className="transition-wrapper w-full h-full rounded-r-lg flex flex-col justify-center items-center gap-8">
+            <Formik
+              id="userRegister-formik"
+              initialValues={initialValues}
+              validationSchema={userRegisterSchema}
+              onSubmit={handleSubmit}
+            >
+              {(formik) => (
+                <Form className="w-full">
+                  <div className="form-container h-full flex flex-col items-center gap-4">
+                    <CSSTransition
+                      in={activeStep === 1}
+                      timeout={300}
+                      classNames="menu-primary"
+                      unmountOnExit
                     >
-                      {t("auth.registerButton")}
-                    </button>
+                      <div className="w-full flex flex-col items-center gap-4">
+                        <h1 className="text-xl font-mont-md font-semibold text-white">
+                          REGISTER
+                        </h1>
+                        <div className="flex flex-col w-full items-center gap-4">
+                        <Field
+                            type="text"
+                            id="login"
+                            name="login"
+                            label="LOGIN"
+                            variant="standard"
+                            helperText={(formik.errors.login && formik.touched.login) && formik.errors.login} 
+                            className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                              !(
+                                formik.errors.login &&
+                                formik.touched.login
+                              )
+                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                            }`}
+                            color="primary"
+                            as={TextField}
+                          />
+                          <Field
+                            type="email"
+                            id="email"
+                            name="email"
+                            label="EMAIL"
+                            variant="standard"
+                            helperText={(formik.errors.email && formik.touched.email) && formik.errors.email} 
+                            className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                              !(
+                                formik.errors.email &&
+                                formik.touched.email
+                              )
+                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                            }`}
+                            color="primary"
+                            as={TextField}
+                          />
+                        <Field
+                          type="password"
+                          id="password"
+                          name="password"
+                          label="PASSWORD"
+                          variant="standard"
+                          helperText={(formik.errors.password && formik.touched.password) && formik.errors.password} 
+                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                            !(
+                              formik.errors.password &&
+                              formik.touched.password
+                            )
+                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                          }`}
+                          color="primary"
+                          as={TextField}
+                        />
+                        <Field
+                          type="password"
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          label="CONFIRM PASSWORD"
+                          variant="standard"
+                          helperText={(formik.errors.confirmPassword && formik.touched.confirmPassword) && formik.errors.confirmPassword} 
+                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                            !(
+                              formik.errors.confirmPassword &&
+                              formik.touched.confirmPassword
+                            )
+                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                          }`}
+                          color="primary"
+                          as={TextField}
+                        />
+                          <button
+                          type="button"
+                            onClick={ () => setActiveStep(2)}
+                            disabled={
+                              !(
+                                !formik.errors.login &&
+                                formik.touched.login &&
+                                !formik.errors.email &&
+                                formik.touched.email &&
+                                !formik.errors.password &&
+                                formik.touched.password &&
+                                !formik.errors.confirmPassword &&
+                                formik.touched.confirmPassword
+                              )
+                            }
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
+                              !(
+                                !formik.errors.login &&
+                                formik.touched.login &&
+                                !formik.errors.email &&
+                                formik.touched.email &&
+                                !formik.errors.password &&
+                                formik.touched.password &&
+                                !formik.errors.confirmPassword &&
+                                formik.touched.confirmPassword
+                              )
+                                ? "bg-grey-1 text-grey-2"
+                                : "bg-primary text-white"
+                            }`}
+                          >
+                            NEXT
+                          </button>
+                        </div>
+                      </div>
+                    </CSSTransition>
+
+                    <CSSTransition
+                      in={activeStep === 2}
+                      timeout={300}
+                      classNames="menu-secondary"
+                      unmountOnExit
+                    >
+                      <div className="w-full flex flex-col items-center gap-4">
+                      <Field
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            label="FIRST NAME"
+                            variant="standard"
+                            helperText={(formik.errors.firstName && formik.touched.firstName) && formik.errors.firstName} 
+                            className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                              !(
+                                formik.errors.firstName &&
+                                formik.touched.firstName
+                              )
+                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                            }`}
+                            color="primary"
+                            as={TextField}
+                          />
+                          <Field
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            label="LAST NAME"
+                            variant="standard"
+                            helperText={(formik.errors.lastName && formik.touched.lastName) && formik.errors.lastName} 
+                            className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                              !(
+                                formik.errors.lastName &&
+                                formik.touched.lastName
+                              )
+                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                            }`}
+                            color="primary"
+                            as={TextField}
+                          />
+
+                          <Field
+                          as={PhoneInput}
+                          international
+                          defaultCountry="PL"
+                          id="userRegister-phoneNumber-field"
+                          name={"phoneNumber"}
+                          value={formik.values.phoneNumber}
+                          onChange={(value: string) =>
+                            formik.setFieldValue("phoneNumber", value)
+                          }
+                          placeholder={
+                            formik.errors.phoneNumber &&
+                            formik.touched.phoneNumber
+                              ? formik.errors.phoneNumber
+                              : "Phone number"
+                          }
+                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                            !(
+                              formik.errors.phoneNumber &&
+                              formik.touched.phoneNumber
+                            )
+                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                          }`}
+                        />
+
+                        <Field
+                          type="date"
+                          id="birthDate"
+                          name="birthDate"
+                          label="BIRTH DATE"
+                          variant="standard"
+                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                            !(
+                              formik.errors.birthDate &&
+                              formik.touched.birthDate
+                            )
+                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                          }`}
+                          color="primary"
+                          as={TextField}
+                        />
+                        <div className="flex gap-5 w-4/5">
+                          <button
+                            type="button"
+                            onClick={() => setActiveStep(1)}
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-grey-1 text-black`}
+                          >
+                            BACK
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={!formik.isValid || requestLoading}
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
+                              formik.isValid
+                                ? "bg-primary text-white"
+                                : "bg-grey-1"
+                            }`}
+                          >
+                            {requestLoading ? (
+                              <CircularProgress color="secondary" />
+                            ) : (
+                              "SUBMIT"
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </CSSTransition>
+
+                    {registerError && (
+                      <div className="text-error font-mont-md mt-2 text-[15px]">
+                        {registerError}
+                      </div>
+                    )}
                   </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
       </div>
     </div>
