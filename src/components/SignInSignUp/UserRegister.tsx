@@ -165,9 +165,9 @@ const UserRegister: React.FC = () => {
   <Link
     id="login-registered-link"
     to="/user/login"
-    className="pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white"
+    className="pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white font-mont-md"
   >
-    LOGIN
+    Back to login
   </Link>
   <button
     type="button"
