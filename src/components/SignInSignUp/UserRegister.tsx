@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, FormikValues } from "formik";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
@@ -161,38 +161,48 @@ const UserRegister: React.FC = () => {
                           color="primary"
                           as={TextField}
                         />
-                          <button
-                          type="button"
-                            onClick={ () => setActiveStep(2)}
-                            disabled={
-                              !(
-                                !formik.errors.login &&
-                                formik.touched.login &&
-                                !formik.errors.email &&
-                                formik.touched.email &&
-                                !formik.errors.password &&
-                                formik.touched.password &&
-                                !formik.errors.confirmPassword &&
-                                formik.touched.confirmPassword
-                              )
-                            }
-                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
-                              !(
-                                !formik.errors.login &&
-                                formik.touched.login &&
-                                !formik.errors.email &&
-                                formik.touched.email &&
-                                !formik.errors.password &&
-                                formik.touched.password &&
-                                !formik.errors.confirmPassword &&
-                                formik.touched.confirmPassword
-                              )
-                                ? "bg-grey-1 text-grey-2"
-                                : "bg-primary text-white"
-                            }`}
-                          >
-                            NEXT
-                          </button>
+                          <div className="flex gap-5 w-4/5">
+  <Link
+    id="login-registered-link"
+    to="/user/login"
+    className="pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white"
+  >
+    LOGIN
+  </Link>
+  <button
+    type="button"
+    onClick={() => setActiveStep(2)}
+    disabled={
+      !(
+        !formik.errors.login &&
+        formik.touched.login &&
+        !formik.errors.email &&
+        formik.touched.email &&
+        !formik.errors.password &&
+        formik.touched.password &&
+        !formik.errors.confirmPassword &&
+        formik.touched.confirmPassword
+      )
+    }
+    className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
+      !(
+        !formik.errors.login &&
+        formik.touched.login &&
+        !formik.errors.email &&
+        formik.touched.email &&
+        !formik.errors.password &&
+        formik.touched.password &&
+        !formik.errors.confirmPassword &&
+        formik.touched.confirmPassword
+      )
+        ? "bg-grey-1 text-grey-2"
+        : "bg-primary text-white"
+    }`}
+  >
+    NEXT
+  </button>
+</div>
+
                         </div>
                       </div>
                     </CSSTransition>
@@ -204,6 +214,9 @@ const UserRegister: React.FC = () => {
                       unmountOnExit
                     >
                       <div className="w-full flex flex-col items-center gap-4">
+                      <h1 className="text-xl font-mont-md font-semibold text-white">
+                          REGISTER
+                        </h1>
                       <Field
                             type="text"
                             id="firstName"
@@ -288,7 +301,7 @@ const UserRegister: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setActiveStep(1)}
-                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-grey-1 text-black`}
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white`}
                           >
                             BACK
                           </button>
