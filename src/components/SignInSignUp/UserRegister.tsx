@@ -279,23 +279,36 @@ const UserRegister: React.FC = () => {
                           }`}
                         />
 
-                        <Field
-                          type="date"
-                          id="birthDate"
-                          name="birthDate"
-                          label="BIRTH DATE"
-                          variant="standard"
-                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
-                            !(
-                              formik.errors.birthDate &&
-                              formik.touched.birthDate
-                            )
-                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
-                          }`}
-                          color="primary"
-                          as={TextField}
-                        />
+<Field
+  type="date"
+  id="birthDate"
+  name="birthDate"
+  label="BIRTH DATE"
+  variant="standard"
+  helperText={(formik.errors.birthDate && formik.touched.birthDate) && formik.errors.birthDate}
+  className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+    !(
+      formik.errors.birthDate &&
+      formik.touched.birthDate
+    )
+      ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+      : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+  }`}
+  InputLabelProps={{
+    shrink: true,
+    style: {
+      color: formik.errors.birthDate && formik.touched.birthDate ? "#f44336" : "#fff",
+    },
+  }}
+  InputProps={{
+    style: {
+      color: "#fff",
+    },
+  }}
+  color="primary"
+  as={TextField}
+/>
+
                         <div className="flex gap-5 w-4/5">
                           <button
                             type="button"
