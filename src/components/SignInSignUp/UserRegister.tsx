@@ -162,47 +162,46 @@ const UserRegister: React.FC = () => {
                           as={TextField}
                         />
                           <div className="flex gap-5 w-4/5">
-  <Link
-    id="login-registered-link"
-    to="/user/login"
-    className="pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white font-mont-md"
-  >
-    Back to login
-  </Link>
-  <button
-    type="button"
-    onClick={() => setActiveStep(2)}
-    disabled={
-      !(
-        !formik.errors.login &&
-        formik.touched.login &&
-        !formik.errors.email &&
-        formik.touched.email &&
-        !formik.errors.password &&
-        formik.touched.password &&
-        !formik.errors.confirmPassword &&
-        formik.touched.confirmPassword
-      )
-    }
-    className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
-      !(
-        !formik.errors.login &&
-        formik.touched.login &&
-        !formik.errors.email &&
-        formik.touched.email &&
-        !formik.errors.password &&
-        formik.touched.password &&
-        !formik.errors.confirmPassword &&
-        formik.touched.confirmPassword
-      )
-        ? "bg-grey-1 text-grey-2"
-        : "bg-primary text-white"
-    }`}
-  >
-    NEXT
-  </button>
-</div>
-
+                            <Link
+                              id="login-registered-link"
+                              to="/user/login"
+                              className="pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white font-mont-md"
+                            >
+                              Back to login
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => setActiveStep(2)}
+                              disabled={
+                                !(
+                                  !formik.errors.login &&
+                                  formik.touched.login &&
+                                  !formik.errors.email &&
+                                  formik.touched.email &&
+                                  !formik.errors.password &&
+                                  formik.touched.password &&
+                                  !formik.errors.confirmPassword &&
+                                  formik.touched.confirmPassword
+                                )
+                              }
+                              className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
+                                !(
+                                  !formik.errors.login &&
+                                  formik.touched.login &&
+                                  !formik.errors.email &&
+                                  formik.touched.email &&
+                                  !formik.errors.password &&
+                                  formik.touched.password &&
+                                  !formik.errors.confirmPassword &&
+                                  formik.touched.confirmPassword
+                                )
+                                  ? "bg-grey-1 text-grey-2"
+                                  : "bg-primary text-white"
+                              }`}
+                            >
+                              NEXT
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </CSSTransition>
@@ -311,7 +310,7 @@ const UserRegister: React.FC = () => {
                             className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
                               formik.isValid
                                 ? "bg-primary text-white"
-                                : "bg-grey-1"
+                                : "bg-grey-1 text-grey-2"
                             }`}
                           >
                             {requestLoading ? (
