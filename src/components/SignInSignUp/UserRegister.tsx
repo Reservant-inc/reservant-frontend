@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, FormikValues } from "formik";
 import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
@@ -161,38 +161,47 @@ const UserRegister: React.FC = () => {
                           color="primary"
                           as={TextField}
                         />
-                          <button
-                          type="button"
-                            onClick={ () => setActiveStep(2)}
-                            disabled={
-                              !(
-                                !formik.errors.login &&
-                                formik.touched.login &&
-                                !formik.errors.email &&
-                                formik.touched.email &&
-                                !formik.errors.password &&
-                                formik.touched.password &&
-                                !formik.errors.confirmPassword &&
-                                formik.touched.confirmPassword
-                              )
-                            }
-                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
-                              !(
-                                !formik.errors.login &&
-                                formik.touched.login &&
-                                !formik.errors.email &&
-                                formik.touched.email &&
-                                !formik.errors.password &&
-                                formik.touched.password &&
-                                !formik.errors.confirmPassword &&
-                                formik.touched.confirmPassword
-                              )
-                                ? "bg-grey-1 text-grey-2"
-                                : "bg-primary text-white"
-                            }`}
-                          >
-                            NEXT
-                          </button>
+                          <div className="flex gap-5 w-4/5">
+                            <Link
+                              id="login-registered-link"
+                              to="/user/login"
+                              className="pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white font-mont-md"
+                            >
+                              Back to login
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => setActiveStep(2)}
+                              disabled={
+                                !(
+                                  !formik.errors.login &&
+                                  formik.touched.login &&
+                                  !formik.errors.email &&
+                                  formik.touched.email &&
+                                  !formik.errors.password &&
+                                  formik.touched.password &&
+                                  !formik.errors.confirmPassword &&
+                                  formik.touched.confirmPassword
+                                )
+                              }
+                              className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
+                                !(
+                                  !formik.errors.login &&
+                                  formik.touched.login &&
+                                  !formik.errors.email &&
+                                  formik.touched.email &&
+                                  !formik.errors.password &&
+                                  formik.touched.password &&
+                                  !formik.errors.confirmPassword &&
+                                  formik.touched.confirmPassword
+                                )
+                                  ? "bg-grey-1 text-grey-2"
+                                  : "bg-primary text-white"
+                              }`}
+                            >
+                              NEXT
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </CSSTransition>
@@ -204,6 +213,9 @@ const UserRegister: React.FC = () => {
                       unmountOnExit
                     >
                       <div className="w-full flex flex-col items-center gap-4">
+                      <h1 className="text-xl font-mont-md font-semibold text-white">
+                          REGISTER
+                        </h1>
                       <Field
                             type="text"
                             id="firstName"
@@ -267,28 +279,41 @@ const UserRegister: React.FC = () => {
                           }`}
                         />
 
-                        <Field
-                          type="date"
-                          id="birthDate"
-                          name="birthDate"
-                          label="BIRTH DATE"
-                          variant="standard"
-                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
-                            !(
-                              formik.errors.birthDate &&
-                              formik.touched.birthDate
-                            )
-                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
-                          }`}
-                          color="primary"
-                          as={TextField}
-                        />
+<Field
+  type="date"
+  id="birthDate"
+  name="birthDate"
+  label="BIRTH DATE"
+  variant="standard"
+  helperText={(formik.errors.birthDate && formik.touched.birthDate) && formik.errors.birthDate}
+  className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+    !(
+      formik.errors.birthDate &&
+      formik.touched.birthDate
+    )
+      ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
+      : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+  }`}
+  InputLabelProps={{
+    shrink: true,
+    style: {
+      color: formik.errors.birthDate && formik.touched.birthDate ? "#f44336" : "#fff",
+    },
+  }}
+  InputProps={{
+    style: {
+      color: "#fff",
+    },
+  }}
+  color="primary"
+  as={TextField}
+/>
+
                         <div className="flex gap-5 w-4/5">
                           <button
                             type="button"
                             onClick={() => setActiveStep(1)}
-                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-grey-1 text-black`}
+                            className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center bg-primary text-white`}
                           >
                             BACK
                           </button>
@@ -298,7 +323,7 @@ const UserRegister: React.FC = () => {
                             className={`pointer w-4/5 h-[50px] rounded-lg shadow-md flex items-center justify-center ${
                               formik.isValid
                                 ? "bg-primary text-white"
-                                : "bg-grey-1"
+                                : "bg-grey-1 text-grey-2"
                             }`}
                           >
                             {requestLoading ? (
