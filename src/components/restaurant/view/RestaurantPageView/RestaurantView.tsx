@@ -10,10 +10,12 @@ const RestaurantView: React.FC = () => {
 
   const addToCart = (item: MenuItem) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      const existingItem = prevCart.find(
+        (cartItem) => cartItem.menuItemId === item.menuItemId,
+      );
       if (existingItem) {
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id
+          cartItem.menuItemId === item.menuItemId
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem,
         );
@@ -22,21 +24,21 @@ const RestaurantView: React.FC = () => {
     });
   };
 
-  const incrementQuantity = (itemId: number) => {
+  const incrementQuantity = (menuItemId: number) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
-        cartItem.id === itemId
+        cartItem.menuItemId === menuItemId
           ? { ...cartItem, quantity: cartItem.quantity + 1 }
           : cartItem,
       ),
     );
   };
 
-  const decrementQuantity = (itemId: number) => {
+  const decrementQuantity = (menuItemId: number) => {
     setCart((prevCart) =>
       prevCart
         .map((cartItem) =>
-          cartItem.id === itemId
+          cartItem.menuItemId === menuItemId
             ? { ...cartItem, quantity: cartItem.quantity - 1 }
             : cartItem,
         )

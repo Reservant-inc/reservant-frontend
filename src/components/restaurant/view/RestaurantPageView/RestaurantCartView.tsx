@@ -13,8 +13,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 interface RestaurantCartViewProps {
   cart: CartItem[];
-  incrementQuantity: (itemId: number) => void;
-  decrementQuantity: (itemId: number) => void;
+  incrementQuantity: (menuItemId: number) => void;
+  decrementQuantity: (menuItemId: number) => void;
 }
 
 const RestaurantCartView: React.FC<RestaurantCartViewProps> = ({
@@ -52,7 +52,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = ({
             <Box className="flex items-center">
               <Typography>Ilość: {item.quantity}</Typography>
               <IconButton
-                onClick={() => decrementQuantity(item.id)}
+                onClick={() => decrementQuantity(item.menuItemId)}
                 sx={{
                   bgcolor: "#a94c79",
                   color: "#fefefe",
@@ -64,7 +64,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = ({
                 <RemoveIcon />
               </IconButton>
               <IconButton
-                onClick={() => incrementQuantity(item.id)}
+                onClick={() => incrementQuantity(item.menuItemId)}
                 sx={{
                   bgcolor: "#a94c79",
                   color: "#fefefe",

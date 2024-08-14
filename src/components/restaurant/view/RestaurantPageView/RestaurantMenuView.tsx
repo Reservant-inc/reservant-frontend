@@ -6,22 +6,22 @@ import { fetchGET, getImage } from "../../../../services/APIconn";
 
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItem) => void;
+  restaurantId: string | undefined;
 }
 
 const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
   addToCart,
+  restaurantId,
 }) => {
   const [menus, setMenus] = useState<any[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
-  const restaurantId = 2; // na razie hardcoded, jak bedzie wiadomo co przekierowuje na te strone to sie wezmie z koncowki useParam
 
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const menusData = await fetchGET(
-          `/my-restaurants/${restaurantId}/menus`,
-        );
+        const menusData = await fetchGET(`/restaurants/${restaurantId}/menus`);
         setMenus(menusData || []);
+
         if (menusData.length > 0) {
           setActiveMenuId(menusData[0].menuId);
         }
