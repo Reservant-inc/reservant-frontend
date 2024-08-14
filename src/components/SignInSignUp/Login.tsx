@@ -9,6 +9,7 @@ import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png"
 import CircularProgress from '@mui/material/CircularProgress';
 import { FetchError } from '../../services/Errors';
 import { TextField } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const initialValues = {
   login: "",
@@ -21,6 +22,7 @@ const Login: React.FC = () => {
   const { loginSchema } = useValidationSchemas();
   const [ loginError, setLoginError ] = useState<string>("")
   const [ requestLoading, setRequestLoading ] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const onSubmit = async (
     values: FormikValues,
@@ -74,19 +76,31 @@ const Login: React.FC = () => {
                         color="primary"
                         as={TextField}
                       />
+                      <div id="passFieldArea"                         
+                        className="relative w-4/5">
 
                       <Field
-                        type="password"
                         id="password"
                         name="password"
+                        type={showPassword ? 'text' : 'password'}
                         helperText={(formik.errors.password && formik.touched.password) && formik.errors.password} 
                         label="PASSWORD" 
                         variant="standard" 
-                        className={`w-4/5 [&>*]:font-mont-md [&>*]:text-md ${!(formik.errors.password && formik.touched.password) ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                        className={` w-full [&>*]:font-mont-md [&>*]:text-md ${!(formik.errors.password && formik.touched.password) ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
                         color="primary"
                         as={TextField}
                       />
+
+                      <span id="showPassLogin" className="absolute right-[0%] top-[40%] text-primary cursor-pointer " 
+                      onClick={()=>{setShowPassword(!showPassword)}}>{
+                        showPassword?<VisibilityOff/>:<Visibility/>
+                        }
+                      </span>
+
+
+                      </div>
                     </div>
+
 
                     <button
                       id="LoginLoginButton"
