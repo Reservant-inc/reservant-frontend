@@ -1,0 +1,8 @@
+services:
+  reservant-frontend:
+    build: .
+    ports:
+      - '12180:80'
+      - '3000:3000' #used for debug, safe to delete
+    environment:
+      - REACT_APP_SERVER_IP=${RESERVANT_APP_SERVER_IP}
