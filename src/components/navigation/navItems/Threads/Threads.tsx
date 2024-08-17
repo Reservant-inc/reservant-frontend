@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
 import CommentSharpIcon from '@mui/icons-material/CommentSharp';
 import { fetchGET } from "../../../../services/APIconn";
-import { ThreadType } from "../../../../services/types";
+import { PaginationType, ThreadType } from "../../../../services/types";
 import { Button, CircularProgress } from "@mui/material";
 
 const Threads: React.FC = () => {
     const [isPressed, setIsPressed] = useState(false);
-    const [threads, setThreads] = useState<ThreadType>();
+    const [threads, setThreads] = useState<ThreadType[]>();
     const [isLoadingThreads, setIsLoadingThreads] = useState<Boolean>(false);
 
     const pressHandler = () => {
@@ -23,10 +23,10 @@ const Threads: React.FC = () => {
         const getThreads = async () => {
             try {
                 setIsLoadingThreads(true)
-                const result = await fetchGET('/user/threads')
+                const result: PaginationType = await fetchGET('/user/threads')
                 
                 if (result.items.length > 0)
-                    setThreads(result.items)
+                    setThreads(result.items as ThreadType[])
 
             } catch (error) {
                 console.log("Error fetching threads:", error);

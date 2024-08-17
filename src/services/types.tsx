@@ -124,7 +124,7 @@ export type PaginationType = {
   totalPages: number,
   perPage: number,
   orderByOptions: string[],
-  items: ThreadType | MessageType
+  items: ThreadType[] | MessageType[]
 }
 
 export type UserType = {
