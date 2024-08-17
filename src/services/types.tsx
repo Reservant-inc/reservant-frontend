@@ -1,4 +1,4 @@
-import { LocalType } from "./enums";
+import { LocalType } from './enums';
 
 export type LoginResponseType = {
   token: string;
@@ -16,7 +16,7 @@ export type RestaurantDetailsType = {
   address: string;
   postalIndex: string;
   city: string;
-  groupId: 0;
+  groupId: number;
   groupName: string;
   rentalContract: string;
   alcoholLicense: string;
@@ -96,4 +96,40 @@ export type EmploymentType = {
   isBackdoorEmployee: string,
   isHallEmployee: string,
   restaurantName: string
+}
+
+export type MessageType = {
+  messageId: number,
+  contents: string,
+  dateSent: string,
+  dateRead: string,
+  authorsFirstName: string,
+  authorsLastName: string,
+  messageThreadId: number
+}
+
+export type ThreadType = {
+  title: string,
+  numberOfParticipants: number
+}
+
+export type ThreadDetailType = {
+  threadId: number,
+  title: string,
+  participants: UserType[]
+}
+
+export type PaginationType = {
+  page: number
+  totalPages: number,
+  perPage: number,
+  orderByOptions: string[],
+  items: ThreadType | MessageType
+}
+
+export type UserType = {
+  userId: string,
+  firstName: string,
+  lastName: string,
+  photo: string
 }

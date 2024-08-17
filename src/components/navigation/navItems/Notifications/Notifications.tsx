@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
-import { Notifications } from "@mui/icons-material";
+import { Notifications as NotificationsIcon}  from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../../services/APIconn";
 
-interface NotificationsButtonProps {
+interface NotificationsProps {
   isDark: boolean;
 }
 
-const NotificationsButton: React.FC<NotificationsButtonProps> = ({
+const Notifications: React.FC<NotificationsProps> = ({
   isDark,
 }) => {
   const [isPressed, setIsPressed] = useState(false);
@@ -42,13 +42,13 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
         className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
         onClick={pressHandler}
       >
-        <Notifications className="h-[30px] w-[30px]" />
+        <NotificationsIcon className="h-[30px] w-[30px]" />
         {hasNotifications && !loading && (
           <span className="absolute right-1 top-0 h-3 w-3 rounded-full bg-primary"></span>
         )}
       </button>
       {isPressed && (
-        <div className="dropdownMenu dark:bg-black" style={{ width: "300px" }}>
+        <div className="nav-dropdown dark:bg-black w-[300px]">
           <NotificationList setHasNotifications={setHasNotifications} />
         </div>
       )}
@@ -56,4 +56,4 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
   );
 };
 
-export default NotificationsButton;
+export default Notifications;

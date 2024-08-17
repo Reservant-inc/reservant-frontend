@@ -146,7 +146,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
             </button>
             {
                 isPressed &&
-                <div style={{height: menuHeight}} className='dropdownMenu dark:bg-black'>
+                <div style={{height: menuHeight}} className='nav-dropdown dark:bg-black'>
                     
                     <CSSTransition 
                         in={activeMenu === 'main'} 

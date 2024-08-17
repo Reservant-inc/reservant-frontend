@@ -107,7 +107,7 @@ export default function HomePage() {
 
   return (
     <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3 relative">
-      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-2xl overflow-y-auto overflow-x-hidden scroll">
+      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-2xl overflow-y-scroll scroll">
         <div className="p-3">
           <div className="w-full flex px-1 rounded-full bg-grey-0 border-[1px] border-grey-1 font-mont-md items-center">
             <input 
@@ -222,7 +222,7 @@ export default function HomePage() {
           )}
         </OutsideClickHandler>
         <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
-          <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
+          <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center justify-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
             onClick={tagsPressHandler}
           >
             <LocalOfferSharpIcon className="h-6"/>
@@ -230,7 +230,7 @@ export default function HomePage() {
             chosenTags.length > 0 ? chosenTags.length === 1 ? `${chosenTags.length} tag` : `${chosenTags.length} tags` : "Tags"
             } 
             {
-            chosenTags.length > 0 && <button className="h-[30px] w-[30px] rounded-full" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[30px]"/></button>  
+            chosenTags.length > 0 && <button className="h-[20px] w-[20px] rounded-full flex items-center" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[20px] h-[20px]"/></button>  
             }
           </Button>
           {isTagFilterPressed && (

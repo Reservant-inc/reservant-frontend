@@ -3,7 +3,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MarkerBlack from "../../assets/images/location-black.svg";
 import MarkerPrimary from "../../assets/images/location-primary.svg";
-import { Marker, Tooltip, useMap } from "react-leaflet";
+import { Marker, Tooltip } from "react-leaflet";
 
 interface CustomMarkerProps {
   position: L.LatLngExpression;
@@ -15,9 +15,11 @@ interface CustomMarkerProps {
 
 const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activeRestaurant, setActiveRestaurant, setUserMovedMap }) => {
 
-  let marker: any = MarkerBlack;
-  if(activeRestaurant != null)  
-    marker = restaurant.name === activeRestaurant.name ? MarkerPrimary : MarkerBlack
+  let isCurrentRestaurant;
+  if(activeRestaurant != null)
+    isCurrentRestaurant = restaurant.name === activeRestaurant.name
+
+  let marker = isCurrentRestaurant ? MarkerPrimary : MarkerBlack
 
   const customIcon = L.icon({
     iconUrl: marker,
@@ -30,13 +32,13 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activ
       eventHandlers={{
           click: (e) => {
             setActiveRestaurant(restaurant)
-    if (setUserMovedMap != undefined ) {
-      setUserMovedMap(false)
-    }
+            if (setUserMovedMap != undefined ) {
+              setUserMovedMap(false)
+            }
           },
         }}
       >
-      <Tooltip direction="bottom" offset={[-5, -10]} opacity={1} permanent className="bg-trans font-mont-bd text-[14px] border-none shadow-none bg-trans::after"> 
+      <Tooltip direction="bottom" offset={[-5, -10]} opacity={1} permanent className={"flex items-center justify-center bg-trans shadow-sm h-[26px] font-mont-bd text-[15px] border-none"}> 
         {restaurant.name}
       </Tooltip>
       </Marker>

@@ -28,14 +28,14 @@ const Map: React.FC<MapProps> = ({
     const map = useMap();
     mapRef.current = map;
 
-    map.zoomControl.setPosition("topright");
+    map.zoomControl.remove();
     map.setMinZoom(10);
-    map.setMaxZoom(17);
+    map.setMaxZoom(18);
 
     useEffect(() => {
       if (activeRestaurant && !userMovedMap) {
         const { latitude, longitude } = activeRestaurant.location;
-        map.flyTo([latitude, longitude - 0.02], 14);
+        map.flyTo([latitude, longitude - 0.0015], 18);
       }
     }, [activeRestaurant, map, userMovedMap]);
 
@@ -96,6 +96,7 @@ const Map: React.FC<MapProps> = ({
         />
         <MarkerClusterGroup
           showCoverageOnHover={false}
+          spiderfyDistanceMultiplier={4}
         >
           {restaurants.map((restaurant, index) => (
             <CustomMarker
