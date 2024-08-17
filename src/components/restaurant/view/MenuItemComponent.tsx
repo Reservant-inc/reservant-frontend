@@ -68,7 +68,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
           <Typography variant="body2" color="textSecondary">
             {item.alternateName}
           </Typography>
-          <p>{item.price} zł</p>
+          <p>{item.price} PLN</p>
           {item.description?.trim().length > 0 ? (
             <p>{item.description}</p>
           ) : (

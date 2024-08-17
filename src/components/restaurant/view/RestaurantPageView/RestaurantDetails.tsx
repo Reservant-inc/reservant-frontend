@@ -75,10 +75,86 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     return <div>Loading...</div>;
   }
 
+  const renderGallery = () => {
+    if (!restaurant.photos || restaurant.photos.length === 0) {
+      return (
+        <div className="mx-4 flex h-40 w-full items-center justify-center rounded-lg border-2 border-primary bg-grey-1 italic text-grey-4 lg:mx-10">
+          <Typography variant="h5" component="div">
+            {restaurant.name} nie posiada jeszcze żadnych zdjęć.
+          </Typography>
+        </div>
+      );
+    }
+
+    return (
+      <div className="mx-4 rounded-lg border-2 border-primary p-4 lg:mx-10">
+        <ImageList sx={{ width: "100%", height: 400 }} cols={4} gap={8}>
+          {restaurant.photos.slice(0, 3).map((img: string, index: number) => (
+            <ImageListItem key={index} sx={{ width: "100%", height: "100%" }}>
+              <img
+                className="bg-grey-2"
+                srcSet={getImage(
+                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                src={getImage(
+                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                alt={`Restaurant image ${index + 1}`}
+                loading="lazy"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </ImageListItem>
+          ))}
+          {restaurant.photos.length > 4 && (
+            <ImageListItem
+              key="show-more"
+              onClick={handleOpenModal}
+              sx={{
+                cursor: "pointer",
+                width: "100%",
+                height: "100%",
+                position: "relative",
+              }}
+            >
+              <img
+                className="bg-grey-2"
+                srcSet={getImage(
+                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                src={getImage(
+                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                )}
+                alt="Show more"
+                loading="lazy"
+                style={{
+                  filter: "grayscale(100%)",
+                  opacity: 0.8,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                <Typography variant="h5" className="font-bold text-black">
+                  Wyświetl Galerię
+                </Typography>
+              </div>
+            </ImageListItem>
+          )}
+        </ImageList>
+      </div>
+    );
+  };
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case TABS.MENU:
-        return <RestaurantMenuView addToCart={addToCart} />;
+        return (
+          <RestaurantMenuView
+            addToCart={addToCart}
+            restaurantId={restaurant.restaurantId}
+          />
+        );
       case TABS.EVENTS:
         return (
           <RestaurantEventsView
@@ -90,7 +166,12 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       case TABS.REVIEWS:
         return <RestaurantReviewsView />;
       default:
-        return <RestaurantMenuView addToCart={addToCart} />;
+        return (
+          <RestaurantMenuView
+            addToCart={addToCart}
+            restaurantId={restaurant.restaurantId}
+          />
+        );
     }
   };
 
@@ -177,7 +258,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           </div>
         </div>
       </div>
-      <div className="relative mx-4 mb-40 mt-64 h-80 overflow-hidden bg-grey-2 lg:mx-10 lg:mb-32 lg:mt-56">
+      <div className="relative mx-4 mb-40 mt-64 h-80 overflow-hidden rounded-lg border-2 border-primary bg-grey-2 lg:mx-10 lg:mb-32 lg:mt-56">
         <MapContainer
           center={center}
           zoom={zoom}
@@ -199,59 +280,20 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <MapViewUpdater />
         </MapContainer>
       </div>
+      <div className="mb-10 flex w-full justify-center text-8xl text-primary lg:mb-8">
+        <Typography
+          variant="h5"
+          component="h3"
+          sx={{
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          Galeria
+        </Typography>
+      </div>
       <div className="mb-20 flex w-full justify-center lg:mb-16">
-        <ImageList sx={{ width: "100%", height: 400 }} cols={4} gap={8}>
-          {restaurant.photos?.slice(0, 3).map((img: string, index: number) => (
-            <ImageListItem key={index} sx={{ width: "100%", height: "100%" }}>
-              <img
-                className="bg-grey-2"
-                srcSet={getImage(
-                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
-                )}
-                src={getImage(
-                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
-                )}
-                alt={`Restaurant image ${index + 1}`}
-                loading="lazy"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-            </ImageListItem>
-          ))}
-          {restaurant.photos?.length > 4 && (
-            <ImageListItem
-              key="show-more"
-              onClick={handleOpenModal}
-              sx={{
-                cursor: "pointer",
-                width: "100%",
-                height: "100%",
-                position: "relative",
-              }}
-            >
-              <img
-                className="bg-grey-2"
-                srcSet={getImage(
-                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
-                )}
-                src={getImage(
-                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
-                )}
-                alt="Show more"
-                loading="lazy"
-                style={{
-                  filter: "grayscale(100%)",
-                  opacity: 0.8,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <Typography variant="h5">Wyświetl Galerię</Typography>
-              </div>
-            </ImageListItem>
-          )}
-        </ImageList>
+        {renderGallery()}
       </div>
       <div className="mb-20 flex justify-center space-x-10 px-6 lg:mb-16">
         <h3

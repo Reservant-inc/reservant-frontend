@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { fetchGET } from "../../../../services/APIconn";
 import FocusedRestaurantMenuItem from "./FocusedRestaurantMenuItem";
@@ -13,12 +13,17 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
 }) => {
   const [menus, setMenus] = useState<any[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const menusData = await fetchGET(`/my-restaurants/2/menus`);
+        const menusData = await fetchGET(`/restaurants/${restaurantId}/menus`);
         setMenus(menusData || []);
+
+        if (menusData.length > 0) {
+          setActiveMenuId(menusData[0].menuId);
+        }
       } catch (error) {
         console.error("Error fetching menus:", error);
         setMenus([]);
@@ -31,6 +36,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
   useEffect(() => {
     const fetchMenuItems = async () => {
       if (activeMenuId !== null) {
+        setIsLoading(true);
         try {
           const menuData = await fetchGET(`/menus/${activeMenuId}`);
           setMenus((prevMenus) => {
@@ -51,6 +57,8 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
             `Error fetching menu items for menuId ${activeMenuId}:`,
             error,
           );
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -59,14 +67,14 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
   }, [activeMenuId]);
 
   const handleMenuClick = (id: number) => {
-    setActiveMenuId(id === activeMenuId ? null : id);
+    setActiveMenuId(id);
   };
 
   const isDarkMode = document.documentElement.classList.contains("dark");
 
   return (
     <div className="flex h-full w-full flex-col gap-2">
-      <div className="space-x-2">
+      <div className="flex gap-2 overflow-x-auto whitespace-nowrap">
         {menus.map((menu) => (
           <Button
             key={menu.menuId}
@@ -90,6 +98,8 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
                     ? "#64c3a6"
                     : "#a94c79"
                   : "transparent",
+              whiteSpace: "nowrap",
+              margin: "4px 0",
             }}
             onClick={() => handleMenuClick(menu.menuId)}
           >
@@ -101,10 +111,14 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
         activeMenuId === menu.menuId ? (
           <div
             key={menu.menuId}
-            className="m-4 h-full w-full overflow-y-auto rounded-lg bg-grey-1 p-5"
+            className="mb-4 mr-4 mt-4 h-full w-full overflow-y-auto rounded-lg bg-grey-1 p-5"
           >
             <h3 className="text-xl font-medium">{menu.name}</h3>
-            {menu.menuItems ? (
+            {isLoading ? (
+              <div className="flex h-full items-center justify-center">
+                <CircularProgress />
+              </div>
+            ) : menu.menuItems && menu.menuItems.length > 0 ? (
               menu.menuItems.map((item: MenuItem) => (
                 <FocusedRestaurantMenuItem key={item.id} item={item} />
               ))

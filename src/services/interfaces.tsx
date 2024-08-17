@@ -32,16 +32,16 @@ export interface RestaurantDataProps {
 
 export interface MyGroupsProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
-  setActiveSectionName: (sectionName: string) => void
+  setActiveSectionName: (sectionName: string) => void;
   filter: string;
 }
 
 export interface GroupProps {
   name: string;
-  filter: string,
+  filter: string;
   restaurants: RestaurantType[];
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
-  setActiveSectionName: (sectionName: string) => void
+  setActiveSectionName: (sectionName: string) => void;
 }
 
 export interface RegisterStep1Props {
@@ -67,6 +67,7 @@ export interface ManagementSectionProps {
 }
 
 export interface CartItem {
+  menuItemId: number;
   id: number;
   name: string;
   price: number;
@@ -74,6 +75,7 @@ export interface CartItem {
 }
 
 export interface MenuItem {
+  menuItemId: number;
   id: number;
   name: string;
   price: number;
@@ -82,4 +84,3 @@ export interface MenuItem {
   alcoholPercentage?: number;
   photo?: string;
 }
-
