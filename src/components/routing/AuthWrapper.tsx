@@ -41,8 +41,8 @@ export const AuthWrapper = () => {
       JSON.stringify({
         firstName: data.firstName,
         lastName: data.lastName,
-        login: data.login,
         roles: data.roles,
+        userId: data.userId
       }),
       { expires: 1 },
     );

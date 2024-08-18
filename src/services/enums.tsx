@@ -10,3 +10,10 @@ export enum FriendStatus {
   IncomingRequest = "IncomingRequest",
   Friend = "Friend"
 }
+
+export enum FriendActionStatus {
+  Sent = "Sent",
+  Undone = "Undone",
+  Accepted = "Accepted",
+  Deleted = "Deleted"
+}

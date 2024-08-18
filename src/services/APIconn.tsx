@@ -110,8 +110,8 @@ export const fetchDELETE = async (connString: string) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
-    throw new Error(errorData);
+    console.log(errorData.title);
+    throw new FetchError(errorData.title, errorData.status);
   }
 
   const data = await response.json();

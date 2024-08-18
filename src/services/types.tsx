@@ -4,8 +4,8 @@ export type LoginResponseType = {
   token: string;
   firstName: string;
   lastName: string;
-  login: string;
   roles: string[];
+  userId: string
 };
 
 export type RestaurantDetailsType = {

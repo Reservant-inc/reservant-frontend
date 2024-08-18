@@ -59,9 +59,9 @@ const FriendSearchBar: React.FC = () => {
         <SearchIcon className="hover:cursor-pointer h-[25px] w-[25px]"/>
       </div>
       {isPressed && (
-        <div>
+        <div className="absolute top-0 right-0 w-[460px]">
           {users.length > 0 ? (
-            <div className="flex items-center nav-dropdown w-[450px] h-[15rem]  overflow-y-auto scroll">
+            <div className="flex items-center nav-dropdown w-[450px] h-[15rem] overflow-y-auto scroll left-0">
               <List
                 className="w-full font-mont-md dark:bg-black p-1"
                 component="nav"
@@ -79,14 +79,14 @@ const FriendSearchBar: React.FC = () => {
           ) : (
             <>
               {isLoadingUsers ? (
-                <div className="flex items-center justify-center nav-dropdown w-[290px] h-[3rem] right-[10rem]">
+                <div className="flex items-center justify-center nav-dropdown w-[290px] h-[3rem] left-0">
                   <div className="flex flex-col items-center gap-2">
                     <CircularProgress className="h-8 w-8 text-grey-2" />
                   </div>
                 </div>
               ) : (
                 searchTerm.length > 0 && (
-                  <div className="flex items-center justify-center nav-dropdown w-[290px] h-[3rem] right-[10rem]">
+                  <div className="flex items-center justify-center nav-dropdown w-[290px] h-[3rem] left-0">
                     <div className="flex flex-col items-center justify-center gap-3">
                       <h1 className="text-sm text-grey-3 italic text-center">No results</h1>
                     </div>
