@@ -54,14 +54,14 @@ const FriendSearchBar: React.FC = () => {
             if (!isPressed)
               setIsPressed(!isPressed)
           }}
-          className="w-60 p-2 clean-input h-8"
+          className="w-[250px] p-2 clean-input h-8"
           />
         <SearchIcon className="hover:cursor-pointer h-[25px] w-[25px]"/>
       </div>
       {isPressed && (
         <div>
           {users.length > 0 ? (
-            <div className="flex items-center nav-dropdown w-[360px] h-[15rem] right-[10rem] overflow-y-auto scroll">
+            <div className="flex items-center nav-dropdown w-[450px] h-[15rem]  overflow-y-auto scroll">
               <List
                 className="w-full font-mont-md dark:bg-black p-1"
                 component="nav"
@@ -69,7 +69,7 @@ const FriendSearchBar: React.FC = () => {
                 {users.map((user, index) => (
                   <ListItem
                     key={index}
-                    className='rounded-lg p-2 hover:bg-grey-1'
+                    className='rounded-lg px-2 py-1 hover:bg-grey-0'
                   >
                     <SearchedUser user={user} />
                   </ListItem>

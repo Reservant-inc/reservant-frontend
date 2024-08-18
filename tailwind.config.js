@@ -28,7 +28,11 @@ module.exports = {
       'grey-4'      : '#333333',
       'black'       : '#222222',
       'trans'       : 'rgba(0,0,0,0)',
-      'error'        : '#ff4747',
+      'red'         : '#ff0000',
+      'l-red'       : '#ff7979',
+      'green'       : '#54de46',
+      'l-green'     : '#71df66',
+      'error'       : '#ff4747',
     },
   },
   plugins: [
