@@ -29,6 +29,7 @@
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "leaflet.label": "^0.2.4",
+    "libphonenumber-js": "^1.11.7",
     "mui-phone-number": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
