@@ -1,4 +1,4 @@
-import { LocalType } from './enums';
+import { FriendStatus, LocalType } from './enums';
 
 export type LoginResponseType = {
   token: string;
@@ -124,7 +124,7 @@ export type PaginationType = {
   totalPages: number,
   perPage: number,
   orderByOptions: string[],
-  items: ThreadType[] | MessageType[]
+  items: ThreadType[] | MessageType[] | UserSearchType[]
 }
 
 export type UserType = {
@@ -133,3 +133,7 @@ export type UserType = {
   lastName: string,
   photo: string
 }
+
+export type UserSearchType = {
+  friendStatus: FriendStatus
+} & UserType

@@ -129,14 +129,13 @@ export default function HomePage() {
           component="nav"
         >
           {restaurants.map((restaurant, index) => (
-            <>
+            <div key={index}>
               <ListItemButton
                 id="homePage-listItemButton"
                 onClick={() => {
                   setUserMovedMap(false);
                   setActiveRestaurant(restaurant);
                 }}
-                key={index}
                 className={
                   activeRestaurant === restaurant ? "bg-grey-1" : "bg-white hover:bg-grey-1"
                 }
@@ -173,7 +172,7 @@ export default function HomePage() {
                 </div>
               </ListItemButton>
               <div className="h-[1px] w-full bg-grey-1"></div>
-            </>
+            </div>
           ))}
         </List>
       </div>

@@ -32,7 +32,7 @@ body {
   filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08)); 
   top: 4rem;
   right: 0.5rem;
-  transition: height var(--speed) ease;
+  transition: height var(--speed) ease, width var(--speed) ease;
 }
 
 .menu-primary-enter{
@@ -115,11 +115,12 @@ body {
   }
   
   .scroll::-webkit-scrollbar {
-    @apply w-[6px]
+    @apply w-[6px] rounded-full
   }
   
   .scroll::-webkit-scrollbar-thumb {
     background: #888;
+    @apply rounded-full
   }
 
   .scroll::-webkit-scrollbar-track {
