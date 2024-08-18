@@ -91,11 +91,15 @@ const Login: React.FC = () => {
                         as={TextField}
                       />
 
-                      <span id="showPassLogin" className="absolute right-[0%] top-[40%] text-primary cursor-pointer " 
-                      onClick={()=>{setShowPassword(!showPassword)}}>{
-                        showPassword?<VisibilityOff/>:<Visibility/>
-                        }
-                      </span>
+                      {
+                        !formik.errors.password && formik.dirty
+                        &&
+                        <span id="showPassLogin" className="absolute right-[0%] top-[40%] text-white hover:text-primary cursor-pointer " 
+                        onClick={()=>{setShowPassword(!showPassword)}}>{
+                          showPassword?<VisibilityOff/>:<Visibility/>
+                          }
+                        </span>
+                      }
 
 
                       </div>
