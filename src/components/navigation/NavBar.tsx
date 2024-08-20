@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LogoDark from "../../assets/images/LOGO-DARK.png";
-import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png";
+import LogoSecondary from "../../assets/images/LOGO-SECONDARY.png";
+import LogoPrimary from "../../assets/images/LOGO-PRIMARY.png";
 import Sections from "./navItems/MenuSections";
 import Tools from "./navItems/Tools";
 import Notifications from "./navItems/Notifications/Notifications";
@@ -15,9 +15,9 @@ const NavBar: React.FC = () => {
       <div className="flex h-full w-full items-center p-1 mx-1">
         <div className="h-full flex-1 flex items-center gap-2">
           {isDark ? (
-            <img src={LogoLight} alt="logo" className="h-[45px] min-w-[45px]" />
+            <img src={LogoSecondary} alt="logo" className="h-[45px] min-w-[45px]" />
           ) : (
-            <img src={LogoLight} alt="logo" className="h-[45px] min-w-[45px]" />
+            <img src={LogoPrimary} alt="logo" className="h-[45px] min-w-[45px]" />
           )}
           <h1 className={"font-mont-md text-xl" + (isDark ? " text-secondary" : " text-primary")}>RESERVANT</h1>
         </div>

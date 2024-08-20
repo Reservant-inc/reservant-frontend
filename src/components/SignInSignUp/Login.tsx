@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AuthData } from "../routing/AuthWrapper";
 import { fetchPOST } from "../../services/APIconn";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import LogoLight from "../../assets/images/LOGO-CLEAN-LIGHT.png"
+import LogoPrimary from "../../assets/images/LOGO-PRIMARY.png"
 import CircularProgress from '@mui/material/CircularProgress';
 import { FetchError } from '../../services/Errors';
 import { TextField } from "@mui/material";
@@ -109,7 +109,7 @@ const Login: React.FC = () => {
             </Formik>
           </div>
           <div className="w-1/3 h-full flex flex-col justify-center items-center bg-white gap-10">
-            <img src={LogoLight} className="h-40"/>
+            <img src={LogoPrimary} className="h-40"/>
             <h1 className="text-black text-xl font-mont-md ">{t("landing-page.notRegistered")}</h1>
             <Link id="login-notRegistered-link" to="/user/register" className="text-white rounded-lg flex items-center justify-center font-mont-md bg-primary w-48 h-12 p-3">{t("landing-page.registerButton")}</Link>
           </div>
