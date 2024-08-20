@@ -12,10 +12,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-
-interface NotificationListProps {
-  setHasNotifications: (hasNotifications: boolean) => void;
-}
+import { NotificationListProps } from "../../../../services/interfaces/navigation";
 
 const NotificationList: React.FC<NotificationListProps> = ({
   setHasNotifications,

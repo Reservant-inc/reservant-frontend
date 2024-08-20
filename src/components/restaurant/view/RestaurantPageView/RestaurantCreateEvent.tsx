@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography, TextField } from "@mui/material";
 import { fetchPOST } from "../../../../services/APIconn";
-
-interface RestaurantCreateEventProps {
-  open: boolean;
-  handleClose: () => void;
-  restaurantName: string;
-  restaurantId: number;
-}
+import { RestaurantCreateEventProps } from "../../../../services/interfaces/restaurant";
 
 const RestaurantCreateEvent: React.FC<RestaurantCreateEventProps> = ({
   open,

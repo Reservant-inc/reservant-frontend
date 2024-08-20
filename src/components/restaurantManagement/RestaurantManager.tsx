@@ -8,6 +8,7 @@ import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
 import OrderHistory from "./reservations/OrderHistory";
 import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
+import { MenuItemProps } from "../../services/interfaces/restaurant";
 
 const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(null);
@@ -42,7 +43,9 @@ const RestaurantManager = () => {
           {
             {
               0: <RestaurantDashboardSection />,
-              1: activeRestaurantId === null ? <RestaurantListSection handleChangeActiveRestaurant={handleChangeActiveRestaurant} setActiveSectionName={setActiveSectionName}/> : <RestaurantDetails activeRestaurantId={activeRestaurantId} />,
+              1: activeRestaurantId === null ? <RestaurantListSection handleChangeActiveRestaurant={handleChangeActiveRestaurant} setActiveSectionName={setActiveSectionName}/> : <RestaurantDetails activeRestaurantId={activeRestaurantId} addToCart={function (item: MenuItemProps): void {
+                throw new Error("Function not implemented.");
+              } } restaurantId={undefined} />,
               2: <EmployeeManagement/>,
               3: <MenuManagement activeRestaurantId={1}/>,
               6: <ReservationOrderHeader activeRestaurantId={1}/>  //order history ma być częścią reservations??? 

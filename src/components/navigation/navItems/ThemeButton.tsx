@@ -1,8 +1,5 @@
 import React from "react";
-
-export interface ThemeButtonProps {
-  setIsDark: Function;
-}
+import { ThemeButtonProps } from "../../../services/interfaces/navigation";
 
 const ThemeButton: React.FC<ThemeButtonProps> = ({ setIsDark }) => {
   //changes local storage value of theme

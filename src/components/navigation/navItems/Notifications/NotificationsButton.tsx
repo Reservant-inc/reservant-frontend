@@ -3,10 +3,8 @@ import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler
 import { Notifications } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../../services/APIconn";
+import { NotificationsButtonProps } from "../../../../services/interfaces/navigation";
 
-interface NotificationsButtonProps {
-  isDark: boolean;
-}
 
 const NotificationsButton: React.FC<NotificationsButtonProps> = ({
   isDark,

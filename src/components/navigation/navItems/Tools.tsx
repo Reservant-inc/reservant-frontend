@@ -17,10 +17,7 @@ import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
 import { AuthContext, AuthData } from "../../routing/AuthWrapper";
 import { useTranslation } from "react-i18next";
-
-export interface ToolsProps {
-  setIsDark: Function;
-}
+import { ToolsProps } from "../../../services/interfaces/navigation";
 
 const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
     const[isThemeAreaHovered, setIsThemeAreaHovered] = useState(false);

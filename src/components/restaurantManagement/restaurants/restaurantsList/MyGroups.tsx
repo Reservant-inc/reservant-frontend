@@ -3,7 +3,7 @@ import "dotenv/config";
 import { useTranslation } from "react-i18next";
 import Popup from "../../../reusableComponents/Popup";
 import { GroupType, RestaurantType } from "../../../../services/types";
-import { MyGroupsProps } from "../../../../services/interfaces";
+import { MyGroupsProps } from "../../../../services/interfaces/restaurant";
 import { fetchGET } from "../../../../services/APIconn";
 import { List, ListSubheader } from "@mui/material";
 import Group from "./Group";

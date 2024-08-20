@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
 import RestaurantCart from "./RestaurantCart";
-import { CartItem, MenuItem } from "../../../../services/interfaces";
+import { CartItem, MenuItemProps } from "../../../../services/interfaces/restaurant";
 import { useParams } from "react-router-dom";
 
 const RestaurantView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const addToCart = (item: MenuItem) => {
+  const addToCart = (item: MenuItemProps) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (cartItem) => cartItem.menuItemId === item.menuItemId,

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
-import { MenuItem } from "../../../../services/interfaces";
+import { MenuItemProps } from "../../../../services/interfaces/restaurant";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "../../../map/CustomMarker";
 
@@ -25,9 +25,11 @@ const TABS = {
 };
 
 interface RestaurantDetailsProps {
-  addToCart: (item: MenuItem) => void;
+  addToCart: (item: MenuItemProps) => void;
   restaurantId: string | undefined;
 }
+
+// coś tu nie gra !!!!
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   addToCart,

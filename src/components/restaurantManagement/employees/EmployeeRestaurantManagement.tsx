@@ -24,13 +24,8 @@ import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
+import { EditEmployeeToolbarProps } from "../../../services/interfaces/restaurant"
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
-}
 
 export default function EmployeeRestaurantManagement({activeRestaurantId}:{activeRestaurantId: string}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
@@ -82,7 +77,7 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
 
   
 
-  const EditToolbar = (props: EditToolbarProps) => {
+  const EditToolbar = (props: EditEmployeeToolbarProps) => {
     return (
       <GridToolbarContainer>
         <div className="h-[3rem] w-full z-1 flex items-center">

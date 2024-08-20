@@ -1,18 +1,7 @@
 import React from 'react';
 import { Button, Menu, MenuItem as MyMenuItem } from '@mui/material';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-
-interface FilterMenuProps {
-    handleFilterOpen: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    handleFilterClose: () => void;
-    filterAnchorEl: HTMLElement | null;
-    handleSortAlphabetically: () => void;
-    handleSortPriceAsc: ()  => void;
-    handleSortPriceDesc: ()  => void;
-    handleSortAlcoholAsc: ()  => void;
-    handleSortAlcoholDesc: ()  => void;
-    handleClearFilters: () => void;
-}
+import { FilterMenuProps } from '../../../services/interfaces/restaurant';
 
 const FilterMenu: React.FC<FilterMenuProps> = 
     ({handleFilterOpen, handleFilterClose, filterAnchorEl, handleClearFilters,

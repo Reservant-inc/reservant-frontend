@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { RestaurantDetailsProps } from "../../../services/interfaces";
+import { RestaurantDetailsProps } from "../../../services/interfaces/restaurant";
 import {
   RestaurantDataType,
   RestaurantDetailsType,

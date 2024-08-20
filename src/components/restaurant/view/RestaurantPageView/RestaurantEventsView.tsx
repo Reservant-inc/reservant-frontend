@@ -2,21 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import RestaurantCreateEvent from "./RestaurantCreateEvent";
 import { fetchGET, getImage } from "../../../../services/APIconn";
-
-interface Event {
-  eventId: number;
-  description: string;
-  time: string;
-  mustJoinUntil: string;
-  creatorFullName: string;
-  numberInterested: number;
-}
-
-interface RestaurantEventsViewProps {
-  restaurantId: number;
-  events: Event[];
-  restaurantName: string;
-}
+import { Event, RestaurantEventsViewProps } from "../../../../services/interfaces/restaurant"; 
 
 const RestaurantEventsView: React.FC<RestaurantEventsViewProps> = ({
   restaurantId,

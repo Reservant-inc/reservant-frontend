@@ -12,13 +12,8 @@ import {
 import { fetchGET, fetchPOST, fetchDELETE } from "../../../../services/APIconn";
 import SendFriendRequest from "./SendFriendRequest";
 import SearchIcon from '@mui/icons-material/Search';
+import { Friend, FriendSearchBarProps } from "../../../../services/interfaces/restaurant"
 
-interface FriendSearchBarProps {}
-
-interface User {
-  senderId: string;
-  senderName: string;
-}
 
 const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
   const [searchTerm, setSearchTerm] = useState("");

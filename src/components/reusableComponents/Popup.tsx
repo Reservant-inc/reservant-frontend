@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PopupProps } from "../../services/interfaces";
+import { PopupProps } from "../../services/interfaces/reusable";
 
 const Popup: React.FC<PopupProps> = ({
   children,

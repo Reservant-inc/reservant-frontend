@@ -12,42 +12,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import { Box, Button, IconButton, InputAdornment, Menu, MenuItem as MyMenuItem, TextField } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, Menu, TextField } from "@mui/material";
 import FilterMenu from "./FilterMenu";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
+import { MenuItemProps, MenuProps, ManagementProps } from "../../../services/interfaces/restaurant";
 
-interface MenuManagementProps {
-  activeRestaurantId: number | null;
-}
 
-interface Menu {
-    menuId: number;
-    name: string;
-    alternateName: string
-    menuType: string;
-    dateFrom: string;
-    dateUntil: string | null;
-    menuItems: MenuItemData[];
-}
-
-interface MenuItemData {
-    menuItemId: number;
-    name: string;
-    alternateName: string;
-    price: number;
-    alcoholPercentage: number;
-    photo: string;
-}
-
-const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) => {
+const MenuManagement: React.FC<ManagementProps> = ({ activeRestaurantId }) => {
     const { t } = useTranslation("global");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-    const [menus, setMenus] = useState<Menu[]>([]);
+    const [menus, setMenus] = useState<MenuProps[]>([]);
     const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{ [key: number]: string[] }>({});
     const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null);
-    const [editMenu, setEditMenu] = useState<Menu | null>(null);
-    const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(null);
+    const [editMenu, setEditMenu] = useState<MenuProps | null>(null);
+    const [editedMenuItem, setEditedMenuItem] = useState<MenuItemProps | null>(null);
     const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
     const [isEditMenuPopupOpen, setIsEditMenuPopupOpen] = useState(false);
     const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState(false);
@@ -95,9 +74,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const fetchMenus = async (restaurantId: number): Promise<Menu[]> => {
+    const fetchMenus = async (restaurantId: number): Promise<MenuProps[]> => {
         try {
-            const menusData: Menu[] = await fetchGET(`/my-restaurants/${restaurantId}/menus`);
+            const menusData: MenuProps[] = await fetchGET(`/my-restaurants/${restaurantId}/menus`);
             console.log("Menus data:", menusData);
             const validatedMenusData = menusData.map(menu => ({
                 ...menu,
@@ -214,7 +193,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const handleEditMenuItem = (menuItem: MenuItemData) => {
+    const handleEditMenuItem = (menuItem: MenuItemProps) => {
         setEditedMenuItem(menuItem);
         setIsMenuItemEditPopupOpen(true);
     };
@@ -243,7 +222,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const handleDeleteMenuItem = async (menuItem: MenuItemData) => {
+    const handleDeleteMenuItem = async (menuItem: MenuItemProps) => {
         try {
             const { menuItemId } = menuItem;
             const response = await fetchDELETE(`/menu-items/${menuItemId}`);
@@ -288,13 +267,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         { icon: <DeleteIcon />, name: 'Delete menu', onClick:() => setOpenConfirmation(true) }
     ];
 
-    const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
+    const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemProps) => {
         const nameMatch = menuItem.name.toLowerCase().includes(searchText.toLowerCase());
         const priceMatch = menuItem.price.toString().toLowerCase().includes(searchText.toLowerCase());
         return nameMatch || priceMatch;
     }) : [];
 
-    const sortMenuItems = (sortFunction: (a: MenuItemData, b: MenuItemData) => number) => {
+    const sortMenuItems = (sortFunction: (a: MenuItemProps, b: MenuItemProps) => number) => {
         if (selectedMenuIndex !== null) {
             const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(sortFunction);
             setMenus(prevMenus => {
@@ -310,23 +289,23 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     };
     
     const handleSortAlphabetically = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.name.localeCompare(b.name));
+        sortMenuItems((a: MenuItemProps, b: MenuItemProps) => a.name.localeCompare(b.name));
     };
     
     const handleSortPriceAsc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.price - b.price);
+        sortMenuItems((a: MenuItemProps, b: MenuItemProps) => a.price - b.price);
     };
     
     const handleSortPriceDesc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => b.price - a.price);
+        sortMenuItems((a: MenuItemProps, b: MenuItemProps) => b.price - a.price);
     };
     
     const handleSortAlcoholAsc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0));
+        sortMenuItems((a: MenuItemProps, b: MenuItemProps) => (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0));
     };
     
     const handleSortAlcoholDesc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0));
+        sortMenuItems((a: MenuItemProps, b: MenuItemProps) => (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0));
     };
 
     const handleClearFilters = () => {
@@ -410,7 +389,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             <div className="flex flex-wrap m-1">
                 {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
                     <>
-                        {filteredMenuItems.map((menuItem: MenuItemData) => (
+                        {filteredMenuItems.map((menuItem: MenuItemProps) => (
                             <MenuItem
                                 key={menuItem.menuItemId}
                                 name={menuItem.name}
@@ -419,9 +398,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                                 photo={menuItem.photo}
                                 alcoholPercentage={menuItem.alcoholPercentage}
                                 menuType={menus[selectedMenuIndex].menuType}
-                                onDelete={() => handleDeleteMenuItem(menuItem)}
-                                onEdit={() => handleEditMenuItem(menuItem)}
-                            />
+                                onDelete={() => handleDeleteMenuItem(menuItem)}//poprawić MenuItem
+                                onEdit={() => handleEditMenuItem(menuItem)} menuItemId={0} id={0} description={""}                            />
                         ))}
                     </>
                 )}

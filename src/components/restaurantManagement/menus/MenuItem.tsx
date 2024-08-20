@@ -7,17 +7,7 @@ import DefaultDrinkItem from "../../../assets/images/defaultDrinkItemImage.png";
 import { useTranslation } from "react-i18next";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { getImage } from "../../../services/APIconn";
-
-interface MenuItemProps {
-  name: string;
-  alternateName: string;
-  price: number;
-  alcoholPercentage: number;
-  menuType: string;
-  photo?: string; // Optional prop
-  onDelete: () => void;
-  onEdit: () => void;
-}
+import { MenuItemProps } from "../../../services/interfaces/restaurant";
 
 const MenuItem: React.FC<MenuItemProps> = ({
   name,

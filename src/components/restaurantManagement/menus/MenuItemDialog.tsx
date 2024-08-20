@@ -3,23 +3,8 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, s
 import { useTranslation } from "react-i18next";
 import { fetchFilesPOST } from "../../../services/APIconn";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { MenuItemDialogProps } from "../../../services/interfaces/restaurant";
 
-interface MenuItemData {
-    menuItemId: number;
-    name: string;
-    alternateName: string;
-    price: number;
-    alcoholPercentage: number;
-    photo: string;
-}
-
-interface MenuItemDialogProps {
-    open: boolean;
-    onClose: () => void;
-    onSave: (values: { [key: string]: string }) => void;
-    menuType: string;
-    editedMenuItem?: MenuItemData | null;
-}
 
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, menuType, editedMenuItem = null }) => {
     const { t } = useTranslation("global");

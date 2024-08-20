@@ -18,12 +18,9 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DetailsIcon from "@mui/icons-material/Details";
 import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from "@mui/material";
 import { fetchGET } from "../../../services/APIconn";
+import { ManagementProps } from "../../../services/interfaces/restaurant"
 
-interface OrderHistoryProps {
-  activeRestaurantId: number | null;
-}
-
-const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
+const ReservationHistory: React.FC<ManagementProps> = ({ activeRestaurantId }) => {
   const [rows, setRows] = useState<GridRowsProp>([
     { id: 1, orderId: 'ORD001', visitId: "2024-05-29", cost: 50.0, status: 'Completed', employeeId: 'John Smith' },
     { id: 2, orderId: 'ORD002', visitId: "2024-05-29", cost: 75.0, status: 'Pending', employeeId: 'Emily Johnson' },

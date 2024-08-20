@@ -25,12 +25,7 @@ import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
-}
+
 
 export default function EmploymentsManagement({empid}:{empid:string}) {
   const [rows, setRows] = useState<GridRowsProp>([]);

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Avatar, Rating, Button, Modal, Box } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Textarea } from "@mui/joy";
+import { RestaurantReviewProps } from "../../../../services/interfaces/restaurant";
 
 const style = {
   position: "absolute" as "absolute",
@@ -14,13 +15,7 @@ const style = {
   border: "1px solid #000",
   boxShadow: 24,
   p: 4,
-};
-
-interface RestaurantReviewProps {
-  createdAt: string;
-  stars: number;
-  contents: string;
-}
+};;
 
 const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   stars,

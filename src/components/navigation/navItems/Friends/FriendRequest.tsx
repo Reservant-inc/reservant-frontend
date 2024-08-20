@@ -1,13 +1,7 @@
 import React from "react";
 import { Avatar, Button } from "@mui/material";
 import { fetchPOST, fetchDELETE } from "../../../../services/APIconn";
-
-interface FriendRequestProps {
-  senderId: string;
-  senderName: string;
-  dateSent: string;
-  onAction: (senderId: string) => void;
-}
+import { FriendRequestProps } from "../../../../services/interfaces/restaurant";
 
 const FriendRequest: React.FC<FriendRequestProps> = ({
   senderId,

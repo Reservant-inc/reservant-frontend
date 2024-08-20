@@ -20,6 +20,7 @@ import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { FocusedRestaurantDetailsProps } from "../../../../services/interfaces/restaurant";
 
 const TABS = {
   MENU: "menu",
@@ -27,10 +28,7 @@ const TABS = {
   REVIEWS: "reviews",
 };
 
-interface FocusedRestaurantDetailsProps {
-  restaurantId: number;
-  onClose: () => void;
-}
+
 
 const getOpinionsText = (count: number) => {
   if (count === 1) return `${count} opinia`;

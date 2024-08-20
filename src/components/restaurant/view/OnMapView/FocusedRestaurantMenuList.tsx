@@ -2,11 +2,8 @@ import { Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { fetchGET } from "../../../../services/APIconn";
 import FocusedRestaurantMenuItem from "./FocusedRestaurantMenuItem";
-import { MenuItem } from "../../../../services/interfaces";
-
-interface FocusedRestaurantMenuListProps {
-  restaurantId: number;
-}
+import { MenuItemProps } from "../../../../services/interfaces/restaurant";
+import { FocusedRestaurantMenuListProps } from "../../../../services/interfaces/restaurant";
 
 const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
   restaurantId,
@@ -119,7 +116,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
                 <CircularProgress />
               </div>
             ) : menu.menuItems && menu.menuItems.length > 0 ? (
-              menu.menuItems.map((item: MenuItem) => (
+              menu.menuItems.map((item: MenuItemProps) => (
                 <FocusedRestaurantMenuItem key={item.id} item={item} />
               ))
             ) : (

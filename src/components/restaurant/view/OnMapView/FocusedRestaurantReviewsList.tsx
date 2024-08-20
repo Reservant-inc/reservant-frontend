@@ -4,11 +4,7 @@ import RestaurantReview from "../../../restaurantManagement/restaurants/restaura
 import RestaurantReviewForm from "../RestaurantReviewForm";
 import { Button, Modal, Box } from "@mui/material";
 import { fetchGET } from "../../../../services/APIconn";
-
-interface FocusedRestaurantReviewsListProps {
-  isPreview: boolean;
-  reviews: any[];
-}
+import { FocusedRestaurantReviewsListProps } from "../../../../services/interfaces/restaurant";
 
 const FocusedRestaurantReviewsList: React.FC<
   FocusedRestaurantReviewsListProps

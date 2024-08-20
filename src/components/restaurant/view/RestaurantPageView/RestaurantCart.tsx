@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import NewReservationDetailsView from "./NewReservationDetailsView";
 import RestaurantCartView from "./RestaurantCartView";
-import { CartItem } from "../../../../services/interfaces";
-
-interface RestaurantCartProps {
-  cart: CartItem[];
-  incrementQuantity: (itemId: number) => void;
-  decrementQuantity: (itemId: number) => void;
-}
+import { RestaurantCartProps } from "../../../../services/interfaces/restaurant";
 
 const RestaurantCart: React.FC<RestaurantCartProps> = ({
   cart,

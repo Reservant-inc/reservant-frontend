@@ -4,14 +4,8 @@ import "leaflet/dist/leaflet.css";
 import MarkerBlack from "../../assets/images/location-black.svg";
 import MarkerPrimary from "../../assets/images/location-primary.svg";
 import { Marker, Tooltip, useMap } from "react-leaflet";
+import { CustomMarkerProps } from "../../services/interfaces/map"; // import interface from interfaces.txt
 
-interface CustomMarkerProps {
-  position: L.LatLngExpression;
-  restaurant: {name: string}
-  activeRestaurant: any
-  setActiveRestaurant: Function,
-  setUserMovedMap?: Function
-}
 
 const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activeRestaurant, setActiveRestaurant, setUserMovedMap }) => {
 

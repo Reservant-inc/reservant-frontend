@@ -1,16 +1,7 @@
 import React from 'react';
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-interface Action {
-  icon: React.ReactNode;
-  name: string;
-  onClick: () => void;
-}
-
-interface MoreActionsProps {
-  actions: Action[];
-}
+import { MoreActionsProps } from '../../services/interfaces/reusable';
 
 const MoreActions: React.FC<MoreActionsProps> = ({ actions }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

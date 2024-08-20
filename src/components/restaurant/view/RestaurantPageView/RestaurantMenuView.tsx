@@ -1,13 +1,16 @@
 import { Button, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import MenuItemComponent from "../MenuItemComponent";
-import { MenuItem } from "../../../../services/interfaces";
+import { MenuItemProps } from "../../../../services/interfaces/restaurant";
 import { fetchGET, getImage } from "../../../../services/APIconn";
 
 interface RestaurantMenuViewProps {
-  addToCart: (item: MenuItem) => void;
+  addToCart: (item: MenuItemProps) => void;
   restaurantId: string | undefined;
 }
+
+// coś tu nie gra !!!!
+
 
 const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
   addToCart,
@@ -134,7 +137,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
             </div>
             <div className="mt-4 flex flex-col items-center">
               {menu.menuItems && menu.menuItems.length > 0 ? (
-                menu.menuItems.map((item: MenuItem) => (
+                menu.menuItems.map((item: MenuItemProps) => (
                   <div key={item.id} className="my-2 w-4/5">
                     <MenuItemComponent item={item} addToCart={addToCart} />
                   </div>

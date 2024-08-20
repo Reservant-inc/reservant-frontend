@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { OutsideClickHandlerProps } from "../../services/interfaces";
+import { OutsideClickHandlerProps } from "../../services/interfaces/reusable";
 
 const OutsideClickHandler: React.FC<OutsideClickHandlerProps> = ({
   children,

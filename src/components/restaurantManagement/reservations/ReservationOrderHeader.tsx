@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { Button, ButtonGroup } from "@mui/material";
 import ReservationHistory from "./ReservationHistoory";
 import OrderHistory from "./OrderHistory";
+import { ManagementProps } from "../../../services/interfaces/restaurant"
 
-interface ReservationOrderHeaderProps {
-  activeRestaurantId: number;
-}
 
-const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({ activeRestaurantId }) => {
+const ReservationOrderHeader: React.FC<ManagementProps> = ({ activeRestaurantId }) => {
   const [activeTab, setActiveTab] = useState<string>("reservation");
 
   return (

@@ -20,26 +20,8 @@ import {
   Save as SaveIcon,
   Close as CancelIcon
 } from "@mui/icons-material";
+import { ManagementProps, OrderRowProps, MenuItem } from "../../../services/interfaces/restaurant"
 
-interface OrderHistoryProps {
-  activeRestaurantId: number | null;
-}
-
-interface OrderRowProps {
-  row: any;
-  isEditing: boolean;
-  onEdit: () => void;
-  onSave: () => void;
-  onCancel: () => void;
-  onDelete: () => void;
-}
-
-interface MenuItem {
-  name: string;
-  amount: number;
-  price: number;
-  status: string;
-}
 
 const OrderRow: React.FC<OrderRowProps> = ({
   row,
@@ -141,7 +123,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
   );
 };
 
-const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
+const OrderHistory: React.FC<ManagementProps> = ({ activeRestaurantId }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 

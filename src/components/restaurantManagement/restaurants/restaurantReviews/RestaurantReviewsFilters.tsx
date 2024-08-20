@@ -8,13 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-
-interface RestaurantReviewsFiltersProps {
-  sort: string;
-  setSort: (value: string) => void;
-  filterText: string;
-  setFilterText: (text: string) => void;
-}
+import { RestaurantReviewsFiltersProps } from "../../../../services/interfaces/restaurant";
 
 const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
   sort,

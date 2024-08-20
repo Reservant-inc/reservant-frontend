@@ -7,17 +7,11 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { CartItem } from "../../../../services/interfaces";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { RestaurantCartProps } from "../../../../services/interfaces/restaurant";
 
-interface RestaurantCartViewProps {
-  cart: CartItem[];
-  incrementQuantity: (menuItemId: number) => void;
-  decrementQuantity: (menuItemId: number) => void;
-}
-
-const RestaurantCartView: React.FC<RestaurantCartViewProps> = ({
+const RestaurantCartView: React.FC<RestaurantCartProps> = ({
   cart,
   incrementQuantity,
   decrementQuantity,

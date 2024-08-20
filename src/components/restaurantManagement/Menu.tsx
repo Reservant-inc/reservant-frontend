@@ -9,13 +9,7 @@ import ScheduleSharpIcon from '@mui/icons-material/ScheduleSharp';
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import Cookies from "js-cookie";
 import useWindowDimensions from "../../hooks/useWindowResize";
-
-interface MenuInterface {
-    setActivePage: Function
-    activePage: Number
-    setActiveSectionName: Function
-    setActiveRestaurantId: Function
-}
+import { MenuInterface } from "../../services/interfaces/restaurant";
 
 const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, setActiveRestaurantId }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(activePage);

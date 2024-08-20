@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import { Box, IconButton, Modal, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import InfoIcon from "@mui/icons-material/Info";
-import { MenuItem as MenuItemType } from "../../../services/interfaces";
+import { MenuItemComponentProps } from "../../../services/interfaces/restaurant";
 import { getImage } from "../../../services/APIconn";
 
-interface MenuItemComponentProps {
-  item: MenuItemType;
-  addToCart: (item: Omit<MenuItemType, "quantity">) => void;
-}
+
 
 const style = {
   position: "absolute" as "absolute",

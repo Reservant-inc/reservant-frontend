@@ -1,11 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { MenuItem } from "../../../../services/interfaces";
 import { getImage } from "../../../../services/APIconn";
-
-interface FocusedRestaurantMenuItemProps {
-  item: MenuItem;
-}
+import { FocusedRestaurantMenuItemProps } from "../../../../services/interfaces/restaurant";
 
 const dummyImage = "https://images.unsplash.com/photo-1551782450-a2132b4ba21d";
 

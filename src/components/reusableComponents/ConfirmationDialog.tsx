@@ -1,12 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
-
-interface ConfirmationDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  confirmationText: string; 
-}
+import { ConfirmationDialogProps } from '../../services/interfaces/reusable';
 
 
 

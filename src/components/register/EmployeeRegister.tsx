@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../services/APIconn";
 import ErrorMes from "../reusableComponents/ErrorMessage";
+import { RegisterEmpModalProps } from "../../services/interfaces/register";
+
 
 const initialValues = {
   login: "",
@@ -16,11 +18,8 @@ const initialValues = {
   confirmPassword: "",
 };
 
-interface RegisterEmpProps {
-  setIsModalOpen: Function;
-}
 
-const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
+const RegisterEmp: React.FC<RegisterEmpModalProps> = ({ setIsModalOpen }) => {
   const [t] = useTranslation("global");
   const { employeeRegisterSchema } = useValidationSchemas();
 

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import ErrorMes from "../../reusableComponents/ErrorMessage";
-import { RestaurantDataProps } from "../../../services/interfaces";
+import { RestaurantDataProps } from "../../../services/interfaces/restaurant";
 import { EmploymentType } from "../../../services/types";
 
 const initialValues = {

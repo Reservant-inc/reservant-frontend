@@ -9,11 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { fetchPOST } from "../../../services/APIconn";
-
-interface RestaurantReviewFormProps {
-  onClose: () => void;
-  onSuccess: () => void;
-}
+import { RestaurantReviewFormProps } from "../../../services/interfaces/restaurant";
 
 const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
   onClose,

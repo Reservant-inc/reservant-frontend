@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, MenuItem } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { MenuDialogProps } from "../../../services/interfaces/restaurant";
 // import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 // import { LocalizationProvider } from '@mui/x-date-pickers-pro/LocalizationProvider';
 // import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 // import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 
 
-interface MenuDialogProps {
-    open: boolean;
-    onClose: () => void;
-    onSave: (values: { [key: string]: string }) => void;
-    editedMenu?: { [key: string]: string } | null; // Dodany props dla edytowanego menu
-}
 
 const MenuDialog: React.FC<MenuDialogProps> = ({ open, onClose, onSave, editedMenu = null }) => {
     const { t } = useTranslation("global");

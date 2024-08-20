@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RestaurantReviewsFilters from "./RestaurantReviewsFilters";
 import RestaurantReview from "./RestaurantReview";
+import { RestaurantReviewsListProps } from "../../../../services/interfaces/restaurant";
 
 const dummyReviews = [
   {
@@ -152,10 +153,6 @@ const dummyReviews = [
     managerResponse: null,
   },
 ];
-
-interface RestaurantReviewsListProps {
-  isPreview: boolean
-}
 
 const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview }) => {
   // downloaded from api when it's ready

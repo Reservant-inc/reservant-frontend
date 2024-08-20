@@ -3,15 +3,8 @@ import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import { Map as LeafletMap, LatLngBounds } from "leaflet";
+import { MapProps } from "../../services/interfaces/map"
 
-interface MapProps {
-  activeRestaurant: any;
-  restaurants: any[];
-  setActiveRestaurant: Function;
-  setBounds: Function;
-  setUserMovedMap: Function;
-  userMovedMap: Boolean;
-}
 
 const Map: React.FC<MapProps> = ({
   restaurants,
