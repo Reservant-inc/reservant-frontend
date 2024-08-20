@@ -29,6 +29,7 @@
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "leaflet.label": "^0.2.4",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.1.0",
@@ -70,6 +71,7 @@
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
     "@types/leaflet-label": "^0.2.39",
+    "@types/lodash": "^4.17.7",
     "assert": "^2.1.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",

@@ -7,7 +7,7 @@ import CloseSharpIcon from '@mui/icons-material/CloseSharp';
 import UndoSharpIcon from '@mui/icons-material/UndoSharp';
 import SendSharpIcon from '@mui/icons-material/SendSharp';
 import { FetchError } from "../../../../services/Errors";
-import defaultPhoto from "../../../../assets/images/user.jpg"
+import DefaultPhoto from "../../../../assets/images/user.jpg"
 
 interface SearchedUserProps {
   user: UserSearchType
@@ -58,7 +58,7 @@ const SearchedUser: React.FC<SearchedUserProps> = ({
   return (
     <div className="flex justify-between w-full">
         <div className="flex gap-[5px] items-center text-sm w-[60%] overflow-x-hidden">
-          <img src={defaultPhoto} alt="user photo" className="h-8 w-8 rounded-full"/>
+          <img src={DefaultPhoto} alt="user photo" className="h-8 w-8 rounded-full"/>
           <h1>{user.firstName}</h1>
           <h1>{user.lastName}</h1>
         </div>
