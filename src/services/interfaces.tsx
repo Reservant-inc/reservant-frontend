@@ -1,3 +1,7 @@
+import { ReactNode } from "react";
+import { LoginResponseType, RestaurantDataType, RestaurantType } from "./types";
+
+
 export interface CartItem {
   menuItemId: number;
   id: number;
@@ -16,3 +20,15 @@ export interface MenuItem {
   alcoholPercentage?: number;
   photo?: string;
 }
+
+
+export interface Menu {
+  menuId: number;
+  name: string;
+  alternateName: string
+  menuType: string;
+  dateFrom: string;
+  dateUntil: string | null;
+  menuItems: MenuItem[];
+}
+

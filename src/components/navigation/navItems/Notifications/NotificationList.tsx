@@ -20,7 +20,7 @@ interface NotificationListProps {
 const NotificationList: React.FC<NotificationListProps> = ({
   setHasNotifications,
 }) => {
-  const [friendRequests, setFriendRequests] = useState<any[]>([]);
+  const [friendRequests, setFriendRequests] = useState<any[]>([]); //reqestType
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {

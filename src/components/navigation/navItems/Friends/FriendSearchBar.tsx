@@ -15,14 +15,27 @@ import SearchIcon from '@mui/icons-material/Search';
 
 interface FriendSearchBarProps {}
 
+type UserType = {
+  userId: string,
+  firstName: string,
+  lastName: string,
+  photo: string
+};
+
+type FriendType = {
+  dateSent: Date,
+  dateRead: Date,
+  dateAccepted: Date,
+  otherUser: UserType
+};
 
 const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [isFocused, setIsFocused] = useState(false);
-  const [outgoingRequests, setOutgoingRequests] = useState<any[]>([]);
-  const [friends, setFriends] = useState<any[]>([]);
-  const [incomingRequests, setIncomingRequests] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<any[]>([]); //reqestType
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [outgoingRequests, setOutgoingRequests] = useState<any[]>([]); //reqestType
+  const [friends, setFriends] = useState<any[]>([]);  //FriendType nie działa
+  const [incomingRequests, setIncomingRequests] = useState<any[]>([]); //reqestType
   const [loading, setLoading] = useState<boolean>(true);
   const [userId, setUserId] = useState<string>("");
 

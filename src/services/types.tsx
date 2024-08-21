@@ -8,6 +8,7 @@ export type LoginResponseType = {
   roles: string[];
 };
 
+
 export type RestaurantDetailsType = {
   id: number;
   name: string;
@@ -47,6 +48,16 @@ export type RestaurantType = {
   isVerified: boolean
 };
 
+export type ActiveRestaurantType = RestaurantType & {
+  isVerified: boolean
+  location: RestaurantLocationType;
+}
+
+export type RestaurantLocationType = {
+  latitude: number;
+  longitude: number;
+}
+
 export type RestaurantDataType = {
   name: string;
   address: string;
@@ -61,7 +72,7 @@ export type RestaurantDataType = {
   tags: string[];
   provideDelivery: boolean;
   logo: File | null | string;
-  photos: File[] | null | string[];
+  photos:  File[] | null | string[];
   description: string;
   groupId: number | null;
 };
@@ -96,4 +107,25 @@ export type EmploymentType = {
   isBackdoorEmployee: string,
   isHallEmployee: string,
   restaurantName: string
+}
+
+
+export type MenuItemType = {
+  menuItemId: number;
+  name: string;
+  alternateName: string;
+  price: number;
+  alcoholPercentage: number;
+  photo: string;
+}
+
+export type MenuType = {
+  menuId: number,
+  name: string,
+  alternateName: string,
+  menuType: string,
+  dateFrom: Date,
+  dateUntil: Date
+  photo: string
+  menuItems: MenuItemType[]
 }

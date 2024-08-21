@@ -4,6 +4,20 @@ import MenuItemComponent from "../MenuItemComponent";
 import { MenuItem } from "../../../../services/interfaces";
 import { fetchGET, getImage } from "../../../../services/APIconn";
 
+
+
+interface Menu {
+  menuId: number;
+  name: string;
+  alternateName: string
+  menuType: string;
+  dateFrom: string;
+  dateUntil: string | null;
+  menuItems: MenuItem[];
+  photo: string;
+}
+
+
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItem) => void;
   restaurantId: string | undefined;
@@ -13,7 +27,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
   addToCart,
   restaurantId,
 }) => {
-  const [menus, setMenus] = useState<any[]>([]);
+  const [menus, setMenus] = useState<Menu[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
 
   useEffect(() => {

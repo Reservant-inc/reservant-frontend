@@ -14,13 +14,14 @@ interface SendFriendRequestProps {
     senderId: string;
     senderName: string;
   };
-  request: any;
+  request: any; //potrzebny typ reqest ale nie wiem co on ma zawierać
   isFriend: any;
   isRequestReceived: any;
   handleInvite: (userId: string) => void;
   handleCancelInvite: (userId: string) => void;
   handleRemoveFriend: (userId: string) => void;
 }
+
 
 const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
   user,

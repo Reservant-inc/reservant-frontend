@@ -4,11 +4,13 @@ import "leaflet/dist/leaflet.css";
 import MarkerBlack from "../../assets/images/location-black.svg";
 import MarkerPrimary from "../../assets/images/location-primary.svg";
 import { Marker, Tooltip, useMap } from "react-leaflet";
+import { RestaurantType } from "../../services/types";
+
 
 interface CustomMarkerProps {
   position: L.LatLngExpression;
   restaurant: {name: string}
-  activeRestaurant: any
+  activeRestaurant: RestaurantType
   setActiveRestaurant: Function,
   setUserMovedMap?: Function
 }
@@ -16,7 +18,7 @@ interface CustomMarkerProps {
 const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activeRestaurant, setActiveRestaurant, setUserMovedMap }) => {
 
   let marker: any = MarkerBlack;
-  if(activeRestaurant != null)  
+  if(activeRestaurant != null)   
     marker = restaurant.name === activeRestaurant.name ? MarkerPrimary : MarkerBlack
 
   const customIcon = L.icon({

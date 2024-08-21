@@ -17,6 +17,7 @@ import MopedIcon from "@mui/icons-material/Moped";
 import { MenuItem } from "../../../../services/interfaces";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "../../../map/CustomMarker";
+import { RestaurantType } from "../../../../services/types";
 
 const TABS = {
   MENU: "menu",
@@ -33,8 +34,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   addToCart,
   restaurantId,
 }) => {
-  const [restaurant, setRestaurant] = useState<any>(null);
-  const [events, setEvents] = useState<any[]>([]);
+  const [restaurant, setRestaurant] = useState<any>(null);  //brak typu konflikty
+  const [events, setEvents] = useState<any[]>([]);  //EventType
   const [activeTab, setActiveTab] = useState<string>(TABS.MENU);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
