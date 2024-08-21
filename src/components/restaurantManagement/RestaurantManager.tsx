@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
 import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
@@ -25,7 +25,7 @@ const RestaurantManager = () => {
     <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
       <div className="z-[0] flex w-full">
         <div className="flex h-full w-[16%] flex-col gap-2 bg-white shadow-md dark:bg-black">
-          <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName} setActiveRestaurantId={setActiveRestaurantId}/>
+          <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
         </div>
         <div className="flex h-full w-[84%] flex-col gap-6 p-6">
           <div className="h-[10%] w-full flex justify-between items-center">

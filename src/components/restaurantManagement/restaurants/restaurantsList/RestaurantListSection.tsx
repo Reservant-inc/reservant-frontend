@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Box, Modal } from "@mui/material";
 import RestaurantRegister from "../../../register/restaurantRegister/RestaurantRegister";
 import AddIcon from "@mui/icons-material/Add";
-import { GridToolbarContainer, GridRowModesModel, GridColDef, GridRowsProp, DataGrid, GridSlots } from "@mui/x-data-grid";
+import { GridToolbarContainer, GridRowModesModel, GridColDef, GridRowsProp, DataGrid, GridSlots, GridActionsCellItem } from "@mui/x-data-grid";
 import { fetchGET } from "../../../../services/APIconn";
 import { LocalType } from "../../../../services/enums";
 import { RestaurantType } from "../../../../services/types";
+import { Details } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
-    handleChangeActiveRestaurant: (restaurantGroupId: number) => void
-    setActiveSectionName: (sectionName: string) => void
+    handleChangeActiveRestaurant: Function
+    setActiveSectionName: Function
 }
 
 interface EditToolbarProps {
@@ -35,7 +36,6 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
             
             const response2 = await fetchGET(`/my-restaurant-groups/${group.restaurantGroupId}`);
 
-                console.log(response2)
 
                 for (const i in response2.restaurants) {
                     tmp.push({
@@ -51,7 +51,6 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
                 }
             }
 
-            console.log(tmp)
             setRows(tmp)
           } catch (error) {
             console.error("Error populating table", error);
@@ -117,15 +116,44 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
           width: 180,
           editable: false,
           type: "string",
-        }
+        },
+        {
+          field: "actions",
+          type: "actions",
+          headerName: "Actions",
+          width: 100,
+          cellClassName: "actions",
+          getActions: ({ id }) => {
+
+            return [
+              <GridActionsCellItem
+                icon={<Details />}
+                label="Details"
+                id={
+                  "RestaurantSeeDetailsButton" +
+                  rows[parseInt(id.toString())].id+
+                  rows[parseInt(id.toString())].name
+                }
+                className="textPrimary"
+                onClick = {handleDetails(id)}
+                  
+                
+                color="inherit"
+              />
+            ];
+          },
+        },
       ];
 
+      const handleDetails: Function = (id: any) =>{
+        handleChangeActiveRestaurant(rows[parseInt(id.toString())].restaurantId)
+        setActiveSectionName(rows[parseInt(id.toString())].name)
+      }
+
       const handleRowClick = (params: any) => {
-        const rowData = params.row;
-        console.log(rowData)
-        setActiveSectionName(rowData.name)
-        handleChangeActiveRestaurant(rowData.restaurantId) 
-        };
+        // const rowData = params.row;
+        
+      };
 
     return(
         <div className="h-full w-full bg-white rounded-lg">

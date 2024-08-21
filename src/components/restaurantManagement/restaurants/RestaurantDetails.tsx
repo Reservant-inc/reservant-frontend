@@ -11,6 +11,7 @@ import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
 import EmployeeManagement from "../employees/EmployeeManagement";
 import MenuManagement from "../menus/MenuMangement";
 import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
+import { ArrowLeftIcon } from "@mui/x-date-pickers-pro";
 
 
 // const style = {
@@ -28,6 +29,7 @@ import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagem
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,
+  
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -72,6 +74,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 
   return (
     <div className="w-full h-full gap-4 overflow-y-auto scroll space-y-4">
+   
+      
       <div className="w-full h-1/2 bg-white rounded-lg shadow-md">
 
       </div>

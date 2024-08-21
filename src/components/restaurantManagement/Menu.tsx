@@ -14,10 +14,10 @@ interface MenuInterface {
     setActivePage: Function
     activePage: Number
     setActiveSectionName: Function
-    setActiveRestaurantId: Function
+    handleChangeActiveRestaurant: Function
 }
 
-const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, setActiveRestaurantId }) => {
+const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, handleChangeActiveRestaurant }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(activePage);
 
     const handleListItemClick = (
@@ -25,7 +25,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
         index: number,
         name: string
     ) => {
-        setActiveRestaurantId(null)
+        handleChangeActiveRestaurant(null)
         setActiveSectionName(name)
         setActivePage(index)
         setSelectedIndex(index);
