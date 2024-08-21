@@ -35,8 +35,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 }) => {
   const [restaurant, setRestaurant] = useState<any>(null);
   const [events, setEvents] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState(TABS.MENU);
-  const [openModal, setOpenModal] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>(TABS.MENU);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
 
   useEffect(() => {

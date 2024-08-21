@@ -11,8 +11,8 @@ interface NotificationsButtonProps {
 const NotificationsButton: React.FC<NotificationsButtonProps> = ({
   isDark,
 }) => {
-  const [isPressed, setIsPressed] = useState(false);
-  const [hasNotifications, setHasNotifications] = useState(true);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
+  const [hasNotifications, setHasNotifications] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
 
   const pressHandler = () => {

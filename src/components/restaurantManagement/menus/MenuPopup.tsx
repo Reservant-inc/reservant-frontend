@@ -32,7 +32,7 @@ const MenuPopup: React.FC<MenuPopupProps> = ({
     ),
   );
 
-  const [isModified, setIsModified] = useState(false);
+  const [isModified, setIsModified] = useState<boolean>(false);
 
   const handleChange = (header: string, value: string) => {
     setInputValues((prevInputValues) => ({

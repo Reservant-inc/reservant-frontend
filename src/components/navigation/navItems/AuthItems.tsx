@@ -8,7 +8,7 @@ const AuthItems: React.FC = () => {
 
   const [t] = useTranslation("global");
 
-  const [isPressed, setIsPressed] = useState(false);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const pressHandler = () => {
     setIsPressed(!isPressed);

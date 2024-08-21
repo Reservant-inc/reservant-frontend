@@ -15,13 +15,9 @@ import SearchIcon from '@mui/icons-material/Search';
 
 interface FriendSearchBarProps {}
 
-interface User {
-  senderId: string;
-  senderName: string;
-}
 
 const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [outgoingRequests, setOutgoingRequests] = useState<any[]>([]);
@@ -71,6 +67,7 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
     try {
       const response = await fetchGET("/friends/incoming");
       setIncomingRequests(response.items);
+      
     } catch (error) {
       console.error("Error fetching incoming requests:", error);
     }

@@ -3,7 +3,7 @@ import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler
 import CommentSharpIcon from '@mui/icons-material/CommentSharp';
 
 const Threads: React.FC = () => {
-    const [isPressed, setIsPressed] = useState(false);
+    const [isPressed, setIsPressed] = useState<boolean>(false);
 
     const pressHandler = () => {
         setIsPressed(!isPressed);

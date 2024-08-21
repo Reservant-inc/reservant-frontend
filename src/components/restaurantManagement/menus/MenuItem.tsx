@@ -34,7 +34,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
     menuType === "Alcohol" ? DefaultDrinkItem : DefaultMenuItem;
   const imagePath = photo || defaultImage;
   const alcoholPercentageVisible = menuType === "Alcohol";
-  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false);
 
   const handleDeleteConfirmation = () => {
     setConfirmationOpen(true);

@@ -15,7 +15,7 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
   incrementQuantity,
   decrementQuantity,
 }) => {
-  const [selectedOption, setSelectedOption] = useState("Dostawa");
+  const [selectedOption, setSelectedOption] = useState<string>("Dostawa");
 
   const handleButtonClick = (option: React.SetStateAction<string>) => {
     setSelectedOption(option);

@@ -23,7 +23,7 @@ const RestaurantEventsView: React.FC<RestaurantEventsViewProps> = ({
   events,
   restaurantName,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState<string>("");
   const [city, setCity] = useState<string>("");
 

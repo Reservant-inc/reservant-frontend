@@ -13,7 +13,7 @@ const initialValues = {
   isHallEmployee: "",
 };
 
-type restaurant = {
+type Restaurant = {
   name: string,
   restaurantID: string
 }
@@ -21,7 +21,7 @@ type restaurant = {
 const RestaurantAddEmp = ({empid}:{empid: string}) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
-  const [restaurants, setRestaurants] = useState<restaurant[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(()=>{
     const getRestaurants = async () => {
@@ -45,7 +45,7 @@ const RestaurantAddEmp = ({empid}:{empid: string}) => {
             }
 
         const response1 = await fetchGET("/my-restaurants");
-        let tmp1: restaurant[] = [];
+        let tmp1: Restaurant[] = [];
   
 
         for (const restaurant of response1) {

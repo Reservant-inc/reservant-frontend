@@ -48,12 +48,12 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null);
     const [editMenu, setEditMenu] = useState<Menu | null>(null);
     const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(null);
-    const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
-    const [isEditMenuPopupOpen, setIsEditMenuPopupOpen] = useState(false);
-    const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState(false);
-    const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
+    const [isMenuPopupOpen, setIsMenuPopupOpen] = useState<boolean>(false);
+    const [isEditMenuPopupOpen, setIsEditMenuPopupOpen] = useState<boolean>(false);
+    const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState<boolean>(false);
+    const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState<boolean>(false);
     const [searchText, setSearchText] = useState<string>("");
-    const [openConfirmation, setOpenConfirmation] = useState(false);
+    const [openConfirmation, setOpenConfirmation] = useState<boolean>(false);
 
   useEffect(() => {
     if (activeRestaurantId !== null) {
