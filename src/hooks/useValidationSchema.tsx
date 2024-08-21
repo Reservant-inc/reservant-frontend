@@ -13,12 +13,18 @@ export const useValidationSchemas = () => {
   const userRegisterSchema = yup.object({
     firstName: yup
       .string()
-      .matches(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/, t("errors.user-register.firstName.matches"))
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t("errors.user-register.firstName.matches"),
+      )
       .required(t("errors.user-register.firstName.required")),
 
     lastName: yup
       .string()
-      .matches(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/, t("errors.user-register.lastName.matches"))
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t("errors.user-register.lastName.matches"),
+      )
       .required(t("errors.user-register.lastName.required")),
 
     login: yup
@@ -125,14 +131,14 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.confirmPassword.required")),
   });
 
-  const RestaurantAddEmployeeSchema = 
-  yup
+  const RestaurantAddEmployeeSchema = yup
     .object({
       isBackdoorEmployee: yup.boolean(),
-      isHallEmployee: yup.boolean(),    
-      selectedRestaurant: yup.string().required("please select one of the available restaurants"),
-    },
-  )
+      isHallEmployee: yup.boolean(),
+      selectedRestaurant: yup
+        .string()
+        .required("please select one of the available restaurants"),
+    })
     .test(
       "at-least-one-checkbox",
       t("errors.employee-register.employeeRole.required"),
@@ -140,7 +146,6 @@ export const useValidationSchemas = () => {
         if (obj.isBackdoorEmployee || obj.isHallEmployee) {
           return true;
         }
-
 
         return new yup.ValidationError([
           new yup.ValidationError(

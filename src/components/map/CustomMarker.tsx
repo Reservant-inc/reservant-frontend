@@ -7,19 +7,24 @@ import { Marker, Tooltip } from "react-leaflet";
 
 interface CustomMarkerProps {
   position: L.LatLngExpression;
-  restaurant: {name: string}
-  activeRestaurant: any
-  setActiveRestaurant: Function,
-  setUserMovedMap?: Function
+  restaurant: { name: string };
+  activeRestaurant: any;
+  setActiveRestaurant: Function;
+  setUserMovedMap?: Function;
 }
 
-const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activeRestaurant, setActiveRestaurant, setUserMovedMap }) => {
-
+const CustomMarker: React.FC<CustomMarkerProps> = ({
+  position,
+  restaurant,
+  activeRestaurant,
+  setActiveRestaurant,
+  setUserMovedMap,
+}) => {
   let isCurrentRestaurant;
-  if(activeRestaurant != null)
-    isCurrentRestaurant = restaurant.name === activeRestaurant.name
+  if (activeRestaurant != null)
+    isCurrentRestaurant = restaurant.name === activeRestaurant.name;
 
-  let marker = isCurrentRestaurant ? MarkerPrimary : MarkerBlack
+  let marker = isCurrentRestaurant ? MarkerPrimary : MarkerBlack;
 
   const customIcon = L.icon({
     iconUrl: marker,
@@ -28,20 +33,30 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({ position, restaurant, activ
   });
 
   return (
-      <Marker position={position} icon={customIcon} 
+    <Marker
+      position={position}
+      icon={customIcon}
       eventHandlers={{
-          click: (e) => {
-            setActiveRestaurant(restaurant)
-            if (setUserMovedMap != undefined ) {
-              setUserMovedMap(false)
-            }
-          },
-        }}
+        click: (e) => {
+          setActiveRestaurant(restaurant);
+          if (setUserMovedMap != undefined) {
+            setUserMovedMap(false);
+          }
+        },
+      }}
+    >
+      <Tooltip
+        direction="bottom"
+        offset={[-5, -10]}
+        opacity={1}
+        permanent
+        className={
+          "flex h-[26px] items-center justify-center border-none bg-trans font-mont-bd text-[15px] shadow-sm"
+        }
       >
-      <Tooltip direction="bottom" offset={[-5, -10]} opacity={1} permanent className={"flex items-center justify-center bg-trans shadow-sm h-[26px] font-mont-bd text-[15px] border-none"}> 
         {restaurant.name}
       </Tooltip>
-      </Marker>
+    </Marker>
   );
 };
 

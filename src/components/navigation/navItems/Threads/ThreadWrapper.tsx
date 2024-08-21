@@ -1,11 +1,7 @@
 import React from "react";
 
 const ThreadWrapper: React.FC = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  return <div></div>;
+};
 
-export default ThreadWrapper
+export default ThreadWrapper;

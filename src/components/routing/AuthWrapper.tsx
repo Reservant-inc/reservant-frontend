@@ -42,7 +42,7 @@ export const AuthWrapper = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         roles: data.roles,
-        userId: data.userId
+        userId: data.userId,
       }),
       { expires: 1 },
     );

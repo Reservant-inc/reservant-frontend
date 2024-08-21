@@ -1,11 +1,7 @@
 import React from "react";
 
 const CreateThread: React.FC = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  return <div></div>;
+};
 
-export default CreateThread
+export default CreateThread;

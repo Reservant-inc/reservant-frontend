@@ -8,12 +8,12 @@ import global_en from "./translations/en/global.json";
 import global_pl from "./translations/pl/global.json";
 import i18next from "i18next";
 import { I18nextProvider } from "react-i18next";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   typography: {
     allVariants: {
-      fontFamily: 'montserrat-md'
+      fontFamily: "montserrat-md",
     },
   },
 });

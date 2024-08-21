@@ -1,11 +1,11 @@
-import { FriendStatus, LocalType } from './enums';
+import { FriendStatus, LocalType } from "./enums";
 
 export type LoginResponseType = {
   token: string;
   firstName: string;
   lastName: string;
   roles: string[];
-  userId: string
+  userId: string;
 };
 
 export type RestaurantDetailsType = {
@@ -44,7 +44,7 @@ export type RestaurantType = {
   restaurantType: LocalType;
   address: string;
   city: string;
-  isVerified: boolean
+  isVerified: boolean;
 };
 
 export type RestaurantDataType = {
@@ -73,7 +73,7 @@ export type EmployeeType = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  employments: EmploymentType[]
+  employments: EmploymentType[];
 };
 
 export type EmployeeEmployedType = {
@@ -83,57 +83,57 @@ export type EmployeeEmployedType = {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  isBackdoorEmployee: string,
-  isHallEmployee: string,
-  dateFrom: string,
-  dateUntil: string,
-  employmentId: string
+  isBackdoorEmployee: string;
+  isHallEmployee: string;
+  dateFrom: string;
+  dateUntil: string;
+  employmentId: string;
 };
 
 export type EmploymentType = {
-  id: string,
-  restaurantId: string,
-  isBackdoorEmployee: string,
-  isHallEmployee: string,
-  restaurantName: string
-}
+  id: string;
+  restaurantId: string;
+  isBackdoorEmployee: string;
+  isHallEmployee: string;
+  restaurantName: string;
+};
 
 export type MessageType = {
-  messageId: number,
-  contents: string,
-  dateSent: string,
-  dateRead: string,
-  authorsFirstName: string,
-  authorsLastName: string,
-  messageThreadId: number
-}
+  messageId: number;
+  contents: string;
+  dateSent: string;
+  dateRead: string;
+  authorsFirstName: string;
+  authorsLastName: string;
+  messageThreadId: number;
+};
 
 export type ThreadType = {
-  title: string,
-  numberOfParticipants: number
-}
+  title: string;
+  numberOfParticipants: number;
+};
 
 export type ThreadDetailType = {
-  threadId: number,
-  title: string,
-  participants: UserType[]
-}
+  threadId: number;
+  title: string;
+  participants: UserType[];
+};
 
 export type PaginationType = {
-  page: number
-  totalPages: number,
-  perPage: number,
-  orderByOptions: string[],
-  items: ThreadType[] | MessageType[] | UserSearchType[] | UserType[]
-}
+  page: number;
+  totalPages: number;
+  perPage: number;
+  orderByOptions: string[];
+  items: ThreadType[] | MessageType[] | UserSearchType[] | UserType[];
+};
 
 export type UserType = {
-  userId: string,
-  firstName: string,
-  lastName: string,
-  photo: string
-}
+  userId: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+};
 
 export type UserSearchType = {
-  friendStatus: FriendStatus
-} & UserType
+  friendStatus: FriendStatus;
+} & UserType;

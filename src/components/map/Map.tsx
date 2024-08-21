@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
-import MarkerClusterGroup from 'react-leaflet-cluster'
+import MarkerClusterGroup from "react-leaflet-cluster";
 import { Map as LeafletMap, LatLngBounds } from "leaflet";
 
 interface MapProps {
@@ -19,9 +19,9 @@ const Map: React.FC<MapProps> = ({
   setActiveRestaurant,
   setBounds,
   setUserMovedMap,
-  userMovedMap
+  userMovedMap,
 }) => {
-  const mapRef = useRef<LeafletMap | null>(null); 
+  const mapRef = useRef<LeafletMap | null>(null);
   const previousBoundsRef = useRef<LatLngBounds | null>(null);
 
   const MapViewUpdater = () => {
@@ -43,9 +43,12 @@ const Map: React.FC<MapProps> = ({
       const onMoveEnd = () => {
         if (mapRef.current) {
           const bounds = mapRef.current.getBounds();
-          if (!previousBoundsRef.current || !previousBoundsRef.current.equals(bounds)) {
+          if (
+            !previousBoundsRef.current ||
+            !previousBoundsRef.current.equals(bounds)
+          ) {
             sendBounds();
-            setUserMovedMap(true)
+            setUserMovedMap(true);
             previousBoundsRef.current = bounds;
           }
         }

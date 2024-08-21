@@ -15,64 +15,61 @@ const initialValues = {
 };
 
 type restaurant = {
-  name: string,
-  restaurantID: string
-}
+  name: string;
+  restaurantID: string;
+};
 
-const RestaurantAddEmp = ({empid}:{empid: string}) => {
+const RestaurantAddEmp = ({ empid }: { empid: string }) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
   const [restaurants, setRestaurants] = useState<restaurant[]>([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const getRestaurants = async () => {
       try {
-  
-          const response = await fetchGET("/user/employees");
-          const tmp: EmploymentType[] = [];
-          
-          if (response.length)
-            for (const i in response) {
-              if(response[i].userId===empid)
-              for (const j in response[i].employments){
+        const response = await fetchGET("/user/employees");
+        const tmp: EmploymentType[] = [];
+
+        if (response.length)
+          for (const i in response) {
+            if (response[i].userId === empid)
+              for (const j in response[i].employments) {
                 tmp.push({
                   id: response[i].employments[j].employmentId,
                   restaurantName: response[i].employments[j].restaurantName,
                   restaurantId: response[i].employments[j].restaurantId,
-                  isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+                  isBackdoorEmployee:
+                    response[i].employments[j].isBackdoorEmployee,
                   isHallEmployee: response[i].employments[j].isHallEmployee,
-                })
+                });
               }
-            }
+          }
 
         const response1 = await fetchGET("/my-restaurants");
         let tmp1: restaurant[] = [];
-  
 
         for (const restaurant of response1) {
           tmp1.push({
-              restaurantID: restaurant.restaurantId,
-              name: restaurant.name
-            });
-      }
-
-      tmp1 = tmp1.filter((e)=>{
-        for(const i in tmp){
-          console.log(e.restaurantID === tmp[i].restaurantId)
-          if(e.restaurantID===tmp[i].restaurantId)
-            return false;
+            restaurantID: restaurant.restaurantId,
+            name: restaurant.name,
+          });
         }
+
+        tmp1 = tmp1.filter((e) => {
+          for (const i in tmp) {
+            console.log(e.restaurantID === tmp[i].restaurantId);
+            if (e.restaurantID === tmp[i].restaurantId) return false;
+          }
           return true;
-      });
-      console.log(tmp1)
-      setRestaurants(tmp1)
+        });
+        console.log(tmp1);
+        setRestaurants(tmp1);
       } catch (error) {
         console.error("Error fetching restaurants", error);
       }
-    }
+    };
     getRestaurants();
-  },[])
-
+  }, []);
 
   const handleSubmit = async (
     values: FormikValues,
@@ -81,18 +78,25 @@ const RestaurantAddEmp = ({empid}:{empid: string}) => {
     try {
       setSubmitting(true);
       // console.log(id)
-      const body = JSON.stringify([{
-        employeeId: empid,
-        isHallEmployee: values.isHallEmployee===""?false:values.isHallEmployee,
-        isBackdoorEmployee: values.isBackdoorEmployee===""?false:values.isBackdoorEmployee,
-      }]);
+      const body = JSON.stringify([
+        {
+          employeeId: empid,
+          isHallEmployee:
+            values.isHallEmployee === "" ? false : values.isHallEmployee,
+          isBackdoorEmployee:
+            values.isBackdoorEmployee === ""
+              ? false
+              : values.isBackdoorEmployee,
+        },
+      ]);
 
-      console.log(body)
+      console.log(body);
       // console.log("AAAAAAAA"+values.selectedRestaurant)
-      console.log(`/my-restaurants/${values.selectedRestaurant}/employees`)
-      await fetchPOST(`/my-restaurants/${values.selectedRestaurant}/employees`, body);
-
-
+      console.log(`/my-restaurants/${values.selectedRestaurant}/employees`);
+      await fetchPOST(
+        `/my-restaurants/${values.selectedRestaurant}/employees`,
+        body,
+      );
     } catch (error) {
       console.log(error);
     } finally {
@@ -100,10 +104,11 @@ const RestaurantAddEmp = ({empid}:{empid: string}) => {
     }
   };
 
- 
-
   return (
-    <div id="restaurantAddEmp-container-register" className="container-register">
+    <div
+      id="restaurantAddEmp-container-register"
+      className="container-register"
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={RestaurantAddEmployeeSchema}
@@ -114,12 +119,21 @@ const RestaurantAddEmp = ({empid}:{empid: string}) => {
             <Form>
               <div className="form-container">
                 <div className="form-control flex flex-col">
-                  <Field id="selectedRestaurant" default="Select a restaurant" name="selectedRestaurant" component="select">
-                    <option value="" id="addEmp-option-default">Select a restaurant</option>
-                    {
-                      restaurants.map((restaurant) => <option value={restaurant.restaurantID}> {restaurant.name} </option>)
-                    }
-                    
+                  <Field
+                    id="selectedRestaurant"
+                    default="Select a restaurant"
+                    name="selectedRestaurant"
+                    component="select"
+                  >
+                    <option value="" id="addEmp-option-default">
+                      Select a restaurant
+                    </option>
+                    {restaurants.map((restaurant) => (
+                      <option value={restaurant.restaurantID}>
+                        {" "}
+                        {restaurant.name}{" "}
+                      </option>
+                    ))}
                   </Field>
                   <span className="">
                     <Field

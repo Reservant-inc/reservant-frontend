@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { FetchError } from '../services/Errors';
+import { FetchError } from "../services/Errors";
 
 export const fetchGET = async (connString: string) => {
   const token = Cookies.get("token");
@@ -40,7 +40,7 @@ export const fetchPOST = async (connString: string, body?: any) => {
     fetchOptions.body = body;
   }
 
-  console.log(fetchOptions)
+  console.log(fetchOptions);
 
   const response = await fetch(
     `${process.env.REACT_APP_SERVER_IP}${connString}`,
@@ -78,8 +78,8 @@ export const fetchPUT = async (connString: string, body: string) => {
     },
   );
 
-  if(!(response.json.length > 0)){
-    return
+  if (!(response.json.length > 0)) {
+    return;
   }
 
   if (!response.ok) {
@@ -106,8 +106,8 @@ export const fetchDELETE = async (connString: string) => {
     },
   );
 
-  if(!(response.json.length > 0)){
-    return
+  if (!(response.json.length > 0)) {
+    return;
   }
 
   if (!response.ok) {

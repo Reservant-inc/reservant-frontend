@@ -8,12 +8,12 @@ export enum FriendStatus {
   Stranger = "Stranger",
   OutgoingRequest = "OutgoingRequest",
   IncomingRequest = "IncomingRequest",
-  Friend = "Friend"
+  Friend = "Friend",
 }
 
 export enum FriendActionStatus {
   Sent = "Sent",
   Undone = "Undone",
   Accepted = "Accepted",
-  Deleted = "Deleted"
+  Deleted = "Deleted",
 }

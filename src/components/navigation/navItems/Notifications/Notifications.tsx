@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
-import { Notifications as NotificationsIcon}  from "@mui/icons-material";
+import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../../services/APIconn";
 
@@ -8,9 +8,7 @@ interface NotificationsProps {
   isDark: boolean;
 }
 
-const Notifications: React.FC<NotificationsProps> = ({
-  isDark,
-}) => {
+const Notifications: React.FC<NotificationsProps> = ({ isDark }) => {
   const [isPressed, setIsPressed] = useState(false);
   const [hasNotifications, setHasNotifications] = useState(true);
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,7 +37,7 @@ const Notifications: React.FC<NotificationsProps> = ({
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
       <button
         id="NotificationsButton"
-        className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
+        className="relative flex h-[40px] w-[40px] items-center justify-center rounded-full bg-grey-1"
         onClick={pressHandler}
       >
         <NotificationsIcon className="h-[30px] w-[30px]" />
@@ -48,7 +46,7 @@ const Notifications: React.FC<NotificationsProps> = ({
         )}
       </button>
       {isPressed && (
-        <div className="nav-dropdown dark:bg-black w-[300px] h-[150px]">
+        <div className="nav-dropdown h-[150px] w-[300px] dark:bg-black">
           <NotificationList setHasNotifications={setHasNotifications} />
         </div>
       )}
