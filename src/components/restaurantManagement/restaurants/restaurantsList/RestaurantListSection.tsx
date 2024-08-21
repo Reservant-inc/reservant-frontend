@@ -122,7 +122,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
 
       const handleRowClick = (params: any) => {
         const rowData = params.row;
-        
+        console.log(rowData)
         setActiveSectionName(rowData.name)
         handleChangeActiveRestaurant(rowData.restaurantId) 
         };

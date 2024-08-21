@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import RestaurantReviewsFilters from "./RestaurantReviewsFilters";
 import RestaurantReview from "./RestaurantReview";
+import { RestaurantReviewProps } from "../../../../services/interfaces";
 
-const dummyReviews = [
+const dummyReviews:RestaurantReviewProps[]  = [
   {
     id: 1,
     score: 4,
@@ -29,7 +30,6 @@ const dummyReviews = [
     score: 5,
     date: "2024-05-12",
     description: "Excellent stay! The food was great.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -37,7 +37,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 5,
@@ -45,7 +44,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 6,
@@ -53,7 +51,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 7,
@@ -61,7 +58,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -69,7 +65,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -77,7 +72,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -85,7 +79,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -93,7 +86,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -101,7 +93,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -109,7 +100,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -117,7 +107,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -125,7 +114,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -133,7 +121,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -141,7 +128,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -149,7 +135,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
 ];
 
@@ -159,7 +144,7 @@ interface RestaurantReviewsListProps {
 
 const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview }) => {
   // downloaded from api when it's ready
-  const [reviews, setReviews] = useState(dummyReviews);
+  const [reviews, setReviews] = useState<RestaurantReviewProps[]>(dummyReviews);
   const [sort, setSort] = useState("");
   const [filterText, setFilterText] = useState("");
 
@@ -203,13 +188,13 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview
 
     return  <div className="flex gap-1">
               <div className="h-full w-1/2 flex flex-col gap-2">
-                  {column1.map((review) => (
-                    <RestaurantReview key={review.id} {...review} />
+                  {column1.map((review:RestaurantReviewProps) => (
+                    <RestaurantReview id={review.id} score={review.score} date={review.date} description={review.description} managerResponse={review.managerResponse} />
                   ))}
               </div>
               <div className="h-full w-1/2 flex flex-col gap-2">
-                  {column2.map((review) => (
-                    <RestaurantReview key={review.id} {...review} />
+                  {column2.map((review:RestaurantReviewProps) => (
+                    <RestaurantReview id={review.id} score={review.score} date={review.date} description={review.description} managerResponse={review.managerResponse} />
                   ))}
               </div>
             </div>
@@ -222,8 +207,8 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview
           <div className="overflow-y-auto scroll">
             {
               filteredAndSortedReviews.length > 0 ? (
-                filteredAndSortedReviews.map((review) => (
-                  <RestaurantReview key={review.id} {...review} />
+                filteredAndSortedReviews.map((review:RestaurantReviewProps) => (
+                  <RestaurantReview id={review.id} score={review.score} date={review.date} description={review.description} managerResponse={review.managerResponse} />
                 ))
               ) : (
                 <div className="mt-4 text-center">No matching reviews</div>

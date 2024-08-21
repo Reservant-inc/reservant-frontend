@@ -84,3 +84,16 @@ export interface MenuItem {
   alcoholPercentage?: number;
   photo?: string;
 }
+
+export interface RestaurantReviewProps {
+  id: number,
+  score: number,
+  date: string,
+  description: string,
+  managerResponse?: ManagerResponseProps;
+}
+
+export interface ManagerResponseProps {
+  date: string,
+  description: string;
+}
