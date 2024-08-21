@@ -23,7 +23,7 @@ export const fetchGET = async (connString: string) => {
   return data;
 };
 
-export const fetchPOST = async (connString: string, body?: string) => {
+export const fetchPOST = async (connString: string, body?: any) => {
   const token = Cookies.get("token");
 
   const fetchOptions: RequestInit = {
@@ -39,6 +39,8 @@ export const fetchPOST = async (connString: string, body?: string) => {
   if (body) {
     fetchOptions.body = body;
   }
+
+  console.log(fetchOptions)
 
   const response = await fetch(
     `${process.env.REACT_APP_SERVER_IP}${connString}`,

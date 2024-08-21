@@ -12,6 +12,12 @@ body {
   --speed: 500ms;
 }
 
+/* infiniteScroll fix */
+
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+}
+
 /* login and register page bg gradient */
 
 .login-gradient{

@@ -48,7 +48,7 @@ const Notifications: React.FC<NotificationsProps> = ({
         )}
       </button>
       {isPressed && (
-        <div className="nav-dropdown dark:bg-black w-[300px]">
+        <div className="nav-dropdown dark:bg-black w-[300px] h-[150px]">
           <NotificationList setHasNotifications={setHasNotifications} />
         </div>
       )}
