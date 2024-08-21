@@ -3,10 +3,15 @@ import "dotenv/config";
 import { useTranslation } from "react-i18next";
 import Popup from "../../../reusableComponents/Popup";
 import { GroupType, RestaurantType } from "../../../../services/types";
-import { MyGroupsProps } from "../../../../services/interfaces";
 import { fetchGET } from "../../../../services/APIconn";
 import { List, ListSubheader } from "@mui/material";
 import Group from "./Group";
+
+interface MyGroupsProps {
+  handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
+  setActiveSectionName: (sectionName: string) => void;
+  filter: string;
+}
 
 const MyGroups: React.FC<MyGroupsProps> = ({
   setActiveSectionName,

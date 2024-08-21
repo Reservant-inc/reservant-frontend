@@ -1,5 +1,10 @@
-import React, { useRef, useEffect } from "react";
-import { OutsideClickHandlerProps } from "../../services/interfaces";
+import React, { useRef, useEffect, ReactNode } from "react";
+
+export interface OutsideClickHandlerProps {
+  onOutsideClick: () => void;
+  isPressed: boolean;
+  children: ReactNode;
+}
 
 const OutsideClickHandler: React.FC<OutsideClickHandlerProps> = ({
   children,
