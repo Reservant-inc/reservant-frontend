@@ -135,7 +135,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
                   rows[parseInt(id.toString())].name
                 }
                 className="textPrimary"
-                onClick = {handleDetails(id)}
+                onClick = {() => handleDetails(id)}
                   
                 
                 color="inherit"
