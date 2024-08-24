@@ -14,10 +14,9 @@ import {
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
-import { MenuItem } from "../../../../services/interfaces";
+import { MenuItemWithDescriptionType } from "../../../../services/types";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "../../../map/CustomMarker";
-import { RestaurantType } from "../../../../services/types";
 
 const TABS = {
   MENU: "menu",
@@ -26,7 +25,7 @@ const TABS = {
 };
 
 interface RestaurantDetailsProps {
-  addToCart: (item: MenuItem) => void;
+  addToCart: (item: MenuItemWithDescriptionType) => void;
   restaurantId: string | undefined;
 }
 

@@ -12,6 +12,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { RequestType } from "../../../../services/types";
 
 interface NotificationListProps {
   setHasNotifications: (hasNotifications: boolean) => void;
@@ -20,7 +21,7 @@ interface NotificationListProps {
 const NotificationList: React.FC<NotificationListProps> = ({
   setHasNotifications,
 }) => {
-  const [friendRequests, setFriendRequests] = useState<any[]>([]); //reqestType
+  const [friendRequests, setFriendRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
           ) : (
             friendRequests.map((request) => (
               <ListItem
-                key={request.senderId}
+                key={request.otherUser.userId}
                 button
                 style={{ marginBottom: "16px" }}
               >
@@ -102,7 +103,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                   <Typography variant="subtitle2" color="textSecondary">
                     Zaproszenie do znajomych od
                   </Typography>
-                  <ListItemText primary={request.senderName} />
+                  <ListItemText primary={request.otherUser.firstName} />
                   <Typography variant="body2" color="textSecondary">
                     Wysłano {new Date(request.dateSent).toLocaleDateString()}
                   </Typography>
@@ -110,7 +111,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                     <Button
                       variant="contained"
                       className="bg-primary"
-                      onClick={() => handleAction(request.senderId, "accept")}
+                      onClick={() => handleAction(request.otherUser.userId, "accept")}
                     >
                       Akceptuj
                     </Button>
@@ -120,7 +121,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                         backgroundColor: "#e0e0e0",
                         color: "#333",
                       }}
-                      onClick={() => handleAction(request.senderId, "reject")}
+                      onClick={() => handleAction(request.otherUser.userId, "reject")}
                     >
                       Odrzuć
                     </Button>

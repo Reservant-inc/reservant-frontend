@@ -12,30 +12,20 @@ import {
 import { fetchGET, fetchPOST, fetchDELETE } from "../../../../services/APIconn";
 import SendFriendRequest from "./SendFriendRequest";
 import SearchIcon from '@mui/icons-material/Search';
+import { FriendType, RequestType } from "../../../../services/types";
 
 interface FriendSearchBarProps {}
 
-type UserType = {
-  userId: string,
-  firstName: string,
-  lastName: string,
-  photo: string
-};
 
-type FriendType = {
-  dateSent: Date,
-  dateRead: Date,
-  dateAccepted: Date,
-  otherUser: UserType
-};
+
 
 const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<any[]>([]); //reqestType
+  const [searchResults, setSearchResults] = useState<any[]>([]); //nie umiem stworzyć typu
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [outgoingRequests, setOutgoingRequests] = useState<any[]>([]); //reqestType
-  const [friends, setFriends] = useState<any[]>([]);  //FriendType nie działa
-  const [incomingRequests, setIncomingRequests] = useState<any[]>([]); //reqestType
+  const [outgoingRequests, setOutgoingRequests] = useState<RequestType[]>([]); 
+  const [friends, setFriends] = useState<FriendType[]>([]);  
+  const [incomingRequests, setIncomingRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [userId, setUserId] = useState<string>("");
 
@@ -158,16 +148,16 @@ const FriendSearchBar: React.FC<FriendSearchBarProps> = () => {
   }, []);
 
   const isRequestSent = (userId: string) => {
-    return outgoingRequests.find((request) => request.receiverId === userId);
+    return outgoingRequests.find((request) => request.otherUser.userId === userId);
   };
 
   const isRequestReceived = (userId: string) => {
-    return incomingRequests.find((request) => request.senderId === userId);
+    return incomingRequests.find((request) => request.otherUser.userId === userId);
   };
 
   const isFriend = (userId: string) => {
     return friends.find(
-      (friend) => friend.senderId === userId || friend.receiverId === userId,
+      (friend) => friend.userId === userId,
     );
   };
 

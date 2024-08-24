@@ -3,22 +3,14 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, s
 import { useTranslation } from "react-i18next";
 import { fetchFilesPOST } from "../../../services/APIconn";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
-interface MenuItemData {
-    menuItemId: number;
-    name: string;
-    alternateName: string;
-    price: number;
-    alcoholPercentage: number;
-    photo: string;
-}
+import { MenuItemType } from "../../../services/types";
 
 interface MenuItemDialogProps {
     open: boolean;
     onClose: () => void;
     onSave: (values: { [key: string]: string }) => void;
     menuType: string;
-    editedMenuItem?: MenuItemData | null;
+    editedMenuItem?: MenuItemType | null;
 }
 
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({ open, onClose, onSave, menuType, editedMenuItem = null }) => {

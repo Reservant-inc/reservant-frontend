@@ -8,13 +8,14 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import { RequestType, FriendType } from "../../../../services/types";
 
 interface SendFriendRequestProps {
   user: {
     senderId: string;
     senderName: string;
   };
-  request: any; //potrzebny typ reqest ale nie wiem co on ma zawierać
+  request?: RequestType; //potrzebny typ reqest ale nie wiem co on ma zawierać
   isFriend: any;
   isRequestReceived: any;
   handleInvite: (userId: string) => void;

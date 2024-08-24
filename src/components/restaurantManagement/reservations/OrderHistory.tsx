@@ -20,6 +20,7 @@ import {
   Save as SaveIcon,
   Close as CancelIcon
 } from "@mui/icons-material";
+import { MenuIteminOrderType } from "../../../services/types";
 
 interface OrderHistoryProps {
   activeRestaurantId: number | null;
@@ -34,12 +35,6 @@ interface OrderRowProps {
   onDelete: () => void;
 }
 
-interface MenuItem {
-  name: string;
-  amount: number;
-  price: number;
-  status: string;
-}
 
 const OrderRow: React.FC<OrderRowProps> = ({
   row,
@@ -121,7 +116,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {row.menuItems.map((menuItem: MenuItem, index: number) => (
+                      {row.menuItems.map((menuItem: MenuIteminOrderType, index: number) => (
                         <TableRow key={index}>
                           <TableCell>{menuItem.name}</TableCell>
                           <TableCell>{menuItem.amount}</TableCell>

@@ -8,8 +8,6 @@ interface ConfirmationDialogProps {
   confirmationText: string; 
 }
 
-
-
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ open, onClose, onConfirm, confirmationText }) => {
 
   const handleConfirm = () => {

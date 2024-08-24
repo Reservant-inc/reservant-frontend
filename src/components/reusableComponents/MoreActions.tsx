@@ -1,15 +1,10 @@
 import React from 'react';
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-interface Action {
-  icon: React.ReactNode;
-  name: string;
-  onClick: () => void;
-}
+import { ActionType } from '../../services/types';
 
 interface MoreActionsProps {
-  actions: Action[];
+  actions: ActionType[];
 }
 
 const MoreActions: React.FC<MoreActionsProps> = ({ actions }) => {

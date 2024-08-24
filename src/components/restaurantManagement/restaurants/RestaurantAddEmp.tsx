@@ -6,6 +6,7 @@ import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import ErrorMes from "../../reusableComponents/ErrorMessage";
 import { EmploymentType } from "../../../services/types";
+import { RestaurantShortType } from "../../../services/types";
 
 const initialValues = {
   selectedRestaurant: "",
@@ -13,15 +14,11 @@ const initialValues = {
   isHallEmployee: "",
 };
 
-type Restaurant = {
-  name: string,
-  restaurantID: string
-}
 
 const RestaurantAddEmp = ({empid}:{empid: string}) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [restaurants, setRestaurants] = useState<RestaurantShortType[]>([]);
 
   useEffect(()=>{
     const getRestaurants = async () => {
@@ -45,20 +42,20 @@ const RestaurantAddEmp = ({empid}:{empid: string}) => {
             }
 
         const response1 = await fetchGET("/my-restaurants");
-        let tmp1: Restaurant[] = [];
+        let tmp1: RestaurantShortType[] = [];
   
 
         for (const restaurant of response1) {
           tmp1.push({
-              restaurantID: restaurant.restaurantId,
+              restaurantId: restaurant.restaurantId,
               name: restaurant.name
             });
       }
 
       tmp1 = tmp1.filter((e)=>{
         for(const i in tmp){
-          console.log(e.restaurantID === tmp[i].restaurantId)
-          if(e.restaurantID===tmp[i].restaurantId)
+          console.log(e.restaurantId === tmp[i].restaurantId)
+          if(e.restaurantId===tmp[i].restaurantId)
             return false;
         }
           return true;
@@ -116,7 +113,7 @@ const RestaurantAddEmp = ({empid}:{empid: string}) => {
                   <Field id="selectedRestaurant" default="Select a restaurant" name="selectedRestaurant" component="select">
                     <option value="" id="addEmp-option-default">Select a restaurant</option>
                     {
-                      restaurants.map((restaurant) => <option value={restaurant.restaurantID}> {restaurant.name} </option>)
+                      restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
                     }
                     
                   </Field>

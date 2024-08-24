@@ -15,39 +15,21 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { Box, Button, IconButton, InputAdornment, Menu, MenuItem as MyMenuItem, TextField } from "@mui/material";
 import FilterMenu from "./FilterMenu";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
+import { MenuItemType, MenuType } from "../../../services/types";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
-}
-
-interface Menu {
-    menuId: number;
-    name: string;
-    alternateName: string
-    menuType: string;
-    dateFrom: string;
-    dateUntil: string | null;
-    menuItems: MenuItemData[];
-}
-
-interface MenuItemData {
-    menuItemId: number;
-    name: string;
-    alternateName: string;
-    price: number;
-    alcoholPercentage: number;
-    photo: string;
 }
 
 const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) => {
     const { t } = useTranslation("global");
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-    const [menus, setMenus] = useState<Menu[]>([]);
+    const [menus, setMenus] = useState<MenuType[]>([]);
     const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{ [key: number]: string[] }>({});
     const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null);
-    const [editMenu, setEditMenu] = useState<Menu | null>(null);
-    const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(null);
+    const [editMenu, setEditMenu] = useState<MenuType | null>(null);
+    const [editedMenuItem, setEditedMenuItem] = useState<MenuItemType | null>(null);
     const [isMenuPopupOpen, setIsMenuPopupOpen] = useState<boolean>(false);
     const [isEditMenuPopupOpen, setIsEditMenuPopupOpen] = useState<boolean>(false);
     const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState<boolean>(false);
@@ -95,9 +77,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const fetchMenus = async (restaurantId: number): Promise<Menu[]> => {
+    const fetchMenus = async (restaurantId: number): Promise<MenuType[]> => {
         try {
-            const menusData: Menu[] = await fetchGET(`/my-restaurants/${restaurantId}/menus`);
+            const menusData: MenuType[] = await fetchGET(`/my-restaurants/${restaurantId}/menus`);
             console.log("Menus data:", menusData);
             const validatedMenusData = menusData.map(menu => ({
                 ...menu,
@@ -214,7 +196,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const handleEditMenuItem = (menuItem: MenuItemData) => {
+    const handleEditMenuItem = (menuItem: MenuItemType) => {
         setEditedMenuItem(menuItem);
         setIsMenuItemEditPopupOpen(true);
     };
@@ -243,7 +225,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         }
     };
 
-    const handleDeleteMenuItem = async (menuItem: MenuItemData) => {
+    const handleDeleteMenuItem = async (menuItem: MenuItemType) => {
         try {
             const { menuItemId } = menuItem;
             const response = await fetchDELETE(`/menu-items/${menuItemId}`);
@@ -288,13 +270,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         { icon: <DeleteIcon />, name: 'Delete menu', onClick:() => setOpenConfirmation(true) }
     ];
 
-    const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
+    const filteredMenuItems = selectedMenuIndex !== null ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemType) => {
         const nameMatch = menuItem.name.toLowerCase().includes(searchText.toLowerCase());
         const priceMatch = menuItem.price.toString().toLowerCase().includes(searchText.toLowerCase());
         return nameMatch || priceMatch;
     }) : [];
 
-    const sortMenuItems = (sortFunction: (a: MenuItemData, b: MenuItemData) => number) => {
+    const sortMenuItems = (sortFunction: (a: MenuItemType, b: MenuItemType) => number) => {
         if (selectedMenuIndex !== null) {
             const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(sortFunction);
             setMenus(prevMenus => {
@@ -310,23 +292,23 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     };
     
     const handleSortAlphabetically = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.name.localeCompare(b.name));
+        sortMenuItems((a: MenuItemType, b: MenuItemType) => a.name.localeCompare(b.name));
     };
     
     const handleSortPriceAsc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => a.price - b.price);
+        sortMenuItems((a: MenuItemType, b: MenuItemType) => a.price - b.price);
     };
     
     const handleSortPriceDesc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => b.price - a.price);
+        sortMenuItems((a: MenuItemType, b: MenuItemType) => b.price - a.price);
     };
     
     const handleSortAlcoholAsc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0));
+        sortMenuItems((a: MenuItemType, b: MenuItemType) => (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0));
     };
     
     const handleSortAlcoholDesc = () => {
-        sortMenuItems((a: MenuItemData, b: MenuItemData) => (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0));
+        sortMenuItems((a: MenuItemType, b: MenuItemType) => (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0));
     };
 
     const handleClearFilters = () => {
@@ -410,7 +392,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
             <div className="flex flex-wrap m-1">
                 {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
                     <>
-                        {filteredMenuItems.map((menuItem: MenuItemData) => (
+                        {filteredMenuItems.map((menuItem: MenuItemType) => (
                             <MenuItem
                                 key={menuItem.menuItemId}
                                 name={menuItem.name}
