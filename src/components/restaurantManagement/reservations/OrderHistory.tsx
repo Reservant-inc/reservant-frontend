@@ -204,7 +204,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer>
       <Table>
         <TableHead>
           <TableRow>

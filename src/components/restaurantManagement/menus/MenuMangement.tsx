@@ -319,11 +319,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
         <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
             <div>
                 {selectedMenuIndex === null && (
-                <div className="flex justify-start">
-                    <IconButton onClick= {() => setIsMenuPopupOpen(true)} >
-                        <AddIcon className="text-secondary-2"/>
-                        <span className="ml-1 text-black dark:text-white">ADD MENU</span>
-                    </IconButton>
+                <div className="h-[3rem] w-full z-1 flex items-center">
+                    <button 
+                    onClick= {() => setIsMenuPopupOpen(true)} 
+                    id="RestaurantListAddMenuButton"
+                    className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2">
+                        <AddIcon />
+                        <h1 className="text-lg font-mont-md">Add menu</h1>
+                    </button>
                 </div>
                  )}
                  <div className="float-end">

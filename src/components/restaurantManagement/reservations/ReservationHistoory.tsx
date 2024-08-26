@@ -159,7 +159,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId })
   ];
 
   return (
-    <div className="h-full w-full bg-white rounded-lg shadow-md">
+    <div className="h-full w-full bg-white rounded-lg">
       <DataGrid
         rows={rows}
         columns={columns}
