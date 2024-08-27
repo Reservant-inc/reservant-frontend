@@ -124,7 +124,7 @@ export default function HomePage() {
       {isMenuOpen ? (
         <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] h-[calc(100%-1rem)] w-[300px] overflow-hidden rounded-lg bg-white shadow-2xl">
           <div className="scroll h-full overflow-y-auto">
-            <div className="custom-transition flex h-14 w-full items-center justify-between px-2">
+            <div className="flex h-14 w-full items-center justify-between px-3">
               <h1 className="font-mont-bd text-xl">Restaurants near you</h1>
               <Button
                 className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 text-black text-black`}
@@ -133,7 +133,7 @@ export default function HomePage() {
                 <KeyboardBackspaceIcon className="h-5 w-5" />
               </Button>
             </div>
-            <div className="px-3 py-2">
+            <div className="px-3 py-3">
               <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-1 font-mont-md">
                 <input
                   type="text"
@@ -154,8 +154,7 @@ export default function HomePage() {
             </div>
             <List
               id="homePage-restaurantList"
-              className="w-full p-0 font-mont-md dark:bg-black"
-              component="nav"
+              className="w-full p-0 px-2 font-mont-md dark:bg-black"
             >
               {restaurants.map((restaurant, index) => (
                 <div key={index}>
@@ -165,13 +164,14 @@ export default function HomePage() {
                       setUserMovedMap(false);
                       setActiveRestaurant(restaurant);
                     }}
-                    className={
-                      activeRestaurant === restaurant
+                    className={`rounded-md p-3 
+                      ${activeRestaurant === restaurant
                         ? "bg-grey-1"
-                        : "bg-white hover:bg-grey-1"
+                        : "bg-white hover:bg-grey-1"}
+                        `
                     }
                   >
-                    <div className="flex w-full items-start justify-between py-3">
+                    <div className="flex w-full items-start justify-between py-2">
                       <div className="flex flex-col gap-1">
                         <h1 className="text-md font-mont-md">
                           {restaurant.name}
@@ -213,7 +213,6 @@ export default function HomePage() {
                       />
                     </div>
                   </ListItemButton>
-                  <div className="h-[1px] w-full bg-grey-1"></div>
                 </div>
               ))}
             </List>

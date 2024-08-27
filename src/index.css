@@ -46,19 +46,6 @@ body {
   transition: height var(--speed) ease, width var(--speed) ease;
 }
 
-.fade-in {
-  animation: fade-in 1s;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 100;
-  }
-}
-
 /* tool section animate */
 
 .nav-dropdown{
@@ -142,6 +129,10 @@ body {
   }
 
 /* leaflet custom css */
+
+.leaflet-control-attribution {
+  display: none;
+}
 
 .leaflet-tooltip-bottom:before {
   border-bottom-color: transparent !important
