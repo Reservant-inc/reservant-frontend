@@ -1,7 +1,11 @@
 import React from "react";
 
 const Thread: React.FC = () => {
-  return <div></div>;
+  return (
+    <div className="">
+
+    </div>
+  )
 };
 
 export default Thread;

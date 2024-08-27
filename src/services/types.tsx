@@ -109,11 +109,6 @@ export type MessageType = {
 };
 
 export type ThreadType = {
-  title: string;
-  numberOfParticipants: number;
-};
-
-export type ThreadDetailType = {
   threadId: number;
   title: string;
   participants: UserType[];

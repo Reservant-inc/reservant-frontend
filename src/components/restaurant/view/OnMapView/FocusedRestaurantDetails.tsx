@@ -20,6 +20,7 @@ import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import DefaultPic from "../../../../assets/images/no-image.png"
 
 const TABS = {
   MENU: "menu",
@@ -84,11 +85,11 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               {restaurant.photos.map((photo: string, index: number) => (
                 <ImageListItem
                   key={index}
-                  onClick={() => setSelectedImage(getImage(photo as string))}
+                  onClick={() => setSelectedImage(getImage(photo as string, DefaultPic))}
                 >
                   <img
-                    src={`${getImage(photo as string)}?w=248&fit=crop&auto=format`}
-                    srcSet={`${getImage(photo as string)}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${getImage(photo as string, DefaultPic)}?w=248&fit=crop&auto=format`}
+                    srcSet={`${getImage(photo as string, DefaultPic)}?w=248&fit=crop&auto=format&dpr=2 2x`}
                     alt={`Gallery photo ${index + 1}`}
                     loading="lazy"
                     style={{ borderRadius: "8px", cursor: "pointer" }}
@@ -165,7 +166,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             </IconButton>
             <Box
               component="img"
-              src={getImage(restaurant.logo as string)}
+              src={getImage(restaurant.logo as string, DefaultPic)}
               alt="Restaurant"
               className="h-50 w-full object-cover"
             />

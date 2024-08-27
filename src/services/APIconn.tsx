@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { FetchError } from "../services/Errors";
+import DefaultUser from "../assets/images/user.jpg"
 
 export const fetchGET = async (connString: string) => {
   const token = Cookies.get("token");
@@ -15,7 +16,7 @@ export const fetchGET = async (connString: string) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData);
+    throw new FetchError("" , errorData.status, errorData.errors);
   }
 
   const data = await response.json();
@@ -49,8 +50,7 @@ export const fetchPOST = async (connString: string, body?: any) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
-    throw new FetchError(errorData.title, errorData.status);
+    throw new FetchError("" , errorData.status, errorData.errors);
   }
 
   const text = await response.text();
@@ -84,7 +84,6 @@ export const fetchPUT = async (connString: string, body: string) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
     throw new Error(errorData);
   }
 
@@ -112,8 +111,7 @@ export const fetchDELETE = async (connString: string) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData.title);
-    throw new FetchError(errorData.title, errorData.status);
+    throw new FetchError("" , errorData.status, errorData.errors);
   }
 
   const data = await response.json();
@@ -140,7 +138,6 @@ export const fetchFilesPOST = async (connString: string, file: File) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
     throw new Error(errorData);
   }
 
@@ -149,6 +146,11 @@ export const fetchFilesPOST = async (connString: string, file: File) => {
   return data;
 };
 
-export const getImage = (path: string) => {
+export const getImage = (path: string, defaultImagePath: string) => {
+
+  if (!path) {
+    return defaultImagePath;
+  }
+
   return `${process.env.REACT_APP_SERVER_IP}${path}`;
 };

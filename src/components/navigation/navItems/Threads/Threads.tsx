@@ -64,16 +64,17 @@ const Threads: React.FC = () => {
     else setFriends([]);
   };
 
+  const getThreads = async () => {
+    try {
+      setIsLoadingThreads(true);
+      const result: PaginationType = await fetchGET("/user/threads");
+      if (result.items.length > 0) setThreads(result.items as ThreadType[]);
+    } finally {
+      setIsLoadingThreads(false);
+    }
+  };
+
   useEffect(() => {
-    const getThreads = async () => {
-      try {
-        setIsLoadingThreads(true);
-        const result: PaginationType = await fetchGET("/user/threads");
-        if (result.items.length > 0) setThreads(result.items as ThreadType[]);
-      } finally {
-        setIsLoadingThreads(false);
-      }
-    };
     getThreads();
   }, []);
 
@@ -100,6 +101,7 @@ const Threads: React.FC = () => {
       console.log(error);
     } finally {
       toggleCreatingThread();
+      getThreads()
     }
   };
 
@@ -134,9 +136,9 @@ const Threads: React.FC = () => {
 
     return (
       <List className="h-full w-full">
-        {threads.map((thread) => (
-          <ListItemButton className="w-full rounded-md">
-            {/* <ThreadPreview thread={thread}/> */}
+        {threads.map((thread, index) => (
+          <ListItemButton key={index} className="w-full rounded-md p-2">
+            { <ThreadPreview thread={thread}/> }
           </ListItemButton>
         ))}
       </List>
@@ -263,7 +265,7 @@ const Threads: React.FC = () => {
             </Button>
           </div>
           {isCreatingThread && renderNewThreadForm()}
-          <div className="w-full px-3 py-2">
+          <div className="w-full px-3 py-1">
             <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-2 font-mont-md">
               <input
                 type="text"

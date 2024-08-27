@@ -14,9 +14,9 @@ import FocusedRestaurantDetails from "./restaurant/view/OnMapView/FocusedRestaur
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { fetchGET, getImage } from "../services/APIconn";
 import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
-import { RestaurantType } from "../services/types";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { FetchError } from "../services/Errors";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
@@ -83,8 +83,13 @@ export default function HomePage() {
           );
           return newIds;
         });
+
       } catch (error) {
-        console.error("Error getting restaurants", error);
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error:", error);
+        }
       }
     };
     getRestaurants();
@@ -202,7 +207,7 @@ export default function HomePage() {
                         </div>
                       </div>
                       <img
-                        src={getImage(restaurant.logo)}
+                        src={getImage(restaurant.logo, "")}
                         alt="logo"
                         className="h-24 w-24 rounded-lg"
                       />

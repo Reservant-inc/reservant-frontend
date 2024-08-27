@@ -35,7 +35,8 @@ const Login: React.FC = () => {
       login(response);
     } catch (error) {
       if (error instanceof FetchError) {
-        setLoginError(error.message);
+       
+        setLoginError("");
       } else {
         console.log("Unexpected error:", error);
       }

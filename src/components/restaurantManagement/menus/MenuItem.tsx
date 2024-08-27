@@ -7,6 +7,7 @@ import DefaultDrinkItem from "../../../assets/images/defaultDrinkItemImage.png";
 import { useTranslation } from "react-i18next";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { getImage } from "../../../services/APIconn";
+import DefaultPic from "../../../assets/images/no-image.png"
 
 interface MenuItemProps {
   name: string;
@@ -53,7 +54,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
     <Card className="m-1 w-64 rounded-lg dark:bg-grey-4 dark:text-grey-1">
       <CardContent className="flex flex-col">
         <img
-          src={getImage(imagePath)}
+          src={getImage(imagePath, DefaultPic)}
           alt="MenuItemImage"
           className="mb-2 h-36 w-full rounded-lg"
         />
