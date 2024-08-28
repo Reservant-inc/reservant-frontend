@@ -15,6 +15,9 @@ import DefaultPhoto from "../../../../assets/images/user.jpg";
 import ThreadPreview from "./ThreadPreview";
 import SearchIcon from "@mui/icons-material/Search";
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
+import Thread from "./Thread";
+import { FetchError } from "../../../../services/Errors";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
@@ -28,6 +31,9 @@ const Threads: React.FC = () => {
   const [friends, setFriends] = useState<UserType[]>([]);
   const [activeThreads, setActiveThreads] = useState<ThreadType[]>([])
   const [inactiveThreads, setInactiveThreads] = useState<ThreadType[]>([])
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+
 
   const clearStates = () => {
     setFriendSearchQuery("");
@@ -39,7 +45,11 @@ const Threads: React.FC = () => {
     if (isPressed) {
       setIsCreatingThread(false);
       clearStates();
+    } else {
+      setHasMore(true)
+      setPage(0)
     }
+
     setIsPressed(!isPressed);
   };
 
@@ -57,6 +67,12 @@ const Threads: React.FC = () => {
       );
 
       setFriends(filteredResult);
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error:", error);
+      }
     } finally {
       setIsLoadingFriends(false);
     }
@@ -70,13 +86,33 @@ const Threads: React.FC = () => {
 
   const getThreads = async () => {
     try {
-      setIsLoadingThreads(true);
-      const result: PaginationType = await fetchGET("/user/threads");
-      if (result.items.length > 0) setThreads(result.items as ThreadType[]);
+
+      if (page === 0) setIsLoadingThreads(true);
+
+      const result: PaginationType = await fetchGET(`/user/threads?page=${page}`);
+      const newThreads = result.items as ThreadType[]
+        
+      if (newThreads.length < 10) setHasMore(false);
+        
+      if (page > 0) 
+        setThreads((prevThreads) => [...prevThreads, ...newThreads]);
+      else 
+        setThreads(newThreads);
+
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error:", error);
+      }
     } finally {
       setIsLoadingThreads(false);
     }
   };
+
+  useEffect(() => {
+    getThreads()
+  }, [page]);
 
   useEffect(() => {
     getThreads();
@@ -102,7 +138,11 @@ const Threads: React.FC = () => {
 
       fetchPOST("/threads", JSON.stringify(values));
     } catch (error) {
-      console.log(error);
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error:", error);
+      }
     } finally {
       toggleCreatingThread();
       getThreads()
@@ -119,9 +159,8 @@ const Threads: React.FC = () => {
   };
 
   const handleThreadOpen = (thread: ThreadType) => {
-
-    setIsPressed(false)
-
+    setIsPressed(false);
+  
     const isActive = activeThreads.some(
       (activeThread) => activeThread.threadId === thread.threadId
     );
@@ -132,12 +171,16 @@ const Threads: React.FC = () => {
       (inactiveThread) => inactiveThread.threadId === thread.threadId
     );
   
-    if (isInactive) 
+    if (isInactive) {
       handleThreadMaximize(thread);
-    else 
+    } else {
+      if (activeThreads.length >= 2) {
+        handleThreadMinimize(activeThreads[0]);
+      }
       setActiveThreads((prevThreads) => [...prevThreads, thread]);
-    
+    }
   };
+  
 
   const handleThreadClose = (thread: ThreadType) => {
 
@@ -153,14 +196,16 @@ const Threads: React.FC = () => {
       setInactiveThreads((prevThreads) =>
         prevThreads.filter((inactiveThread) => inactiveThread.threadId !== thread.threadId)
       );
-    
   };
 
   const handleThreadMinimize = (thread: ThreadType) => {
-
     setActiveThreads((prevThreads) =>
       prevThreads.filter((activeThread) => activeThread.threadId !== thread.threadId)
     );
+  
+    if (inactiveThreads.length >= 5) {
+      handleThreadClose(inactiveThreads[0]);
+    }
   
     setInactiveThreads((prevThreads) => [...prevThreads, thread]);
   };
@@ -170,9 +215,28 @@ const Threads: React.FC = () => {
     setInactiveThreads((prevThreads) =>
       prevThreads.filter((inactiveThread) => inactiveThread.threadId !== thread.threadId)
     );
-
+  
+    if (activeThreads.length >= 2) {
+      const earliestActiveThread = activeThreads[0];
+  
+      setActiveThreads((prevThreads) =>
+        prevThreads.filter((_, index) => index !== 0)
+      );
+  
+      setInactiveThreads((prevThreads) => {
+        const updatedInactiveThreads = [...prevThreads, earliestActiveThread];
+  
+        if (updatedInactiveThreads.length > 5) {
+          return updatedInactiveThreads.slice(1);
+        }
+  
+        return updatedInactiveThreads;
+      });
+    }
+  
     setActiveThreads((prevThreads) => [...prevThreads, thread]);
   };
+  
 
   const renderUserPhotos = (thread: ThreadType) => {
       return(
@@ -217,11 +281,20 @@ const Threads: React.FC = () => {
 
     return (
       <List className="h-full w-full p-0">
-        {threads.map((thread, index) => (
-          <ListItemButton key={index} className="w-full rounded-md p-2" onClick={() => handleThreadOpen(thread)}>
-            { <ThreadPreview thread={thread} renderUserPhotos={renderUserPhotos}/> }
-          </ListItemButton>
-        ))}
+        <InfiniteScroll
+          dataLength={threads.length}
+          next={() => setPage((prevPage) => prevPage + 1)}
+          hasMore={hasMore}
+          loader={<CircularProgress />}
+          scrollableTarget="scrollableDiv"
+          className="hidescroll px-2"
+        >
+          {threads.map((thread, index) => (
+            <ListItemButton key={index} className="w-full rounded-md p-2" onClick={() => handleThreadOpen(thread)}>
+              { <ThreadPreview thread={thread} renderUserPhotos={renderUserPhotos}/> }
+            </ListItemButton>
+          ))}
+        </InfiniteScroll>
       </List>
     );
   };
@@ -357,7 +430,7 @@ const Threads: React.FC = () => {
                   <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer" />
                 </div>
               </div>
-              <div className="flex h-full w-full items-center justify-center px-2">
+              <div id='scrollableDiv' className="flex h-full w-full items-center justify-center px-2 scroll overflow-y-auto">
                 {renderThreadsContent()}
               </div>
             </div>
@@ -371,7 +444,7 @@ const Threads: React.FC = () => {
               {
                 activeThreads.map((activeThread, index) => (
                   <div key={index} className="w-[300px] h-full bg-white rounded-t-md shadow-2xl flex flex-col">
-                    <div className="w-full h-12 flex items-center justify-between px-2 shadow-md">
+                    <div className="w-full h-12 flex items-center justify-between px-2 shadow-md z-[1]">
                       <div className="flex gap-2 items-center">
                         {
                           activeThread.participants.length > 1 ? (
@@ -402,6 +475,7 @@ const Threads: React.FC = () => {
                         </IconButton>
                       </div>
                     </div>
+                    <Thread thread={activeThread}/>
                   </div>  
                 ))
               }

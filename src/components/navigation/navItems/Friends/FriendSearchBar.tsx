@@ -11,6 +11,7 @@ import {
 import { PaginationType, UserSearchType } from "../../../../services/types";
 import SearchedUser from "./SearchedUser";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { FetchError } from "../../../../services/Errors";
 
 const FriendSearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -28,14 +29,12 @@ const FriendSearchBar: React.FC = () => {
     try {
       if (page === 0) setIsLoadingUsers(true);
 
-      console.log(page);
-
       const result: PaginationType = await fetchGET(
-        `/users?name=${name}&page=${page}&perPage=5`,
+        `/users?name=${name}&page=${page}&perPage=10`,
       );
       const newUsers = result.items as UserSearchType[];
 
-      if (newUsers.length === 0) setHasMore(false);
+      if (newUsers.length < 10) setHasMore(false);
 
       if (page > 0) {
         setUsers((prevUsers) => [...prevUsers, ...newUsers]);
@@ -43,7 +42,11 @@ const FriendSearchBar: React.FC = () => {
         setUsers(newUsers);
       }
     } catch (error) {
-      console.log("error fetching users", error);
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error:", error);
+        }
     } finally {
       setIsLoadingUsers(false);
     }
@@ -83,13 +86,13 @@ const FriendSearchBar: React.FC = () => {
         <div className="absolute right-0 top-0 w-[460px]">
           {users.length > 0 ? (
             <div className="nav-dropdown scroll left-0 flex h-[15rem] w-[450px] items-center overflow-y-hidden">
+              <div className="custom-transition flex h-14 w-full items-center justify-between px-3 py-4">
+                <h1 className="font-mont-bd text-xl">Results</h1>
+              </div>
               <div
                 id="scrollableDiv"
                 className="scroll h-full w-full overflow-y-auto"
               >
-                <div className="custom-transition flex h-14 w-full items-center justify-between px-3 py-4">
-                  <h1 className="font-mont-bd text-xl">Results</h1>
-                </div>
                 <InfiniteScroll
                   dataLength={users.length}
                   next={() => setPage((prevPage) => prevPage + 1)}

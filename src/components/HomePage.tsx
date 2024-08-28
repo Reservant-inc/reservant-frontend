@@ -49,7 +49,11 @@ export default function HomePage() {
         const response = await fetchGET("/restaurant-tags");
         setTags(response);
       } catch (error) {
-        console.error("Error getting restaurants", error);
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error:", error);
+        }
       }
     };
     getTags();
@@ -122,9 +126,8 @@ export default function HomePage() {
       className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3"
     >
       {isMenuOpen ? (
-        <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] h-[calc(100%-1rem)] w-[300px] overflow-hidden rounded-lg bg-white shadow-2xl">
-          <div className="scroll h-full overflow-y-auto">
-            <div className="flex h-14 w-full items-center justify-between px-3">
+        <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] h-[calc(100%-1rem)] w-[300px] rounded-lg bg-white shadow-2xl flex flex-col">
+            <div className="flex h-14 w-full items-center justify-between px-3 py-2">
               <h1 className="font-mont-bd text-xl">Restaurants near you</h1>
               <Button
                 className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 text-black text-black`}
@@ -138,7 +141,7 @@ export default function HomePage() {
                 <input
                   type="text"
                   placeholder="Search for restaurants"
-                  className="clean-input w-full"
+                  className="w-full"
                   onChange={(e) => {
                     setRestaurants(
                       allRestaurants.filter((restaurant: any) => {
@@ -152,72 +155,73 @@ export default function HomePage() {
                 <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer" />
               </div>
             </div>
-            <List
-              id="homePage-restaurantList"
-              className="w-full p-0 px-2 font-mont-md dark:bg-black"
-            >
-              {restaurants.map((restaurant, index) => (
-                <div key={index}>
-                  <ListItemButton
-                    id="homePage-listItemButton"
-                    onClick={() => {
-                      setUserMovedMap(false);
-                      setActiveRestaurant(restaurant);
-                    }}
-                    className={`rounded-md p-3 
-                      ${activeRestaurant === restaurant
-                        ? "bg-grey-1"
-                        : "bg-white hover:bg-grey-1"}
-                        `
-                    }
-                  >
-                    <div className="flex w-full items-start justify-between py-2">
-                      <div className="flex flex-col gap-1">
-                        <h1 className="text-md font-mont-md">
-                          {restaurant.name}
-                        </h1>
-                        <div className="flex">
-                          <h1 className="text-sm">
-                            {Math.round(
-                              (restaurant.rating + Number.EPSILON) * 100,
-                            ) / 100}
+            <div className="scroll h-full overflow-y-auto">
+              <List
+                id="homePage-restaurantList"
+                className="w-full p-0 px-2 font-mont-md dark:bg-black"
+              >
+                {restaurants.map((restaurant, index) => (
+                  <div key={index}>
+                    <ListItemButton
+                      id="homePage-listItemButton"
+                      onClick={() => {
+                        setUserMovedMap(false);
+                        setActiveRestaurant(restaurant);
+                      }}
+                      className={`rounded-md p-3 
+                        ${activeRestaurant === restaurant
+                          ? "bg-grey-1"
+                          : "bg-white hover:bg-grey-1"}
+                          `
+                      }
+                    >
+                      <div className="flex w-full items-start justify-between py-2">
+                        <div className="flex flex-col gap-1">
+                          <h1 className="text-md font-mont-md">
+                            {restaurant.name}
                           </h1>
-                          <Rating
-                            name="read-only"
-                            value={restaurant.rating}
-                            readOnly
-                            className="text-[18px]"
-                          />
-                          <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
-                        </div>
-                        <h1 className="font-mont-l text-sm">
-                          {restaurant.address}
-                        </h1>
-                        <h1 className="font-mont-l text-sm">
-                          {restaurant.provideDelivery
-                            ? "Provides delivery"
-                            : "No delivery"}
-                        </h1>
-                        <div className="flex gap-2">
-                          {restaurant.tags.map((tag: string, index: number) => (
-                            <h1 className="font-mont-md text-sm" key={index}>
-                              {tag}
+                          <div className="flex">
+                            <h1 className="text-sm">
+                              {Math.round(
+                                (restaurant.rating + Number.EPSILON) * 100,
+                              ) / 100}
                             </h1>
-                          ))}
+                            <Rating
+                              name="read-only"
+                              value={restaurant.rating}
+                              readOnly
+                              className="text-[18px]"
+                            />
+                            <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
+                          </div>
+                          <h1 className="font-mont-l text-sm">
+                            {restaurant.address}
+                          </h1>
+                          <h1 className="font-mont-l text-sm">
+                            {restaurant.provideDelivery
+                              ? "Provides delivery"
+                              : "No delivery"}
+                          </h1>
+                          <div className="flex gap-2">
+                            {restaurant.tags.map((tag: string, index: number) => (
+                              <h1 className="font-mont-md text-sm" key={index}>
+                                {tag}
+                              </h1>
+                            ))}
+                          </div>
                         </div>
+                        <img
+                          src={getImage(restaurant.logo, "")}
+                          alt="logo"
+                          className="h-24 w-24 rounded-lg"
+                        />
                       </div>
-                      <img
-                        src={getImage(restaurant.logo, "")}
-                        alt="logo"
-                        className="h-24 w-24 rounded-lg"
-                      />
-                    </div>
-                  </ListItemButton>
-                </div>
-              ))}
-            </List>
+                    </ListItemButton>
+                  </div>
+                ))}
+              </List>
+            </div>
           </div>
-        </div>
       ) : (
         <div className="absolute left-[0.5rem] top-[0.5rem] z-[1]">
           <Button
