@@ -21,9 +21,11 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
         const menusData = await fetchGET(
           `/my-restaurants/${restaurantId}/menus`,
         );
-        setMenus(menusData || []);
-        if (menusData.length > 0) {
-          setActiveMenuId(menusData[0].menuId);
+        if (JSON.stringify(menusData) !== JSON.stringify(menus)) {
+          setMenus(menusData || []);
+          if (menusData.length > 0) {
+            setActiveMenuId(menusData[0].menuId);
+          }
         }
       } catch (error) {
         console.error("Error fetching menus:", error);
@@ -32,7 +34,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
     };
 
     fetchMenus();
-  }, [restaurantId]);
+  }, [restaurantId, menus]);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -114,6 +116,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
                 component="img"
                 src={getImage(menu.photo) as string}
                 alt={menu.name}
+                loading="lazy"
                 className="rounded-lg"
                 sx={{ height: 300, width: 300 }}
               />
