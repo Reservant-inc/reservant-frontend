@@ -17,6 +17,7 @@ import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
 import { AuthContext, AuthData } from "../../routing/AuthWrapper";
 import { useTranslation } from "react-i18next";
+import Tooltip from '@mui/material/Tooltip';
 
 export interface ToolsProps {
   setIsDark: Function;
@@ -136,14 +137,15 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
 
     return (
         <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-            <button
-            //do czego..
-                id="ToolsButton"
-                className="h-10 w-10 flex justify-center items-center"
-                onClick={pressHandler}
-            >
-                <img src={User} alt="logo" className="rounded-full" />
-            </button>
+          <Tooltip title="Open Tools" arrow>
+                <button
+                    id="ToolsButton"
+                    className="h-10 w-10 flex justify-center items-center"
+                    onClick={pressHandler}
+                >
+                    <img src={User} alt="user" className="rounded-full" />
+                </button>
+            </Tooltip>
             {
                 isPressed &&
                 <div style={{height: menuHeight}} className='dropdownMenu dark:bg-black'>

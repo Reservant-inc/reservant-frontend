@@ -3,6 +3,7 @@ import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler
 import { Notifications } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../../services/APIconn";
+import Tooltip from '@mui/material/Tooltip';
 
 interface NotificationsButtonProps {
   isDark: boolean;
@@ -37,16 +38,18 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      <button
-        id="NotificationsButton"
-        className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
-        onClick={pressHandler}
-      >
-        <Notifications className="h-[30px] w-[30px]" />
-        {hasNotifications && !loading && (
-          <span className="absolute right-1 top-0 h-3 w-3 rounded-full bg-primary"></span>
-        )}
-      </button>
+      <Tooltip title="Open Notifications" arrow>
+        <button
+          id="NotificationButtons"
+          className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
+          onClick={pressHandler}
+        >
+          <Notifications className="h-[30px] w-[30px]" />
+          {hasNotifications && !loading && (
+            <span className="absolute right-1 top-0 h-3 w-3 rounded-full bg-primary"></span>
+          )}
+        </button>
+      </Tooltip>
       {isPressed && (
         <div className="dropdownMenu dark:bg-black" style={{ width: "300px" }}>
           <NotificationList setHasNotifications={setHasNotifications} />
