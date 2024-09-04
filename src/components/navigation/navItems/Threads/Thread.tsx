@@ -94,19 +94,11 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
             participant.userId !== user.userId ? "self-start" : "self-end flex-row-reverse"
           }`}
         >
-          <Tooltip title={`${participant.firstName} ${participant.lastName}`} placement="bottom"
-          slotProps={{
-            popper: {
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [0, -10],
-                  },
-                },
-              ],
-            },
-          }}>
+          <Tooltip 
+          title={`${participant.firstName} ${participant.lastName}`} 
+          placement="bottom"
+          arrow
+          >
             <img className="h-6 w-6 rounded-full" src={getImage(participant.photo, DefaultPhoto)} />
           </Tooltip>
           <h1

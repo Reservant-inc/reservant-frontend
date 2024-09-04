@@ -8,7 +8,7 @@ import {
   ThreadType,
   UserType,
 } from "../../../../services/types";
-import { Button, CircularProgress, List, ListItemButton, Tooltip } from "@mui/material";
+import { Button, CircularProgress, List, ListItemButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import DefaultPhoto from "../../../../assets/images/user.jpg";
@@ -17,6 +17,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Thread from "./Thread";
 import { FetchError } from "../../../../services/Errors";
 import InfiniteScroll from "react-infinite-scroll-component";
+import InactiveThread from "./InactiveThread";
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
@@ -449,28 +450,7 @@ const Threads: React.FC = () => {
             <div className="w-14 h-full flex flex-col-reverse py-4 gap-2">
               {
                 inactiveThreads.map((inactiveThread) => (
-                  <Tooltip title={`${inactiveThread.title}`} placement="left"
-                  slotProps={{
-                    popper: {
-                      modifiers: [
-                        {
-                          name: 'offset',
-                          options: {
-                            offset: [0, -10],
-                          },
-                        },
-                      ],
-                    },
-                  }}>
-                    <div key={inactiveThread.threadId} className="relative group flex items-center justify-center">
-                      <button onClick={() => handleThreadMaximize(inactiveThread)}>
-                        {renderUserPhotos(inactiveThread)}
-                      </button>  
-                      <button className="absolute right-0 top-0 hidden group-hover:flex bg-black text-white rounded-full w-4 h-4 justify-center items-center p-0">
-                        <CloseIcon className="h-3 w-3 p-0"/>
-                      </button>
-                    </div>
-                  </Tooltip>
+                  <InactiveThread thread={inactiveThread} handleThreadMaximize={handleThreadMaximize} renderUserPhotos={renderUserPhotos}/>
                 ))
               }
             </div>
