@@ -442,8 +442,8 @@ const Threads: React.FC = () => {
           <div className="absolute w-[675px] h-[400px] bottom-0 right-[0.5rem] z-[0] flex gap-2">
             <div className="w-full h-full flex flex-row-reverse gap-[15px]">
               {
-                activeThreads.map((activeThread, index) => (
-                  <div key={index} className="w-[300px] h-full bg-white rounded-t-md shadow-2xl flex flex-col">
+                activeThreads.map((activeThread) => (
+                  <div key={activeThread.threadId} className="w-[300px] h-full bg-white rounded-t-md shadow-2xl flex flex-col">
                     <div className="w-full h-12 flex items-center justify-between px-2 shadow-md z-[1]">
                       <div className="flex gap-2 items-center">
                         {

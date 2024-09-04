@@ -103,8 +103,7 @@ export type MessageType = {
   contents: string;
   dateSent: string;
   dateRead: string;
-  authorsFirstName: string;
-  authorsLastName: string;
+  authorId: string;
   messageThreadId: number;
 };
 

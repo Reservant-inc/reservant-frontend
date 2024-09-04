@@ -28,7 +28,6 @@ body {
 
 .infinite-scroll-component__outerdiv {
   width: 100%;
-  height: 100%;
 }
 
 .infinite-scroll-component__outerdiv::-webkit-scrollbar {
