@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SectionProps } from "../../../services/interfaces";
 import Cookies from "js-cookie";
+import { fetchGET } from "../../../services/APIconn";
+import { User, UserInfo } from "../../../services/types";
 
 const Sections: React.FC<SectionProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userRoles = JSON.parse(Cookies.get("userInfo") as string).roles;
+
+  
+  const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string));
+
+ 
+
+  const userRoles = user.roles;
 
   const isClickedRestaurants =
     location.pathname ===
-    `/${JSON.parse(Cookies.get("userInfo") as string).login}/restaurants`;
+    `/${user.login}/restaurants`;
   const isClickedHome = location.pathname === "/home";
 
   return (
@@ -52,7 +60,7 @@ const Sections: React.FC<SectionProps> = () => {
       </div>
       {
       
-        userRoles.includes("RestaurantOwner") &&
+        userRoles?.includes("RestaurantOwner") &&
         <div className="relative h-14">
         <button
           id="NavbarRestaurantsSectionButton"
@@ -64,7 +72,7 @@ const Sections: React.FC<SectionProps> = () => {
             }
             onClick={() =>
               navigate(
-                `/${JSON.parse(Cookies.get("userInfo") as string).login}/restaurants`,
+                `/${user.login}/restaurants`,
               )
             }
         >

@@ -35,7 +35,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
             
             const response2 = await fetchGET(`/my-restaurant-groups/${group.restaurantGroupId}`);
 
-                console.log(response2)
+                // console.log(response2)
 
                 for (const i in response2.restaurants) {
                     tmp.push({
@@ -50,8 +50,8 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
                     });
                 }
             }
-
-            console.log(tmp)
+            
+            // console.log(tmp)
             setRows(tmp)
           } catch (error) {
             console.error("Error populating table", error);
