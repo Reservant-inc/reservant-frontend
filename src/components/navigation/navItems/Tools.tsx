@@ -99,6 +99,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
       handleLogout();
     }
   }
+  
   function DropdownItem(props: any) {
     const onClicked = () => {
       if (props.logout === true) {

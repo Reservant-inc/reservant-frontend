@@ -41,13 +41,26 @@ body {
 }
 
 /* animations */
+.fade-in-render {
+  animation: fade-in-render 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-.fade-in {
+@keyframes fade-in-render {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.fade-in-opacity {
   transition: opacity 0.1s ease-in;
   transition-delay: 0.1s;
 }
 
-@keyframes fade-in {
+@keyframes fade-in-opacity {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
@@ -158,16 +171,13 @@ body {
   }
   
   .scroll::-webkit-scrollbar-thumb {
-    background: #888;
     @apply rounded-full
   }
 
   .scroll::-webkit-scrollbar-track {
-    background: #EEE;
   }
   
   .scroll::-webkit-scrollbar-thumb:hover {
-    background: #555;
   }
   
 }

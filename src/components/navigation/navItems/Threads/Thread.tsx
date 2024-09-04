@@ -9,6 +9,7 @@ import DefaultPhoto from "../../../../assets/images/user.jpg";
 import Cookies from "js-cookie";
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 
 interface ThreadProps {
   thread: ThreadType;
@@ -24,9 +25,12 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
   const [hasMore, setHasMore] = useState<boolean>(true);
   const participants = thread.participants;
 
+  const [t] = useTranslation("global");
+
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
 
   const getMessages = async () => {
+    console.log("wgas")
     try {
       const result: PaginationType = await fetchGET(`/threads/${thread.threadId}/messages?page=${page}&perPage=20`);
       const newMessages: MessageType[] = result.items as MessageType[];
@@ -90,6 +94,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
 
     return (
         <div
+        key={message.messageId}
           className={`flex items-center gap-2 w-full ${
             participant.userId !== user.userId ? "self-start" : "self-end flex-row-reverse"
           }`}
@@ -103,7 +108,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
           </Tooltip>
           <h1
             className={`text-sm rounded-lg break-words max-w-[70%] p-2 ${
-              participant.userId !== user.userId ? "bg-grey-1" : "bg-primary text-white"
+              participant.userId !== user.userId ? "bg-grey-1 dark:bg-grey-4 dark:text-white" : "bg-primary dark:bg-secondary text-white dark:text-black dark:font-mont-bd"
             }`}
           >
             {message.contents}
@@ -113,40 +118,51 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
   }
 
   return (
-    <div key={thread.threadId} className="w-[300px] h-full bg-white rounded-t-md shadow-2xl flex flex-col">
+    <div key={thread.threadId} className="w-[300px] h-full bg-white dark:bg-black rounded-t-md shadow-2xl flex flex-col">
       <div className="w-full h-12 flex items-center justify-between px-2 shadow-md z-[1]">
         <div className="flex gap-2 items-center">
           {
             thread.participants.length > 1 ? (
               <div className="relative w-9 h-9">
-                <div className="absolute h-6 w-6 flex items-center justify-center bg-white z-[0] top-0 right-0 rounded-full">
+                <div className="absolute h-6 w-6 flex items-center justify-center bg-white dark:bg-black z-[0] top-0 right-0 rounded-full">
                   <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="absolute h-5 w-5 rounded-full"/>
                 </div>
-                <div className="absolute h-6 w-6 flex items-center justify-center bg-white z-[1] bottom-0 left-0 rounded-full">
+                <div className="absolute h-6 w-6 flex items-center justify-center bg-white dark:bg-black z-[1] bottom-0 left-0 rounded-full">
                   <img src={getImage(thread.participants[1].photo, DefaultPhoto)} className="absolute h-5 w-5 rounded-full"/>
                 </div>
               </div>
             ) : (
               <div className="w-9 h-9 flex items-center justify-center">
-                <div className="h-9 w-9 flex items-center justify-center bg-white rounded-full">
+                <div className="h-9 w-9 flex items-center justify-center bg-white dark:bg-black rounded-full">
                   <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="h-8 w-8 rounded-full"/>
                 </div>
               </div>
             )
           }
-          <h1 className="text-md font-mont-bd">{thread.title}</h1>
+          <h1 className="text-md font-mont-bd dark:text-white">{thread.title}</h1>
         </div>
         <div className="flex gap-1 items-center">
-          <IconButton className="h-8 w-8" onClick={() => handleThreadMinimize(thread)}>
-            <HorizontalRuleRoundedIcon className="h-5 w-5"/>
-          </IconButton>
-          <IconButton className="h-8 w-8" onClick={() => handleThreadClose(thread)}>
-            <CloseIcon className="h-5 w-5"/>
-          </IconButton>
+          <Tooltip 
+          title={t('threads.send-message')} 
+          placement="top" 
+          arrow
+          >
+            <IconButton className="h-8 w-8" onClick={() => handleThreadMinimize(thread)}>
+              <HorizontalRuleRoundedIcon className="h-5 w-5 dark:text-white"/>
+            </IconButton>
+          </Tooltip>  
+          <Tooltip 
+          title={t('general.close')} 
+          placement="top" 
+          arrow
+          >
+            <IconButton className="h-8 w-8" onClick={() => handleThreadClose(thread)}>
+              <CloseIcon className="h-5 w-5 dark:text-white"/>
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
-
-        <div className="h-[calc(100%-3rem)] w-full z-[0]">
+        <div className="h-[calc(100%-3rem)] w-full z-[0] dark:bg-grey-3">
           {isEditing ? (
             <div>
               {/* Editing logic here */}
@@ -168,7 +184,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
                   inverse={true}
                 >
                   <div className="h-full w-full flex flex-col-reverse gap-4">
-                    {messages.map((message, index) => (
+                    {messages.map((message) => (
                       renderMessage(message)
                     ))}
                   </div>
@@ -176,25 +192,31 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
               </div>
               <div className="flex items-center justify-between h-12 w-full p-2 gap-2 relative">
                 <div
-                  className={`border-[1px] border-grey-1 bg-grey-0 rounded-full transition-all duration-300 ${
+                  className={`border-[1px] border-grey-1 dark:border-grey-3 bg-grey-0 dark:bg-grey-4 rounded-full transition-all duration-300 ${
                     messageToSend.length > 0 ? "w-[calc(100%-48px)]" : "w-full"
                   }`}
                 >
                   <input
                     type="text"
-                    placeholder="Send a message"
+                    placeholder={t('threads.message')}
                     value={messageToSend}
                     onChange={(e) => setMessageToSend(e.target.value)}
-                    className="text-sm w-full"
+                    className="text-sm w-full placeholder:text-grey-2 dark:text-white"
                   />
                 </div>
                 <button
-                  className={`absolute p-2 hover:bg-grey-0 hover:text-primary rounded-full h-10 flex items-center justify-center fade-in right-2 ${
+                  className={`absolute p-2 hover:bg-grey-0 dark:hover:bg-grey-4 hover:text-primary dark:hover:text-secondary rounded-full h-10 flex items-center justify-center fade-in-opacity right-2 ${
                     messageToSend.length > 0 ? "opacity-100" : "opacity-0 z-[-1]"
                   }`}
                   onClick={() => handleSendMessage(messageToSend)}
                 >
-                  <SendRoundedIcon className="h-6 w-6" />
+                  <Tooltip 
+                  title={t('threads.send-message')} 
+                  placement="left" 
+                  arrow
+                  >
+                    <SendRoundedIcon className="h-6 w-6 dark:text-white" />
+                  </Tooltip>
                 </button>
               </div>
             </div>

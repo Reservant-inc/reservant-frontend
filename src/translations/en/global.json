@@ -2,7 +2,9 @@
     "general": {
         "search": "Search...",
         "cancel": "Cancel",
-        "save": "Save"
+        "save": "Save",
+        "no-results": "No results",
+        "close": "Close"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -186,5 +188,15 @@
         "settings":{
             "setting":"SettingFiller"
         }
+    },
+    "threads": {
+        "threads":"Threads",
+        "search": "Search for threads",
+        "new-thread": "New thread",
+        "title": "Title",
+        "friends": "Friends",
+        "message": "Message",
+        "send-message": "Send a message",
+        "minimize": "Minimize"
     }
 }

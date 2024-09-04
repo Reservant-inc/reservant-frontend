@@ -18,6 +18,7 @@ import Thread from "./Thread";
 import { FetchError } from "../../../../services/Errors";
 import InfiniteScroll from "react-infinite-scroll-component";
 import InactiveThread from "./InactiveThread";
+import { useTranslation } from "react-i18next";
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
@@ -33,6 +34,8 @@ const Threads: React.FC = () => {
   const [inactiveThreads, setInactiveThreads] = useState<ThreadType[]>([])
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const [t] = useTranslation("global");
 
 
   const clearStates = () => {
@@ -109,6 +112,10 @@ const Threads: React.FC = () => {
       setIsLoadingThreads(false);
     }
   };
+
+  useEffect(() => {
+    console.log("jzu")
+  }, [activeThreads]);
 
   useEffect(() => {
     getThreads()
@@ -242,16 +249,16 @@ const Threads: React.FC = () => {
       return(
         thread.participants.length > 1 ? (
           <div className="relative w-10 h-10">
-            <div className="absolute h-8 w-8 flex items-center justify-center bg-white z-[0] top-0 right-0 rounded-full">
+            <div className="absolute h-8 w-8 flex items-center justify-center bg-white dark:bg-black z-[0] top-0 right-0 rounded-full">
               <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full"/>
             </div>
-            <div className="absolute h-8 w-8 flex items-center justify-center bg-white z-[1] bottom-0 left-0 rounded-full">
+            <div className="absolute h-8 w-8 flex items-center justify-center bg-white dark:bg-black z-[1] bottom-0 left-0 rounded-full">
               <img src={getImage(thread.participants[1].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full"/>
             </div>
           </div>
         ) : (
           <div className="w-10 h-10 flex items-center justify-center">
-            <div className="h-9 w-9 flex items-center justify-center bg-white rounded-full">
+            <div className="h-9 w-9 flex items-center justify-center bg-white dark:bg-black rounded-full">
               <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="h-9 w-9 rounded-full"/>
             </div>
           </div>
@@ -289,8 +296,8 @@ const Threads: React.FC = () => {
           scrollableTarget="scrollableDiv"
           className="hidescroll"
         >
-          {threads.map((thread, index) => (
-            <ListItemButton key={index} className="w-full rounded-md p-2" onClick={() => handleThreadOpen(thread)}>
+          {threads.map((thread) => (
+            <ListItemButton key={thread.threadId} className="w-full rounded-md p-2 dark:hover:bg-grey-4" onClick={() => handleThreadOpen(thread)}>
               { <ThreadPreview thread={thread} renderUserPhotos={renderUserPhotos}/> }
             </ListItemButton>
           ))}
@@ -299,21 +306,21 @@ const Threads: React.FC = () => {
     );
   };
 
-  const inputClass = "clean-input py-1 px-0 text-sm italic";
+  const inputClass = "clean-input py-1 px-0 text-sm italic dark:text-white";
 
   const renderNewThreadForm = () => (
-    <div className="flex w-full flex-col border-y-[2px] border-grey-1 px-3 pt-2">
+    <div className="flex w-full flex-col border-y-[2px] border-grey-1 dark:border-grey-4 px-3 pt-2">
       <div className="flex items-center justify-between">
-        <h1 className="font-mont-bd text-lg">New thread</h1>
+        <h1 className="font-mont-bd text-lg dark:text-grey-1">{t('threads.new-thread')}</h1>
         <button
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-grey-1"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-4"
           onClick={postThread}
         >
-          <CheckIcon className="h-5 w-5" />
+          <CheckIcon className="h-5 w-5 dark:text-grey-1" />
         </button>
       </div>
       <div className="flex items-center gap-2 pb-1 pt-2">
-        <h1 className="font-mont-md text-sm">Title:</h1>
+        <h1 className="font-mont-md text-sm dark:text-grey-1">{t('threads.title')}:</h1>
         <input
           type="text"
           className={inputClass + " w-full"}
@@ -322,7 +329,7 @@ const Threads: React.FC = () => {
         />
       </div>
       <div className="flex items-center gap-2 pb-2 pt-1">
-        <h1 className="font-mont-md text-sm">Friends:</h1>
+        <h1 className="font-mont-md text-sm dark:text-grey-1">{t('threads.friends')}:</h1>
         <input
           type="text"
           value={friendSearchQuery}
@@ -335,9 +342,9 @@ const Threads: React.FC = () => {
       </div>
       <div className="flex flex-wrap gap-2">
         {friendsToAdd.length > 0 &&
-          friendsToAdd.map((friend, index) => (
+          friendsToAdd.map((friend) => (
             <div
-              key={index}
+              key={friend.userId}
               className="flex h-6 items-center justify-center gap-1 rounded-full bg-grey-1 px-2 text-sm"
             >
               {friend.firstName}
@@ -361,11 +368,11 @@ const Threads: React.FC = () => {
               className="w-full p-0 py-1 font-mont-md dark:bg-black"
             >
               {friends.map(
-                (friend, index) =>
+                (friend) =>
                   !friendsToAdd.includes(friend) && (
                     <ListItemButton
-                      key={index}
-                      className="rounded-lg px-2 py-2 hover:bg-grey-0"
+                      key={friend.userId}
+                      className="rounded-lg px-2 py-2 hover:bg-grey-0 dark:hover:bg-grey-4"
                       onClick={() => onFriendSelect(friend)}
                     >
                       <div className="flex w-full items-center gap-[5px] overflow-x-hidden text-sm">
@@ -374,8 +381,8 @@ const Threads: React.FC = () => {
                           alt="user photo"
                           className="h-8 w-8 rounded-full"
                         />
-                        <h1>{friend.firstName}</h1>
-                        <h1>{friend.lastName}</h1>
+                        <h1 className="dark:text-white">{friend.firstName}</h1>
+                        <h1 className="dark:text-white">{friend.lastName}</h1>
                       </div>
                     </ListItemButton>
                   ),
@@ -387,8 +394,8 @@ const Threads: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center gap-3">
-              <h1 className="text-center text-sm italic text-grey-3">
-                No results
+              <h1 className="text-center text-sm italic text-grey-3 dark:text-grey-2">
+                {t('general.no-results')}
               </h1>
             </div>
           )}
@@ -402,18 +409,18 @@ const Threads: React.FC = () => {
       <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
         <Button
           id="NotificationsButton"
-          className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 text-black ${isPressed && "text-primary"}`}
+          className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 dark:bg-grey-4 text-black dark:text-grey-1 ${isPressed && "text-primary dark:text-secondary"}`}
           onClick={pressHandler}
         >
           <CommentRoundedIcon className="h-[23px] w-[23px]" />
         </Button>
         {
           isPressed && (
-            <div className="nav-dropdown flex h-[calc(100%-4.5rem)] w-[300px] flex-col items-center z-[1]">
+            <div className="nav-dropdown flex h-[calc(100%-4.5rem)] w-[300px] flex-col items-center z-[1] bg-white dark:bg-black">
               <div className="flex h-14 w-full items-center justify-between px-3 py-2">
-                <h1 className="font-mont-bd text-xl">Threads</h1>
+                <h1 className="font-mont-bd text-xl text-black dark:text-white">{t("threads.threads")}</h1>
                 <Button
-                  className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 p-1 text-black ${isCreatingThread ? "text-primary" : "text-black"}`}
+                  className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-4 p-1 text-black ${isCreatingThread ? "text-primary dark:text-secondary" : "text-black dark:text-grey-1"}`}
                   onClick={toggleCreatingThread}
                 >
                   <AddCommentRoundedIcon className="h-5 w-5" />
@@ -421,13 +428,13 @@ const Threads: React.FC = () => {
               </div>
               {isCreatingThread && renderNewThreadForm()}
               <div className="w-full px-3 py-3">
-                <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-2 font-mont-md">
+                <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-3 bg-grey-0 dark:bg-grey-4 px-2 font-mont-md">
                   <input
                     type="text"
-                    placeholder="Szukaj wątków"
-                    className="clean-input h-8 w-[250px] p-2"
+                    placeholder={t('threads.search')}
+                    className="clean-input h-8 w-[250px] p-2 dark:placeholder:text-grey-2 dark:text-white"
                   />
-                  <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer" />
+                  <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
                 </div>
               </div>
               <div id='scrollableDiv' className="flex h-full w-full items-center justify-center px-2 scroll overflow-y-auto">
@@ -450,7 +457,7 @@ const Threads: React.FC = () => {
             <div className="w-14 h-full flex flex-col-reverse py-4 gap-2">
               {
                 inactiveThreads.map((inactiveThread) => (
-                  <InactiveThread thread={inactiveThread} handleThreadMaximize={handleThreadMaximize} renderUserPhotos={renderUserPhotos}/>
+                  <InactiveThread thread={inactiveThread} handleThreadMaximize={handleThreadMaximize} renderUserPhotos={renderUserPhotos} handleThreadClose={handleThreadClose}/>
                 ))
               }
             </div>

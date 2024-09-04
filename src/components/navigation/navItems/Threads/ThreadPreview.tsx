@@ -28,12 +28,12 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({ thread, renderUserPhotos 
           <>
             <div className="flex gap-3 items-center">
               {renderUserPhotos(updatedThread)}
-              <h1 className="text-sm">
+              <h1 className="text-sm dark:text-white">
                 {thread.title}
               </h1>
             </div>
             <button>
-              <MoreHorizIcon />
+              <MoreHorizIcon className="dark:text-grey-1"/>
             </button>
           </>
         )

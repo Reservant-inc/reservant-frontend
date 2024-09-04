@@ -2,7 +2,9 @@
     "general": {
         "search": "Szukaj...",
         "cancel": "Anuluj",
-        "save": "Zapisz"
+        "save": "Zapisz",
+        "no-results": "Brak wyników",
+        "close": "Zamknij"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -181,5 +183,15 @@
         "settings":{
             "setting":"SettingFiller"
         }
+    },
+    "threads": {
+        "threads":"Wątki",
+        "search": "Szukaj wątków",
+        "new-thread": "Nowy wątek",
+        "title": "Nazwa",
+        "friends": "Znajomi",
+        "message": "Wiadomość",
+        "send-message": "Wyślij wiadomość",
+        "minimize": "Minimalizuj"
     }
 }
