@@ -13,7 +13,16 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 const theme = createTheme({
   typography: {
     allVariants: {
-      fontFamily: "montserrat-md",
+      fontFamily: "Montserrat-md",
+    },
+  },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontFamily: 'Montserrat-md',
+        },
+      },
     },
   },
 });

@@ -41,8 +41,6 @@ export const fetchPOST = async (connString: string, body?: any) => {
     fetchOptions.body = body;
   }
 
-  console.log(fetchOptions);
-
   const response = await fetch(
     `${process.env.REACT_APP_SERVER_IP}${connString}`,
     fetchOptions,

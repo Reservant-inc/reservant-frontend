@@ -8,13 +8,12 @@ import {
   ThreadType,
   UserType,
 } from "../../../../services/types";
-import { Button, CircularProgress, IconButton, List, ListItemButton } from "@mui/material";
+import { Button, CircularProgress, List, ListItemButton, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import DefaultPhoto from "../../../../assets/images/user.jpg";
 import ThreadPreview from "./ThreadPreview";
 import SearchIcon from "@mui/icons-material/Search";
-import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded';
 import Thread from "./Thread";
 import { FetchError } from "../../../../services/Errors";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -241,18 +240,18 @@ const Threads: React.FC = () => {
   const renderUserPhotos = (thread: ThreadType) => {
       return(
         thread.participants.length > 1 ? (
-          <div className="relative w-12 h-12">
-            <div className="absolute h-9 w-9 flex items-center justify-center bg-white z-[0] top-0 right-0 rounded-full">
-              <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="absolute h-8 w-8 rounded-full"/>
+          <div className="relative w-10 h-10">
+            <div className="absolute h-8 w-8 flex items-center justify-center bg-white z-[0] top-0 right-0 rounded-full">
+              <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full"/>
             </div>
-            <div className="absolute h-9 w-9 flex items-center justify-center bg-white z-[1] bottom-0 left-0 rounded-full">
-              <img src={getImage(thread.participants[1].photo, DefaultPhoto)} className="absolute h-8 w-8 rounded-full"/>
+            <div className="absolute h-8 w-8 flex items-center justify-center bg-white z-[1] bottom-0 left-0 rounded-full">
+              <img src={getImage(thread.participants[1].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full"/>
             </div>
           </div>
         ) : (
-          <div className="w-12 h-12 flex items-center justify-center">
-            <div className="h-11 w-11 flex items-center justify-center bg-white rounded-full">
-              <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="h-10 w-10 rounded-full"/>
+          <div className="w-10 h-10 flex items-center justify-center">
+            <div className="h-9 w-9 flex items-center justify-center bg-white rounded-full">
+              <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="h-9 w-9 rounded-full"/>
             </div>
           </div>
         )
@@ -287,7 +286,7 @@ const Threads: React.FC = () => {
           hasMore={hasMore}
           loader={<CircularProgress />}
           scrollableTarget="scrollableDiv"
-          className="hidescroll px-2"
+          className="hidescroll"
         >
           {threads.map((thread, index) => (
             <ListItemButton key={index} className="w-full rounded-md p-2" onClick={() => handleThreadOpen(thread)}>
@@ -443,49 +442,35 @@ const Threads: React.FC = () => {
             <div className="w-full h-full flex flex-row-reverse gap-[15px]">
               {
                 activeThreads.map((activeThread) => (
-                  <div key={activeThread.threadId} className="w-[300px] h-full bg-white rounded-t-md shadow-2xl flex flex-col">
-                    <div className="w-full h-12 flex items-center justify-between px-2 shadow-md z-[1]">
-                      <div className="flex gap-2 items-center">
-                        {
-                          activeThread.participants.length > 1 ? (
-                            <div className="relative w-9 h-9">
-                              <div className="absolute h-6 w-6 flex items-center justify-center bg-white z-[0] top-0 right-0 rounded-full">
-                                <img src={getImage(activeThread.participants[0].photo, DefaultPhoto)} className="absolute h-5 w-5 rounded-full"/>
-                              </div>
-                              <div className="absolute h-6 w-6 flex items-center justify-center bg-white z-[1] bottom-0 left-0 rounded-full">
-                                <img src={getImage(activeThread.participants[1].photo, DefaultPhoto)} className="absolute h-5 w-5 rounded-full"/>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="w-9 h-9 flex items-center justify-center">
-                              <div className="h-9 w-9 flex items-center justify-center bg-white rounded-full">
-                                <img src={getImage(activeThread.participants[0].photo, DefaultPhoto)} className="h-8 w-8 rounded-full"/>
-                              </div>
-                            </div>
-                          )
-                        }
-                        <h1 className="text-md font-mont-bd">{activeThread.title}</h1>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <IconButton className="h-8 w-8" onClick={() => handleThreadMinimize(activeThread)}>
-                          <HorizontalRuleRoundedIcon className="h-5 w-5"/>
-                        </IconButton>
-                        <IconButton className="h-8 w-8" onClick={() => handleThreadClose(activeThread)}>
-                          <CloseIcon className="h-5 w-5"/>
-                        </IconButton>
-                      </div>
-                    </div>
-                    <Thread thread={activeThread}/>
-                  </div>  
+                  <Thread thread={activeThread} handleThreadClose={handleThreadClose} handleThreadMinimize={handleThreadMinimize}/>  
                 ))
               }
             </div>
             <div className="w-14 h-full flex flex-col-reverse py-4 gap-2">
               {
-                inactiveThreads.map((inactiveThread, index) => (
-                  <button key={index} onClick={() => handleThreadMaximize(inactiveThread)}>
-                    {renderUserPhotos(inactiveThread)}
-                  </button>  
+                inactiveThreads.map((inactiveThread) => (
+                  <Tooltip title={`${inactiveThread.title}`} placement="left"
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: 'offset',
+                          options: {
+                            offset: [0, -10],
+                          },
+                        },
+                      ],
+                    },
+                  }}>
+                    <div key={inactiveThread.threadId} className="relative group flex items-center justify-center">
+                      <button onClick={() => handleThreadMaximize(inactiveThread)}>
+                        {renderUserPhotos(inactiveThread)}
+                      </button>  
+                      <button className="absolute right-0 top-0 hidden group-hover:flex bg-black text-white rounded-full w-4 h-4 justify-center items-center p-0">
+                        <CloseIcon className="h-3 w-3 p-0"/>
+                      </button>
+                    </div>
+                  </Tooltip>
                 ))
               }
             </div>

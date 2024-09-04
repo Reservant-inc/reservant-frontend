@@ -4,6 +4,8 @@ import { nav } from "./Routing";
 import Cookies from "js-cookie";
 import { LoginResponseType } from "../../services/types";
 import NavBar from "../navigation/NavBar";
+import { FetchError } from "../../services/Errors";
+import { fetchGET } from "../../services/APIconn";
 
 export const AuthContext = createContext({
   authorized: false,
@@ -33,20 +35,32 @@ export const AuthWrapper = () => {
     }
   });
 
-  const login = (data: LoginResponseType) => {
+  const login = async (data: LoginResponseType) => {
     Cookies.set("token", data.token, { expires: 1 });
 
-    Cookies.set(
-      "userInfo",
-      JSON.stringify({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        roles: data.roles,
-        userId: data.userId,
-      }),
-      { expires: 1 },
-    );
+    try {
+      const userInfo = await fetchGET('/user')
 
+      Cookies.set(
+        "userInfo",
+        JSON.stringify({
+          userId: userInfo.userId,
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          roles: userInfo.roles,
+          photo: userInfo.photo
+        }),
+        { expires: 1 },
+      );
+
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("unexpected error")
+      }
+    }
+    
     setAuthorized(true);
     navigate("/home");
   };
