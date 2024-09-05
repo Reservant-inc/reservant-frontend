@@ -131,3 +131,25 @@ export type UserType = {
 export type UserSearchType = {
   friendStatus: FriendStatus;
 } & UserType;
+
+export type User ={
+  userId: string,
+  login: string,
+  email: string,
+  phoneNumber: string,
+  firstName: string,
+  lastName: string,
+  registeredAt: string,
+  birthDate: string,
+  roles: string[],
+  employerId: string,
+  photo: string
+};
+
+export type UserInfo ={
+  firstName: string,
+  login:string,
+  lastName: string,
+  roles: string[],
+  photo: string
+};

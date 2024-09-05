@@ -6,11 +6,14 @@ import Cookies from "js-cookie";
 const Sections: React.FC<SectionProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const userRoles = JSON.parse(Cookies.get("userInfo") as string).roles;
+  
+  const user =JSON.parse(Cookies.get("userInfo") as string);
+
+  const userRoles = user.roles;
 
   const isClickedRestaurants =
     location.pathname ===
-    `/${JSON.parse(Cookies.get("userInfo") as string).login}/restaurants`;
+    `/${user.login}/restaurants`;
   const isClickedHome = location.pathname === "/home";
 
   return (
@@ -62,7 +65,7 @@ const Sections: React.FC<SectionProps> = () => {
             }
             onClick={() =>
               navigate(
-                `/${JSON.parse(Cookies.get("userInfo") as string).login}/restaurants`,
+                `/${user.login}/restaurants`,
               )
             }
           >

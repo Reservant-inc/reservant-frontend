@@ -1,6 +1,12 @@
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { fetchGET } from "../services/APIconn";
+import {
+
+  isValidPhoneNumber
+
+
+} from 'libphonenumber-js';
 
 export const useValidationSchemas = () => {
   const [t] = useTranslation("global");
@@ -49,12 +55,11 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.email.required")),
 
     phoneNumber: yup
-      .string()
-      .matches(
-        /^\+[0-9]{11,15}$/,
-        t("errors.user-register.phoneNumber.matches"),
-      )
-      .required(t("errors.user-register.phoneNumber.required")),
+    .string()
+    .required(t("errors.user-register.phoneNumber.required"))
+    .test("phone number valid", t("errors.user-register.phoneNumber.matches"), (phone) => {
+      return isValidPhoneNumber(phone)
+    }),
 
     birthDate: yup
       .date()

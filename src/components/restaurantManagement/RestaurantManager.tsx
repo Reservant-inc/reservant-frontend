@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
 import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
@@ -8,6 +8,12 @@ import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
 import OrderHistory from "./reservations/OrderHistory";
 import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
+import { fetchGET, getImage } from "../../services/APIconn";
+import { User, UserInfo } from "../../services/types";
+import { AccountCircle } from "@mui/icons-material";
+import { checkPrimeSync } from "crypto";
+import { wait } from "@testing-library/user-event/dist/utils";
+import DefaultPhoto from "../../assets/images/user.jpg"
 
 const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(
@@ -15,16 +21,14 @@ const RestaurantManager = () => {
   );
   const [activePage, setActivePage] = useState<number>(0);
 
-  const user = JSON.parse(Cookies.get("userInfo") as string);
-
-  const [activeSectionName, setActiveSectionName] = useState<string>(
-    `Hello, ${user.firstName}`,
-  );
-
   const handleChangeActiveRestaurant = (restaurantId: number) => {
     setActiveRestaurantId(restaurantId);
   };
+  
+  const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string));
 
+  const [activeSectionName, setActiveSectionName] = useState<string>(`Hello, ${user.firstName}`)
+  
   return (
     <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-6">
       <div className="z-[0] flex w-full">
@@ -41,13 +45,10 @@ const RestaurantManager = () => {
             <h1 className="font-mont-bd text-[35px]">{activeSectionName}</h1>
             <div className="flex items-center justify-center gap-4">
               <div className="flex flex-col items-end">
-                <h1 className="text-md font-mont-md">{`${user.firstName} ${user.lastName}`}</h1>
+                <h1 className="font-mont-md text-md">{`${user.firstName} ${user.lastName}`}</h1>
                 <h1 className="font-mont-l text-sm">Owner</h1>
               </div>
-              <img
-                className="h-14 w-14 rounded-full"
-                src="https://l-ldesign.com.au/2016/wp-content/uploads/2020/01/profile-pic-katie-square.jpg"
-              />
+              <img className="h-14 w-14 rounded-full" src={getImage(user.photo, DefaultPhoto)}/>
             </div>
           </div>
           <div

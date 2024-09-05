@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, FormikValues } from "formik";
-import PhoneInput from "react-phone-number-input";
 import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchPOST } from "../../services/APIconn";
 import { TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { CSSTransition } from "react-transition-group";
+import MuiPhoneNumber from "mui-phone-number";
 
 const initialValues = {
   firstName: "",
@@ -75,11 +75,11 @@ const UserRegister: React.FC = () => {
               onSubmit={handleSubmit}
             >
               {(formik) => (
-                <Form className="w-full">
-                  <div className="form-container flex h-full flex-col items-center gap-4">
+                <Form className="w-full h-full mt-[10%]">
+                  <div className="form-container h-full flex flex-col items-center gap-4">
                     <CSSTransition
                       in={activeStep === 1}
-                      timeout={300}
+                      timeout={500}
                       classNames="menu-primary"
                       unmountOnExit
                     >
@@ -217,7 +217,7 @@ const UserRegister: React.FC = () => {
 
                     <CSSTransition
                       in={activeStep === 2}
-                      timeout={300}
+                      timeout={500}
                       classNames="menu-secondary"
                       unmountOnExit
                     >
@@ -267,23 +267,10 @@ const UserRegister: React.FC = () => {
                           as={TextField}
                         />
 
-                        <Field
-                          as={PhoneInput}
-                          international
-                          defaultCountry="PL"
-                          id="userRegister-phoneNumber-field"
-                          name={"phoneNumber"}
-                          value={formik.values.phoneNumber}
-                          onChange={(value: string) =>
-                            formik.setFieldValue("phoneNumber", value)
-                          }
-                          placeholder={
-                            formik.errors.phoneNumber &&
-                            formik.touched.phoneNumber
-                              ? formik.errors.phoneNumber
-                              : "Phone number"
-                          }
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${
+
+                          <Field
+                          as={MuiPhoneNumber}
+                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.phoneNumber &&
                               formik.touched.phoneNumber
@@ -291,7 +278,22 @@ const UserRegister: React.FC = () => {
                               ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
                               : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
                           }`}
-                        />
+                          
+                          label="PHONE NUMBER"
+
+                          helperText={(formik.errors.phoneNumber && formik.touched.phoneNumber) && formik.errors.phoneNumber} 
+
+                          defaultCountry="pl"
+                          id="userRegister-phoneNumber-field"
+                          name={"phoneNumber"}
+                          value={formik.values.phoneNumber}
+                          onChange={(value: string) =>
+                            formik.setFieldValue("phoneNumber", value)
+                          }
+                        
+                          
+                          />
+         
 
                         <Field
                           type="date"
@@ -299,12 +301,8 @@ const UserRegister: React.FC = () => {
                           name="birthDate"
                           label="BIRTH DATE"
                           variant="standard"
-                          helperText={
-                            formik.errors.birthDate &&
-                            formik.touched.birthDate &&
-                            formik.errors.birthDate
-                          }
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${
+                          helperText={(formik.errors.birthDate && formik.touched.birthDate) && formik.errors.birthDate}
+                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.birthDate &&
                               formik.touched.birthDate
@@ -315,11 +313,7 @@ const UserRegister: React.FC = () => {
                           InputLabelProps={{
                             shrink: true,
                             style: {
-                              color:
-                                formik.errors.birthDate &&
-                                formik.touched.birthDate
-                                  ? "#f44336"
-                                  : "#fff",
+                              color: formik.errors.birthDate && formik.touched.birthDate ? "#f44336" : "#fff",
                             },
                           }}
                           InputProps={{
