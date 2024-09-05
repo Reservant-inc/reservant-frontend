@@ -7,8 +7,8 @@ import { Input } from "@mui/base/Input";
 
 interface RestaurantCartViewProps {
   cart: CartItem[];
-  incrementQuantity: (itemId: number) => void;
-  decrementQuantity: (itemId: number) => void;
+  incrementQuantity: (menuItemId: number) => void;
+  decrementQuantity: (menuItemId: number) => void;
 }
 
 const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(

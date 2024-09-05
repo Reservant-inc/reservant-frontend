@@ -7,7 +7,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh "docker build -t reservant-front:latest ."
+                sh "docker build --build-arg='REACT_APP_SERVER_IP=http://172.21.40.127:12038' -t reservant-front:latest ."
             }
         }
 

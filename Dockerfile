@@ -4,6 +4,8 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install
 COPY . ./
+ARG REACT_APP_SERVER_IP="sekude"
+ENV REACT_APP_SERVER_IP $REACT_APP_SERVER_IP
 RUN npm run build
 
 # release step
