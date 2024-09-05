@@ -1,5 +1,5 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider} from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AppsSharpIcon from '@mui/icons-material/AppsSharp';
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import MenuBookSharpIcon from '@mui/icons-material/MenuBookSharp';
@@ -9,6 +9,8 @@ import ScheduleSharpIcon from '@mui/icons-material/ScheduleSharp';
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import Cookies from "js-cookie";
 import useWindowDimensions from "../../hooks/useWindowResize";
+import { fetchGET } from "../../services/APIconn";
+import { User, UserInfo } from "../../services/types";
 
 interface MenuInterface {
     setActivePage: Function
@@ -32,6 +34,11 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
     };
     const size = useWindowDimensions();
 
+    const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string))
+
+    
+
+
     return(
     <div id="menu-wrapper" className="">
         <List id="menu-list">
@@ -39,7 +46,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
                 <ListItemButton
                     id="menu-listItem-dash-button"
                     className={`rounded-lg ${selectedIndex === 0 ? "bg-grey-1" : ""}`}
-                    onClick={(event) => handleListItemClick(event, 0, `Hello, ${JSON.parse(Cookies.get("userInfo") as string).firstName}`)}
+                    onClick={(event) => handleListItemClick(event, 0, `Hello, ${user.firstName}`)}
                 >
                     <ListItemIcon id="menu-listItem-dash-ico" className={` ${size.width>1330?"":"justify-center w-full h-full"}`}>
                         <AppsSharpIcon/>
