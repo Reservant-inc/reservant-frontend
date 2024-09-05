@@ -37,7 +37,7 @@ const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
 
   return (
     <div>
-      <div className="flex items-center justify-start gap-4 p-2 dark:bg-grey-3">
+      <div className="flex items-center justify-start gap-4 p-2 dark:bg-grey-6">
         <TextField
           id="outlined-basic"
           variant="outlined"

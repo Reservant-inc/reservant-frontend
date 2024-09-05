@@ -79,7 +79,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const renderGallery = () => {
     if (!restaurant.photos || restaurant.photos.length === 0) {
       return (
-        <div className="mx-4 flex h-40 w-full items-center justify-center rounded-lg border-2 border-primary bg-grey-1 italic text-grey-4 lg:mx-10">
+        <div className="mx-4 flex h-40 w-full items-center justify-center rounded-lg border-2 border-primary bg-grey-1 italic text-grey-5 lg:mx-10">
           <Typography variant="h5" component="div">
             {restaurant.name} nie posiada jeszcze żadnych zdjęć.
           </Typography>
@@ -301,7 +301,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           className={`cursor-pointer py-3 ${
             activeTab === TABS.MENU
               ? "text-2xl font-extrabold text-primary underline"
-              : "text-2xl text-grey-4"
+              : "text-2xl text-grey-5"
           }`}
           onClick={() => setActiveTab(TABS.MENU)}
         >
@@ -311,7 +311,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           className={`cursor-pointer py-3 ${
             activeTab === TABS.EVENTS
               ? "text-2xl font-extrabold text-primary underline"
-              : "text-2xl text-grey-4"
+              : "text-2xl text-grey-5"
           }`}
           onClick={() => setActiveTab(TABS.EVENTS)}
         >
@@ -321,7 +321,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           className={`cursor-pointer py-3 ${
             activeTab === TABS.REVIEWS
               ? "text-2xl font-extrabold text-primary underline"
-              : "text-2xl text-grey-4"
+              : "text-2xl text-grey-5"
           }`}
           onClick={() => setActiveTab(TABS.REVIEWS)}
         >

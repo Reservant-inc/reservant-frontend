@@ -37,12 +37,12 @@ const Notifications: React.FC<NotificationsProps> = ({ isDark }) => {
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
       <button
         id="NotificationsButton"
-        className="relative flex h-[40px] w-[40px] items-center justify-center rounded-full bg-grey-1"
+        className="relative flex h-[40px] w-[40px] items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 dark:text-grey-1"
         onClick={pressHandler}
       >
         <NotificationsIcon className="h-[30px] w-[30px]" />
         {hasNotifications && !loading && (
-          <span className="absolute right-1 top-0 h-3 w-3 rounded-full bg-primary"></span>
+          <span className="absolute right-1 top-0 h-3 w-3 rounded-full bg-primary dark:bg-secondary"></span>
         )}
       </button>
       {isPressed && (

@@ -22,7 +22,7 @@ const Sections: React.FC<SectionProps> = () => {
             "relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl fill-grey-2" +
             (isClickedHome
               ? " hover:bg-transpartent fill-primary dark:fill-secondary dark:hover:bg-none"
-              : " hover:bg-grey-1 dark:hover:bg-grey-4")
+              : " hover:bg-grey-1 dark:hover:bg-grey-5")
           }
           onClick={() => navigate("/home")}
         >
@@ -58,7 +58,7 @@ const Sections: React.FC<SectionProps> = () => {
               "relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl fill-grey-2" +
               (isClickedRestaurants
                 ? " hover:bg-transpartent fill-primary dark:fill-secondary dark:hover:bg-none"
-                : " hover:bg-grey-1 dark:hover:bg-grey-4")
+                : " hover:bg-grey-1 dark:hover:bg-grey-5")
             }
             onClick={() =>
               navigate(

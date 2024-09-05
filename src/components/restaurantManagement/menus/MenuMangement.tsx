@@ -490,7 +490,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
                 label={t("general.search")}
                 onChange={handleSearchInputChange}
                 variant="standard"
-                className="rounded-lg p-1 dark:bg-grey-3 dark:text-white"
+                className="rounded-lg p-1 dark:bg-grey-6 dark:text-white"
               />
             </Box>
           )}

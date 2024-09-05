@@ -133,7 +133,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           className={
             props.className
               ? props.className
-              : "menu-item flex flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-4"
+              : "menu-item flex flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
           }
           onClick={onClicked}
         >
@@ -195,7 +195,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   {t("tools.main.language")}{" "}
                 </DropdownItem>
                 <DropdownItem
-                  className="menu-item flex flex h-14 cursor-default items-center rounded-lg p-2 text-black  hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-4"
+                  className="menu-item flex flex h-14 cursor-default items-center rounded-lg p-2 text-black  hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
                   leftIcon={
                     document.documentElement.className === "dark" ? (
                       <DarkMode />
@@ -294,7 +294,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 language="en"
                 className={
                   i18next.language === "en"
-                    ? "menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-4 dark:text-grey-1 "
+                    ? "menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 "
                     : ""
                 }
               >
@@ -308,7 +308,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 language="pl"
                 className={
                   i18next.language === "pl"
-                    ? "menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-4 dark:text-grey-1 "
+                    ? "menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 "
                     : ""
                 }
               >

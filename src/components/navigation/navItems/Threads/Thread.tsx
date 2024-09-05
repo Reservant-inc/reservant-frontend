@@ -106,7 +106,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
           </Tooltip>
           <h1
             className={`text-sm rounded-lg break-words max-w-[70%] p-2 ${
-              participant.userId !== user.userId ? "bg-grey-1 dark:bg-grey-4 dark:text-white" : "bg-primary dark:bg-secondary text-white dark:text-black dark:font-mont-bd"
+              participant.userId !== user.userId ? "bg-grey-1 dark:bg-grey-5 dark:text-white" : "bg-primary dark:bg-secondary text-white dark:text-black dark:font-mont-bd"
             }`}
           >
             {message.contents}
@@ -160,7 +160,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
           </Tooltip>
         </div>
       </div>
-        <div className="h-[calc(100%-3rem)] w-full z-[0] dark:bg-grey-3">
+        <div className="h-[calc(100%-3rem)] w-full z-[0] dark:bg-grey-6">
           {isEditing ? (
             <div>
               {/* Editing logic here */}
@@ -190,7 +190,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
               </div>
               <div className="flex items-center justify-between h-12 w-full p-2 gap-2 relative">
                 <div
-                  className={`border-[1px] border-grey-1 dark:border-grey-3 bg-grey-0 dark:bg-grey-4 rounded-full transition-all duration-300 ${
+                  className={`border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 rounded-full transition-all duration-300 ${
                     messageToSend.length > 0 ? "w-[calc(100%-48px)]" : "w-full"
                   }`}
                 >
@@ -203,7 +203,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
                   />
                 </div>
                 <button
-                  className={`absolute p-2 hover:bg-grey-0 dark:hover:bg-grey-4 hover:text-primary dark:hover:text-secondary rounded-full h-10 flex items-center justify-center fade-in-opacity right-2 ${
+                  className={`absolute p-2 hover:bg-grey-0 dark:hover:bg-grey-5 hover:text-primary dark:hover:text-secondary rounded-full h-10 flex items-center justify-center fade-in-opacity right-2 ${
                     messageToSend.length > 0 ? "opacity-100" : "opacity-0 z-[-1]"
                   }`}
                   onClick={() => handleSendMessage(messageToSend)}

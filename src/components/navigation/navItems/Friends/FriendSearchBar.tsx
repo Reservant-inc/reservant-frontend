@@ -4,14 +4,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
 import {
   CircularProgress,
-  List,
-  ListItem,
-  ListItemButton,
 } from "@mui/material";
 import { PaginationType, UserSearchType } from "../../../../services/types";
 import SearchedUser from "./SearchedUser";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FetchError } from "../../../../services/Errors";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const FriendSearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -20,6 +19,8 @@ const FriendSearchBar: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+
+  const [ t ] = useTranslation("global")
 
   const pressHandler = async () => {
     setIsPressed(!isPressed);
@@ -69,10 +70,10 @@ const FriendSearchBar: React.FC = () => {
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-3 bg-grey-0 dark:bg-grey-4 px-2 font-mont-md">
+      <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
         <input
           type="text"
-          placeholder="Szukaj znajomych"
+          placeholder={t("friends.search")}
           value={searchTerm}
           onChange={handleSearch}
           onFocus={() => {
@@ -85,9 +86,9 @@ const FriendSearchBar: React.FC = () => {
       {isPressed && (
         <div className="absolute right-0 top-0 w-[460px]">
           {users.length > 0 ? (
-            <div className="nav-dropdown scroll left-0 flex h-[15rem] w-[450px] items-center overflow-y-hidden">
+            <div className="nav-dropdown scroll left-0 flex h-[15rem] w-[450px] items-center overflow-y-hidden dark:bg-black">
               <div className="custom-transition flex h-14 w-full items-center justify-between px-3 py-4">
-                <h1 className="font-mont-bd text-xl">Results</h1>
+                <h1 className="font-mont-bd text-xl dark:text-white">{t('general.results')}</h1>
               </div>
               <div
                 id="scrollableDiv"
@@ -104,7 +105,7 @@ const FriendSearchBar: React.FC = () => {
                   {users.map((user, index) => (
                     <div
                       key={index}
-                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0"
+                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
                     >
                       <SearchedUser user={user} />
                     </div>
@@ -115,17 +116,17 @@ const FriendSearchBar: React.FC = () => {
           ) : (
             <>
               {isLoadingUsers ? (
-                <div className="nav-dropdown left-0 flex h-[3rem] w-[290px] items-center justify-center">
+                <div className="nav-dropdown left-0 flex h-[3rem] w-[290px] items-center justify-center dark:bg-black">
                   <div className="flex flex-col items-center gap-2">
                     <CircularProgress className="h-8 w-8 text-grey-2" />
                   </div>
                 </div>
               ) : (
                 searchTerm.length > 0 && (
-                  <div className="nav-dropdown left-0 flex h-[3rem] w-[290px] items-center justify-center">
+                  <div className="nav-dropdown left-0 flex h-[3rem] w-[290px] items-center justify-center dark:bg-black">
                     <div className="flex flex-col items-center justify-center gap-3">
                       <h1 className="text-center text-sm italic text-grey-3">
-                        No results
+                        {t('general.no-results')}
                       </h1>
                     </div>
                   </div>

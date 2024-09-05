@@ -26,7 +26,7 @@ const RestaurantManager = () => {
   };
 
   return (
-    <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-3">
+    <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-6">
       <div className="z-[0] flex w-full">
         <div className="flex h-full w-[16%] flex-col gap-2 bg-white shadow-md dark:bg-black">
           <Menu

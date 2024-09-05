@@ -3,6 +3,7 @@
         "search": "Szukaj...",
         "cancel": "Anuluj",
         "save": "Zapisz",
+        "results": "Wyniki",
         "no-results": "Brak wyników",
         "close": "Zamknij"
     },
@@ -195,5 +196,20 @@
         "minimize": "Minimalizuj",
         "no-threads": "Nie masz jeszcze żadnych aktywnych wątków",
         "loading": "Wątki się ładują"
+    },
+    "friends": {
+        "search": "Szukaj znajomych",
+        "friends": "Znajomi",
+        "undo": "Cofnij zaproszenie",
+        "send": "Wyślij zaproszenie"
+    },
+    "home-page": {
+        "restaurants": "Restauracje",
+        "search": "Szukaj restauracji",
+        "delivery": "Oferuje dostawę",
+        "no-delivery": "Brak dostaw",
+        "rating": "Dowolna ocena",
+        "reviews": "Oceny",
+        "tags": "Tagi"
     }
 }

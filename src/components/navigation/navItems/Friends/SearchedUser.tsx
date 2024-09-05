@@ -8,6 +8,7 @@ import UndoSharpIcon from "@mui/icons-material/UndoSharp";
 import SendSharpIcon from "@mui/icons-material/SendSharp";
 import { FetchError } from "../../../../services/Errors";
 import DefaultPhoto from "../../../../assets/images/user.jpg";
+import { useTranslation } from "react-i18next";
 
 interface SearchedUserProps {
   user: UserSearchType;
@@ -15,6 +16,8 @@ interface SearchedUserProps {
 
 const SearchedUser: React.FC<SearchedUserProps> = ({ user }) => {
   const [refresh, forceRefresh] = useState<boolean>(true);
+
+  const [t] = useTranslation("global")
 
   const sendRequest = () => {
     try {
@@ -61,15 +64,15 @@ const SearchedUser: React.FC<SearchedUserProps> = ({ user }) => {
           alt="user photo"
           className="h-8 w-8 rounded-full"
         />
-        <h1>{user.firstName}</h1>
-        <h1>{user.lastName}</h1>
+        <h1 className="dark:text-white">{user.firstName}</h1>
+        <h1 className="dark:text-white">{user.lastName}</h1>
       </div>
       <div className="flex w-[25%] items-center justify-center">
         {
           {
             [FriendStatus.Friend]: (
               <h1 className="flex h-12 items-center gap-1 text-sm text-grey-2">
-                friends <CheckSharpIcon className="h-5 w-5" />
+                {t('friends.friends')} <CheckSharpIcon className="h-5 w-5" />
               </h1>
             ),
             [FriendStatus.OutgoingRequest]: (
@@ -77,7 +80,7 @@ const SearchedUser: React.FC<SearchedUserProps> = ({ user }) => {
                 className="flex h-12 w-full items-center justify-center gap-2 rounded-md p-2 text-sm text-grey-2 hover:text-secondary"
                 onClick={deleteRequest}
               >
-                undo request
+                {t('friends.undo')}
                 <UndoSharpIcon className="h-5 w-5" />
               </button>
             ),
@@ -102,7 +105,7 @@ const SearchedUser: React.FC<SearchedUserProps> = ({ user }) => {
                 className="flex h-12 w-full items-center justify-center gap-2 rounded-md p-2 text-sm text-grey-2 hover:text-primary"
                 onClick={sendRequest}
               >
-                send request <SendSharpIcon className="h-5 w-5" />
+                {t('friends.send')} <SendSharpIcon className="h-5 w-5" />
               </button>
             ),
           }[user.friendStatus]

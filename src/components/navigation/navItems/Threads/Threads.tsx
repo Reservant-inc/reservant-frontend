@@ -264,7 +264,7 @@ const Threads: React.FC = () => {
     if (isLoadingThreads) {
       return (
         <div className="flex flex-col items-center gap-2">
-          <h1 className="text-lg italic text-grey-3 dark:text-grey-2">{t("threads.loading")}</h1>
+          <h1 className="text-lg italic text-grey-6 dark:text-grey-2">{t("threads.loading")}</h1>
           <CircularProgress className="h-8 w-8 text-grey-2" />
         </div>
       );
@@ -273,7 +273,7 @@ const Threads: React.FC = () => {
     if (!threads.length) {
       return (
         <div className="flex flex-col items-center justify-center gap-3">
-          <h1 className="text-center text-lg italic text-grey-3 dark:text-grey-2">
+          <h1 className="text-center text-lg italic text-grey-6 dark:text-grey-2">
             {t("threads.no-threads")}
           </h1>
         </div>
@@ -291,7 +291,7 @@ const Threads: React.FC = () => {
           className="hidescroll"
         >
           {threads.map((thread) => (
-            <ListItemButton key={thread.threadId} className="w-full rounded-md p-2 dark:hover:bg-grey-4" onClick={() => handleThreadOpen(thread)}>
+            <ListItemButton key={thread.threadId} className="w-full rounded-md p-2 dark:hover:bg-grey-5" onClick={() => handleThreadOpen(thread)}>
               {<ThreadPreview thread={thread} renderUserPhotos={renderUserPhotos} />}
             </ListItemButton>
           ))}
@@ -303,11 +303,11 @@ const Threads: React.FC = () => {
   const inputClass = "clean-input py-1 px-0 text-sm italic dark:text-white";
 
   const renderNewThreadForm = () => (
-    <div className="flex w-full flex-col border-y-[2px] border-grey-1 dark:border-grey-4 px-3 pt-2">
+    <div className="flex w-full flex-col border-y-[2px] border-grey-1 dark:border-grey-5 px-3 pt-2">
       <div className="flex items-center justify-between">
         <h1 className="font-mont-bd text-lg dark:text-grey-1">{t('threads.new-thread')}</h1>
         <button
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-4"
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5"
           onClick={postThread}
         >
           <CheckIcon className="h-5 w-5 dark:text-grey-1" />
@@ -365,7 +365,7 @@ const Threads: React.FC = () => {
                   !friendsToAdd.includes(friend) && (
                     <ListItemButton
                       key={friend.userId}
-                      className="rounded-lg px-2 py-2 hover:bg-grey-0 dark:hover:bg-grey-4"
+                      className="rounded-lg px-2 py-2 hover:bg-grey-0 dark:hover:bg-grey-5"
                       onClick={() => onFriendSelect(friend)}
                     >
                       <div className="flex w-full items-center gap-[5px] overflow-x-hidden text-sm">
@@ -387,7 +387,7 @@ const Threads: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center gap-3">
-              <h1 className="text-center text-sm italic text-grey-3 dark:text-grey-2">
+              <h1 className="text-center text-sm italic text-grey-6 dark:text-grey-2">
                 {t('general.no-results')}
               </h1>
             </div>
@@ -402,7 +402,7 @@ const Threads: React.FC = () => {
       <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
         <Button
           id="NotificationsButton"
-          className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 dark:bg-grey-4 text-black dark:text-grey-1 ${isPressed && "text-primary dark:text-secondary"}`}
+          className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 text-black dark:text-grey-1 ${isPressed && "text-primary dark:text-secondary"}`}
           onClick={pressHandler}
         >
           <CommentRoundedIcon className="h-[23px] w-[23px]" />
@@ -413,7 +413,7 @@ const Threads: React.FC = () => {
               <div className="flex h-14 w-full items-center justify-between px-3 py-2">
                 <h1 className="font-mont-bd text-xl text-black dark:text-white">{t("threads.threads")}</h1>
                 <Button
-                  className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-4 p-1 text-black ${isCreatingThread ? "text-primary dark:text-secondary" : "text-black dark:text-grey-1"}`}
+                  className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 p-1 text-black ${isCreatingThread ? "text-primary dark:text-secondary" : "text-black dark:text-grey-1"}`}
                   onClick={toggleCreatingThread}
                 >
                   <AddCommentRoundedIcon className="h-5 w-5" />
@@ -421,7 +421,7 @@ const Threads: React.FC = () => {
               </div>
               {isCreatingThread && renderNewThreadForm()}
               <div className="w-full px-3 py-3">
-                <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-3 bg-grey-0 dark:bg-grey-4 px-2 font-mont-md">
+                <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
                   <input
                     type="text"
                     placeholder={t('threads.search')}
