@@ -197,6 +197,8 @@
         "friends": "Friends",
         "message": "Message",
         "send-message": "Send a message",
-        "minimize": "Minimize"
+        "minimize": "Minimize",
+        "no-threads": "You do not have any active threads yet",
+        "loading": "Threads are loading"
     }
 }

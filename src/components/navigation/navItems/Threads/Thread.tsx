@@ -141,7 +141,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
         </div>
         <div className="flex gap-1 items-center">
           <Tooltip 
-          title={t('threads.send-message')} 
+          title={t('threads.minimize')} 
           placement="top" 
           arrow
           >

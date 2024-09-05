@@ -192,6 +192,8 @@
         "friends": "Znajomi",
         "message": "Wiadomość",
         "send-message": "Wyślij wiadomość",
-        "minimize": "Minimalizuj"
+        "minimize": "Minimalizuj",
+        "no-threads": "Nie masz jeszcze żadnych aktywnych wątków",
+        "loading": "Wątki się ładują"
     }
 }

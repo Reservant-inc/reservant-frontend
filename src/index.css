@@ -171,13 +171,15 @@ body {
   }
   
   .scroll::-webkit-scrollbar-thumb {
-    @apply rounded-full
+    @apply rounded-full bg-grey-2 dark:bg-grey-3
   }
 
   .scroll::-webkit-scrollbar-track {
+    @apply bg-grey-0 dark:bg-grey-2
   }
   
   .scroll::-webkit-scrollbar-thumb:hover {
+    @apply bg-grey-4
   }
   
 }

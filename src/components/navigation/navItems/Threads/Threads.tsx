@@ -264,7 +264,7 @@ const Threads: React.FC = () => {
     if (isLoadingThreads) {
       return (
         <div className="flex flex-col items-center gap-2">
-          <h1 className="text-lg italic text-grey-3">Threads are loading</h1>
+          <h1 className="text-lg italic text-grey-3 dark:text-grey-2">{t("threads.loading")}</h1>
           <CircularProgress className="h-8 w-8 text-grey-2" />
         </div>
       );
@@ -273,8 +273,8 @@ const Threads: React.FC = () => {
     if (!threads.length) {
       return (
         <div className="flex flex-col items-center justify-center gap-3">
-          <h1 className="text-center text-lg italic text-grey-3">
-            You do not have any active threads yet
+          <h1 className="text-center text-lg italic text-grey-3 dark:text-grey-2">
+            {t("threads.no-threads")}
           </h1>
         </div>
       );
