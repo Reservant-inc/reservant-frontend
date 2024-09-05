@@ -69,7 +69,7 @@ const FriendSearchBar: React.FC = () => {
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-2 font-mont-md">
+      <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-3 bg-grey-0 dark:bg-grey-4 px-2 font-mont-md">
         <input
           type="text"
           placeholder="Szukaj znajomych"
@@ -78,9 +78,9 @@ const FriendSearchBar: React.FC = () => {
           onFocus={() => {
             if (!isPressed) setIsPressed(!isPressed);
           }}
-          className="clean-input h-8 w-[250px] p-2"
+          className="clean-input h-8 w-[250px] p-2 placeholder:text-grey-2 dark:text-grey-1"
         />
-        <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer" />
+        <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
       </div>
       {isPressed && (
         <div className="absolute right-0 top-0 w-[460px]">

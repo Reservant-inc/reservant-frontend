@@ -30,7 +30,6 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
   const scrollableDivRef = useRef<HTMLDivElement | null>(null);
 
   const getMessages = async () => {
-    console.log("wgas")
     try {
       const result: PaginationType = await fetchGET(`/threads/${thread.threadId}/messages?page=${page}&perPage=20`);
       const newMessages: MessageType[] = result.items as MessageType[];
@@ -91,10 +90,9 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
       }
     }
 
-
     return (
         <div
-        key={message.messageId}
+          key={message.messageId}
           className={`flex items-center gap-2 w-full ${
             participant.userId !== user.userId ? "self-start" : "self-end flex-row-reverse"
           }`}
@@ -201,7 +199,7 @@ const Thread: React.FC<ThreadProps> = ({ thread, handleThreadClose, handleThread
                     placeholder={t('threads.message')}
                     value={messageToSend}
                     onChange={(e) => setMessageToSend(e.target.value)}
-                    className="text-sm w-full placeholder:text-grey-2 dark:text-white"
+                    className="text-sm w-full placeholder:text-grey-2 dark:text-grey-1"
                   />
                 </div>
                 <button

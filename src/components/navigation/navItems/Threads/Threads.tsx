@@ -37,7 +37,6 @@ const Threads: React.FC = () => {
 
   const [t] = useTranslation("global");
 
-
   const clearStates = () => {
     setFriendSearchQuery("");
     setThreadTitle("");
@@ -94,12 +93,12 @@ const Threads: React.FC = () => {
 
       const result: PaginationType = await fetchGET(`/user/threads?page=${page}`);
       const newThreads = result.items as ThreadType[]
-        
+
       if (newThreads.length < 10) setHasMore(false);
-        
-      if (page > 0) 
+
+      if (page > 0)
         setThreads((prevThreads) => [...prevThreads, ...newThreads]);
-      else 
+      else
         setThreads(newThreads);
 
     } catch (error) {
@@ -112,10 +111,6 @@ const Threads: React.FC = () => {
       setIsLoadingThreads(false);
     }
   };
-
-  useEffect(() => {
-    console.log("jzu")
-  }, [activeThreads]);
 
   useEffect(() => {
     getThreads()
@@ -167,17 +162,17 @@ const Threads: React.FC = () => {
 
   const handleThreadOpen = (thread: ThreadType) => {
     setIsPressed(false);
-  
+
     const isActive = activeThreads.some(
       (activeThread) => activeThread.threadId === thread.threadId
     );
-  
+
     if (isActive) return;
-  
+
     const isInactive = inactiveThreads.some(
       (inactiveThread) => inactiveThread.threadId === thread.threadId
     );
-  
+
     if (isInactive) {
       handleThreadMaximize(thread);
     } else {
@@ -187,7 +182,6 @@ const Threads: React.FC = () => {
       setActiveThreads((prevThreads) => [...prevThreads, thread]);
     }
   };
-  
 
   const handleThreadClose = (thread: ThreadType) => {
 
@@ -195,11 +189,11 @@ const Threads: React.FC = () => {
       (activeThread) => activeThread.threadId === thread.threadId
     );
 
-    if (isActive) 
+    if (isActive)
       setActiveThreads((prevThreads) =>
         prevThreads.filter((activeThread) => activeThread.threadId !== thread.threadId)
       );
-    else 
+    else
       setInactiveThreads((prevThreads) =>
         prevThreads.filter((inactiveThread) => inactiveThread.threadId !== thread.threadId)
       );
@@ -209,11 +203,11 @@ const Threads: React.FC = () => {
     setActiveThreads((prevThreads) =>
       prevThreads.filter((activeThread) => activeThread.threadId !== thread.threadId)
     );
-  
+
     if (inactiveThreads.length >= 5) {
       handleThreadClose(inactiveThreads[0]);
     }
-  
+
     setInactiveThreads((prevThreads) => [...prevThreads, thread]);
   };
 
@@ -222,48 +216,48 @@ const Threads: React.FC = () => {
     setInactiveThreads((prevThreads) =>
       prevThreads.filter((inactiveThread) => inactiveThread.threadId !== thread.threadId)
     );
-  
+
     if (activeThreads.length >= 2) {
       const earliestActiveThread = activeThreads[0];
-  
+
       setActiveThreads((prevThreads) =>
         prevThreads.filter((_, index) => index !== 0)
       );
-  
+
       setInactiveThreads((prevThreads) => {
         const updatedInactiveThreads = [...prevThreads, earliestActiveThread];
-  
+
         if (updatedInactiveThreads.length > 5) {
           return updatedInactiveThreads.slice(1);
         }
-  
+
         return updatedInactiveThreads;
       });
     }
-  
+
     setActiveThreads((prevThreads) => [...prevThreads, thread]);
   };
-  
+
 
   const renderUserPhotos = (thread: ThreadType) => {
-      return(
-        thread.participants.length > 1 ? (
-          <div className="relative w-10 h-10">
-            <div className="absolute h-8 w-8 flex items-center justify-center bg-white dark:bg-black z-[0] top-0 right-0 rounded-full">
-              <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full"/>
-            </div>
-            <div className="absolute h-8 w-8 flex items-center justify-center bg-white dark:bg-black z-[1] bottom-0 left-0 rounded-full">
-              <img src={getImage(thread.participants[1].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full"/>
-            </div>
+    return (
+      thread.participants.length > 1 ? (
+        <div className="relative w-10 h-10">
+          <div className="absolute h-8 w-8 flex items-center justify-center bg-white dark:bg-black z-[0] top-0 right-0 rounded-full">
+            <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full" />
           </div>
-        ) : (
-          <div className="w-10 h-10 flex items-center justify-center">
-            <div className="h-9 w-9 flex items-center justify-center bg-white dark:bg-black rounded-full">
-              <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="h-9 w-9 rounded-full"/>
-            </div>
+          <div className="absolute h-8 w-8 flex items-center justify-center bg-white dark:bg-black z-[1] bottom-0 left-0 rounded-full">
+            <img src={getImage(thread.participants[1].photo, DefaultPhoto)} className="absolute h-7 w-7 rounded-full" />
           </div>
-        )
+        </div>
+      ) : (
+        <div className="w-10 h-10 flex items-center justify-center">
+          <div className="h-10 w-10 flex items-center justify-center bg-white dark:bg-black rounded-full">
+            <img src={getImage(thread.participants[0].photo, DefaultPhoto)} className="h-9 w-9 rounded-full" />
+          </div>
+        </div>
       )
+    )
   }
 
   const renderThreadsContent = () => {
@@ -298,7 +292,7 @@ const Threads: React.FC = () => {
         >
           {threads.map((thread) => (
             <ListItemButton key={thread.threadId} className="w-full rounded-md p-2 dark:hover:bg-grey-4" onClick={() => handleThreadOpen(thread)}>
-              { <ThreadPreview thread={thread} renderUserPhotos={renderUserPhotos}/> }
+              {<ThreadPreview thread={thread} renderUserPhotos={renderUserPhotos} />}
             </ListItemButton>
           ))}
         </InfiniteScroll>
@@ -359,9 +353,8 @@ const Threads: React.FC = () => {
       </div>
       {friendSearchQuery.length > 0 && (
         <div
-          className={`h-[${friends.length <= 4 ? friends.length * 50 : 200}] ${
-            friends.length > 4 && "scroll overflow-y-scroll"
-          }`}
+          className={`h-[${friends.length <= 4 ? friends.length * 50 : 200}] ${friends.length > 4 && "scroll overflow-y-scroll"
+            }`}
         >
           {friends.length > 0 ? (
             <List
@@ -444,26 +437,22 @@ const Threads: React.FC = () => {
           )
         }
       </OutsideClickHandler>
-      {
-        true && (
-          <div className="absolute w-[675px] h-[400px] bottom-0 right-[0.5rem] z-[0] flex gap-2">
-            <div className="w-full h-full flex flex-row-reverse gap-[15px]">
-              {
-                activeThreads.map((activeThread) => (
-                  <Thread thread={activeThread} handleThreadClose={handleThreadClose} handleThreadMinimize={handleThreadMinimize}/>  
-                ))
-              }
-            </div>
-            <div className="w-14 h-full flex flex-col-reverse py-4 gap-2">
-              {
-                inactiveThreads.map((inactiveThread) => (
-                  <InactiveThread thread={inactiveThread} handleThreadMaximize={handleThreadMaximize} renderUserPhotos={renderUserPhotos} handleThreadClose={handleThreadClose}/>
-                ))
-              }
-            </div>
-          </div>
-        )
-      }
+      <div className="absolute w-[675px] h-[400px] bottom-0 right-[0.5rem] z-[0] flex gap-2">
+        <div className="w-full h-full flex flex-row-reverse gap-[15px]">
+          {
+            activeThreads.map((activeThread) => (
+              <Thread key={activeThread.threadId} thread={activeThread} handleThreadClose={handleThreadClose} handleThreadMinimize={handleThreadMinimize} />
+            ))
+          }
+        </div>
+        <div className="w-14 h-full flex flex-col-reverse py-4 gap-2">
+          {
+            inactiveThreads.map((inactiveThread) => (
+              <InactiveThread key={inactiveThread.threadId} thread={inactiveThread} handleThreadMaximize={handleThreadMaximize} renderUserPhotos={renderUserPhotos} handleThreadClose={handleThreadClose} />
+            ))
+          }
+        </div>
+      </div>
     </div>
   );
 };
