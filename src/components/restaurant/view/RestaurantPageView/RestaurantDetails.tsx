@@ -17,6 +17,7 @@ import MopedIcon from "@mui/icons-material/Moped";
 import { MenuItem } from "../../../../services/interfaces";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "../../../map/CustomMarker";
+import DefaultPic from "../../../../assets/images/no-image.png"
 
 const TABS = {
   MENU: "menu",
@@ -78,7 +79,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const renderGallery = () => {
     if (!restaurant.photos || restaurant.photos.length === 0) {
       return (
-        <div className="mx-4 flex h-40 w-full items-center justify-center rounded-lg border-2 border-primary bg-grey-1 italic text-grey-4 lg:mx-10">
+        <div className="mx-4 flex h-40 w-full items-center justify-center rounded-lg border-2 border-primary bg-grey-1 italic text-grey-5 lg:mx-10">
           <Typography variant="h5" component="div">
             {restaurant.name} nie posiada jeszcze żadnych zdjęć.
           </Typography>
@@ -94,10 +95,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
               <img
                 className="bg-grey-2"
                 srcSet={getImage(
-                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string, DefaultPic
                 )}
                 src={getImage(
-                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                  `${img}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string, DefaultPic
                 )}
                 alt={`Restaurant image ${index + 1}`}
                 loading="lazy"
@@ -119,10 +120,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
               <img
                 className="bg-grey-2"
                 srcSet={getImage(
-                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string, DefaultPic
                 )}
                 src={getImage(
-                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string,
+                  `${restaurant.photos[3]}?w=400&h=400&fit=crop&auto=format&dpr=2 2x` as string, DefaultPic
                 )}
                 alt="Show more"
                 loading="lazy"
@@ -202,7 +203,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       <div className="relative mb-40 border-l-4 border-r-4 border-t-4 border-primary lg:mb-32">
         <Box
           component="img"
-          src={getImage(restaurant.logo as string)}
+          src={getImage(restaurant.logo as string, DefaultPic)}
           alt="Restaurant logo"
           className="w-full object-cover lg:h-96"
         />
@@ -300,7 +301,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           className={`cursor-pointer py-3 ${
             activeTab === TABS.MENU
               ? "text-2xl font-extrabold text-primary underline"
-              : "text-2xl text-grey-4"
+              : "text-2xl text-grey-5"
           }`}
           onClick={() => setActiveTab(TABS.MENU)}
         >
@@ -310,7 +311,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           className={`cursor-pointer py-3 ${
             activeTab === TABS.EVENTS
               ? "text-2xl font-extrabold text-primary underline"
-              : "text-2xl text-grey-4"
+              : "text-2xl text-grey-5"
           }`}
           onClick={() => setActiveTab(TABS.EVENTS)}
         >
@@ -320,7 +321,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           className={`cursor-pointer py-3 ${
             activeTab === TABS.REVIEWS
               ? "text-2xl font-extrabold text-primary underline"
-              : "text-2xl text-grey-4"
+              : "text-2xl text-grey-5"
           }`}
           onClick={() => setActiveTab(TABS.REVIEWS)}
         >
@@ -356,10 +357,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
               <ImageListItem key={index}>
                 <img
                   srcSet={getImage(
-                    `${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x` as string,
+                    `${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x` as string, DefaultPic
                   )}
                   src={getImage(
-                    `${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x` as string,
+                    `${img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x` as string, DefaultPic
                   )}
                   alt={`Restaurant image ${index + 1}`}
                   loading="lazy"

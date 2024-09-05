@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import Map from "./map/Map";
 import {
   Button,
-  IconButton,
   List,
   ListItemButton,
   Rating,
@@ -15,7 +14,10 @@ import FocusedRestaurantDetails from "./restaurant/view/OnMapView/FocusedRestaur
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { fetchGET, getImage } from "../services/APIconn";
 import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
-import { RestaurantType } from "../services/types";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { FetchError } from "../services/Errors";
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
@@ -26,13 +28,15 @@ export default function HomePage() {
     new Set(),
   );
   const [userMovedMap, setUserMovedMap] = useState<boolean>(false);
-  const [isReviewFilterPressed, setIsReviewFilterPressed] = useState<boolean>(false);
+  const [isReviewFilterPressed, setIsReviewFilterPressed] =
+    useState<boolean>(false);
   const [isTagFilterPressed, setIsTagFilterPressed] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(true);
   const [reviewFilter, setReviewFilter] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [chosenTags, setChosenTags] = useState<string[]>([]);
-  const [page, setPage] = useState<number>(0);
-  const itemsPerPage = 10;
+
+  const [t] = useTranslation("global")
 
   //center of warsaw, cant get users location without https
   const [bounds, setBounds] = useState<any>({
@@ -45,10 +49,14 @@ export default function HomePage() {
   useEffect(() => {
     const getTags = async () => {
       try {
-        const response = await fetchGET('/restaurant-tags');
+        const response = await fetchGET("/restaurant-tags");
         setTags(response);
       } catch (error) {
-        console.error("Error getting restaurants", error);
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error:", error);
+        }
       }
     };
     getTags();
@@ -57,32 +65,42 @@ export default function HomePage() {
   useEffect(() => {
     const getRestaurants = async () => {
       try {
-        const tagsQuery = chosenTags.map((tag) => {
-          return `&tags=${tag}`;
-        }).join('');
+        const tagsQuery = chosenTags
+          .map((tag) => {
+            return `&tags=${tag}`;
+          })
+          .join("");
 
         const response = await fetchGET(
-          `/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&page=${page}&perPage=${itemsPerPage}`,
+          `/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}`,
         );
 
-        const newRestaurants = response.items.filter((restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId));
+        const newRestaurants = response.items.filter(
+          (restaurant: any) =>
+            !loadedRestaurantIds.has(restaurant.restaurantId),
+        );
 
         setRestaurants([...restaurants, ...newRestaurants]);
         setAllRestaurants([...allRestaurants, ...newRestaurants]);
 
-        setLoadedRestaurantIds(prevIds => {
+        setLoadedRestaurantIds((prevIds) => {
           const newIds = new Set(prevIds);
           newRestaurants.forEach((restaurant: any) =>
             newIds.add(restaurant.restaurantId),
           );
           return newIds;
         });
+
       } catch (error) {
-        console.error("Error getting restaurants", error);
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error:", error);
+        }
       }
     };
     getRestaurants();
-  }, [bounds, chosenTags, reviewFilter, page]);
+  }, [bounds, chosenTags, reviewFilter]);
 
   const reviewsPressHandler = () => {
     setIsReviewFilterPressed(!isReviewFilterPressed);
@@ -106,157 +124,241 @@ export default function HomePage() {
   };
 
   return (
-    <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3 relative">
-      <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-2xl overflow-y-auto overflow-x-hidden scroll">
-        <div className="p-3">
-          <div className="w-full flex px-1 rounded-full bg-grey-0 border-[1px] border-grey-1 font-mont-md items-center">
-            <input 
-              type="text"
-              placeholder="Search for restaurants"
-              className="clean-input w-full"
-              onChange={(e)=>{
-                setRestaurants(allRestaurants.filter((restaurant: any)=>{
-                  return (restaurant.name.toLowerCase().includes(e.target.value.toLowerCase()))
-                }))
-              }}
-            />
-            <SearchIcon className="hover:cursor-pointer h-[25px] w-[25px]"/>
-          </div>
-        </div>
-        <List
-          id="homePage-restaurantList"
-          className="w-full font-mont-md dark:bg-black p-0"
-          component="nav"
-        >
-          {restaurants.map((restaurant, index) => (
-            <>
-              <ListItemButton
-                id="homePage-listItemButton"
-                onClick={() => {
-                  setUserMovedMap(false);
-                  setActiveRestaurant(restaurant);
-                }}
-                key={index}
-                className={
-                  activeRestaurant === restaurant ? "bg-grey-1" : "bg-white hover:bg-grey-1"
-                }
+    <div
+      id="homePage-wrapper"
+      className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-black"
+    >
+      {isMenuOpen ? (
+        <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] h-[calc(100%-1rem)] w-[300px] rounded-lg bg-white dark:bg-black shadow-2xl flex flex-col">
+            <div className="flex h-14 w-full items-center justify-between px-3 py-2">
+              <h1 className="font-mont-bd text-xl dark:text-white">{t('home-page.restaurants')}</h1>
+              <Button
+                className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 text-black text-black`}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
-                <div className="flex w-full items-start justify-between py-3">
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-md font-mont-md">{restaurant.name}</h1>
-                    <div className="flex">
-                      <h1 className="text-sm">{Math.round((restaurant.rating + Number.EPSILON) * 100) / 100}</h1>
-                      <Rating name="read-only" value={restaurant.rating} readOnly className="text-[18px]"/>
-                      <h1 className="text-sm">{`(${restaurant.numberReviews})`}</h1>
-                    </div>
-                    <h1 className="font-mont-l text-sm">
-                      {restaurant.address}
-                    </h1>
-                    <h1 className="font-mont-l text-sm">
-                      {restaurant.provideDelivery
-                        ? "Provides delivery"
-                        : "No delivery"}
-                    </h1>
-                    <div className="flex gap-2">
-                      {
-                        restaurant.tags.map((tag: string, index: number) => (
-                          <h1 className="text-sm font-mont-md" key={index}>{tag}</h1>
-                        ))
-                      }
-                    </div>
-                  </div>
-                  <img
-                    src={getImage(restaurant.logo)}
-                    alt="logo"
-                    className="h-24 w-24 rounded-lg"
-                  />
-                </div>
-              </ListItemButton>
-              <div className="h-[1px] w-full bg-grey-1"></div>
-            </>
-          ))}
-        </List>
-      </div>
-      <div className="absolute left-[370px] h-[40px] w-[450px] top-[15px] flex items-center gap-4 z-[2]">
-        <OutsideClickHandler onOutsideClick={reviewsPressHandler} isPressed={isReviewFilterPressed}>
-          <Button id="homePage-reviewsFilter" className={"h-full rounded-lg shadow-md p-2 flex gap-2 " + (reviewFilter !== 0 ? "bg-primary text-white" : "bg-white text-black")}
-            onClick={reviewsPressHandler}
-          >
-            <StarPurple500SharpIcon className="h-6"/>
-            {   
-            reviewFilter === 0 ? "Reviews" : `${reviewFilter}.0 or more`
-            } 
-          </Button>
-          {isReviewFilterPressed && (
-            <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg">
+                <KeyboardBackspaceIcon className="h-5 w-5 dark:text-grey-1" />
+              </Button>
+            </div>
+            <div className="px-3 py-3">
+              <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-1 font-mont-md">
+                <input
+                  type="text"
+                  placeholder={t('home-page.search')}
+                  className="w-full placeholder:text-grey-2"
+                  onChange={(e) => {
+                    setRestaurants(
+                      allRestaurants.filter((restaurant: any) => {
+                        return restaurant.name
+                          .toLowerCase()
+                          .includes(e.target.value.toLowerCase());
+                      }),
+                    );
+                  }}
+                />
+                <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer text-grey-2" />
+              </div>
+            </div>
+            <div className="scroll h-full overflow-y-auto">
               <List
                 id="homePage-restaurantList"
-                className="font-mont-md dark:bg-black w-full"
+                className="w-full p-0 px-2 font-mont-md dark:bg-black"
+              >
+                {restaurants.map((restaurant, index) => (
+                  <div key={index}>
+                    <ListItemButton
+                      id="homePage-listItemButton"
+                      onClick={() => {
+                        setUserMovedMap(false);
+                        setActiveRestaurant(restaurant);
+                      }}
+                      className={`rounded-md p-3 dark:bg-black
+                        ${activeRestaurant === restaurant
+                          ? " bg-grey-1 dark:bg-grey-5"
+                          : " bg-white hover:bg-grey-1 dark:hover:bg-grey-5"}
+                          `
+                      }
+                    >
+                      <div className="flex w-full items-start justify-between py-2">
+                        <div className="flex flex-col gap-1">
+                          <h1 className="text-md font-mont-md dark:text-white">
+                            {restaurant.name}
+                          </h1>
+                          <div className="flex">
+                            <h1 className="text-sm dark:text-white">
+                              {Math.round(
+                                (restaurant.rating + Number.EPSILON) * 100,
+                              ) / 100}
+                            </h1>
+                            <Rating
+                              name="read-only"
+                              value={restaurant.rating}
+                              readOnly
+                              className="text-[18px]"
+                            />
+                            <h1 className="text-sm dark:text-white">{`(${restaurant.numberReviews})`}</h1>
+                          </div>
+                          <h1 className="font-mont-l text-sm dark:text-white">
+                            {restaurant.address}
+                          </h1>
+                          <h1 className="font-mont-l text-sm dark:text-white">
+                            {restaurant.provideDelivery
+                              ? t("home-page.delivery")
+                              : t("home-page.no-delivery")}
+                          </h1>
+                          <div className="flex gap-2">
+                            {restaurant.tags.map((tag: string, index: number) => (
+                              <h1 className="font-mont-md text-sm dark:text-white" key={index}>
+                                {tag}
+                              </h1>
+                            ))}
+                          </div>
+                        </div>
+                        <img
+                          src={getImage(restaurant.logo, "")}
+                          alt="logo"
+                          className="h-24 w-24 rounded-lg"
+                        />
+                      </div>
+                    </ListItemButton>
+                  </div>
+                ))}
+              </List>
+            </div>
+          </div>
+      ) : (
+        <div className="absolute left-[0.5rem] top-[0.5rem] z-[1]">
+          <Button
+            id="NotificationsButton"
+            className={`relative flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-white dark:bg-grey-5 text-black dark:text-grey-1 shadow-md ${isMenuOpen && "text-primary"}`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <RestaurantMenuIcon className="h-6 w-6 dark:text-grey-1" />
+          </Button>
+        </div>
+      )}
+      <div
+        className={`absolute top-[0.5rem] z-[2] flex items-center gap-2 ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[3.5rem]"}`}
+      >
+        <OutsideClickHandler
+          onOutsideClick={reviewsPressHandler}
+          isPressed={isReviewFilterPressed}
+        >
+          <Button
+            id="homePage-reviewsFilter"
+            className={
+              "flex h-10 gap-2 rounded-full p-2 shadow-md " +
+              (reviewFilter !== 0
+                ? "bg-primary text-white dark:bg-secondary dark:text-black"
+                : "bg-white text-black dark:bg-grey-5 dark:text-white")
+            }
+            onClick={reviewsPressHandler}
+          >
+            <StarPurple500SharpIcon className={"h-6 " +
+              (reviewFilter !== 0
+                ? "text-white dark:text-black"
+                : "text-black dark:text-white")
+            } />
+            {reviewFilter === 0 ? t('home-page.reviews') : `${reviewFilter}.0 or more`}
+          </Button>
+          {isReviewFilterPressed && (
+            <div className="absolute top-[55px] rounded-lg bg-white dark:bg-black shadow-2xl">
+              <List
+                id="homePage-restaurantList"
+                className="w-full font-mont-md"
               >
                 <ListItemButton
                   id="homePage-listItemButton"
-                  className="flex gap-2 justify-center items-center"
+                  className="flex items-center justify-center gap-2"
                   onClick={() => {
                     setReviewFilter(0);
                     setIsReviewFilterPressed(false);
                   }}
                 >
-                  <Typography component="legend">Any rating</Typography>
+                  <Typography component="legend" className="dark:text-white">{t('home-page.rating')}</Typography>
                 </ListItemButton>
                 {[2, 3, 4, 5].map((value, index) => (
                   <ListItemButton
                     id="homePage-listItemButton"
-                    className="flex gap-2 justify-center items-center"
+                    className="flex items-center justify-center gap-2"
                     onClick={() => {
                       setReviewFilter(value);
                       setIsReviewFilterPressed(false);
                     }}
                     key={index}
                   >
-                    <Typography component="legend">{value}.0</Typography>
-                    <Rating name="read-only" value={value} readOnly />
+                    <Typography component="legend" className="dark:text-white">{value}.0</Typography>
+                    <Rating name="read-only" value={value} readOnly/>
                   </ListItemButton>
                 ))}
               </List>
-            </div>  
+            </div>
           )}
         </OutsideClickHandler>
-        <OutsideClickHandler onOutsideClick={tagsPressHandler} isPressed={isTagFilterPressed}>
-          <Button id="homePage-tagssFilter" className={"h-full rounded-lg shadow-md p-2 flex items-center gap-2 " + (chosenTags.length > 0 ? "bg-primary text-white" : "bg-white text-black")}
+        <OutsideClickHandler
+          onOutsideClick={tagsPressHandler}
+          isPressed={isTagFilterPressed}
+        >
+          <Button
+            id="homePage-tagssFilter"
+            className={
+              "flex h-10 items-center justify-center gap-2 rounded-full p-2 shadow-md " +
+              (chosenTags.length > 0
+                ? "bg-primary text-white dark:bg-secondary dark:text-black"
+                : "bg-white text-black dark:bg-grey-5 dark:text-white")
+            }
             onClick={tagsPressHandler}
           >
-            <LocalOfferSharpIcon className="h-6"/>
-            {   
-            chosenTags.length > 0 ? chosenTags.length === 1 ? `${chosenTags.length} tag` : `${chosenTags.length} tags` : "Tags"
-            } 
-            {
-            chosenTags.length > 0 && <button className="h-[30px] w-[30px] rounded-full" onClick={() => setChosenTags([])}><CloseSharpIcon className="w-[30px]"/></button>  
-            }
+            <LocalOfferSharpIcon className={"h-6 " +
+              (chosenTags.length > 0
+                ? "text-white dark:text-black"
+                : "text-black dark:text-white")
+            }/>
+            {chosenTags.length > 0
+              ? chosenTags.length === 1
+                ? `${chosenTags.length} tag`
+                : `${chosenTags.length} tags`
+              : t('home-page.tags')}
+            {chosenTags.length > 0 && (
+              <button
+                className="flex h-[20px] w-[20px] items-center rounded-full"
+                onClick={() => setChosenTags([])}
+              >
+                <CloseSharpIcon className={"h-[20px] w-[20px] " +
+                  (chosenTags.length > 0
+                    ? "text-white dark:text-black"
+                    : "text-black dark:text-white")
+                }/>
+              </button>
+            )}
           </Button>
           {isTagFilterPressed && (
-            <div className="absolute top-[55px] bg-white shadow-2xl rounded-lg w-44 flex flex-wrap justify-start p-3 gap-2">
-              {
-                tags.map((tag, i) => (
-                  <button
-                    key={i}
-                    className={`rounded-full border-[1px] border-grey-2 p-2 text-[12px] font-mont-md ${chosenTags.includes(tag) ? "text-white bg-primary" : "text-black bg-white"}`}
-                    onClick={() => handleTagSelection(tag)}
-                  >
-                    {tag.toUpperCase()}
-                  </button>
-                ))
-              }
-            </div>  
+            <div className="absolute top-[55px] flex w-44 flex-wrap justify-start gap-2 rounded-lg bg-white dark:bg-black p-3 shadow-2xl">
+              {tags.map((tag, i) => (
+                <button
+                  key={i}
+                  className={`rounded-full border-[1px] border-grey-2 dark:border-grey-6 p-2 font-mont-md text-[12px] ${chosenTags.includes(tag) ? "bg-primary text-white dark:bg-secondary dark:text-black" : "bg-white dark:bg-grey-5 text-black dark:text-white"}`}
+                  onClick={() => handleTagSelection(tag)}
+                >
+                  {tag.toUpperCase()}
+                </button>
+              ))}
+            </div>
           )}
         </OutsideClickHandler>
       </div>
       {activeRestaurant && (
-        <FocusedRestaurantDetails
-          restaurantId={activeRestaurant.restaurantId}
-          onClose={() => setActiveRestaurant(null)}
-        />
+        <div
+          className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[300px] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
+        >
+          <div className="scroll h-full overflow-y-auto">
+            <FocusedRestaurantDetails
+              restaurantId={activeRestaurant.restaurantId}
+              onClose={() => setActiveRestaurant(null)}
+            />
+          </div>
+        </div>
       )}
-      <div id="map" className="z-[0] h-full w-[85%] relative">
+      <div id="map" className="relative z-[0] h-full w-full">
         <Map
           activeRestaurant={activeRestaurant}
           restaurants={restaurants}

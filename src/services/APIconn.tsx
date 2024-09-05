@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
-import { FetchError } from '../services/Errors';
+import { FetchError } from "../services/Errors";
+import DefaultUser from "../assets/images/user.jpg"
 
 export const fetchGET = async (connString: string) => {
   const token = Cookies.get("token");
@@ -15,7 +16,7 @@ export const fetchGET = async (connString: string) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData);
+    throw new FetchError("" , errorData.status, errorData.errors);
   }
 
   const data = await response.json();
@@ -23,7 +24,7 @@ export const fetchGET = async (connString: string) => {
   return data;
 };
 
-export const fetchPOST = async (connString: string, body?: string) => {
+export const fetchPOST = async (connString: string, body?: any) => {
   const token = Cookies.get("token");
 
   const fetchOptions: RequestInit = {
@@ -47,8 +48,7 @@ export const fetchPOST = async (connString: string, body?: string) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
-    throw new FetchError(errorData.title, errorData.status);
+    throw new FetchError("" , errorData.status, errorData.errors);
   }
 
   const text = await response.text();
@@ -76,13 +76,12 @@ export const fetchPUT = async (connString: string, body: string) => {
     },
   );
 
-  if(!(response.json.length > 0)){
-    return
+  if (!(response.json.length > 0)) {
+    return;
   }
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
     throw new Error(errorData);
   }
 
@@ -104,14 +103,13 @@ export const fetchDELETE = async (connString: string) => {
     },
   );
 
-  if(!(response.json.length > 0)){
-    return
+  if (!(response.json.length > 0)) {
+    return;
   }
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
-    throw new Error(errorData);
+    throw new FetchError("" , errorData.status, errorData.errors);
   }
 
   const data = await response.json();
@@ -138,7 +136,6 @@ export const fetchFilesPOST = async (connString: string, file: File) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.log(errorData);
     throw new Error(errorData);
   }
 
@@ -147,6 +144,11 @@ export const fetchFilesPOST = async (connString: string, file: File) => {
   return data;
 };
 
-export const getImage = (path: string) => {
+export const getImage = (path: string, defaultImagePath: string) => {
+
+  if (!path) {
+    return defaultImagePath;
+  }
+
   return `${process.env.REACT_APP_SERVER_IP}${path}`;
 };

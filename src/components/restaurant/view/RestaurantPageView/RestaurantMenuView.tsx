@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MenuItemComponent from "../MenuItemComponent";
 import { MenuItem } from "../../../../services/interfaces";
 import { fetchGET, getImage } from "../../../../services/APIconn";
+import DefaultPic from "../../../../assets/images/no-image.png"
 
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItem) => void;
@@ -115,7 +116,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
             <div className="flex gap-4">
               <Box
                 component="img"
-                src={getImage(menu.photo) as string}
+                src={getImage(menu.photo as string, DefaultPic)}
                 alt={menu.name}
                 loading="lazy"
                 className="rounded-lg"

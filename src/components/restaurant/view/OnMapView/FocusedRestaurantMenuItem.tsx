@@ -1,7 +1,9 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { MenuItem } from "../../../../services/interfaces";
 import { getImage } from "../../../../services/APIconn";
+import DefaultPic from "../../../../assets/images/no-image.png"
+
 
 interface FocusedRestaurantMenuItemProps {
   item: MenuItem;
@@ -31,7 +33,7 @@ const FocusedRestaurantMenuItem: React.FC<FocusedRestaurantMenuItemProps> = ({
             height: 90,
             width: 100,
           }}
-          src={getImage(item.photo as string)}
+          src={getImage(item.photo as string, DefaultPic)}
           alt="default image"
         />
       </div>

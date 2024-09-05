@@ -2,7 +2,10 @@
     "general": {
         "search": "Search...",
         "cancel": "Cancel",
-        "save": "Save"
+        "save": "Save",
+        "results": "Results",
+        "no-results": "No results",
+        "close": "Close"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -186,5 +189,32 @@
         "settings":{
             "setting":"SettingFiller"
         }
+    },
+    "threads": {
+        "threads":"Threads",
+        "search": "Search for threads",
+        "new-thread": "New thread",
+        "title": "Title",
+        "friends": "Friends",
+        "message": "Message",
+        "send-message": "Send a message",
+        "minimize": "Minimize",
+        "no-threads": "You do not have any active threads yet",
+        "loading": "Threads are loading"
+    },
+    "friends": {
+        "search": "Search for friends",
+        "friends": "Friends",
+        "undo": "Undo request",
+        "send": "Send request"
+    },
+    "home-page": {
+        "restaurants": "Restaurants near you",
+        "search": "Search for restaurants",
+        "delivery": "Provides delivery",
+        "no-delivery": "No delivery",
+        "rating": "Any rating",
+        "reviews": "Reviews",
+        "tags": "Tags"
     }
 }

@@ -16,21 +16,65 @@ import CancelIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import DetailsIcon from "@mui/icons-material/Details";
-import { Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { fetchGET } from "../../../services/APIconn";
 
 interface OrderHistoryProps {
   activeRestaurantId: number | null;
 }
 
-const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
+const ReservationHistory: React.FC<OrderHistoryProps> = ({
+  activeRestaurantId,
+}) => {
   const [rows, setRows] = useState<GridRowsProp>([
-    { id: 1, orderId: 'ORD001', visitId: "2024-05-29", cost: 50.0, status: 'Completed', employeeId: 'John Smith' },
-    { id: 2, orderId: 'ORD002', visitId: "2024-05-29", cost: 75.0, status: 'Pending', employeeId: 'Emily Johnson' },
-    { id: 3, orderId: 'ORD003', visitId: "2024-05-30", cost: 100.0, status: 'Cancelled', employeeId: 'Michael Davis' },
-    { id: 4, orderId: 'ORD004', visitId: "2024-06-01", cost: 25.0, status: 'Completed', employeeId: 'Sarah Brown' },
-    { id: 5, orderId: 'ORD005', visitId: "2024-06-01", cost: 60.0, status: 'Pending', employeeId: 'David Wilson' },
-  ]);    
+    {
+      id: 1,
+      orderId: "ORD001",
+      visitId: "2024-05-29",
+      cost: 50.0,
+      status: "Completed",
+      employeeId: "John Smith",
+    },
+    {
+      id: 2,
+      orderId: "ORD002",
+      visitId: "2024-05-29",
+      cost: 75.0,
+      status: "Pending",
+      employeeId: "Emily Johnson",
+    },
+    {
+      id: 3,
+      orderId: "ORD003",
+      visitId: "2024-05-30",
+      cost: 100.0,
+      status: "Cancelled",
+      employeeId: "Michael Davis",
+    },
+    {
+      id: 4,
+      orderId: "ORD004",
+      visitId: "2024-06-01",
+      cost: 25.0,
+      status: "Completed",
+      employeeId: "Sarah Brown",
+    },
+    {
+      id: 5,
+      orderId: "ORD005",
+      visitId: "2024-06-01",
+      cost: 60.0,
+      status: "Pending",
+      employeeId: "David Wilson",
+    },
+  ]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -38,7 +82,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId })
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
-    event
+    event,
   ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -48,9 +92,10 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId })
   useEffect(() => {
     const populateRows = async () => {
       try {
-        const response = await fetchGET(`/restaurants/${activeRestaurantId}/orders`);
+        const response = await fetchGET(
+          `/restaurants/${activeRestaurantId}/orders`,
+        );
         console.log(response);
-        
       } catch (error) {
         console.error("Error populating table", error);
       }
@@ -159,13 +204,12 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId })
   ];
 
   return (
-    <div className="h-full w-full bg-white rounded-lg shadow-md">
+    <div className="h-full w-full rounded-lg bg-white shadow-md">
       <DataGrid
         rows={rows}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
-       
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         disableRowSelectionOnClick
@@ -185,7 +229,12 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId })
             </ListItem>
             {selectedOrderId && (
               <ListItem>
-                <ListItemText primary="Visit Date:" secondary={rows.find(row => row.orderId === selectedOrderId)?.visitId} />
+                <ListItemText
+                  primary="Visit Date:"
+                  secondary={
+                    rows.find((row) => row.orderId === selectedOrderId)?.visitId
+                  }
+                />
               </ListItem>
             )}
             {selectedOrderId && (
@@ -195,17 +244,33 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId })
             )}
             {selectedOrderId && (
               <ListItem>
-                <ListItemText primary="Cost:" secondary={rows.find(row => row.orderId === selectedOrderId)?.cost} />
+                <ListItemText
+                  primary="Cost:"
+                  secondary={
+                    rows.find((row) => row.orderId === selectedOrderId)?.cost
+                  }
+                />
               </ListItem>
             )}
             {selectedOrderId && (
               <ListItem>
-                <ListItemText primary="Status:" secondary={rows.find(row => row.orderId === selectedOrderId)?.status} />
+                <ListItemText
+                  primary="Status:"
+                  secondary={
+                    rows.find((row) => row.orderId === selectedOrderId)?.status
+                  }
+                />
               </ListItem>
             )}
             {selectedOrderId && (
               <ListItem>
-                <ListItemText primary="Employee:" secondary={rows.find(row => row.orderId === selectedOrderId)?.employeeId} />
+                <ListItemText
+                  primary="Employee:"
+                  secondary={
+                    rows.find((row) => row.orderId === selectedOrderId)
+                      ?.employeeId
+                  }
+                />
               </ListItem>
             )}
           </List>

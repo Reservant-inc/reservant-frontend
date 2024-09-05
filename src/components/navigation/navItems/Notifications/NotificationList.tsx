@@ -67,7 +67,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
   };
 
   return (
-    <div className="w-full p-2">
+    <div className="h-full w-full">
       {loading ? (
         <Box
           display="flex"
@@ -78,58 +78,70 @@ const NotificationList: React.FC<NotificationListProps> = ({
           <CircularProgress />
         </Box>
       ) : (
-        <List>
-          {friendRequests.length === 0 ? (
-            <Typography
-              variant="subtitle1"
-              color="textSecondary"
-              align="center"
-              style={{ fontStyle: "italic", padding: "20px 0" }}
-            >
-              Brak zaproszeń do znajomych
-            </Typography>
-          ) : (
-            friendRequests.map((request) => (
-              <ListItem
-                key={request.senderId}
-                button
-                style={{ marginBottom: "16px" }}
+        <div className="flex h-full w-full flex-col">
+          <div className="custom-transition flex h-14 w-full items-center justify-between px-3 pt-4">
+            <h1 className="font-mont-bd text-xl">Notifications</h1>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            {friendRequests.length === 0 ? (
+              <Typography
+                variant="subtitle1"
+                color="textSecondary"
+                align="center"
+                className="py-1 italic"
               >
-                <ListItemAvatar>
-                  <Avatar />
-                </ListItemAvatar>
-                <Grid container direction="column">
-                  <Typography variant="subtitle2" color="textSecondary">
-                    Zaproszenie do znajomych od
-                  </Typography>
-                  <ListItemText primary={request.senderName} />
-                  <Typography variant="body2" color="textSecondary">
-                    Wysłano {new Date(request.dateSent).toLocaleDateString()}
-                  </Typography>
-                  <Box display="flex" justifyContent="space-between" mt={1}>
-                    <Button
-                      variant="contained"
-                      className="bg-primary"
-                      onClick={() => handleAction(request.senderId, "accept")}
-                    >
-                      Akceptuj
-                    </Button>
-                    <Button
-                      variant="contained"
-                      style={{
-                        backgroundColor: "#e0e0e0",
-                        color: "#333",
-                      }}
-                      onClick={() => handleAction(request.senderId, "reject")}
-                    >
-                      Odrzuć
-                    </Button>
-                  </Box>
-                </Grid>
-              </ListItem>
-            ))
-          )}
-        </List>
+                Brak zaproszeń do znajomych
+              </Typography>
+            ) : (
+              <List className="p-0">
+                {friendRequests.map((request) => (
+                  <ListItem
+                    key={request.senderId}
+                    button
+                    style={{ marginBottom: "16px" }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar />
+                    </ListItemAvatar>
+                    <Grid container direction="column">
+                      <Typography variant="subtitle2" color="textSecondary">
+                        Zaproszenie do znajomych od
+                      </Typography>
+                      <ListItemText primary={request.senderName} />
+                      <Typography variant="body2" color="textSecondary">
+                        Wysłano{" "}
+                        {new Date(request.dateSent).toLocaleDateString()}
+                      </Typography>
+                      <Box display="flex" justifyContent="space-between" mt={1}>
+                        <Button
+                          variant="contained"
+                          className="bg-primary"
+                          onClick={() =>
+                            handleAction(request.senderId, "accept")
+                          }
+                        >
+                          Akceptuj
+                        </Button>
+                        <Button
+                          variant="contained"
+                          style={{
+                            backgroundColor: "#e0e0e0",
+                            color: "#333",
+                          }}
+                          onClick={() =>
+                            handleAction(request.senderId, "reject")
+                          }
+                        >
+                          Odrzuć
+                        </Button>
+                      </Box>
+                    </Grid>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
