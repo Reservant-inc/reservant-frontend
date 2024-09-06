@@ -28,12 +28,12 @@ const ThemeButton: React.FC<ThemeButtonProps> = ({ setIsDark }) => {
       />
       <button
         id="ThemeButtonToggleThemeButton"
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-3"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-6"
         onClick={toggleTheme}
       >
         <label className="relative cursor-pointer p-2" htmlFor="light-switch">
           <svg
-            className="h-5 fill-grey-3 dark:hidden"
+            className="h-5 fill-grey-6 dark:hidden"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >

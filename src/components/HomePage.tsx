@@ -106,7 +106,7 @@ export default function HomePage() {
   };
 
   return (
-    <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-3 relative">
+    <div id="homePage-wrapper" className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-grey-6 relative">
       <div id="homePage-restaurantList-wrapper" className="relative h-full min-w-[350px] w-[350px] bg-white shadow-2xl overflow-y-auto overflow-x-hidden scroll">
         <div className="p-3">
           <div className="w-full flex px-1 rounded-full bg-grey-0 border-[1px] border-grey-1 font-mont-md items-center">

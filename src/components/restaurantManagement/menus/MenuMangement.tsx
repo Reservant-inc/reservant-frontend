@@ -400,7 +400,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                                 label={t("general.search")}
                                 onChange={handleSearchInputChange}
                                 variant="standard"
-                                className="rounded-lg p-1 dark:text-white dark:bg-grey-3"
+                                className="rounded-lg p-1 dark:text-white dark:bg-grey-6"
                             />
                         </Box>
                     )}

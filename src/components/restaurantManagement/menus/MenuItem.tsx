@@ -50,7 +50,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
   };
 
   return (
-    <Card className="m-1 w-64 rounded-lg dark:bg-grey-4 dark:text-grey-1">
+    <Card className="m-1 w-64 rounded-lg dark:bg-grey-5 dark:text-grey-1">
       <CardContent className="flex flex-col">
         <img
           src={getImage(imagePath)}
