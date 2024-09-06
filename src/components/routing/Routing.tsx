@@ -23,8 +23,6 @@ export const nav = [
     roles: ["Customer", "RestaurantOwner"],
   },
   {
-    // do testowania RestaurantView
-    // HomePage element
     path: "/home",
     element: <HomePage />,
     isPrivate: true,
@@ -35,11 +33,5 @@ export const nav = [
     element: <RestaurantManager />,
     isPrivate: true,
     roles: ["RestaurantOwner"],
-  },
-  {
-    path: "/restaurants/:id",
-    element: <RestaurantView />,
-    isPrivate: true,
-    roles: ["RestaurantOwner", "Customer", "RestaurantEmployee"],
-  },
+  }
 ];

@@ -27,7 +27,7 @@ const TABS = {
 
 interface RestaurantDetailsProps {
   addToCart: (item: MenuItem) => void;
-  restaurantId: string | undefined;
+  restaurantId: number | undefined;
 }
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({

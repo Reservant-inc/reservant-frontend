@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState } from "react";
 import Map from "./map/Map";
 import {
   Button,
@@ -18,6 +18,8 @@ import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { FetchError } from "../services/Errors";
 import { useTranslation } from "react-i18next";
+import { boolean } from "yup";
+import RestaurantView from "./restaurant/view/RestaurantPageView/RestaurantView";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
@@ -35,8 +37,10 @@ export default function HomePage() {
   const [reviewFilter, setReviewFilter] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [chosenTags, setChosenTags] = useState<string[]>([]);
+  const [isRestaurantViewExtended, setIsRestaurantViewExtended] =
+    useState<boolean>(false);
 
-  const [t] = useTranslation("global")
+  const [t] = useTranslation("global");
 
   //center of warsaw, cant get users location without https
   const [bounds, setBounds] = useState<any>({
@@ -53,7 +57,7 @@ export default function HomePage() {
         setTags(response);
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.log(error.formatErrors());
         } else {
           console.log("Unexpected error:", error);
         }
@@ -90,10 +94,9 @@ export default function HomePage() {
           );
           return newIds;
         });
-
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.log(error.formatErrors());
         } else {
           console.log("Unexpected error:", error);
         }
@@ -129,107 +132,113 @@ export default function HomePage() {
       className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-black"
     >
       {isMenuOpen ? (
-        <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] h-[calc(100%-1rem)] w-[300px] rounded-lg bg-white dark:bg-black shadow-2xl flex flex-col">
-            <div className="flex h-14 w-full items-center justify-between px-3 py-2">
-              <h1 className="font-mont-bd text-xl dark:text-white">{t('home-page.restaurants')}</h1>
-              <Button
-                className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 text-black text-black`}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                <KeyboardBackspaceIcon className="h-5 w-5 dark:text-grey-1" />
-              </Button>
-            </div>
-            <div className="px-3 py-3">
-              <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-1 font-mont-md">
-                <input
-                  type="text"
-                  placeholder={t('home-page.search')}
-                  className="w-full placeholder:text-grey-2"
-                  onChange={(e) => {
-                    setRestaurants(
-                      allRestaurants.filter((restaurant: any) => {
-                        return restaurant.name
-                          .toLowerCase()
-                          .includes(e.target.value.toLowerCase());
-                      }),
-                    );
-                  }}
-                />
-                <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer text-grey-2" />
-              </div>
-            </div>
-            <div className="scroll h-full overflow-y-auto">
-              <List
-                id="homePage-restaurantList"
-                className="w-full p-0 px-2 font-mont-md dark:bg-black"
-              >
-                {restaurants.map((restaurant, index) => (
-                  <div key={index}>
-                    <ListItemButton
-                      id="homePage-listItemButton"
-                      onClick={() => {
-                        setUserMovedMap(false);
-                        setActiveRestaurant(restaurant);
-                      }}
-                      className={`rounded-md p-3 dark:bg-black
-                        ${activeRestaurant === restaurant
-                          ? " bg-grey-1 dark:bg-grey-5"
-                          : " bg-white hover:bg-grey-1 dark:hover:bg-grey-5"}
-                          `
-                      }
-                    >
-                      <div className="flex w-full items-start justify-between py-2">
-                        <div className="flex flex-col gap-1">
-                          <h1 className="text-md font-mont-md dark:text-white">
-                            {restaurant.name}
-                          </h1>
-                          <div className="flex">
-                            <h1 className="text-sm dark:text-white">
-                              {Math.round(
-                                (restaurant.rating + Number.EPSILON) * 100,
-                              ) / 100}
-                            </h1>
-                            <Rating
-                              name="read-only"
-                              value={restaurant.rating}
-                              readOnly
-                              className="text-[18px]"
-                            />
-                            <h1 className="text-sm dark:text-white">{`(${restaurant.numberReviews})`}</h1>
-                          </div>
-                          <h1 className="font-mont-l text-sm dark:text-white">
-                            {restaurant.address}
-                          </h1>
-                          <h1 className="font-mont-l text-sm dark:text-white">
-                            {restaurant.provideDelivery
-                              ? t("home-page.delivery")
-                              : t("home-page.no-delivery")}
-                          </h1>
-                          <div className="flex gap-2">
-                            {restaurant.tags.map((tag: string, index: number) => (
-                              <h1 className="font-mont-md text-sm dark:text-white" key={index}>
-                                {tag}
-                              </h1>
-                            ))}
-                          </div>
-                        </div>
-                        <img
-                          src={getImage(restaurant.logo, "")}
-                          alt="logo"
-                          className="h-24 w-24 rounded-lg"
-                        />
-                      </div>
-                    </ListItemButton>
-                  </div>
-                ))}
-              </List>
+        <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] flex h-[calc(100%-1rem)] w-[300px] flex-col rounded-lg bg-white shadow-2xl dark:bg-black">
+          <div className="flex h-14 w-full items-center justify-between px-3 py-2">
+            <h1 className="font-mont-bd text-xl dark:text-white">
+              {t("home-page.restaurants")}
+            </h1>
+            <Button
+              className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 text-black text-black dark:bg-grey-5`}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <KeyboardBackspaceIcon className="h-5 w-5 dark:text-grey-1" />
+            </Button>
+          </div>
+          <div className="px-3 py-3">
+            <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-1 font-mont-md dark:border-grey-6 dark:bg-grey-5">
+              <input
+                type="text"
+                placeholder={t("home-page.search")}
+                className="w-full placeholder:text-grey-2"
+                onChange={(e) => {
+                  setRestaurants(
+                    allRestaurants.filter((restaurant: any) => {
+                      return restaurant.name
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase());
+                    }),
+                  );
+                }}
+              />
+              <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
             </div>
           </div>
+          <div className="scroll h-full overflow-y-auto">
+            <List
+              id="homePage-restaurantList"
+              className="w-full p-0 px-2 font-mont-md dark:bg-black"
+            >
+              {restaurants.map((restaurant) => (
+                <ListItemButton
+                  id="homePage-listItemButton"
+                  onClick={() => {
+                    setUserMovedMap(false);
+                    setIsRestaurantViewExtended(false)
+                    setActiveRestaurant(restaurant);
+                  }}
+                  className={`rounded-md p-3 dark:bg-black
+                      ${
+                        activeRestaurant === restaurant
+                          ? " bg-grey-1 dark:bg-grey-5"
+                          : " bg-white hover:bg-grey-1 dark:hover:bg-grey-5"
+                      }
+                        `}
+                  key={restaurant.id}
+                >
+                  <div className="flex w-full items-start justify-between py-2">
+                    <div className="flex flex-col gap-1">
+                      <h1 className="text-md font-mont-md dark:text-white">
+                        {restaurant.name}
+                      </h1>
+                      <div className="flex">
+                        <h1 className="text-sm dark:text-white">
+                          {Math.round(
+                            (restaurant.rating + Number.EPSILON) * 100,
+                          ) / 100}
+                        </h1>
+                        <Rating
+                          name="read-only"
+                          value={restaurant.rating}
+                          readOnly
+                          className="text-[18px]"
+                        />
+                        <h1 className="text-sm dark:text-white">{`(${restaurant.numberReviews})`}</h1>
+                      </div>
+                      <h1 className="font-mont-l text-sm dark:text-white">
+                        {restaurant.address}
+                      </h1>
+                      <h1 className="font-mont-l text-sm dark:text-white">
+                        {restaurant.provideDelivery
+                          ? t("home-page.delivery")
+                          : t("home-page.no-delivery")}
+                      </h1>
+                      <div className="flex gap-2">
+                        {restaurant.tags.map((tag: string, index: number) => (
+                          <h1
+                            className="font-mont-md text-sm dark:text-white"
+                            key={index}
+                          >
+                            {tag}
+                          </h1>
+                        ))}
+                      </div>
+                    </div>
+                    <img
+                      src={getImage(restaurant.logo, "")}
+                      alt="logo"
+                      className="h-24 w-24 rounded-lg"
+                    />
+                  </div>
+                </ListItemButton>
+              ))}
+            </List>
+          </div>
+        </div>
       ) : (
         <div className="absolute left-[0.5rem] top-[0.5rem] z-[1]">
           <Button
             id="NotificationsButton"
-            className={`relative flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-white dark:bg-grey-5 text-black dark:text-grey-1 shadow-md ${isMenuOpen && "text-primary"}`}
+            className={`relative flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-white text-black shadow-md dark:bg-grey-5 dark:text-grey-1 ${isMenuOpen && "text-primary"}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <RestaurantMenuIcon className="h-6 w-6 dark:text-grey-1" />
@@ -246,22 +255,27 @@ export default function HomePage() {
           <Button
             id="homePage-reviewsFilter"
             className={
-              "flex h-10 gap-2 rounded-full p-2 shadow-md " +
+              "flex h-10 gap-2 rounded-lg p-3 shadow-md " +
               (reviewFilter !== 0
                 ? "bg-primary text-white dark:bg-secondary dark:text-black"
-                : "bg-white text-black dark:bg-grey-5 dark:text-white")
+                : "bg-white text-black dark:bg-black dark:text-white")
             }
             onClick={reviewsPressHandler}
           >
-            <StarPurple500SharpIcon className={"h-6 " +
-              (reviewFilter !== 0
-                ? "text-white dark:text-black"
-                : "text-black dark:text-white")
-            } />
-            {reviewFilter === 0 ? t('home-page.reviews') : `${reviewFilter}.0 or more`}
+            <StarPurple500SharpIcon
+              className={
+                "h-6 " +
+                (reviewFilter !== 0
+                  ? "text-white dark:text-black"
+                  : "text-black dark:text-white")
+              }
+            />
+            {reviewFilter === 0
+              ? t("home-page.reviews")
+              : `${reviewFilter}.0 or more`}
           </Button>
           {isReviewFilterPressed && (
-            <div className="absolute top-[55px] rounded-lg bg-white dark:bg-black shadow-2xl">
+            <div className="absolute top-[3rem] rounded-lg bg-white shadow-2xl dark:bg-black">
               <List
                 id="homePage-restaurantList"
                 className="w-full font-mont-md"
@@ -274,7 +288,9 @@ export default function HomePage() {
                     setIsReviewFilterPressed(false);
                   }}
                 >
-                  <Typography component="legend" className="dark:text-white">{t('home-page.rating')}</Typography>
+                  <Typography component="legend" className="dark:text-white">
+                    {t("home-page.rating")}
+                  </Typography>
                 </ListItemButton>
                 {[2, 3, 4, 5].map((value, index) => (
                   <ListItemButton
@@ -286,8 +302,10 @@ export default function HomePage() {
                     }}
                     key={index}
                   >
-                    <Typography component="legend" className="dark:text-white">{value}.0</Typography>
-                    <Rating name="read-only" value={value} readOnly/>
+                    <Typography component="legend" className="dark:text-white">
+                      {value}.0
+                    </Typography>
+                    <Rating name="read-only" value={value} readOnly />
                   </ListItemButton>
                 ))}
               </List>
@@ -301,42 +319,48 @@ export default function HomePage() {
           <Button
             id="homePage-tagssFilter"
             className={
-              "flex h-10 items-center justify-center gap-2 rounded-full p-2 shadow-md " +
+              "flex h-10 items-center justify-center gap-2 rounded-lg p-3 shadow-md " +
               (chosenTags.length > 0
                 ? "bg-primary text-white dark:bg-secondary dark:text-black"
-                : "bg-white text-black dark:bg-grey-5 dark:text-white")
+                : "bg-white text-black dark:bg-black dark:text-white")
             }
             onClick={tagsPressHandler}
           >
-            <LocalOfferSharpIcon className={"h-6 " +
-              (chosenTags.length > 0
-                ? "text-white dark:text-black"
-                : "text-black dark:text-white")
-            }/>
+            <LocalOfferSharpIcon
+              className={
+                "h-6 " +
+                (chosenTags.length > 0
+                  ? "text-white dark:text-black"
+                  : "text-black dark:text-white")
+              }
+            />
             {chosenTags.length > 0
               ? chosenTags.length === 1
                 ? `${chosenTags.length} tag`
                 : `${chosenTags.length} tags`
-              : t('home-page.tags')}
+              : t("home-page.tags")}
             {chosenTags.length > 0 && (
               <button
                 className="flex h-[20px] w-[20px] items-center rounded-full"
                 onClick={() => setChosenTags([])}
               >
-                <CloseSharpIcon className={"h-[20px] w-[20px] " +
-                  (chosenTags.length > 0
-                    ? "text-white dark:text-black"
-                    : "text-black dark:text-white")
-                }/>
+                <CloseSharpIcon
+                  className={
+                    "h-[20px] w-[20px] " +
+                    (chosenTags.length > 0
+                      ? "text-white dark:text-black"
+                      : "text-black dark:text-white")
+                  }
+                />
               </button>
             )}
           </Button>
           {isTagFilterPressed && (
-            <div className="absolute top-[55px] flex w-44 flex-wrap justify-start gap-2 rounded-lg bg-white dark:bg-black p-3 shadow-2xl">
+            <div className="absolute top-[3rem] flex w-44 flex-wrap justify-start gap-2 rounded-lg bg-white p-3 shadow-2xl dark:bg-black">
               {tags.map((tag, i) => (
                 <button
                   key={i}
-                  className={`rounded-full border-[1px] border-grey-2 dark:border-grey-6 p-2 font-mont-md text-[12px] ${chosenTags.includes(tag) ? "bg-primary text-white dark:bg-secondary dark:text-black" : "bg-white dark:bg-grey-5 text-black dark:text-white"}`}
+                  className={`rounded-full border-[1px] border-grey-2 p-2 font-mont-md text-[12px] dark:border-grey-6 ${chosenTags.includes(tag) ? "bg-primary text-white dark:bg-secondary dark:text-black" : "bg-white text-black dark:bg-grey-5 dark:text-white"}`}
                   onClick={() => handleTagSelection(tag)}
                 >
                   {tag.toUpperCase()}
@@ -347,15 +371,24 @@ export default function HomePage() {
         </OutsideClickHandler>
       </div>
       {activeRestaurant && (
-        <div
-          className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[300px] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
-        >
-          <div className="scroll h-full overflow-y-auto">
-            <FocusedRestaurantDetails
-              restaurantId={activeRestaurant.restaurantId}
-              onClose={() => setActiveRestaurant(null)}
-            />
-          </div>
+        <div>
+          {isRestaurantViewExtended ? (
+            <div className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)] w-[calc(100%-300px-1.5rem)]" : "left-[0.5rem] w-[calc(100%-1rem)]"}`}>
+              <RestaurantView id={activeRestaurant.restaurantId}/>
+            </div>
+          ) : (
+            <div
+              className={`absolute top-[3.5rem] h-[calc(100%-15rem)] z-[1] w-[300px] rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
+            >
+              <div className="scroll h-full">
+                <FocusedRestaurantDetails
+                  restaurantId={activeRestaurant.restaurantId}
+                  onClose={() => setActiveRestaurant(null)}
+                  setIsRestaurantViewExtended={setIsRestaurantViewExtended}
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
       <div id="map" className="relative z-[0] h-full w-full">

@@ -2,7 +2,6 @@ html {
   height: 100%;
 }
 
-
 body {
   margin: 0;
   height: 100%;
@@ -41,6 +40,11 @@ body {
 }
 
 /* animations */
+
+.change-width {
+  transition: width 1s ease;
+}
+
 .fade-in-render {
   animation: fade-in-render 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

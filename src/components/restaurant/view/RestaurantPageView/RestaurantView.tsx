@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
 import RestaurantCart from "./RestaurantCart";
 import { CartItem, MenuItem } from "../../../../services/interfaces";
-import { useParams } from "react-router-dom";
 
-const RestaurantView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+interface RestaurantViewProps {
+  id: number
+}
+
+const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+
+  console.log(id)
 
   const addToCart = (item: MenuItem) => {
     setCart((prevCart) => {
@@ -47,7 +51,7 @@ const RestaurantView: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col lg:flex-row">
+    <div className="flex w-full h-full flex-col lg:flex-row overflow-y-auto scroll">
       <div className="w-full lg:w-2/3">
         <RestaurantDetails addToCart={addToCart} restaurantId={id} />
       </div>
