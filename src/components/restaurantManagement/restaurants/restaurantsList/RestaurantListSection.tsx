@@ -6,7 +6,7 @@ import { GridToolbarContainer, GridRowModesModel, GridColDef, GridRowsProp, Data
 import { fetchGET } from "../../../../services/APIconn";
 import { LocalType } from "../../../../services/enums";
 import { RestaurantType } from "../../../../services/types";
-import { Details } from "@mui/icons-material";
+import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
     handleChangeActiveRestaurant: Function
@@ -32,14 +32,15 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
             const response = await fetchGET("/my-restaurant-groups");
             const tmp: RestaurantType[] = [];
 
+            let indx = 0;
             for (const group of response) {
             
             const response2 = await fetchGET(`/my-restaurant-groups/${group.restaurantGroupId}`);
 
-
+                
                 for (const i in response2.restaurants) {
                     tmp.push({
-                    id: Number(i),
+                    id: Number(indx++),
                     groupName: group.name,
                     restaurantId: response2.restaurants[i].restaurantId,
                     name: response2.restaurants[i].name,
@@ -52,6 +53,8 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
             }
 
             setRows(tmp)
+            console.log(response)
+            console.log(tmp)
           } catch (error) {
             console.error("Error populating table", error);
           }
@@ -127,8 +130,9 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
 
             return [
               <GridActionsCellItem
-                icon={<Details />}
+                icon={<ArrowForwardIos />}
                 label="Details"
+                
                 id={
                   "RestaurantSeeDetailsButton" +
                   rows[parseInt(id.toString())].id+
