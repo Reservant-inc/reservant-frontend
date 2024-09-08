@@ -4,6 +4,13 @@
         "cancel": "Cancel",
         "save": "Save"
     },
+    "navbar": {
+        "home": "Home",
+        "restaurant-menagment": "Restaurant Menagment",
+        "threads": "Open threads",
+        "notifications": "Open notifications",
+        "tools": "Open tools"
+    },
     "landing-page": {
         "loginButton": "Sign in",
         "registerButton": "Sign up",

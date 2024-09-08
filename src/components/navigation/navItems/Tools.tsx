@@ -137,7 +137,7 @@ const Tools: React.FC<ToolsProps> = ({setIsDark}) => {
 
     return (
         <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-          <Tooltip title="Open Tools" arrow>
+          <Tooltip title={t("navbar.tools")} arrow>
                 <button
                     id="ToolsButton"
                     className="h-10 w-10 flex justify-center items-center"

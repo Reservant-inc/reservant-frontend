@@ -4,6 +4,7 @@ import { Notifications } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../../services/APIconn";
 import Tooltip from '@mui/material/Tooltip';
+import { useTranslation } from "react-i18next";
 
 interface NotificationsButtonProps {
   isDark: boolean;
@@ -15,6 +16,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
   const [isPressed, setIsPressed] = useState(false);
   const [hasNotifications, setHasNotifications] = useState(true);
   const [loading, setLoading] = useState<boolean>(true);
+  const { t } = useTranslation("global");
 
   const pressHandler = () => {
     setIsPressed(!isPressed);
@@ -38,7 +40,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      <Tooltip title="Open Notifications" arrow>
+      <Tooltip title={t("navbar.notifications")} arrow>
         <button
           id="NotificationButtons"
           className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
