@@ -316,10 +316,10 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
     };
     
     return (
-        <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
+        <div className=" p-1 w-full h-full flex-col bg-white rounded-lg">
             <div>
-                {selectedMenuIndex === null && (
-                <div className="h-[3rem] w-full z-1 flex items-center">
+                
+                <div className="h-[3rem] w-full  flex items-center">
                     <button 
                     onClick= {() => setIsMenuPopupOpen(true)} 
                     id="RestaurantListAddMenuButton"
@@ -328,7 +328,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({ activeRestaurantId }) =
                         <h1 className="text-lg font-mont-md">Add menu</h1>
                     </button>
                 </div>
-                 )}
+                 
                  <div className="float-end">
                     <IconButton onClick={handleMenuOpen} disabled={selectedMenuIndex === null}>
                         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (

@@ -83,7 +83,7 @@ export default function EmployeeManagement() {
     
     populateRows();
 
-    
+     
   }, []);
 
   
@@ -91,7 +91,7 @@ export default function EmployeeManagement() {
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <div className="h-[3rem] w-full z-1 flex items-center">
+        <div className="h-[3rem] w-full  flex items-center">
                 <button
                     id="RestaurantListAddRestaurantButton"
                     onClick={() => setIsModalOpen(true)}
