@@ -437,7 +437,7 @@ const Threads: React.FC = () => {
           )
         }
       </OutsideClickHandler>
-      <div className="absolute w-[675px] h-[400px] bottom-0 right-[0.5rem] z-[0] flex gap-2">
+      <div className={`absolute w-[675px] h-[400px] bottom-0 right-[0.5rem] z-[0] flex gap-2 ${(activeThreads.length === 0 && inactiveThreads.length === 0) && 'invisible'}`}>
         <div className="w-full h-full flex flex-row-reverse gap-[15px]">
           {
             activeThreads.map((activeThread) => (

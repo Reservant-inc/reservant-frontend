@@ -18,7 +18,6 @@ import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { FetchError } from "../services/Errors";
 import { useTranslation } from "react-i18next";
-import { boolean } from "yup";
 import RestaurantView from "./restaurant/view/RestaurantPageView/RestaurantView";
 
 export default function HomePage() {
@@ -373,8 +372,11 @@ export default function HomePage() {
       {activeRestaurant && (
         <div>
           {isRestaurantViewExtended ? (
-            <div className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)] w-[calc(100%-300px-1.5rem)]" : "left-[0.5rem] w-[calc(100%-1rem)]"}`}>
-              <RestaurantView id={activeRestaurant.restaurantId}/>
+            <div className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)] w-[calc(80%-300px-1.5rem)]" : "left-[0.5rem] w-[calc(80%-1rem)]"}`}>
+              <RestaurantView 
+                id={activeRestaurant.restaurantId}
+                setIsRestaurantViewExtended={setIsRestaurantViewExtended}
+              />
             </div>
           ) : (
             <div

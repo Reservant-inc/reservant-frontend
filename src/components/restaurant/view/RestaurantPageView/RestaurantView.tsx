@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
-import RestaurantCart from "./RestaurantCart";
 import { CartItem, MenuItem } from "../../../../services/interfaces";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { Button } from "@mui/material";
 
 interface RestaurantViewProps {
   id: number
+  setIsRestaurantViewExtended: Function
 }
 
-const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
+const RestaurantView: React.FC<RestaurantViewProps> = ({ id, setIsRestaurantViewExtended }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-
-  console.log(id)
 
   const addToCart = (item: MenuItem) => {
     setCart((prevCart) => {
@@ -51,17 +51,16 @@ const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
   };
 
   return (
-    <div className="flex w-full h-full flex-col lg:flex-row overflow-y-auto scroll">
-      <div className="w-full lg:w-2/3">
-        <RestaurantDetails addToCart={addToCart} restaurantId={id} />
+    <div className="relative w-full h-full overflow-y-auto scrol p-2 dark:bg-black">
+      <div className="absolute right-2">
+        <Button
+          className={`flex h-10 w-10 min-w-10 items-center justify-center rounded-full bg-grey-1 text-black text-black dark:bg-grey-5`}
+          onClick={() => setIsRestaurantViewExtended(false)}
+        >
+          <KeyboardBackspaceIcon className="h-5 w-5 dark:text-grey-1" />
+        </Button>
       </div>
-      <div className="mt-10 flex h-full min-h-screen w-full items-start justify-center lg:mt-20 lg:w-1/3">
-        <RestaurantCart
-          cart={cart}
-          incrementQuantity={incrementQuantity}
-          decrementQuantity={decrementQuantity}
-        />
-      </div>
+      <RestaurantDetails restaurantId={id} />
     </div>
   );
 };
