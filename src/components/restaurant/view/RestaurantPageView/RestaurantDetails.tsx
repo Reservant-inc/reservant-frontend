@@ -26,12 +26,10 @@ const TABS = {
 };
 
 interface RestaurantDetailsProps {
-  addToCart: (item: MenuItem) => void;
-  restaurantId: number | undefined;
+  restaurantId: string | undefined;
 }
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
-  addToCart,
   restaurantId,
 }) => {
   const [restaurant, setRestaurant] = useState<any>(null);
@@ -149,13 +147,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 
   const renderActiveTab = () => {
     switch (activeTab) {
-      case TABS.MENU:
-        return (
-          <RestaurantMenuView
-            addToCart={addToCart}
-            restaurantId={restaurant.restaurantId}
-          />
-        );
       case TABS.EVENTS:
         return (
           <RestaurantEventsView
@@ -168,10 +159,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         return <RestaurantReviewsView />;
       default:
         return (
-          <RestaurantMenuView
-            addToCart={addToCart}
-            restaurantId={restaurant.restaurantId}
-          />
+          <></>
         );
     }
   };

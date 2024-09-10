@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
-import RestaurantCart from "./RestaurantCart";
 import { CartItem, MenuItem } from "../../../../services/interfaces";
 
 interface RestaurantViewProps {
-  id: number
+  id: string
 }
 
 const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
@@ -53,14 +52,7 @@ const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
   return (
     <div className="flex w-full h-full flex-col lg:flex-row overflow-y-auto scroll">
       <div className="w-full lg:w-2/3">
-        <RestaurantDetails addToCart={addToCart} restaurantId={id} />
-      </div>
-      <div className="mt-10 flex h-full min-h-screen w-full items-start justify-center lg:mt-20 lg:w-1/3">
-        <RestaurantCart
-          cart={cart}
-          incrementQuantity={incrementQuantity}
-          decrementQuantity={decrementQuantity}
-        />
+        <RestaurantDetails restaurantId={id} />
       </div>
     </div>
   );
