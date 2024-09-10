@@ -26,12 +26,12 @@ import {
   MenuItem as MyMenuItem,
   TextField,
 } from "@mui/material";
-import MenuOrderBy from "./MenuOrderBy";
+import MenuOrderBy from "./MenuSortBy";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { MenuItemType, MenuType } from "../../../services/types";
 
 interface MenuManagementProps {
-  activeRestaurantId: number | null;
+  activeRestaurantId: number;
 }
 
 interface Menu {
@@ -543,6 +543,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             ? menus[selectedMenuIndex]?.menuType || ""
             : ""
         }
+        restaurantId={activeRestaurantId}
       />
       <MenuItemDialog
         open={isMenuItemEditPopupOpen}
@@ -553,6 +554,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             ? menus[selectedMenuIndex]?.menuType || ""
             : ""
         }
+        restaurantId={activeRestaurantId}
         editedMenuItem={editedMenuItem}
       />
       <ConfirmationDialog

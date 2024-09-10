@@ -9,16 +9,42 @@ import {
   styled,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { fetchFilesPOST } from "../../../services/APIconn";
+import { fetchFilesPOST, fetchGET, fetchPOST } from "../../../services/APIconn";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { MenuItemType } from "../../../services/types";
+import { forEach, initial } from "lodash";
+import { useValidationSchemas } from "../../../hooks/useValidationSchema";
+import { Field, Form, Formik, FormikValues } from "formik";
 
 interface MenuItemDialogProps {
     open: boolean;
     onClose: () => void;
     onSave: (values: { [key: string]: string }) => void;
     menuType: string;
+    restaurantId: number;
     editedMenuItem?: MenuItemType | null;
+}
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
+
+//na razie jako interface..
+interface Ingredient {
+  id: number,
+  publicName: string,
+  unitOfMeasurement: string,
+  minimalAmount: number,
+  amountToOrder: number,
+  amount: number
 }
 
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
@@ -26,9 +52,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   onClose,
   onSave,
   menuType,
-  editedMenuItem = null,
+  restaurantId,
+  editedMenuItem = null, //??????????? nie wiem o co chodzi, nie dotykam
 }) => {
-  const { t } = useTranslation("global");
   const [values, setValues] = useState<{ [key: string]: string }>({
     name: "",
     alternateName: "",
@@ -54,7 +80,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             : "",
           photo: "",
         });
-        setPhotoFileName(null); // Usuń nazwę pliku, ponieważ nie wybrano nowego pliku
+        setPhotoFileName(null);
       } else {
         setValues({
           name: "",
@@ -67,13 +93,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       }
     }
   }, [open, editedMenuItem]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -103,139 +122,252 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = async () => {
-    if (!validate()) {
+  //=====================================================
+  const { t } = useTranslation("global");
+
+  const {menuItemSchema} = useValidationSchemas();
+
+  const initialValues = {
+    price: "",
+    name: "",
+    alternateName: "",
+    alcoholPercentage: "",
+    photo: "",
+    ingredients: [
+      {
+        ingredientId: "",
+        amountUsed: ""
+      }
+    ],
+  }
+
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+
+  useEffect (()=>{
+    const getIngredients = async () => {
+      try{
+  
+        let page=0;
+        let totalPages = 1;
+        const perPage= 5;
+  
+        let tmp:Ingredient[] = []
+  
+        while (page < totalPages){
+          const res = await fetchGET(`/restaurants/${restaurantId}/ingredients?page=${page++}&perPage=${perPage}`);
+          totalPages=res.totalPages;
+          for(const i in res.items)
+            tmp.push({
+              id: res.items[i].ingredientId,
+              publicName: res.items[i].publicName,
+              unitOfMeasurement: res.items[i].unitOfMeasurement,
+              minimalAmount: res.items[i].minimalAmount,
+              amountToOrder: res.items[i].amountToOrder,
+              amount: res.items[i].amount
+            });
+        }
+
+        setIngredients(tmp);
+      } catch (error) {
+        console.error("Error fetching ingredients", error);
+      }
+    }
+    getIngredients();
+  },[])
+  
+
+  const onSubmit = async (
+    values: FormikValues,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+  ) => {
+    if(values.photo)
+      try {
+      const photoUrl = await fetchFilesPOST("/uploads", values.photo);
+      values.photo = photoUrl.fileName;
+
+    } catch (error) {
+      console.error("Error uploading photo:", error);
       return;
     }
+    try {
+      setSubmitting(true);
+      const body = JSON.stringify(
+        {
+          restaurantId: restaurantId,
+          price: values.price,
+          name: values.name,
+          alternateName: values.alternateName,
+          alcoholPercentage: values.alcoholPercentage?values.alcoholPercentage:0,
+          photo: values.photo,
+          ingredients: values.ingridients,
+        },
+      );
+      console.log(body)
 
-    if (photoFile && (!editedMenuItem || !editedMenuItem.photo)) {
-      try {
-        const photoUrl = await fetchFilesPOST("/uploads", photoFile);
-        const updatedValues = {
-          ...values,
-          photo: photoUrl.fileName,
-        };
-        onSave(updatedValues);
-        onClose();
-      } catch (error) {
-        console.error("Error uploading photo:", error);
-        return;
-      }
-    } else if (photoFile) {
-      // Tutaj sprawdzamy, czy istnieje nowy plik, jeśli tak, użyj go zamiast pliku z editedMenuItem
-      try {
-        const photoUrl = await fetchFilesPOST("/uploads", photoFile);
-        const updatedValues = {
-          ...values,
-          photo: photoUrl.fileName,
-        };
-        onSave(updatedValues);
-        onClose();
-      } catch (error) {
-        console.error("Error uploading photo:", error);
-        return;
-      }
-    } else {
-      // Jeśli nie ma nowego pliku, użyj pliku z editedMenuItem
-      onSave(values);
+      await fetchPOST(
+        '/menu-items',
+        body,
+      );
       onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
     }
   };
-
-  const VisuallyHiddenInput = styled("input")({
-    clip: "rect(0 0 0 0)",
-    clipPath: "inset(50%)",
-    height: 1,
-    overflow: "hidden",
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    whiteSpace: "nowrap",
-    width: 1,
-  });
+  
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
-        {editedMenuItem
-          ? t("restaurant-management.menu.editedMenuItem")
-          : t("restaurant-management.menu.newMenuItem")}
-      </DialogTitle>
-      <DialogContent>
-        <TextField
-          margin="dense"
-          name="name"
-          label={t("restaurant-management.menu.menuItemName")}
-          fullWidth
-          value={values.name}
-          onChange={handleChange}
-          required
-          error={!!errors.name}
-          helperText={errors.name}
-        />
-        <TextField
-          required
-          margin="dense"
-          name="alternateName"
-          label={t("restaurant-management.menu.alternateName")}
-          fullWidth
-          value={values.alternateName}
-          onChange={handleChange}
-        />
-        <TextField
-          margin="dense"
-          name="price"
-          label={t("restaurant-management.menu.menuItemPrice")}
-          fullWidth
-          value={values.price}
-          onChange={handleChange}
-          required
-          error={!!errors.price}
-          helperText={errors.price}
-        />
-        {menuType === "Alcohol" && (
-          <TextField
-            required
-            margin="dense"
-            name="alcoholPercentage"
-            label={t("restaurant-management.menu.menuItemAlcoholPercentage")}
-            fullWidth
-            value={values.alcoholPercentage}
-            onChange={handleChange}
-            error={!!errors.alcoholPercentage}
-            helperText={errors.alcoholPercentage}
-          />
-        )}
-        <Button
-          component="label"
-          role={undefined}
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          className="bg-primary"
-        >
-          Upload file
-          <VisuallyHiddenInput
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoChange}
-          />
-        </Button>
-        {photoFileName && (
-          <span className="ml-2">
-            {t("restaurant-management.menu.selectedFile")}: {photoFileName}
-          </span>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button className="text-primary" onClick={onClose}>
-          {t("general.cancel")}
-        </Button>
-        <Button onClick={handleSave} className="text-primary">
-          {t("general.save")}
-        </Button>
-      </DialogActions>
+    
+    <Dialog open={open} onClose={onClose} className="">
+      <div className="h-full w-full">
+        <DialogTitle>
+          {editedMenuItem
+            ? t("restaurant-management.menu.editedMenuItem")
+            : t("restaurant-management.menu.newMenuItem")}
+        </DialogTitle>
+        <DialogContent className="w-full h-full">
+          <Formik
+            id="menuitem-formik"
+            initialValues={initialValues}
+            validationSchema={menuItemSchema}
+            onSubmit={onSubmit}
+          >
+          {(formik) => {
+            return(
+              <Form>
+                <div  
+                  id="addmenuitem-form-containter"
+                  className="form-container flex h-full flex-col items-center gap-8"
+                >
+                  <div className="flex w-full flex-col items-center gap-6">
+                    
+                    <Field
+                      type="text"
+                      id="name"
+                      name="name"
+                      helperText={
+                        formik.errors.name &&
+                        formik.touched.name &&
+                        formik.errors.name
+                      }
+                      label="NAME" //@TODO tłumaczenia
+                      variant="standard"
+                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                      color="primary"
+                      as={TextField}
+                    />
+                    
+                    <Field
+                      type="text"
+                      id="alternateName"
+                      name="alternateName"
+                      helperText={
+                        formik.errors.alternateName &&
+                        formik.touched.alternateName &&
+                        formik.errors.alternateName
+                      }
+                      label="NAME TRANSLATION" //@TODO tłumaczenia
+                      variant="standard"
+                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.alternateName && formik.touched.alternateName) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                      color="primary"
+                      as={TextField}
+                    />
+                    <Field
+                      type="text"
+                      id="price"
+                      name="price"
+                      helperText={
+                        formik.errors.price &&
+                        formik.touched.price &&
+                        formik.errors.price
+                      }
+                      label="PRICE" //@todo tłumaczenia
+                      variant="standard"
+                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.price && formik.touched.price) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                      color="primary"
+                      as={TextField}
+                    />
+                    <Field
+                    id="ingredients" 
+                    name="ingredients" 
+                    default="Select ingredients" 
+                    as="select"
+                    multiple={true} 
+                    className={` [&>*]:label-[20px] w-fit [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.ingredients && formik.touched.ingredients) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                    >
+                      {
+                        
+                        ingredients.map((ingredient) => <option value={[ingredient.id, (document.getElementById(`in+${ingredient.id}`)?(document.getElementById(`in+${ingredient.id}`) as any).value:0)]}> {ingredient.publicName} <input id={`in+${ingredient.id}`} /> ({ingredient.unitOfMeasurement}) </option>)
+                      }
+                    </Field>
+                    {menuType === "Alcohol" && (
+                      <Field
+                        type="text"
+                        id="alcoholPercentage"
+                        name="alcoholPercentage"
+                        helperText={
+                          formik.errors.alcoholPercentage &&
+                          formik.touched.alcoholPercentage &&
+                          formik.errors.alcoholPercentage
+                        }
+                        label="%%%%%" //@TODO tłumaczenia
+                        variant="standard"
+                        className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.alcoholPercentage && formik.touched.alcoholPercentage) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                        color="primary"
+                        as={TextField}
+                      />
+                    )}
+                    <Button
+                      component="label"
+                      role={undefined}
+                      variant="contained"
+                      tabIndex={-1}
+                      startIcon={<CloudUploadIcon />}
+                      className="bg-primary"
+                    >
+                      Upload photo
+                      {/* @todo tlumaczneie */}
+                      <VisuallyHiddenInput
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                      />
+                    </Button>
+                    {photoFileName && (
+                      <span className="ml-2 h-min w-min">
+                        {t("restaurant-management.menu.selectedFile")}: {photoFileName}
+                      </span>
+                    )}
+                  </div>
+                  <DialogActions>
+                    <Button 
+                      id="addmenuitemsubmit"
+                      type="submit"
+                      disabled={!formik.isValid}
+                      className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}  
+                    >
+                      {t("general.save")}
+                    </Button>
+                    <Button 
+                      className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}  
+                      onClick={onClose}
+                    >
+                      {t("general.cancel")}
+                    </Button>
+                  </DialogActions>
+                </div>
+              </Form>
+            )
+          }}
+          </Formik>
+          
+          
+        </DialogContent>
+        
+      </div>
     </Dialog>
+
   );
 };
 

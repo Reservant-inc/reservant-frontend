@@ -5,7 +5,7 @@ import { ArrowUpward, KeyboardArrowDown, KeyboardArrowUp, Sort, SortByAlpha, Swa
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 
-interface MenuOrderBy {
+interface MenuSortBy {
   handleFilterOpen: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleFilterClose: () => void;
   filterAnchorEl: HTMLElement | null;
@@ -18,7 +18,7 @@ interface MenuOrderBy {
   handleClearSort: () => void;
 }
 
-const MenuOrderBy: React.FC<MenuOrderBy> = ({
+const MenuOrderBy: React.FC<MenuSortBy> = ({
   handleFilterOpen,
   handleFilterClose,
   filterAnchorEl,
@@ -40,17 +40,20 @@ const MenuOrderBy: React.FC<MenuOrderBy> = ({
   return (
     <>
       <Button
+        className="dark:bg-grey-5 dark:hover:bg-grey-6 dark:text-white text-black hover:bg-grey-0"
         startIcon={<SwapVert className="text-secondary-2" />}
         onClick={handleFilterOpen}
       >
-        <span className="ml-1 text-black dark:text-white">{t("restaurant-management.menu.sort")}</span>
+        <span className="ml-1 ">{t("restaurant-management.menu.sort")}</span>
       </Button>
       <Menu
         anchorEl={filterAnchorEl}
         open={Boolean(filterAnchorEl)}
         onClose={handleFilterClose}
       >
-        <MyMenuItem onClick={()=>{
+        <MyMenuItem 
+        className="dark:bg-grey-5 dark:hover:bg-grey-6 dark:text-white text-black hover:bg-grey-0"
+        onClick={()=>{
           setPriceSort(0)
           setAlcoholSort(0)
           if(nameSort===0 || nameSort===2){
@@ -60,7 +63,8 @@ const MenuOrderBy: React.FC<MenuOrderBy> = ({
             handleSortAlphabeticallyDesc()
             setNameSort(2)
           }
-        }}> {t("restaurant-management.menu.name")} 
+        }} 
+        > {t("restaurant-management.menu.name")} 
           {
             (nameSort !== 0) 
             ?
@@ -74,7 +78,9 @@ const MenuOrderBy: React.FC<MenuOrderBy> = ({
           } 
         </MyMenuItem>
 
-        <MyMenuItem onClick={()=>{
+        <MyMenuItem
+        className="dark:bg-grey-5 dark:hover:bg-grey-6 dark:text-white text-black hover:bg-grey-0"
+        onClick={()=>{
           setNameSort(0)
           setAlcoholSort(0)
           if(priceSort===0 || priceSort===2){
@@ -98,7 +104,9 @@ const MenuOrderBy: React.FC<MenuOrderBy> = ({
           } 
         </MyMenuItem>
 
-        <MyMenuItem onClick={()=>{
+        <MyMenuItem
+        className="dark:bg-grey-5 dark:hover:bg-grey-6 dark:text-white text-black hover:bg-grey-0"
+        onClick={()=>{
           setNameSort(0)
           setPriceSort(0)
           if(alcoholSort===0 || alcoholSort===2){

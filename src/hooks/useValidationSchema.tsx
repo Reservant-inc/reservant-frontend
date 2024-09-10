@@ -230,6 +230,10 @@ export const useValidationSchemas = () => {
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
   });
 
+  const menuItemSchema = yup.object({
+
+  })
+
   return {
     loginSchema,
     userRegisterSchema,
@@ -238,5 +242,6 @@ export const useValidationSchemas = () => {
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
     RestaurantEditSchema,
+    menuItemSchema,
   };
 };

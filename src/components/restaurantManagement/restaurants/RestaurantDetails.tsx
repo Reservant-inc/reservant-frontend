@@ -25,7 +25,7 @@ import { ArrowLeftIcon } from "@mui/x-date-pickers-pro";
 // };
 
 interface RestaurantDetailsProps {
-  activeRestaurantId: number | null;
+  activeRestaurantId: number ;
 }
 
 
