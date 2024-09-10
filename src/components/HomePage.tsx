@@ -373,12 +373,12 @@ export default function HomePage() {
       {activeRestaurant && (
         <div>
           {isRestaurantViewExtended ? (
-            <div className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)] w-[calc(100%-300px-1.5rem)]" : "left-[0.5rem] w-[calc(100%-1rem)]"}`}>
+            <div className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)] w-[calc(80%-300px-1.5rem)]" : "left-[0.5rem] w-[calc(80%-300px-1rem)]"}`}>
               <RestaurantView id={activeRestaurant.restaurantId}/>
             </div>
           ) : (
             <div
-              className={`absolute top-[3.5rem] h-[calc(100%-15rem)] z-[1] w-[300px] rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
+              className={`absolute top-[3.5rem] z-[1] w-[300px] rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
             >
               <div className="scroll h-full">
                 <FocusedRestaurantDetails
