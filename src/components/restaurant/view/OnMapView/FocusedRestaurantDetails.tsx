@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET, getImage } from "../../../../services/APIconn";
+import { fetchGET } from "../../../../services/APIconn";
 import {
-  Box,
   Chip,
   Rating,
   Button,
   IconButton,
-  Typography,
   CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -14,7 +12,10 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import DefaultPic from "../../../../assets/images/no-image.png"
+import Carousel from "../../../reusableComponents/ImageCarousel/Carousel";
+import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
+import CustomMarker from "../../../map/CustomMarker";
+import { RestaurantDetailsType, RestaurantType } from "../../../../services/types";
 
 const TABS = {
   MENU: "menu",
@@ -23,9 +24,8 @@ const TABS = {
 };
 
 interface FocusedRestaurantDetailsProps {
-  restaurantId: number;
+  activeRestaurant: RestaurantDetailsType;
   onClose: () => void;
-  setIsRestaurantViewExtended: Function
 }
 
 const getOpinionsText = (count: number) => {
@@ -35,19 +35,16 @@ const getOpinionsText = (count: number) => {
 };
 
 const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
-  restaurantId,
+  activeRestaurant,
   onClose,
-  setIsRestaurantViewExtended
 }) => {
-  const [restaurant, setRestaurant] = useState<any>(null);  //ResturantType
-  const [activeTab, setActiveTab] = useState<string>(TABS.MENU);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [restaurant, setRestaurant] = useState<RestaurantDetailsType>(activeRestaurant);  //ResturantType
   const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
-        const data = await fetchGET(`/restaurants/${restaurantId}`);
+        const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}`);
         setRestaurant(data);
       } catch (error) {
         console.error("Error fetching restaurant details:", error);
@@ -56,7 +53,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
     const fetchRestaurantReviews = async () => {
       try {
-        const data = await fetchGET(`/restaurants/${restaurantId}/reviews`);
+        const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}/reviews`);
         setReviews(data.items || []);
       } catch (error) {
         console.error("Error fetching restaurant reviews:", error);
@@ -65,11 +62,33 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
     fetchRestaurantDetails();
     fetchRestaurantReviews();
-  }, [restaurantId]);
+  }, [activeRestaurant.restaurantId]);
 
   const averageRating = reviews.length
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0;
+
+    const center: [number, number] = [
+      restaurant.location.latitude,
+      restaurant.location.longitude,
+    ];
+    const zoom = 17;
+  
+    const MapViewUpdater = () => {
+      const map = useMap();
+  
+      useEffect(() => {
+        map.setMinZoom(15);
+        map.setMaxZoom(18);
+        map.setView(center, zoom);
+      }, [center, map]);
+  
+      map.on("zoomend", () => {
+        map.setView(center, map.getZoom());
+      });
+  
+      return null;
+    };
 
   return (
     <>
@@ -84,50 +103,63 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             >
               <CloseIcon />
             </IconButton>
-            <Box
-              component="img"
-              src={getImage(restaurant.logo as string, DefaultPic)}
-              alt="Restaurant"
-              className="h-50 w-full object-cover rounded-lg"
-            />
-          </div>
-          <div className="p-4">
-            <h2 className="text-xl font-bold">{restaurant.name}</h2>
-            <div className="my-3 flex items-center space-x-2">
-              <Rating
-                name="read-only"
-                value={averageRating}
-                precision={0.25}
-                readOnly
-                emptyIcon={<StarBorderIcon fontSize="inherit" />}
-              />
-              <Typography variant="body2">
-                {averageRating.toFixed(2)} ({getOpinionsText(reviews.length)})
-              </Typography>
+            <div className="w-full h-48">
+              <Carousel images={[restaurant.logo, ...restaurant.photos]}/>
             </div>
-            <Typography variant="body2" className="my-1">
+          </div>
+          <div className="p-4 flex flex-col gap-2">
+            <div className="flex gap-5 items-center w-full justify-between">
+              <h2 className="text-2xl font-bold">{restaurant.name}</h2>
+              <div className="flex items-center gap-2">
+                <h1>
+                  {averageRating.toFixed(2)}
+                </h1>
+                <Rating
+                  name="read-only"
+                  value={averageRating}
+                  precision={0.25}
+                  readOnly
+                  emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                />
+                <h1>
+                  ({getOpinionsText(reviews.length)})
+                </h1>
+              </div>
+            </div>
+            <h1 className="text-sm">
               {restaurant.address}, {restaurant.city}
-            </Typography>
-            <Typography variant="body2" className="my-1">
-              {restaurant.restaurantType}
-            </Typography>
+            </h1>
+            <MapContainer
+              center={center}
+              zoom={zoom}
+              style={{ height: "100%", width: "100%" }}
+              scrollWheelZoom={true}
+              dragging={false}
+              doubleClickZoom={false}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <MapViewUpdater />
+            </MapContainer>
             <div className="my-3 flex items-center">
               {restaurant.provideDelivery && (
                 <>
                   <MopedIcon />{" "}
-                  <Typography variant="body2" className="ml-2">
+                  <h1 className="ml-2">
                     Koszt dostawy 5,99 zł
-                  </Typography>
+                  </h1>
                 </>
               )}
-              <Typography variant="body2" className="ml-2">
+              <h1 className="ml-2">
                 Dostawa:{" "}
                 {restaurant.provideDelivery ? (
                   <CheckCircleIcon className="text-green-500" />
                 ) : (
                   <CancelIcon className="text-red-500" />
                 )}
-              </Typography>
+              </h1>
             </div>
             <div className="my-3 flex flex-wrap gap-1">
               {restaurant.tags.map((tag: string) => (
@@ -142,15 +174,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   }}
                 />
               ))}
-            </div>
-            <div className="mt-4 flex justify-between">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
-                onClick={() => setIsRestaurantViewExtended(true)}
-              >
-                Przejdź do strony restauracji
-              </Button>
             </div>
           </div>
         </>

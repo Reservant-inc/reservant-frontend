@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import RestaurantDetails from "./RestaurantDetails";
-import { CartItemType, MenuItemType} from '../../../../services/types'
+import { CartItemType, MenuItemType} from '../../../../../services/types'
 
 interface RestaurantViewProps {
   id: string
@@ -8,8 +7,6 @@ interface RestaurantViewProps {
 
 const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
-
-  console.log(id)
 
   const addToCart = (item: MenuItemType) => {
     setCart((prevCart) => {
@@ -50,9 +47,8 @@ const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
   };
 
   return (
-    <div className="flex w-full h-full flex-col lg:flex-row overflow-y-auto scroll">
-      <div className="w-full lg:w-2/3">
-        <RestaurantDetails restaurantId={id} />
+    <div className="w-full h-full overflow-y-auto scroll dark:bg-black">
+      <div className="w-full">
       </div>
     </div>
   );

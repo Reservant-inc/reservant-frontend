@@ -4,13 +4,13 @@ import "leaflet/dist/leaflet.css";
 import MarkerBlack from "../../assets/images/location-black.svg";
 import MarkerPrimary from "../../assets/images/location-primary.svg";
 import { Marker, Tooltip, useMap } from "react-leaflet";
-import { RestaurantType } from "../../services/types";
+import { RestaurantDetailsType } from "../../services/types";
 
 
 interface CustomMarkerProps {
   position: L.LatLngExpression;
   restaurant: {name: string}
-  activeRestaurant: RestaurantType
+  activeRestaurant: RestaurantDetailsType | null
   setActiveRestaurant: Function,
   setUserMovedMap?: Function
 }

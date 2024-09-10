@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import RestaurantCreateEvent from "./RestaurantCreateEvent";
-import { fetchGET, getImage } from "../../../../services/APIconn";
-import DefaultPic from "../../../../assets/images/no-image.png"
+import { fetchGET, getImage } from "../../../../../services/APIconn";
+import DefaultPic from "../../../../../assets/images/no-image.png"
 
 interface Event {
   eventId: number;

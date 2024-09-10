@@ -1,13 +1,9 @@
 import { Button, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MenuItemComponent from "../MenuItemComponent";
-import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../services/types";
-import { fetchGET, getImage } from "../../../../services/APIconn";
+import MenuItemComponent from "../../MenuItemComponent";
+import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../../services/types";
+import { fetchGET, getImage } from "../../../../../services/APIconn";
 import DefaultPic from "../../../../assets/images/no-image.png"
-
-
-
-
 
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItemWithDescriptionType) => void;
