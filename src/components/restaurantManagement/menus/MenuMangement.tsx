@@ -26,7 +26,7 @@ import {
   MenuItem as MyMenuItem,
   TextField,
 } from "@mui/material";
-import FilterMenu from "./FilterMenu";
+import MenuOrderBy from "./MenuOrderBy";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { MenuItemType, MenuType } from "../../../services/types";
 
@@ -372,9 +372,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const handleSortAlphabetically = () => {
+  const handleSortAlphabeticallyAsc = () => {
     sortMenuItems((a: MenuItemData, b: MenuItemData) =>
       a.name.localeCompare(b.name),
+    );
+  };
+  const handleSortAlphabeticallyDesc = () => {
+    sortMenuItems((a: MenuItemData, b: MenuItemData) =>
+      b.name.localeCompare(a.name),
     );
   };
 
@@ -400,7 +405,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     );
   };
 
-  const handleClearFilters = () => {
+  const handleClearSort = () => {
     fetchMenuIemsForSelectedMenu();
   };
 
@@ -463,16 +468,17 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             </Button>
           )}
           {selectedMenuIndex !== null && (
-            <FilterMenu
+            <MenuOrderBy
               filterAnchorEl={filterAnchorEl}
               handleFilterOpen={handleFilterOpen}
               handleFilterClose={handleFilterClose}
-              handleSortAlphabetically={handleSortAlphabetically}
+              handleSortAlphabeticallyAsc={handleSortAlphabeticallyAsc}
+              handleSortAlphabeticallyDesc={handleSortAlphabeticallyDesc}
               handleSortPriceAsc={handleSortPriceAsc}
               handleSortPriceDesc={handleSortPriceDesc}
               handleSortAlcoholAsc={handleSortAlcoholAsc}
               handleSortAlcoholDesc={handleSortAlcoholDesc}
-              handleClearFilters={handleClearFilters}
+              handleClearSort={handleClearSort}
             />
           )}
         </div>
