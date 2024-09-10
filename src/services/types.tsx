@@ -1,4 +1,4 @@
-import { FriendStatus, LocalType } from "./enums";
+import { FriendStatus, LocalType } from './enums';
 
 export type LoginResponseType = {
   token: string;
@@ -7,6 +7,7 @@ export type LoginResponseType = {
   roles: string[];
   userId: string;
 };
+
 
 export type RestaurantDetailsType = {
   id: number;
@@ -36,6 +37,11 @@ export type GroupType = {
   restaurants: RestaurantType[];
 };
 
+export type RestaurantShortType = {
+  name: string,
+  restaurantId: string
+}
+
 export type RestaurantType = {
   id: number;
   groupName: string;
@@ -46,6 +52,16 @@ export type RestaurantType = {
   city: string;
   isVerified: boolean;
 };
+
+export type ActiveRestaurantType = RestaurantType & {
+  isVerified: boolean
+  location: RestaurantLocationType;
+}
+
+export type RestaurantLocationType = {
+  latitude: number;
+  longitude: number;
+}
 
 export type RestaurantDataType = {
   name: string;
@@ -61,7 +77,7 @@ export type RestaurantDataType = {
   tags: string[];
   provideDelivery: boolean;
   logo: File | null | string;
-  photos: File[] | null | string[];
+  photos:  File[] | null | string[];
   description: string;
   groupId: number | null;
 };
@@ -91,11 +107,68 @@ export type EmployeeEmployedType = {
 };
 
 export type EmploymentType = {
-  id: string;
-  restaurantId: string;
-  isBackdoorEmployee: string;
-  isHallEmployee: string;
-  restaurantName: string;
+  id: string,
+  restaurantId: string,
+  isBackdoorEmployee: string,
+  isHallEmployee: string,
+  restaurantName: string
+}
+
+
+export type MenuItemType = {
+  menuItemId: number;
+  name: string;
+  alternateName: string;
+  price: number;
+  alcoholPercentage: number;
+  photo: string;
+}
+
+export interface MenuItemWithDescriptionType {
+  menuItemId: number;
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  alternateName?: string;
+  alcoholPercentage?: number;
+  photo?: string;
+}
+
+export type  MenuIteminOrderType = {
+  name: string;
+  amount: number;
+  price: number;
+  status: string;
+}
+
+export type MenuType = {
+  menuId: number;
+  name: string;
+  alternateName: string
+  menuType: string;
+  dateFrom: string;
+  dateUntil: string | null;
+  menuItems: MenuItemType[];
+}
+
+export type MenuWithDescriptionType = {
+  menuId: number;
+  name: string;
+  alternateName: string
+  menuType: string;
+  photo: string;
+  dateFrom: string;
+  dateUntil: string | null;
+  menuItems: MenuItemWithDescriptionType[];
+}
+
+
+export type FriendType = {
+  userId: string,
+  firstName: string,
+  lastName: string,
+  photo: string
 };
 
 export type MessageType = {
@@ -128,6 +201,25 @@ export type UserType = {
   photo: string;
 };
 
+export type RequestType = {
+  dateSent: string;
+  dateRead?: string;
+  dateAccepted?: string;
+  otherUser: FriendType;
+};
+
+export type ActionType = {
+  icon: React.ReactNode;
+  name: string;
+  onClick: () => void;
+}
+
+export type CartItemType = {
+  menuItemId: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
 export type UserSearchType = {
   friendStatus: FriendStatus;
 } & UserType;

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import RestaurantDetails from "./RestaurantDetails";
-import { CartItem, MenuItem } from "../../../../services/interfaces";
+import { CartItemType, MenuItemType} from '../../../../services/types'
 
 interface RestaurantViewProps {
   id: string
 }
 
 const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItemType[]>([]);
 
   console.log(id)
 
-  const addToCart = (item: MenuItem) => {
+  const addToCart = (item: MenuItemType) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (cartItem) => cartItem.menuItemId === item.menuItemId,

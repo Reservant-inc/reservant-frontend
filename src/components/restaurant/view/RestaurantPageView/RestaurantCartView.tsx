@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { Box, Typography, IconButton, TextField, Button } from "@mui/material";
-import { CartItem } from "../../../../services/interfaces";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Input } from "@mui/base/Input";
+import { CartItemType } from "../../../../services/types";
 
 interface RestaurantCartViewProps {
-  cart: CartItem[];
+  cart: CartItemType[];
   incrementQuantity: (menuItemId: number) => void;
   decrementQuantity: (menuItemId: number) => void;
 }
@@ -33,7 +32,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
         ) : (
           cart.map((item) => (
             <Box
-              key={item.id}
+              key={item.menuItemId}
               className="my-2 flex w-full max-w-md justify-between rounded border p-4"
             >
               <Box>
@@ -48,7 +47,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
               <Box className="flex items-center">
                 <Typography>Ilość: {item.quantity}</Typography>
                 <IconButton
-                  onClick={() => decrementQuantity(item.id)}
+                  onClick={() => decrementQuantity(item.menuItemId)}
                   sx={{
                     bgcolor: "#a94c79",
                     color: "#fefefe",
@@ -60,7 +59,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
                   <RemoveIcon />
                 </IconButton>
                 <IconButton
-                  onClick={() => incrementQuantity(item.id)}
+                  onClick={() => incrementQuantity(item.menuItemId)}
                   sx={{
                     bgcolor: "#a94c79",
                     color: "#fefefe",

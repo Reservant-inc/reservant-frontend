@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import ErrorMes from "../../reusableComponents/ErrorMessage";
-import { RestaurantDataProps } from "../../../services/interfaces";
 import { EmploymentType } from "../../../services/types";
+import { RestaurantShortType } from "../../../services/types";
 
 const initialValues = {
   selectedRestaurant: "",
@@ -22,7 +22,7 @@ type restaurant = {
 const RestaurantAddEmp = ({ empid }: { empid: string }) => {
   const [t] = useTranslation("global");
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
-  const [restaurants, setRestaurants] = useState<restaurant[]>([]);
+  const [restaurants, setRestaurants] = useState<RestaurantShortType[]>([]);
 
   useEffect(() => {
     const getRestaurants = async () => {
@@ -46,19 +46,20 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
           }
 
         const response1 = await fetchGET("/my-restaurants");
-        let tmp1: restaurant[] = [];
+        let tmp1: RestaurantShortType[] = [];
+  
 
         for (const restaurant of response1) {
           tmp1.push({
-            restaurantID: restaurant.restaurantId,
-            name: restaurant.name,
-          });
+              restaurantId: restaurant.restaurantId,
+              name: restaurant.name
+            });
         }
 
         tmp1 = tmp1.filter((e) => {
           for (const i in tmp) {
-            console.log(e.restaurantID === tmp[i].restaurantId);
-            if (e.restaurantID === tmp[i].restaurantId) return false;
+            console.log(e.restaurantId === tmp[i].restaurantId);
+            if (e.restaurantId === tmp[i].restaurantId) return false;
           }
           return true;
         });
@@ -119,21 +120,12 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
             <Form>
               <div className="form-container">
                 <div className="form-control flex flex-col">
-                  <Field
-                    id="selectedRestaurant"
-                    default="Select a restaurant"
-                    name="selectedRestaurant"
-                    component="select"
-                  >
-                    <option value="" id="addEmp-option-default">
-                      Select a restaurant
-                    </option>
-                    {restaurants.map((restaurant) => (
-                      <option value={restaurant.restaurantID}>
-                        {" "}
-                        {restaurant.name}{" "}
-                      </option>
-                    ))}
+                  <Field id="selectedRestaurant" default="Select a restaurant" name="selectedRestaurant" component="select">
+                    <option value="" id="addEmp-option-default">Select a restaurant</option>
+                    {
+                      restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
+                    }
+                    
                   </Field>
                   <span className="">
                     <Field

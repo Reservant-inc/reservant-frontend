@@ -39,7 +39,9 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   onClose,
   setIsRestaurantViewExtended
 }) => {
-  const [restaurant, setRestaurant] = useState<any>(null);
+  const [restaurant, setRestaurant] = useState<any>(null);  //ResturantType
+  const [activeTab, setActiveTab] = useState<string>(TABS.MENU);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {

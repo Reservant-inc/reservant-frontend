@@ -161,9 +161,9 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({
   isPreview,
 }) => {
   // downloaded from api when it's ready
-  const [reviews, setReviews] = useState(dummyReviews);
-  const [sort, setSort] = useState("");
-  const [filterText, setFilterText] = useState("");
+  const [reviews, setReviews] = useState(dummyReviews);  //trzeba typ dla prawdziwych review
+  const [sort, setSort] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>("");
 
   const handleSort = (reviews: any[]) => {
     // ^ zmienic

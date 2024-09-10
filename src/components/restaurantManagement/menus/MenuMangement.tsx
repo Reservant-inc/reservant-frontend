@@ -28,6 +28,7 @@ import {
 } from "@mui/material";
 import FilterMenu from "./FilterMenu";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
+import { MenuItemType, MenuType } from "../../../services/types";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
