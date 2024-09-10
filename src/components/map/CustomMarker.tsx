@@ -3,14 +3,16 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MarkerBlack from "../../assets/images/location-black.svg";
 import MarkerPrimary from "../../assets/images/location-primary.svg";
-import { Marker, Tooltip } from "react-leaflet";
+import { Marker, Tooltip, useMap } from "react-leaflet";
+import { RestaurantDetailsType } from "../../services/types";
+
 
 interface CustomMarkerProps {
   position: L.LatLngExpression;
-  restaurant: { name: string };
-  activeRestaurant: any;
-  setActiveRestaurant: Function;
-  setUserMovedMap?: Function;
+  restaurant: {name: string}
+  activeRestaurant: RestaurantDetailsType | null
+  setActiveRestaurant: Function,
+  setUserMovedMap?: Function
 }
 
 const CustomMarker: React.FC<CustomMarkerProps> = ({

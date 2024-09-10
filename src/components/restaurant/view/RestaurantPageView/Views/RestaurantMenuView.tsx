@@ -1,12 +1,12 @@
 import { Button, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MenuItemComponent from "../MenuItemComponent";
-import { MenuItem } from "../../../../services/interfaces";
-import { fetchGET, getImage } from "../../../../services/APIconn";
+import MenuItemComponent from "../../MenuItemComponent";
+import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../../services/types";
+import { fetchGET, getImage } from "../../../../../services/APIconn";
 import DefaultPic from "../../../../assets/images/no-image.png"
 
 interface RestaurantMenuViewProps {
-  addToCart: (item: MenuItem) => void;
+  addToCart: (item: MenuItemWithDescriptionType) => void;
   restaurantId: string | undefined;
 }
 
@@ -14,7 +14,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
   addToCart,
   restaurantId,
 }) => {
-  const [menus, setMenus] = useState<any[]>([]);
+  const [menus, setMenus] = useState<MenuWithDescriptionType[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
 
   // useEffect(() => {
@@ -139,7 +139,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
             </div>
             <div className="mt-4 flex flex-col items-center">
               {menu.menuItems && menu.menuItems.length > 0 ? (
-                menu.menuItems.map((item: MenuItem) => (
+                menu.menuItems.map((item: MenuItemWithDescriptionType) => (
                   <div key={item.id} className="my-2 w-4/5">
                     <MenuItemComponent item={item} addToCart={addToCart} />
                   </div>

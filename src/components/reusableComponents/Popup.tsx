@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { PopupProps } from "../../services/interfaces";
+import React, { ReactNode, useState } from "react";
+
+interface PopupProps {
+  children: ReactNode;
+  buttonText?: String;
+  bgColor?: String;
+  modalTitle?: String;
+}
 
 const Popup: React.FC<PopupProps> = ({
   children,

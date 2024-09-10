@@ -4,13 +4,15 @@ import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import NotificationList from "./NotificationList";
 import { fetchGET } from "../../../../services/APIconn";
 
-interface NotificationsProps {
+interface NotificationsButtonProps {
   isDark: boolean;
 }
 
-const Notifications: React.FC<NotificationsProps> = ({ isDark }) => {
-  const [isPressed, setIsPressed] = useState(false);
-  const [hasNotifications, setHasNotifications] = useState(true);
+const NotificationsButton: React.FC<NotificationsButtonProps> = ({
+  isDark,
+}) => {
+  const [isPressed, setIsPressed] = useState<boolean>(false);
+  const [hasNotifications, setHasNotifications] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
 
   const pressHandler = () => {
@@ -54,4 +56,4 @@ const Notifications: React.FC<NotificationsProps> = ({ isDark }) => {
   );
 };
 
-export default Notifications;
+export default NotificationsButton;

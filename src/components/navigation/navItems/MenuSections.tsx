@@ -1,7 +1,8 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SectionProps } from "../../../services/interfaces";
 import Cookies from "js-cookie";
+
+interface SectionProps {}
 
 const Sections: React.FC<SectionProps> = () => {
   const navigate = useNavigate();

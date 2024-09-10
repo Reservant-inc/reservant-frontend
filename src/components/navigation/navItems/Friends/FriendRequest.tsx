@@ -15,6 +15,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({
   dateSent,
   onAction,
 }) => {
+  
   const handleAccept = async () => {
     try {
       await fetchPOST(

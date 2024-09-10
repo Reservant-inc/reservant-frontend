@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import RestaurantCreateEvent from "./RestaurantCreateEvent";
-import { fetchGET, getImage } from "../../../../services/APIconn";
-import DefaultPic from "../../../../assets/images/no-image.png"
+import { fetchGET, getImage } from "../../../../../services/APIconn";
+import DefaultPic from "../../../../../assets/images/no-image.png"
 
 interface Event {
   eventId: number;
@@ -24,7 +24,7 @@ const RestaurantEventsView: React.FC<RestaurantEventsViewProps> = ({
   events,
   restaurantName,
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState<string>("");
   const [city, setCity] = useState<string>("");
 

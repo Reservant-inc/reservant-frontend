@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { RestaurantDetailsProps } from "../../../services/interfaces";
 import {
   RestaurantDataType,
   RestaurantDetailsType,
@@ -24,6 +23,11 @@ import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagem
 //   boxShadow: 24,
 //   p: 2,
 // };
+
+interface RestaurantDetailsProps {
+  activeRestaurantId: number | null;
+}
+
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   activeRestaurantId,

@@ -12,6 +12,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { RequestType } from "../../../../services/types";
 
 interface NotificationListProps {
   setHasNotifications: (hasNotifications: boolean) => void;
@@ -20,7 +21,7 @@ interface NotificationListProps {
 const NotificationList: React.FC<NotificationListProps> = ({
   setHasNotifications,
 }) => {
-  const [friendRequests, setFriendRequests] = useState<any[]>([]);
+  const [friendRequests, setFriendRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -96,7 +97,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
               <List className="p-0">
                 {friendRequests.map((request) => (
                   <ListItem
-                    key={request.senderId}
+                    key={request.otherUser.userId}
                     button
                     style={{ marginBottom: "16px" }}
                   >
@@ -107,7 +108,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                       <Typography variant="subtitle2" color="textSecondary">
                         Zaproszenie do znajomych od
                       </Typography>
-                      <ListItemText primary={request.senderName} />
+                      <ListItemText primary={request.otherUser.firstName} />
                       <Typography variant="body2" color="textSecondary">
                         Wysłano{" "}
                         {new Date(request.dateSent).toLocaleDateString()}
@@ -117,7 +118,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                           variant="contained"
                           className="bg-primary"
                           onClick={() =>
-                            handleAction(request.senderId, "accept")
+                            handleAction(request.otherUser.userId, "accept")
                           }
                         >
                           Akceptuj
@@ -129,7 +130,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                             color: "#333",
                           }}
                           onClick={() =>
-                            handleAction(request.senderId, "reject")
+                            handleAction(request.otherUser.userId, "reject")
                           }
                         >
                           Odrzuć

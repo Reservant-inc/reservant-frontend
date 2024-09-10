@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography, TextField } from "@mui/material";
-import { fetchPOST } from "../../../../services/APIconn";
+import { fetchPOST } from "../../../../../services/APIconn";
 
 interface RestaurantCreateEventProps {
   open: boolean;
@@ -19,7 +19,7 @@ const RestaurantCreateEvent: React.FC<RestaurantCreateEventProps> = ({
   const [dataWydarzenia, setDataWydarzenia] = useState<Date | null>(new Date());
   const [koniecPrzyjmowaniaZgloszen, setKoniecPrzyjmowaniaZgloszen] =
     useState<Date | null>(new Date());
-  const [opis, setOpis] = useState("");
+  const [opis, setOpis] = useState<string>("");
 
   const handleSubmit = async () => {
     const eventBody = {

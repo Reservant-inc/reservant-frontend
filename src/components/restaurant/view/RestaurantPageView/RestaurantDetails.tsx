@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import RestaurantMenuView from "./RestaurantMenuView";
-import RestaurantReviewsView from "./RestaurantReviewsView";
-import RestaurantEventsView from "./RestaurantEventsView";
+import RestaurantReviewsView from "./Views/RestaurantReviewsView";
+import RestaurantEventsView from "./Events/RestaurantEventsView";
 import { fetchGET, getImage } from "../../../../services/APIconn";
 import {
   ImageList,

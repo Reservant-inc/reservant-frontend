@@ -18,13 +18,13 @@ import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { FetchError } from "../services/Errors";
 import { useTranslation } from "react-i18next";
-import RestaurantView from "./restaurant/view/RestaurantPageView/RestaurantView";
+import { RestaurantDetailsType } from "../services/types";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
-  const [restaurants, setRestaurants] = useState<any[]>([]);
-  const [allRestaurants, setAllRestaurants] = useState<any[]>([]);
-  const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
+  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([]); 
+  const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>([]); 
+  const [activeRestaurant, setActiveRestaurant] = useState<RestaurantDetailsType | null>( null); 
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
     new Set(),
   );
@@ -182,7 +182,7 @@ export default function HomePage() {
                           : " bg-white hover:bg-grey-1 dark:hover:bg-grey-5"
                       }
                         `}
-                  key={restaurant.id}
+                  key={restaurant.restaurantId}
                 >
                   <div className="flex w-full items-start justify-between py-2">
                     <div className="flex flex-col gap-1">
@@ -371,26 +371,16 @@ export default function HomePage() {
       </div>
       {activeRestaurant && (
         <div>
-          {isRestaurantViewExtended ? (
-            <div className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] overflow-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)] w-[calc(80%-300px-1.5rem)]" : "left-[0.5rem] w-[calc(80%-1rem)]"}`}>
-              <RestaurantView 
-                id={activeRestaurant.restaurantId}
-                setIsRestaurantViewExtended={setIsRestaurantViewExtended}
+          <div
+            className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[450px] rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
+          >
+            <div className="scroll h-full">
+              <FocusedRestaurantDetails
+                activeRestaurant={activeRestaurant}
+                onClose={() => setActiveRestaurant(null)}
               />
             </div>
-          ) : (
-            <div
-              className={`absolute top-[3.5rem] h-[calc(100%-15rem)] z-[1] w-[300px] rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
-            >
-              <div className="scroll h-full">
-                <FocusedRestaurantDetails
-                  restaurantId={activeRestaurant.restaurantId}
-                  onClose={() => setActiveRestaurant(null)}
-                  setIsRestaurantViewExtended={setIsRestaurantViewExtended}
-                />
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       )}
       <div id="map" className="relative z-[0] h-full w-full">

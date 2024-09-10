@@ -23,8 +23,8 @@ const RestaurantRegister: React.FC = () => {
     Partial<RestaurantDataType>
   >({});
   const [tags, setTags] = useState<string[]>([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [formProgress, setFormProgress] = useState<number>(0);
 
   const { t } = useTranslation("global");

@@ -1,6 +1,10 @@
 import React from "react";
-import { RestaurantDataProps } from "../../../services/interfaces";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
+import { RestaurantDataType } from "../../../services/types";
+
+interface RestaurantDataProps {
+  restaurant: RestaurantDataType;
+}
 
 const RestaurantData: React.FC<RestaurantDataProps> = ({ restaurant }) => {
   return <div className=""></div>;

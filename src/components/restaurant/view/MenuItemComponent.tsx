@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Box, IconButton, Modal, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import InfoIcon from "@mui/icons-material/Info";
-import { MenuItem as MenuItemType } from "../../../services/interfaces";
+import { MenuItemWithDescriptionType } from "../../../services/types";
 import { getImage } from "../../../services/APIconn";
 import DefaultPic from "../../../assets/images/no-image.png"
 
 interface MenuItemComponentProps {
-  item: MenuItemType;
-  addToCart: (item: Omit<MenuItemType, "quantity">) => void;
+  item: MenuItemWithDescriptionType;
+  addToCart: (item: Omit<MenuItemWithDescriptionType, "quantity">) => void;
 }
 
 const style = {
@@ -70,7 +70,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
             {item.alternateName}
           </Typography>
           <p>{item.price} PLN</p>
-          {item.description?.trim().length > 0 ? (
+          {item.description?.trim().length > 0 ? (  //w menuItem nie ma description???
             <p>{item.description}</p>
           ) : (
             <p className="italic">Brak opisu.</p>
