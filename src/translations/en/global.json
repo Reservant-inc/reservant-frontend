@@ -173,8 +173,9 @@
             "menuItemPriceRequired": "Price is required",
             "menuItemPriceMustBeNumber": "Price must be number",
             "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
-            "selectedFile": "Selected file"
-        
+            "selectedFile": "Selected file",
+            "sort": "Sort by"
+
         }
     },
     "tools": {
