@@ -21,7 +21,7 @@ const LanguageChange: React.FC = () => {
       <button
         id="LanguageChangeSelectionMenuButton"
         className={
-          "flex h-10 w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-3" +
+          "flex h-10 w-10 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-6" +
           (isPressed ? " bg-l-grey" : "")
         }
         onClick={pressHandler}
@@ -31,7 +31,7 @@ const LanguageChange: React.FC = () => {
             "h-5" +
             (isPressed
               ? " fill-primary dark:fill-secondary"
-              : " fill-grey-3 dark:fill-grey-2")
+              : " fill-grey-6 dark:fill-grey-2")
           }
           version="1.1"
           id="XMLID_275_"

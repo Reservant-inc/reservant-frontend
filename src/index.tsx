@@ -8,6 +8,24 @@ import global_en from "./translations/en/global.json";
 import global_pl from "./translations/pl/global.json";
 import i18next from "i18next";
 import { I18nextProvider } from "react-i18next";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "Montserrat-md",
+    },
+  },
+  components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontFamily: 'Montserrat-md',
+        },
+      },
+    },
+  },
+});
 
 i18next.init({
   interpolation: { escapeValue: true },
@@ -28,11 +46,13 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <I18nextProvider i18n={i18next}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </I18nextProvider>
+    <ThemeProvider theme={theme}>
+      <I18nextProvider i18n={i18next}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </I18nextProvider>
+    </ThemeProvider>
   </React.StrictMode>,
 );
 

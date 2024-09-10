@@ -10,7 +10,7 @@ import {
   Box,
   Typography,
   Paper,
-  TablePagination
+  TablePagination,
 } from "@mui/material";
 import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
@@ -18,7 +18,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Save as SaveIcon,
-  Close as CancelIcon
+  Close as CancelIcon,
 } from "@mui/icons-material";
 import { MenuIteminOrderType } from "../../../services/types";
 
@@ -42,7 +42,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
   onEdit,
   onSave,
   onCancel,
-  onDelete
+  onDelete,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -145,7 +145,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -164,8 +164,8 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
       notes: "No allergies",
       menuItems: [
         { name: "Pizza", amount: 3, price: 30, status: "Completed" },
-        { name: "Burger", amount: 2, price: 25, status: "In Progress" }
-      ]
+        { name: "Burger", amount: 2, price: 25, status: "In Progress" },
+      ],
     },
     {
       id: 2,
@@ -179,9 +179,9 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
       notes: "Extra ketchup",
       menuItems: [
         { name: "Pasta", amount: 1, price: 15, status: "Completed" },
-        { name: "Salad", amount: 2, price: 10, status: "Pending" }
-      ]
-    }
+        { name: "Salad", amount: 2, price: 10, status: "Pending" },
+      ],
+    },
     // Add more orders as needed
   ]);
 

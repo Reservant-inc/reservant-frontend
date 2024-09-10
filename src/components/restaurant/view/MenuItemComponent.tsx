@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import InfoIcon from "@mui/icons-material/Info";
 import { MenuItemWithDescriptionType } from "../../../services/types";
 import { getImage } from "../../../services/APIconn";
+import DefaultPic from "../../../assets/images/no-image.png"
 
 interface MenuItemComponentProps {
   item: MenuItemWithDescriptionType;
@@ -46,7 +47,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
             height: 120,
             width: 120,
           }}
-          src={getImage(item.photo as string)}
+          src={getImage(item.photo as string, DefaultPic)}
           alt={item.name}
         />
         <div className="flex-grow">

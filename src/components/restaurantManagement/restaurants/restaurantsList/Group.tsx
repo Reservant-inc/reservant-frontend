@@ -21,35 +21,45 @@ const Group: React.FC<GroupProps> = ({
   restaurants,
   filter,
   handleChangeActiveRestaurant,
-  setActiveSectionName
+  setActiveSectionName,
 }) => {
   const [t] = useTranslation("global");
 
-  const [open, setOpen] = React.useState(filter!=="");
+  const [open, setOpen] = React.useState(filter !== "");
 
   const handleClick = () => {
     setOpen(!open);
   };
 
   const handleSubmit = (id: number, name: string) => {
-    setActiveSectionName(name)
-    handleChangeActiveRestaurant(id)  
-  }
+    setActiveSectionName(name);
+    handleChangeActiveRestaurant(id);
+  };
 
-  useEffect(()=>{setOpen(filter!=="")},[filter])
+  useEffect(() => {
+    setOpen(filter !== "");
+  }, [filter]);
 
   return (
     <div className={"text-sm text-black dark:text-white"}>
       <ListItemButton onClick={handleClick}>
         <ListItemText primary={name} />
-        {open ?  <ExpandMore /> : <ExpandLess />}
+        {open ? <ExpandMore /> : <ExpandLess />}
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
-              <div className="flex w-full px-2 pb-2 gap-4">
-                {restaurants.map((restaurant) => (
-                  <Button className="border-2 border-grey-1 text-black hover:bg-grey-0 w-[10rem] h-10" variant="outlined" onClick={() => handleSubmit(restaurant.restaurantId, restaurant.name)}>{restaurant.name}</Button>
-                ))}
-              </div>
+        <div className="flex w-full gap-4 px-2 pb-2">
+          {restaurants.map((restaurant) => (
+            <Button
+              className="h-10 w-[10rem] border-2 border-grey-1 text-black hover:bg-grey-0"
+              variant="outlined"
+              onClick={() =>
+                handleSubmit(restaurant.restaurantId, restaurant.name)
+              }
+            >
+              {restaurant.name}
+            </Button>
+          ))}
+        </div>
       </Collapse>
       <div className="h-[2px] w-full bg-grey-1" />
     </div>

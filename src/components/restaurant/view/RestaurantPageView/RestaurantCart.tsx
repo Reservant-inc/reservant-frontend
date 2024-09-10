@@ -25,6 +25,7 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
     switch (selectedOption) {
       case "Na miejscu":
         return <NewReservationDetailsView />;
+
       case "Dostawa":
       case "Odbiór":
         return (

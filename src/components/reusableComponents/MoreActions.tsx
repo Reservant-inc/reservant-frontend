@@ -1,7 +1,19 @@
-import React from 'react';
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { ActionType } from '../../services/types';
+import React from "react";
+import {
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { ActionType } from "../../services/types";
+
+interface Action {
+  icon: React.ReactNode;
+  name: string;
+  onClick: () => void;
+}
 
 interface MoreActionsProps {
   actions: ActionType[];

@@ -8,7 +8,10 @@ const LandingPage = () => {
   const [t] = useTranslation("global");
 
   return (
-    <div id="landingPageWrapper" className="flex h-screen flex-col items-center justify-center">
+    <div
+      id="landingPageWrapper"
+      className="flex h-screen flex-col items-center justify-center"
+    >
       <a id="localhostLink" href="http://localhost:3000/home" className="p-2">
         localhost
       </a>{" "}

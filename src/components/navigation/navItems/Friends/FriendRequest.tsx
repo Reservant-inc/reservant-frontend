@@ -44,7 +44,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({
   });
 
   return (
-    <div className="border-grey-300 flex items-center border-b p-2">
+    <div className="border-grey-600 flex items-center border-b p-2">
       <Avatar className="mr-2" sx={{ width: 32, height: 32 }}>
         A
       </Avatar>

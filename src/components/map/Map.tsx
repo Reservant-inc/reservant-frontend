@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
-import MarkerClusterGroup from 'react-leaflet-cluster'
+import MarkerClusterGroup from "react-leaflet-cluster";
 import { Map as LeafletMap, LatLngBounds } from "leaflet";
 import { ActiveRestaurantType } from "../../services/types";
 
@@ -20,23 +20,23 @@ const Map: React.FC<MapProps> = ({
   setActiveRestaurant,
   setBounds,
   setUserMovedMap,
-  userMovedMap
+  userMovedMap,
 }) => {
-  const mapRef = useRef<LeafletMap | null>(null); 
+  const mapRef = useRef<LeafletMap | null>(null);
   const previousBoundsRef = useRef<LatLngBounds | null>(null);
 
   const MapViewUpdater = () => {
     const map = useMap();
     mapRef.current = map;
 
-    map.zoomControl.setPosition("topright");
+    map.zoomControl.remove();
     map.setMinZoom(10);
-    map.setMaxZoom(17);
+    map.setMaxZoom(18);
 
     useEffect(() => {
       if (activeRestaurant && !userMovedMap) {
         const { latitude, longitude } = activeRestaurant.location;
-        map.flyTo([latitude, longitude - 0.02], 14);
+        map.flyTo([latitude, longitude - 0.0015], 18);
       }
     }, [activeRestaurant, map, userMovedMap]);
 
@@ -44,9 +44,12 @@ const Map: React.FC<MapProps> = ({
       const onMoveEnd = () => {
         if (mapRef.current) {
           const bounds = mapRef.current.getBounds();
-          if (!previousBoundsRef.current || !previousBoundsRef.current.equals(bounds)) {
+          if (
+            !previousBoundsRef.current ||
+            !previousBoundsRef.current.equals(bounds)
+          ) {
             sendBounds();
-            setUserMovedMap(true)
+            setUserMovedMap(true);
             previousBoundsRef.current = bounds;
           }
         }
@@ -97,6 +100,7 @@ const Map: React.FC<MapProps> = ({
         />
         <MarkerClusterGroup
           showCoverageOnHover={false}
+          spiderfyDistanceMultiplier={4}
         >
           {restaurants.map((restaurant, index) => (
             <CustomMarker

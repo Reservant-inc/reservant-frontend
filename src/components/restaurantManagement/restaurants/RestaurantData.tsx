@@ -7,11 +7,7 @@ interface RestaurantDataProps {
 }
 
 const RestaurantData: React.FC<RestaurantDataProps> = ({ restaurant }) => {
-  return (
-    <div className="">
-      
-    </div>
-  );
+  return <div className=""></div>;
 };
 
 export default RestaurantData;
