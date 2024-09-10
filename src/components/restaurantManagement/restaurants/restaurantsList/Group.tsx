@@ -5,8 +5,16 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { GroupProps } from "../../../../services/interfaces";
 import { Button } from "@mui/material";
+import { RestaurantType } from "../../../../services/types";
+
+interface GroupProps {
+  name: string;
+  filter: string;
+  restaurants: RestaurantType[];
+  handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
+  setActiveSectionName: (sectionName: string) => void;
+}
 
 const Group: React.FC<GroupProps> = ({
   name,

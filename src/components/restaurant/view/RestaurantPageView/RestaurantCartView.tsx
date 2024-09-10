@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { Box, Typography, IconButton, TextField, Button } from "@mui/material";
-import { CartItem } from "../../../../services/interfaces";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Input } from "@mui/base/Input";
+import { CartItemType } from "../../../../services/types";
 
 interface RestaurantCartViewProps {
-  cart: CartItem[];
+  cart: CartItemType[];
   incrementQuantity: (menuItemId: number) => void;
   decrementQuantity: (menuItemId: number) => void;
 }

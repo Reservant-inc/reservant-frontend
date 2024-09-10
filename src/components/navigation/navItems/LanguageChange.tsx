@@ -4,7 +4,7 @@ import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
 import i18next from "i18next";
 
 const LanguageChange: React.FC = () => {
-  const [isPressed, setIsPressed] = useState(false);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const pressHandler = () => {
     setIsPressed(!isPressed);

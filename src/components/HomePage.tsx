@@ -21,9 +21,9 @@ import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
-  const [restaurants, setRestaurants] = useState<any[]>([]);
-  const [allRestaurants, setAllRestaurants] = useState<any[]>([]);
-  const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
+  const [restaurants, setRestaurants] = useState<any[]>([]); //brak typu 
+  const [allRestaurants, setAllRestaurants] = useState<any[]>([]); //brak typu 
+  const [activeRestaurant, setActiveRestaurant] = useState<any>(null); //brak typu 
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
     new Set(),
   );

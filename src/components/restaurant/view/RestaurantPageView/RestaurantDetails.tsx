@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
-import { MenuItem } from "../../../../services/interfaces";
+import { MenuItemWithDescriptionType } from "../../../../services/types";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "../../../map/CustomMarker";
 import DefaultPic from "../../../../assets/images/no-image.png"
@@ -26,7 +26,7 @@ const TABS = {
 };
 
 interface RestaurantDetailsProps {
-  addToCart: (item: MenuItem) => void;
+  addToCart: (item: MenuItemWithDescriptionType) => void;
   restaurantId: string | undefined;
 }
 
@@ -34,10 +34,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   addToCart,
   restaurantId,
 }) => {
-  const [restaurant, setRestaurant] = useState<any>(null);
-  const [events, setEvents] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState(TABS.MENU);
-  const [openModal, setOpenModal] = useState(false);
+  const [restaurant, setRestaurant] = useState<any>(null);  //brak typu konflikty
+  const [events, setEvents] = useState<any[]>([]);  //EventType
+  const [activeTab, setActiveTab] = useState<string>(TABS.MENU);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [activeRestaurant, setActiveRestaurant] = useState<any>(null);
 
   useEffect(() => {

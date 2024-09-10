@@ -13,7 +13,7 @@ interface FocusedRestaurantReviewsListProps {
 const FocusedRestaurantReviewsList: React.FC<
   FocusedRestaurantReviewsListProps
 > = ({ isPreview, reviews }) => {
-  const [filteredReviews, setFilteredReviews] = useState<any[]>(reviews);
+  const [filteredReviews, setFilteredReviews] = useState<any[]>(reviews); //ReviewType
   const [sort, setSort] = useState<string>("");
   const [filterText, setFilterText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -21,7 +21,6 @@ const FocusedRestaurantReviewsList: React.FC<
   const fetchReviews = async () => {
     try {
       const data = await fetchGET("/restaurants/2/reviews");
-      setFilteredReviews(data.items || []);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     }
