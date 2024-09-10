@@ -139,7 +139,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({
   };
 
   return (
-    <div className="h-full w-full rounded-lg bg-white">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -157,7 +157,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="border-0"
+        className="border-0 dark:text-white"
       />
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <Box>
