@@ -25,7 +25,7 @@ import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagem
 // };
 
 interface RestaurantDetailsProps {
-  activeRestaurantId: number | null;
+  activeRestaurantId: number ;
 }
 
 
