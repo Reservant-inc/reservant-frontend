@@ -44,22 +44,37 @@ const FocusedRestaurantReviewsList: React.FC<
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
       <div className="flex h-full w-full flex-col gap-2">
-        {!isPreview && (
-          <>
-            <Button
-              className=""
-            >
-              + Dodaj opinię
-            </Button>
-            <RestaurantReviewsFilters
-              sort={sort}
-              setSort={setSort}
-              filterText={filterText}
-              setFilterText={setFilterText}
-            />
-          </>
-        )}
-        <div className="scroll h-full w-full overflow-y-auto">
+        <div className="w-full h-[50px] rounded-lg flex gap-2">
+          <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
+            Zarezerwuj
+          </button>
+          <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
+            Stwórz event
+          </button>
+          <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
+            Zamów
+          </button>
+        </div>
+        <h1 className="text-2xl font-mont-bd text-black dark:text-white">Menu:</h1>
+        <div className="w-full h-[150px] dark:bg-grey-5 rounded-lg">
+        </div>
+        <div className="scroll flex flex-col gap-2 h-full w-full overflow-y-auto">
+          <h1 className="text-2xl font-mont-bd text-black dark:text-white">Reviews:</h1>
+          {!isPreview && (
+            <div className="flex w-full gap-2">
+              <RestaurantReviewsFilters
+                sort={sort}
+                setSort={setSort}
+                filterText={filterText}
+                setFilterText={setFilterText}
+              />
+              <Button
+                className="w-[180px] dark:bg-grey-5 bg-grey-0 rounded-lg text-primary dark:text-secondary dark:hover:bg-grey-6 hover:bg-white"
+              >
+                + Dodaj opinię
+              </Button>
+            </div>
+          )}
           {filteredAndSortedReviews.length > 0 ? (
             filteredAndSortedReviews.map((review) => (
               <RestaurantReview key={review.reviewId} {...review} />

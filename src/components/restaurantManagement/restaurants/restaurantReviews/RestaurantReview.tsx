@@ -18,7 +18,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
     contents.length > 100 ? contents.substring(0, 100) + "..." : contents;
 
   return (
-    <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-1 dark:bg-grey-6">
+    <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-2 dark:bg-grey-6 bg-grey-0">
       <div className="flex items-center items-center justify-between space-x-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-8 w-8">A</Avatar>
@@ -38,7 +38,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       <div className="flex w-full justify-end">
         <Button
           id="RestaurantReviewMoreButton"
-          className="rounded-lg text-primary"
+          className="rounded-lg text-primary dark:text-secondary"
         >
           Respond
         </Button>

@@ -2,12 +2,16 @@ import { Rating } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import React from "react";
 
-const CustomRating = ({ rating, readOnly, className } : { rating: number, readOnly: boolean, className?: string }) => {
+const CustomRating = ({ rating, readOnly, className, onChange } : { rating: number, readOnly: boolean, className?: string, onChange?: Function }) => {
     return (
         <Rating
             name="read-only"
             value={rating}
             readOnly={readOnly}
+            onChange={(event, newValue) => {
+                if (onChange)
+                onChange(newValue);
+              }}
             emptyIcon={
             <StarBorderIcon
                 fontSize="inherit"
