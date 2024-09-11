@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Avatar, Rating, Button, Modal, Box } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Textarea } from "@mui/joy";
+import { ManagerResponseProps, RestaurantReviewProps } from "../../../../services/interfaces";
+import { number } from "yup";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,17 +18,11 @@ const style = {
   p: 4,
 };
 
-interface RestaurantReviewProps {
-  createdAt: string;
-  stars: number;
-  contents: string;
-}
 
-const RestaurantReview: React.FC<RestaurantReviewProps> = ({
-  stars,
-  createdAt,
-  contents,
-}) => {
+
+const RestaurantReview: React.FC<RestaurantReviewProps> = (
+    {id,score,date,description,managerResponse}:{id:number,score:number,date:string,description:string,managerResponse?:ManagerResponseProps}
+  ) => {
   const [areDetailsOpen, setAreDetailsOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
@@ -38,18 +34,18 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   };
 
   const reducedDescription =
-    contents.length > 100 ? contents.substring(0, 100) + "..." : contents;
+    description.length > 100 ? description.substring(0, 100) + "..." : description;
 
   return (
     <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-1 dark:bg-grey-6">
       <div className="flex items-center items-center justify-between space-x-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-8 w-8">A</Avatar>
-          <p>{new Date(createdAt).toLocaleDateString()}</p>
+          <p>{new Date(date).toLocaleDateString()}</p>
         </div>
         <Rating
           name="read-only"
-          value={stars}
+          value={score}
           readOnly
           emptyIcon={
             <StarBorderIcon
@@ -76,10 +72,10 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
               <div className="flex items-center justify-start space-x-4">
                 <Avatar>A</Avatar>
                 <div>
-                  <div>{new Date(createdAt).toLocaleDateString()}</div>
+                  <div>{new Date(date).toLocaleDateString()}</div>
                   <Rating
                     name="read-only"
-                    value={stars}
+                    value={score}
                     readOnly
                     emptyIcon={
                       <StarBorderIcon
@@ -91,8 +87,8 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
                 </div>
               </div>
               <div className="mt-3 break-words">
-                {contents.replace(/\s/g, "").length > 0 ? (
-                  <p>{contents}</p>
+                {description.replace(/\s/g, "").length > 0 ? (
+                  <p>{description}</p>
                 ) : (
                   <p className="italic">No description.</p>
                 )}

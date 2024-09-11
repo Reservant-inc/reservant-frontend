@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import RestaurantReviewsFilters from "./RestaurantReviewsFilters";
 import RestaurantReview from "./RestaurantReview";
+import { RestaurantReviewProps } from "../../../../services/interfaces";
 
-const dummyReviews = [
+const dummyReviews:RestaurantReviewProps[]  = [
   {
     id: 1,
     score: 4,
@@ -29,7 +30,6 @@ const dummyReviews = [
     score: 5,
     date: "2024-05-12",
     description: "Excellent stay! The food was great.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -37,7 +37,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 5,
@@ -45,7 +44,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 6,
@@ -53,7 +51,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 7,
@@ -61,7 +58,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -69,7 +65,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -77,7 +72,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -85,7 +79,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -93,7 +86,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -101,7 +93,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -109,7 +100,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -117,7 +107,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -125,7 +114,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -133,7 +121,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -141,7 +128,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
   {
     id: 4,
@@ -149,7 +135,6 @@ const dummyReviews = [
     date: "2024-05-13",
     description:
       "Average experience. The food was fine, but nothing exceptional.",
-    managerResponse: null,
   },
 ];
 
@@ -204,47 +189,50 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({
         : column2.push(filteredAndSortedReviews[i]);
     }
 
-    return (
-      <div className="flex gap-1">
-        <div className="flex h-full w-1/2 flex-col gap-2">
-          {column1.map((review) => (
-            <RestaurantReview key={review.id} {...review} />
-          ))}
-        </div>
-        <div className="flex h-full w-1/2 flex-col gap-2">
-          {column2.map((review) => (
-            <RestaurantReview key={review.id} {...review} />
-          ))}
-        </div>
-      </div>
-    );
-  };
+
+    return  <div className="flex gap-1">
+              <div className="h-full w-1/2 flex flex-col gap-2">
+                  {column1.map((review:RestaurantReviewProps) => (
+                    <RestaurantReview id={review.id} score={review.score} date={review.date} description={review.description} managerResponse={review.managerResponse} />
+                  ))}
+              </div>
+              <div className="h-full w-1/2 flex flex-col gap-2">
+                  {column2.map((review:RestaurantReviewProps) => (
+                    <RestaurantReview id={review.id} score={review.score} date={review.date} description={review.description} managerResponse={review.managerResponse} />
+                  ))}
+              </div>
+            </div>
+  }      
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
-      {isPreview ? (
-        <div className="scroll overflow-y-auto">
-          {filteredAndSortedReviews.length > 0 ? (
-            filteredAndSortedReviews.map((review) => (
-              <RestaurantReview key={review.id} {...review} />
-            ))
-          ) : (
-            <div className="mt-4 text-center">No matching reviews</div>
-          )}
-        </div>
-      ) : (
-        <div className="flex h-full w-full flex-col gap-2">
-          <RestaurantReviewsFilters
-            sort={sort}
-            setSort={setSort}
-            filterText={filterText}
-            setFilterText={setFilterText}
-          />
-          <div className="scroll h-full w-full overflow-y-auto">
-            {displayReviews()}
-          </div>
-        </div>
-      )}
+    <div className="h-full w-full flex flex-col dark:text-grey-1 gap-2 rounded-lg">
+      {
+        isPreview ? (
+          <div className="overflow-y-auto scroll">
+            {
+              filteredAndSortedReviews.length > 0 ? (
+                filteredAndSortedReviews.map((review:RestaurantReviewProps) => (
+                  <RestaurantReview id={review.id} score={review.score} date={review.date} description={review.description} managerResponse={review.managerResponse} />
+                ))
+              ) : (
+                <div className="mt-4 text-center">No matching reviews</div>
+              )
+            }
+          </div>  
+        ) : (
+          <div className="h-full w-full flex flex-col gap-2">
+            <RestaurantReviewsFilters
+              sort={sort}
+              setSort={setSort}
+              filterText={filterText}
+              setFilterText={setFilterText}
+            />
+            <div className="h-full w-full overflow-y-auto scroll">
+                {displayReviews()}
+            </div>  
+          </div>  
+        )
+      }
     </div>
   );
 };
