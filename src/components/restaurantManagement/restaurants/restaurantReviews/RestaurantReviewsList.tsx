@@ -154,14 +154,16 @@ const dummyReviews = [
 ];
 
 interface RestaurantReviewsListProps {
-  isPreview: boolean
+  isPreview: boolean;
 }
 
-const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview }) => {
+const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({
+  isPreview,
+}) => {
   // downloaded from api when it's ready
-  const [reviews, setReviews] = useState(dummyReviews);
-  const [sort, setSort] = useState("");
-  const [filterText, setFilterText] = useState("");
+  const [reviews, setReviews] = useState(dummyReviews);  //trzeba typ dla prawdziwych review
+  const [sort, setSort] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>("");
 
   const handleSort = (reviews: any[]) => {
     // ^ zmienic
@@ -193,57 +195,56 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview
       : handleSort(reviews);
 
   const displayReviews = () => {
-    const column1: any[] = []
-    const column2: any[] = []
+    const column1: any[] = [];
+    const column2: any[] = [];
 
     for (let i = 0; i < filteredAndSortedReviews.length; i++) {
-      i % 2 === 0 ? column1.push(filteredAndSortedReviews[i]) : column2.push(filteredAndSortedReviews[i])
+      i % 2 === 0
+        ? column1.push(filteredAndSortedReviews[i])
+        : column2.push(filteredAndSortedReviews[i]);
     }
 
-
-    return  <div className="flex gap-1">
-              <div className="h-full w-1/2 flex flex-col gap-2">
-                  {column1.map((review) => (
-                    <RestaurantReview key={review.id} {...review} />
-                  ))}
-              </div>
-              <div className="h-full w-1/2 flex flex-col gap-2">
-                  {column2.map((review) => (
-                    <RestaurantReview key={review.id} {...review} />
-                  ))}
-              </div>
-            </div>
-  }      
+    return (
+      <div className="flex gap-1">
+        <div className="flex h-full w-1/2 flex-col gap-2">
+          {column1.map((review) => (
+            <RestaurantReview key={review.id} {...review} />
+          ))}
+        </div>
+        <div className="flex h-full w-1/2 flex-col gap-2">
+          {column2.map((review) => (
+            <RestaurantReview key={review.id} {...review} />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="h-full w-full flex flex-col dark:text-grey-1 gap-2 rounded-lg">
-      {
-        isPreview ? (
-          <div className="overflow-y-auto scroll">
-            {
-              filteredAndSortedReviews.length > 0 ? (
-                filteredAndSortedReviews.map((review) => (
-                  <RestaurantReview key={review.id} {...review} />
-                ))
-              ) : (
-                <div className="mt-4 text-center">No matching reviews</div>
-              )
-            }
-          </div>  
-        ) : (
-          <div className="h-full w-full flex flex-col gap-2">
-            <RestaurantReviewsFilters
-              sort={sort}
-              setSort={setSort}
-              filterText={filterText}
-              setFilterText={setFilterText}
-            />
-            <div className="h-full w-full overflow-y-auto scroll">
-                {displayReviews()}
-            </div>  
-          </div>  
-        )
-      }
+    <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
+      {isPreview ? (
+        <div className="scroll overflow-y-auto">
+          {filteredAndSortedReviews.length > 0 ? (
+            filteredAndSortedReviews.map((review) => (
+              <RestaurantReview key={review.id} {...review} />
+            ))
+          ) : (
+            <div className="mt-4 text-center">No matching reviews</div>
+          )}
+        </div>
+      ) : (
+        <div className="flex h-full w-full flex-col gap-2">
+          <RestaurantReviewsFilters
+            sort={sort}
+            setSort={setSort}
+            filterText={filterText}
+            setFilterText={setFilterText}
+          />
+          <div className="scroll h-full w-full overflow-y-auto">
+            {displayReviews()}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

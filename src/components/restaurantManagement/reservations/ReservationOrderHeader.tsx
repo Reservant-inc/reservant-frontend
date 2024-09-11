@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Button, ButtonGroup } from "@mui/material";
 import ReservationHistory from "./ReservationHistoory";
 import OrderHistory from "./OrderHistory";
+import { ButtonGroup, Button } from "@mui/material";
 
 interface ReservationOrderHeaderProps {
   activeRestaurantId: number;
 }
 
-const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({ activeRestaurantId }) => {
+const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({
+  activeRestaurantId,
+}) => {
   const [activeTab, setActiveTab] = useState<string>("reservation");
 
   return (
-    <div>
+    <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
       <div className="flex justify-start p-2">
         <ButtonGroup>
           <Button
@@ -21,7 +23,7 @@ const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({ activeR
           >
             Reservations
             {activeTab === "reservation" && (
-              <span className="absolute bottom-0 left-0 w-full h-1 bg-primary dark:bg-secondary-2"></span>
+              <span className="absolute bottom-0 left-0 h-1 w-full bg-primary dark:bg-secondary-2"></span>
             )}
           </Button>
           <Button
@@ -31,7 +33,7 @@ const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({ activeR
           >
             Orders
             {activeTab === "order" && (
-              <span className="absolute bottom-0 left-0 w-full h-1 bg-primary dark:bg-secondary-2"></span>
+              <span className="absolute bottom-0 left-0 h-1 w-full bg-primary dark:bg-secondary-2"></span>
             )}
           </Button>
         </ButtonGroup>

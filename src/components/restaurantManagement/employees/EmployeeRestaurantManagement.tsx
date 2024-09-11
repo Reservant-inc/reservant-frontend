@@ -18,7 +18,11 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import { EmployeeEmployedType, EmployeeType, RestaurantType } from "../../../services/types";
+import {
+  EmployeeEmployedType,
+  EmployeeType,
+  RestaurantType,
+} from "../../../services/types";
 import { fetchDELETE, fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
@@ -33,69 +37,68 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmployeeRestaurantManagement({activeRestaurantId}:{activeRestaurantId: string}) {
+export default function EmployeeRestaurantManagement({
+  activeRestaurantId,
+}: {
+  activeRestaurantId: string;
+}) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  
+
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const populateRows = async () => {
       try {
-        console.log(activeRestaurantId)
-        const response = await fetchGET(`/my-restaurants/${activeRestaurantId}/employees`);
+        console.log(activeRestaurantId);
+        const response = await fetchGET(
+          `/my-restaurants/${activeRestaurantId}/employees`,
+        );
 
         let employees: EmployeeEmployedType[] = [];
 
         if (response.length)
-        for (const i in response) {
+          for (const i in response) {
             employees.push({
-            id: Number(i),
-            empID: response[i].employeeId,
-            login: response[i].login,
-            firstName: response[i].firstName,
-            lastName: response[i].lastName,
-            phoneNumber: response[i].phoneNumber,
-            isBackdoorEmployee: response[i].isBackdoorEmployee,
-            isHallEmployee: response[i].isHallEmployee,
-            dateFrom: response[i].dateFrom,
-            dateUntil: response[i].dateUntil,
-            employmentId: response[i].employmentId
+              id: Number(i),
+              empID: response[i].employeeId,
+              login: response[i].login,
+              firstName: response[i].firstName,
+              lastName: response[i].lastName,
+              phoneNumber: response[i].phoneNumber,
+              isBackdoorEmployee: response[i].isBackdoorEmployee,
+              isHallEmployee: response[i].isHallEmployee,
+              dateFrom: response[i].dateFrom,
+              dateUntil: response[i].dateUntil,
+              employmentId: response[i].employmentId,
             });
-        }
-        console.log(employees)
-        
+          }
+        console.log(employees);
+
         setRows(employees);
-          
-          
-        
       } catch (error) {
         console.error("Error populating table", error);
       }
     };
-    
+
     populateRows();
-
-    
   }, []);
-
-  
 
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <div className="h-[3rem] w-full z-1 flex items-center">
-                <button
-                    id="RestaurantListAddRestaurantButton"
-                    onClick={() => setIsModalOpen(true)}
-                    className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2"
-                >
-                    <AddIcon />
-                    <h1 className="text-lg font-mont-md">Add employee</h1>
-                </button>
-            </div>
+        <div className="z-1 flex h-[3rem] w-full items-center">
+          <button
+            id="RestaurantListAddRestaurantButton"
+            onClick={() => setIsModalOpen(true)}
+            className="flex h-full items-center justify-center gap-2 rounded-lg p-2 text-primary hover:bg-grey-1"
+          >
+            <AddIcon />
+            <h1 className="font-mont-md text-lg">Add employee</h1>
+          </button>
+        </div>
       </GridToolbarContainer>
     );
   };
@@ -123,7 +126,6 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
-    
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -147,8 +149,6 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-
-
 
   const columns: GridColDef[] = [
     { field: "empID", headerName: "ID", width: 180, editable: false },
@@ -185,40 +185,40 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
       editable: true,
     },
     {
-        field: "isHallEmployee",
-        headerName: "Hall role",
-        type: "boolean",
-        width: 180,
-        align: "left",
-        headerAlign: "left",
-        editable: false,
-      },
-    {
-        field: "isBackdoorEmployee",
-        headerName: "Backdoor role",
-        type: "boolean",
-        width: 180,
-        align: "left",
-        headerAlign: "left",
-        editable: false,
-      },
-    {
-        field: "dateFrom",
-        headerName: "Assigned since",
-        type: "string",
-        width: 180,
-        align: "left",
-        headerAlign: "left",
-        editable: false,
+      field: "isHallEmployee",
+      headerName: "Hall role",
+      type: "boolean",
+      width: 180,
+      align: "left",
+      headerAlign: "left",
+      editable: false,
     },
     {
-        field: "dateUntil",
-        headerName: "Assigned until",
-        type: "string",
-        width: 180,
-        align: "left",
-        headerAlign: "left",
-        editable: true,
+      field: "isBackdoorEmployee",
+      headerName: "Backdoor role",
+      type: "boolean",
+      width: 180,
+      align: "left",
+      headerAlign: "left",
+      editable: false,
+    },
+    {
+      field: "dateFrom",
+      headerName: "Assigned since",
+      type: "string",
+      width: 180,
+      align: "left",
+      headerAlign: "left",
+      editable: false,
+    },
+    {
+      field: "dateUntil",
+      headerName: "Assigned until",
+      type: "string",
+      width: 180,
+      align: "left",
+      headerAlign: "left",
+      editable: true,
     },
     {
       field: "actions",
@@ -294,10 +294,8 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
     },
   ];
 
-  
-
   return (
-    <div className="h-full w-full bg-white rounded-lg ">
+    <div className="h-full w-full rounded-lg bg-white ">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -342,7 +340,7 @@ export default function EmployeeRestaurantManagement({activeRestaurantId}:{activ
         className="flex items-center justify-center"
       >
         <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
-          <RestaurantAddEmp  empid={selectedId}/>
+          <RestaurantAddEmp empid={selectedId} />
         </div>
       </Modal>
     </div>

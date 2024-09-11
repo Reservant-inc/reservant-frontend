@@ -29,11 +29,13 @@
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "leaflet.label": "^0.2.4",
+    "lodash": "^4.17.21",
     "libphonenumber-js": "^1.11.7",
     "mui-phone-number": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.1.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
     "react-phone-number-input": "^3.3.9",
@@ -49,7 +51,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "npx prettier --write \"**/*.tsx\""
   },
   "eslintConfig": {
     "extends": [
@@ -72,6 +75,7 @@
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",
     "@types/leaflet-label": "^0.2.39",
+    "@types/lodash": "^4.17.7",
     "assert": "^2.1.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",

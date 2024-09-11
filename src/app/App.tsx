@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { AuthWrapper } from "../components/routing/AuthWrapper";
 
 const App = () => {
-  //test
   useEffect(() => {
     if (
       localStorage.theme === "dark" ||
@@ -16,7 +15,7 @@ const App = () => {
   });
 
   return (
-    <div id="AppWrapper" className="App font-mont-l">
+    <div id="AppWrapper" className="App font-mont-md">
       <div id="AppMainSection" className="h-screen">
         <AuthWrapper />
       </div>

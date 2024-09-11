@@ -1,5 +1,5 @@
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider} from "@mui/material";
-import React from "react";
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, } from "@mui/material";
+import React, { useState } from "react";
 import AppsSharpIcon from '@mui/icons-material/AppsSharp';
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import MenuBookSharpIcon from '@mui/icons-material/MenuBookSharp';
@@ -9,30 +9,38 @@ import ScheduleSharpIcon from '@mui/icons-material/ScheduleSharp';
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import Cookies from "js-cookie";
 import useWindowDimensions from "../../hooks/useWindowResize";
+import { UserInfo } from "../../services/types";
 
 interface MenuInterface {
-    setActivePage: Function
-    activePage: Number
-    setActiveSectionName: Function
-    setActiveRestaurantId: Function
+  setActivePage: Function;
+  activePage: Number;
+  setActiveSectionName: Function;
+  setActiveRestaurantId: Function;
 }
 
-const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, setActiveRestaurantId }) => {
-    const [selectedIndex, setSelectedIndex] = React.useState(activePage);
+const Menu: React.FC<MenuInterface> = ({
+  setActivePage,
+  activePage,
+  setActiveSectionName,
+  setActiveRestaurantId,
+}) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(activePage);
 
-    const handleListItemClick = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        index: number,
-        name: string
-    ) => {
-        setActiveRestaurantId(null)
-        setActiveSectionName(name)
-        setActivePage(index)
-        setSelectedIndex(index);
-    };
-    const size = useWindowDimensions();
+  const handleListItemClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number,
+    name: string,
+  ) => {
+    setActiveRestaurantId(null);
+    setActiveSectionName(name);
+    setActivePage(index);
+    setSelectedIndex(index);
+  };
+  const size = useWindowDimensions();
 
-    return(
+  const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string))
+
+  return (
     <div id="menu-wrapper" className="">
         <List id="menu-list">
             <ListItem id="menu-listItem-dash" className="">
@@ -136,7 +144,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             </ListItem>
         </List>
     </div>
-    )
-}
+  );
+};
 
 export default Menu;

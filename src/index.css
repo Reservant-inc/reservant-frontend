@@ -12,15 +12,63 @@ body {
   --speed: 500ms;
 }
 
+/* hide scroll */
+
+.hidescroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hidescroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* infiniteScroll fix */
+
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+}
+
+.infinite-scroll-component__outerdiv::-webkit-scrollbar {
+  display: none;
+}
+
 /* login and register page bg gradient */
 
 .login-gradient{
   background: radial-gradient(circle,  rgba(0,0,0,1) 20%, rgba(255,255,255,0.0) 70%, rgba(169,76,121,0.2) 100%);
 }
 
+/* animations */
+.fade-in-render {
+  animation: fade-in-render 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fade-in-render {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.fade-in-opacity {
+  transition: opacity 0.1s ease-in;
+  transition-delay: 0.1s;
+}
+
+@keyframes fade-in-opacity {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
 /* tool section animate */
 
-.dropdownMenu{
+.nav-dropdown{
   display: flex; 
   overflow: hidden; 
   position: absolute; 
@@ -32,7 +80,7 @@ body {
   filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03)) drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08)); 
   top: 4rem;
   right: 0.5rem;
-  transition: height var(--speed) ease;
+  transition: height var(--speed) ease, width var(--speed) ease;
 }
 
 .menu-primary-enter{
@@ -102,6 +150,10 @@ body {
 
 /* leaflet custom css */
 
+.leaflet-control-attribution {
+  display: none;
+}
+
 .leaflet-tooltip-bottom:before {
   border-bottom-color: transparent !important
 }
@@ -111,23 +163,23 @@ body {
 @layer base{
   
   input[type], input:focus {
-    @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans;
+    @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans p-2;
   }
   
   .scroll::-webkit-scrollbar {
-    @apply w-[6px]
+    @apply w-[6px] h-[6px] rounded-full
   }
   
   .scroll::-webkit-scrollbar-thumb {
-    background: #888;
+    @apply rounded-full bg-grey-2 dark:bg-grey-4
   }
 
   .scroll::-webkit-scrollbar-track {
-    background: #EEE;
+    @apply bg-grey-0 dark:bg-grey-5
   }
   
   .scroll::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    @apply bg-grey-4 dark:bg-grey-3
   }
   
 }
@@ -136,15 +188,9 @@ body {
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Roboto';
-  font-weight: normal;
-  src: url(./assets/fonts/Roboto-Regular.ttf)
-}
-
-@font-face {
   font-family: 'Montserrat-bold';
   font-weight: normal;
-  src: url(./assets/fonts/Montserrat-Bold.ttf) 
+  src: url(./assets/fonts/Montserrat-SemiBold.ttf) 
 }
 
 @font-face {

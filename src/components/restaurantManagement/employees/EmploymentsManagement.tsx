@@ -18,7 +18,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import { EmployeeEmployedType, EmployeeType, EmploymentType, RestaurantType } from "../../../services/types";
+import {
+  EmployeeEmployedType,
+  EmployeeType,
+  EmploymentType,
+  RestaurantType,
+} from "../../../services/types";
 import { fetchDELETE, fetchGET, fetchPUT } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
@@ -32,47 +37,43 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmploymentsManagement({empid}:{empid:string}) {
+export default function EmploymentsManagement({ empid }: { empid: string }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  
+
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const populateRows = async () => {
-        try {
-      
-          const response = await fetchGET("/user/employees");
-          const tmp: EmploymentType[] = [];
-          
-          if (response.length)
-            for (const i in response) {
-              if(response[i].userId===empid)
-              for (const j in response[i].employments){
+      try {
+        const response = await fetchGET("/user/employees");
+        const tmp: EmploymentType[] = [];
+
+        if (response.length)
+          for (const i in response) {
+            if (response[i].userId === empid)
+              for (const j in response[i].employments) {
                 tmp.push({
                   id: response[i].employments[j].employmentId,
                   restaurantName: response[i].employments[j].restaurantName,
                   restaurantId: response[i].employments[j].restaurantId,
-                  isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+                  isBackdoorEmployee:
+                    response[i].employments[j].isBackdoorEmployee,
                   isHallEmployee: response[i].employments[j].isHallEmployee,
-                })
+                });
               }
-        }
-        
+          }
+
         setRows(tmp);
-      
-        } catch (error) {
-          console.error("Error populating table", error);
-        }
-      };
-      
-      populateRows();
+      } catch (error) {
+        console.error("Error populating table", error);
+      }
+    };
 
-    
+    populateRows();
   }, []);
-
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -92,12 +93,10 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
     setSelectedId(id);
   };
 
- 
-
   const handleDeleteClick = (id: GridRowId) => async () => {
     setRows(rows.filter((row) => row.id !== id));
 
-    await fetchDELETE(`/employments/${id}`)
+    await fetchDELETE(`/employments/${id}`);
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -112,33 +111,28 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
     }
   };
 
-
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
-  
-  
   const processRowUpdate = async (newRow: GridRowModel) => {
-    if(!(newRow.isHallEmployee||newRow.isBackdoorEmployee)) return;
-    const updatedRow = { ...newRow, isNew: false}
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
-    const body =JSON.stringify([{
-      employmentId: newRow.id,
-      isBackdoorEmployee: newRow.isBackdoorEmployee,
-      isHallEmployee: newRow.isHallEmployee,
-    }])
-    console.log(body)
-    await fetchPUT("/employments", body)
-    return updatedRow
-  }
-  
-  
- 
+    if (!(newRow.isHallEmployee || newRow.isBackdoorEmployee)) return;
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    const body = JSON.stringify([
+      {
+        employmentId: newRow.id,
+        isBackdoorEmployee: newRow.isBackdoorEmployee,
+        isHallEmployee: newRow.isHallEmployee,
+      },
+    ]);
+    console.log(body);
+    await fetchPUT("/employments", body);
+    return updatedRow;
+  };
+
   const handleSaveClick = (id: GridRowId) => async () => {
-    
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-    
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   const columns: GridColDef[] = [
@@ -166,7 +160,7 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
       width: 180,
       editable: true,
     },
-    
+
     {
       field: "actions",
       type: "actions",
@@ -180,22 +174,15 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
-              id={
-                "EmployeeManagementSaveButtonPopup" +
-                id
-              }
+              id={"EmployeeManagementSaveButtonPopup" + id}
               sx={{
                 color: "primary.main",
               }}
-              onClick={handleSaveClick(id)
-              }
+              onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
-              id={
-                "EmployeeManagementCancelEditButtonPopup" +
-                id
-              }
+              id={"EmployeeManagementCancelEditButtonPopup" + id}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -205,24 +192,17 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
         }
 
         return [
-         
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
-            id={
-              "EmployeeManagementEditButtonPopup" +
-              id
-            }
+            id={"EmployeeManagementEditButtonPopup" + id}
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
-            id={
-              "EmployeeManagementDeleteButtonPopup" +
-              id
-            }
+            id={"EmployeeManagementDeleteButtonPopup" + id}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
@@ -232,10 +212,11 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
     },
   ];
 
-  
-
   return (
-    <div id="employmentsManagement-wrapper" className="h-full w-full bg-white rounded-lg ">
+    <div
+      id="employmentsManagement-wrapper"
+      className="h-full w-full rounded-lg bg-white "
+    >
       <DataGrid
         rows={rows}
         columns={columns}
@@ -249,13 +230,11 @@ export default function EmploymentsManagement({empid}:{empid:string}) {
           pagination: { paginationModel: { pageSize: 5 } },
         }}
         pageSizeOptions={[5, 10, 25]}
-       
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
         className="border-0"
       />
-      
     </div>
   );
 }
