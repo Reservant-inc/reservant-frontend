@@ -237,10 +237,22 @@ export type User ={
   photo: string
 };
 
-export type UserInfo ={
+export type UserInfo = {
   firstName: string,
   login:string,
   lastName: string,
   roles: string[],
   photo: string
 };
+
+export type ReviewType ={
+  reviewId: number,
+  restaurantId: number,
+  authorId: string,
+  authorFullName: string,
+  stars: number,
+  createdAt: string,
+  contents: string,
+  answeredAt: string,
+  restaurantResponse: string
+}

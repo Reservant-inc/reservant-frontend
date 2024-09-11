@@ -12,7 +12,7 @@ import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Carousel from "../../../reusableComponents/ImageCarousel/Carousel";
-import { RestaurantDetailsType } from "../../../../services/types";
+import { RestaurantDetailsType, ReviewType } from "../../../../services/types";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import CustomRating from "../../../reusableComponents/CustomRating";
 
@@ -32,7 +32,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   onClose,
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>(activeRestaurant); 
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {

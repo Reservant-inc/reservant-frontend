@@ -18,30 +18,20 @@ const FocusedRestaurantReviewsList: React.FC<
   const [filterText, setFilterText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const fetchReviews = async () => {
-    try {
-      const data = await fetchGET("/restaurants/2/reviews");
-    } catch (error) {
-      console.error("Error fetching reviews:", error);
-    }
-  };
-
   useEffect(() => {
     setFilteredReviews(reviews);
   }, [reviews]);
 
   const handleSort = (reviews: any[]) => {
     switch (sort) {
-      case "1": // od a do z
-        return reviews.sort((a, b) => a.contents?.localeCompare(b.contents));
-      case "2": // od najnowszych
+      case "1": // od najnowszych
         return reviews.sort(
           (a, b) =>
             new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf(),
         );
-      case "3": // ascending
+      case "2": // ascending
         return reviews.sort((a, b) => a.stars - b.stars);
-      case "4": // descending
+      case "3": // descending
         return reviews.sort((a, b) => b.stars - a.stars);
       default:
         return reviews;
@@ -75,7 +65,6 @@ const FocusedRestaurantReviewsList: React.FC<
             >
               + Dodaj opinię
             </Button>
-            <div className="my-2 h-[2px] w-full bg-grey-1" />
           </>
         )}
         <div className="scroll h-full w-full overflow-y-auto">
@@ -99,7 +88,7 @@ const FocusedRestaurantReviewsList: React.FC<
         <Box sx={style}>
           <RestaurantReviewForm
             onClose={() => setIsModalOpen(false)}
-            onSuccess={fetchReviews}
+            onSuccess={() => alert("kurwa")}
           />
         </Box>
       </Modal>
