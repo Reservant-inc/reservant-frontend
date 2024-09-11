@@ -162,10 +162,14 @@ body {
   border-bottom-color: transparent !important
 }
 
+.css-1c99szj-MuiRating-icon{
+  color: #faaf009e !important
+}
+
 @tailwind base;
 
 @layer base{
-  
+
   input[type], input:focus {
     @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans p-2;
   }

@@ -1,12 +1,11 @@
 import { useState } from "react"
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import AdjustOutlinedIcon from '@mui/icons-material/AdjustOutlined';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import "./Carousel.css"
 import React from "react";
 import { getImage } from "../../../services/APIconn";
 import DefaultImage from '../../../assets/images/no-image.png'
+import CircleIcon from '@mui/icons-material/Circle';
 
 type CarouselProps = {
   images: string[]
@@ -39,7 +38,7 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
         ) : (
           <>
               <div
-              className="w-full h-full flex overflow-hidden rounded-lg"
+              className="w-full h-full flex overflow-hidden"
               >
                 {images.map((image, index) => (
                   <img
@@ -59,13 +58,14 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
               </button>
               <button
                 onClick={showNextImage}
-                className="img-slider-btn top-1/2 right-2 p-2 rounded-full bg-white dark:bg-black dark:bg-opacity-60 bg-opacity-90 flex justify-center items-center"
+                className="img-slider-btn top-1/2 right-2 w-8 h-8 rounded-full bg-white dark:bg-black dark:bg-opacity-60 bg-opacity-90 flex justify-center items-center"
               >
                 <ArrowForwardIosRoundedIcon className="dark:text-white w-5 h-5" />
               </button>
               <div
                 className="absolute bottom-2 flex justify-center w-full h-10 items-center"
               >
+                <div className="flex bg-black bg-opacity-60 rounded-full px-2 gap-1">
                 {images.map((_, index) => (
                   <button
                     key={index}
@@ -73,12 +73,13 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
                     onClick={() => setImageIndex(index)}
                   >
                     {index === imageIndex ? (
-                        <AdjustOutlinedIcon className="text-white h-6 w-6"/>
+                        <CircleIcon className="text-white h-3 w-3"/>
                     ) : (
-                        <CircleOutlinedIcon className="text-white h-5 w-5"/>
+                        <CircleIcon className="text-white h-2 w-2"/>
                     )}
                   </button>
                 ))}
+                </div>
               </div>
             <div id="after-image-slider-controls" />
           </>

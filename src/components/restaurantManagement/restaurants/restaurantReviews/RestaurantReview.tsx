@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Avatar, Rating, Button, Modal, Box } from "@mui/material";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Textarea } from "@mui/joy";
+import CustomRating from "../../../reusableComponents/CustomRating";
 
 const style = {
   position: "absolute" as "absolute",
@@ -47,17 +47,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           <Avatar className="h-8 w-8">A</Avatar>
           <p>{new Date(createdAt).toLocaleDateString()}</p>
         </div>
-        <Rating
-          name="read-only"
-          value={stars}
-          readOnly
-          emptyIcon={
-            <StarBorderIcon
-              fontSize="inherit"
-              className="text-grey-2 dark:text-grey-1"
-            />
-          }
-        />
+        <CustomRating rating={stars} readOnly={true} />
       </div>
       <div className="flex flex-col items-start">
         {reducedDescription.replace(/\s/g, "").length > 0 ? (
@@ -77,17 +67,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
                 <Avatar>A</Avatar>
                 <div>
                   <div>{new Date(createdAt).toLocaleDateString()}</div>
-                  <Rating
-                    name="read-only"
-                    value={stars}
-                    readOnly
-                    emptyIcon={
-                      <StarBorderIcon
-                        fontSize="inherit"
-                        className="text-grey-2 dark:text-grey-1"
-                      />
-                    }
-                  />
+                  <CustomRating rating={stars} readOnly={true} />
                 </div>
               </div>
               <div className="mt-3 break-words">

@@ -59,45 +59,37 @@ const FocusedRestaurantReviewsList: React.FC<
 
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
-      {isPreview ? (
-        <div className="scroll overflow-y-auto">
+      <div className="flex h-full w-full flex-col gap-2">
+        {!isPreview && (
+          <>
+            <RestaurantReviewsFilters
+              sort={sort}
+              setSort={setSort}
+              filterText={filterText}
+              setFilterText={setFilterText}
+            />
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
+              onClick={() => setIsModalOpen(true)}
+            >
+              + Dodaj opinię
+            </Button>
+            <div className="my-2 h-[2px] w-full bg-grey-1" />
+          </>
+        )}
+        <div className="scroll h-full w-full overflow-y-auto">
           {filteredAndSortedReviews.length > 0 ? (
             filteredAndSortedReviews.map((review) => (
               <RestaurantReview key={review.reviewId} {...review} />
             ))
           ) : (
-            <div className="mt-4 text-center">No matching reviews</div>
+            <div className="mt-4 text-center">
+              No matching reviews for this restaurant.
+            </div>
           )}
         </div>
-      ) : (
-        <div className="flex h-full w-full flex-col gap-2">
-          <RestaurantReviewsFilters
-            sort={sort}
-            setSort={setSort}
-            filterText={filterText}
-            setFilterText={setFilterText}
-          />
-          <Button
-            variant="contained"
-            style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
-            onClick={() => setIsModalOpen(true)}
-          >
-            + Dodaj opinię
-          </Button>
-          <div className="my-2 h-[2px] w-full bg-grey-1" />
-          <div className="scroll h-full w-full overflow-y-auto">
-            {filteredAndSortedReviews.length > 0 ? (
-              filteredAndSortedReviews.map((review) => (
-                <RestaurantReview key={review.reviewId} {...review} />
-              ))
-            ) : (
-              <div className="mt-4 text-center">
-                No matching reviews for this restaurant.
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      </div>
       <Modal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -19,6 +19,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { FetchError } from "../services/Errors";
 import { useTranslation } from "react-i18next";
 import { RestaurantDetailsType } from "../services/types";
+import CustomRating from "./reusableComponents/CustomRating";
 
 export default function HomePage() {
   //change from any once backend finishes the API endpoint
@@ -195,11 +196,10 @@ export default function HomePage() {
                             (restaurant.rating + Number.EPSILON) * 100,
                           ) / 100}
                         </h1>
-                        <Rating
-                          name="read-only"
-                          value={restaurant.rating}
-                          readOnly
-                          className="text-[18px]"
+                        <CustomRating 
+                          rating={restaurant.rating} 
+                          readOnly={true} 
+                          className={"text-[18px]"}
                         />
                         <h1 className="text-sm dark:text-white">{`(${restaurant.numberReviews})`}</h1>
                       </div>
@@ -304,7 +304,7 @@ export default function HomePage() {
                     <Typography component="legend" className="dark:text-white">
                       {value}.0
                     </Typography>
-                    <Rating name="read-only" value={value} readOnly />
+                    <CustomRating rating={value} readOnly={true}/>
                   </ListItemButton>
                 ))}
               </List>
@@ -372,9 +372,9 @@ export default function HomePage() {
       {activeRestaurant && (
         <div>
           <div
-            className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[450px] rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
+            className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[450px] overflow-y-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
           >
-            <div className="scroll h-full">
+            <div className="overflow-y-auto scroll h-full dark:bg-black">
               <FocusedRestaurantDetails
                 activeRestaurant={activeRestaurant}
                 onClose={() => setActiveRestaurant(null)}

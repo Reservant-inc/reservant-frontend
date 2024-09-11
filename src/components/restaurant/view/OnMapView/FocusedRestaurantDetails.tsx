@@ -3,7 +3,6 @@ import { fetchGET } from "../../../../services/APIconn";
 import {
   Chip,
   Rating,
-  Button,
   IconButton,
   CircularProgress,
 } from "@mui/material";
@@ -13,15 +12,9 @@ import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Carousel from "../../../reusableComponents/ImageCarousel/Carousel";
-import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
-import CustomMarker from "../../../map/CustomMarker";
-import { RestaurantDetailsType, RestaurantType } from "../../../../services/types";
-
-const TABS = {
-  MENU: "menu",
-  GALLERY: "gallery",
-  REVIEWS: "reviews",
-};
+import { RestaurantDetailsType } from "../../../../services/types";
+import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
+import CustomRating from "../../../reusableComponents/CustomRating";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -69,28 +62,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0;
 
-  const center: [number, number] = [
-    restaurant.location.latitude,
-    restaurant.location.longitude,
-  ];
-  const zoom = 17;
-
-  const MapViewUpdater = () => {
-    const map = useMap();
-
-    useEffect(() => {
-      map.setMinZoom(15);
-      map.setMaxZoom(18);
-      map.setView(center, zoom);
-    }, [center, map]);
-
-    map.on("zoomend", () => {
-      map.setView(center, map.getZoom());
-    });
-
-    return null;
-  };
-
   return (
     <>
       {!restaurant ? (
@@ -100,16 +71,16 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           <div className="relative">
             <IconButton
               onClick={onClose}
-              className="absolute right-2 top-2 z-10 h-8 w-8 bg-white"
+              className="absolute right-2 top-2 z-10 h-8 w-8 bg-white dark:bg-grey-5 dark:text-grey-1"
             >
               <CloseIcon />
             </IconButton>
-            <div className="w-full h-48">
+            <div className="w-full h-[250px]">
               {restaurant && (
                 <Carousel
                   images={[
                     restaurant.logo,
-                    ...(restaurant.photos || []), // Ensure photos is an array
+                    ...(restaurant.photos || []),
                   ]}
                 />
               )}
@@ -117,65 +88,37 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           </div>
           <div className="p-4 flex flex-col gap-2">
             <div className="flex gap-5 items-center w-full justify-between">
-              <h2 className="text-2xl font-bold">{restaurant.name}</h2>
-              <div className="flex items-center gap-2">
+              <h2 className="text-2xl font-bold dark:text-white">{restaurant.name}</h2>
+              <div className="flex items-center gap-2 dark:text-white">
                 <h1>{averageRating.toFixed(2)}</h1>
-                <Rating
-                  name="read-only"
-                  value={averageRating}
-                  precision={0.25}
-                  readOnly
-                  emptyIcon={<StarBorderIcon fontSize="inherit" />}
-                />
+                <CustomRating rating={averageRating} readOnly={true}/>
                 <h1>({getOpinionsText(reviews.length)})</h1>
               </div>
             </div>
-            <h1 className="text-sm">
-              {restaurant.address}, {restaurant.city}
-            </h1>
-            <MapContainer
-              center={center}
-              zoom={zoom}
-              style={{ height: "100%", width: "100%" }}
-              scrollWheelZoom={true}
-              dragging={false}
-              doubleClickZoom={false}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <MapViewUpdater />
-            </MapContainer>
-            <div className="my-3 flex items-center">
-              {restaurant.provideDelivery && (
-                <>
-                  <MopedIcon /> <h1 className="ml-2">Koszt dostawy 5,99 zł</h1>
-                </>
-              )}
-              <h1 className="ml-2">
-                Dostawa:{" "}
-                {restaurant.provideDelivery ? (
-                  <CheckCircleIcon className="text-green-500" />
-                ) : (
-                  <CancelIcon className="text-red-500" />
-                )}
+            <div className="flex flex-col gap-1">
+              <h1 className="text-sm dark:text-white">
+                {restaurant.address}, {restaurant.city}
               </h1>
+              <div className="text-sm flex items-center gap-3">
+                {restaurant.provideDelivery && (
+                  <div className="flex gap-2 items-center">
+                    <MopedIcon className="dark:text-white w-5 h-5"/> 
+                    <h1 className="dark:text-white">Koszt dostawy 5,99 zł</h1>
+                  </div>
+                )}
+                <div className="flex gap-1 items-center">
+                  <h1 className="dark:text-white">
+                    Dostawa:
+                  </h1>
+                  {restaurant.provideDelivery ? (
+                    <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />
+                  ) : (
+                    <CancelIcon className="text-red-500 dark:text-white w-5 h-5" />
+                  )}
+                </div>
+              </div>
             </div>
-            <div className="my-3 flex flex-wrap gap-1">
-              {restaurant.tags.map((tag: string) => (
-                <Chip
-                  key={tag}
-                  label={tag}
-                  style={{
-                    backgroundColor: "#e0f7fa",
-                    color: "#00796b",
-                    fontWeight: "bold",
-                    fontSize: "0.875rem",
-                  }}
-                />
-              ))}
-            </div>
+            <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} />
           </div>
         </>
       )}
