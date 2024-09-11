@@ -210,6 +210,18 @@
         "no-delivery": "Brak dostaw",
         "rating": "Dowolna ocena",
         "reviews": "Oceny",
-        "tags": "Tagi"
+        "tags": "Tagi",
+        "reservation": "Zarezerwuj",
+        "create-event": "Stwórz wydarzenie",
+        "order": "Zamów",
+        "is-delivering": "Dostawa",
+        "delivery-fee": "Koszt dostawy"
+    },
+    "reviews": {
+        "filter": "Filtruj",
+        "filter-tooltip": "filtruj opinie",
+        "reviews": "Opinie",
+        "no-reviews": "Brak opinii",
+        "add-review": "Dodaj opinie"
     }
 }

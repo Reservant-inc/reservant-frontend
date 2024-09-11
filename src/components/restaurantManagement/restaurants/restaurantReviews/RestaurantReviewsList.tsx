@@ -234,12 +234,12 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({
         </div>
       ) : (
         <div className="flex h-full w-full flex-col gap-2">
-          <RestaurantReviewsFilters
+          {/* <RestaurantReviewsFilters
             sort={sort}
             setSort={setSort}
             filterText={filterText}
             setFilterText={setFilterText}
-          />
+          /> */}
           <div className="scroll h-full w-full overflow-y-auto">
             {displayReviews()}
           </div>

@@ -12,17 +12,12 @@ import Carousel from "../../../reusableComponents/ImageCarousel/Carousel";
 import { RestaurantDetailsType, ReviewType } from "../../../../services/types";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import CustomRating from "../../../reusableComponents/CustomRating";
+import { useTranslation } from "react-i18next";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
   onClose: () => void;
 }
-
-const getOpinionsText = (count: number) => {
-  if (count === 1) return `${count} opinia`;
-  if (count > 1 && count < 5) return `${count} opinie`;
-  return `${count} opinii`;
-};
 
 const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   activeRestaurant,
@@ -31,6 +26,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>(activeRestaurant); 
   const [reviews, setReviews] = useState<ReviewType[]>([]);
 
+  const [t] = useTranslation("global")
+ 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
@@ -52,7 +49,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
     fetchRestaurantDetails();
     fetchRestaurantReviews();
-  }, [activeRestaurant.restaurantId]);
+  }, [activeRestaurant]);
 
   const averageRating = reviews.length
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
@@ -88,7 +85,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex items-center gap-2 dark:text-white">
                 <h1>{averageRating.toFixed(2)}</h1>
                 <CustomRating rating={averageRating} readOnly={true}/>
-                <h1>({getOpinionsText(reviews.length)})</h1>
+                <h1>({reviews.length})</h1>
               </div>
             </div>
             <div className="flex flex-col gap-1">
@@ -99,12 +96,12 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 {restaurant.provideDelivery && (
                   <div className="flex gap-2 items-center">
                     <MopedIcon className="dark:text-white w-5 h-5"/> 
-                    <h1 className="dark:text-white">Koszt dostawy 5,99 zł</h1>
+                    <h1 className="dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
                   </div>
                 )}
                 <div className="flex gap-1 items-center">
                   <h1 className="dark:text-white">
-                    Dostawa:
+                    {t("home-page.is-delivering")}:
                   </h1>
                   {restaurant.provideDelivery ? (
                     <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />

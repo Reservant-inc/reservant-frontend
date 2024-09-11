@@ -215,6 +215,18 @@
         "no-delivery": "No delivery",
         "rating": "Any rating",
         "reviews": "Reviews",
-        "tags": "Tags"
+        "tags": "Tags",
+        "reservation": "Make a reservation",
+        "create-event": "Create event",
+        "order": "Order",
+        "is-delivering": "Delivery",
+        "delivery-fee": "Delivery fee"
+    },
+    "reviews": {
+        "filter": "Filter",
+        "filter-tooltip": "filter reviews",
+        "reviews": "Reviews",
+        "no-reviews": "No reviews",
+        "add-review": "Add review"
     }
 }
