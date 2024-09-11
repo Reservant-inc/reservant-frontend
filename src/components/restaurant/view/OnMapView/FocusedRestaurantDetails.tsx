@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { fetchGET } from "../../../../services/APIconn";
 import {
-  Chip,
-  Rating,
   IconButton,
   CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
 import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -38,7 +35,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     const fetchRestaurantDetails = async () => {
       try {
         const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}`);
-        console.log(data)
         setRestaurant(data);
       } catch (error) {
         console.error("Error fetching restaurant details:", error);

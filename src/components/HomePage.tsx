@@ -4,7 +4,6 @@ import {
   Button,
   List,
   ListItemButton,
-  Rating,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -37,8 +36,6 @@ export default function HomePage() {
   const [reviewFilter, setReviewFilter] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [chosenTags, setChosenTags] = useState<string[]>([]);
-  const [isRestaurantViewExtended, setIsRestaurantViewExtended] =
-    useState<boolean>(false);
 
   const [t] = useTranslation("global");
 
@@ -173,7 +170,6 @@ export default function HomePage() {
                   id="homePage-listItemButton"
                   onClick={() => {
                     setUserMovedMap(false);
-                    setIsRestaurantViewExtended(false)
                     setActiveRestaurant(restaurant);
                   }}
                   className={`rounded-md p-3 dark:bg-black
