@@ -18,7 +18,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import { EmployeeEmployedType, EmployeeType, EmploymentType, RestaurantType } from "../../../services/types";
+import {
+  EmployeeEmployedType,
+  EmployeeType,
+  EmploymentType,
+  RestaurantType,
+} from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
@@ -37,30 +42,29 @@ export default function EmployeeManagement() {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  
+
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const populateRows = async () => {
       try {
-    
         const response = await fetchGET("/user/employees");
-        
+
         let employees: EmployeeType[] = [];
-        
+
         if (response.length)
           for (const i in response) {
-        
             const tmp: EmploymentType[] = [];
-            for (const j in response[i].employments){
+            for (const j in response[i].employments) {
               tmp.push({
                 id: response[i].employments[j].employmentId,
                 restaurantId: response[i].employments[j].restaurantId,
-                isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+                isBackdoorEmployee:
+                  response[i].employments[j].isBackdoorEmployee,
                 isHallEmployee: response[i].employments[j].isHallEmployee,
-                restaurantName: response[i].employments[j].restaurantName
-              })
+                restaurantName: response[i].employments[j].restaurantName,
+              });
             }
             employees.push({
               id: Number(i),
@@ -69,38 +73,33 @@ export default function EmployeeManagement() {
               firstName: response[i].firstName,
               lastName: response[i].lastName,
               phoneNumber: response[i].phoneNumber,
-              employments: tmp.slice()
+              employments: tmp.slice(),
             });
-      }
-      console.log(employees)
-      
-      setRows(employees);
-    
+          }
+        console.log(employees);
+
+        setRows(employees);
       } catch (error) {
         console.error("Error populating table", error);
       }
     };
-    
+
     populateRows();
-
-    
   }, []);
-
-  
 
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <div className="h-[3rem] w-full z-1 flex items-center">
-                <button
-                    id="RestaurantListAddRestaurantButton"
-                    onClick={() => setIsModalOpen(true)}
-                    className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2"
-                >
-                    <AddIcon />
-                    <h1 className="text-lg font-mont-md">Add employee</h1>
-                </button>
-            </div>
+        <div className="z-1 flex h-[3rem] w-full items-center">
+          <button
+            id="RestaurantListAddRestaurantButton"
+            onClick={() => setIsModalOpen(true)}
+            className="flex h-full items-center justify-center gap-2 rounded-lg p-2 text-primary hover:bg-grey-1"
+          >
+            <AddIcon />
+            <h1 className="font-mont-md text-lg">Add employee</h1>
+          </button>
+        </div>
       </GridToolbarContainer>
     );
   };
@@ -151,8 +150,6 @@ export default function EmployeeManagement() {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-
-
 
   const columns: GridColDef[] = [
     { field: "empID", headerName: "ID", width: 180, editable: false },
@@ -262,10 +259,8 @@ export default function EmployeeManagement() {
     },
   ];
 
-  
-
   return (
-    <div className="h-full w-full bg-white rounded-lg ">
+    <div className="h-full w-full rounded-lg bg-white ">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -302,10 +297,12 @@ export default function EmployeeManagement() {
         className="flex items-center justify-center"
       >
         <div className=" rounded-xl bg-white p-3">
-          <h1 className="text-center" id="employeeManagement-modal-header">Employments</h1>
+          <h1 className="text-center" id="employeeManagement-modal-header">
+            Employments
+          </h1>
 
-          <RestaurantAddEmp empid={selectedId}/>
-          <EmploymentsManagement empid={selectedId}/>
+          <RestaurantAddEmp empid={selectedId} />
+          <EmploymentsManagement empid={selectedId} />
         </div>
       </Modal>
     </div>

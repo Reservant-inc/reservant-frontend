@@ -1,6 +1,13 @@
-import React from 'react';
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import React from "react";
+import {
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { ActionType } from "../../services/types";
 
 interface Action {
   icon: React.ReactNode;
@@ -9,7 +16,7 @@ interface Action {
 }
 
 interface MoreActionsProps {
-  actions: Action[];
+  actions: ActionType[];
 }
 
 const MoreActions: React.FC<MoreActionsProps> = ({ actions }) => {

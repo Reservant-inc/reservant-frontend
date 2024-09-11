@@ -139,14 +139,16 @@ const dummyReviews:RestaurantReviewProps[]  = [
 ];
 
 interface RestaurantReviewsListProps {
-  isPreview: boolean
+  isPreview: boolean;
 }
 
-const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview }) => {
+const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({
+  isPreview,
+}) => {
   // downloaded from api when it's ready
-  const [reviews, setReviews] = useState<RestaurantReviewProps[]>(dummyReviews);
-  const [sort, setSort] = useState("");
-  const [filterText, setFilterText] = useState("");
+  const [reviews, setReviews] = useState(dummyReviews);  //trzeba typ dla prawdziwych review
+  const [sort, setSort] = useState<string>("");
+  const [filterText, setFilterText] = useState<string>("");
 
   const handleSort = (reviews: any[]) => {
     // ^ zmienic
@@ -178,11 +180,13 @@ const RestaurantReviewsList: React.FC<RestaurantReviewsListProps> = ({ isPreview
       : handleSort(reviews);
 
   const displayReviews = () => {
-    const column1: any[] = []
-    const column2: any[] = []
+    const column1: any[] = [];
+    const column2: any[] = [];
 
     for (let i = 0; i < filteredAndSortedReviews.length; i++) {
-      i % 2 === 0 ? column1.push(filteredAndSortedReviews[i]) : column2.push(filteredAndSortedReviews[i])
+      i % 2 === 0
+        ? column1.push(filteredAndSortedReviews[i])
+        : column2.push(filteredAndSortedReviews[i]);
     }
 
 

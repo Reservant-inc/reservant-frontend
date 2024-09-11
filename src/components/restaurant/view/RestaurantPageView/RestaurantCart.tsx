@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import NewReservationDetailsView from "./NewReservationDetailsView";
 import RestaurantCartView from "./RestaurantCartView";
-import { CartItem } from "../../../../services/interfaces";
+import { CartItemType } from "../../../../services/types";
 
 interface RestaurantCartProps {
-  cart: CartItem[];
+  cart: CartItemType[];
   incrementQuantity: (itemId: number) => void;
   decrementQuantity: (itemId: number) => void;
 }
@@ -15,7 +15,7 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
   incrementQuantity,
   decrementQuantity,
 }) => {
-  const [selectedOption, setSelectedOption] = useState("Dostawa");
+  const [selectedOption, setSelectedOption] = useState<string>("Dostawa");
 
   const handleButtonClick = (option: React.SetStateAction<string>) => {
     setSelectedOption(option);
@@ -25,6 +25,7 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
     switch (selectedOption) {
       case "Na miejscu":
         return <NewReservationDetailsView />;
+
       case "Dostawa":
       case "Odbiór":
         return (

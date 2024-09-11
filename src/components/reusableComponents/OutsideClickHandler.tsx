@@ -1,5 +1,10 @@
-import React, { useRef, useEffect } from "react";
-import { OutsideClickHandlerProps } from "../../services/interfaces";
+import React, { useRef, useEffect, ReactNode } from "react";
+
+export interface OutsideClickHandlerProps {
+  onOutsideClick: () => void;
+  isPressed: boolean;
+  children: ReactNode;
+}
 
 const OutsideClickHandler: React.FC<OutsideClickHandlerProps> = ({
   children,
@@ -20,10 +25,6 @@ const OutsideClickHandler: React.FC<OutsideClickHandlerProps> = ({
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, [onOutsideClick]);
 
   return <div ref={ref}>{children}</div>;

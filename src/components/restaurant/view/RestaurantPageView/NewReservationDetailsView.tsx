@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Box, Button, ButtonGroup, TextareaAutosize } from "@mui/material";
+import { Box, Button, ButtonGroup, TextField } from "@mui/material";
+import { Input } from "@mui/base/Input";
 
-const GroupedButtons: React.FC = () => {
+const GroupedButtons: React.FC = React.memo(() => {
   const [counter, setCounter] = useState<number>(1);
 
   const handleIncrement = () => {
@@ -23,20 +24,22 @@ const GroupedButtons: React.FC = () => {
       </Button>
     </ButtonGroup>
   );
-};
+});
 
-const NewReservationDetailsView: React.FC = () => {
+const NewReservationDetailsView: React.FC = React.memo(() => {
   return (
-    <Box className="flex flex-col items-center space-y-4">
+    <Box className="flex flex-col items-center space-y-4 p-4">
       <p>Liczba miejsc:</p>
       <GroupedButtons />
-      <TextareaAutosize
-        minRows={4}
+
+      <TextField
+        multiline={true}
         placeholder="Opcjonalny komentarz do restauracji"
-        style={{ width: 300, padding: 8 }}
+        rows={5}
+        style={{ width: "100%", maxWidth: 600 }}
       />
     </Box>
   );
-};
+});
 
 export default NewReservationDetailsView;

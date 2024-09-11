@@ -1,6 +1,12 @@
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { fetchGET } from "../services/APIconn";
+import {
+
+  isValidPhoneNumber
+
+
+} from 'libphonenumber-js';
 
 export const useValidationSchemas = () => {
   const [t] = useTranslation("global");
@@ -13,12 +19,18 @@ export const useValidationSchemas = () => {
   const userRegisterSchema = yup.object({
     firstName: yup
       .string()
-      .matches(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/, t("errors.user-register.firstName.matches"))
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t("errors.user-register.firstName.matches"),
+      )
       .required(t("errors.user-register.firstName.required")),
 
     lastName: yup
       .string()
-      .matches(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/, t("errors.user-register.lastName.matches"))
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t("errors.user-register.lastName.matches"),
+      )
       .required(t("errors.user-register.lastName.required")),
 
     login: yup
@@ -43,12 +55,11 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.email.required")),
 
     phoneNumber: yup
-      .string()
-      .matches(
-        /^\+[0-9]{11,15}$/,
-        t("errors.user-register.phoneNumber.matches"),
-      )
-      .required(t("errors.user-register.phoneNumber.required")),
+    .string()
+    .required(t("errors.user-register.phoneNumber.required"))
+    .test("phone number valid", t("errors.user-register.phoneNumber.matches"), (phone) => {
+      return isValidPhoneNumber(phone)
+    }),
 
     birthDate: yup
       .date()
@@ -125,14 +136,14 @@ export const useValidationSchemas = () => {
       .required(t("errors.user-register.confirmPassword.required")),
   });
 
-  const RestaurantAddEmployeeSchema = 
-  yup
+  const RestaurantAddEmployeeSchema = yup
     .object({
       isBackdoorEmployee: yup.boolean(),
-      isHallEmployee: yup.boolean(),    
-      selectedRestaurant: yup.string().required("please select one of the available restaurants"),
-    },
-  )
+      isHallEmployee: yup.boolean(),
+      selectedRestaurant: yup
+        .string()
+        .required("please select one of the available restaurants"),
+    })
     .test(
       "at-least-one-checkbox",
       t("errors.employee-register.employeeRole.required"),
@@ -140,7 +151,6 @@ export const useValidationSchemas = () => {
         if (obj.isBackdoorEmployee || obj.isHallEmployee) {
           return true;
         }
-
 
         return new yup.ValidationError([
           new yup.ValidationError(
