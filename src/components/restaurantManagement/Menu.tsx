@@ -12,31 +12,26 @@ import useWindowDimensions from "../../hooks/useWindowResize";
 import { UserInfo } from "../../services/types";
 
 interface MenuInterface {
-  setActivePage: Function;
-  activePage: Number;
-  setActiveSectionName: Function;
-  setActiveRestaurantId: Function;
+    setActivePage: Function
+    activePage: Number
+    setActiveSectionName: Function
+    handleChangeActiveRestaurant: Function
 }
 
-const Menu: React.FC<MenuInterface> = ({
-  setActivePage,
-  activePage,
-  setActiveSectionName,
-  setActiveRestaurantId,
-}) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(activePage);
+const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, handleChangeActiveRestaurant }) => {
+    const [selectedIndex, setSelectedIndex] = React.useState(activePage);
 
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
-    name: string,
-  ) => {
-    setActiveRestaurantId(null);
-    setActiveSectionName(name);
-    setActivePage(index);
-    setSelectedIndex(index);
-  };
-  const size = useWindowDimensions();
+    const handleListItemClick = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        index: number,
+        name: string
+    ) => {
+        handleChangeActiveRestaurant(null)
+        setActiveSectionName(name)
+        setActivePage(index)
+        setSelectedIndex(index);
+    };
+    const size = useWindowDimensions();
 
   const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string))
 
