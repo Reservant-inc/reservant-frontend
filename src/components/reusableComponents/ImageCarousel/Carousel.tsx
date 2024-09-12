@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import "./Carousel.css"
@@ -13,6 +13,10 @@ type CarouselProps = {
 
 const Carousel: React.FC<CarouselProps> = ({ images }) => {
   const [imageIndex, setImageIndex] = useState(0)
+
+  useEffect(() => {
+    setImageIndex(0)
+  }, [images])
 
   function showNextImage() {
     setImageIndex(index => {

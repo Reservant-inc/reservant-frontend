@@ -8,20 +8,28 @@ import { useTranslation } from "react-i18next";
 interface FocusedRestaurantReviewsListProps {
   isPreview: boolean;
   reviews: ReviewType[];
+  isDelivering: boolean
 }
 
 const FocusedRestaurantReviewsList: React.FC<
   FocusedRestaurantReviewsListProps
-> = ({ isPreview, reviews }) => {
+> = ({ isPreview, reviews, isDelivering }) => {
   const [ filteredAndSortedReviews, setFilteredAndSortedReviews ] = useState<ReviewType[]>(reviews)
   const [ value, setValue ] = useState<number>(0)
 
   const [t] = useTranslation("global")
 
   useEffect(() => {
-    if(value > 0)
-      setFilteredAndSortedReviews(reviews.filter((review) => review.stars === value))
-  }, [value])
+    setValue(0);
+  }, [reviews]);
+
+  useEffect(() => {
+    if (value > 0) {
+      setFilteredAndSortedReviews(reviews.filter((review) => review.stars === value));
+    } else {
+      setFilteredAndSortedReviews(reviews);
+    }
+  }, [reviews, value]);
 
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
@@ -33,9 +41,13 @@ const FocusedRestaurantReviewsList: React.FC<
           <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
           {t("home-page.create-event")}
           </button>
-          <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
-          {t("home-page.order")}
-          </button>
+          {
+            isDelivering && (
+            <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
+              {t("home-page.order")}
+            </button>
+            )
+          }
         </div>
         <h1 className="text-2xl font-mont-bd text-black dark:text-white">Menu:</h1>
         <div className="w-full h-[150px] dark:bg-grey-5 rounded-lg">

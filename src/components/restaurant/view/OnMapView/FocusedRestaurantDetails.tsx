@@ -111,7 +111,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 </div>
               </div>
             </div>
-            <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} />
+            <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} isDelivering={restaurant.provideDelivery}/>
           </div>
         </>
       )}
