@@ -5,7 +5,6 @@ import {
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
-import RestaurantReviewsList from "./restaurantReviews/RestaurantReviewsList";
 import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
 import EmployeeManagement from "../employees/EmployeeManagement";
 import MenuManagement from "../menus/MenuMangement";
@@ -91,7 +90,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             <h1 className="text-xl font-mont-md">Customers opinions</h1>
           </div>
           <div className="h-[calc(100%-6rem)]">
-            <RestaurantReviewsList isPreview={true} />
           </div>
           <div className="flex h-[2rem] items-center justify-end">
             <Button
@@ -132,7 +130,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         className="flex items-center justify-center"
       >
         <Box className="h-[800px] w-[1200px] rounded-lg bg-white p-4">
-          <RestaurantReviewsList isPreview={false} />
         </Box>
       </Modal>
     </div>

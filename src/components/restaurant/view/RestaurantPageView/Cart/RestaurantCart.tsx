@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
-import NewReservationDetailsView from "./NewReservationDetailsView";
 import RestaurantCartView from "./RestaurantCartView";
-import { CartItemType } from "../../../../services/types";
+import { CartItemType } from "../../../../../services/types";
 
 interface RestaurantCartProps {
   cart: CartItemType[];
@@ -24,8 +23,6 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
   const renderContent = () => {
     switch (selectedOption) {
       case "Na miejscu":
-        return <NewReservationDetailsView />;
-
       case "Dostawa":
       case "Odbiór":
         return (

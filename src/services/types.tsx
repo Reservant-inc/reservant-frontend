@@ -10,25 +10,34 @@ export type LoginResponseType = {
 
 
 export type RestaurantDetailsType = {
-  id: number;
-  name: string;
-  restaurantType: string;
+  restaurantId: number,
+  name: string,
+  restaurantType: LocalType,
+  address: string,
+  postalIndex: string,
+  city: string,
+  location: {
+    latitude: number,
+    longitude: number
+  },
+  tables: { 
+    tableId: number, 
+    capacity: number
+  }[],
+  provideDelivery: boolean,
+  logo: string,
+  photos: string[]
+  description: string,
+  reservationDeposit: null,
+  tags: string[],
+  rating: number,
+  numberReviews: number
+  rentalContract: string
+  alcoholLicense: string
+  businessPermission: string
+  idCard: string
   nip: string;
-  address: string;
-  postalIndex: string;
-  city: string;
   groupId: number;
-  groupName: string;
-  rentalContract: string;
-  alcoholLicense: string;
-  businessPermission: string;
-  idCard: string;
-  tables: [{}];
-  provideDelivery: boolean;
-  logo: string;
-  photos: string[];
-  description: string;
-  tags: string[];
 };
 
 export type GroupType = {
@@ -52,16 +61,6 @@ export type RestaurantType = {
   city: string;
   isVerified: boolean;
 };
-
-export type ActiveRestaurantType = RestaurantType & {
-  isVerified: boolean
-  location: RestaurantLocationType;
-}
-
-export type RestaurantLocationType = {
-  latitude: number;
-  longitude: number;
-}
 
 export type RestaurantDataType = {
   name: string;
@@ -216,7 +215,6 @@ export type ActionType = {
 
 export type CartItemType = {
   menuItemId: number;
-  id: number;
   name: string;
   price: number;
   quantity: number;
@@ -239,10 +237,22 @@ export type User ={
   photo: string
 };
 
-export type UserInfo ={
+export type UserInfo = {
   firstName: string,
   login:string,
   lastName: string,
   roles: string[],
   photo: string
 };
+
+export type ReviewType ={
+  reviewId: number,
+  restaurantId: number,
+  authorId: string,
+  authorFullName: string,
+  stars: number,
+  createdAt: string,
+  contents: string,
+  answeredAt: string,
+  restaurantResponse: string
+}

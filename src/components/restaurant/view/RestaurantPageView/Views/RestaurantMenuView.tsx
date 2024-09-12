@@ -1,13 +1,9 @@
 import { Button, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import MenuItemComponent from "../MenuItemComponent";
-import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../services/types";
-import { fetchGET, getImage } from "../../../../services/APIconn";
+import MenuItemComponent from "../../MenuItemComponent";
+import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../../services/types";
+import { fetchGET, getImage } from "../../../../../services/APIconn";
 import DefaultPic from "../../../../assets/images/no-image.png"
-
-
-
-
 
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItemWithDescriptionType) => void;
@@ -21,26 +17,26 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
   const [menus, setMenus] = useState<MenuWithDescriptionType[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchMenus = async () => {
-      try {
-        const menusData = await fetchGET(
-          `/my-restaurants/${restaurantId}/menus`,
-        );
-        if (JSON.stringify(menusData) !== JSON.stringify(menus)) {
-          setMenus(menusData || []);
-          if (menusData.length > 0) {
-            setActiveMenuId(menusData[0].menuId);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching menus:", error);
-        setMenus([]);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMenus = async () => {
+  //     try {
+  //       const menusData = await fetchGET(
+  //         `/my-restaurants/${restaurantId}/menus`,
+  //       );
+  //       if (JSON.stringify(menusData) !== JSON.stringify(menus)) {
+  //         setMenus(menusData || []);
+  //         if (menusData.length > 0) {
+  //           setActiveMenuId(menusData[0].menuId);
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching menus:", error);
+  //       setMenus([]);
+  //     }
+  //   };
 
-    fetchMenus();
-  }, [restaurantId, menus]);
+  //   fetchMenus();
+  // }, [restaurantId, menus]);
 
   useEffect(() => {
     const fetchMenuItems = async () => {

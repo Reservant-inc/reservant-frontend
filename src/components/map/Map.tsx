@@ -3,11 +3,11 @@ import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import CustomMarker from "./CustomMarker";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { Map as LeafletMap, LatLngBounds } from "leaflet";
-import { ActiveRestaurantType } from "../../services/types";
+import { RestaurantDetailsType } from "../../services/types";
 
 interface MapProps {
-  activeRestaurant: ActiveRestaurantType; 
-  restaurants: ActiveRestaurantType[];
+  activeRestaurant: RestaurantDetailsType | null; 
+  restaurants: RestaurantDetailsType[];
   setActiveRestaurant: Function;
   setBounds: Function;
   setUserMovedMap: Function;

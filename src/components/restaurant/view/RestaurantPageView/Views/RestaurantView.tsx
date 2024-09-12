@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import RestaurantDetails from "./RestaurantDetails";
-import RestaurantCart from "./RestaurantCart";
-import { CartItemType, MenuItemWithDescriptionType } from "../../../../services/types";
-import { useParams } from "react-router-dom";
+import { CartItemType, MenuItemType} from '../../../../../services/types'
 
-const RestaurantView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+interface RestaurantViewProps {
+  id: string
+}
+
+const RestaurantView: React.FC<RestaurantViewProps> = ({ id }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
 
-  const addToCart = (item: MenuItemWithDescriptionType) => {
+  const addToCart = (item: MenuItemType) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find(
         (cartItem) => cartItem.menuItemId === item.menuItemId,
@@ -47,17 +47,7 @@ const RestaurantView: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col lg:flex-row">
-      <div className="w-full lg:w-2/3">
-        <RestaurantDetails addToCart={addToCart} restaurantId={id} />
-      </div>
-      <div className="mt-10 flex h-full min-h-screen w-full items-start justify-center lg:mt-20 lg:w-1/3">
-        <RestaurantCart
-          cart={cart}
-          incrementQuantity={incrementQuantity}
-          decrementQuantity={decrementQuantity}
-        />
-      </div>
+    <div className="w-full h-full overflow-y-auto scroll dark:bg-black">
     </div>
   );
 };

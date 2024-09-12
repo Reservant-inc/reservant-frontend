@@ -1,77 +1,34 @@
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-} from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import CustomRating from "../../../reusableComponents/CustomRating";
+import { Tooltip } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantReviewsFiltersProps {
-  sort: string;
-  setSort: (value: string) => void;
-  filterText: string;
-  setFilterText: (text: string) => void;
+  setValue: Function
+  value: number
 }
 
 const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
-  sort,
-  setSort,
-  filterText,
-  setFilterText,
+  setValue,
+  value
 }) => {
-  const handleChange = (e: SelectChangeEvent) => {
-    setSort(e.target.value as string);
-  };
 
-  const handleCleanFilter = () => {
-    setSort("");
-    setFilterText("");
-  };
-
-  const handleFilterTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(e.target.value);
-  };
+  const [t] = useTranslation("global")
 
   return (
     <div>
-      <div className="flex items-center justify-start gap-4 p-2 dark:bg-grey-6">
-        <TextField
-          id="outlined-basic"
-          variant="outlined"
-          value={filterText}
-          onChange={handleFilterTextChange}
-          placeholder="Search..."
-          autoComplete="off"
-          style={{ marginRight: "16px" }}
-        />
-        <FormControl fullWidth style={{ marginRight: "16px" }}>
-          <InputLabel id="demo-simple-select-label">Sort</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={sort}
-            label="Sort"
-            onChange={handleChange}
+      <div className="flex gap-2 items-center bg-grey-0 dark:bg-grey-5 rounded-lg p-2">
+        <h1>{t("reviews.filter")}:</h1>
+        <CustomRating readOnly={false} rating={value} onChange={setValue}/>
+        <Tooltip title={t("reviews.filter-tooltip")}>
+          <button
+            className="z-1 h-8 w-8 bg-trans hover:bg-grey-1 dark:hover:bg-grey-4 dark:text-grey-1 rounded-full"
           >
-            <MenuItem value="1">Alfabetycznie</MenuItem>
-            <MenuItem value="2">Od najnowszych</MenuItem>
-            <MenuItem value="3">Rosnąco</MenuItem>
-            <MenuItem value="4">Malejąco</MenuItem>
-          </Select>
-        </FormControl>
-        <Button
-          id="RestaurantReviewsFiltersClearButton"
-          onClick={handleCleanFilter}
-          variant="contained"
-          style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
-        >
-          Clear
-        </Button>
+            <CloseIcon />
+          </button>
+        </Tooltip>
       </div>
-      <div className="my-2 h-[2px] w-full bg-grey-1" />
     </div>
   );
 };

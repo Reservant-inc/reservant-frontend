@@ -2,7 +2,6 @@ html {
   height: 100%;
 }
 
-
 body {
   margin: 0;
   height: 100%;
@@ -41,6 +40,11 @@ body {
 }
 
 /* animations */
+
+.change-width {
+  transition: width 1s ease;
+}
+
 .fade-in-render {
   animation: fade-in-render 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -161,7 +165,7 @@ body {
 @tailwind base;
 
 @layer base{
-  
+
   input[type], input:focus {
     @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans p-2;
   }
