@@ -246,3 +246,12 @@ export type UserInfo ={
   roles: string[],
   photo: string
 };
+
+export type Ingredient = {
+  ingredientId: string,
+  publicName: string,
+  unitOfMeasurement: string,
+  minimalAmount: number,
+  amountToOrder: number,
+  amount: number
+}
