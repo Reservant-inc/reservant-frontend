@@ -11,10 +11,11 @@ import {
 import { useTranslation } from "react-i18next";
 import { fetchFilesPOST, fetchGET, fetchPOST } from "../../../services/APIconn";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { MenuItemType } from "../../../services/types";
+import { Ingredient, MenuItemType } from "../../../services/types";
 import { forEach, initial } from "lodash";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
+import { ArrowDownward } from "@mui/icons-material";
 
 interface MenuItemDialogProps {
     open: boolean;
@@ -37,15 +38,12 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-//na razie jako interface..
-interface Ingredient {
-  id: number,
-  publicName: string,
-  unitOfMeasurement: string,
-  minimalAmount: number,
-  amountToOrder: number,
-  amount: number
+
+interface IngredientUsage {
+  ingredientId: number,
+  amountUsed: number
 }
+
 
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   open,
@@ -132,14 +130,29 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     name: "",
     alternateName: "",
     alcoholPercentage: "",
-    photo: "",
-    ingredients: [
-      {
-        ingredientId: "",
-        amountUsed: ""
-      }
-    ],
+    photo: ""
+
   }
+  const initialValuesIng = {
+    id: "",
+    amountUsed: ""
+  }
+  const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([])
+
+  const handleSubmitIng = (
+    values: FormikValues,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+  ) => {
+    setSubmitting(true)
+    setSelectedIngredients([...selectedIngredients, {
+        ingredientId: values.ingredientId,
+        amountUsed: values.amountUsed
+    }])
+    setSubmitting(false)
+
+    console.log(selectedIngredients)
+  }
+
 
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
@@ -157,14 +170,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           const res = await fetchGET(`/restaurants/${restaurantId}/ingredients?page=${page++}&perPage=${perPage}`);
           totalPages=res.totalPages;
           for(const i in res.items)
-            tmp.push({
-              id: res.items[i].ingredientId,
-              publicName: res.items[i].publicName,
-              unitOfMeasurement: res.items[i].unitOfMeasurement,
-              minimalAmount: res.items[i].minimalAmount,
-              amountToOrder: res.items[i].amountToOrder,
-              amount: res.items[i].amount
-            });
+            tmp.push(res.items[i]);
         }
 
         setIngredients(tmp);
@@ -227,6 +233,73 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             : t("restaurant-management.menu.newMenuItem")}
         </DialogTitle>
         <DialogContent className="w-full h-full">
+        <Formik  
+          initialValues={initialValues} 
+          onSubmit={handleSubmitIng}
+        >
+
+          {(formik) => {
+              return(
+              <Form>
+                  <div className="flex justify-center w-full">
+
+                      <Field
+                          as="select"
+                          id="ingredientId" 
+                          name="ingredientId" 
+                          className={` [&>*]:label-[20px] w-fit [&>*]:font-mont-md [&>*]:text-[15px] "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                      >
+                      {
+                          
+                          ingredients.map((ingredient) => 
+                          <option 
+                          value={ingredient.ingredientId}
+                          > 
+                          {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
+                          </option>)
+                      }
+                      </Field>
+                      <Field 
+                          type="number" 
+                          id="amountUsed" 
+                          name="amountUsed"
+                          className="border w-1/4" 
+                          variant="standard"
+
+                          as={TextField}
+                      />
+                      <button
+                          type="submit"
+                          className="border" 
+                          id="addIngridientToMenuItem"
+                          disabled={!formik.isValid || !formik.dirty}
+
+                      >
+                      add 
+                        {/*@todo tlumacz  */}
+                      </button> 
+                      {/* @todo tłumaczenie */}
+
+                  </div>
+              </Form>
+              
+              )
+          }}
+        </Formik>
+        <div>
+          {
+            selectedIngredients.map((ingredient) => 
+            <span 
+              className="border"
+            > 
+                {ingredient.ingredientId}, {ingredient.amountUsed} ;
+                <button onClick={()=>{
+                          //@todo usuwanie
+                }}> X </button>
+            </span>
+            )
+          }
+        </div>
           <Formik
             id="menuitem-formik"
             initialValues={initialValues}
@@ -288,19 +361,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       color="primary"
                       as={TextField}
                     />
-                    <Field
-                    id="ingredients" 
-                    name="ingredients" 
-                    default="Select ingredients" 
-                    as="select"
-                    multiple={true} 
-                    className={` [&>*]:label-[20px] w-fit [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.ingredients && formik.touched.ingredients) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                    >
-                      {
-                        
-                        ingredients.map((ingredient) => <option value={[ingredient.id, (document.getElementById(`in+${ingredient.id}`)?(document.getElementById(`in+${ingredient.id}`) as any).value:0)]}> {ingredient.publicName} <input id={`in+${ingredient.id}`} /> ({ingredient.unitOfMeasurement}) </option>)
-                      }
-                    </Field>
+                    
+                  </div>                     
+                    
                     {menuType === "Alcohol" && (
                       <Field
                         type="text"
@@ -356,15 +419,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       {t("general.cancel")}
                     </Button>
                   </DialogActions>
-                </div>
-              </Form>
+                  </Form>
+                  
             )
           }}
           </Formik>
           
-          
-        </DialogContent>
-        
+      </DialogContent>
       </div>
     </Dialog>
 

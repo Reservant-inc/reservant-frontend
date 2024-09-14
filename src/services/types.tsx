@@ -245,6 +245,14 @@ export type UserInfo = {
   photo: string
 };
 
+export type Ingredient = {
+  ingredientId: string,
+  publicName: string,
+  unitOfMeasurement: string,
+  minimalAmount: number,
+  amountToOrder: number,
+  amount: number
+}
 export type ReviewType ={
   reviewId: number,
   restaurantId: number,
