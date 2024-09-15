@@ -23,6 +23,7 @@ import {
   IconButton,
   InputAdornment,
   Menu,
+  Modal,
   MenuItem as MyMenuItem,
   TextField,
 } from "@mui/material";
@@ -534,21 +535,27 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         onSave={handleSaveEditedMenu}
         editedMenu={editedMenu}
       />
-      <MenuItemDialog
+      <Modal
+        className="flex items-center justify-center"
         open={isMenuItemPopupOpen}
         onClose={() => setIsMenuItemPopupOpen(false)}
-        onSave={handleSaveNewMenuItem}
+      >
+        <div className="h-[600px] w-[500px] rounded-xl bg-white p-3">
+
+        <MenuItemDialog 
         menuType={
           selectedMenuIndex !== null
             ? menus[selectedMenuIndex]?.menuType || ""
             : ""
         }
         restaurantId={activeRestaurantId}
-      />
+
+        />
+        </div>
+
+      </Modal>
+      
       <MenuItemDialog
-        open={isMenuItemEditPopupOpen}
-        onClose={() => setIsMenuItemEditPopupOpen(false)}
-        onSave={handleSaveEditedMenuItem}
         menuType={
           selectedMenuIndex !== null
             ? menus[selectedMenuIndex]?.menuType || ""
