@@ -15,7 +15,7 @@ import { Ingredient, MenuItemType } from "../../../services/types";
 import { forEach, initial } from "lodash";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
-import { ArrowDownward } from "@mui/icons-material";
+import { CloseSharp, Cancel } from "@mui/icons-material";
 
 interface MenuItemDialogProps {
     open: boolean;
@@ -40,7 +40,7 @@ const VisuallyHiddenInput = styled("input")({
 
 
 interface IngredientUsage {
-  ingredientId: number,
+  ingredientId: string,
   amountUsed: number
 }
 
@@ -221,11 +221,16 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       setSubmitting(false);
     }
   };
+
+  const findIngDetails= (ingredient: IngredientUsage) => {
+    const res = (ingredients.find((e)=>e.ingredientId==ingredient.ingredientId))
+    return res;
+  }
   
 
   return (
     
-    <Dialog open={open} onClose={onClose} className="">
+    <Dialog open={open} onClose={onClose} className=" h-[100%] w-[100%] flex-col ">
       <div className="h-full w-full">
         <DialogTitle>
           {editedMenuItem
@@ -233,6 +238,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             : t("restaurant-management.menu.newMenuItem")}
         </DialogTitle>
         <DialogContent className="w-full h-full">
+        <div className="flex-col flex gap-2">
         <Formik  
           initialValues={initialValues} 
           onSubmit={handleSubmitIng}
@@ -241,7 +247,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           {(formik) => {
               return(
               <Form>
-                  <div className="flex justify-center w-full">
+                  <div className=" align-center justify-center w-full flex gap-1">
 
                       <Field
                           as="select"
@@ -260,15 +266,15 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       }
                       </Field>
                       <Field 
-                          type="number" 
+                          type="text" 
                           id="amountUsed" 
                           name="amountUsed"
                           className="border w-1/4" 
                           variant="standard"
-
+                          label="amount used"
                           as={TextField}
                       />
-                      <button
+                      <Button
                           type="submit"
                           className="border" 
                           id="addIngridientToMenuItem"
@@ -277,7 +283,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       >
                       add 
                         {/*@todo tlumacz  */}
-                      </button> 
+                      </Button> 
                       {/* @todo tłumaczenie */}
 
                   </div>
@@ -286,20 +292,32 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               )
           }}
         </Formik>
-        <div>
+        <div className="border h-36 rounded-lg overflow-y-auto ">
+
+        <div
+          className="flex  p-1  gap-1 flex-wrap  "  
+        >
           {
             selectedIngredients.map((ingredient) => 
             <span 
-              className="border"
+              className="border h-fit flex  rounded-lg"
             > 
-                {ingredient.ingredientId}, {ingredient.amountUsed} ;
-                <button onClick={()=>{
-                          //@todo usuwanie
-                }}> X </button>
+                {findIngDetails(ingredient)?.publicName}: {ingredient.amountUsed} {findIngDetails(ingredient)?.unitOfMeasurement}
+                <button 
+                className=" "
+                onClick={()=>{
+                  setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>{
+                    return ingredientToRemove.ingredientId!==ingredient.ingredientId
+                  }))
+                }}> <CloseSharp/> </button>
             </span>
             )
           }
         </div>
+        </div>
+
+        </div>
+
           <Formik
             id="menuitem-formik"
             initialValues={initialValues}
@@ -326,7 +344,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       }
                       label="NAME" //@TODO tłumaczenia
                       variant="standard"
-                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
                       color="primary"
                       as={TextField}
                     />
@@ -342,7 +359,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       }
                       label="NAME TRANSLATION" //@TODO tłumaczenia
                       variant="standard"
-                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.alternateName && formik.touched.alternateName) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
                       color="primary"
                       as={TextField}
                     />
@@ -357,7 +373,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       }
                       label="PRICE" //@todo tłumaczenia
                       variant="standard"
-                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.price && formik.touched.price) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
                       color="primary"
                       as={TextField}
                     />
@@ -376,7 +391,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         }
                         label="%%%%%" //@TODO tłumaczenia
                         variant="standard"
-                        className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.alcoholPercentage && formik.touched.alcoholPercentage) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
                         color="primary"
                         as={TextField}
                       />
