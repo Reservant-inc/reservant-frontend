@@ -18,9 +18,6 @@ import { Field, Form, Formik, FormikValues } from "formik";
 import { CloseSharp, Cancel } from "@mui/icons-material";
 
 interface MenuItemDialogProps {
-    open: boolean;
-    onClose: () => void;
-    onSave: (values: { [key: string]: string }) => void;
     menuType: string;
     restaurantId: number;
     editedMenuItem?: MenuItemType | null;
@@ -46,9 +43,6 @@ interface IngredientUsage {
 
 
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
-  open,
-  onClose,
-  onSave,
   menuType,
   restaurantId,
   editedMenuItem = null, //??????????? nie wiem o co chodzi, nie dotykam
@@ -65,7 +59,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    if (open) {
       if (editedMenuItem) {
         const { name, alternateName, price, alcoholPercentage, photo } =
           editedMenuItem;
@@ -89,8 +82,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         });
         setPhotoFileName(null);
       }
-    }
-  }, [open, editedMenuItem]);
+  }, [ editedMenuItem]);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -214,7 +206,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         '/menu-items',
         body,
       );
-      onClose();
     } catch (error) {
       console.log(error);
     } finally {
@@ -230,14 +221,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   return (
     
-    <Dialog open={open} onClose={onClose} className=" h-[100%] w-[100%] flex-col ">
+    <div className="  flex-col ">
       <div className="h-full w-full">
-        <DialogTitle>
+        <h1 >
           {editedMenuItem
             ? t("restaurant-management.menu.editedMenuItem")
             : t("restaurant-management.menu.newMenuItem")}
-        </DialogTitle>
-        <DialogContent className="w-full h-full">
+        </h1>
+        <div className="w-full h-full">
         <div className="flex-col flex gap-2">
         <Formik  
           initialValues={initialValues} 
@@ -247,13 +238,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           {(formik) => {
               return(
               <Form>
-                  <div className=" align-center justify-center w-full flex gap-1">
+                  <div className=" align-center justify-center w-full flex ">
 
                       <Field
                           as="select"
                           id="ingredientId" 
                           name="ingredientId" 
-                          className={` [&>*]:label-[20px] w-fit [&>*]:font-mont-md [&>*]:text-[15px] "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          className={""}
                       >
                       {
                           
@@ -269,12 +260,11 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           type="text" 
                           id="amountUsed" 
                           name="amountUsed"
-                          className="border w-1/4" 
+                          className="border w-1/5  text-justify " 
                           variant="standard"
-                          label="amount used"
-                          as={TextField}
+                          label="amount"
                       />
-                      <Button
+                      <button
                           type="submit"
                           className="border" 
                           id="addIngridientToMenuItem"
@@ -283,7 +273,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       >
                       add 
                         {/*@todo tlumacz  */}
-                      </Button> 
+                      </button> 
                       {/* @todo tłumaczenie */}
 
                   </div>
@@ -345,7 +335,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       label="NAME" //@TODO tłumaczenia
                       variant="standard"
                       color="primary"
-                      as={TextField}
+                      className="border w-1/5  text-justify " 
+
                     />
                     
                     <Field
@@ -360,7 +351,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       label="NAME TRANSLATION" //@TODO tłumaczenia
                       variant="standard"
                       color="primary"
-                      as={TextField}
+                      className="border w-1/5  text-justify " 
+
                     />
                     <Field
                       type="text"
@@ -374,7 +366,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       label="PRICE" //@todo tłumaczenia
                       variant="standard"
                       color="primary"
-                      as={TextField}
+                      className="border w-full  text-justify " 
                     />
                     
                   </div>                     
@@ -392,56 +384,56 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         label="%%%%%" //@TODO tłumaczenia
                         variant="standard"
                         color="primary"
-                        as={TextField}
+                        className="border w-1/5  text-justify " 
+
                       />
                     )}
-                    <Button
-                      component="label"
+                    <button
                       role={undefined}
-                      variant="contained"
-                      tabIndex={-1}
-                      startIcon={<CloudUploadIcon />}
-                      className="bg-primary"
+                      className="flex gap-1 p-2 bg-primary text-white"
                     >
+                      <>
+                      <CloudUploadIcon/>
                       Upload photo
                       {/* @todo tlumaczneie */}
                       <VisuallyHiddenInput
                         type="file"
                         accept="image/*"
                         onChange={handlePhotoChange}
-                      />
-                    </Button>
+                        />
+                      
+                      </>
+                    </button>
                     {photoFileName && (
                       <span className="ml-2 h-min w-min">
                         {t("restaurant-management.menu.selectedFile")}: {photoFileName}
                       </span>
                     )}
                   </div>
-                  <DialogActions>
-                    <Button 
+                  <div>
+                    <button 
                       id="addmenuitemsubmit"
                       type="submit"
                       disabled={!formik.isValid}
                       className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}  
                     >
                       {t("general.save")}
-                    </Button>
-                    <Button 
+                    </button>
+                    <button 
                       className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}  
-                      onClick={onClose}
                     >
                       {t("general.cancel")}
-                    </Button>
-                  </DialogActions>
+                    </button>
+                  </div>
                   </Form>
                   
             )
           }}
           </Formik>
           
-      </DialogContent>
       </div>
-    </Dialog>
+      </div>
+    </div>
 
   );
 };
