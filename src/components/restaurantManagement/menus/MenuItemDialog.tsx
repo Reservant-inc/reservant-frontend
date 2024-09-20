@@ -7,6 +7,8 @@ import {
   TextField,
   Button,
   styled,
+  FormLabel,
+  Select,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { fetchFilesPOST, fetchGET, fetchPOST } from "../../../services/APIconn";
@@ -15,12 +17,14 @@ import { Ingredient, MenuItemType } from "../../../services/types";
 import { forEach, initial } from "lodash";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
-import { CloseSharp, Cancel } from "@mui/icons-material";
+import { CloseSharp, Cancel, ArrowRight, ArrowForward, ArrowForwardIos } from "@mui/icons-material";
+import { Label } from "leaflet";
 
 interface MenuItemDialogProps {
     menuType: string;
     restaurantId: number;
     editedMenuItem?: MenuItemType | null;
+    onClose: Function
 }
 
 const VisuallyHiddenInput = styled("input")({
@@ -45,6 +49,7 @@ interface IngredientUsage {
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   menuType,
   restaurantId,
+  onClose,
   editedMenuItem = null, //??????????? nie wiem o co chodzi, nie dotykam
 }) => {
   const [values, setValues] = useState<{ [key: string]: string }>({
@@ -221,92 +226,73 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   return (
     
-    <div className="  flex-col ">
-      <div className="h-full w-full">
-        <h1 >
-          {editedMenuItem
-            ? t("restaurant-management.menu.editedMenuItem")
-            : t("restaurant-management.menu.newMenuItem")}
+    <div className="w-full h-full">
+      <span className="flex w-full mb-4 pb-2 border-b justify-between">
+
+        <h1 className="text-lg ">
+            {editedMenuItem
+              ? t("restaurant-management.menu.editedMenuItem")
+              : t("restaurant-management.menu.newMenuItem")}
         </h1>
-        <div className="w-full h-full">
-        <div className="flex-col flex gap-2">
-        <Formik  
-          initialValues={initialValues} 
-          onSubmit={handleSubmitIng}
-        >
 
-          {(formik) => {
+        <button onClick={()=>onClose()} className="hover:text-error">
+          <CloseSharp/>
+        </button>
+
+      </span>
+      <div className="flex w-full h-[90%] gap-4">
+        <div className="flex w-[60%] flex-col gap-2">
+          <Formik  
+            initialValues={initialValuesIng} 
+            onSubmit={handleSubmitIng}
+          >
+
+            {(formik) => {
               return(
-              <Form>
-                  <div className=" align-center justify-center w-full flex ">
-
-                      <Field
-                          as="select"
-                          id="ingredientId" 
-                          name="ingredientId" 
-                          className={""}
-                      >
-                      {
-                          
+                <Form>
+                  <div className="flex gap-2">
+                    <Field
+                      as={"select"}
+                      id="ingredientId" 
+                      name="ingredientId" 
+                      label="Ingredient"
+                      className="w-[65%] border-0 border-b"
+                    >
+                      <option value="" id="ingredientSelector-option-default">Select an ingredient</option>
+                        {/* @todo tlumaczenie  */}
+                        {
+                              
                           ingredients.map((ingredient) => 
-                          <option 
-                          value={ingredient.ingredientId}
-                          > 
-                          {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
+                          <option value={ingredient.ingredientId}> 
+                            {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
                           </option>)
-                      }
-                      </Field>
+                        }
+                    </Field>
+                    <div className="flex w-[35%]">
                       <Field 
-                          type="text" 
-                          id="amountUsed" 
-                          name="amountUsed"
-                          className="border w-1/5  text-justify " 
-                          variant="standard"
-                          label="amount"
+                        type="text" 
+                        id="amountUsed" 
+                        name="amountUsed"
+                        className={` w-full  ${!(formik.errors.amountUsed && formik.touched.amountUsed) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                        variant="standard"
+                        label="Amount"
+                        as={TextField}
+                        // @todo tlumacz
                       />
                       <button
-                          type="submit"
-                          className="border" 
-                          id="addIngridientToMenuItem"
-                          disabled={!formik.isValid || !formik.dirty}
-
+                        type="submit"
+                        className={` bg-grey-0 border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
+                        id="addIngridientToMenuItem"
+                        disabled={!formik.isValid || !formik.dirty}
                       >
-                      add 
-                        {/*@todo tlumacz  */}
+                        <ArrowForwardIos/> 
                       </button> 
-                      {/* @todo tłumaczenie */}
-
+                    </div>
                   </div>
-              </Form>
-              
+                </Form>
               )
-          }}
-        </Formik>
-        <div className="border h-36 rounded-lg overflow-y-auto ">
-
-        <div
-          className="flex  p-1  gap-1 flex-wrap  "  
-        >
-          {
-            selectedIngredients.map((ingredient) => 
-            <span 
-              className="border h-fit flex  rounded-lg"
-            > 
-                {findIngDetails(ingredient)?.publicName}: {ingredient.amountUsed} {findIngDetails(ingredient)?.unitOfMeasurement}
-                <button 
-                className=" "
-                onClick={()=>{
-                  setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>{
-                    return ingredientToRemove.ingredientId!==ingredient.ingredientId
-                  }))
-                }}> <CloseSharp/> </button>
-            </span>
-            )
-          }
-        </div>
-        </div>
-
-        </div>
+            }}
+          </Formik>
 
           <Formik
             id="menuitem-formik"
@@ -314,62 +300,62 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             validationSchema={menuItemSchema}
             onSubmit={onSubmit}
           >
-          {(formik) => {
-            return(
-              <Form>
-                <div  
-                  id="addmenuitem-form-containter"
-                  className="form-container flex h-full flex-col items-center gap-8"
-                >
-                  <div className="flex w-full flex-col items-center gap-6">
-                    
-                    <Field
-                      type="text"
-                      id="name"
-                      name="name"
-                      helperText={
-                        formik.errors.name &&
-                        formik.touched.name &&
-                        formik.errors.name
-                      }
-                      label="NAME" //@TODO tłumaczenia
-                      variant="standard"
-                      color="primary"
-                      className="border w-1/5  text-justify " 
+            {(formik) => {
+              return(
+                <Form>
+                  <div  
+                    id="addmenuitem-form-containter"
+                    className="form-container flex h-full flex-col items-center gap-8"
+                  >
+                    <div className="flex w-full flex-col items-center gap-6">
+                      <Field
+                        type="text"
+                        id="name"
+                        name="name"
+                        helperText={
+                          formik.errors.name &&
+                          formik.touched.name &&
+                          formik.errors.name
+                        }
+                        label="Name" //@TODO tłumaczenia
+                        variant="standard"
+                        color="primary"
+                        className={` w-full  ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                        as={TextField}
+                      />
+                      
+                      <Field
+                        type="text"
+                        id="alternateName"
+                        name="alternateName"
+                        helperText={
+                          formik.errors.alternateName &&
+                          formik.touched.alternateName &&
+                          formik.errors.alternateName
+                        }
+                        label="Name translation" //@TODO tłumaczenia
+                        variant="standard"
+                        color="primary"
+                        className={` w-full  ${!(formik.errors.alternateName && formik.touched.alternateName) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                        as={TextField}
 
-                    />
-                    
-                    <Field
-                      type="text"
-                      id="alternateName"
-                      name="alternateName"
-                      helperText={
-                        formik.errors.alternateName &&
-                        formik.touched.alternateName &&
-                        formik.errors.alternateName
-                      }
-                      label="NAME TRANSLATION" //@TODO tłumaczenia
-                      variant="standard"
-                      color="primary"
-                      className="border w-1/5  text-justify " 
+                      />
+                      <Field
+                        type="text"
+                        id="price"
+                        name="price"
+                        helperText={
+                          formik.errors.price &&
+                          formik.touched.price &&
+                          formik.errors.price
+                        }
+                        label="Price" //@todo tłumaczenia
+                        variant="standard"
+                        color="primary"
+                        className={` w-full  ${!(formik.errors.price && formik.touched.price) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                        as={TextField}
 
-                    />
-                    <Field
-                      type="text"
-                      id="price"
-                      name="price"
-                      helperText={
-                        formik.errors.price &&
-                        formik.touched.price &&
-                        formik.errors.price
-                      }
-                      label="PRICE" //@todo tłumaczenia
-                      variant="standard"
-                      color="primary"
-                      className="border w-full  text-justify " 
-                    />
-                    
-                  </div>                     
+                      />
                     
                     {menuType === "Alcohol" && (
                       <Field
@@ -381,13 +367,16 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           formik.touched.alcoholPercentage &&
                           formik.errors.alcoholPercentage
                         }
-                        label="%%%%%" //@TODO tłumaczenia
+                        label="Alcohol percentage" //@TODO tłumaczenia
                         variant="standard"
                         color="primary"
-                        className="border w-1/5  text-justify " 
+                        className={` w-full  ${!(formik.errors.alcoholPercentage && formik.touched.alcoholPercentage) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                        as={TextField}
 
                       />
                     )}
+                    </div>                     
+
                     <button
                       role={undefined}
                       className="flex gap-1 p-2 bg-primary text-white"
@@ -400,7 +389,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         type="file"
                         accept="image/*"
                         onChange={handlePhotoChange}
-                        />
+                      />
                       
                       </>
                     </button>
@@ -410,30 +399,56 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       </span>
                     )}
                   </div>
-                  <div>
-                    <button 
-                      id="addmenuitemsubmit"
-                      type="submit"
-                      disabled={!formik.isValid}
-                      className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}  
+                  <button 
+                    id="addmenuitemsubmit"
+                    type="submit"
+                    disabled={!formik.isValid || !formik.dirty}
+                    className={` w-full border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
                     >
-                      {t("general.save")}
-                    </button>
-                    <button 
-                      className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}  
-                    >
-                      {t("general.cancel")}
-                    </button>
-                  </div>
-                  </Form>
-                  
-            )
-          }}
-          </Formik>
-          
+                    {t("general.save")}
+                  </button>
+                </Form>
+              )
+            }}
+            </Formik>
+          </div>
+          <div className="border h-full w-[40%] overflow-y-auto rounded-lg">
+            {/* @todo tłumacz */}
+            {selectedIngredients.length>0
+            ?
+            <ul
+              className="flex p-2 gap-1 w-full flex-wrap"  
+            > 
+              {
+                selectedIngredients.map((ingredient) => 
+                <li 
+                  className="border rounded-md h-fit justify-between w-full flex p-1 "
+                > 
+                  <p className="overflow-hidden text-ellipsis">
+
+                    {findIngDetails(ingredient)?.publicName}: {ingredient.amountUsed} {findIngDetails(ingredient)?.unitOfMeasurement}
+                  </p>
+
+                  <button 
+                    className=" "
+                    onClick={()=>{
+                      setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>{
+                        return ingredientToRemove.ingredientId!==ingredient.ingredientId
+                      }))
+                    }}> 
+                    <CloseSharp/> 
+                  </button>
+                </li>
+                )
+              }
+            </ul>
+            :
+            <h1 className="p-2">Selected ingredients will appear here.</h1>
+            //@todo tlumacz 
+            }
+          </div>
+        </div>
       </div>
-      </div>
-    </div>
 
   );
 };
