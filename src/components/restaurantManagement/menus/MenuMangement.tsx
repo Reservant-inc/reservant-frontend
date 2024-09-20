@@ -302,11 +302,11 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     setAnchorEl(null);
   };
 
-  const handleFilterOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSortOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setFilterAnchorEl(event.currentTarget);
   };
 
-  const handleFilterClose = () => {
+  const handleSortClose = () => {
     setFilterAnchorEl(null);
   };
 
@@ -369,7 +369,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         };
         return updatedMenus;
       });
-      handleFilterClose();
+      handleSortClose();
     }
   };
 
@@ -471,8 +471,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           {selectedMenuIndex !== null && (
             <MenuOrderBy
               filterAnchorEl={filterAnchorEl}
-              handleFilterOpen={handleFilterOpen}
-              handleFilterClose={handleFilterClose}
+              handleSortOpen={handleSortOpen}
+              handleSortClose={handleSortClose}
               handleSortAlphabeticallyAsc={handleSortAlphabeticallyAsc}
               handleSortAlphabeticallyDesc={handleSortAlphabeticallyDesc}
               handleSortPriceAsc={handleSortPriceAsc}
@@ -540,7 +540,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         open={isMenuItemPopupOpen}
         onClose={() => setIsMenuItemPopupOpen(false)}
       >
-        <div className="h-[600px] w-[500px] rounded-xl bg-white p-3">
+        <div className=" h-[600px] w-[600px] rounded-xl bg-white p-6">
 
         <MenuItemDialog 
         menuType={
@@ -549,21 +549,34 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             : ""
         }
         restaurantId={activeRestaurantId}
+        onClose={() => setIsMenuItemPopupOpen(false)}
 
         />
         </div>
 
       </Modal>
-      
-      <MenuItemDialog
-        menuType={
-          selectedMenuIndex !== null
-            ? menus[selectedMenuIndex]?.menuType || ""
-            : ""
-        }
-        restaurantId={activeRestaurantId}
-        editedMenuItem={editedMenuItem}
-      />
+      <Modal
+        className="flex items-center justify-center"
+        open={isMenuItemEditPopupOpen}
+
+        onClose={() => setIsMenuItemEditPopupOpen(false)}
+
+      >
+        <div>
+          <MenuItemDialog
+            menuType={
+              selectedMenuIndex !== null
+                ? menus[selectedMenuIndex]?.menuType || ""
+                : ""
+            }
+            restaurantId={activeRestaurantId}
+            editedMenuItem={editedMenuItem}
+            onClose={() => setIsMenuItemEditPopupOpen(false)}
+
+          />
+
+        </div>
+      </Modal>
       <ConfirmationDialog
         open={openConfirmation}
         onClose={() => setOpenConfirmation(false)}
