@@ -202,7 +202,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           alternateName: values.alternateName,
           alcoholPercentage: values.alcoholPercentage?values.alcoholPercentage:0,
           photo: values.photo,
-          ingredients: values.ingridients,
+          ingredients: selectedIngredients
         },
       );
       console.log(body)
@@ -226,7 +226,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   return (
     
-    <div className="w-full h-full">
+    <div className="w-full h-full ">
       <span className="flex w-full mb-4 pb-2 border-b justify-between">
 
         <h1 className="text-lg ">
@@ -240,8 +240,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         </button>
 
       </span>
-      <div className="flex w-full h-[90%] gap-4">
-        <div className="flex w-[60%] flex-col gap-2">
+      <div className="flex  w-full h-[90%] gap-4">
+        <div className="flex w-[60%] h-full flex-col gap-2">
           <Formik  
             initialValues={initialValuesIng} 
             onSubmit={handleSubmitIng}
@@ -305,7 +305,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 <Form>
                   <div  
                     id="addmenuitem-form-containter"
-                    className="form-container flex h-full flex-col items-center gap-8"
+                    className="form-container flex h-full flex-col  items-center gap-8"
                   >
                     <div className="flex w-full flex-col items-center gap-6">
                       <Field
@@ -377,33 +377,37 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                     )}
                     </div>                     
 
-                    <button
-                      role={undefined}
-                      className="flex gap-1 p-2 bg-primary text-white"
-                    >
-                      <>
-                      <CloudUploadIcon/>
-                      Upload photo
-                      {/* @todo tlumaczneie */}
-                      <VisuallyHiddenInput
-                        type="file"
-                        accept="image/*"
-                        onChange={handlePhotoChange}
-                      />
+
                       
-                      </>
-                    </button>
-                    {photoFileName && (
-                      <span className="ml-2 h-min w-min">
-                        {t("restaurant-management.menu.selectedFile")}: {photoFileName}
+                    <div className="flex w-full h-[10%] text-ellipsis  gap-2">
+                      <label
+                        htmlFor="menuItemPhotoUpload"
+                        className="w-[60%] justify-center items-center text-center flex p-1 gap-2 hover:cursor-pointer bg-grey-0 text-black border-black border rounded-lg text-black hover:text-primary"
+                      >
+                        <CloudUploadIcon/>
+                        <p>
+                          Upload photo
+                        </p>
+                        {/* @todo tlumaczneie */}
+                        <VisuallyHiddenInput
+                          type="file"
+                          id="menuItemPhotoUpload"
+                          accept="image/*"
+                          onChange={handlePhotoChange}
+                        />
+
+                      </label>
+                      <span className="w-[40%] h-[10%]">
+                        {t("restaurant-management.menu.selectedFile")}: {photoFileName?"photo successfully loaded":"none"}
                       </span>
-                    )}
+                    </div>
+
                   </div>
                   <button 
                     id="addmenuitemsubmit"
                     type="submit"
                     disabled={!formik.isValid || !formik.dirty}
-                    className={` w-full border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
+                    className={` w-full rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
                     >
                     {t("general.save")}
                   </button>
@@ -411,8 +415,10 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               )
             }}
             </Formik>
-          </div>
-          <div className="border h-full w-[40%] overflow-y-auto rounded-lg">
+        </div>
+        <div className="flex w-[40%] gap-2 flex-col">
+
+          <div className="border h-full w-full overflow-y-auto rounded-lg">
             {/* @todo tłumacz */}
             {selectedIngredients.length>0
             ?
@@ -430,7 +436,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   </p>
 
                   <button 
-                    className=" "
+                    className="hover:text-error "
                     onClick={()=>{
                       setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>{
                         return ingredientToRemove.ingredientId!==ingredient.ingredientId
@@ -447,8 +453,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             //@todo tlumacz 
             }
           </div>
+          <button className="border rounded-lg hover:bg-error hover:text-white bg-grey-0">
+              Clear all ingredients
+              {/* @todo t */}
+          </button>
         </div>
+
       </div>
+    </div>
 
   );
 };
