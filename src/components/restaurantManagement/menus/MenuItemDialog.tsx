@@ -226,8 +226,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   return (
     
-    <div className="w-full h-full ">
-      <span className="flex w-full mb-4 pb-2 border-b justify-between">
+    <div className="w-full h-full flex flex-col gap-4">
+      <span className="flex w-full   items-center border-b justify-between">
 
         <h1 className="text-lg ">
             {editedMenuItem
@@ -235,13 +235,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               : t("restaurant-management.menu.newMenuItem")}
         </h1>
 
-        <button onClick={()=>onClose()} className="hover:text-error">
+        <button onClick={()=>onClose()} className="hover:text-primary">
           <CloseSharp/>
         </button>
 
       </span>
-      <div className="flex  w-full h-[90%] gap-4">
-        <div className="flex w-[60%] h-full flex-col gap-2">
+      <div className="flex w-full h-full ">
+        <div className="flex w-3/5 h-full flex-col gap-6 pr-4">
           <Formik  
             initialValues={initialValuesIng} 
             onSubmit={handleSubmitIng}
@@ -256,7 +256,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       id="ingredientId" 
                       name="ingredientId" 
                       label="Ingredient"
-                      className="w-[65%] border-0 border-b"
+                      className="w-2/3 border-0 border-b"
                     >
                       <option value="" id="ingredientSelector-option-default">Select an ingredient</option>
                         {/* @todo tlumaczenie  */}
@@ -268,7 +268,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           </option>)
                         }
                     </Field>
-                    <div className="flex w-[35%]">
+                    <div className="flex w-1/3">
                       <Field 
                         type="text" 
                         id="amountUsed" 
@@ -305,58 +305,57 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 <Form>
                   <div  
                     id="addmenuitem-form-containter"
-                    className="form-container flex h-full flex-col  items-center gap-8"
+                    className="  w-full flex h-full  items-center flex-col gap-6 "
                   >
-                    <div className="flex w-full flex-col items-center gap-6">
-                      <Field
-                        type="text"
-                        id="name"
-                        name="name"
-                        helperText={
-                          formik.errors.name &&
-                          formik.touched.name &&
-                          formik.errors.name
-                        }
-                        label="Name" //@TODO tłumaczenia
-                        variant="standard"
-                        color="primary"
-                        className={` w-full  ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                        as={TextField}
-                      />
-                      
-                      <Field
-                        type="text"
-                        id="alternateName"
-                        name="alternateName"
-                        helperText={
-                          formik.errors.alternateName &&
-                          formik.touched.alternateName &&
-                          formik.errors.alternateName
-                        }
-                        label="Name translation" //@TODO tłumaczenia
-                        variant="standard"
-                        color="primary"
-                        className={` w-full  ${!(formik.errors.alternateName && formik.touched.alternateName) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                        as={TextField}
-
-                      />
-                      <Field
-                        type="text"
-                        id="price"
-                        name="price"
-                        helperText={
-                          formik.errors.price &&
-                          formik.touched.price &&
-                          formik.errors.price
-                        }
-                        label="Price" //@todo tłumaczenia
-                        variant="standard"
-                        color="primary"
-                        className={` w-full  ${!(formik.errors.price && formik.touched.price) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                        as={TextField}
-
-                      />
+                    <Field
+                      type="text"
+                      id="name"
+                      name="name"
+                      helperText={
+                        formik.errors.name &&
+                        formik.touched.name &&
+                        formik.errors.name
+                      }
+                      label="Name" //@TODO tłumaczenia
+                      variant="standard"
+                      color="primary"
+                      className={` w-full  ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                      as={TextField}
+                    />
                     
+                    <Field
+                      type="text"
+                      id="alternateName"
+                      name="alternateName"
+                      helperText={
+                        formik.errors.alternateName &&
+                        formik.touched.alternateName &&
+                        formik.errors.alternateName
+                      }
+                      label="Name translation" //@TODO tłumaczenia
+                      variant="standard"
+                      color="primary"
+                      className={` w-full  ${!(formik.errors.alternateName && formik.touched.alternateName) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                      as={TextField}
+
+                    />
+                    <Field
+                      type="text"
+                      id="price"
+                      name="price"
+                      helperText={
+                        formik.errors.price &&
+                        formik.touched.price &&
+                        formik.errors.price
+                      }
+                      label="Price" //@todo tłumaczenia
+                      variant="standard"
+                      color="primary"
+                      className={` w-full  ${!(formik.errors.price && formik.touched.price) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
+                      as={TextField}
+
+                    />
+                  
                     {menuType === "Alcohol" && (
                       <Field
                         type="text"
@@ -375,14 +374,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
                       />
                     )}
-                    </div>                     
 
 
                       
-                    <div className="flex w-full h-[10%] text-ellipsis  gap-2">
+                    <div className="flex w-full gap-2">
                       <label
                         htmlFor="menuItemPhotoUpload"
-                        className="w-[60%] justify-center items-center text-center flex p-1 gap-2 hover:cursor-pointer bg-grey-0 text-black border-black border rounded-lg text-black hover:text-primary"
+                        className="w-1/2 justify-center items-center  flex p-1 gap-2 hover:cursor-pointer bg-grey-0 text-black border-black border rounded-lg text-black hover:text-primary"
                       >
                         <CloudUploadIcon/>
                         <p>
@@ -397,28 +395,29 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         />
 
                       </label>
-                      <span className="w-[40%] h-[10%]">
-                        {t("restaurant-management.menu.selectedFile")}: {photoFileName?"photo successfully loaded":"none"}
-                      </span>
+                      <p className="w-1/2 text-nowrap  overflow-hidden text-ellipsis">
+                        {t("restaurant-management.menu.selectedFile")}:<br/>{photoFileName?photoFileName:"none"}
+                      </p>
                     </div>
 
+                    <button 
+                      id="addmenuitemsubmit"
+                      type="submit"
+                      disabled={!formik.isValid || !formik.dirty}
+                      className={`  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
+                      >
+                      {t("general.save")}
+                    </button>
                   </div>
-                  <button 
-                    id="addmenuitemsubmit"
-                    type="submit"
-                    disabled={!formik.isValid || !formik.dirty}
-                    className={` w-full rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
-                    >
-                    {t("general.save")}
-                  </button>
+
                 </Form>
               )
             }}
             </Formik>
         </div>
-        <div className="flex w-[40%] gap-2 flex-col">
+        <div className="flex w-2/5 justify-between items-center  gap-2 flex-col">
 
-          <div className="border h-full w-full overflow-y-auto rounded-lg">
+          <div className="border w-full h-full overflow-y-auto rounded-lg">
             {/* @todo tłumacz */}
             {selectedIngredients.length>0
             ?
@@ -428,7 +427,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               {
                 selectedIngredients.map((ingredient) => 
                 <li 
-                  className="border rounded-md h-fit justify-between w-full flex p-1 "
+                  className="border rounded-md justify-between w-full flex p-1 "
                 > 
                   <p className="overflow-hidden text-ellipsis">
 
@@ -453,8 +452,10 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             //@todo tlumacz 
             }
           </div>
-          <button className="border rounded-lg hover:bg-error hover:text-white bg-grey-0">
-              Clear all ingredients
+          <button
+           className={`  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+          >
+              Clear
               {/* @todo t */}
           </button>
         </div>
