@@ -540,7 +540,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         open={isMenuItemPopupOpen}
         onClose={() => setIsMenuItemPopupOpen(false)}
       >
-        <div className=" h-[500px] w-[600px] rounded-xl bg-white p-6">
+        <div className=" h-[500px] w-[700px] rounded-xl bg-white p-5">
 
         <MenuItemDialog 
         menuType={
