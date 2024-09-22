@@ -540,16 +540,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         open={isMenuItemPopupOpen}
         onClose={() => setIsMenuItemPopupOpen(false)}
       >
-        <div className=" h-[500px] w-[700px] rounded-xl bg-white p-5">
+        <div className=" h-[510px] w-[700px] rounded-xl  bg-white p-5">
 
         <MenuItemDialog 
-        menuType={
-          selectedMenuIndex !== null
-            ? menus[selectedMenuIndex]?.menuType || ""
-            : ""
-        }
-        restaurantId={activeRestaurantId}
-        onClose={() => setIsMenuItemPopupOpen(false)}
+        
+         
+          restaurantId={activeRestaurantId}
+          onClose={() => setIsMenuItemPopupOpen(false)}
+          menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
 
         />
         </div>
@@ -564,11 +562,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       >
         <div>
           <MenuItemDialog
-            menuType={
-              selectedMenuIndex !== null
-                ? menus[selectedMenuIndex]?.menuType || ""
-                : ""
-            }
+            menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
+
             restaurantId={activeRestaurantId}
             editedMenuItem={editedMenuItem}
             onClose={() => setIsMenuItemEditPopupOpen(false)}
