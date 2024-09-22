@@ -60,7 +60,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     [key: number]: string[];
   }>({});
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(
-    null,
+    null
   );
   const [editMenu, setEditMenu] = useState<Menu | null>(null);
   const [editedMenuItem, setEditedMenuItem] = useState<MenuItemType | null>(
@@ -404,8 +404,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   };
 
   return (
-    <div className="h-full w-full flex-col space-y-2 rounded-lg bg-white p-2">
-      <div>
+    <div className="h-full w-full">
+      <div className="bg-grey-1 h-[5%]">
         {selectedMenuIndex === null && (
           <div className="flex justify-start">
             <IconButton onClick={() => setIsMenuPopupOpen(true)}>
@@ -414,160 +414,162 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             </IconButton>
           </div>
         )}
-        <div className="float-end">
-          <IconButton
+        <div className="flex h-full justify-start gap-1">
+          {activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId]
+          ? menuNamesByRestaurant[activeRestaurantId].map(
+            (name: string, index: number) => (
+            <button
+              key={index}
+              className={` rounded-t-md p-2 flex text-2xl font-bold  ${index === selectedMenuIndex ? "bg-white  text-primary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
+              onClick={() =>
+                setSelectedMenuIndex(
+                  index === selectedMenuIndex ? null : index,
+                )
+              }
+            >
+              {name}
+            </button>))
+          : null
+          }
+          <button
+            className={` rounded-t-md p-2 flex text-2xl font-bold self-end h-full "text-grey-2 bg-grey-0 `}
             onClick={handleMenuOpen}
             disabled={selectedMenuIndex === null}
           >
             {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
               <MoreActions actions={actions} />
             )}
-          </IconButton>
+          </button>
         </div>
-        <div className="flex justify-start">
-          {activeRestaurantId !== null &&
-          menuNamesByRestaurant[activeRestaurantId]
-            ? menuNamesByRestaurant[activeRestaurantId].map(
-                (name: string, index: number) => (
-                  <Button
-                    variant="text"
-                    key={index}
-                    className={`mr-1 p-1 text-2xl font-bold  ${index === selectedMenuIndex ? "bg-gray-200 text-primary dark:text-secondary-2 " : "text-grey-2"}`}
-                    onClick={() =>
-                      setSelectedMenuIndex(
-                        index === selectedMenuIndex ? null : index,
-                      )
-                    }
-                  >
-                    {name}
-                  </Button>
-                ),
-              )
-            : null}
-        </div>
+    
       </div>
+      <div className="h-[95%] w-full flex-col rounded-tl-none rounded-lg bg-white ">
+      
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          {selectedMenuIndex !== null && (
-            <Button
-              startIcon={<AddIcon className="text-secondary-2" />}
-              onClick={() => {
-                setIsMenuItemPopupOpen(true);
-              }}
-            >
-              <span className="ml-1 text-black dark:text-white">
-                ADD MENU ITEM
-              </span>
-            </Button>
-          )}
-          {selectedMenuIndex !== null && (
-            <MenuOrderBy
-              filterAnchorEl={filterAnchorEl}
-              handleSortOpen={handleSortOpen}
-              handleSortClose={handleSortClose}
-              handleSortAlphabeticallyAsc={handleSortAlphabeticallyAsc}
-              handleSortAlphabeticallyDesc={handleSortAlphabeticallyDesc}
-              handleSortPriceAsc={handleSortPriceAsc}
-              handleSortPriceDesc={handleSortPriceDesc}
-              handleSortAlcoholAsc={handleSortAlcoholAsc}
-              handleSortAlcoholDesc={handleSortAlcoholDesc}
-              handleClearSort={handleClearSort}
-            />
-          )}
-        </div>
-        <div className="flex-grow">
-          {selectedMenuIndex !== null && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-              }}
-            >
-              <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-              <TextField
-                type="text"
-                label={t("general.search")}
-                onChange={handleSearchInputChange}
-                variant="standard"
-                className="rounded-lg p-1 dark:bg-grey-6 dark:text-white"
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            {selectedMenuIndex !== null && (
+              <Button
+                startIcon={<AddIcon className="text-secondary-2" />}
+                onClick={() => {
+                  setIsMenuItemPopupOpen(true);
+                }}
+              >
+                <span className="ml-1 text-black dark:text-white">
+                  ADD MENU ITEM
+                {/* @todo t */}
+                </span>
+              </Button>
+            )}
+            {selectedMenuIndex !== null && (
+              <MenuOrderBy
+                filterAnchorEl={filterAnchorEl}
+                handleSortOpen={handleSortOpen}
+                handleSortClose={handleSortClose}
+                handleSortAlphabeticallyAsc={handleSortAlphabeticallyAsc}
+                handleSortAlphabeticallyDesc={handleSortAlphabeticallyDesc}
+                handleSortPriceAsc={handleSortPriceAsc}
+                handleSortPriceDesc={handleSortPriceDesc}
+                handleSortAlcoholAsc={handleSortAlcoholAsc}
+                handleSortAlcoholDesc={handleSortAlcoholDesc}
+                handleClearSort={handleClearSort}
               />
-            </Box>
+            )}
+          </div>
+          <div className="flex-grow">
+            {selectedMenuIndex !== null && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                }}
+              >
+                <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+                <TextField
+                  type="text"
+                  label={t("general.search")}
+                  onChange={handleSearchInputChange}
+                  variant="standard"
+                  className="rounded-lg p-1 dark:bg-grey-6 dark:text-white"
+                />
+              </Box>
+            )}
+          </div>
+        </div>
+
+        <div className="m-1 flex flex-wrap">
+          {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
+            <>
+              {filteredMenuItems.map((menuItem: MenuItemType) => (
+                <MenuItem
+                  key={menuItem.menuItemId}
+                  menuItem={menuItem}
+                  menuType={menus[selectedMenuIndex].menuType}
+                  onDelete={() => handleDeleteMenuItem(menuItem)}
+                  onEdit={() => handleEditMenuItem(menuItem)}
+                />
+              ))}
+            </>
           )}
         </div>
-      </div>
-
-      <div className="m-1 flex flex-wrap">
-        {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-          <>
-            {filteredMenuItems.map((menuItem: MenuItemType) => (
-              <MenuItem
-                key={menuItem.menuItemId}
-                menuItem={menuItem}
-                menuType={menus[selectedMenuIndex].menuType}
-                onDelete={() => handleDeleteMenuItem(menuItem)}
-                onEdit={() => handleEditMenuItem(menuItem)}
-              />
-            ))}
-          </>
-        )}
-      </div>
-      <MenuDialog
-        open={isMenuPopupOpen}
-        onClose={() => setIsMenuPopupOpen(false)}
-        onSave={handleSaveNewMenu}
-      />
-      <MenuDialog
-        open={isEditMenuPopupOpen}
-        onClose={() => setIsEditMenuPopupOpen(false)}
-        onSave={handleSaveEditedMenu}
-        editedMenu={editedMenu}
-      />
-      <Modal
-        className="flex items-center justify-center"
-        open={isMenuItemPopupOpen}
-        onClose={() => setIsMenuItemPopupOpen(false)}
-      >
-        <div className=" h-[510px] w-[700px] rounded-xl  bg-white p-5">
-
-        <MenuItemDialog 
-        
-         
-          restaurantId={activeRestaurantId}
-          onClose={() => setIsMenuItemPopupOpen(false)}
-          menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
-
+        <MenuDialog
+          open={isMenuPopupOpen}
+          onClose={() => setIsMenuPopupOpen(false)}
+          onSave={handleSaveNewMenu}
         />
-        </div>
+        <MenuDialog
+          open={isEditMenuPopupOpen}
+          onClose={() => setIsEditMenuPopupOpen(false)}
+          onSave={handleSaveEditedMenu}
+          editedMenu={editedMenu}
+        />
+        <Modal
+          className="flex items-center justify-center"
+          open={isMenuItemPopupOpen}
+          onClose={() => setIsMenuItemPopupOpen(false)}
+        >
+          <div className=" h-[510px] w-[700px] rounded-xl  bg-white p-5">
 
-      </Modal>
-      <Modal
-        className="flex items-center justify-center"
-        open={isMenuItemEditPopupOpen}
-
-        onClose={() => setIsMenuItemEditPopupOpen(false)}
-
-      >
-        <div>
-          <MenuItemDialog
+          <MenuItemDialog 
+          
+          
+            restaurantId={activeRestaurantId}
+            onClose={() => setIsMenuItemPopupOpen(false)}
             menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
 
-            restaurantId={activeRestaurantId}
-            editedMenuItem={editedMenuItem}
-            onClose={() => setIsMenuItemEditPopupOpen(false)}
-
           />
+          </div>
 
-        </div>
-      </Modal>
-      <ConfirmationDialog
-        open={openConfirmation}
-        onClose={() => setOpenConfirmation(false)}
-        onConfirm={handleDeleteMenu}
-        confirmationText={`Are you sure you want to delete this menu?`}
-      />
+        </Modal>
+        <Modal
+          className="flex items-center justify-center"
+          open={isMenuItemEditPopupOpen}
+
+          onClose={() => setIsMenuItemEditPopupOpen(false)}
+
+        >
+          <div>
+            <MenuItemDialog
+              menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
+
+              restaurantId={activeRestaurantId}
+              editedMenuItem={editedMenuItem}
+              onClose={() => setIsMenuItemEditPopupOpen(false)}
+
+            />
+
+          </div>
+        </Modal>
+        <ConfirmationDialog
+          open={openConfirmation}
+          onClose={() => setOpenConfirmation(false)}
+          onConfirm={handleDeleteMenu}
+          confirmationText={`Are you sure you want to delete this menu?`}
+        />
+      </div>
     </div>
+  
   );
 };
 

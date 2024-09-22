@@ -557,9 +557,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               </Formik>
             </div>
 
-            <div className="flex w-full h-[80%] items-center   gap-6 flex-col">
+            <div className="flex w-full h-[80%] items-center gap-6 flex-col">
 
-              <div className="border w-full  h-full overflow-auto rounded-lg">
+              <div className="border w-[90%]  h-full overflow-auto rounded-lg p-1">
                 {/* @todo tłumacz */}
                 {selectedMenuItems.length>0
                 ?
