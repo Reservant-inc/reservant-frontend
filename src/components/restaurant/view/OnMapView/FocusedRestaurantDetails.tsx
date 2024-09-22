@@ -14,6 +14,8 @@ import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
 import RestaurantEventsModal from "../../events/RestaurantEventsModal";
+import MyEventsModal from "../../events/MyEventsModal"; // Import MyEventsModal
+
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -28,6 +30,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [reviews, setReviews] = useState<ReviewType[]>([]);
   // TEMP FOR EVENTS MODAL
   const [showEventsModal, setShowEventsModal] = useState<boolean>(false); // Modal state
+  const [showMyEventsModal, setShowMyEventsModal] = useState<boolean>(false); // Modal state for MyEvents
+
 
 
   const [t] = useTranslation("global")
@@ -129,7 +133,16 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             onClose={() => setShowEventsModal(false)} // Close the events modal
             restaurantId={activeRestaurant.restaurantId}
           />
-          {/* TEMP FOR EVENTS MODAL */}
+          {/* TEMP FOR MYEVENTS MODAL */}
+          <button
+              onClick={() => setShowMyEventsModal(true)} // Open the MyEvents modal
+            >
+              TEMPORARY MyEvents
+            </button>
+            <MyEventsModal
+              open={showMyEventsModal}
+              onClose={() => setShowMyEventsModal(false)} // Close the MyEvents modal
+            />
           </div>
         </>
       )}

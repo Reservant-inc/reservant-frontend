@@ -36,7 +36,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
         await fetchDELETE(`/events/${eventId}`);
         onClose();
         setTimeout(() => {
-          setShowRemovedModal(true); // Wyswietlenie Event Removed po malym opoznieniu (naprawic potem)
+          setShowRemovedModal(true); 
         }, 300);
       } catch (err) {
         console.error("Error deleting event:", err);
@@ -45,8 +45,8 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     };
   
     const handleGoToMyEvents = () => {
-      onClose(); // Zamkniecie EventDetailsModal
-      setShowMyEventsModal(true); // Otworzenie MyEventsModal
+      onClose();
+      setShowMyEventsModal(true);
     };
   
     React.useEffect(() => {
@@ -56,6 +56,9 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     }, [eventId, open]);
   
     if (!open) return null;
+  
+    const currentParticipants = eventDetails?.participants?.length || 0;
+    const maxParticipants = eventDetails?.maxPeople || 0;
   
     return (
       <>
@@ -75,6 +78,25 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                 <p><strong>Must Join Until:</strong> {eventDetails.mustJoinUntil}</p>
                 <p><strong>Creator:</strong> {eventDetails.creatorFullName}</p>
                 <p><strong>Restaurant:</strong> {eventDetails.restaurantName}</p>
+                <p><strong>Participants:</strong> {currentParticipants} / {maxParticipants}</p>
+  
+                {currentParticipants > 0 && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-semibold">Participants:</h3>
+                    <ul>
+                      {eventDetails.participants.map((participant: any) => (
+                        <li key={participant.userId} className="flex items-center space-x-2 mt-2">
+                          <img
+                            src={participant.photo}
+                            alt={`${participant.firstName} ${participant.lastName}`}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <span>{participant.firstName} {participant.lastName}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
   
@@ -98,4 +120,4 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     );
   };
   
-  export default EventDetailsModal;
+export default EventDetailsModal;
