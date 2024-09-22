@@ -5,7 +5,26 @@
         "save": "Save",
         "results": "Results",
         "no-results": "No results",
-        "close": "Close"
+        "close": "Close",
+        "delete": "Delete",
+        "create": "Create",
+        "no-description": "No description",
+        "edit": "Edit",
+        "delete-confirmation": "Are you sure you want to delete",
+        "confirmation": "Confirmation",
+        "yes": "Yes",
+        "upload": "Upload file",
+        "details": "Details",
+        "hello": "Hello"
+    },
+    "filters": {
+        "filter-by": "FILTER BY",
+        "name": "Name alphabetically",
+        "price-asc": "Price ascending",
+        "price-desc": "Price descending",
+        "alcohol-percentage-asc": "Alcohol percentage ascending",
+        "alcohol-percentage-desc": "Alcohol percentage descending",
+        "clear": "Clear filters"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -174,8 +193,17 @@
             "menuItemPriceMustBeNumber": "Price must be number",
             "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
             "selectedFile": "Selected file"
-        
         }
+    },
+    "menu": {
+        "active-until": "Active until",
+        "no-menu": "There are no dishes for this menu",
+        "alcohol-percentage": "Alcohol Percentage",
+        "ingredients-information": "Ingredients Information",
+        "add-menu": "Add menu",
+        "edit-menu": "Edit menu",
+        "delete-menu": "Delete menu",
+        "add-menu-item": "Add menu item"
     },
     "tools": {
         "main":{
@@ -206,7 +234,13 @@
         "search": "Search for friends",
         "friends": "Friends",
         "undo": "Undo request",
-        "send": "Send request"
+        "send": "Send request",
+        "accept": "Accept",
+        "reject": "Reject",
+        "sent": "Sent",
+        "friend-since": "Friend since",
+        "invited": "You are already invited",
+        "invite": "Invite"
     },
     "home-page": {
         "restaurants": "Restaurants near you",
@@ -220,13 +254,96 @@
         "create-event": "Create event",
         "order": "Order",
         "is-delivering": "Delivery",
-        "delivery-fee": "Delivery fee"
+        "delivery-fee": "Delivery fee",
+        "no-menu": "Menu has not been added yet"
     },
     "reviews": {
         "filter": "Filter",
         "filter-tooltip": "filter reviews",
         "reviews": "Reviews",
         "no-reviews": "No reviews",
-        "add-review": "Add review"
+        "add-review": "Add review",
+        "ratings": "Ratings",
+        "no-description": "No description",
+        "respond": "Respond"
+    },
+    "navbar": {
+        "notifications": "Notifications"
+    },
+    "cart": {
+        "total-cost": "Total cost",
+        "empty-basket": "Your basket is empty, add something",
+        "my-basket": "My basket",
+        "quantity": "Quantity",
+        "note": "Write a note to your order... (optional)",
+        "your-note": "Your note",
+        "add-promo-code": "Add promo code",
+        "promo-code": "Promo code",
+        "got-to-summary": "Go to summary",
+        "my-reservation": "My reservation",
+        "on-site": "On site",
+        "delivery": "Delivery",
+        "collection": "Personal collection",
+        "show-gallery": "Show gallery"
+    },
+    "events": {
+        "event-craetion": "Creating an event for this venue",
+        "temporarly": "TEMPORARLY:",
+        "add-event": "Craete an event",
+        "theme": "Theme",
+        "intrested": "Intrested",
+        "no-events": "No events available"
+    }, 
+    "employees": {
+        "add-employee": "Add employee",
+        "name": "Name",
+        "surname": "Surname",
+        "phone-number": "Phone number",
+        "actions": "Actions",
+        "hall-role": "Hall role",
+        "backdoor-role": "Backdoor role",
+        "assigned-since": "Assigned since",
+        "assigned-until": "Assigned until",
+        "restuarnt-name": "Eestaurant Name"
+    },
+    "reservations": {
+        "client-info": "Client Info",
+        "client": "Client",
+        "address": "Address",
+        "note": "Note",
+        "order-info": "Order Info",
+        "name-of-menu-item": "Name of Menu Item",
+        "amount": "Amount",
+        "price": "Price",
+        "status": "Status",
+        "order-id": "Order ID",
+        "visit-date": "Visit Date",
+        "total-cost": "Total Cost",
+        "client-name": "Client Name",
+        "actions": "Actions",
+        "orderDetails": "Order details",
+        "employee": "Employee",
+        "items": "Items",
+        "reservations": "Reservations",
+        "orders": "Orders"
+    },
+    "restaurants": {
+        "add-restaurand": "Add restaurant",
+        "name": "Name",
+        "local-type": "Premisses type",
+        "city": "City",
+        "verified": "Verified",
+        "group": "Group",
+        "select": "Select a restaurant",
+        "opinions": "Customers opinions",
+        "empolyees": "Employee management",
+        "menu": "Menus",
+        "dashboard": "Restaurant Dashboard",
+        "my": "My restaurants",
+        "restaurants": "Restaurants",
+        "menu-menage": "Menu management",
+        "shipment-menage": "Shipment management",
+        "statistics": "Statistics",
+        "reservations": "Reservation history"
     }
 }

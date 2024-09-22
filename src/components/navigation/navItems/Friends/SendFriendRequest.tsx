@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { RequestType, FriendType } from "../../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface SendFriendRequestProps {
   user: {
@@ -32,6 +33,7 @@ const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
   handleCancelInvite,
   handleRemoveFriend,
 }) => {
+  const { t } = useTranslation("global");
   const dateSent = request
     ? new Date(request.dateSent).toLocaleDateString()
     : null;
@@ -51,12 +53,12 @@ const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
           <Typography variant="body1">{user.senderName}</Typography>
           {request && (
             <Typography variant="body2" color="textSecondary">
-              Wysłano {dateSent}
+              {t("friends-sent")} {dateSent}
             </Typography>
           )}
           {isFriend && (
             <Typography variant="body2" color="textSecondary">
-              Znajomy od {dateAccepted}
+              {t("friends.friend-since")} {dateAccepted}
             </Typography>
           )}
         </Grid>
@@ -71,7 +73,7 @@ const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
         >
           {isRequestReceived ? (
             <Typography variant="body2" color="textSecondary">
-              Już Cię zaprosił
+              {t("friends.invited")}
             </Typography>
           ) : request ? (
             <Button
@@ -79,7 +81,7 @@ const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
               className="bg-primary text-white"
               onClick={() => handleCancelInvite(user.senderId)}
             >
-              Anuluj
+              {t("genral-cancel")}
             </Button>
           ) : isFriend ? (
             <Button
@@ -87,7 +89,7 @@ const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
               className="bg-primary text-white"
               onClick={() => handleRemoveFriend(user.senderId)}
             >
-              Usuń
+              {t("genral-delete")}
             </Button>
           ) : (
             <Button
@@ -95,7 +97,7 @@ const SendFriendRequest: React.FC<SendFriendRequestProps> = ({
               style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
               onClick={() => handleInvite(user.senderId)}
             >
-              Zaproś
+              {t("friends.invite")}
             </Button>
           )}
         </Grid>

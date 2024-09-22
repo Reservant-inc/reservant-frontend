@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchGET } from "../../../../services/APIconn";
 import FocusedRestaurantMenuItem from "./FocusedRestaurantMenuItem";
 import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface FocusedRestaurantMenuListProps {
   restaurantId: number;
@@ -14,6 +15,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
   const [menus, setMenus] = useState<MenuWithDescriptionType[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     const fetchMenus = async () => {
@@ -123,7 +125,7 @@ const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
                 <FocusedRestaurantMenuItem key={item.id} item={item} />
               ))
             ) : (
-              <p>Brak dań dla tego menu.</p>
+              <p>{t('home-page.no-menu')}</p>
             )}
           </div>
         ) : null,

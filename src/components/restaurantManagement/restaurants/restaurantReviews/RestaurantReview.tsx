@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Button } from "@mui/material";
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { ReviewType } from "../../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantReviewProps {
   review: ReviewType
@@ -11,6 +12,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   review
 }) => {
 
+  const { t } = useTranslation("global");
   const reducedDescription =
   review.contents.length > 100 ? review.contents.substring(0, 100) + "..." : review.contents;
 
@@ -27,7 +29,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
         {reducedDescription.replace(/\s/g, "").length > 0 ? (
           <p>{reducedDescription}</p>
         ) : (
-          <p className="italic">No description.</p>
+          <p className="italic">{t('reviews.no-description')}.</p>
         )}
         <div className="flex justify-end">
         </div>
@@ -37,7 +39,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           id="RestaurantReviewMoreButton"
           className="rounded-lg text-primary dark:text-secondary"
         >
-          Respond
+          {t('reviews.respond')}
         </Button>
       </div>
     </div>

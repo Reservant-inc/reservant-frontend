@@ -24,6 +24,7 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
   const { RestaurantAddEmployeeSchema } = useValidationSchemas();
   const [restaurants, setRestaurants] = useState<RestaurantShortType[]>([]);
 
+
   useEffect(() => {
     const getRestaurants = async () => {
       try {
@@ -121,7 +122,7 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
               <div className="form-container">
                 <div className="form-control flex flex-col">
                   <Field id="selectedRestaurant" default="Select a restaurant" name="selectedRestaurant" component="select">
-                    <option value="" id="addEmp-option-default">Select a restaurant</option>
+                    <option value="" id="addEmp-option-default">{t('restaurants.select')}</option>
                     {
                       restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
                     }

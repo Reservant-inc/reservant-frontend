@@ -9,6 +9,7 @@ import {
   Alert,
 } from "@mui/material";
 import { fetchPOST } from "../../../services/APIconn";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantReviewFormProps {
   onClose: () => void;
@@ -23,6 +24,8 @@ const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
   const [contents, setContents] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const { t } = useTranslation("global");
 
   const handleSubmit = async () => {
     const review = {
@@ -74,7 +77,7 @@ const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
       component="form"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-      <Typography variant="h6">Dodaj opinię</Typography>
+      <Typography variant="h6">{t('reviews.add-review')}</Typography>
       <Rating
         name="review-rating"
         value={stars}
@@ -96,7 +99,7 @@ const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
         style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
         onClick={handleSubmit}
       >
-        Dodaj opinię
+        {t('reviews.add-review')}
       </Button>
       <Snackbar
         open={!!errorMessage}

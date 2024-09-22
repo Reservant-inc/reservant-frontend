@@ -3,6 +3,7 @@ import { Button, Box, Typography } from "@mui/material";
 import RestaurantCreateEvent from "./RestaurantCreateEvent";
 import { fetchGET, getImage } from "../../../../../services/APIconn";
 import DefaultPic from "../../../../../assets/images/no-image.png"
+import { useTranslation } from "react-i18next";
 
 interface Event {
   eventId: number;
@@ -27,6 +28,8 @@ const RestaurantEventsView: React.FC<RestaurantEventsViewProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState<string>("");
   const [city, setCity] = useState<string>("");
+
+  const { t } = useTranslation("global");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -57,9 +60,9 @@ const RestaurantEventsView: React.FC<RestaurantEventsViewProps> = ({
 
   return (
     <div>
-      TYMCZASOWO:
+      {t('cart.temporarly')}:
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Dodaj event
+        {t('cart.add-event')}:
       </Button>
       {events.length > 0 ? (
         events.map((event) => (
@@ -92,18 +95,18 @@ const RestaurantEventsView: React.FC<RestaurantEventsViewProps> = ({
               {formatDate(event.time)}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1, fontWeight: "bold" }}>
-              {restaurantName} - Tematyka
+              {restaurantName} - {t('cart.theme')}
             </Typography>
             <Typography variant="body2" sx={{ mb: 1 }}>
               {event.creatorFullName} - {city}
             </Typography>
             <Typography variant="body2">
-              {event.numberInterested} - interested
+              {event.numberInterested} - {t('cart.intrested')}
             </Typography>
           </Box>
         ))
       ) : (
-        <Typography>No events available</Typography>
+        <Typography>{t('cart.no-events')}</Typography>
       )}
       <RestaurantCreateEvent
         open={open}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography, TextField } from "@mui/material";
 import { fetchPOST } from "../../../../../services/APIconn";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantCreateEventProps {
   open: boolean;
@@ -20,6 +21,7 @@ const RestaurantCreateEvent: React.FC<RestaurantCreateEventProps> = ({
   const [koniecPrzyjmowaniaZgloszen, setKoniecPrzyjmowaniaZgloszen] =
     useState<Date | null>(new Date());
   const [opis, setOpis] = useState<string>("");
+  const { t } = useTranslation("global");
 
   const handleSubmit = async () => {
     const eventBody = {
@@ -59,7 +61,7 @@ const RestaurantCreateEvent: React.FC<RestaurantCreateEventProps> = ({
         }}
       >
         <Typography id="modal-title" variant="h6" component="h2">
-          Tworzenie wydarzenia dla lokalu {restaurantName}
+          {t('events.event-craetion')}{restaurantName}
         </Typography>
         <Box
           component="form"
@@ -101,10 +103,10 @@ const RestaurantCreateEvent: React.FC<RestaurantCreateEventProps> = ({
                 },
               }}
             >
-              Stwórz
+              {t('geral.create')}
             </Button>
             <Button onClick={handleClose} color="secondary">
-              Anuluj
+            {t('geral.cancel')}
             </Button>
           </Box>
         </Box>

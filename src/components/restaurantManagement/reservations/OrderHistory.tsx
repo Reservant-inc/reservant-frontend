@@ -21,6 +21,7 @@ import {
   Close as CancelIcon,
 } from "@mui/icons-material";
 import { MenuIteminOrderType } from "../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface OrderHistoryProps {
   activeRestaurantId: number | null;
@@ -45,6 +46,7 @@ const OrderRow: React.FC<OrderRowProps> = ({
   onDelete,
 }) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation("global");
 
   const toggleDetails = () => {
     setOpen(!open);
@@ -96,23 +98,23 @@ const OrderRow: React.FC<OrderRowProps> = ({
               <Box display="flex">
                 <Box flex={1}>
                   <Typography variant="h6" gutterBottom component="div">
-                    Client Info
+                    {t('reservations.client-info')}
                   </Typography>
-                  <Typography>Client: {row.clientName}</Typography>
-                  <Typography>Address: {row.address}</Typography>
-                  <Typography>Note: {row.notes}</Typography>
+                  <Typography>{t('reservations.client')}: {row.clientName}</Typography>
+                  <Typography>{t('reservations.address')}: {row.address}</Typography>
+                  <Typography>{t('reservations.note')}: {row.notes}</Typography>
                 </Box>
                 <Box flex={1}>
                   <Typography variant="h6" gutterBottom component="div">
-                    Order Info
+                  {t('reservations.order-info')}
                   </Typography>
                   <Table size="small" aria-label="menu items">
                     <TableHead>
                       <TableRow>
-                        <TableCell>Name of Menu Item</TableCell>
-                        <TableCell>Amount</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Status</TableCell>
+                        <TableCell>{t('reservations.name-of-menu-item')}</TableCell>
+                        <TableCell>{t('reservations.amount')}:</TableCell>
+                        <TableCell>{t('reservations.price')}</TableCell>
+                        <TableCell>{t('reservations.status')}</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -186,6 +188,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
   ]);
 
   const [isEditing, setIsEditing] = useState<{ [key: number]: boolean }>({});
+  const { t } = useTranslation("global");
 
   const handleEditClick = (id: number) => () => {
     setIsEditing({ ...isEditing, [id]: true });
@@ -209,12 +212,12 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ activeRestaurantId }) => {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Order ID</TableCell>
-            <TableCell>Visit Date</TableCell>
-            <TableCell>Total Cost</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Client Name</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell>{t('reservations.order-id')}</TableCell>
+            <TableCell>{t('reservations.visit-date')}</TableCell>
+            <TableCell>{t('reservations.total-cost')}</TableCell>
+            <TableCell>{t('reservations.status')}</TableCell>
+            <TableCell>{t('reservations.client-name')}</TableCell>
+            <TableCell>{t('reservations.actions')}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

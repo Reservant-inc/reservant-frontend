@@ -3,6 +3,7 @@ import { Box, Typography, IconButton, TextField, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { CartItemType } from "../../../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantCartViewProps {
   cart: CartItemType[];
@@ -14,6 +15,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
   ({ cart, incrementQuantity, decrementQuantity }) => {
     const [note, setNote] = useState<string>("");
     const [promoCode, setPromoCode] = useState<string>("");
+    const { t } = useTranslation("global");
 
     const totalAmount = useMemo(() => {
       return cart.reduce(
@@ -24,10 +26,10 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
 
     return (
       <Box className="flex flex-col items-center space-y-4 p-4">
-        <Typography variant="h4">Mój koszyk</Typography>
+        <Typography variant="h4">{t('cart.my-basket')}</Typography>
         {cart.length === 0 ? (
           <Typography variant="body1">
-            Twój koszyk jest pusty. Dodaj coś!
+            {t('cart.empty-basket')}!
           </Typography>
         ) : (
           cart.map((item) => (
@@ -41,11 +43,11 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
                   {item.price} zł x {item.quantity}
                 </Typography>
                 <Typography>
-                  Łącznie: {item.price * item.quantity} zł
+                  {t('cart.total-cost')}: {item.price * item.quantity} zł
                 </Typography>
               </Box>
               <Box className="flex items-center">
-                <Typography>Ilość: {item.quantity}</Typography>
+                <Typography>{t('cart.quantity')}: {item.quantity}</Typography>
                 <IconButton
                   onClick={() => decrementQuantity(item.menuItemId)}
                   sx={{
@@ -76,30 +78,30 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
         )}
 
         <Typography variant="body1" className="mt-4">
-          Napisz notatkę do zamówienia... (opcjonalnie)
+          {t("cart.note")}
         </Typography>
 
         <TextField
           rows={6}
           multiline={true}
-          placeholder="Twoja notatka"
+          placeholder={t("cart.your-note")}
           value={note}
           onChange={(e) => setNote(e.target.value)}
           style={{ width: "100%", maxWidth: 600 }}
         />
 
         <Typography variant="body1" className="mt-4">
-          Dodaj kod promocyjny
+          {t('cart.add-promo-code')}
         </Typography>
         <TextField
-          placeholder="Kod promocyjny"
+          placeholder={t('cart.promo-code')}
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
           style={{ width: "100%", maxWidth: 600 }}
         />
 
         <Box className="mt-4 flex w-full max-w-md justify-between">
-          <Typography variant="h6">Kwota całkowita</Typography>
+          <Typography variant="h6">{t('cart.total-cost')}</Typography>
           <Typography variant="h6">{totalAmount} zł</Typography>
         </Box>
 
@@ -107,7 +109,7 @@ const RestaurantCartView: React.FC<RestaurantCartViewProps> = React.memo(
           variant="contained"
           sx={{ bgcolor: "#a94c79", color: "#fefefe", mt: 4 }}
         >
-          Przejdź do podsumowania
+          {t('cart.go-to-summary')}
         </Button>
       </Box>
     );

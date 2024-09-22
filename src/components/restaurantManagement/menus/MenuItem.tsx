@@ -85,7 +85,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
           open={confirmationOpen}
           onClose={handleDeleteCancelled}
           onConfirm={handleDeleteConfirmed}
-          confirmationText={`Are you sure you want to delete ${name}?`}
+          confirmationText={`${t('general.delete-confirmation')} ${name}?`}
         />
       </CardContent>
     </Card>

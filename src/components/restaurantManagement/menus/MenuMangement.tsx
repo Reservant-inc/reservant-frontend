@@ -328,13 +328,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   const actions = [
     {
       icon: <AddIcon />,
-      name: "Add menu",
+      name: t('menu.add-menu'),
       onClick: () => setIsMenuPopupOpen(true),
     },
-    { icon: <EditIcon />, name: "Edit menu", onClick: handleEditMenu },
+    { icon: <EditIcon />, name: t('menu.edit-menu'), onClick: handleEditMenu },
     {
       icon: <DeleteIcon />,
-      name: "Delete menu",
+      name: t('menu.delete-menu'),
       onClick: () => setOpenConfirmation(true),
     },
   ];
@@ -411,7 +411,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           <div className="flex justify-start">
             <IconButton onClick={() => setIsMenuPopupOpen(true)}>
               <AddIcon className="text-secondary-2" />
-              <span className="ml-1 text-black dark:text-white">ADD MENU</span>
+              <span className="ml-1 text-black dark:text-white">{t('menu.add-menu')}</span>
             </IconButton>
           </div>
         )}
@@ -458,7 +458,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
               }}
             >
               <span className="ml-1 text-black dark:text-white">
-                ADD MENU ITEM
+                {t('menu.add-menu-item')}
               </span>
             </Button>
           )}

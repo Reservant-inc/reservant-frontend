@@ -87,7 +87,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         </div>
         <div className="h-full w-[50%] bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">
           <div className="h-[2rem] flex items-center">
-            <h1 className="text-xl font-mont-md">Customers opinions</h1>
+            <h1 className="text-xl font-mont-md">{t('restaurants.opinions')}</h1>
           </div>
           <div className="h-[calc(100%-6rem)]">
           </div>
@@ -103,7 +103,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       </div>
       <div className="flex h-full w-full flex-col gap-4 rounded-lg bg-white p-4 shadow-md">
         <div className="flex h-[2rem] items-center">
-          <h1 className="font-mont-md text-xl">Employee management</h1>
+          <h1 className="font-mont-md text-xl">{t('restaurants.employees')}</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
           <EmployeeRestaurantManagement
@@ -113,7 +113,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       </div>
       <div className="flex h-full w-full flex-col gap-4 rounded-lg bg-white p-4 shadow-md">
         <div className="flex h-[2rem] items-center">
-          <h1 className="font-mont-md text-xl">Menus</h1>
+          <h1 className="font-mont-md text-xl">{t('restaurants.menu')}</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
           <MenuManagement activeRestaurantId={activeRestaurantId} />

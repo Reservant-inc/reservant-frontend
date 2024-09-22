@@ -30,6 +30,7 @@ import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 import EmploymentsManagement from "./EmploymentsManagement";
+import { useTranslation } from "react-i18next";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -45,6 +46,8 @@ export default function EmployeeManagement() {
 
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
+
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     const populateRows = async () => {
@@ -97,7 +100,7 @@ export default function EmployeeManagement() {
             className="flex h-full items-center justify-center gap-2 rounded-lg p-2 text-primary hover:bg-grey-1"
           >
             <AddIcon />
-            <h1 className="font-mont-md text-lg">Add employee</h1>
+            <h1 className="font-mont-md text-lg">{t('employees.add-employee')}</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -164,21 +167,21 @@ export default function EmployeeManagement() {
     },
     {
       field: "firstName",
-      headerName: "Name",
+      headerName: t('employees.name'),
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "lastName",
-      headerName: "Surname",
+      headerName: t('employees.surname'),
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "phoneNumber",
-      headerName: "Phone Number",
+      headerName: t('employees.phone-number'),
       type: "string",
       width: 180,
       align: "left",
@@ -188,7 +191,7 @@ export default function EmployeeManagement() {
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: t('employees.actions'),
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
@@ -197,7 +200,7 @@ export default function EmployeeManagement() {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label="Save"
+              label={t('general.save')}
               id={
                 "EmployeeManagementSaveButton" +
                 rows[parseInt(id.toString())].login
@@ -213,7 +216,7 @@ export default function EmployeeManagement() {
                 "EmployeeManagementCancelEditButton" +
                 rows[parseInt(id.toString())].login
               }
-              label="Cancel"
+              label={t('general.cancel')}
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
@@ -224,7 +227,7 @@ export default function EmployeeManagement() {
         return [
           <GridActionsCellItem
             icon={<Restaurant />}
-            label="Employments"
+            label={t('employees.employments')}
             id={
               "EmployeeManagementEmploymentButton" +
               rows[parseInt(id.toString())].login
@@ -235,7 +238,7 @@ export default function EmployeeManagement() {
           />,
           <GridActionsCellItem
             icon={<EditIcon />}
-            label="Edit"
+            label={t('general.edit')}
             id={
               "EmployeeManagementEditButton" +
               rows[parseInt(id.toString())].login
@@ -250,7 +253,7 @@ export default function EmployeeManagement() {
               "EmployeeManagementDeleteButton" +
               rows[parseInt(id.toString())].login
             }
-            label="Delete"
+            label={t('general.delete')}
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
@@ -298,7 +301,7 @@ export default function EmployeeManagement() {
       >
         <div className=" rounded-xl bg-white p-3">
           <h1 className="text-center" id="employeeManagement-modal-header">
-            Employments
+            {t('employees.employments')}
           </h1>
 
           <RestaurantAddEmp empid={selectedId} />

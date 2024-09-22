@@ -5,6 +5,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { MenuItemWithDescriptionType } from "../../../services/types";
 import { getImage } from "../../../services/APIconn";
 import DefaultPic from "../../../assets/images/no-image.png"
+import { useTranslation } from "react-i18next";
 
 interface MenuItemComponentProps {
   item: MenuItemWithDescriptionType;
@@ -28,6 +29,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
   addToCart,
 }) => {
   const [areDetailsOpen, setAreDetailsOpen] = useState<boolean>(false);
+  const { t } = useTranslation("global");
 
   const handleOpen = () => {
     setAreDetailsOpen(true);
@@ -73,12 +75,12 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
           {item.description?.trim().length > 0 ? (  //w menuItem nie ma description???
             <p>{item.description}</p>
           ) : (
-            <p className="italic">Brak opisu.</p>
+            <p className="italic">{t('general.no-description')}.</p>
           )}
           {item.alcoholPercentage !== undefined &&
             item.alcoholPercentage > 0 && (
               <Typography variant="body2" color="textSecondary">
-                Zawartość alkoholu: {item.alcoholPercentage}%
+                {t('menu.alcohol-percentage')}: {item.alcoholPercentage}%
               </Typography>
             )}
         </div>
@@ -99,7 +101,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
       >
         <Box sx={style}>
           <div className="flex items-center justify-start space-x-4">
-            Informacje o składnikach
+            {t('menu.ingredients-information')}
           </div>
         </Box>
       </Modal>

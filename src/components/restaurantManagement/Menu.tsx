@@ -10,6 +10,7 @@ import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import Cookies from "js-cookie";
 import useWindowDimensions from "../../hooks/useWindowResize";
 import { UserInfo } from "../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface MenuInterface {
     setActivePage: Function
@@ -20,6 +21,7 @@ interface MenuInterface {
 
 const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, handleChangeActiveRestaurant }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(activePage);
+    const [t] = useTranslation("global");
 
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -42,13 +44,13 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
           <ListItemButton
             id="menu-listItem-dash-button"
             className={`rounded-lg ${selectedIndex === 0 ? "bg-grey-1" : ""}`}
-            onClick={(event) => handleListItemClick(event, 0, `Hello, ${user.firstName}`)}
+            onClick={(event) => handleListItemClick(event, 0, `${t('general.hello')}, ${user.firstName}`)}
           >
             <ListItemIcon id="menu-listItem-dash-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <AppsSharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-dash-text" primary="Restaurant Dashboard" />
+              <ListItemText id="menu-listItem-dash-text" primary={t('restaurants.dashboard')} />
             }
           </ListItemButton>
         </ListItem>
@@ -56,26 +58,26 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
           <ListItemButton
             id="menu-listItem-restaurants-button"
             className={`rounded-lg ${selectedIndex === 1 ? "bg-grey-1" : ""} `}
-            onClick={(event) => handleListItemClick(event, 1, 'My restaurants')}
+            onClick={(event) => handleListItemClick(event, 1, t('restaurants.my'))}
           >
             <ListItemIcon id="menu-listItem-restaurants-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <LocalDiningSharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-restaurants-text" primary="Restaurants" />}
+              <ListItemText id="menu-listItem-restaurants-text" primary={t('restaurants.restaurants')} />}
           </ListItemButton>
         </ListItem>
         <ListItem id="menu-listItem-employees">
           <ListItemButton
             id="menu-listItem-employees-button"
             className={`rounded-lg ${selectedIndex === 2 ? "bg-grey-1" : ""}  `}
-            onClick={(event) => handleListItemClick(event, 2, 'Employee management')}
+            onClick={(event) => handleListItemClick(event, 2, t('restaurants.employees'))}
           >
             <ListItemIcon id="menu-listItem-emp-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <PeopleAltSharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-emp-text" primary="Employee management" />}
+              <ListItemText id="menu-listItem-emp-text" primary={t('restaurants.employees')} />}
           </ListItemButton>
         </ListItem>
         <ListItem id="menu-listItem-menuManagement">
@@ -83,13 +85,13 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             id="menu-listItem-menuManagement-button"
 
             className={`rounded-lg ${selectedIndex === 3 ? "bg-grey-1" : ""} `}
-            onClick={(event) => handleListItemClick(event, 3, 'Menu management')}
+            onClick={(event) => handleListItemClick(event, 3, t('restaurants.menu-menage'))}
           >
             <ListItemIcon id="menu-listItem-menuManagement-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <MenuBookSharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-menuManagement-text" primary="Menu management" />
+              <ListItemText id="menu-listItem-menuManagement-text" primary={t('restaurants.menu-menage')} />
             }
           </ListItemButton>
         </ListItem>
@@ -98,13 +100,13 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             id="menu-listItem-Shipment-button"
 
             className={`rounded-lg ${selectedIndex === 4 ? "bg-grey-1" : ""}  `}
-            onClick={(event) => handleListItemClick(event, 4, 'Shipment management')}
+            onClick={(event) => handleListItemClick(event, 4, t('restaurants.shipment-menage'))}
           >
             <ListItemIcon id="menu-listItem-shipment-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <InventorySharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-shipment-text" primary="Shipment management" />
+              <ListItemText id="menu-listItem-shipment-text" primary={t('restaurants.shipment-menage')}/>
             }
           </ListItemButton>
         </ListItem>
@@ -113,13 +115,13 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             id="menu-listItem-Statistics-button"
 
             className={`rounded-lg ${selectedIndex === 5 ? "bg-grey-1" : ""}  `}
-            onClick={(event) => handleListItemClick(event, 5, 'Statistics')}
+            onClick={(event) => handleListItemClick(event, 5, t('restaurants.statistics'))}
           >
             <ListItemIcon id="menu-listItem-stats-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <MovingSharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-stats-text" primary="Statistics" />
+              <ListItemText id="menu-listItem-stats-text" primary={t('restaurants.statistics')} />
             }
           </ListItemButton>
         </ListItem>
@@ -128,13 +130,13 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
             id="menu-listItem-history-button"
 
             className={`rounded-lg ${selectedIndex === 6 ? "bg-grey-1" : ""} `}
-            onClick={(event) => handleListItemClick(event, 6, 'Reservation history')}
+            onClick={(event) => handleListItemClick(event, 6, t('restaurants.reservations'))}
           >
             <ListItemIcon id="menu-listItem-history-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
               <ScheduleSharpIcon />
             </ListItemIcon>
             {size.width > 1330 &&
-              <ListItemText id="menu-listItem-history-text" primary="Reservation history" />}
+              <ListItemText id="menu-listItem-history-text" primary={t('restaurants.reservations')} />}
           </ListItemButton>
         </ListItem>
       </List>
