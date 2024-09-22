@@ -420,7 +420,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             (name: string, index: number) => (
             <button
               key={index}
-              className={` rounded-t-md p-2 flex text-2xl font-bold  ${index === selectedMenuIndex ? "bg-white  text-primary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
+              className={` rounded-t-md p-2 flex text-xl ${index === selectedMenuIndex ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
               onClick={() =>
                 setSelectedMenuIndex(
                   index === selectedMenuIndex ? null : index,
