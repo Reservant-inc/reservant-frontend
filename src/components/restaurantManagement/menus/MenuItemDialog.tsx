@@ -214,7 +214,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           startIcon={<CloudUploadIcon />}
           className="bg-primary"
         >
-          Upload file
+          {t('general.upload')}
           <VisuallyHiddenInput
             type="file"
             accept="image/*"

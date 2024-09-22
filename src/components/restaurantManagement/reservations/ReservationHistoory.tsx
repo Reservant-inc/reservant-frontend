@@ -25,6 +25,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { fetchGET } from "../../../services/APIconn";
+import { useTranslation } from "react-i18next";
 
 interface OrderHistoryProps {
   activeRestaurantId: number | null;
@@ -33,6 +34,7 @@ interface OrderHistoryProps {
 const ReservationHistory: React.FC<OrderHistoryProps> = ({
   activeRestaurantId,
 }) => {
+  const { t } = useTranslation("global");
   const [rows, setRows] = useState<GridRowsProp>([
     {
       id: 1,
@@ -150,15 +152,15 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
   };
 
   const columns: GridColDef[] = [
-    { field: "orderId", headerName: "Order ID", width: 150, editable: false },
-    { field: "visitId", headerName: "Visit Date", width: 150, editable: false },
-    { field: "cost", headerName: "Cost", width: 150, editable: true },
-    { field: "status", headerName: "Status", width: 150, editable: true },
-    { field: "employeeId", headerName: "Employee", width: 150, editable: true },
+    { field: "orderId", headerName: t('reservations.order-id'), width: 150, editable: false },
+    { field: "visitId", headerName: t('reservations.visit-date'), width: 150, editable: false },
+    { field: "cost", headerName: t('reservations.total-cost'), width: 150, editable: true },
+    { field: "status", headerName: t('reservations.status'), width: 150, editable: true },
+    { field: "employeeId", headerName: t('reservations.employee'), width: 150, editable: true },
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: t('reservations.actions'),
       width: 150,
       cellClassName: "actions",
       getActions: ({ id, row }) => {
@@ -221,16 +223,16 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
         className="border-0"
       />
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Order Details</DialogTitle>
+        <DialogTitle>{t('reservations.orderDetails')}</DialogTitle>
         <DialogContent>
           <List>
             <ListItem>
-              <ListItemText primary="Order ID:" secondary={selectedOrderId} />
+              <ListItemText primary={t('reservations.order-id')} secondary={selectedOrderId} />
             </ListItem>
             {selectedOrderId && (
               <ListItem>
                 <ListItemText
-                  primary="Visit Date:"
+                  primary={t('reservations.visit-date')}
                   secondary={
                     rows.find((row) => row.orderId === selectedOrderId)?.visitId
                   }
@@ -239,13 +241,13 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
             )}
             {selectedOrderId && (
               <ListItem>
-                <ListItemText primary="Items:" secondary=" items..." />
+                <ListItemText primary={t('reservations.items')} secondary=" items..." />
               </ListItem>
             )}
             {selectedOrderId && (
               <ListItem>
                 <ListItemText
-                  primary="Cost:"
+                  primary={t('reservations.total-cost')}
                   secondary={
                     rows.find((row) => row.orderId === selectedOrderId)?.cost
                   }
@@ -255,7 +257,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
             {selectedOrderId && (
               <ListItem>
                 <ListItemText
-                  primary="Status:"
+                  primary={t('reservations.status')}
                   secondary={
                     rows.find((row) => row.orderId === selectedOrderId)?.status
                   }
@@ -265,7 +267,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
             {selectedOrderId && (
               <ListItem>
                 <ListItemText
-                  primary="Employee:"
+                  primary={t('reservations.employee')}
                   secondary={
                     rows.find((row) => row.orderId === selectedOrderId)
                       ?.employeeId

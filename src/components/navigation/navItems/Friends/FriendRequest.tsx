@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar, Button } from "@mui/material";
 import { fetchPOST, fetchDELETE } from "../../../../services/APIconn";
+import { useTranslation } from "react-i18next";
 
 interface FriendRequestProps {
   senderId: string;
@@ -12,9 +13,11 @@ interface FriendRequestProps {
 const FriendRequest: React.FC<FriendRequestProps> = ({
   senderId,
   senderName,
-  dateSent,
+  dateSent, 
   onAction,
 }) => {
+
+  const { t } = useTranslation("global");
   
   const handleAccept = async () => {
     try {
@@ -51,7 +54,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <div className="text-sm font-bold">{senderName}</div>
-          <div className="text-gray-500 text-xs">wysłano {formattedDate}</div>
+          <div className="text-gray-500 text-xs">{t("friends-sent")} {formattedDate}</div>
         </div>
         <div className="mt-1 flex gap-1">
           <Button
@@ -61,7 +64,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({
             onClick={handleAccept}
             style={{ backgroundColor: "#a94c79", color: "#fefefe" }}
           >
-            Zaakceptuj
+            {t("friends.accept")}
           </Button>
           <Button
             variant="contained"
@@ -70,7 +73,7 @@ const FriendRequest: React.FC<FriendRequestProps> = ({
             onClick={handleReject}
             style={{ backgroundColor: "#ff0000", color: "#fefefe" }}
           >
-            Odrzuć
+            {t("friends.reject")}
           </Button>
         </div>
       </div>

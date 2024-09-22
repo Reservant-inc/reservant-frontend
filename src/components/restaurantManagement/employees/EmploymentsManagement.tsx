@@ -29,6 +29,7 @@ import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
+import { useTranslation } from "react-i18next";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -44,6 +45,8 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
 
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
+
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     const populateRows = async () => {
@@ -139,7 +142,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     { field: "id", headerName: "ID", width: 180, editable: false },
     {
       field: "restaurantName",
-      headerName: "restaurantName",
+      headerName: t('employees.restuarnt-name'),
       type: "string",
       width: 180,
       align: "left",
@@ -148,14 +151,14 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     },
     {
       field: "isHallEmployee",
-      headerName: "isHallEmployee",
+      headerName: t('employees.hall-role'),
       type: "boolean",
       width: 180,
       editable: true,
     },
     {
       field: "isBackdoorEmployee",
-      headerName: "isBackdoorEmployee",
+      headerName: t('employees.backdoor-role'),
       type: "boolean",
       width: 180,
       editable: true,
@@ -164,7 +167,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: t('employees.actions'),
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {

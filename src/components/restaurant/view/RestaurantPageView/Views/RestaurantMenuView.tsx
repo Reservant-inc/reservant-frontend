@@ -4,6 +4,7 @@ import MenuItemComponent from "../../MenuItemComponent";
 import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../../services/types";
 import { fetchGET, getImage } from "../../../../../services/APIconn";
 import DefaultPic from "../../../../assets/images/no-image.png"
+import { useTranslation } from "react-i18next";
 
 interface RestaurantMenuViewProps {
   addToCart: (item: MenuItemWithDescriptionType) => void;
@@ -16,6 +17,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
 }) => {
   const [menus, setMenus] = useState<MenuWithDescriptionType[]>([]);
   const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
+  const { t } = useTranslation("global");
 
   // useEffect(() => {
   //   const fetchMenus = async () => {
@@ -132,7 +134,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
                 </Typography>
                 {menu.dateUntil && (
                   <Typography variant="body2" color="textSecondary">
-                    Aktywne do {new Date(menu.dateUntil).toLocaleDateString()}
+                    {t('menu.active-until')} {new Date(menu.dateUntil).toLocaleDateString()}
                   </Typography>
                 )}
               </div>
@@ -146,7 +148,7 @@ const RestaurantMenuView: React.FC<RestaurantMenuViewProps> = ({
                 ))
               ) : (
                 <Typography variant="body2" color="textSecondary">
-                  Brak dań dla tego menu.
+                  {t('menu.no-menu')}.
                 </Typography>
               )}
             </div>

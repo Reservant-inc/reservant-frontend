@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import RestaurantCartView from "./RestaurantCartView";
 import { CartItemType } from "../../../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantCartProps {
   cart: CartItemType[];
@@ -14,7 +15,9 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
   incrementQuantity,
   decrementQuantity,
 }) => {
+  const { t } = useTranslation("global");
   const [selectedOption, setSelectedOption] = useState<string>("Dostawa");
+  
 
   const handleButtonClick = (option: React.SetStateAction<string>) => {
     setSelectedOption(option);
@@ -33,7 +36,7 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
           />
         );
       default:
-        return <Typography variant="h6">Moja rezerwacja</Typography>;
+        return <Typography variant="h6">{t('cart.my-reservation')}</Typography>;
     }
   };
 
@@ -54,21 +57,21 @@ const RestaurantCart: React.FC<RestaurantCartProps> = ({
           sx={buttonStyle("Na miejscu")}
           onClick={() => handleButtonClick("Na miejscu")}
         >
-          Na miejscu
+          {t('cart.on-site')}
         </Button>
         <Button
           variant="outlined"
           sx={buttonStyle("Dostawa")}
           onClick={() => handleButtonClick("Dostawa")}
         >
-          Dostawa
+          {t('cart.delivery')}
         </Button>
         <Button
           variant="outlined"
           sx={buttonStyle("Odbiór")}
           onClick={() => handleButtonClick("Odbiór")}
         >
-          Odbiór
+           {t('cart.collection')}
         </Button>
       </Box>
       {renderContent()}

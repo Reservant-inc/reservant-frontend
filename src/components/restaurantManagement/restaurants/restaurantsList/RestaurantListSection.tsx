@@ -7,6 +7,7 @@ import { fetchGET } from "../../../../services/APIconn";
 import { LocalType } from "../../../../services/enums";
 import { RestaurantType } from "../../../../services/types";
 import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 interface RestaurantListSectionProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
@@ -24,6 +25,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+    const { t } = useTranslation("global");
 
     useEffect(() => {
         const populateRows = async () => {
@@ -72,7 +74,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
                         className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2"
                     >
                         <AddIcon />
-                        <h1 className="text-lg font-mont-md">Add restaurant</h1>
+                        <h1 className="text-lg font-mont-md">{t('restaurants.add-restaurant')}</h1>
                     </button>
                 </div>
           </GridToolbarContainer>
@@ -83,7 +85,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
         { field: "restaurantId", headerName: "ID", width: 180, editable: false },
         {
           field: "name",
-          headerName: "Name",
+          headerName: t('restaurants.name'),
           type: "string",
           width: 180,
           align: "left",
@@ -92,21 +94,21 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
         },
         {
           field: "restaurantType",
-          headerName: "Local type",
+          headerName: t('restaurants.local-type'),
           type: "string",
           width: 180,
           editable: false,
         },
         {
           field: "city",
-          headerName: "City",
+          headerName: t('restaurants.city'),
           type: "string",
           width: 180,
           editable: false,
         },
         {
           field: "isVerified",
-          headerName: "Is verified?",
+          headerName: t('restaurants.verified'),
           type: "boolean",
           width: 180,
           align: "left",
@@ -115,7 +117,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
         },
         {
           field: "groupName",
-          headerName: "Group",
+          headerName: t('restaurants.group'),
           width: 180,
           editable: false,
           type: "string",
@@ -123,7 +125,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
         {
           field: "actions",
           type: "actions",
-          headerName: "Actions",
+          headerName: "",
           width: 100,
           cellClassName: "actions",
           getActions: ({ id }) => {

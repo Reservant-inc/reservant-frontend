@@ -28,6 +28,7 @@ import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
+import { useTranslation } from "react-i18next";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -47,6 +48,8 @@ export default function EmployeeRestaurantManagement({
 
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
+
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     const populateRows = async () => {
@@ -95,7 +98,7 @@ export default function EmployeeRestaurantManagement({
             className="flex h-full items-center justify-center gap-2 rounded-lg p-2 text-primary hover:bg-grey-1"
           >
             <AddIcon />
-            <h1 className="font-mont-md text-lg">Add employee</h1>
+            <h1 className="font-mont-md text-lg">{t('employees.add-employee')}</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -162,21 +165,21 @@ export default function EmployeeRestaurantManagement({
     },
     {
       field: "firstName",
-      headerName: "Name",
+      headerName: t('employees.name'),
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "lastName",
-      headerName: "Surname",
+      headerName: t('employees.surname'),
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "phoneNumber",
-      headerName: "Phone Number",
+      headerName: t('employees.phone-number'),
       type: "string",
       width: 180,
       align: "left",
@@ -185,7 +188,7 @@ export default function EmployeeRestaurantManagement({
     },
     {
       field: "isHallEmployee",
-      headerName: "Hall role",
+      headerName: t('employees.hall-role'),
       type: "boolean",
       width: 180,
       align: "left",
@@ -194,7 +197,7 @@ export default function EmployeeRestaurantManagement({
     },
     {
       field: "isBackdoorEmployee",
-      headerName: "Backdoor role",
+      headerName: t('employees.backdoor-role'),
       type: "boolean",
       width: 180,
       align: "left",
@@ -203,7 +206,7 @@ export default function EmployeeRestaurantManagement({
     },
     {
       field: "dateFrom",
-      headerName: "Assigned since",
+      headerName: t('employees.assigned-since'),
       type: "string",
       width: 180,
       align: "left",
@@ -212,7 +215,7 @@ export default function EmployeeRestaurantManagement({
     },
     {
       field: "dateUntil",
-      headerName: "Assigned until",
+      headerName: t('employees.assigned-until'),
       type: "string",
       width: 180,
       align: "left",
@@ -222,7 +225,7 @@ export default function EmployeeRestaurantManagement({
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: t('employees.actions'),
       width: 100,
       cellClassName: "actions",
       getActions: ({ id }) => {
@@ -231,7 +234,7 @@ export default function EmployeeRestaurantManagement({
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label="Save"
+              label={t('general.save')}
               id={
                 "EmployeeManagementSaveButton" +
                 rows[parseInt(id.toString())].login
@@ -247,7 +250,7 @@ export default function EmployeeRestaurantManagement({
                 "EmployeeManagementCancelEditButton" +
                 rows[parseInt(id.toString())].login
               }
-              label="Cancel"
+              label={t('general.cancel')}
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
@@ -258,7 +261,7 @@ export default function EmployeeRestaurantManagement({
         return [
           <GridActionsCellItem
             icon={<Restaurant />}
-            label="Employments"
+            label={t('employees.employments')}
             id={
               "EmployeeManagementEmploymentButton" +
               rows[parseInt(id.toString())].login
@@ -269,7 +272,7 @@ export default function EmployeeRestaurantManagement({
           />,
           <GridActionsCellItem
             icon={<EditIcon />}
-            label="Edit"
+            label={t('general.edit')}
             id={
               "EmployeeManagementEditButton" +
               rows[parseInt(id.toString())].login
@@ -284,7 +287,7 @@ export default function EmployeeRestaurantManagement({
               "EmployeeManagementDeleteButton" +
               rows[parseInt(id.toString())].login
             }
-            label="Delete"
+            label={t('general.delete')}
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,

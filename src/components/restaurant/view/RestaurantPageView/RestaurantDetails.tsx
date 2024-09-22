@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import DefaultPic from "../../../../assets/images/no-image.png"
+import { useTranslation } from "react-i18next";
 
 const TABS = {
   MENU: "MENU",
@@ -26,6 +27,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const [events, setEvents] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState(TABS.MENU);
   const [openModal, setOpenModal] = useState(false);
+
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
@@ -123,7 +126,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
                 <Typography variant="h5" className="font-bold text-black">
-                  Wyświetl Galerię
+                  {t('cart.show-gallery')}
                 </Typography>
               </div>
             </ImageListItem>

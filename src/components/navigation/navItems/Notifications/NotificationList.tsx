@@ -13,6 +13,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { RequestType } from "../../../../services/types";
+import { useTranslation } from "react-i18next";
 
 interface NotificationListProps {
   setHasNotifications: (hasNotifications: boolean) => void;
@@ -23,6 +24,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
 }) => {
   const [friendRequests, setFriendRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     fetchFriendRequests();
@@ -81,7 +83,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
       ) : (
         <div className="flex h-full w-full flex-col">
           <div className="custom-transition flex h-14 w-full items-center justify-between px-3 pt-4">
-            <h1 className="font-mont-bd text-xl">Notifications</h1>
+            <h1 className="font-mont-bd text-xl">{t('navbar.notifications')} </h1>
           </div>
           <div className="flex h-full items-center justify-center">
             {friendRequests.length === 0 ? (

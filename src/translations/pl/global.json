@@ -5,7 +5,27 @@
         "save": "Zapisz",
         "results": "Wyniki",
         "no-results": "Brak wyników",
-        "close": "Zamknij"
+        "close": "Zamknij",
+        "delete": "Usuń",
+        "invite": "Zaproś",
+        "create": "Stwórz",
+        "no-description": "Brak opisu",
+        "edit": "Edytuj",
+        "delete-confirmation": "Jesteś pewny, że chcesz usunąć",
+        "confirmation": "Potwierdzenie",
+        "yes": "Tak",
+        "upload": "Wyśli plik",
+        "details": "Szczegóły",
+        "hello": "Witaj"
+    },
+    "filters": {
+        "filter-by": "FILTRUJ",
+        "name": "Nazwa alfabetycznie",
+        "price-asc": "Cena rosnąco",
+        "price-desc": "Cena malejąco",
+        "alcohol-percentage-asc": "Zawartość alkoholu rosnąco",
+        "alcohol-percentage-desc": "Zawartość alkoholu malejąco",
+        "clear": "Wyczyść filtry"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -170,8 +190,17 @@
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
             "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
             "selectedFile": "Wybrano plik"
-            
         }
+    },
+    "menu": {
+        "active-until": "Aktywne do",
+        "no-menu": "Brak dań dla tego menu",
+        "alcohol-percentage": "Zawartość alokoholu",
+        "ingredients-information": "Informacje o składnikach",
+        "add-menu": "Dodaj menu",
+        "edit-menu": "Edytuj menu",
+        "delete-menu": "Usuń menu",
+        "add-menu-item": "Dodaj pozycje menu"
     },
     "tools": {
         "main":{
@@ -201,7 +230,12 @@
         "search": "Szukaj znajomych",
         "friends": "Znajomi",
         "undo": "Cofnij zaproszenie",
-        "send": "Wyślij zaproszenie"
+        "send": "Wyślij zaproszenie",
+        "accept": "Zaakceptuj",
+        "reject": "Odrzuć",
+        "sent": "Wysłano",
+        "friend-since": "Znajomy od",
+        "invited": "Jesteś już zaproszony"
     },
     "home-page": {
         "restaurants": "Restauracje",
@@ -215,13 +249,98 @@
         "create-event": "Stwórz wydarzenie",
         "order": "Zamów",
         "is-delivering": "Dostawa",
-        "delivery-fee": "Koszt dostawy"
+        "delivery-fee": "Koszt dostawy",
+        "no-menu": "Menu nie zostało jeszcze dodane"
     },
     "reviews": {
         "filter": "Filtruj",
         "filter-tooltip": "filtruj opinie",
         "reviews": "Opinie",
         "no-reviews": "Brak opinii",
-        "add-review": "Dodaj opinie"
+        "add-review": "Dodaj opinie",
+        "ratings": "Oceny",
+        "no-description": "Brak opisu",
+        "respond": "Odpowiedz"
+    },
+    "navbar": {
+        "notifications": "Powiadomienia"
+    },
+    "cart": {
+        "total-cost": "Łączny koszt",
+        "empty-basket": "Twój koszyk jest pusty, dodaj coś",
+        "my-basket": "Mój koszyk",
+        "quantity": "Ilość",
+        "note": "Napisz notatkę do zamówienia... (opcjonalnie)",
+        "your-note": "Twoja notatka",
+        "add-promo-code": "Dodaj kod promocyjny",
+        "promo-code": "Kod promocyjny",
+        "got-to-summary": "Przejdź do podsumowania",
+        "my-reservation": "Moja rezerwacja",
+        "on-site": "Na miejscu",
+        "delivery": "Dostawa",
+        "collection": "Odbiór osobisty",
+        "show-gallery": "Wyświetl Galerię"
+    },
+    "events": {
+        "event-craetion": "Tworzenie wydarzenia dla lokalu",
+        "temporarly": "TYMCZASOWO:",
+        "add-event": "Stwórz wydarzenie",
+        "theme": "Tematyka",
+        "intrested": "Zainteresowani",
+        "no-events": "Brak dostępnych wydarzeń"
+    },
+    "employees": {
+        "add-employee": "Dodaj pracownika",
+        "name": "Imię",
+        "surname": "Nazwisko",
+        "phone-number": "Numer telefonu",
+        "actions": "Akcje",
+        "employments": "Zatrudnienia",
+        "hall-role": "Pracownik sali",
+        "backdoor-role": "Pracownik zaplecza",
+        "assigned-since": "Przydzielony od",
+        "assigned-until": "Przydzielony do",
+        "restuarnt-name": "Nazwa resturacji"
+    },
+    "reservations": {
+        "client-info": "Informacje o kliencie",
+        "client": "Klient",
+        "address": "Adres",
+        "note": "Notatka",
+        "order-info": "Informacje o zamówieniu",
+        "name-of-menu-item": "Nazwa pozycji menu",
+        "amount": "Ilość",
+        "price": "Cena",
+        "status": "Status",
+        "order-id": "Order ID",
+        "visit-date": "Data wizyty",
+        "total-cost": "Kwota całkowita",
+        "client-name": "Imię klienta",
+        "actions": "Akcje",
+        "orderDetails": "Szczegóły zamówienia",
+        "employee": "Pracownik",
+        "items": "Pozycje",
+        "reservations": "Rezerwacje",
+        "orders": "Zamówienia"
+    },
+    "restaurants": {
+        "add-restaurant": "Dodaj restaurację",
+        "name": "Nazwa",
+        "local-type": "Typ lokalu",
+        "city": "Miasto",
+        "verified": "Zweryfikowany",
+        "group": "Grupa",
+        "select": "Wybierz restaurację",
+        "opinions": "Opienie klientów",
+        "employees": "Zarządzanie pracownikami",
+        "menu": "Menu",
+        "dashboard": "Pulpit Restauracji",
+        "my": "Moje restauracje",
+        "restaurants": "Restauracje",
+        "menu-menage": "Zarządzanie menu",
+        "shipment-menage": "Zarządzanie magazynem",
+        "statistics": "Statystyki",
+        "reservations": "Historia rezerwacji"
     }
+    
 }
