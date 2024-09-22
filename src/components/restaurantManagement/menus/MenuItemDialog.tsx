@@ -21,6 +21,7 @@ import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
 import { CloseSharp, Cancel, ArrowRight, ArrowForward, ArrowForwardIos, SwapCalls, PlusOne, HdrPlus, Add } from "@mui/icons-material";
 import { Label } from "leaflet";
+import MenuItem from "./MenuItem";
 
 interface MenuItemDialogProps {
     menu: MenuType;
@@ -235,6 +236,28 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     return res;
   }
   
+  const convertToIds = () => {
+    let tmp: number[] = []
+    for (const menuItem of selectedMenuItems){
+      tmp.push(menuItem.menuItemId)
+    }
+    return tmp
+  }
+
+  const handleSaveMIs = async (
+  ) => {
+    try{
+      
+      const body = JSON.stringify({
+        itemIds: convertToIds()
+      });
+      console.log(body)
+      let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
+      console.log(res)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     
@@ -536,7 +559,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
             <div className="flex w-full h-[80%] items-center   gap-6 flex-col">
 
-              <div className="border w-full  h-full overflow-y-auto rounded-lg">
+              <div className="border w-full  h-full overflow-auto rounded-lg">
                 {/* @todo tłumacz */}
                 {selectedMenuItems.length>0
                 ?
@@ -544,34 +567,17 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   className="flex p-2 gap-1 w-full flex-wrap"  
                 > 
                   {
-                    selectedMenuItems.map((menuItem) => 
-                    <li 
-                      className="border rounded-lg w-[20%] h-[50%] items-start flex  p-2"
-                    > 
-                      <p className="overflow-hidden text-ellipsis">
-
-                        <div className="flex justify-between">
-                          {menuItem.name}
-                          <button 
-                            className="hover:text-primary "
-                            onClick={()=>{
-                              setSelectedMenuItems(selectedMenuItems.filter((menuItemsToRemove)=>{
-                              return menuItemsToRemove.menuItemId!==menuItem.menuItemId
-                              }))
-                            }}> 
-                            <CloseSharp/> 
-                          </button>
-                        </div>
-
-                        <img
-                          src={getImage(menuItem.photo,defaultImage)}
-                          alt="sadas"
-                          className="mb-2 rounded-lg"
-                        />
-                      </p>
-
-                      
-                    </li>
+                    selectedMenuItems.map((menuItem: MenuItemType) => 
+                   
+                      <MenuItem
+                        menuType={menu.menuType}
+                        menuItem={menuItem}
+                        onDelete={()=>{
+                            setSelectedMenuItems(selectedMenuItems.filter((menuItemsToRemove)=>{
+                            return menuItemsToRemove.menuItemId!==menuItem.menuItemId
+                          }))
+                        }}
+                      />
                     )
                   }
                 </ul>
@@ -582,8 +588,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               </div>
             <div className="flex  h-[10%] w-1/2 gap-8">
               <button 
-                id="addmenuitemsubmit"
+                id="addmenuitemsubmitall"
                 type="submit"
+                onClick={handleSaveMIs}
                 className={`self-justify-end  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
               >
                 {t("general.save")}

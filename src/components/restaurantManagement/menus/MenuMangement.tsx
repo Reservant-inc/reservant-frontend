@@ -42,17 +42,10 @@ interface Menu {
   menuType: string;
   dateFrom: string;
   dateUntil: string | null;
-  menuItems: MenuItemData[];
+  menuItems: MenuItemType[];
 }
 
-interface MenuItemData {
-  menuItemId: number;
-  name: string;
-  alternateName: string;
-  price: number;
-  alcoholPercentage: number;
-  photo: string;
-}
+
 
 const MenuManagement: React.FC<MenuManagementProps> = ({
   activeRestaurantId,
@@ -70,7 +63,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     null,
   );
   const [editMenu, setEditMenu] = useState<Menu | null>(null);
-  const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(
+  const [editedMenuItem, setEditedMenuItem] = useState<MenuItemType | null>(
     null,
   );
   const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
@@ -250,7 +243,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const handleEditMenuItem = (menuItem: MenuItemData) => {
+  const handleEditMenuItem = (menuItem: MenuItemType) => {
     setEditedMenuItem(menuItem);
     setIsMenuItemEditPopupOpen(true);
   };
@@ -283,7 +276,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const handleDeleteMenuItem = async (menuItem: MenuItemData) => {
+  const handleDeleteMenuItem = async (menuItem: MenuItemType) => {
     try {
       const { menuItemId } = menuItem;
       const response = await fetchDELETE(`/menu-items/${menuItemId}`);
@@ -342,7 +335,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
   const filteredMenuItems =
     selectedMenuIndex !== null
-      ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
+      ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemType) => {
           const nameMatch = menuItem.name
             .toLowerCase()
             .includes(searchText.toLowerCase());
@@ -355,7 +348,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       : [];
 
   const sortMenuItems = (
-    sortFunction: (a: MenuItemData, b: MenuItemData) => number,
+    sortFunction: (a: MenuItemType, b: MenuItemType) => number,
   ) => {
     if (selectedMenuIndex !== null) {
       const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(
@@ -374,34 +367,34 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   };
 
   const handleSortAlphabeticallyAsc = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) =>
+    sortMenuItems((a: MenuItemType, b: MenuItemType) =>
       a.name.localeCompare(b.name),
     );
   };
   const handleSortAlphabeticallyDesc = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) =>
+    sortMenuItems((a: MenuItemType, b: MenuItemType) =>
       b.name.localeCompare(a.name),
     );
   };
 
   const handleSortPriceAsc = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) => a.price - b.price);
+    sortMenuItems((a: MenuItemType, b: MenuItemType) => a.price - b.price);
   };
 
   const handleSortPriceDesc = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) => b.price - a.price);
+    sortMenuItems((a: MenuItemType, b: MenuItemType) => b.price - a.price);
   };
 
   const handleSortAlcoholAsc = () => {
     sortMenuItems(
-      (a: MenuItemData, b: MenuItemData) =>
+      (a: MenuItemType, b: MenuItemType) =>
         (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0),
     );
   };
 
   const handleSortAlcoholDesc = () => {
     sortMenuItems(
-      (a: MenuItemData, b: MenuItemData) =>
+      (a: MenuItemType, b: MenuItemType) =>
         (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0),
     );
   };
@@ -508,14 +501,10 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       <div className="m-1 flex flex-wrap">
         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
           <>
-            {filteredMenuItems.map((menuItem: MenuItemData) => (
+            {filteredMenuItems.map((menuItem: MenuItemType) => (
               <MenuItem
                 key={menuItem.menuItemId}
-                name={menuItem.name}
-                alternateName={menuItem.alternateName}
-                price={menuItem.price}
-                photo={menuItem.photo}
-                alcoholPercentage={menuItem.alcoholPercentage}
+                menuItem={menuItem}
                 menuType={menus[selectedMenuIndex].menuType}
                 onDelete={() => handleDeleteMenuItem(menuItem)}
                 onEdit={() => handleEditMenuItem(menuItem)}
