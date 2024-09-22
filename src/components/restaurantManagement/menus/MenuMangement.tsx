@@ -406,14 +406,14 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   return (
     <div className="h-full w-full">
       <div className="bg-grey-1 h-[5%]">
-        {selectedMenuIndex === null && (
+        {/* {selectedMenuIndex === null && (
           <div className="flex justify-start">
             <IconButton onClick={() => setIsMenuPopupOpen(true)}>
               <AddIcon className="text-secondary-2" />
               <span className="ml-1 text-black dark:text-white">ADD MENU</span>
             </IconButton>
           </div>
-        )}
+        )} */}
         <div className="flex h-full justify-start gap-1">
           {activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId]
           ? menuNamesByRestaurant[activeRestaurantId].map(
@@ -436,9 +436,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             onClick={handleMenuOpen}
             disabled={selectedMenuIndex === null}
           >
-            {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-              <MoreActions actions={actions} />
-            )}
+            
+            <MoreActions actions={actions} />
+            
           </button>
         </div>
     
