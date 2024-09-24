@@ -327,7 +327,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         />
                         <button
                           type="submit"
-                          className={` bg-grey-0 border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
+                          className={`  border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
                           id="addIngridientToMenuItem"
                           disabled={!formik.isValid || !formik.dirty}
                         >
@@ -425,7 +425,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       <div className="flex w-full gap-2">
                         <label
                           htmlFor="photo"
-                          className={`  w-1/2 rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+                          className={` shadow w-1/2 rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2   dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
                         
                         >
                           <CloudUploadIcon/>
@@ -450,7 +450,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         id="addmenuitemsubmit"
                         type="submit"
                         disabled={!formik.isValid || !formik.dirty}
-                        className={`self-justify-end  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
+                        className={`shadow  w-1/2 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
                         >
                         {t("general.save")}
                       </button>
@@ -461,19 +461,19 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               }}
               </Formik>
           </div>
-          <div className="flex w-2/5  items-center   gap-6 flex-col">
+          <div className="flex w-2/5  items-center justify-between h-full gap-6 flex-col">
 
-            <div className="border w-full h-full overflow-y-auto rounded-lg">
+            <div className="shadow-inner bg-grey-0 w-full h-5/6 overflow-y-scroll rounded-lg">
               {/* @todo tłumacz */}
               {selectedIngredients.length>0
               ?
               <ul
-                className="flex p-2 gap-1 w-full flex-wrap"  
+                className="flex p-2 gap-2 h-full flex-col w-full "  
               > 
                 {
                   selectedIngredients.map((ingredient) => 
                   <li 
-                    className="border rounded-md justify-between w-full flex p-1 "
+                    className="shadow-md h-fit bg-white items-center rounded-md justify-between w-full flex p-1 "
                   > 
                     <p className="overflow-hidden text-ellipsis">
 
@@ -499,7 +499,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               }
             </div>
             <button
-            className={`  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+            className={` shadow w-1/2 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
             >
                 Clear ingredients
                 {/* @todo t */}
@@ -508,8 +508,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
         </div>
         :
-        <div className="flex flex-col h-[90%] gap-6">
-          <div className="h-[10%]">
+        <div className="flex flex-col  items-start h-[90%] w-full gap-6">
+          <div className="h-[10%] w-full ">
             <Formik  
                 initialValues={initialValuesMI} 
                 onSubmit={handleSubmitMI}
@@ -519,13 +519,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 {(formik) => {
                   return(
                     <Form>
-                      <div className="flex justify-center gap-2">
+                      <div className="flex  justify-center w-full">
                         <Field
                           as={"select"}
                           id="id" 
                           name="id" 
                           label="id"
-                          className="w-1/2 border-0 border-b"
+                          className="w-1/3 border-0 border-b"
                         >
                           <option value="" id="MI-option-default">Select a menu item</option>
                             {/* @todo tlumaczenie  */}
@@ -544,8 +544,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         
                           <button
                             type="submit"
-                            className={` bg-grey-0 border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
-                            id="addIngridientToMenuItem"
+                            className={`  border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
+                            id="addMenuItemToMenu"
                             disabled={!formik.isValid || !formik.dirty}
                           >
                             <Add/>
@@ -559,12 +559,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
             <div className="flex w-full h-[80%] items-center gap-6 flex-col">
 
-              <div className="border w-[90%]  h-full overflow-auto rounded-lg p-1">
+              <div className=" shadow-inner bg-grey-0 rounded-lg w-full  h-full overflow-y-scroll  p-1">
                 {/* @todo tłumacz */}
                 {selectedMenuItems.length>0
                 ?
                 <ul
-                  className="flex p-2 gap-1 w-full flex-wrap"  
+                  className="flex h-fit p-2 gap-1 w-full flex-wrap"  
                 > 
                   {
                     selectedMenuItems.map((menuItem: MenuItemType) => 
@@ -591,12 +591,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 id="addmenuitemsubmitall"
                 type="submit"
                 onClick={handleSaveMIs}
-                className={`self-justify-end  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+                className={` shadow   w-1/2 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
               >
                 {t("general.save")}
               </button>
               <button
-                className={`  w-1/2 rounded-lg p-1 border-black border dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+                className={` shadow w-1/2 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
               >
                   Clear all items
                   {/* @todo t */}
