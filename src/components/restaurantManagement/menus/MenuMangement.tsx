@@ -405,7 +405,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
   return (
     <div className="h-full w-full">
-      <div className="bg-grey-1 h-[5%]">
+      <div className="bg-grey-1 h-[8%]">
         {/* {selectedMenuIndex === null && (
           <div className="flex justify-start">
             <IconButton onClick={() => setIsMenuPopupOpen(true)}>
@@ -420,7 +420,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             (name: string, index: number) => (
             <button
               key={index}
-              className={` rounded-t-md p-2 flex text-xl ${index === selectedMenuIndex ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
+              className={` rounded-t-md p-2 h-full w-full align-center justify-center text-lg  ${index === selectedMenuIndex ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
               onClick={() =>
                 setSelectedMenuIndex(
                   index === selectedMenuIndex ? null : index,
@@ -432,7 +432,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           : null
           }
           <button
-            className={` rounded-t-md p-2 flex text-2xl font-bold self-end h-full "text-grey-2 bg-grey-0 `}
+            className={` rounded-t-md p-2 h-full w-1/6 text-lg "text-grey-2 bg-grey-0 `}
             onClick={handleMenuOpen}
             disabled={selectedMenuIndex === null}
           >
@@ -443,7 +443,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         </div>
     
       </div>
-      <div className="h-[95%] w-full flex-col rounded-tl-none rounded-lg bg-white ">
+      <div className="h-[92%] w-full flex-col rounded-t-none rounded-lg bg-white ">
       
 
         <div className="flex items-center justify-between">
