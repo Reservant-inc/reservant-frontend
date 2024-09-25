@@ -52,7 +52,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 }) => {
   const { t } = useTranslation("global");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
+  const [sortAnchorElement, setSortAnchorElement] = useState<null | HTMLElement>(
     null,
   );
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -214,34 +214,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const handleSaveNewMenuItem = async (values: { [key: string]: string }) => {
-    try {
-      console.log(activeRestaurantId);
-
-      const body = JSON.stringify({
-        restaurantId: activeRestaurantId,
-        name: values.name,
-        alternateName: values.alternateName,
-        price: values.price,
-        alcoholPercentage: values.alcoholPercentage || null,
-        photofileName: values.photo, // Ensure this is set correctly
-      });
-      const response = await fetchPOST("/menu-items", body);
-      if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
-        const menuItemId = response.menuItemId;
-        const menuId = menus[selectedMenuIndex].menuId;
-        const response2 = await fetchPOST(
-          `/menus/${menuId}/items`,
-          JSON.stringify({ itemIds: [menuItemId] }),
-        );
-        console.log(response2);
-        setIsMenuItemPopupOpen(false);
-        fetchMenuIemsForSelectedMenu();
-      }
-    } catch (error) {
-      console.error("error while posting new menu item:", error);
-    }
-  };
 
   const handleEditMenuItem = (menuItem: MenuItemType) => {
     setEditedMenuItem(menuItem);
@@ -291,16 +263,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
+ 
   const handleSortOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setFilterAnchorEl(event.currentTarget);
+    setSortAnchorElement(event.currentTarget);
   };
 
   const handleSortClose = () => {
-    setFilterAnchorEl(null);
+    setSortAnchorElement(null);
   };
 
   const handleSearchInputChange = (
@@ -405,7 +374,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
   return (
     <div className="h-full w-full">
-      <div className="bg-grey-1 h-[8%]">
+      <div className="bg-grey-1 h-[5%]">
         {/* {selectedMenuIndex === null && (
           <div className="flex justify-start">
             <IconButton onClick={() => setIsMenuPopupOpen(true)}>
@@ -414,13 +383,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             </IconButton>
           </div>
         )} */}
-        <div className="flex h-full justify-start gap-1">
-          {activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId]
-          ? menuNamesByRestaurant[activeRestaurantId].map(
+        <div className="flex h-full gap-1">
+          {(activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId])
+          && menuNamesByRestaurant[activeRestaurantId].map(
             (name: string, index: number) => (
             <button
               key={index}
-              className={` rounded-t-md p-2 h-full w-full align-center justify-center text-lg  ${index === selectedMenuIndex ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
+              className={` rounded-t-md p-2 h-full w-full  text-lg  ${index === selectedMenuIndex ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
               onClick={() =>
                 setSelectedMenuIndex(
                   index === selectedMenuIndex ? null : index,
@@ -429,10 +398,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             >
               {name}
             </button>))
-          : null
           }
           <button
-            className={` rounded-t-md p-2 h-full w-1/6 text-lg "text-grey-2 bg-grey-0 `}
+            className={` rounded-t-md p-2 h-full  w-1/6 text-lg "text-grey-2 bg-grey-0 `}
             onClick={handleMenuOpen}
             disabled={selectedMenuIndex === null}
           >
@@ -443,7 +411,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         </div>
     
       </div>
-      <div className="h-[92%] w-full flex-col rounded-t-none rounded-lg bg-white ">
+      <div className="h-[95%] w-full flex-col rounded-t-none rounded-lg bg-white ">
       
 
         <div className="flex items-center justify-between">
@@ -463,7 +431,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             )}
             {selectedMenuIndex !== null && (
               <MenuOrderBy
-                filterAnchorEl={filterAnchorEl}
+                sortAnchorElement={sortAnchorElement}
                 handleSortOpen={handleSortOpen}
                 handleSortClose={handleSortClose}
                 handleSortAlphabeticallyAsc={handleSortAlphabeticallyAsc}
@@ -529,7 +497,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           open={isMenuItemPopupOpen}
           onClose={() => setIsMenuItemPopupOpen(false)}
         >
-          <div className=" h-[510px] w-[700px] rounded-xl  bg-white p-5">
+          <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
 
           <MenuItemDialog 
           

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 interface MenuSortBy {
   handleSortOpen: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleSortClose: () => void;
-  filterAnchorEl: HTMLElement | null;
+  sortAnchorElement: HTMLElement | null;
   handleSortAlphabeticallyAsc: () => void;
   handleSortAlphabeticallyDesc: () => void;
   handleSortPriceAsc: () => void;
@@ -21,7 +21,7 @@ interface MenuSortBy {
 const MenuOrderBy: React.FC<MenuSortBy> = ({
   handleSortOpen,
   handleSortClose,
-  filterAnchorEl,
+  sortAnchorElement,
   handleClearSort,
   handleSortAlphabeticallyAsc,
   handleSortAlphabeticallyDesc,
@@ -47,8 +47,8 @@ const MenuOrderBy: React.FC<MenuSortBy> = ({
         <span className="ml-1 ">{t("restaurant-management.menu.sort")}</span>
       </Button>
       <Menu
-        anchorEl={filterAnchorEl}
-        open={Boolean(filterAnchorEl)}
+        anchorEl={sortAnchorElement}
+        open={!!sortAnchorElement}
         onClose={handleSortClose}
       >
         <MyMenuItem 
