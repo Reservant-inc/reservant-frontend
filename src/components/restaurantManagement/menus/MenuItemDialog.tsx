@@ -19,7 +19,7 @@ import { Ingredient, MenuItemType, MenuType } from "../../../services/types";
 import { forEach, initial } from "lodash";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
-import { CloseSharp, Cancel, ArrowRight, ArrowForward, ArrowForwardIos, SwapCalls, PlusOne, HdrPlus, Add } from "@mui/icons-material";
+import { CloseSharp, Cancel, ArrowRight, ArrowForward, ArrowForwardIos, SwapCalls, PlusOne, HdrPlus, Add, Save, ClearAll, Clear } from "@mui/icons-material";
 import { Label } from "leaflet";
 import MenuItem from "./MenuItem";
 
@@ -262,7 +262,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   return (
     
     <div className="w-full h-full flex flex-col gap-4">
-      <span className="flex w-full h-[10%]  items-center border-b justify-between">
+      <span className="flex w-full h-[5%]  items-center border-b justify-between">
 
         <h1 className="text-lg ">
           {
@@ -286,7 +286,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       </span>
       {isCreating?
 
-        <div className="flex w-full h-[90%] ">
+        <div className="flex w-full h-[95%] ">
           <div className="flex w-3/5 h-full flex-col gap-6 pr-4">
             <Formik  
               initialValues={initialValuesIng} 
@@ -296,7 +296,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               {(formik) => {
                 return(
                   <Form>
-                    <div className="flex gap-2">
+                    <div className="flex  gap-2">
                       <Field
                         as={"select"}
                         id="ingredientId" 
@@ -350,7 +350,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 return(
                   <Form>
                     <div  
-                      className="  w-full flex h-full items-center flex-col gap-6 "
+                      className="  w-full flex  items-center flex-col gap-6 "
                     >
                       <Field
                         type="text"
@@ -425,12 +425,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       <div className="flex w-full gap-2">
                         <label
                           htmlFor="photo"
-                          className={` shadow w-1/2 rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2   dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+                          className={` shadow  w-40 rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2   dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
                         
                         >
                           <CloudUploadIcon/>
                           <p>
                             Upload photo
+                            {/* Dodaj zdjęcie */}
                           </p>
                           {/* @todo tlumaczneie */}
                           <VisuallyHiddenInput
@@ -441,19 +442,21 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           />
 
                         </label>
-                        <p className="w-1/2 text-nowrap  overflow-hidden text-ellipsis">
+                        <p className="text-nowrap  overflow-hidden text-ellipsis">
                           {t("restaurant-management.menu.selectedFile")}:<br/>{photoFileName?photoFileName:"none"}
                         </p>
                       </div>
 
-                      <button 
-                        id="addmenuitemsubmit"
-                        type="submit"
-                        disabled={!formik.isValid || !formik.dirty}
-                        className={`shadow  w-1/2 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary ${formik.isValid&&formik.dirty?`dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary`:``}  ` }
-                        >
-                        {t("general.save")}
-                      </button>
+
+                        <button 
+                          id="addmenuitemsubmit"
+                          type="submit"
+                          disabled={!formik.isValid || !formik.dirty}
+                          className={"shadow h-12 min-w-1/2 w-40 justify-center items-center gap-2 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
+                          >
+                          <Save/>
+                          {t("general.save")}
+                        </button>
                     </div>
 
                   </Form>
@@ -461,9 +464,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               }}
               </Formik>
           </div>
-          <div className="flex w-2/5  items-center justify-between h-full gap-6 flex-col">
+          <div className="flex w-2/5  items-center  h-full gap-6 flex-col">
 
-            <div className="shadow-inner bg-grey-0 w-full h-5/6 overflow-y-scroll rounded-lg">
+            <div className="shadow-inner bg-grey-0 w-full h-5/6 overflow-y-auto rounded-lg">
               {/* @todo tłumacz */}
               {selectedIngredients.length>0
               ?
@@ -499,17 +502,23 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               }
             </div>
             <button
-            className={` shadow w-1/2 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+              disabled={selectedIngredients.length<=0}
+              onClick={()=>{
+                setSelectedIngredients([]);
+              }}
+              className={"items-center flex justify-center shadow text-nowrap w-40 h-12 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary" }
             >
+                <Clear/>
                 Clear ingredients
+                {/* Wyczyść składniki */}
                 {/* @todo t */}
             </button>
           </div>
 
         </div>
         :
-        <div className="flex flex-col  items-start h-[90%] w-full gap-6">
-          <div className="h-[10%] w-full ">
+        <div className="flex flex-col  items-start h-[95%] w-full gap-6">
+          <div className=" w-full ">
             <Formik  
                 initialValues={initialValuesMI} 
                 onSubmit={handleSubmitMI}
@@ -557,27 +566,30 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               </Formik>
             </div>
 
-            <div className="flex w-full h-[80%] items-center gap-6 flex-col">
+            <div className="flex w-full h-[70%]  items-center gap-6 flex-col">
 
-              <div className=" shadow-inner bg-grey-0 rounded-lg w-full  h-full overflow-y-scroll  p-1">
+              <div className=" shadow-inner bg-grey-0 rounded-lg overflow-y-auto p-1  w-full  h-full   ">
                 {/* @todo tłumacz */}
                 {selectedMenuItems.length>0
                 ?
                 <ul
-                  className="flex h-fit p-2 gap-1 w-full flex-wrap"  
+                  className="flex h-full  w-full flex-wrap "  
                 > 
                   {
                     selectedMenuItems.map((menuItem: MenuItemType) => 
-                   
-                      <MenuItem
-                        menuType={menu.menuType}
-                        menuItem={menuItem}
-                        onDelete={()=>{
-                            setSelectedMenuItems(selectedMenuItems.filter((menuItemsToRemove)=>{
-                            return menuItemsToRemove.menuItemId!==menuItem.menuItemId
-                          }))
-                        }}
+                      <li>
+
+                        <MenuItem
+                          menuType={menu.menuType}
+                          menuItem={menuItem}
+                          onDelete={()=>{
+                              setSelectedMenuItems(selectedMenuItems.filter((menuItemsToRemove)=>{
+                              return menuItemsToRemove.menuItemId!==menuItem.menuItemId
+                            }))
+                          }}
                       />
+                      </li>
+
                     )
                   }
                 </ul>
@@ -586,17 +598,23 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 //@todo tlumacz 
                 }
               </div>
-            <div className="flex  h-[10%] w-1/2 gap-8">
+            <div className="flex  gap-20">
               <button 
                 id="addmenuitemsubmitall"
                 type="submit"
                 onClick={handleSaveMIs}
-                className={` shadow   w-1/2 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+                disabled={selectedMenuItems.length<=0}
+
+                className={` shadow h-12  w-40  rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary ` }
               >
                 {t("general.save")}
               </button>
               <button
-                className={` shadow w-1/2 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary` }
+                disabled={selectedMenuItems.length<=0}
+                onClick={()=>{
+                  setSelectedMenuItems([]);
+                }}
+                className={` shadow w-40 h-12 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary ` }
               >
                   Clear all items
                   {/* @todo t */}
