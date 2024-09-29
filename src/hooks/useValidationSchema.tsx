@@ -230,6 +230,8 @@ export const useValidationSchemas = () => {
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
   });
 
+  // @todo t
+
   const menuItemSchema = yup.object({
     price: yup.number().required().min(0).max(2000),
     name: yup.string().required(),
@@ -237,10 +239,15 @@ export const useValidationSchemas = () => {
     alcoholPercentage: yup.number().min(0).max(100),
   })
 
+  // @todo t
+
   const ingredientSelectorSchema = yup.object({
     ingredientId: yup.string().required(),
     amountUsed: yup.number().required()
   })
+
+  // @todo t
+
   const MISchema = yup.object({
     id: yup.string().required()
   })
