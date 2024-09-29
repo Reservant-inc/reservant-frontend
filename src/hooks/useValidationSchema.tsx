@@ -231,11 +231,24 @@ export const useValidationSchemas = () => {
   });
 
   const menuItemSchema = yup.object({
+    price: yup.number().required().min(0).max(2000),
+    name: yup.string().required(),
+    alternateName: yup.string().required(),
+    alcoholPercentage: yup.number().min(0).max(100),
+  })
 
+  const ingredientSelectorSchema = yup.object({
+    ingredientId: yup.string().required(),
+    amountUsed: yup.number().required()
+  })
+  const MISchema = yup.object({
+    id: yup.string().required()
   })
 
   return {
     loginSchema,
+    ingredientSelectorSchema,
+    MISchema,
     userRegisterSchema,
     employeeRegisterSchema,
     RestaurantAddEmployeeSchema,
