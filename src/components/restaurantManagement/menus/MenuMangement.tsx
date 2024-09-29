@@ -302,7 +302,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     },
   ];
 
-  const filteredMenuItems =
+  const sortedMenuItems =
     selectedMenuIndex !== null
       ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemType) => {
           const nameMatch = menuItem.name
@@ -469,7 +469,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         <div className="m-1 flex flex-wrap">
           {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
             <>
-              {filteredMenuItems.map((menuItem: MenuItemType) => (
+              {sortedMenuItems.map((menuItem: MenuItemType) => (
                 <MenuItem
                   key={menuItem.menuItemId}
                   menuItem={menuItem}
@@ -501,10 +501,12 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
           <MenuItemDialog 
           
+            menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
+            activeMenuItems={sortedMenuItems}
           
             restaurantId={activeRestaurantId}
+          
             onClose={() => setIsMenuItemPopupOpen(false)}
-            menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
 
           />
           </div>
@@ -520,6 +522,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           <div>
             <MenuItemDialog
               menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
+              
+              activeMenuItems={sortedMenuItems}
 
               restaurantId={activeRestaurantId}
               editedMenuItem={editedMenuItem}
