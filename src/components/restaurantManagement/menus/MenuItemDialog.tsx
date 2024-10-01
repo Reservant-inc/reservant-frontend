@@ -26,7 +26,7 @@ interface MenuItemDialogProps {
     restaurantId: number;
     editedMenuItem?: MenuItemType | null;
     onClose: Function;
-    activeMenuItems: MenuItemType[]
+    activeMenuItems: MenuItemType[] | null
 }
 
 const VisuallyHiddenInput = styled("input")({
@@ -537,13 +537,11 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           <option value="" id="MI-option-default">Select a menu item</option>
                             {/* @todo tlumaczenie  */}
                             {
-                                  
+                              activeMenuItems &&
                               menuItems.filter(menuItem=>!activeMenuItems.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
                               .filter(menuItem=>!selectedMenuItems.find(selectedMI=>selectedMI.menuItemId==menuItem.menuItemId))
                               .map((menuItem) => 
                               <option value={menuItem.menuItemId}> 
-                               
-
                                 {menuItem.name}
 
                               </option>

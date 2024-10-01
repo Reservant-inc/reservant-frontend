@@ -46,10 +46,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   activeRestaurantId,
 }) => {
   const { t } = useTranslation("global");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [sortAnchorElement, setSortAnchorElement] = useState<null | HTMLElement>(
-    null,
-  );
+
   const [menus, setMenus] = useState<Menu[]>([]);
   const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{
     [key: number]: string[];
@@ -254,24 +251,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     fetchMenuIemsForSelectedMenu();
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+
 
  
-  const handleSortOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSortAnchorElement(event.currentTarget);
-  };
-
-  const handleSortClose = () => {
-    setSortAnchorElement(null);
-  };
-
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSearchText(event.target.value);
-  };
 
   const editedMenu = editMenu
     ? {
@@ -283,7 +265,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       }
     : null;
 
-  const actions = [
+
+  const menuActions = [
     {
       icon: <AddIcon />,
       name: "Add menu",
@@ -297,7 +280,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     },
   ];
 
-  const sortedMenuItems =
+  
+  const searchedMenuItems =
     selectedMenuIndex !== null
       ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemType) => {
           const nameMatch = menuItem.name
@@ -310,7 +294,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           return nameMatch || priceMatch;
         })
       : [];
-
 
 
 
@@ -343,11 +326,10 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           }
           <button
             className={` rounded-t-md p-2 h-full  w-1/6 text-lg "text-grey-2 bg-grey-0 `}
-            onClick={handleMenuOpen}
             disabled={selectedMenuIndex === null}
           >
             
-            <MoreActions actions={actions} />
+            <MoreActions actions={menuActions} />
             
           </button>
         </div>
@@ -386,7 +368,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
                 <TextField
                   type="text"
                   label={t("general.search")}
-                  onChange={handleSearchInputChange}
+    
+                  onChange={(e)=>{setSearchText(e.target.value)}}
                   variant="standard"
                   className="rounded-lg p-1 dark:bg-grey-6 dark:text-white"
                 />
@@ -398,7 +381,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         <div className="m-1 flex flex-wrap">
           {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
             <>
-              {sortedMenuItems.map((menuItem: MenuItemType) => (
+              {searchedMenuItems.map((menuItem: MenuItemType) => (
                 <MenuItem
                   key={menuItem.menuItemId}
                   menuItem={menuItem}
@@ -431,7 +414,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           <MenuItemDialog 
           
             menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
-            activeMenuItems={sortedMenuItems}
+            activeMenuItems={selectedMenuIndex?menus[selectedMenuIndex].menuItems:null}
           
             restaurantId={activeRestaurantId}
           
@@ -448,11 +431,12 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
           onClose={() => setIsMenuItemEditPopupOpen(false)}
 
         >
-          <div>
+          <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
+          
             <MenuItemDialog
               menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
               
-              activeMenuItems={sortedMenuItems}
+              activeMenuItems={selectedMenuIndex?menus[selectedMenuIndex].menuItems:null}
 
               restaurantId={activeRestaurantId}
               editedMenuItem={editedMenuItem}
