@@ -223,5 +223,9 @@
         "reviews": "Opinie",
         "no-reviews": "Brak opinii",
         "add-review": "Dodaj opinie"
+        "tags": "Tagi"
+    },
+    "alt" : {
+        "delete": "Usuń na amen"
     }
 }

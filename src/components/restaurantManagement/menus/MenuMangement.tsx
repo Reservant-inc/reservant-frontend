@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { MenuItemType, MenuType } from "../../../services/types";
+import { FetchError } from "../../../services/Errors";
 
 interface MenuManagementProps {
   activeRestaurantId: number;
@@ -66,67 +67,56 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
   useEffect(() => {
+    const fetchMenus = async (restaurantId: number) => {
+      try {
+        const menusData: Menu[] = await fetchGET(
+          `/my-restaurants/${restaurantId}/menus`,
+        );
+        console.log("Menus data:", menusData);
+        const validatedMenusData = menusData.map((menu) => ({
+          ...menu,
+          menuItems: menu.menuItems || [], // Jeśli brakuje menuItems, ustaw na pustą tablicę
+        }));
+        const allMenuNames = validatedMenusData.map((menu) => menu.name);
+        setMenus(validatedMenusData);
+        setmenuNamesByRestaurant({ [activeRestaurantId || 0]: allMenuNames });
+      } catch (error) {
+        console.error("Error fetching menus:", error);
+      }
+    };
     if (activeRestaurantId !== null) {
       console.log(activeRestaurantId);
       fetchMenus(activeRestaurantId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeRestaurantId]);
+  }, []);
 
   useEffect(() => {
-    const isMenuFetched =
-      selectedMenuIndex !== null &&
-      menus.length > selectedMenuIndex &&
-      menus[selectedMenuIndex].menuItems.length > 0;
-
-    if (!isMenuFetched) {
-      fetchMenuIemsForSelectedMenu();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menus, selectedMenuIndex]);
-
-  const fetchMenuIemsForSelectedMenu = async () => {
-    if (selectedMenuIndex !== null && menus.length > selectedMenuIndex) {
-      const menuId = menus[selectedMenuIndex].menuId;
-      try {
-        const menuData = await fetchGET(`/menus/${menuId}`);
-        console.log("Menu items for selected menu:", menuData);
-        if (!menuData.menuItems || menuData.menuItems.length === 0) {
-          return;
+    const fetchMenuIemsForSelectedMenu = async () => {
+      if (selectedMenuIndex !== null) {
+        const {menuId} = menus[selectedMenuIndex];
+        try {
+          const menuData = await fetchGET(`/menus/${menuId}`);
+          console.log("Menu items for selected menu:", menuData);
+          if (menuData.menuItems || menuData.menuItems.length > 0) {
+            return;
+          }
+          setMenus((prevMenus) => {
+            const updatedMenus = [...prevMenus];
+            updatedMenus[selectedMenuIndex] = {
+              ...updatedMenus[selectedMenuIndex],
+              menuItems: menuData.menuItems || [],
+            };
+            return updatedMenus;
+          });
+        } catch (error) {
+          console.error("Error fetching menu items for selected menu:", error);
         }
-        setMenus((prevMenus) => {
-          const updatedMenus = [...prevMenus];
-          updatedMenus[selectedMenuIndex] = {
-            ...updatedMenus[selectedMenuIndex],
-            menuItems: menuData.menuItems || [],
-          };
-          return updatedMenus;
-        });
-      } catch (error) {
-        console.error("Error fetching menu items for selected menu:", error);
       }
-    }
-  };
-
-  const fetchMenus = async (restaurantId: number): Promise<Menu[]> => {
-    try {
-      const menusData: Menu[] = await fetchGET(
-        `/my-restaurants/${restaurantId}/menus`,
-      );
-      console.log("Menus data:", menusData);
-      const validatedMenusData = menusData.map((menu) => ({
-        ...menu,
-        menuItems: menu.menuItems || [], // Jeśli brakuje menuItems, ustaw na pustą tablicę
-      }));
-      const allMenuNames = validatedMenusData.map((menu) => menu.name);
-      setMenus(validatedMenusData);
-      setmenuNamesByRestaurant({ [activeRestaurantId || 0]: allMenuNames });
-      return validatedMenusData;
-    } catch (error) {
-      console.error("Error fetching menus:", error);
-      return [];
-    }
-  };
+    };
+    
+    fetchMenuIemsForSelectedMenu();
+    
+  }, [selectedMenuIndex]);
 
   const handleSaveNewMenu = async (values: { [key: string]: string }) => {
     console.log("New menu values:", values);
@@ -144,9 +134,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       const response = await fetchPOST("/menus", body);
       console.log("Response:", response);
       setIsMenuPopupOpen(false);
-      if (activeRestaurantId !== null) {
-        fetchMenus(activeRestaurantId);
-      }
+      
     } catch (error) {
       console.error("Error saving new menu:", error);
     }
@@ -180,9 +168,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         const response = await fetchPUT(`/menus/${menuId}`, body);
         console.log("Response:", response);
         setIsEditMenuPopupOpen(false);
-        if (activeRestaurantId !== null) {
-          fetchMenus(activeRestaurantId);
-        }
+       
       } catch (error) {
         console.error("Error while editing category:", error);
       }
@@ -201,9 +187,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     } catch (error) {
       console.error("Error while deleting menu:", error);
     }
-    if (activeRestaurantId !== null) {
-      fetchMenus(activeRestaurantId);
-    }
+  
   };
 
 
@@ -233,22 +217,51 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         console.log(response);
         setIsMenuItemEditPopupOpen(false);
 
-        fetchMenuIemsForSelectedMenu();
       }
     } catch (error) {
       console.error("Error while saving edited menu item:", error);
     }
   };
 
-  const handleDeleteMenuItem = async (menuItem: MenuItemType) => {
+  const handleRemoveMenuItem = async (menuItem: MenuItemType) => {
+
     try {
-      const { menuItemId } = menuItem;
-      const response = await fetchDELETE(`/menu-items/${menuItemId}`);
-      console.log(response);
+      if (selectedMenuIndex !== null){
+
+        const { menuItemId } = menuItem;
+        const body = JSON.stringify(
+        {
+          itemIds: [menuItemId],
+        });
+        const response = await fetchDELETE(`/menus/${menus[selectedMenuIndex].menuId}/items`, body);
+        console.log(response);
+      }
     } catch (error) {
-      console.error("Error while deleting menu item:", error);
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
     }
-    fetchMenuIemsForSelectedMenu();
+  };
+
+  const handleDeletePermanentlyMenuItem = async (menuItem: MenuItemType) => {
+
+    try {
+      if (selectedMenuIndex !== null){
+
+        const { menuItemId } = menuItem;
+      
+        const response = await fetchDELETE(`/menu-items/${menuItemId}`);
+        console.log(response);
+      }
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
+    }
   };
 
 
@@ -299,15 +312,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
   return (
     <div className="h-full w-full">
-      <div className="bg-grey-1 h-[5%]">
-        {/* {selectedMenuIndex === null && (
-          <div className="flex justify-start">
-            <IconButton onClick={() => setIsMenuPopupOpen(true)}>
-              <AddIcon className="text-secondary-2" />
-              <span className="ml-1 text-black dark:text-white">ADD MENU</span>
-            </IconButton>
-          </div>
-        )} */}
+      <div className="bg-grey-1 h-[10%]">
+      
         <div className="flex h-full gap-1">
           {(activeRestaurantId !== null && menuNamesByRestaurant[activeRestaurantId])
           && menuNamesByRestaurant[activeRestaurantId].map(
@@ -379,18 +385,19 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         </div>
 
         <div className="m-1 flex flex-wrap">
-          {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-            <>
+          {selectedMenuIndex !== null && (
+            <div>
               {searchedMenuItems.map((menuItem: MenuItemType) => (
                 <MenuItem
                   key={menuItem.menuItemId}
                   menuItem={menuItem}
                   menuType={menus[selectedMenuIndex].menuType}
-                  onDelete={() => handleDeleteMenuItem(menuItem)}
+                  onDelete={() => handleRemoveMenuItem(menuItem)}
                   onEdit={() => handleEditMenuItem(menuItem)}
+                  onAlt={() => handleDeletePermanentlyMenuItem(menuItem)}
                 />
               ))}
-            </>
+            </div>
           )}
         </div>
         <MenuDialog
@@ -413,8 +420,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
           <MenuItemDialog 
           
-            menu={menus[selectedMenuIndex?selectedMenuIndex:0]}
-            activeMenuItems={selectedMenuIndex?menus[selectedMenuIndex].menuItems:null}
+            menu={selectedMenuIndex!==null?menus[selectedMenuIndex]:null}
+            activeMenuItems={selectedMenuIndex!==null?menus[selectedMenuIndex].menuItems:null}
           
             restaurantId={activeRestaurantId}
           

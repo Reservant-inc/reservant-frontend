@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   TextField,
-  Button,
   styled,
-  FormLabel,
-  Select,
 } from "@mui/material";
 import DefaultMenuItem from "../../../assets/images/defaultMenuItemImage.png";
 import DefaultDrinkItem from "../../../assets/images/defaultDrinkItemImage.png";
@@ -22,7 +15,7 @@ import { CloseSharp, ArrowForwardIos, Add, Save, Clear } from "@mui/icons-materi
 import MenuItem from "./MenuItem";
 
 interface MenuItemDialogProps {
-    menu: MenuType;
+    menu: MenuType | null;
     restaurantId: number;
     editedMenuItem?: MenuItemType | null;
     onClose: Function;
@@ -83,7 +76,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([])
   const [selectedMenuItems, setSelectedMenuItems] = useState<MenuItemType[]>([])
 
-  const defaultImage = menu.menuType === "Alcohol" ? DefaultDrinkItem : DefaultMenuItem;  
 
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
@@ -118,8 +110,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     const getMenuItems = async () => {
       try{
         const res = await fetchGET(`/my-restaurants/${restaurantId}/menu-items`);
-        
+        console.log(res)
         setMenuItems(res);
+        console.log(menuItems)
 
       } catch (error) {
         console.error("Error fetching ingredients", error);
@@ -175,38 +168,46 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     } finally {
       setSubmitting(false);
     }
+    if(menu!==null){
 
-    try{
-      setSubmitting(true);
-      
-      const body = JSON.stringify({
-        itemIds: [
-          menuItemRes.menuItemId
-        ],
-      });
-      console.log(body)
-      let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
-      console.log(res)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSubmitting(false);
+      try{
+        setSubmitting(true);
+          const body = JSON.stringify({
+            itemIds: [
+              menuItemRes.menuItemId
+            ],
+          });
+          console.log(body)
+          let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
+          console.log(res)
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setSubmitting(false);
+        onClose();
+      }
     }
+
   };
 
 
   const handleSaveMIs = async (
   ) => {
-    try{
-      
-      const body = JSON.stringify({
-        itemIds: convertToIds()
-      });
-      console.log(body)
-      let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
-      console.log(res)
-    } catch (error) {
-      console.log(error);
+    if(menu!==null){
+
+      try{
+        const body = JSON.stringify({
+          itemIds: convertToIds()
+        });
+        console.log(body)
+        let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
+        console.log(res)
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        onClose();
+      }
     }
   }
 
@@ -398,7 +399,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
                       />
                     
-                      {menu.menuType === "Alcohol" && (
+                      {(menu !==null && menu.menuType) === "Alcohol" && (
                         <Field
                           type="text"
                           id="alcoholPercentage"
@@ -537,8 +538,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           <option value="" id="MI-option-default">Select a menu item</option>
                             {/* @todo tlumaczenie  */}
                             {
-                              activeMenuItems &&
-                              menuItems.filter(menuItem=>!activeMenuItems.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
+                              menuItems
+                              .filter(menuItem=>!activeMenuItems?.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
                               .filter(menuItem=>!selectedMenuItems.find(selectedMI=>selectedMI.menuItemId==menuItem.menuItemId))
                               .map((menuItem) => 
                               <option value={menuItem.menuItemId}> 
@@ -578,7 +579,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       <li>
 
                         <MenuItem
-                          menuType={menu.menuType}
+                          key={menuItem.menuItemId}
+                          menuType={menu!==null?menu.menuType:""}
                           menuItem={menuItem}
                           onDelete={()=>{
                               setSelectedMenuItems(selectedMenuItems.filter((menuItemsToRemove)=>{

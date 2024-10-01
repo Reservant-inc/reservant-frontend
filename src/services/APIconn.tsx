@@ -90,17 +90,25 @@ export const fetchPUT = async (connString: string, body: string) => {
   return data;
 };
 
-export const fetchDELETE = async (connString: string) => {
+export const fetchDELETE = async (connString: string, body?:string) => {
   const token = Cookies.get("token");
+
+  const fetchOptions: RequestInit = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token as string}`,
+    },
+  };
+
+  if (body) {
+    fetchOptions.body = body;
+  }
 
   const response = await fetch(
     `${process.env.REACT_APP_SERVER_IP}${connString}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token as string}`,
-      },
-    },
+    fetchOptions
+    
   );
 
   if (!(response.json.length > 0)) {

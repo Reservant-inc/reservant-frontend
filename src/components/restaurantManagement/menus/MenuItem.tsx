@@ -11,15 +11,17 @@ import DefaultPic from "../../../assets/images/no-image.png"
 import { MenuItemType } from "../../../services/types";
 
 interface MenuItemProps {
-  menuType: string
+  menuType: string  
   menuItem: MenuItemType
   onDelete: Function;
   onEdit?: Function;
+  onAlt?:()=>void
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
   menuItem,
   menuType,
+  onAlt,
   onDelete,
   onEdit,
 }) => {
@@ -29,19 +31,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
   const imagePath = menuItem.photo || defaultImage;
   const alcoholPercentageVisible = menuType === "Alcohol";
   const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false);
-
-  const handleDeleteConfirmation = () => {
-    setConfirmationOpen(true);
-  };
-
-  const handleDeleteConfirmed = () => {
-    onDelete();
-    setConfirmationOpen(false);
-  };
-
-  const handleDeleteCancelled = () => {
-    setConfirmationOpen(false);
-  };
 
   return (
     <Card className="m-1 w-64 rounded-lg dark:bg-grey-5 dark:text-grey-1">
@@ -63,7 +52,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
             <button className="text-primary" onClick={()=>onEdit()}>
               <EditIcon />
             </button>}
-            <button className="text-primary" onClick={handleDeleteConfirmation}>
+            <button className="text-primary" onClick={()=>{setConfirmationOpen(true)}}>
               <DeleteIcon />
             </button>
           </div>
@@ -77,9 +66,18 @@ const MenuItem: React.FC<MenuItemProps> = ({
         )}
         <ConfirmationDialog
           open={confirmationOpen}
-          onClose={handleDeleteCancelled}
-          onConfirm={handleDeleteConfirmed}
-          confirmationText={`Are you sure you want to delete ${menuItem.name}?`}
+          onClose={()=>{setConfirmationOpen(false)}}
+          onConfirm={()=>{
+            onDelete();
+            setConfirmationOpen(false);
+          }}
+          onAlt={()=>{
+            if(onAlt)
+              onAlt();
+            setConfirmationOpen(false);
+          }}
+          confirmationText={`Are you sure you want to remove ${menuItem.name} from this menu?`} //@todo t
+          altText={t("alt.delete")}
         />
       </CardContent>
     </Card>

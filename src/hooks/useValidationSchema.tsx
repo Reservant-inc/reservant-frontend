@@ -233,7 +233,7 @@ export const useValidationSchemas = () => {
   // @todo t
 
   const menuItemSchema = yup.object({
-    price: yup.number().required().min(0).max(2000),
+    price: yup.number().required().min(0).max(500),
     name: yup.string().required(),
     alternateName: yup.string().required(),
     alcoholPercentage: yup.number().min(0).max(100),
