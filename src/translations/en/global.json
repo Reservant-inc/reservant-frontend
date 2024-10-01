@@ -217,5 +217,8 @@
         "rating": "Any rating",
         "reviews": "Reviews",
         "tags": "Tags"
+    },
+    "alt" : {
+        "delete": "Delete permanently"
     }
 }

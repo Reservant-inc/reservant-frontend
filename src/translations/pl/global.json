@@ -211,5 +211,8 @@
         "rating": "Dowolna ocena",
         "reviews": "Oceny",
         "tags": "Tagi"
+    },
+    "alt" : {
+        "delete": "Usuń na amen"
     }
 }
