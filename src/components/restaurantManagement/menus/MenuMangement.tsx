@@ -16,19 +16,15 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
   Box,
   Button,
   IconButton,
-  InputAdornment,
   Menu,
-  MenuItem as MyMenuItem,
   TextField,
 } from "@mui/material";
 import FilterMenu from "./FilterMenu";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
-import { MenuItemType, MenuType } from "../../../services/types";
 
 interface MenuManagementProps {
   activeRestaurantId: number | null;
