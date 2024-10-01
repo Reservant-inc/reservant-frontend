@@ -16,18 +16,13 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
   Box,
   Button,
-  IconButton,
-  InputAdornment,
   Menu,
   Modal,
-  MenuItem as MyMenuItem,
   TextField,
 } from "@mui/material";
-import MenuOrderBy from "./MenuSortBy";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { MenuItemType, MenuType } from "../../../services/types";
 
@@ -316,61 +311,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         })
       : [];
 
-  const sortMenuItems = (
-    sortFunction: (a: MenuItemType, b: MenuItemType) => number,
-  ) => {
-    if (selectedMenuIndex !== null) {
-      const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(
-        sortFunction,
-      );
-      setMenus((prevMenus) => {
-        const updatedMenus = [...prevMenus];
-        updatedMenus[selectedMenuIndex] = {
-          ...updatedMenus[selectedMenuIndex],
-          menuItems: sortedMenuItems,
-        };
-        return updatedMenus;
-      });
-      handleSortClose();
-    }
-  };
 
-  const handleSortAlphabeticallyAsc = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) =>
-      a.name.localeCompare(b.name),
-    );
-  };
-  const handleSortAlphabeticallyDesc = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) =>
-      b.name.localeCompare(a.name),
-    );
-  };
 
-  const handleSortPriceAsc = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) => a.price - b.price);
-  };
-
-  const handleSortPriceDesc = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) => b.price - a.price);
-  };
-
-  const handleSortAlcoholAsc = () => {
-    sortMenuItems(
-      (a: MenuItemType, b: MenuItemType) =>
-        (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0),
-    );
-  };
-
-  const handleSortAlcoholDesc = () => {
-    sortMenuItems(
-      (a: MenuItemType, b: MenuItemType) =>
-        (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0),
-    );
-  };
-
-  const handleClearSort = () => {
-    fetchMenuIemsForSelectedMenu();
-  };
 
   return (
     <div className="h-full w-full">
@@ -429,20 +371,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
                 </span>
               </Button>
             )}
-            {selectedMenuIndex !== null && (
-              <MenuOrderBy
-                sortAnchorElement={sortAnchorElement}
-                handleSortOpen={handleSortOpen}
-                handleSortClose={handleSortClose}
-                handleSortAlphabeticallyAsc={handleSortAlphabeticallyAsc}
-                handleSortAlphabeticallyDesc={handleSortAlphabeticallyDesc}
-                handleSortPriceAsc={handleSortPriceAsc}
-                handleSortPriceDesc={handleSortPriceDesc}
-                handleSortAlcoholAsc={handleSortAlcoholAsc}
-                handleSortAlcoholDesc={handleSortAlcoholDesc}
-                handleClearSort={handleClearSort}
-              />
-            )}
+            
           </div>
           <div className="flex-grow">
             {selectedMenuIndex !== null && (
