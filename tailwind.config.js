@@ -31,6 +31,7 @@ module.exports = {
       'grey-6'      : '#2b2b2b',
       'black'       : '#222222',
       'trans'       : 'rgba(0,0,0,0)',
+      'semi-trans'  : 'rgba(0,0,0,0.8)',
       'red'         : '#ff0000',
       'l-red'       : '#ff7979',
       'green'       : '#54de46',

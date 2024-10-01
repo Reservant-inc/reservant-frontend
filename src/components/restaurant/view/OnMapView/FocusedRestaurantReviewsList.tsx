@@ -62,11 +62,11 @@ const FocusedRestaurantReviewsList: React.FC<
                 setValue={setValue}
                 value={value}
               />
-              <Button
-                className="w-1/2 dark:bg-grey-5 bg-grey-0 rounded-lg text-primary dark:text-secondary dark:hover:bg-grey-6 hover:bg-grey-1"
+              <button
+                className="w-1/2 border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
               >
                 + {t("reviews.add-review")}
-              </Button>
+              </button>
             </div>
           )}
           {filteredAndSortedReviews.length > 0 ? (
