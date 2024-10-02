@@ -1,16 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {  MenuType } from '../../../../services/types';
-import { fetchGET } from '../../../../services/APIconn';
+import { fetchGET, getImage } from '../../../../services/APIconn';
 import { FetchError } from '../../../../services/Errors';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Menu from './Menu';
+import AddIcon from '@mui/icons-material/Add';
+import { MenuScreenType } from '../../../../services/enums';
 
 interface MenuListProps {
     activeRestaurantId: number
+    type: MenuScreenType
 }
 
-const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId }) => {
+const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
 
     const [menus, setMenus] = useState<MenuType[]>([])
     const [menuIndex, setMenuIndex] = useState<number>(0)
@@ -59,7 +62,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId }) => {
       };
 
     return (
-        <div className='w-full h-full flex flex-col gap-6'>
+        <div className='w-full h-full flex flex-col gap-2'>
             <div className='flex gap-2 h-16 w-full justify-between'>
               <button className='h-8 min-w-8 rounded-full bg-grey-0 hover:bg-grey-1 dark:bg-grey-6 dark:hover:bg-grey-5' onClick={() => menuIndex === 0 ? setMenuIndex(menus.length - 1) : setMenuIndex((index) => index - 1)}>
                 <ChevronLeftIcon className='w-6 h-6 dark:text-white'/>
@@ -75,13 +78,21 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId }) => {
                     </button>
                 ))}
               </div>
-              <button className='h-8 min-w-8 rounded-full bg-grey-0 hover:bg-grey-1 dark:bg-grey-6 dark:hover:bg-grey-5' onClick={() => menuIndex === (menus.length - 1) ? setMenuIndex(0) : setMenuIndex((index) => index + 1)}>
-                <ChevronRightIcon className='w-6 h-6 dark:text-white'/>
-              </button>  
+              <div className='flex gap-2'>
+                <button className='h-8 min-w-8 rounded-full bg-grey-0 hover:bg-grey-1 dark:bg-grey-6 dark:hover:bg-grey-5' onClick={() => menuIndex === (menus.length - 1) ? setMenuIndex(0) : setMenuIndex((index) => index + 1)}>
+                  <ChevronRightIcon className='w-6 h-6 dark:text-white'/>
+                </button>  
+                { 
+                type === MenuScreenType.Management &&
+                  <button className='flex items-center justify-center p-1 px-2 h-8 w-8 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'>
+                    <AddIcon className='h-6 w-6'/>
+                  </button>
+                }
+              </div>
             </div>
             <div className='overflow-y-auto scroll h-full flex flex-col gap-5 scroll-smooth'>
                 {menus.map((menu, index) => (
-                    <Menu key={menu.menuId + menu.name} menu={menu} ref={(el) => (menuRefs.current[index] = el)} />
+                    <Menu key={menu.menuId + menu.name} menu={menu} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
                 ))}
             </div>
         </div>

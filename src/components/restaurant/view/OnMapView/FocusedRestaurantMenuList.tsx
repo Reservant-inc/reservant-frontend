@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { getImage } from '../../../../services/APIconn';
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import SearchIcon from "@mui/icons-material/Search";
+import { MenuScreenType } from '../../../../services/enums';
 
 interface MenuProps {
     restaurant: RestaurantDetailsType
@@ -66,7 +67,7 @@ const FocusedRestaurantDetails: React.FC<MenuProps> = ({ restaurant, reviews }) 
               </div>
             </div>
           </div>
-          <div className='h-full w-[45%] flex-col-reverse'>
+          <div className='h-full w-[45%] flex flex-col-reverse'>
             <div className="flex h-10 items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
                 <input
                     type="text"
@@ -80,7 +81,7 @@ const FocusedRestaurantDetails: React.FC<MenuProps> = ({ restaurant, reviews }) 
           </div>
           </div>
         <div className='w-[90%] flex justify-center h-[calc(85%-1.75rem)]'>
-          <Menu activeRestaurantId={restaurant.restaurantId}/>
+          <Menu activeRestaurantId={restaurant.restaurantId} type={MenuScreenType.Preview}/>
         </div>
       </div>
     )

@@ -4,16 +4,14 @@ import Cookies from "js-cookie";
 import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
-import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
-import OrderHistory from "./reservations/OrderHistory";
 import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
-import { fetchGET, getImage } from "../../services/APIconn";
-import { User, UserInfo } from "../../services/types";
-import { AccountCircle } from "@mui/icons-material";
-import { checkPrimeSync } from "crypto";
-import { wait } from "@testing-library/user-event/dist/utils";
+import { getImage } from "../../services/APIconn";
+import { UserInfo } from "../../services/types";
 import DefaultPhoto from "../../assets/images/user.jpg"
+import { MenuScreenType } from "../../services/enums";
+import MenuList from "./menus/newMenus/MenuList";
+
 
 const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(
@@ -67,7 +65,7 @@ const RestaurantManager = () => {
                     />
                   ),
                 2: <EmployeeManagement />,
-                3: <MenuManagement activeRestaurantId={1} />,
+                3: <MenuList activeRestaurantId={1} type={MenuScreenType.Management}/>,
                 6: <ReservationOrderHeader activeRestaurantId={1} />, //order history ma być częścią reservations???
               }[activePage]
             }
