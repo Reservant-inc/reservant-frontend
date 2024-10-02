@@ -232,10 +232,10 @@ export const useValidationSchemas = () => {
 
   // @todo t
 
-  const menuItemSchema = yup.object({
+  const newMenuItemsSchema = yup.object({
     price: yup.number().required().min(0).max(500),
-    name: yup.string().required(),
-    alternateName: yup.string().required(),
+    name: yup.string().required().max(50),
+    alternateName: yup.string().max(50),
     alcoholPercentage: yup.number().min(0).max(100),
   })
 
@@ -248,20 +248,20 @@ export const useValidationSchemas = () => {
 
   // @todo t
 
-  const MISchema = yup.object({
+  const menuItemSelectorSchema = yup.object({
     id: yup.string().required()
   })
 
   return {
     loginSchema,
     ingredientSelectorSchema,
-    MISchema,
+    menuItemSelectorSchema,
     userRegisterSchema,
     employeeRegisterSchema,
     RestaurantAddEmployeeSchema,
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
     RestaurantEditSchema,
-    menuItemSchema,
+    newMenuItemsSchema,
   };
 };

@@ -121,7 +121,12 @@ export type MenuItemType = {
   price: number;
   alcoholPercentage: number;
   photo: string;
-  ingredients: Ingredient[];
+  ingredients: IngredientUsage[];
+}
+
+export type IngredientUsage = {
+  ingredientId: string,
+  amountUsed: number
 }
 
 export interface MenuItemWithDescriptionType {

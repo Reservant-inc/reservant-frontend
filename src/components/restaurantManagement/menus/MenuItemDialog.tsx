@@ -3,21 +3,20 @@ import {
   TextField,
   styled,
 } from "@mui/material";
-import DefaultMenuItem from "../../../assets/images/defaultMenuItemImage.png";
-import DefaultDrinkItem from "../../../assets/images/defaultDrinkItemImage.png";
 import { useTranslation } from "react-i18next";
 import { fetchFilesPOST, fetchGET, fetchPOST, getImage } from "../../../services/APIconn";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Ingredient, MenuItemType, MenuType } from "../../../services/types";
+import { Ingredient, IngredientUsage, MenuItemType, MenuType } from "../../../services/types";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
 import { CloseSharp, ArrowForwardIos, Add, Save, Clear } from "@mui/icons-material";
 import MenuItem from "./MenuItem";
+import { FetchError } from "../../../services/Errors";
 
 interface MenuItemDialogProps {
     menu: MenuType | null;
     restaurantId: number;
-    editedMenuItem?: MenuItemType | null;
+    menuItemToEdit?: MenuItemType | null;
     onClose: Function;
     activeMenuItems: MenuItemType[] | undefined
 }
@@ -34,19 +33,12 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-
-interface IngredientUsage {
-  ingredientId: string,
-  amountUsed: number
-}
-
-
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   menu,
   restaurantId,
   onClose,
   activeMenuItems,
-  editedMenuItem = null, //??????????? nie wiem o co chodzi, nie dotykam
+  menuItemToEdit, 
 }) => {
   
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -54,30 +46,15 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   const { t } = useTranslation("global");
 
-  const {menuItemSchema,ingredientSelectorSchema,MISchema} = useValidationSchemas();
-
-  const initialValues = {
-    price: "",
-    name: "",
-    alternateName: "",
-    alcoholPercentage: "", 
-  }
-  const initialValuesIng = {
-    ingredientId: "",
-    amountUsed: ""
-  }
-  const initialValuesMI = {
-    id: ""
-  }
+  const {menuItemSelectorSchema,ingredientSelectorSchema,newMenuItemsSchema} = useValidationSchemas();
 
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
 
-  const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([])
+  const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([]) //@todo set as menuItemToEdit.ingredients
   const [selectedMenuItems, setSelectedMenuItems] = useState<MenuItemType[]>([])
 
-
-  const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [isCreating, setIsCreating] = useState<boolean>(true);
 
   
   useEffect (()=>{
@@ -98,8 +75,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         }
 
         setIngredients(tmp);
-      } catch (error) {
-        console.error("Error fetching ingredients", error);
+      }catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error")
+        }
       }
     }
     getIngredients();
@@ -114,22 +95,37 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         setMenuItems(res);
         console.log(menuItems)
 
-      } catch (error) {
-        console.error("Error fetching ingredients", error);
+      }catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error")
+        }
       }
     }
     getMenuItems();
   },[])
-  
-  
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setPhotoFile(e.target.files[0]);
-      setPhotoFileName(e.target.files[0].name);
-    }
-  };
 
-  const onSubmit = async (
+  useEffect (()=>{
+    const getMenuItemToEditDetails = async () => {
+      try{
+        const res = await fetchGET(`/menu-items/${menuItemToEdit?.menuItemId}`);
+        setSelectedIngredients(res.ingredients)
+      }catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error")
+        }
+      }
+    }
+
+    if(menuItemToEdit){
+      getMenuItemToEditDetails
+    }
+  },[])
+
+  const onSubmitNewMenuItem = async (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
@@ -191,13 +187,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   };
 
 
-  const handleSaveMIs = async (
+  const submitSelectedMenuItems = async (
   ) => {
     if(menu!==null){
 
       try{
         const body = JSON.stringify({
-          itemIds: convertToIds()
+          itemIds: getSelectedMenuItemsIds()
         });
         console.log(body)
         let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
@@ -211,7 +207,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     }
   }
 
-  const handleSubmitIng = (
+  const addIngredient = (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
@@ -225,7 +221,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   }
 
 
-  const handleSubmitMI= ( values: FormikValues,
+  const addMenuItem = ( values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },) => {
       let tmp = menuItems.find((e)=>
         e.menuItemId==values.id
@@ -240,12 +236,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   }
 
-  const findIngDetails= (ingredient: IngredientUsage) => {
+  const getIngredientDetails= (ingredient: IngredientUsage) => {
     const res = (ingredients.find((e)=>e.ingredientId==ingredient.ingredientId))
     return res;
   }
   
-  const convertToIds = () => {
+  const getSelectedMenuItemsIds = () => {
     let tmp: number[] = []
     for (const menuItem of selectedMenuItems){
       tmp.push(menuItem.menuItemId)
@@ -261,8 +257,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       <span className="flex w-full h-[5%]  items-center border-b justify-between">
 
         <h1 className="text-lg ">
-          {
-            isCreating
+          { menuItemToEdit
+            ?
+            <p>
+            Editing menu item
+            </p>
+            :
+            isCreating 
             ?
             <p>
             Create new menu item or <span onClick={()=>{setIsCreating(false)}} className="text-primary cursor-pointer">add existing</span>
@@ -285,8 +286,11 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         <div className="flex w-full h-[95%] ">
           <div className="flex w-3/5 h-full flex-col gap-6 pr-4">
             <Formik  
-              initialValues={initialValuesIng} 
-              onSubmit={handleSubmitIng}
+              initialValues={{
+                ingredientId: "",
+                amountUsed: ""
+              }} 
+              onSubmit={addIngredient}
               validationSchema={ingredientSelectorSchema}
               
             >
@@ -340,9 +344,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
             <Formik
               id="menuitem-formik"
-              initialValues={initialValues}
-              validationSchema={menuItemSchema}
-              onSubmit={onSubmit}
+              initialValues={{
+                price: "",
+                name: "",
+                alternateName: "",
+                alcoholPercentage: ""
+              }}
+              validationSchema={newMenuItemsSchema}
+              onSubmit={onSubmitNewMenuItem}
             >
               {(formik) => {
                 return(
@@ -436,7 +445,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                             type="file"
                             id="photo"
                             accept="image/*"
-                            onChange={handlePhotoChange}
+                            onChange={(e)=>{
+                              if (e.target.files && e.target.files.length > 0) {
+                                setPhotoFile(e.target.files[0]);
+                                setPhotoFileName(e.target.files[0].name);
+                              }
+                            }}
                           />
 
                         </label>
@@ -474,11 +488,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 {
                   selectedIngredients.map((ingredient) => 
                   <li 
+                    key={ingredient.ingredientId}
                     className="shadow-md h-fit bg-white items-center rounded-md justify-between w-full flex p-1 "
                   > 
                     <p className="overflow-hidden text-ellipsis">
 
-                      {findIngDetails(ingredient)?.publicName}: {ingredient.amountUsed} {findIngDetails(ingredient)?.unitOfMeasurement}
+                      {getIngredientDetails(ingredient)?.publicName}: {ingredient.amountUsed} {getIngredientDetails(ingredient)?.unitOfMeasurement}
                     </p>
 
                     <button 
@@ -518,9 +533,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         <div className="flex flex-col  items-start h-[95%] w-full gap-6">
           <div className=" w-full ">
             <Formik  
-                initialValues={initialValuesMI} 
-                onSubmit={handleSubmitMI}
-                validationSchema={MISchema}
+                initialValues={{id: ""}} 
+                onSubmit={addMenuItem}
+                validationSchema={menuItemSelectorSchema}
 
               >
 
@@ -602,7 +617,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               <button 
                 id="addmenuitemsubmitall"
                 type="submit"
-                onClick={handleSaveMIs}
+                onClick={submitSelectedMenuItems}
                 disabled={selectedMenuItems.length<=0}
 
                 className={` shadow h-12  w-40  rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary ` }
