@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 import { FetchError } from "../services/Errors";
-import DefaultUser from "../assets/images/user.jpg"
 
 export const fetchGET = async (connString: string) => {
   const token = Cookies.get("token");

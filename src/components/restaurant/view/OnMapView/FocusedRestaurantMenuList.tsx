@@ -1,135 +1,90 @@
-import { Button, CircularProgress } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../../services/APIconn";
-import FocusedRestaurantMenuItem from "./FocusedRestaurantMenuItem";
-import { MenuItemWithDescriptionType, MenuWithDescriptionType } from "../../../../services/types";
+import React, { useEffect, useState } from 'react'
+import MopedIcon from "@mui/icons-material/Moped";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { RestaurantDetailsType, ReviewType } from '../../../../services/types';
+import Menu from '../../../restaurantManagement/menus/newMenus/MenuList';
+import CustomRating from "../../../reusableComponents/CustomRating";
+import { useTranslation } from 'react-i18next';
+import { getImage } from '../../../../services/APIconn';
+import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
+import SearchIcon from "@mui/icons-material/Search";
+import { MenuScreenType } from '../../../../services/enums';
 
-interface FocusedRestaurantMenuListProps {
-  restaurantId: number;
+interface MenuProps {
+    restaurant: RestaurantDetailsType
+    reviews: ReviewType[]
 }
 
-const FocusedRestaurantMenuList: React.FC<FocusedRestaurantMenuListProps> = ({
-  restaurantId,
-}) => {
-  const [menus, setMenus] = useState<MenuWithDescriptionType[]>([]);
-  const [activeMenuId, setActiveMenuId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const FocusedRestaurantDetails: React.FC<MenuProps> = ({ restaurant, reviews }) => {
 
-  useEffect(() => {
-    const fetchMenus = async () => {
-      try {
-        const menusData = await fetchGET(`/restaurants/${restaurantId}/menus`);
-        setMenus(menusData || []);
+    const [filterValue, setFilterValue] = useState<string>('')
 
-        if (menusData.length > 0) {
-          setActiveMenuId(menusData[0].menuId);
-        }
-      } catch (error) {
-        console.error("Error fetching menus:", error);
-        setMenus([]);
-      }
-    };
+    const [ t ] = useTranslation('global')
+    
+    const averageRating = reviews.length
+    ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
+    : 0;
 
-    fetchMenus();
-  }, [restaurantId]);
+    useEffect(() => {
+      //tutaj filtrowanie
+    },[filterValue])
 
-  useEffect(() => {
-    const fetchMenuItems = async () => {
-      if (activeMenuId !== null) {
-        setIsLoading(true);
-        try {
-          const menuData = await fetchGET(`/menus/${activeMenuId}`);
-          setMenus((prevMenus) => {
-            const updatedMenus = [...prevMenus];
-            const menuIndex = updatedMenus.findIndex(
-              (menu) => menu.menuId === activeMenuId,
-            );
-            if (menuIndex !== -1) {
-              updatedMenus[menuIndex] = {
-                ...updatedMenus[menuIndex],
-                menuItems: menuData.menuItems || [],
-              };
-            }
-            return updatedMenus;
-          });
-        } catch (error) {
-          console.error(
-            `Error fetching menu items for menuId ${activeMenuId}:`,
-            error,
-          );
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchMenuItems();
-  }, [activeMenuId]);
-
-  const handleMenuClick = (id: number) => {
-    setActiveMenuId(id);
-  };
-
-  const isDarkMode = document.documentElement.classList.contains("dark");
-
-  return (
-    <div className="flex h-full w-full flex-col gap-2">
-      <div className="flex gap-2 overflow-x-auto whitespace-nowrap">
-        {menus.map((menu) => (
-          <Button
-            key={menu.menuId}
-            variant={activeMenuId === menu.menuId ? "contained" : "outlined"}
-            sx={{
-              borderColor:
-                activeMenuId !== menu.menuId && isDarkMode
-                  ? "#64c3a6"
-                  : "#a94c79",
-              color:
-                activeMenuId === menu.menuId
-                  ? isDarkMode
-                    ? "#fefefe"
-                    : "#fefefe"
-                  : isDarkMode
-                    ? "#64c3a6"
-                    : "#a94c79",
-              backgroundColor:
-                activeMenuId === menu.menuId
-                  ? isDarkMode
-                    ? "#64c3a6"
-                    : "#a94c79"
-                  : "transparent",
-              whiteSpace: "nowrap",
-              margin: "4px 0",
-            }}
-            onClick={() => handleMenuClick(menu.menuId)}
-          >
-            {menu.name}
-          </Button>
-        ))}
-      </div>
-      {menus.map((menu) =>
-        activeMenuId === menu.menuId ? (
-          <div
-            key={menu.menuId}
-            className="mb-4 mr-4 mt-4 h-full w-full overflow-y-auto rounded-lg bg-grey-1 p-5"
-          >
-            <h3 className="text-xl font-medium">{menu.name}</h3>
-            {isLoading ? (
-              <div className="flex h-full items-center justify-center">
-                <CircularProgress />
+    return (
+      <div className='flex flex-col gap-7 h-[90vh] w-[50vw] min-w-[700px] bg-white dark:bg-black items-center rounded-lg py-7'>
+        <div className='flex gap-4 items-center w-[calc(100%-3.5rem)] h-[15%]'>
+          <div className='flex gap-4 w-[55%]'>
+            <img src={getImage(restaurant.logo, DefaultImage)} className='w-[5rem] h-[5rem] rounded-lg'/>
+            <div className="flex flex-col w-[80%]">
+              <h2 className="text-lg font-bold dark:text-white">{restaurant.name}</h2>
+              <div className="flex items-center gap-2 dark:text-white">
+                <h1 className='text-[12px]'>{averageRating.toFixed(2)}</h1>
+                <CustomRating rating={averageRating} readOnly={true} className='text-[16px]'/>
+                <h1 className='text-[12px]'>({reviews.length})</h1>
               </div>
-            ) : menu.menuItems && menu.menuItems.length > 0 ? (
-              menu.menuItems.map((item: MenuItemWithDescriptionType) => (
-                <FocusedRestaurantMenuItem key={item.id} item={item} />
-              ))
-            ) : (
-              <p>Brak dań dla tego menu.</p>
-            )}
+              <div className="flex flex-col gap-1">
+                <h1 className="text-[12px] dark:text-white">
+                  {restaurant.address}, {restaurant.city}
+                </h1>
+                <div className="text-[12px] flex items-center gap-3">
+                  {restaurant.provideDelivery && (
+                    <div className="flex gap-2 items-center">
+                      <MopedIcon className="dark:text-white w-4 h-4"/> 
+                      <h1 className="text-[12px] dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
+                    </div>
+                  )}
+                  <div className="flex gap-1 items-center">
+                    <h1 className="text-[12px] dark:text-white">
+                      {t("home-page.is-delivering")}:
+                    </h1>
+                    {restaurant.provideDelivery ? (
+                      <CheckCircleIcon className="text-green-500 dark:text-white w-4 h-4" />
+                    ) : (
+                      <CancelIcon className="text-red-500 dark:text-white w-4 h-4" />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        ) : null,
-      )}
-    </div>
-  );
-};
+          <div className='h-full w-[45%] flex flex-col-reverse'>
+            <div className="flex h-10 items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
+                <input
+                    type="text"
+                    placeholder={"search by name"}
+                    value={filterValue}
+                    onChange={(e) => setFilterValue(e.target.value)}
+                    className="clean-input h-8 w-full p-2 placeholder:text-grey-2 dark:text-grey-1"
+                />
+                <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+            </div>
+          </div>
+          </div>
+        <div className='w-[90%] flex justify-center h-[calc(85%-1.75rem)]'>
+          <Menu activeRestaurantId={restaurant.restaurantId} type={MenuScreenType.Preview}/>
+        </div>
+      </div>
+    )
+}
 
-export default FocusedRestaurantMenuList;
+export default FocusedRestaurantDetails

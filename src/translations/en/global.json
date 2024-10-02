@@ -224,7 +224,6 @@
     },
     "reviews": {
         "filter": "Filter",
-        "filter-tooltip": "filter reviews",
         "reviews": "Reviews",
         "no-reviews": "No reviews",
         "add-review": "Add review"

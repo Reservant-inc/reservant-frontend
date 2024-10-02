@@ -11,6 +11,12 @@ body {
   --speed: 500ms;
 }
 
+/* backdrop */
+
+dialog::backdrop {
+  background: rgba(0,0,0,0.8);
+}
+
 /* hide scroll */
 
 .hidescroll::-webkit-scrollbar {
