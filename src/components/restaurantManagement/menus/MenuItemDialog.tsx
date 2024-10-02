@@ -19,7 +19,7 @@ interface MenuItemDialogProps {
     restaurantId: number;
     editedMenuItem?: MenuItemType | null;
     onClose: Function;
-    activeMenuItems: MenuItemType[] | null
+    activeMenuItems: MenuItemType[] | undefined
 }
 
 const VisuallyHiddenInput = styled("input")({
@@ -465,7 +465,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           <div className="flex w-2/5  items-center  h-full gap-6 flex-col">
 
             <div className="shadow-inner bg-grey-0 w-full h-5/6 overflow-y-auto rounded-lg">
-              {/* @todo tłumacz */}
+              {/* @todo t */}
               {selectedIngredients.length>0
               ?
               <ul
@@ -496,7 +496,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               </ul>
               :
               <h1 className="p-2">Selected ingredients will appear here.</h1>
-              //@todo tlumacz 
+              //@todo t 
               }
             </div>
             <button
@@ -536,10 +536,10 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           className="w-1/3 border-0 border-b"
                         >
                           <option value="" id="MI-option-default">Select a menu item</option>
-                            {/* @todo tlumaczenie  */}
-                            {
+                            {/* @todo t  */}
+                            {activeMenuItems!==undefined &&
                               menuItems
-                              .filter(menuItem=>!activeMenuItems?.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
+                              .filter(menuItem=>!activeMenuItems.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
                               .filter(menuItem=>!selectedMenuItems.find(selectedMI=>selectedMI.menuItemId==menuItem.menuItemId))
                               .map((menuItem) => 
                               <option value={menuItem.menuItemId}> 
@@ -568,7 +568,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             <div className="flex w-full h-[70%]  items-center gap-6 flex-col">
 
               <div className=" shadow-inner bg-grey-0 rounded-lg overflow-y-auto p-1  w-full  h-full   ">
-                {/* @todo tłumacz */}
+                {/* @todo t */}
                 {selectedMenuItems.length>0
                 ?
                 <ul
@@ -595,7 +595,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 </ul>
                 :
                 <h1 className="p-2">Selected menu items will appear here.</h1>
-                //@todo tlumacz 
+                //@todo t 
                 }
               </div>
             <div className="flex  gap-20">
