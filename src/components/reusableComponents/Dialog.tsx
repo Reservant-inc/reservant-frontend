@@ -41,7 +41,7 @@ const Dialog: React.FC<PopupProps> = ({ open, children, onClose, title }) => {
   }, [open, onClose]);
 
   return (
-    <dialog ref={dialog} onClose={onClose} className="rounded-lg p-2 h-full w-full bg-trans flex items-center justify-center overflow-hidden">
+    <dialog ref={dialog} onClose={onClose} className="rounded-lg h-full w-full bg-trans flex items-center justify-center overflow-y-hidden">
       <div ref={div} className="relative min-h-[100px] min-w-[100px] bg-black rounded-lg">
         {
           title && (
