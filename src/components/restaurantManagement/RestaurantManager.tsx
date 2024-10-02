@@ -65,7 +65,9 @@ const RestaurantManager = () => {
                     />
                   ),
                 2: <EmployeeManagement />,
-                3: <MenuList activeRestaurantId={1} type={MenuScreenType.Management}/>,
+                3: <div className="bg-white dark:bg-black p-3 rounded-lg h-full">
+                    <MenuList activeRestaurantId={1} type={MenuScreenType.Management}/>
+                  </div>,
                 6: <ReservationOrderHeader activeRestaurantId={1} />, //order history ma być częścią reservations???
               }[activePage]
             }
