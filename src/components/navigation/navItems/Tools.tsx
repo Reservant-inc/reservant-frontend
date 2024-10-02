@@ -108,6 +108,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
 
       props.goToMenu && setActiveMenu(props.goToMenu);
 
+<<<<<<< HEAD
       if (props.language) {
         setLanguage(props.language);
         setIsPressed(false);
@@ -121,6 +122,94 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           onMouseEnter={() => {
             if (props.id === "ThemeDropdownItem") {
               setIsThemeAreaHovered(true);
+=======
+        }
+
+        return(   
+            <div className=" p-2 ">
+                <a onMouseEnter={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(true)}}}onMouseLeave={()=> {if(props.id==="ThemeDropdownItem"){setIsThemeAreaHovered(false)}}} href="#" id={props.id} className={props.className?props.className:"rounded-lg menu-item hover:bg-grey-1 text-black dark:text-grey-1 dark:hover:bg-grey-5 items-center h-14 p-2 flex flex" } onClick={onClicked}>
+                    <span className="icon-button">{props.leftIcon}</span>
+                        <div className="p-1">
+                            {props.children}
+                        </div>
+                    <span className="icon-right ml-auto">{props.rightIcon}</span>
+                </a>
+            </div>
+            
+        )
+    }
+    
+
+    return (
+        <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
+          <Tooltip title={t("navbar.tools")} arrow>
+                <button
+                    id="ToolsButton"
+                    className="h-10 w-10 flex justify-center items-center"
+                    onClick={pressHandler}
+                >
+                    <img src={User} alt="user" className="rounded-full" />
+                </button>
+            </Tooltip>
+            {
+                isPressed &&
+                <div style={{height: menuHeight}} className='dropdownMenu dark:bg-black'>
+                    
+                    <CSSTransition 
+                        in={activeMenu === 'main'} 
+                        unmountOnExit 
+                        timeout={500}
+                        classNames="menu-primary"
+                        onEnter={calcHeight}
+                        >
+                        <div className="w-full" >   
+                        <ThemeProvider theme={theme}>
+                        
+                            <DropdownItem leftIcon={<AccountCircle/>} id="profileDropdownItem" > {t("tools.main.profile")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />} rightIcon={<ChevronRight /> }id="settingsDropdownItem" goToMenu="settings"> {t("tools.main.settings")} </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} rightIcon={<ChevronRight />} goToMenu="languages" id="languagesDropdownItem"> {t("tools.main.language")} </DropdownItem>
+                            <DropdownItem className="menu-item rounded-lg cursor-default hover:bg-grey-1 text-black dark:text-grey-1 dark:hover:bg-grey-5 items-center h-14  p-2 flex flex"
+                                leftIcon={document.documentElement.className==="dark"?<DarkMode/>:<LightMode/>} rightIcon={<Switch onClick={toggleTheme} id="ToolsThemeSwitch" className="ToolsThemeSwitch" defaultChecked={document.documentElement.className==="dark"} />}  id="ThemeDropdownItem"> {t("tools.main.mode")} </DropdownItem>
+                            <DropdownItem leftIcon={<Logout />} id="logoutDropdownItem" logout={true}> {t("tools.main.signout")} </DropdownItem>
+                        </ThemeProvider>
+                       
+                        </div>
+                    </CSSTransition>    
+
+                    <CSSTransition 
+                        in={activeMenu === 'settings'} 
+                        unmountOnExit 
+                        timeout={500}
+                        classNames="menu-secondary"
+                        onEnter={calcHeight}
+
+                        >
+                        <div className="w-full" >   
+                            <DropdownItem leftIcon={<ChevronLeft />} id="backFromSettingsDropdownItem" goToMenu="main"/>
+                            <DropdownItem leftIcon={<Settings />} id="SettingFiller1DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller2DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller3DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                            <DropdownItem leftIcon={<Settings />}id="SettingFiller4DropdownItem"> {t("tools.settings.setting")} </DropdownItem>
+                        </div>
+                    </CSSTransition>
+
+                    <CSSTransition 
+                        in={activeMenu === 'languages'} 
+                        unmountOnExit 
+                        timeout={500}
+                        classNames="menu-secondary"
+                        onEnter={calcHeight}
+
+                        >
+                        <div className="w-full" >   
+                            <DropdownItem leftIcon={<ChevronLeft />}id="backFromLanguagesDropdownItem" goToMenu="main"/>
+                            <DropdownItem leftIcon={<Language />} goToMenu="main" id="EnglishDropdownItem" language="en" className={i18next.language === "en" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-5 bg-grey-1 dark:text-grey-1 text-black ":""}> English </DropdownItem>
+                            <DropdownItem leftIcon={<Language />} goToMenu="main" id="PolishDropdownItem" language="pl" className={i18next.language === "pl" ?"menu-item rounded-lg cursor-default items-center h-14  p-2 flex flex dark:bg-grey-5 bg-grey-1 text-black dark:text-grey-1 ":""}> Polski </DropdownItem>
+                        </div>
+                    </CSSTransition>        
+                </div>
+            
+>>>>>>> 33818509380a6cb4432c360eea2c123a6513df8e
             }
           }}
           onMouseLeave={() => {

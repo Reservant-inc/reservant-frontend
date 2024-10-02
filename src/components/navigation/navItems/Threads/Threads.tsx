@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
 import CommentSharpIcon from '@mui/icons-material/CommentSharp';
 import Tooltip from '@mui/material/Tooltip';
+<<<<<<< HEAD
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import AddCommentRoundedIcon from "@mui/icons-material/AddCommentRounded";
 import { fetchGET, fetchPOST, getImage } from "../../../../services/APIconn";
@@ -36,6 +37,13 @@ const Threads: React.FC = () => {
   const [inactiveThreads, setInactiveThreads] = useState<ThreadType[]>([])
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+=======
+import { useTranslation } from "react-i18next";
+
+const Threads: React.FC = () => {
+    const [isPressed, setIsPressed] = useState(false);
+    const { t } = useTranslation("global");
+>>>>>>> 33818509380a6cb4432c360eea2c123a6513df8e
 
   const [t] = useTranslation("global");
 
@@ -283,6 +291,7 @@ const Threads: React.FC = () => {
     }
 
     return (
+<<<<<<< HEAD
       <List className="h-full w-full p-0">
         <InfiniteScroll
           dataLength={threads.length}
@@ -299,6 +308,27 @@ const Threads: React.FC = () => {
           ))}
         </InfiniteScroll>
       </List>
+=======
+        <div>
+            <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
+                <Tooltip title={t("navbar.threads")} arrow>
+                    <button
+                        id="ThreadsButton"
+                        className="relative flex h-[40px] w-[40px] items-center justify-center bg-grey-1 rounded-full"
+                        onClick={pressHandler}
+                    >
+                        <CommentSharpIcon className="h-[23px] w-[23px]" />
+                    </button>
+                </Tooltip>
+
+                {isPressed && (
+                    <div>
+                        {/* Treść otwartego menu threads */}
+                    </div>
+                )}
+            </OutsideClickHandler>
+        </div>
+>>>>>>> 33818509380a6cb4432c360eea2c123a6513df8e
     );
   };
 
