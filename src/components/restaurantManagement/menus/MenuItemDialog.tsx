@@ -4,7 +4,7 @@ import {
   styled,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { fetchFilesPOST, fetchGET, fetchPOST, getImage } from "../../../services/APIconn";
+import { fetchFilesPOST, fetchGET, fetchPOST, fetchPUT, getImage } from "../../../services/APIconn";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Ingredient, IngredientUsage, MenuItemType, MenuType } from "../../../services/types";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
@@ -111,6 +111,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       try{
         const res = await fetchGET(`/menu-items/${menuItemToEdit?.menuItemId}`);
         setSelectedIngredients(res.ingredients)
+        setPhotoFileName(res.photo.substring(9))
       }catch (error) {
         if (error instanceof FetchError) {
           console.log(error.formatErrors())
@@ -121,7 +122,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     }
 
     if(menuItemToEdit){
-      getMenuItemToEditDetails
+      getMenuItemToEditDetails()
     }
   },[])
 
@@ -186,6 +187,66 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   };
 
+  const onSubmitEditedMenuItem = async (
+    values: FormikValues,
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+  ) => {
+    let photoUrl
+    if(photoFile)
+      try {
+        photoUrl = await fetchFilesPOST("/uploads", photoFile);
+        console.log(photoUrl)
+      } catch (error) {
+        console.error("Error uploading photo:", error);
+        return;
+      }
+    let menuItemRes
+    try {
+      setSubmitting(true);
+      const body = JSON.stringify(
+        {
+          restaurantId: restaurantId,
+          price: values.price,
+          name: values.name,
+          alternateName: values.alternateName,
+          alcoholPercentage: values.alcoholPercentage?values.alcoholPercentage:0,
+          ingredients: selectedIngredients,
+          photo: photoUrl?photoUrl.fileName:photoFileName
+        },
+      );
+      console.log(body)
+
+      menuItemRes = await fetchPUT(
+        `/menu-items/${menuItemToEdit?.menuItemId}`,
+        body,
+      );
+      
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+    if(menu!==null){
+
+      try{
+        setSubmitting(true);
+          const body = JSON.stringify({
+            itemIds: [
+              menuItemRes.menuItemId
+            ],
+          });
+          console.log(body)
+          let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
+          console.log(res)
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setSubmitting(false);
+        onClose();
+      }
+    }
+
+  };
 
   const submitSelectedMenuItems = async (
   ) => {
@@ -345,13 +406,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             <Formik
               id="menuitem-formik"
               initialValues={{
-                price: "",
-                name: "",
-                alternateName: "",
-                alcoholPercentage: ""
+                price: menuItemToEdit?.price,
+                name: menuItemToEdit?.name,
+                alternateName: menuItemToEdit?.alternateName,
+                alcoholPercentage: menuItemToEdit?.alcoholPercentage
               }}
               validationSchema={newMenuItemsSchema}
-              onSubmit={onSubmitNewMenuItem}
+              onSubmit={menuItemToEdit?onSubmitEditedMenuItem:onSubmitNewMenuItem}
             >
               {(formik) => {
                 return(
@@ -591,7 +652,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 > 
                   {
                     selectedMenuItems.map((menuItem: MenuItemType) => 
-                      <li>
+                      <li key={menuItem.menuItemId}>
 
                         <MenuItem
                           key={menuItem.menuItemId}
