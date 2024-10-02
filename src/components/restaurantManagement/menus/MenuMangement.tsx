@@ -44,28 +44,20 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 }) => {
   const { t } = useTranslation("global");
 
-  const [menus, setMenus] = useState<Menu[]>([]);
-  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
+  const [menus, setMenus] = useState<Menu[]>([]); 
+  const [activeMenuIndex, setActiveMenuIndex] = useState<number>(0); 
+  const [searchText, setSearchText] = useState<string>("");
   
+  const [isNewMenuItemOpen, setIsNewMenuItemOpen] = useState(false);
+  const [menuItemToEdit, setMenuItemToEdit] = useState<MenuItemType | null>(null);
 
-  const [editMenu, setEditMenu] = useState<Menu | null>(null);
-  const [editedMenuItem, setEditedMenuItem] = useState<MenuItemType | null>(
-    null,
-  );
-
-  
-  const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
-  const [isEditMenuPopupOpen, setIsEditMenuPopupOpen] = useState(false);
-  const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState(false);
-  const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-
-  const [searchText, setSearchText] = useState<string>("")
+  const [isNewMenuOpen, setIsNewMenuOpen] = useState(false);
+  const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-
         const menus: MenuType[] = await fetchGET(
           `/restaurants/${activeRestaurantId}/menus`,
         )
@@ -87,10 +79,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       }
     };
     fetchMenus();
-  }, [isMenuItemPopupOpen]);
-
- 
-
+  }, [isNewMenuItemOpen, isDeleteMenuOpen]);
 
   const handleSaveNewMenu = async (values: { [key: string]: string }) => {
     console.log("New menu values:", values);
@@ -107,99 +96,38 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     try {
       const response = await fetchPOST("/menus", body);
       console.log("Response:", response);
-      setIsMenuPopupOpen(false);
+      setIsNewMenuOpen(false);
       
     } catch (error) {
       console.error("Error saving new menu:", error);
     }
   };
 
-  const handleEditMenu = () => {
-    {
-     
-      setEditMenu(menus[selectedMenuIndex]);
-      setIsEditMenuPopupOpen(true);
-    }
-  };
-
-  const handleSaveEditedMenu = async (values: { [key: string]: string }) => {
-    {
-      const body = JSON.stringify({
-        name: values.name,
-        alternateName: values.alternateName,
-        menuType: values.type,
-        dateFrom: values.dateFrom,
-        dateUntil: values.dateUntil,
-      });
-      try {
-        const menuId = menus[selectedMenuIndex]?.menuId
-        const response = await fetchPUT(`/menus/${menuId}`, body);
-        console.log("Response:", response);
-        setIsEditMenuPopupOpen(false);
-       
-      } catch (error) {
-        console.error("Error while editing category:", error);
-      }
-    }
-  };
 
   const handleDeleteMenu = async () => {
     try {
-      if (menus[selectedMenuIndex]) {
-        const menuId = menus[selectedMenuIndex].menuId;
+      if (menus[activeMenuIndex]) {
+        const menuId = menus[activeMenuIndex].menuId; 
         const response = await fetchDELETE(`/menus/${menuId}`);
+        setIsDeleteMenuOpen(false)
+      }
+    }catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
       } else {
-        console.error("No menu selected to delete");
+        console.log("Unexpected error")
       }
-    } catch (error) {
-      console.error("Error while deleting menu:", error);
-    }
-  
-  };
-
-
-  const handleEditMenuItem = (menuItem: MenuItemType) => {
-    setEditedMenuItem(menuItem);
-    setIsMenuItemEditPopupOpen(true);
-  };
-
-  const handleSaveEditedMenuItem = async (values: {
-    [key: string]: string;
-  }) => {
-    try {
-      if (editedMenuItem) {
-        const { menuItemId } = editedMenuItem;
-        const photoFileName = values.photo.startsWith("/uploads/")
-          ? values.photo.slice(9)
-          : values.photo;
-        const body = JSON.stringify({
-          name: values.name,
-          alternateName: values.alternateName,
-          price: values.price,
-          alcoholPercentage: values.alcoholPercentage || null,
-          photofileName: photoFileName,
-        });
-        console.log(body);
-        const response = await fetchPUT(`/menu-items/${menuItemId}`, body);
-        console.log(response);
-        setIsMenuItemEditPopupOpen(false);
-
-      }
-    } catch (error) {
-      console.error("Error while saving edited menu item:", error);
-    }
-  };
+    };
+  }
 
   const handleRemoveMenuItem = async (menuItem: MenuItemType) => {
-
     try {
-
       const { menuItemId } = menuItem;
       const body = JSON.stringify(
       {
         itemIds: [menuItemId],
       });
-      const response = await fetchDELETE(`/menus/${menus[selectedMenuIndex]?.menuId}/items`, body);
+      const response = await fetchDELETE(`/menus/${menus[activeMenuIndex]?.menuId}/items`, body);
       console.log(response);
     } catch (error) {
       if (error instanceof FetchError) {
@@ -212,9 +140,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
   const handleDeletePermanentlyMenuItem = async (menuItem: MenuItemType) => {
     try {
-
         const { menuItemId } = menuItem;
-      
         const response = await fetchDELETE(`/menu-items/${menuItemId}`);
         console.log(response);
     } catch (error) {
@@ -226,34 +152,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const editedMenu = editMenu
-    ? {
-        name: editMenu.name,
-        alternateName: editMenu.alternateName,
-        type: editMenu.menuType,
-        dateFrom: editMenu.dateFrom,
-        dateUntil: editMenu.dateUntil || "",
-      }
-    : null;
-
-  const menuActions = [
-    {
-      icon: <AddIcon />,
-      name: "Add menu",
-      onClick: () => setIsMenuPopupOpen(true),
-    },
-    { icon: <EditIcon />, name: "Edit menu", onClick: handleEditMenu },
-    {
-      icon: <DeleteIcon />,
-      name: "Delete menu",
-      onClick: () => setOpenConfirmation(true),
-    },
-  ];
-  
-
-    
-    
-
   return (
     <div className="h-full w-full">
       <div className="bg-grey-1 h-[10%]">
@@ -264,9 +162,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             (menuTab: MenuType) => (
             <button
               key={menuTab.menuId}
-              className={` rounded-t-md p-2 h-full w-full  text-lg  ${menuTab.menuId === menus[selectedMenuIndex]?.menuId ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
+              className={` rounded-t-md p-2 h-full w-full  text-lg  ${menuTab.menuId === menus[activeMenuIndex]?.menuId ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
               onClick={() =>
-                setSelectedMenuIndex(
+                setActiveMenuIndex(
                   menus.findIndex((menu: MenuType)=>menu.menuId===menuTab.menuId)
                 )
               }
@@ -278,7 +176,23 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             className={` rounded-t-md p-2 h-full  w-1/6 text-lg "text-grey-2 bg-grey-0 `}
           >
             
-            <MoreActions actions={menuActions} />
+            <MoreActions actions={[
+              {
+                icon: <AddIcon />,
+                name: "Add menu",
+                onClick: () => setIsNewMenuOpen(true),
+              },
+              { 
+                icon: <EditIcon />,
+                name: "Edit menu",
+                onClick: () => setIsEditMenuOpen(true),
+              },
+              {
+                icon: <DeleteIcon />,
+                name: "Delete menu",
+                onClick: () => setIsDeleteMenuOpen(true),
+              },
+            ]}/>
             
           </button>
         </div>
@@ -289,11 +203,11 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            {menus[selectedMenuIndex] && (
+            {menus[activeMenuIndex] && (
               <Button
                 startIcon={<AddIcon className="text-secondary-2" />}
                 onClick={() => {
-                  setIsMenuItemPopupOpen(true);
+                  setIsNewMenuItemOpen(true);
                 }}
               >
                 <span className="ml-1 text-black dark:text-white">
@@ -328,9 +242,9 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         </div>
 
         <div className="m-1">
-          {menus[selectedMenuIndex] && (
+          {menus[activeMenuIndex] && (
             <div className=" flex flex-wrap gap-1">
-              {menus[selectedMenuIndex].menuItems.filter((menuItem: MenuItemType)=>{
+              {menus[activeMenuIndex].menuItems.filter((menuItem: MenuItemType)=>{
                 const nameMatch = menuItem.name
                   .toLowerCase()
                   .includes(searchText.toLowerCase());
@@ -343,41 +257,33 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
                 <MenuItem
                   key={menuItem.menuItemId}
                   menuItem={menuItem}
-                  menuType={menus[selectedMenuIndex].menuType}
+                  menuType={menus[activeMenuIndex].menuType}
+                  onEdit={() => {
+                    setMenuItemToEdit(menuItem);
+                  }}
                   onDelete={() => handleRemoveMenuItem(menuItem)}
-                  onEdit={() => handleEditMenuItem(menuItem)}
                   onAlt={() => handleDeletePermanentlyMenuItem(menuItem)}
                 />
               ))}
             </div>
           )}
         </div>
-        <MenuDialog
-          open={isMenuPopupOpen}
-          onClose={() => setIsMenuPopupOpen(false)}
-          onSave={handleSaveNewMenu}
-        />
-        <MenuDialog
-          open={isEditMenuPopupOpen}
-          onClose={() => setIsEditMenuPopupOpen(false)}
-          onSave={handleSaveEditedMenu}
-          editedMenu={editedMenu}
-        />
+        
         <Modal
           className="flex items-center justify-center"
-          open={isMenuItemPopupOpen}
-          onClose={() => setIsMenuItemPopupOpen(false)}
+          open={isNewMenuItemOpen}
+          onClose={() => setIsNewMenuItemOpen(false)}
         >
           <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
 
           <MenuItemDialog 
           
-            menu={menus[selectedMenuIndex]}
-            activeMenuItems={menus[selectedMenuIndex]?.menuItems}
+            menu={menus[activeMenuIndex]}
+            activeMenuItems={menus[activeMenuIndex]?.menuItems}
           
             restaurantId={activeRestaurantId}
           
-            onClose={() => setIsMenuItemPopupOpen(false)}
+            onClose={() => setIsNewMenuItemOpen(false)}
 
           />
           </div>
@@ -385,31 +291,31 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         </Modal>
         <Modal
           className="flex items-center justify-center"
-          open={isMenuItemEditPopupOpen}
+          open={menuItemToEdit!==null}
 
-          onClose={() => setIsMenuItemEditPopupOpen(false)}
+          onClose={() => setMenuItemToEdit(null)}
 
         >
           <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
           
             <MenuItemDialog
-              menu={menus[selectedMenuIndex]}
+              menu={menus[activeMenuIndex]}
               
-              activeMenuItems={menus[selectedMenuIndex]?.menuItems}
+              activeMenuItems={menus[activeMenuIndex]?.menuItems}
 
               restaurantId={activeRestaurantId}
-              editedMenuItem={editedMenuItem}
-              onClose={() => setIsMenuItemEditPopupOpen(false)}
+              menuItemToEdit={menuItemToEdit}
+              onClose={() => setMenuItemToEdit(null)}
 
             />
 
           </div>
         </Modal>
         <ConfirmationDialog
-          open={openConfirmation}
-          onClose={() => setOpenConfirmation(false)}
+          open={isDeleteMenuOpen}
+          onClose={() => setIsDeleteMenuOpen(false)}
           onConfirm={handleDeleteMenu}
-          confirmationText={`Are you sure you want to delete this menu?`}
+          confirmationText={`Are you sure you want to delete this menu?`} //@todo t
         />
       </div>
     </div>
