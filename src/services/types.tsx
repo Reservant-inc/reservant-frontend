@@ -124,6 +124,7 @@ export type MenuItemType = {
   ingredients: IngredientUsage[];
 }
 
+
 export type IngredientUsage = {
   ingredientId: string,
   amountUsed: number
