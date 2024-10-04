@@ -25,7 +25,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                build job: 'Reservant Frontend-Tests'
+                build job: 'Reservant Frontend-Tests/main'
             }
         }
     }
