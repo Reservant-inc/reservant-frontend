@@ -219,7 +219,6 @@
     },
     "reviews": {
         "filter": "Filtruj",
-        "filter-tooltip": "filtruj opinie",
         "reviews": "Opinie",
         "no-reviews": "Brak opinii",
         "add-review": "Dodaj opinie",

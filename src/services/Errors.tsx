@@ -10,7 +10,6 @@ export class FetchError extends Error {
     super(message);
     this.status = status;
     this.errors = errors;
-    console.log("const:", this.errors)
   }
 
   // Method to format the errors into a readable string

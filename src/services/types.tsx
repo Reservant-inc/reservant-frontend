@@ -8,7 +8,6 @@ export type LoginResponseType = {
   userId: string;
 };
 
-
 export type RestaurantDetailsType = {
   restaurantId: number,
   name: string,
@@ -113,7 +112,6 @@ export type EmploymentType = {
   restaurantName: string
 }
 
-
 export type MenuItemType = {
   menuItemId: number;
   name: string;
@@ -167,7 +165,6 @@ export type MenuWithDescriptionType = {
   dateUntil: string | null;
   menuItems: MenuItemWithDescriptionType[];
 }
-
 
 export type FriendType = {
   userId: string,
