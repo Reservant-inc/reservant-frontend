@@ -48,6 +48,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([]) //@todo set as menuItemToEdit.ingredients
   const [selectedMenuItems, setSelectedMenuItems] = useState<MenuItemType[]>([])
   const [isCreating, setIsCreating] = useState<boolean>(true);
+
+  const [ingredient, setIngredient] = useState<Ingredient>();
+  const [amountUsed, setAmountUsed] = useState<number>(0);
   
   useEffect (()=>{
     getIngredients();
@@ -234,16 +237,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     }
   }
 
-  const addIngredient = (
-    values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
-  ) => {
-    setSubmitting(true)
-    setSelectedIngredients([...selectedIngredients, {
-        ingredientId: values.ingredientId,
-        amountUsed: values.amountUsed
-    }])
-    setSubmitting(false)
+  const addIngredient = () => {
+    if(ingredient && amountUsed>0)
+      setSelectedIngredients([...selectedIngredients, {
+          ingredientId: ingredient.ingredientId,
+          amountUsed: amountUsed
+      }])
   }
 
 
@@ -404,61 +403,44 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             <div className="w-2/5 border-l-[1px]  ">
 
               <div className="flex   h-full gap-6 flex-col">
-              <Formik  
-                initialValues={{
-                  ingredientId: "",
-                  amountUsed: ""
-                }} 
-                onSubmit={addIngredient}
-                validationSchema={ingredientSelectorSchema}
-              >
-                {(formik) => {
-                  return(
-                    <Form
-                      className="pl-2"
+              
+                    
+                <div className="flex gap-2">
+                  <select
+                    name="ingredientId" 
+                    className="w-2/3  border-0 border-b"
+                  >
+                    <option value="" id="ingredientSelector-option-default">Select an ingredient</option>
+                      {/* //@TODO translation */}
+                      {
+                        ingredients.filter(ingredient=>!selectedIngredients.find(ingredientUsage=>ingredientUsage.ingredientId==ingredient.ingredientId)).map((ingredient) => 
+                        <option value={ingredient.ingredientId}> 
+                          {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
+                        </option>)
+                      }
+                  </select>
+                  <div className={`flex gap-2 border-b  w-1/3 ${amountUsed>0?"":"border-error"}`}>
+                    <Field 
+                      type="text" 
+                      id="amountUsed" 
+                      name="amountUsed"
+                      className={` w-full [&>*]:before:border-0 [&>*]:after:border-0  ${amountUsed>0 ? "[&>*]:text-black " : "[&>*]:text-error" }`} 
+                      variant="standard"
+                      label="Amount"
+                      as={TextField}
+                      //@TODO translation
+                    />
+                    <button
+                      type="submit"
+                      className={`  text-grey-black  enabled:hover:text-primary enabled:cursor-pointer ` }
+                      id="addIngridientToMenuItem"
+                      disabled={!ingredient||amountUsed<=0}
+                      onClick={()=>addIngredient}
                     >
-                      <div className="flex gap-2">
-                        <Field
-                          as={"select"}
-                          id="ingredientId" 
-                          name="ingredientId" 
-                          label="Ingredient"
-                          className="w-2/3  border-0 border-b"
-                        >
-                          <option value="" id="ingredientSelector-option-default">Select an ingredient</option>
-                            {/* //@TODO translation */}
-                            {
-                              ingredients.filter(ingredient=>!selectedIngredients.find(ingredientUsage=>ingredientUsage.ingredientId==ingredient.ingredientId)).map((ingredient) => 
-                              <option value={ingredient.ingredientId}> 
-                                {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
-                              </option>)
-                            }
-                        </Field>
-                        <div className={`flex gap-2 border-b  w-1/3 ${!(formik.errors.amountUsed && formik.touched.amountUsed)?"":"border-error"}`}>
-                          <Field 
-                            type="text" 
-                            id="amountUsed" 
-                            name="amountUsed"
-                            className={` w-full [&>*]:before:border-0 [&>*]:after:border-0  ${!(formik.errors.amountUsed && formik.touched.amountUsed) ? "[&>*]:text-black " : "[&>*]:text-error" }`} 
-                            variant="standard"
-                            label="Amount"
-                            as={TextField}
-                            //@TODO translation
-                          />
-                          <button
-                            type="submit"
-                            className={`  text-grey-black  enabled:hover:text-primary enabled:cursor-pointer ` }
-                            id="addIngridientToMenuItem"
-                            disabled={!formik.isValid || !formik.dirty}
-                          >
-                            <Add/> 
-                          </button> 
-                        </div>
-                      </div>
-                    </Form>
-                  )
-                }}
-              </Formik>
+                      <Add/> 
+                    </button> 
+                  </div>
+                </div>
               <h1 className="pl-2">Selected ingredients:</h1>
 
                 <div className="shadow-inner  w-full h-full overflow-y-auto ">
