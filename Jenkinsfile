@@ -25,7 +25,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                build job: 'Reservant Frontend-Tests/main'
+                build job: 'Reservant Frontend-Tests/main', parameters: [string(name: 'label_string', value: 'FRONTEND DEPLOY')]
             }
         }
     }
