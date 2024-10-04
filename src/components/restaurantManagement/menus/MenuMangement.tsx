@@ -255,16 +255,17 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
                   .includes(searchText.toLowerCase());
                 return nameMatch || priceMatch;
               }).map((menuItem: MenuItemType) => (
-                <MenuItem
-                  key={menuItem.menuItemId}
-                  menuItem={menuItem}
-                  menuType={menus[activeMenuIndex].menuType}
-                  onEdit={() => {
-                    setMenuItemToEdit(menuItem);
-                  }}
-                  onDelete={() => handleRemoveMenuItem(menuItem)}
-                  onAlt={() => handleDeletePermanentlyMenuItem(menuItem)}
-                />
+                <></>
+                // <MenuItem
+                //   key={menuItem.menuItemId}
+                //   menuItem={menuItem}
+                //   menuType={menus[activeMenuIndex].menuType}
+                //   onEdit={() => {
+                //     setMenuItemToEdit(menuItem);
+                //   }}
+                //   onDelete={() => handleRemoveMenuItem(menuItem)}
+                //   onAlt={() => handleDeletePermanentlyMenuItem(menuItem)}
+                // />
               ))}
             </div>
           )}
