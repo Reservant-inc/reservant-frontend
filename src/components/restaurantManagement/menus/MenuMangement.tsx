@@ -110,6 +110,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       if (menus[activeMenuIndex]) {
         const menuId = menus[activeMenuIndex].menuId; 
         const response = await fetchDELETE(`/menus/${menuId}`);
+        console.log(response);
         setIsDeleteMenuOpen(false)
       }
     }catch (error) {
@@ -283,9 +284,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             menu={menus[activeMenuIndex]}
             activeMenuItems={menus[activeMenuIndex]?.menuItems}
           
-            restaurantId={activeRestaurantId}
+            activeRestaurantId={activeRestaurantId}
           
-            onClose={() => setIsNewMenuItemOpen(false)}
 
           />
           </div>
@@ -305,9 +305,8 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
               
               activeMenuItems={menus[activeMenuIndex]?.menuItems}
 
-              restaurantId={activeRestaurantId}
+              activeRestaurantId={activeRestaurantId}
               menuItemToEdit={menuItemToEdit}
-              onClose={() => setMenuItemToEdit(null)}
 
             />
 

@@ -84,7 +84,12 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
                 </button>  
                 { 
                 type === MenuScreenType.Management &&
-                  <button className='flex items-center justify-center p-1 px-2 h-8 w-8 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'>
+                  <button 
+                    className='flex items-center justify-center p-1 px-2 h-8 w-8 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+                    onClick={()=>{
+                      //@todo create menu function
+                    }}
+                  >
                     <AddIcon className='h-6 w-6'/>
                   </button>
                 }
@@ -92,7 +97,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
             </div>
             <div className='overflow-y-auto scroll h-full flex flex-col gap-5 scroll-smooth'>
                 {menus.map((menu, index) => (
-                    <Menu key={menu.menuId + menu.name} menu={menu} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
+                    <Menu key={menu.menuId + menu.name} menu={menu} activeRestaurantId={activeRestaurantId} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
                 ))}
             </div>
         </div>
