@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
+import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
@@ -23,7 +23,7 @@ const RestaurantManager = () => {
     setActiveRestaurantId(restaurantId);
   };
   
-  const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string));
+  const user: UserInfo = JSON.parse(Cookies.get("userInfo") as string);
 
   const [activeSectionName, setActiveSectionName] = useState<string>(`Hello, ${user.firstName}`)
   

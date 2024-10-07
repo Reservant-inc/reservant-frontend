@@ -8,7 +8,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { fetchPOST } from "../../../services/APIconn";
+import { fetchPOST } from "../../services/APIconn";
 
 interface RestaurantReviewFormProps {
   onClose: () => void;

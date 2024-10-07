@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { MenuItemWithDescriptionType } from "../../../../services/types";
-import { getImage } from "../../../../services/APIconn";
+import { MenuItemWithDescriptionType } from "../../../services/types";
+import { getImage } from "../../../services/APIconn";
 import DefaultPic from "../../../../assets/images/no-image.png"
 
 

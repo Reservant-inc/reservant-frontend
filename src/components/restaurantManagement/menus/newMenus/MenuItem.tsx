@@ -55,7 +55,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type }) => {
         {menuItem.alternateName && <h1 className="text-grey-3 h-[20px]">{menuItem.alternateName}</h1>}
         <div className="flex gap-1">
           {ingredients.map((ingredient, index) => (
-            <h1 className="text-grey-3 h-[20px]">{ingredient.publicName}{index !== ingredients.length-1 && ','}</h1>
+            <h1 key={ingredient.ingredientId} className="text-grey-3 h-[20px]">{ingredient.publicName}{index !== ingredients.length-1 && ','}</h1>
           ))} 
         </div>
         {menuItem.alcoholPercentage !== 0 && <h1 className="text-grey-3 h-[20px]">alcohol contents - {menuItem.alcoholPercentage}%</h1>}

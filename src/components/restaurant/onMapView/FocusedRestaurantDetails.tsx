@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../../services/APIconn";
+import { fetchGET } from "../../../services/APIconn";
 import {
   IconButton,
   CircularProgress,
@@ -12,13 +12,15 @@ import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import Carousel from "../../../reusableComponents/ImageCarousel/Carousel";
-import { RestaurantDetailsType, ReviewType } from "../../../../services/types";
+import Carousel from "../../reusableComponents/ImageCarousel/Carousel";
+import { RestaurantDetailsType, ReviewType } from "../../../services/types";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
-import CustomRating from "../../../reusableComponents/CustomRating";
+import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
-import Dialog from "../../../reusableComponents/Dialog";
+import Dialog from "../../reusableComponents/Dialog";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
+import CartContextProvider from "../../../contexts/CartContext";
+import Visit from "../visits/Visit";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -48,6 +50,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [option, setOption] = useState<Options | null>(null)
 
   const [t] = useTranslation("global")
+
+
  
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
@@ -123,7 +127,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     [Options.ORDER]: <></>,
     [Options.MENU] : <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews}/>,
     [Options.EVENT]: <></>,
-    [Options.VISIT]: <></>,
+    [Options.VISIT]: <Visit restaurant={activeRestaurant}/>,
   };
 
   return (
@@ -210,10 +214,15 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           </div>
         </>
       )}
-        <Dialog open={option !== null} onClose={() => handleDialogClose()} title={option !== null ? optionTitles[option] : ""}>
-          {option !== null && renderDialogContent[option]}
-        </Dialog>
-    </>
+        {
+          option !== null && 
+          <Dialog open={true} onClose={() => handleDialogClose()} title={optionTitles[option]}>
+            <CartContextProvider>
+              {option !== null && renderDialogContent[option]}
+            </CartContextProvider>
+          </Dialog>
+        }
+    </> 
   );
 };
 
