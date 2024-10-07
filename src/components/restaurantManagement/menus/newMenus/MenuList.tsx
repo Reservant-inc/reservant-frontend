@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {  MenuType } from '../../../../services/types';
-import { fetchGET, getImage } from '../../../../services/APIconn';
+import { fetchGET } from '../../../../services/APIconn';
 import { FetchError } from '../../../../services/Errors';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

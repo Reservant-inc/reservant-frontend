@@ -216,6 +216,7 @@ export type CartItemType = {
   price: number;
   quantity: number;
 }
+
 export type UserSearchType = {
   friendStatus: FriendStatus;
 } & UserType;
