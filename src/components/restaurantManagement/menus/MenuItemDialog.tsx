@@ -115,7 +115,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   const uploadPhoto = async (photoFile: File) => {
     try {
       const res = await fetchFilesPOST("/uploads", photoFile);
-      setPhotoFileName(res.fileName);
+      setPhotoFileName(res.path);
     } catch (error) {
       if (error instanceof FetchError) 
         console.log(error.formatErrors())
@@ -277,7 +277,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   }
 
   return (
-      <div className=" flex  h-[90vh] w-[50vw] min-w-[900px] bg-white rounded-lg dark:bg-black p-7">
+      <div className=" flex h-[90vh] w-[50vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7">
         {isCreating?
           <div className="flex">
               <Formik
@@ -294,7 +294,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 {(formik) => {
                   return(
                     <Form className="h-full w-full flex gap-7">
-                      <div className="relative w-56 h-56" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
+                      <div className="relative w-48 h-48" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
 
                         <img className=" w-full w-full absolute " src={getImage(photoFileName, DefaultMenuItemImage)} />
                           {
@@ -303,7 +303,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                             <div className="bg-semi-trans h-full w-full absolute flex items-center justify-center">
                               <label
                                 htmlFor="photo"
-                                className={` shadow w-48 rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2   dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary ` }
+                                className={` shadow rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2   dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary ` }
                               >
                                 <CloudUploadIcon/>
                                 <p>
@@ -319,7 +319,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                             accept="image/*"
                             onChange={(e)=>{
                               if (e.target.files && e.target.files.length > 0) {
-                                uploadPhoto(e.target.files[0]);
+                                uploadPhoto(e.target.files[0])
                               }
                             }}
                           />
