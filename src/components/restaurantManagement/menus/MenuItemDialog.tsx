@@ -15,7 +15,7 @@ import { FetchError } from "../../../services/Errors";
 import DefaultMenuItemImage from "../../../assets/images/defaultMenuItemImage.png"
 
 interface MenuItemDialogProps {
-  menu: MenuType ;
+  menu?: MenuType ;
   activeRestaurantId: number;
   menuItemToEdit?: MenuItemType | null;
   activeMenuItems?: MenuItemType[] | undefined
@@ -44,21 +44,16 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   const [photoFileName, setPhotoFileName] = useState<string>("");
   const [photoPath, setPhotoPath] = useState<string>("");
   const { t } = useTranslation("global");
-  const {menuItemSelectorSchema,ingredientSelectorSchema,menuItemsSchema} = useValidationSchemas();
+  const {ingredientSelectorSchema,menuItemsSchema} = useValidationSchemas();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([])
-  const [selectedMenuItems, setSelectedMenuItems] = useState<MenuItemType[]>(menu.menuItems)
-  const [creatorOpen, setCreatorOpen] = useState<boolean>(menuItemToEdit?true:false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   
   useEffect (()=>{
     getIngredients();
   },[])
 
-  useEffect (()=>{
-    getMenuItems();
-  },[])
+
 
   useEffect (()=>{
     if(menuItemToEdit){
@@ -88,17 +83,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     }
   }
 
-  const getMenuItems = async () => {
-    try{
-      const res = await fetchGET(`/my-restaurants/${activeRestaurantId}/menu-items`);
-      setMenuItems(res);
-    }catch (error) {
-      if (error instanceof FetchError) 
-        console.log(error.formatErrors())
-      else 
-        console.log("Unexpected error")
-    }
-  }
+  
 
   const getMenuItemToEditDetails = async () => {
     try{
@@ -167,7 +152,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             ],
           });
           console.log(body)
-          let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
+          let res = await fetchPOST(`/menus/${menu?.menuId}/items`, body);
           console.log(res)
       } catch (error) {
         if (error instanceof FetchError) 
@@ -213,24 +198,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     }
   };
 
-  const submitSelectedMenuItems = async () => {
-    if(menu!==null){
-      try{
-        const body = JSON.stringify({
-          itemIds: getSelectedMenuItemsIds()
-        });
-        console.log(body)
-        let res = await fetchPOST(`/menus/${menu.menuId}/items`, body);
-        console.log(res)
-
-      } catch (error) {
-        if (error instanceof FetchError) 
-          console.log(error.formatErrors())
-        else 
-          console.log("Unexpected error")
-      } 
-    }
-  }
+  
 
   const addIngredient = (
     values: FormikValues,
@@ -245,34 +213,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   }
 
 
-  const addMenuItem = (
-    values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
-  ) => {  
-    let tmp = menuItems.find((e)=>e.menuItemId==values.id)
-    if(tmp) {
-      setSubmitting(true)
-      setSelectedMenuItems([...selectedMenuItems, tmp])
-      setSubmitting(false)
-    }
-  }
-
   const getIngredientDetails= (ingredient: IngredientUsage) => {
     const res = (ingredients.find((e)=>e.ingredientId==ingredient.ingredientId))
     return res;
   }
-  
-  const getSelectedMenuItemsIds = () => {
-    let tmp: number[] = []
-    for (const menuItem of selectedMenuItems){
-      tmp.push(menuItem.menuItemId)
-    }
-    return tmp
-  }
+ 
 
   return (
       <div className=" flex h-[90vh] w-[50vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7">
-        {creatorOpen?
           <div className="flex">
               <Formik
                 id="menuitem-formik"
@@ -502,124 +450,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <h1 className="p-2">Selected ingredients will appear here.</h1> //@TODO translation
                   }
                 </div>
-                {
-                  !menuItemToEdit &&  
-                  <button
-                    className={`  border-b  text-grey-black  hover:text-primary` }
-                    id="GoToCreateAddExisting"
-                    onClick={()=>setCreatorOpen(false)}
-                  >
-                    Or add existing one
-                  </button>
-                }
-                
               </div>
             </div>
-
-
-          :
-          <div className="flex flex-col  items-start h-full w-full gap-6">
-            <div className=" w-full ">
-              <Formik  
-                  initialValues={{id: ""}} 
-                  onSubmit={addMenuItem}
-                  validationSchema={menuItemSelectorSchema}
-                >
-                  {(formik) => {
-                    return(
-                      <Form>
-                        <div className="flex  justify-center w-full">
-                          <Field
-                            as={"select"}
-                            id="id" 
-                            name="id" 
-                            label="id"
-                            className="w-1/3 border-0 border-b"
-                          >
-                            <option value="" id="MI-option-default">Select a menu item</option>
-                              {/* @todo t  */}
-                              {menuItems
-                              .filter(menuItem=>!menu.menuItems.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
-                              .filter(menuItem=>!selectedMenuItems.find(selectedMI=>selectedMI.menuItemId==menuItem.menuItemId))
-                              .map((menuItem) => 
-                              <option value={menuItem.menuItemId}> 
-                                {menuItem.name}
-                              </option>
-                              )}
-                          </Field>
-                          <button
-                            type="submit"
-                            className={`  border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
-                            id="addMenuItemToMenu"
-                            disabled={!formik.isValid || !formik.dirty}
-                          >
-                            <Add/>
-                          </button>
-                          <button
-                            className={`  border-b  text-grey-black  hover:text-primary` }
-                            id="GoToCreateNewMenuItem"
-                            onClick={()=>setCreatorOpen(true)}
-                          >
-                            Create new
-                          </button>
-                        </div>
-                      </Form>
-                    )
-                  }}
-                </Formik>
-              </div>
-              <div className="flex w-full h-[70%]  items-center gap-6 flex-col">
-                <div className=" shadow-inner bg-grey-0 rounded-lg overflow-y-auto p-1  w-full  h-full   ">
-                  {selectedMenuItems.length>0
-                  ?
-                  <ul
-                    className="flex h-full  w-full flex-wrap "  
-                  > 
-                    {
-                      selectedMenuItems.map((menuItem: MenuItemType) => 
-                        <li key={menuItem.menuItemId}>
-                          <MenuItem
-                            key={menuItem.menuItemId}
-                            menuType={menu!==null?menu.menuType:""}
-                            menuItem={menuItem}
-                            onDelete={()=>{
-                                setSelectedMenuItems(selectedMenuItems.filter((menuItemsToRemove)=>{
-                                return menuItemsToRemove.menuItemId!==menuItem.menuItemId
-                              }))
-                            }}
-                        />
-                        </li>
-                      )
-                    }
-                  </ul>
-                  :
-                  <h1 className="p-2">Selected menu items will appear here.</h1> //@TODO translation 
-                  }
-                </div>
-              <div className="flex  gap-20">
-                <button 
-                  id="addmenuitemsubmitall"
-                  type="submit"
-                  onClick={submitSelectedMenuItems}
-                  disabled={selectedMenuItems.length<=0}
-                  className={` shadow h-12  w-48  rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary ` }
-                >
-                  {t("general.save")}
-                </button>
-                <button
-                  disabled={selectedMenuItems.length<=0}
-                  onClick={()=>{
-                    setSelectedMenuItems([]);
-                  }}
-                  className={` shadow w-48 h-12 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary ` }
-                >
-                    Clear all items
-                    {/* @TODO translation */}
-                </button>
-              </div>
-            </div>
-          </div>
-        }
       </div>
   );
 };

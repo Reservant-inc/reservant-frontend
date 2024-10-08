@@ -9,6 +9,7 @@ import { fetchDELETE } from '../../../../services/APIconn';
 import { FetchError } from '../../../../services/Errors';
 import MenuItemDialog from '../MenuItemDialog';
 import Dialog from '../../../reusableComponents/Dialog';
+import MenuDialog from '../MenuDialog';
 
 interface MenuProps {
     menu: MenuType;
@@ -64,17 +65,17 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
                 ))}
             </div>
             {isEditingOpen && 
-                <Dialog
-                    open={isEditingOpen}
-                    onClose={()=>setIsEditingOpen(false)}
-                    title={`Editing ${menu.name}...`} //@TODO translation
-                >
-                    <MenuItemDialog
-                        menu={menu}
-                        activeRestaurantId={activeRestaurantId}
-                        onClose={()=>setIsEditingOpen(false)}
-                    />
-                </Dialog>
+              <Dialog
+                open={isEditingOpen}
+                onClose={()=>setIsEditingOpen(false)}
+                title={`Editing the ${menu.name} new menu...`} //@TODO translation
+              >
+                <MenuDialog
+                  activeRestaurantId={activeRestaurantId}
+                  onClose={()=>setIsEditingOpen(false)}
+                  menu={menu}
+                />
+              </Dialog>
             }
             <ConfirmationDialog
                 open={isConfirmationOpen}

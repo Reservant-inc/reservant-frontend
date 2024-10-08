@@ -14,7 +14,7 @@ import MenuItemDialog from "../MenuItemDialog";
 interface MenuItemProps {
   menuItem: MenuItemType
   type: MenuScreenType
-  menu: MenuType
+  menu?: MenuType
   activeRestaurantId: number
 }
 
@@ -63,7 +63,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
       {
         itemIds: [menuItemId],
       });
-      await fetchDELETE(`/menus/${menu.menuId}/items`, body);
+      await fetchDELETE(`/menus/${menu?.menuId}/items`, body);
       setIsConfirmationOpen(false);
     } catch (error) {
       if (error instanceof FetchError) {
