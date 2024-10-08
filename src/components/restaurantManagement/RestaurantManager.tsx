@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
@@ -11,6 +10,7 @@ import { UserInfo } from "../../services/types";
 import DefaultPhoto from "../../assets/images/user.jpg"
 import { MenuScreenType } from "../../services/enums";
 import MenuList from "./menus/newMenus/MenuList";
+import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
 
 
 const RestaurantManager = () => {

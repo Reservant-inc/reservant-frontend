@@ -1,4 +1,13 @@
+import { ReactElement } from 'react';
 import { FriendStatus, LocalType } from './enums';
+
+export type Routing = {
+  path: string,
+  element: ReactElement,
+  isPrivate: boolean,
+  navbar: boolean,
+  roles: string[]
+}[]
 
 export type LoginResponseType = {
   token: string;
