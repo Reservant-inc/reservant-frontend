@@ -84,9 +84,16 @@ const MenuItem: React.FC<MenuItemProps> = ({
         <ConfirmationDialog
           open={confirmationOpen}
           onClose={handleDeleteCancelled}
-          onConfirm={handleDeleteConfirmed}
-          confirmationText={`Are you sure you want to delete ${name}?`}
-        />
+        >
+        <div className="p-4 flex flex-col justify-between h-[20vh] w-[20vw]">
+          <h1>Delete?</h1>
+          <p>you wanna delete?</p>
+          <div className="flex justify-between">
+            <button onClick={handleDeleteConfirmed}>YES</button>
+            <button onClick={handleDeleteCancelled}>nono</button>
+          </div>
+        </div>
+        </ConfirmationDialog>
       </CardContent>
     </Card>
   );

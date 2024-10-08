@@ -551,9 +551,10 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       <ConfirmationDialog
         open={openConfirmation}
         onClose={() => setOpenConfirmation(false)}
-        onConfirm={handleDeleteMenu}
-        confirmationText={`Are you sure you want to delete this menu?`}
-      />
+      >
+        <p>asdasd</p>
+        <button onClick={handleDeleteMenu}> dleete</button>
+      </ConfirmationDialog>
     </div>
   );
 };
