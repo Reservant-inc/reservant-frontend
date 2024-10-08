@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react';
+import React, { createContext, ReactNode, useState, useMemo } from 'react';
 import { CartItemType } from '../services/types';
 
 interface CartContextProps {
@@ -10,6 +10,7 @@ interface CartContextValue {
   addItemToCart: (item: CartItemType) => void;
   incrementItemQuantity: (menuItemId: number) => void;
   decrementItemQuantity: (menuItemId: number) => void;
+  totalPrice: number;
 }
 
 export const CartContext = createContext<CartContextValue>({
@@ -17,6 +18,7 @@ export const CartContext = createContext<CartContextValue>({
   addItemToCart: () => {},
   incrementItemQuantity: () => {},
   decrementItemQuantity: () => {},
+  totalPrice: 0
 });
 
 const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
@@ -52,19 +54,26 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
     setCart((prevCart) =>
       prevCart
         .map(cartItem =>
-          cartItem.menuItemId === menuItemId && cartItem.quantity > 1
-            ? { ...cartItem, quantity: cartItem.quantity - 1 }
-            : cartItem
+          cartItem.menuItemId === menuItemId
+          ? { ...cartItem, quantity: cartItem.quantity - 1 } 
+          : cartItem
         )
         .filter(cartItem => cartItem.quantity > 0)
     );
   };
+
+  const totalPrice = useMemo(() => {
+    return cart.reduce((total, cartItem) => {
+      return total + cartItem.price * cartItem.quantity;
+    }, 0);
+  }, [cart])
 
   const ctxValue = {
     items: cart,
     addItemToCart: addToCart,
     incrementItemQuantity: incrementQuantity,
     decrementItemQuantity: decrementQuantity,
+    totalPrice
   };
 
   return (

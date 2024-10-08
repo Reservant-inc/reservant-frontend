@@ -10,7 +10,6 @@ import {
 import MoreActions from "../../reusableComponents/MoreActions";
 import MenuDialog from "./MenuDialog";
 import MenuItemDialog from "./MenuItemDialog";
-import MenuItem from "./newMenus/MenuItem";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";

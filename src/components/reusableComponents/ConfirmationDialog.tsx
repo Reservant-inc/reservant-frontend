@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import {
   Dialog,
 } from "@mui/material";
+import { createPortal } from "react-dom";
 
 interface ConfirmationDialogProps {
   open: boolean;
@@ -15,12 +16,13 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   children,
 }) => {
   
-  return (
+  return createPortal(
     <Dialog open={open} onClose={onClose}>
       <div>
         {children}
       </div>
-    </Dialog>
+    </Dialog>,
+    document.getElementById('modal') || document.body
   );
 };
 

@@ -130,16 +130,15 @@ export type MenuItemType = {
   photo: string;
 }
 
-export interface MenuItemWithDescriptionType {
-  menuItemId: number;
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  alternateName?: string;
-  alcoholPercentage?: number;
-  photo?: string;
+export type IngredientType = {
+  ingredientId: number,
+  publicName: string,
+  amountUsed: number
 }
+
+export type ItemWithIngredientsType = {
+  ingredients: IngredientType[]
+} & MenuItemType
 
 export type  MenuIteminOrderType = {
   name: string;
@@ -156,17 +155,6 @@ export type MenuType = {
   dateFrom: string;
   dateUntil: string | null;
   menuItems: MenuItemType[];
-}
-
-export type MenuWithDescriptionType = {
-  menuId: number;
-  name: string;
-  alternateName: string
-  menuType: string;
-  photo: string;
-  dateFrom: string;
-  dateUntil: string | null;
-  menuItems: MenuItemWithDescriptionType[];
 }
 
 export type FriendType = {
@@ -224,6 +212,7 @@ export type CartItemType = {
   name: string;
   price: number;
   quantity: number;
+  photo: string
 }
 
 export type UserSearchType = {
