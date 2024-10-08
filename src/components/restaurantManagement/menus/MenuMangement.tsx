@@ -104,7 +104,6 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-
   const handleDeleteMenu = async () => {
     try {
       if (menus[activeMenuIndex]) {
@@ -279,7 +278,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         >
           <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
 
-          <MenuItemDialog 
+          {/* <MenuItemDialog 
           
             menu={menus[activeMenuIndex]}
             activeMenuItems={menus[activeMenuIndex]?.menuItems}
@@ -287,7 +286,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
             activeRestaurantId={activeRestaurantId}
           
 
-          />
+          /> */}
           </div>
 
         </Modal>
@@ -300,7 +299,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
         >
           <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
           
-            <MenuItemDialog
+            {/* <MenuItemDialog
               menu={menus[activeMenuIndex]}
               
               activeMenuItems={menus[activeMenuIndex]?.menuItems}
@@ -308,7 +307,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
               activeRestaurantId={activeRestaurantId}
               menuItemToEdit={menuItemToEdit}
 
-            />
+            /> */}
 
           </div>
         </Modal>

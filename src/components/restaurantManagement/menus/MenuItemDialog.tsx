@@ -15,10 +15,11 @@ import { FetchError } from "../../../services/Errors";
 import DefaultMenuItemImage from "../../../assets/images/defaultMenuItemImage.png"
 
 interface MenuItemDialogProps {
-    menu: MenuType | null;
-    activeRestaurantId: number;
-    menuItemToEdit?: MenuItemType | null;
-    activeMenuItems?: MenuItemType[] | undefined
+  menu: MenuType ;
+  activeRestaurantId: number;
+  menuItemToEdit?: MenuItemType | null;
+  activeMenuItems?: MenuItemType[] | undefined
+  onClose: Function
 }
 
 const VisuallyHiddenInput = styled("input")({
@@ -36,19 +37,19 @@ const VisuallyHiddenInput = styled("input")({
 const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   menu,
   activeRestaurantId,
-  activeMenuItems,
   menuItemToEdit, 
+  onClose,
 }) => {
   
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoFileName, setPhotoFileName] = useState<string>("");
+  const [photoPath, setPhotoPath] = useState<string>("");
   const { t } = useTranslation("global");
   const {menuItemSelectorSchema,ingredientSelectorSchema,menuItemsSchema} = useValidationSchemas();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
-  const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([]) //@todo set as menuItemToEdit.ingredients
-  const [selectedMenuItems, setSelectedMenuItems] = useState<MenuItemType[]>([])
-  const [isCreating, setIsCreating] = useState<boolean>(true);
+  const [selectedIngredients, setSelectedIngredients] = useState<IngredientUsage[]>([])
+  const [selectedMenuItems, setSelectedMenuItems] = useState<MenuItemType[]>(menu.menuItems)
+  const [creatorOpen, setCreatorOpen] = useState<boolean>(menuItemToEdit?true:false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   
   useEffect (()=>{
@@ -103,7 +104,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     try{
       const res = await fetchGET(`/menu-items/${menuItemToEdit?.menuItemId}`);
       setSelectedIngredients(res.ingredients)
-      setPhotoFileName(res.photo)
+      setPhotoPath(res.photo)
+      setPhotoFileName(res.photo.substr(9))
     }catch (error) {
       if (error instanceof FetchError) 
         console.log(error.formatErrors())
@@ -115,7 +117,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   const uploadPhoto = async (photoFile: File) => {
     try {
       const res = await fetchFilesPOST("/uploads", photoFile);
-      setPhotoFileName(res.path);
+      setPhotoPath(res.path);
+      setPhotoFileName(res.fileName);
     } catch (error) {
       if (error instanceof FetchError) 
         console.log(error.formatErrors())
@@ -181,17 +184,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    let photoUrl
-    if(photoFile) {
-      try {
-        photoUrl = await fetchFilesPOST("/uploads", photoFile);
-      } catch (error) {
-        if (error instanceof FetchError) 
-          console.log(error.formatErrors())
-        else 
-          console.log("Unexpected error")
-      }
-    }
+    
     try {
       setSubmitting(true);
       const body = JSON.stringify(
@@ -202,13 +195,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
           alternateName: values.alternateName,
           alcoholPercentage: values.alcoholPercentage?values.alcoholPercentage:0,
           ingredients: selectedIngredients,
-          photo: photoUrl?photoUrl.fileName:photoFileName
+          photo: photoFileName
         },
       );
       await fetchPUT(
         `/menu-items/${menuItemToEdit?.menuItemId}`,
         body,
       );
+      onClose()
     } catch (error) {
       if (error instanceof FetchError) 
         console.log(error.formatErrors())
@@ -278,7 +272,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   return (
       <div className=" flex h-[90vh] w-[50vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7">
-        {isCreating?
+        {creatorOpen?
           <div className="flex">
               <Formik
                 id="menuitem-formik"
@@ -296,7 +290,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                     <Form className="h-full w-full flex gap-7">
                       <div className="relative w-48 h-48" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
 
-                        <img className=" w-full w-full absolute " src={getImage(photoFileName, DefaultMenuItemImage)} />
+                        <img className=" w-full w-full absolute " src={getImage(photoPath, DefaultMenuItemImage)} />
                           {
                             isHovered 
                             && 
@@ -508,7 +502,16 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <h1 className="p-2">Selected ingredients will appear here.</h1> //@TODO translation
                   }
                 </div>
-
+                {
+                  !menuItemToEdit &&  
+                  <button
+                    className={`  border-b  text-grey-black  hover:text-primary` }
+                    id="GoToCreateAddExisting"
+                    onClick={()=>setCreatorOpen(false)}
+                  >
+                    Or add existing one
+                  </button>
+                }
                 
               </div>
             </div>
@@ -535,25 +538,30 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           >
                             <option value="" id="MI-option-default">Select a menu item</option>
                               {/* @todo t  */}
-                              {activeMenuItems!==undefined &&
-                                menuItems
-                                .filter(menuItem=>!activeMenuItems.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
-                                .filter(menuItem=>!selectedMenuItems.find(selectedMI=>selectedMI.menuItemId==menuItem.menuItemId))
-                                .map((menuItem) => 
-                                <option value={menuItem.menuItemId}> 
-                                  {menuItem.name}
-                                </option>
-                                )
-                              }
+                              {menuItems
+                              .filter(menuItem=>!menu.menuItems.find(activeMI=>activeMI.menuItemId==menuItem.menuItemId))
+                              .filter(menuItem=>!selectedMenuItems.find(selectedMI=>selectedMI.menuItemId==menuItem.menuItemId))
+                              .map((menuItem) => 
+                              <option value={menuItem.menuItemId}> 
+                                {menuItem.name}
+                              </option>
+                              )}
                           </Field>
-                            <button
-                              type="submit"
-                              className={`  border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
-                              id="addMenuItemToMenu"
-                              disabled={!formik.isValid || !formik.dirty}
-                            >
-                              <Add/>
-                            </button> 
+                          <button
+                            type="submit"
+                            className={`  border-b  text-grey-black  ${formik.isValid&&formik.dirty?` hover:text-primary`:``}  ` }
+                            id="addMenuItemToMenu"
+                            disabled={!formik.isValid || !formik.dirty}
+                          >
+                            <Add/>
+                          </button>
+                          <button
+                            className={`  border-b  text-grey-black  hover:text-primary` }
+                            id="GoToCreateNewMenuItem"
+                            onClick={()=>setCreatorOpen(true)}
+                          >
+                            Create new
+                          </button>
                         </div>
                       </Form>
                     )

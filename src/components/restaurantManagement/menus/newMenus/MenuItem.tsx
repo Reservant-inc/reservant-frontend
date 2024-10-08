@@ -27,6 +27,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
   const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false);
 
+
   const [ingredients, setIngredients] = useState<{
     ingredientId: number,
     publicName: string,
@@ -35,7 +36,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
 
   useEffect(() => {
     fetchIngredients()
-  }, []);
+  }, [isEditingOpen]);
   
   const fetchIngredients = async () => {
     try {
@@ -133,6 +134,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
             menu={menu}
             menuItemToEdit={menuItem}
             activeRestaurantId={activeRestaurantId}
+            onClose={()=>setIsEditingOpen(false)}
           />
         </Dialog>
       }

@@ -1,9 +1,14 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { MenuType, MenuItemType } from '../../../../services/types';
 import MenuItem from './MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { MenuScreenType } from '../../../../services/enums';
+import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog';
+import { fetchDELETE } from '../../../../services/APIconn';
+import { FetchError } from '../../../../services/Errors';
+import MenuItemDialog from '../MenuItemDialog';
+import Dialog from '../../../reusableComponents/Dialog';
 
 interface MenuProps {
     menu: MenuType;
@@ -12,6 +17,26 @@ interface MenuProps {
 }
 
 const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, activeRestaurantId }, ref) {
+
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
+    const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false);
+
+    const handleDeleteMenu = async () => {
+        try {
+            const menuId = menu.menuId; 
+            const response = await fetchDELETE(`/menus/${menuId}`);
+            console.log(response);
+            setIsConfirmationOpen(false)
+        }
+        catch (error) {
+          if (error instanceof FetchError) {
+            console.log(error.formatErrors())
+          } else {
+            console.log("Unexpected error")
+          }
+        };
+    }
+    
     return (
         <div ref={ref}>
             <div className='w-full flex justify-between pr-3'>
@@ -20,17 +45,13 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
                     <div className='flex gap-2'>
                         <button 
                             className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
-                            onClick={()=>{
-                                //@todo menu edit
-                            }}                        
+                            onClick={()=>setIsEditingOpen(true)}                        
                         >
                             <EditIcon className='h-4 w-4'/>
                         </button>
                         <button 
                             className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
-                            onClick={()=>{
-                                //@todo menu deletion
-                            }}
+                            onClick={()=>setIsConfirmationOpen(true)}
                         >
                             <DeleteIcon className='h-4 w-4'/>
                         </button>
@@ -42,6 +63,25 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
                     <MenuItem key={item.menuItemId} menuItem={item} type={type} menu={menu} activeRestaurantId={activeRestaurantId}/>
                 ))}
             </div>
+            {isEditingOpen && 
+                <Dialog
+                    open={isEditingOpen}
+                    onClose={()=>setIsEditingOpen(false)}
+                    title={`Editing ${menu.name}...`} //@TODO translation
+                >
+                    <MenuItemDialog
+                        menu={menu}
+                        activeRestaurantId={activeRestaurantId}
+                        onClose={()=>setIsEditingOpen(false)}
+                    />
+                </Dialog>
+            }
+            <ConfirmationDialog
+                open={isConfirmationOpen}
+                onClose={()=>setIsConfirmationOpen(false)}
+                onConfirm={handleDeleteMenu}
+                confirmationText={`Are you sure you want to remove ${menu.name}?`} //@TODO translation
+            />
         </div>
     );
 });
