@@ -17,3 +17,9 @@ export enum FriendActionStatus {
   Accepted = "Accepted",
   Deleted = "Deleted",
 }
+
+export enum MenuScreenType {
+  Preview = "Preview",
+  Order = "Order",
+  Management = "Management",
+}

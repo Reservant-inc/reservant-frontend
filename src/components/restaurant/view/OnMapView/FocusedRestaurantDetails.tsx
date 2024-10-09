@@ -4,7 +4,11 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material";
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import EventIcon from '@mui/icons-material/Event';
 import CloseIcon from "@mui/icons-material/Close";
+import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -13,14 +17,27 @@ import { RestaurantDetailsType, ReviewType } from "../../../../services/types";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
-import RestaurantEventsModal from "../../events/RestaurantEventsModal";
-import MyEventsModal from "../../events/MyEventsModal"; // Import MyEventsModal
-
+import Dialog from "../../../reusableComponents/Dialog";
+import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
   onClose: () => void;
 }
+
+enum Options {
+  "ORDER",
+  "MENU",
+  "EVENT",
+  "VISIT"
+}
+
+const optionTitles: Record<Options, string> = {
+  [Options.ORDER]: "Order",
+  [Options.MENU]: "Menu",
+  [Options.EVENT]: "Event",
+  [Options.VISIT]: "Reservation",
+};
 
 const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   activeRestaurant,
@@ -28,11 +45,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>(activeRestaurant); 
   const [reviews, setReviews] = useState<ReviewType[]>([]);
-  // TEMP FOR EVENTS MODAL
-  const [showEventsModal, setShowEventsModal] = useState<boolean>(false); // Modal state
-  const [showMyEventsModal, setShowMyEventsModal] = useState<boolean>(false); // Modal state for MyEvents
-
-
+  const [option, setOption] = useState<Options | null>(null)
 
   const [t] = useTranslation("global")
  
@@ -63,6 +76,56 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0;
 
+    
+    const handleDialogClose =() => {
+      setOption(null)
+    }
+    
+    const renderRestaurantDetails = () => {
+      return (
+        <div className="p-3 flex flex-col gap-2 w-full">
+          <div className="flex gap-5 items-center w-full justify-between">
+            <h2 className="text-2xl font-bold dark:text-white">{restaurant.name}</h2>
+            <div className="flex items-center gap-2 dark:text-white">
+              <h1>{averageRating.toFixed(2)}</h1>
+              <CustomRating rating={averageRating} readOnly={true}/>
+              <h1>({reviews.length})</h1>
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <h1 className="text-sm dark:text-white">
+              {restaurant.address}, {restaurant.city}
+            </h1>
+            <div className="text-sm flex items-center gap-3">
+              {restaurant.provideDelivery && (
+                <div className="flex gap-2 items-center">
+                  <MopedIcon className="dark:text-white w-5 h-5"/> 
+                  <h1 className="dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
+                </div>
+              )}
+              <div className="flex gap-1 items-center">
+                <h1 className="dark:text-white">
+                  {t("home-page.is-delivering")}:
+                </h1>
+                {restaurant.provideDelivery ? (
+                  <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />
+                ) : (
+                  <CancelIcon className="text-red-500 dark:text-white w-5 h-5" />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+    )
+  }
+  
+  const renderDialogContent = {
+    [Options.ORDER]: <></>,
+    [Options.MENU] : <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews}/>,
+    [Options.EVENT]: <></>,
+    [Options.VISIT]: <></>,
+  };
+
   return (
     <>
       {!restaurant ? (
@@ -87,65 +150,69 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               )}
             </div>
           </div>
-          <div className="p-4 flex flex-col gap-2">
-            <div className="flex gap-5 items-center w-full justify-between">
-              <h2 className="text-2xl font-bold dark:text-white">{restaurant.name}</h2>
-              <div className="flex items-center gap-2 dark:text-white">
-                <h1>{averageRating.toFixed(2)}</h1>
-                <CustomRating rating={averageRating} readOnly={true}/>
-                <h1>({reviews.length})</h1>
-              </div>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h1 className="text-sm dark:text-white">
-                {restaurant.address}, {restaurant.city}
-              </h1>
-              <div className="text-sm flex items-center gap-3">
-                {restaurant.provideDelivery && (
-                  <div className="flex gap-2 items-center">
-                    <MopedIcon className="dark:text-white w-5 h-5"/> 
-                    <h1 className="dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
-                  </div>
-                )}
-                <div className="flex gap-1 items-center">
-                  <h1 className="dark:text-white">
-                    {t("home-page.is-delivering")}:
-                  </h1>
-                  {restaurant.provideDelivery ? (
-                    <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />
-                  ) : (
-                    <CancelIcon className="text-red-500 dark:text-white w-5 h-5" />
-                  )}
+          <div className="flex flex-col">
+            {renderRestaurantDetails()}
+            <span className="w-full bg-grey-1 h-[1px] dark:bg-grey-4"></span>
+            <div className="p-3 w-full rounded-lg flex gap-2 justify-around">
+              <div className="flex h-full items-center flex-col gap-1 w-[70px]">
+                <button 
+                  className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+                  onClick={() => setOption(Options.VISIT)}
+                >
+                  <EditCalendarIcon className="w-6 h-6"/>
+                </button>
+                <div className="flex h-[30px] items-center justify-center">
+                  <h1 className="text-[11px] text-primary dark:text-secondary">{t("home-page.reservation")}</h1>
                 </div>
               </div>
+              <div className="flex h-full items-center flex-col gap-1 w-[70px]">
+                <button 
+                  className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+                  onClick={() => setOption(Options.EVENT)}
+                >
+                    <EventIcon className="w-6 h-6"/>
+                </button>
+                <div className="flex h-[30px] items-center justify-center">
+                  <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.create-event")}</h1>
+                </div>
+              </div>
+              <div className="flex h-full items-center flex-col gap-1 w-[70px]">
+                <button 
+                  className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+                  onClick={() => setOption(Options.MENU)}
+                >
+                    <RestaurantMenuIcon className="w-6 h-6"/>
+                </button>
+                <div className="flex h-[30px] items-center justify-center">
+                  <h1 className="text-[11px] text-primary dark:text-secondary text-center">Menu</h1>
+                </div>
+              </div>
+              {
+                restaurant.provideDelivery && (
+                  <div className="flex h-full items-center flex-col gap-1 w-[70px]">
+                    <button 
+                    className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+                    onClick={() => setOption(Options.ORDER)}
+                  >
+                    <DeliveryDiningIcon className="w-6 h-6"/>
+                  </button>
+                  <div className="flex h-[30px] items-center justify-center">
+                    <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.order")}</h1>
+                  </div>
+                </div>
+                )
+              }
             </div>
-            <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} isDelivering={restaurant.provideDelivery} restaurantId={activeRestaurant.restaurantId}/>
-                     
-                     
-          {/* TEMP FOR EVENTS MODAL */}
-          <button
-              onClick={() => setShowEventsModal(true)} // Open the events modal
-            >
-              TEMPORARY Events
-            </button>
-          <RestaurantEventsModal
-            open={showEventsModal}
-            onClose={() => setShowEventsModal(false)} // Close the events modal
-            restaurantId={activeRestaurant.restaurantId}
-          />
-          {/* TEMP FOR MYEVENTS MODAL */}
-          <button
-              onClick={() => setShowMyEventsModal(true)} // Open the MyEvents modal
-            >
-              TEMPORARY MyEvents
-            </button>
-            <MyEventsModal
-              open={showMyEventsModal}
-              onClose={() => setShowMyEventsModal(false)} // Close the MyEvents modal
-            />
+            <span className="w-full bg-grey-1 h-[1px] dark:bg-grey-4"></span>
+            <div className="p-3">
+              <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} activeRestaurantId={restaurant.restaurantId}/>
+            </div>
           </div>
         </>
       )}
+        <Dialog open={option !== null} onClose={() => handleDialogClose()} title={option !== null ? optionTitles[option] : ""}>
+          {option !== null && renderDialogContent[option]}
+        </Dialog>
     </>
   );
 };

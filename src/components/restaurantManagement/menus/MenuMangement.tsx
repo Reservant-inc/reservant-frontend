@@ -10,20 +10,16 @@ import {
 import MoreActions from "../../reusableComponents/MoreActions";
 import MenuDialog from "./MenuDialog";
 import MenuItemDialog from "./MenuItemDialog";
-import MenuItem from "./MenuItem";
+import MenuItem from "./newMenus/MenuItem";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
   Box,
   Button,
   IconButton,
-  InputAdornment,
-  Menu,
-  MenuItem as MyMenuItem,
   TextField,
 } from "@mui/material";
 import FilterMenu from "./FilterMenu";
@@ -34,25 +30,6 @@ interface MenuManagementProps {
   activeRestaurantId: number | null;
 }
 
-interface Menu {
-  menuId: number;
-  name: string;
-  alternateName: string;
-  menuType: string;
-  dateFrom: string;
-  dateUntil: string | null;
-  menuItems: MenuItemData[];
-}
-
-interface MenuItemData {
-  menuItemId: number;
-  name: string;
-  alternateName: string;
-  price: number;
-  alcoholPercentage: number;
-  photo: string;
-}
-
 const MenuManagement: React.FC<MenuManagementProps> = ({
   activeRestaurantId,
 }) => {
@@ -61,15 +38,15 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
     null,
   );
-  const [menus, setMenus] = useState<Menu[]>([]);
+  const [menus, setMenus] = useState<MenuType[]>([]);
   const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{
     [key: number]: string[];
   }>({});
   const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(
     null,
   );
-  const [editMenu, setEditMenu] = useState<Menu | null>(null);
-  const [editedMenuItem, setEditedMenuItem] = useState<MenuItemData | null>(
+  const [editMenu, setEditMenu] = useState<MenuType | null>(null);
+  const [editedMenuItem, setEditedMenuItem] = useState<MenuItemType | null>(
     null,
   );
   const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
@@ -104,7 +81,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       const menuId = menus[selectedMenuIndex].menuId;
       try {
         const menuData = await fetchGET(`/menus/${menuId}`);
-        console.log("Menu items for selected menu:", menuData);
+        console.log("MenuType items for selected menu:", menuData);
         if (!menuData.menuItems || menuData.menuItems.length === 0) {
           return;
         }
@@ -122,20 +99,25 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const fetchMenus = async (restaurantId: number): Promise<Menu[]> => {
+  const fetchMenus = async (restaurantId: number): Promise<MenuType[]> => {
     try {
-      const menusData: Menu[] = await fetchGET(
+
+      const menusData: MenuType[] = await fetchGET(
         `/my-restaurants/${restaurantId}/menus`,
       );
-      console.log("Menus data:", menusData);
+
       const validatedMenusData = menusData.map((menu) => ({
         ...menu,
         menuItems: menu.menuItems || [], // Jeśli brakuje menuItems, ustaw na pustą tablicę
       }));
+
       const allMenuNames = validatedMenusData.map((menu) => menu.name);
+
       setMenus(validatedMenusData);
       setmenuNamesByRestaurant({ [activeRestaurantId || 0]: allMenuNames });
+
       return validatedMenusData;
+
     } catch (error) {
       console.error("Error fetching menus:", error);
       return [];
@@ -249,7 +231,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const handleEditMenuItem = (menuItem: MenuItemData) => {
+  const handleEditMenuItem = (menuItem: MenuItemType) => {
     setEditedMenuItem(menuItem);
     setIsMenuItemEditPopupOpen(true);
   };
@@ -282,7 +264,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     }
   };
 
-  const handleDeleteMenuItem = async (menuItem: MenuItemData) => {
+  const handleDeleteMenuItem = async (menuItem: MenuItemType) => {
     try {
       const { menuItemId } = menuItem;
       const response = await fetchDELETE(`/menu-items/${menuItemId}`);
@@ -341,7 +323,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
 
   const filteredMenuItems =
     selectedMenuIndex !== null
-      ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemData) => {
+      ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemType) => {
           const nameMatch = menuItem.name
             .toLowerCase()
             .includes(searchText.toLowerCase());
@@ -354,7 +336,7 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       : [];
 
   const sortMenuItems = (
-    sortFunction: (a: MenuItemData, b: MenuItemData) => number,
+    sortFunction: (a: MenuItemType, b: MenuItemType) => number,
   ) => {
     if (selectedMenuIndex !== null) {
       const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(
@@ -373,29 +355,29 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
   };
 
   const handleSortAlphabetically = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) =>
+    sortMenuItems((a: MenuItemType, b: MenuItemType) =>
       a.name.localeCompare(b.name),
     );
   };
 
   const handleSortPriceAsc = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) => a.price - b.price);
+    sortMenuItems((a: MenuItemType, b: MenuItemType) => a.price - b.price);
   };
 
   const handleSortPriceDesc = () => {
-    sortMenuItems((a: MenuItemData, b: MenuItemData) => b.price - a.price);
+    sortMenuItems((a: MenuItemType, b: MenuItemType) => b.price - a.price);
   };
 
   const handleSortAlcoholAsc = () => {
     sortMenuItems(
-      (a: MenuItemData, b: MenuItemData) =>
+      (a: MenuItemType, b: MenuItemType) =>
         (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0),
     );
   };
 
   const handleSortAlcoholDesc = () => {
     sortMenuItems(
-      (a: MenuItemData, b: MenuItemData) =>
+      (a: MenuItemType, b: MenuItemType) =>
         (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0),
     );
   };
@@ -501,18 +483,13 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       <div className="m-1 flex flex-wrap">
         {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
           <>
-            {filteredMenuItems.map((menuItem: MenuItemData) => (
-              <MenuItem
-                key={menuItem.menuItemId}
-                name={menuItem.name}
-                alternateName={menuItem.alternateName}
-                price={menuItem.price}
-                photo={menuItem.photo}
-                alcoholPercentage={menuItem.alcoholPercentage}
-                menuType={menus[selectedMenuIndex].menuType}
-                onDelete={() => handleDeleteMenuItem(menuItem)}
-                onEdit={() => handleEditMenuItem(menuItem)}
-              />
+            {filteredMenuItems.map((menuItem: MenuItemType) => (
+              // <MenuItem
+              //   key={menuItem.menuItemId}
+              //   menuItem={{}}
+              // />
+              <>
+              </>
             ))}
           </>
         )}
