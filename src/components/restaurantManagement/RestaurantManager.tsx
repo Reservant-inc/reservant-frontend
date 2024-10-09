@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
+import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
-import OrderHistory from "./reservations/OrderHistory";
 import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
-import { fetchGET, getImage } from "../../services/APIconn";
-import { User, UserInfo } from "../../services/types";
-import { AccountCircle } from "@mui/icons-material";
-import { checkPrimeSync } from "crypto";
-import { wait } from "@testing-library/user-event/dist/utils";
+import { getImage } from "../../services/APIconn";
+import { UserInfo } from "../../services/types";
 import DefaultPhoto from "../../assets/images/user.jpg"
 
 const RestaurantManager = () => {
