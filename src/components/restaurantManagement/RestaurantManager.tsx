@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Menu from "./Menu";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
@@ -50,7 +49,6 @@ const RestaurantManager = () => {
           >
             {
               {
-                0: <RestaurantDashboardSection />,
                 1:
                   activeRestaurantId === null ? (
                     <RestaurantListSection

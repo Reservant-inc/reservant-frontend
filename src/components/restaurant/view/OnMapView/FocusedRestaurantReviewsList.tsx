@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RestaurantReviewsFilters from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReviewsFilters";
 import RestaurantReview from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReview";
-import { Button } from "@mui/material";
 import { ReviewType } from "../../../../services/types";
 import { useTranslation } from "react-i18next";
 import { FetchError } from "../../../../services/Errors";
@@ -20,7 +19,7 @@ const FocusedRestaurantReviewsList: React.FC<
   const [ value, setValue ] = useState<number>(0)
   const [ isOwner, setIsOwner ] = useState<boolean>(false)
 
-  const [t] = useTranslation("global")
+  const [t] = useTranslation("global");
 
   useEffect(() => {
     setValue(0);
@@ -80,9 +79,6 @@ const FocusedRestaurantReviewsList: React.FC<
           )}
         </div>
       </div>
-      <dialog>
-
-      </dialog>
     </div>
   );
 };
