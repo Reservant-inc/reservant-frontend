@@ -104,7 +104,6 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    let responseMenu
     try {
       setSubmitting(true);
       const body = JSON.stringify({
@@ -236,9 +235,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                       //@TODO translation
                     />
                     <button 
-                      id="addmenuitemsubmit"
+                      id="addmenuSubmit"
                       type="submit"
-                      disabled={!formik.isValid || !formik.dirty}
+                      disabled={!formik.isValid || (!formik.dirty && menu===null) }
                       className={"shadow h-12 min-w-1/2 w-48 justify-center items-center gap-2 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
                     >
                       <Save/>

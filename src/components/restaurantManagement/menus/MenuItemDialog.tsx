@@ -65,7 +65,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     try{
       let page=0;
       let totalPages = 1;
-      const perPage= 5;
+      const perPage= 20;
       let tmp:Ingredient[] = []
 
       while (page < totalPages){

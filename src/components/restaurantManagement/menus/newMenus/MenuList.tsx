@@ -34,7 +34,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
 
     useEffect(() => {
         fetchMenus()
-    }, [])
+    }, [isCreating])
 
     useEffect(() => {
       scrollToMenu()
