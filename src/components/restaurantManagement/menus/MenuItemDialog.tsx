@@ -13,6 +13,7 @@ import { CloseSharp, ArrowForwardIos, Add, Save, Clear, KeyboardDoubleArrowDown,
 import MenuItem from "./MenuItem";
 import { FetchError } from "../../../services/Errors";
 import DefaultMenuItemImage from "../../../assets/images/defaultMenuItemImage.png"
+import ErrorMes from "../../reusableComponents/ErrorMessage";
 
 interface MenuItemDialogProps {
   menu?: MenuType ;
@@ -220,239 +221,226 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
  
 
   return (
-      <div className=" flex h-[90vh] w-[50vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7">
-          <div className="flex">
-              <Formik
-                id="menuitem-formik"
-                initialValues={{
-                  price: menuItemToEdit?.price,
-                  name: menuItemToEdit?.name,
-                  alternateName: menuItemToEdit?.alternateName?menuItemToEdit.alternateName:"",
-                  alcoholPercentage: menuItemToEdit?.alcoholPercentage?menuItemToEdit.alcoholPercentage:0
-                }}
-                validationSchema={menuItemsSchema}
-                onSubmit={menuItemToEdit?onSubmitEditedMenuItem:onSubmitNewMenuItem}
-              >
-                {(formik) => {
-                  return(
-                    <Form className="h-full w-full flex gap-7">
-                      <div className="relative w-48 h-48" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
+    <div className=" flex justify-center h-[65vh] w-[90vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7">
+      <Formik
+        id="menuitem-formik"
+        initialValues={{
+          price: menuItemToEdit?.price,
+          name: menuItemToEdit?.name,
+          alternateName: menuItemToEdit?.alternateName?menuItemToEdit.alternateName:"",
+          alcoholPercentage: menuItemToEdit?.alcoholPercentage?menuItemToEdit.alcoholPercentage:0
+        }}
+        validationSchema={menuItemsSchema}
+        onSubmit={menuItemToEdit?onSubmitEditedMenuItem:onSubmitNewMenuItem}
+      >
+        {(formik) => {
+          return(
+            <Form className="h-full w-1/2 flex gap-7 pl-3">
+              <div className="relative w-72 h-72 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
 
-                        <img className=" w-full w-full absolute " src={getImage(photoPath, DefaultMenuItemImage)} />
-                          {
-                            isHovered 
-                            && 
-                            <div className="bg-semi-trans h-full w-full absolute flex items-center justify-center">
-                              <label
-                                htmlFor="photo"
-                                className={` shadow rounded-lg justify-center items-center cursor-pointer flex p-1 gap-2   dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary ` }
-                              >
-                                <CloudUploadIcon/>
-                                <p>
-                                  Upload photo
-                                  {/* @TODO translation */}
-                                </p>
-                              </label>
-                            </div>
-                          } 
-                          <VisuallyHiddenInput
-                            type="file"
-                            id="photo"
-                            accept="image/*"
-                            onChange={(e)=>{
-                              if (e.target.files && e.target.files.length > 0) {
-                                uploadPhoto(e.target.files[0])
-                              }
-                            }}
-                          />
-                      </div>
+                <img className=" w-72 h-72 absolute rounded-lg" src={getImage(photoPath, DefaultMenuItemImage)} />
+                  {
+                    isHovered 
+                    && 
+                    <div className="bg-semi-trans w-72 h-72 absolute flex items-center justify-center rounded-lg">
+                      <button
+                        className={"shadow self-center h-10 w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary  dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary  " }
+                      >
+                        <CloudUploadIcon/>
+                        Upload photo
+                      </button>
+                    </div>
+                  } 
+                  <VisuallyHiddenInput
+                    type="file"
+                    id="photo"
+                    accept="image/*"
+                    onChange={(e)=>{
+                      if (e.target.files && e.target.files.length > 0) {
+                        uploadPhoto(e.target.files[0])
+                      }
+                    }}
+                  />
+              </div>
 
-                      <div className="flex flex-col gap-7">
-                        <Field
-                          type="text"
-                          id="name"
-                          name="name"
-                          helperText={
-                            formik.errors.name &&
-                            formik.touched.name &&
-                            formik.errors.name
-                          }
-                          label="Name" //@TODO translation
-                          variant="standard"
-                          color="primary"
-                          className={` w-full  ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                          as={TextField}
-                        />
-                        <Field
-                          type="text"
-                          id="alternateName"
-                          name="alternateName"
-                          helperText={
-                            formik.errors.alternateName &&
-                            formik.touched.alternateName &&
-                            formik.errors.alternateName
-                          }
-                          label="Name translation" //@TODO translation
-                          variant="standard"
-                          color="primary"
-                          className={` w-full  ${!(formik.errors.alternateName && formik.touched.alternateName) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                          as={TextField}
-                        />
-                        <Field
-                          type="text"
-                          id="price"
-                          name="price"
-                          helperText={
-                            formik.errors.price &&
-                            formik.touched.price &&
-                            formik.errors.price
-                          }
-                          label="Price" //@TODO translation
-                          variant="standard"
-                          color="primary"
-                          className={` w-full  ${!(formik.errors.price && formik.touched.price) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                          as={TextField}
-                        />
-                        <Field
-                          type="text"
-                          id="alcoholPercentage"
-                          name="alcoholPercentage"
-                          helperText={
-                            formik.errors.alcoholPercentage &&
-                            formik.touched.alcoholPercentage &&
-                            formik.errors.alcoholPercentage
-                          }
-                          label="Alcohol percentage" //@TODO translation
-                          variant="standard"
-                          color="primary"
-                          className={` w-full  ${!(formik.errors.alcoholPercentage && formik.touched.alcoholPercentage) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-primary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                          as={TextField}
-                        />
-                       
-                        <button 
-                          id="addmenuitemsubmit"
-                          type="submit"
-                          disabled={!formik.isValid || (!formik.dirty && !menuItemToEdit) || selectedIngredients.length<=0}
-                          className={"shadow h-12 min-w-1/2 w-48 justify-center items-center gap-2 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-                        >
-                          <Save/>
-                          {t("general.save")}
-                        </button>
-                      </div>
-                    </Form>
-                  )
-                }}
-              </Formik>
-
-              <div className="flex   h-full gap-6 flex-col">
-              <Formik  
-                initialValues={{
-                  ingredientId: "",
-                  amountUsed: ""
-                }} 
-                onSubmit={addIngredient}
-                validationSchema={ingredientSelectorSchema}
-              >
-                {(formik) => {
-                  return(
-                    <Form
-                      className=" flex flex-col"
-                    >
-                      <div className="flex ">
-                        <Field
-                          as={"select"}
-                          id="ingredientId" 
-                          name="ingredientId" 
-                          label="Ingredient"
-                          className="w-2/3  border-0 border-b"
-                        >
-                          <option value="" id="ingredientSelector-option-default">Select an ingredient</option>
-                            {/* //@TODO translation */}
-                            {
-                              ingredients.filter(ingredient=>!selectedIngredients.find(ingredientUsage=>ingredientUsage.ingredientId==ingredient.ingredientId)).map((ingredient) => 
-                              <option value={ingredient.ingredientId}> 
-                                {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
-                              </option>)
-                            }
-                        </Field>
-                        <div className={` border-b  w-1/3 ${!(formik.errors.amountUsed && formik.touched.amountUsed)?"":"border-error"}`}>
-                          <Field 
-                            type="text" 
-                            id="amountUsed" 
-                            name="amountUsed"
-                            className={` w-full [&>*]:before:border-0 [&>*]:after:border-0  ${!(formik.errors.amountUsed && formik.touched.amountUsed) ? "[&>*]:text-black " : "[&>*]:text-error" }`} 
-                            variant="standard"
-                            label="Amount"
-                            as={TextField}
-                            //@TODO translation
-                          />
-                        </div>
-                      </div>
-                      <div className="flex">
-                        <button
-                          type="submit"
-                          className={"items-center  flex justify-center shadow  w-48 h-12 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary" }
-                          id="addIngridientToMenuItem"
-                          disabled={!formik.isValid || !formik.dirty}
-                        >
-                          <Add/> 
-                          Add Ingredient usage
-                          {/* @TODO translation */}
-                        </button> 
-                        <button
-                          className={"items-center flex justify-center shadow  w-48 h-12 rounded-lg p-1  dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary" }
-                          disabled={selectedIngredients.length<=0}
-                          onClick={()=>{
-                            setSelectedIngredients([]);
-                          }}
-                          >
-                            <Clear/>
-                            Clear all ingredients
-                            {/* @TODO translation */}
-                        </button>
-                      </div>
-                    </Form>
-                  )
-                }}
-              </Formik>
-              <h1 className="pl-2">Selected ingredients:</h1>
-
-                <div className="shadow-inner  w-full h-full overflow-y-auto ">
-                  {selectedIngredients.length>0
-                  ?
-                  <ul
-                    className="flex h-full flex-col w-full "  
-                  > 
-                    {
-                      selectedIngredients.map((ingredient) => 
-                      <li 
-                        key={ingredient.ingredientId}
-                        className="h-fit hover:bg-grey-0 bg-white border-white border items-center p-2 justify-between w-full flex"
-                      > 
-                        <p className="overflow-hidden text-ellipsis">
-
-                          {getIngredientDetails(ingredient)?.publicName}: {ingredient.amountUsed} {getIngredientDetails(ingredient)?.unitOfMeasurement}
-                        </p>
-                        <button 
-                          className="hover:text-primary "
-                          onClick={()=>{
-                            setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>{
-                              return ingredientToRemove.ingredientId!==ingredient.ingredientId
-                            }))
-                          }}> 
-                          <Remove/> 
-                        </button>
-                      </li>
-                      )
-                    }
-                  </ul>
-                  :
-                  <h1 className="p-2">Selected ingredients will appear here.</h1> //@TODO translation
+              <div className="flex flex-col gap-7">
+                <div>
+                  <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name&&formik.touched.name?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label htmlFor="name">Name:</label>
+                    <Field 
+                      type="text" 
+                      id="name" 
+                      name="name"
+                      className="w-full "
+                      //@TODO translation
+                    />
+                  </div>
+                  {
+                    (formik.errors.name&&formik.touched.name) &&
+                    <ErrorMes msg={formik.errors.name}/>
                   }
                 </div>
+                <div>
+                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName&&formik.touched.alternateName?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label htmlFor="alternateName">Alternate name:</label>
+                    <Field 
+                      type="text" 
+                      id="alternateName" 
+                      name="alternateName"
+                      className="w-full"
+                      //@TODO translation
+                    />
+                  </div>
+                  {
+                    (formik.errors.alternateName&&formik.touched.alternateName) &&
+                    <ErrorMes msg={formik.errors.alternateName}/>
+                  }                  
+                </div>
+                <div>
+                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price&&formik.touched.price?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label htmlFor="alternateName">Price:</label>
+                    <Field 
+                      type="text" 
+                      id="price" 
+                      name="price"
+                      className="w-full"
+                      //@TODO translation
+                    />
+                  </div>
+                  {
+                    (formik.errors.price&&formik.touched.price) &&
+                    <ErrorMes msg={formik.errors.price}/>
+                  }                  
+                </div>
+                <div>
+                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alcoholPercentage&&formik.touched.alcoholPercentage?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label htmlFor="alternateName">Alcohol percentage:</label>
+                    <Field 
+                      type="text" 
+                      id="alcoholPercentage" 
+                      name="alcoholPercentage"
+                      className="w-full"
+                      //@TODO translation
+                    />
+                  </div>
+                  {
+                    (formik.errors.alcoholPercentage&&formik.touched.alcoholPercentage) &&
+                    <ErrorMes msg={formik.errors.alcoholPercentage}/>
+                  }                  
+                </div>
+                <button 
+                  id="addmenuitemsubmit"
+                  type="submit"
+                  disabled={!formik.isValid || (!formik.dirty && !menuItemToEdit) || selectedIngredients.length<=0}
+                  className={"shadow h-10 self-center w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
+                >
+                  <Save/>
+                  {t("general.save")}
+                </button>
               </div>
-            </div>
+            </Form>
+          )
+        }}
+      </Formik>
+
+      <div className="flex flex-col w-1/2 gap-7">
+        <Formik  
+          initialValues={{
+            ingredientId: "",
+            amountUsed: ""
+          }} 
+          onSubmit={addIngredient}
+          validationSchema={ingredientSelectorSchema}
+        >
+          {(formik) => {
+            return(
+              <Form className="flex flex-col pr-3">
+                <div className="flex gap-7">
+                  <div className={`w-2/3 flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.amountUsed&&formik.touched.amountUsed?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label className="">Ingredient:</label>
+                    <Field
+                      as={"select"}
+                      id="ingredientId" 
+                      name="ingredientId" 
+                      className="border-0 w-1/2 dark:bg-black"
+                    >
+                      <option value="" className="w-full" disabled={true} selected={true} id="ingredientSelector-option-default">Ingredient</option>
+                        {/* //@TODO translation */}
+                        {
+                          ingredients.filter(ingredient=>!selectedIngredients.find(ingredientUsage=>ingredientUsage.ingredientId==ingredient.ingredientId)).map((ingredient) => 
+                          <option className="w-full" value={ingredient.ingredientId}> 
+                            {ingredient.publicName}  ({ingredient.unitOfMeasurement}) 
+                          </option>)
+                        }
+                    </Field>
+                    <div className="flex w-1/2 justify-start items-center">
+
+                      <label htmlFor="alternateName">Amount:</label>
+                      <Field 
+                        type="text" 
+                        id="amountUsed" 
+                        name="amountUsed"
+                        className="w-1/3"
+                        //@TODO translation
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
+                    id="addIngridientToMenuItem"
+                    disabled={!formik.isValid || !formik.dirty}
+                    >
+                    <Add/> 
+                    Add usage
+                    {/* @TODO translation */}
+                  </button> 
+                
+                </div>
+                {
+                  (formik.errors.amountUsed&&formik.touched.amountUsed) &&
+                  <ErrorMes msg={formik.errors.amountUsed}/>
+                }  
+              </Form>
+            )
+          }}
+        </Formik>
+
+        <div className="  dark:bg-black bg-white overflow-y-auto w-full  h-full p-2 rounded-lg pr-3">
+          {selectedIngredients.length>0
+          ?
+          <ul
+            className="flex flex-wrap h-fit max-h-full w-full gap-2"  
+          > 
+            {
+              selectedIngredients.map((ingredient) => 
+              <li 
+                key={ingredient.ingredientId+ingredient.amountUsed}
+                className="h-fit w-fit gap-1  bg-grey-0 dark:bg-black rounded-lg items-center p-2 justify-center flex"
+              > 
+                <p className="overflow-hidden text-ellipsis">
+                  {getIngredientDetails(ingredient)?.publicName}: {ingredient.amountUsed} {getIngredientDetails(ingredient)?.unitOfMeasurement}
+                </p>
+                <button
+                  className=' dark:bg-black flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+                  onClick={()=>{
+                    setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>
+                       ingredientToRemove.ingredientId!==ingredient.ingredientId
+                    ))
+                  }}
+                >
+                  <Remove className="h-4 w-4"/>
+                </button>
+              </li>
+              )
+            }
+          </ul>
+          :
+          <h1 className="p-2">Selected ingredients will appear here.</h1> //@TODO translation
+          }
+        </div>
       </div>
+    </div>
   );
 };
 

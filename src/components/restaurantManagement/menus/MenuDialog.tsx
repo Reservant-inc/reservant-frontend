@@ -155,7 +155,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
 
 
   return (
-    <div className=" flex justify-center h-[65vh] w-[60vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7">
+    <div className=" flex justify-center h-[65vh] w-[60vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         initialValues={{ 
           name: menu?menu.name:"",
@@ -166,124 +166,122 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         }} 
         onSubmit={menu?handleEditedNewMenu:handleSaveNewMenu}
         validationSchema={menuSchema}
-        className="w-1/3"
+        className="w-1/3 "
       >
         {(formik) => {
           return(
-            <Form>
-              <div className="flex flex-col gap-7">
-                <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name&&formik.touched.name?"border-error text-error":"border-black text-black"}`}>
-                    <label htmlFor="name">Name:</label>
-                    <Field 
-                      type="text" 
-                      id="name" 
-                      name="name"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                  </div>
-                  {
-                    (formik.errors.name&&formik.touched.name) &&
-                    <ErrorMes msg={formik.errors.name}/>
-                  }
+            <Form className="flex flex-col gap-7 pl-3">
+              <div>
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name&&formik.touched.name?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="name">Name:</label>
+                  <Field 
+                    type="text" 
+                    id="name" 
+                    name="name"
+                    className="w-full "
+                    //@TODO translation
+                  />
                 </div>
-                <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName&&formik.touched.alternateName?"border-error text-error":"border-black text-black"}`}>
-                    <label htmlFor="alternateName">Alternate name:</label>
-                    <Field 
-                      type="text" 
-                      id="alternateName" 
-                      name="alternateName"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                  </div>
-                  {
-                    (formik.errors.alternateName&&formik.touched.alternateName) &&
-                    <ErrorMes msg={formik.errors.alternateName}/>
-                  }                  
-                </div>
-                <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.menuType&&formik.touched.menuType?"border-error text-error":"border-black text-black"}`}>
-                    <label htmlFor="menuType">Menu type:</label>
-                    <Field 
-                      id="menuType" 
-                      name="menuType"
-                      as={"select"}
-                      className="border-none w-full"
-                      //@TODO translation
-                    >
-                      <option className="" value="" selected={true} disabled={true} id="MenuMenuType-option-default">Menu type</option>
-                      {/* //@TODO translation */}
-                      {
-                        menuTypes.map((menuType) => 
-                        <option className="text-black" value={menuType}> 
-                          {menuType} 
-                        </option>)
-                      }
-                    </Field>
-                    </div>
-                    {
-                      (formik.errors.menuType&&formik.touched.menuType) &&
-                      <ErrorMes msg={formik.errors.menuType}/>
-                    }        
-                </div>
-                <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateFrom&&formik.touched.dateFrom?"border-error text-error":"border-black text-black"}`}>
-                    <label htmlFor="dateFrom">Active since:</label>
-                    <Field 
-                      type="date" 
-                      id="dateFrom" 
-                      name="dateFrom"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                  </div>
-                  {
-                    (formik.errors.dateFrom&&formik.touched.dateFrom) &&
-                    <ErrorMes msg={formik.errors.dateFrom}/>
-                  }                  
-                </div>
-                <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateUntil&&formik.touched.dateUntil?"border-error text-error":"border-black text-black"}`}>
-                    <label htmlFor="dateUntil">Active until:</label>
-                    <Field 
-                      type="date" 
-                      id="dateUntil" 
-                      name="dateUntil"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                  </div>
-                  {
-                    (formik.errors.dateUntil&&formik.touched.dateUntil) &&
-                    <ErrorMes msg={formik.errors.dateUntil}/>
-                  }   
-                </div>
-                <button 
-                  id="addmenuSubmit"
-                  type="submit"
-                  disabled={!formik.isValid || (!formik.dirty && menu===null) }
-                  className={"shadow self-center h-10 min-w-1/2 w-48 justify-center items-center gap-2 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-                >
-                  <Save/>
-                  {t("general.save")}
-                </button>
+                {
+                  (formik.errors.name&&formik.touched.name) &&
+                  <ErrorMes msg={formik.errors.name}/>
+                }
               </div>
+              <div>
+                <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName&&formik.touched.alternateName?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="alternateName">Alternate name:</label>
+                  <Field 
+                    type="text" 
+                    id="alternateName" 
+                    name="alternateName"
+                    className="w-full"
+                    //@TODO translation
+                  />
+                </div>
+                {
+                  (formik.errors.alternateName&&formik.touched.alternateName) &&
+                  <ErrorMes msg={formik.errors.alternateName}/>
+                }                  
+              </div>
+              <div>
+                <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.menuType&&formik.touched.menuType?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="menuType">Menu type:</label>
+                  <Field 
+                    id="menuType" 
+                    name="menuType"
+                    as={"select"}
+                    className="border-none w-full dark:bg-black"
+                    //@TODO translation
+                  >
+                    <option className="" value="" selected={true} disabled={true} id="MenuMenuType-option-default">Menu type</option>
+                    {/* //@TODO translation */}
+                    {
+                      menuTypes.map((menuType) => 
+                      <option className="text-black" value={menuType}> 
+                        {menuType} 
+                      </option>)
+                    }
+                  </Field>
+                  </div>
+                  {
+                    (formik.errors.menuType&&formik.touched.menuType) &&
+                    <ErrorMes msg={formik.errors.menuType}/>
+                  }        
+              </div>
+              <div>
+                <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateFrom&&formik.touched.dateFrom?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="dateFrom">Active since:</label>
+                  <Field 
+                    type="date" 
+                    id="dateFrom" 
+                    name="dateFrom"
+                    className="w-full"
+                    //@TODO translation
+                  />
+                </div>
+                {
+                  (formik.errors.dateFrom&&formik.touched.dateFrom) &&
+                  <ErrorMes msg={formik.errors.dateFrom}/>
+                }                  
+              </div>
+              <div>
+                <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateUntil&&formik.touched.dateUntil?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="dateUntil">Active until:</label>
+                  <Field 
+                    type="date" 
+                    id="dateUntil" 
+                    name="dateUntil"
+                    className="w-full"
+                    //@TODO translation
+                  />
+                </div>
+                {
+                  (formik.errors.dateUntil&&formik.touched.dateUntil) &&
+                  <ErrorMes msg={formik.errors.dateUntil}/>
+                }   
+              </div>
+              <button 
+                id="addmenuSubmit"
+                type="submit"
+                disabled={!formik.isValid || (!formik.dirty && menu===null) }
+                className={" self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 shadow dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
+              >
+                <Save/>
+                {t("general.save")}
+              </button>
             </Form>
           )
         }}
       </Formik>
       <div className="flex flex-col w-2/3 gap-7">
-        <form className="flex text-nowrap items-center gap-7">
-          <div className="flex items-center justify-start gap-1 w-2/3 border-b-[1px]">
+        <form className="flex text-nowrap items-center gap-7 pr-3">
+          <div className="flex items-center justify-start gap-1 w-2/3 border-b-[1px] dark:text-grey-1">
 
             <label className="">Menu item:</label>
             <select
               name="id" 
               id="MenuDialogMenuItemSelector"
-              className="border-0 w-full"
+              className="border-0 w-full dark:bg-black"
               onChange={(e)=>setSelectedMenuItemId(e.target.value)}
             >
               <option value="" className="w-full" disabled={true} selected={true} id="MI-option-default">Menu item</option>
@@ -302,7 +300,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
             </select>
           </div>
           <button
-            className={"shadow self-center h-10 min-w-1/2 w-48 justify-center items-center gap-2 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
+            className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
             
             id="addMenuItemToMenu"
             onClick={()=>{
@@ -310,8 +308,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               setSelectedMenuItemId("")
               if(tmp){
                 setSelectedMenuItems([...selectedMenuItems, tmp])}
-                let selector: HTMLSelectElement = document.getElementById("MenuDialogMenuItemSelector") as HTMLSelectElement
-                selector.selectedIndex=0
+                let selector: HTMLSelectElement = document.getElementById("MenuDialogMenuItemSelector") as HTMLSelectElement;
+                selector.selectedIndex=0;
               }
             }
             disabled={!Number(selectedMenuItemId)}
@@ -321,7 +319,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           </button>
         </form>
 
-        <div className=" shadow-inner bg-white overflow-y-auto w-full  h-full p-2 rounded-lg">
+        <div className="  dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full  h-full rounded-lg  pr-3">
           {selectedMenuItems.length>0
           ?
           <ul
@@ -329,7 +327,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           > 
             {
               selectedMenuItems.map((menuItem: MenuItemType ) => 
-                <li className="relative bg-white rounded-lg " key={menuItem.menuItemId + menuItem.name }>
+                <li className="relative bg-white dark:bg-black rounded-lg " key={menuItem.menuItemId + menuItem.name }>
                   <MenuItem
                       key={menuItem.menuItemId}
                       type={MenuScreenType.Preview}
@@ -338,7 +336,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                       activeRestaurantId={activeRestaurantId}
                   />
                   <button
-                    className='absolute top-2 right-2 flex items-center justify-center bg-white p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+                    className='absolute dark:bg-black top-2 right-2 flex items-center justify-center bg-white p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
                     onClick={()=>{
                       setSelectedMenuItems(selectedMenuItems.filter((e)=>e.menuItemId!==menuItem.menuItemId))
                     }}
@@ -350,7 +348,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
             }
           </ul>
           :
-          <h1 className="p-2">Selected menu items will appear here.</h1> //@TODO translation 
+          <h1 className="p-2 dark:text-grey-1">Selected menu items will appear here.</h1> //@TODO translation 
           }
         </div>
       </div>
