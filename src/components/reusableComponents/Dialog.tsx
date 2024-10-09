@@ -14,7 +14,6 @@ const Dialog: React.FC<PopupProps> = ({ open = true, children, onClose, title })
   const div = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log(open + (title + ""))
     if (open) {
       dialog.current?.showModal();
     } else {

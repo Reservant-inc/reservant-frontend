@@ -10,7 +10,6 @@ import { UserInfo } from "../../services/types";
 import DefaultPhoto from "../../assets/images/user.jpg"
 import { MenuScreenType } from "../../services/enums";
 import MenuList from "./menus/newMenus/MenuList";
-import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
 
 
 const RestaurantManager = () => {
@@ -50,7 +49,6 @@ const RestaurantManager = () => {
           >
             {
               {
-                0: <RestaurantDashboardSection />,
                 1:
                   activeRestaurantId === null ? (
                     <RestaurantListSection

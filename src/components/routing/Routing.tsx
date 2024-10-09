@@ -6,6 +6,7 @@ import UserRegister from "../SignInSignUp/UserRegister";
 import HomePage from "../HomePage";
 import RestaurantManager from "../restaurantManagement/RestaurantManager";
 import { Routing } from "../../services/types";
+import Checkout from "../restaurant/Checkout";
 
 export const nav: Routing = [
   { path: "/",                    element: <LandingPage />,         isPrivate: false,   navbar: false,  roles: [""] },
@@ -13,5 +14,7 @@ export const nav: Routing = [
   { path: "/user/register",       element: <UserRegister />,        isPrivate: false,   navbar: false,  roles: [""],},
   { path: "/restaurant/register", element: <RestaurantRegister />,  isPrivate: true,    navbar: true,   roles: ["Customer", "RestaurantOwner"],},
   { path: "/home",                element: <HomePage />,            isPrivate: true,    navbar: true,   roles: ["Customer", "RestaurantOwner", "RestaurantEmployee"],},
+  { path: "/checkout",            element: <Checkout />,            isPrivate: true,    navbar: false,  roles: ["Customer", "RestaurantOwner", "RestaurantEmployee"],},
   { path: "/:user/restaurants",   element: <RestaurantManager />,   isPrivate: true,    navbar: true,   roles: ["RestaurantOwner"],}
+
 ];
