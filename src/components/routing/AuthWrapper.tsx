@@ -91,7 +91,7 @@ export const AuthWrapper = () => {
                   path={r.path}
                   element={
                     <div className="flex h-full w-full flex-col">
-                      <NavBar />
+                      {r.navbar && <NavBar />}
                       {r.element}
                     </div>
                   }

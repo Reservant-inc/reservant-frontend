@@ -10,7 +10,6 @@ import {
 import MoreActions from "../../reusableComponents/MoreActions";
 import MenuDialog from "./MenuDialog";
 import MenuItemDialog from "./MenuItemDialog";
-import MenuItem from "./newMenus/MenuItem";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -529,9 +528,10 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
       <ConfirmationDialog
         open={openConfirmation}
         onClose={() => setOpenConfirmation(false)}
-        onConfirm={handleDeleteMenu}
-        confirmationText={`Are you sure you want to delete this menu?`}
-      />
+      >
+        <p>asdasd</p>
+        <button onClick={handleDeleteMenu}> dleete</button>
+      </ConfirmationDialog>
     </div>
   );
 };

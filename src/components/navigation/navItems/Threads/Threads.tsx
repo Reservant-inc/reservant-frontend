@@ -438,14 +438,14 @@ const Threads: React.FC = () => {
         }
       </OutsideClickHandler>
       <div className={`absolute w-[675px] h-[400px] bottom-0 right-[0.5rem] z-[0] flex gap-2 ${(activeThreads.length === 0 && inactiveThreads.length === 0) && 'invisible'}`}>
-        <div className="w-full h-full flex flex-row-reverse gap-[15px]">
+        <div className={`w-full h-full flex flex-row-reverse gap-[15px]`}>
           {
             activeThreads.map((activeThread) => (
               <Thread key={activeThread.threadId} thread={activeThread} handleThreadClose={handleThreadClose} handleThreadMinimize={handleThreadMinimize} />
             ))
           }
         </div>
-        <div className="w-14 h-full flex flex-col-reverse py-4 gap-2">
+        <div className={`w-14 h-full flex flex-col-reverse py-4 gap-2`}>
           {
             inactiveThreads.map((inactiveThread) => (
               <InactiveThread key={inactiveThread.threadId} thread={inactiveThread} handleThreadMaximize={handleThreadMaximize} renderUserPhotos={renderUserPhotos} handleThreadClose={handleThreadClose} />
