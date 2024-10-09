@@ -68,7 +68,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
               <Dialog
                 open={isEditingOpen}
                 onClose={()=>setIsEditingOpen(false)}
-                title={`Editing the ${menu.name} new menu...`} //@TODO translation
+                title={`Editing the "${menu.name}" menu...`} //@TODO translation
               >
                 <MenuDialog
                   activeRestaurantId={activeRestaurantId}

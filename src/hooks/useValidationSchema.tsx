@@ -246,12 +246,7 @@ export const useValidationSchemas = () => {
     amountUsed: yup.number().required()
   })
 
-  // @todo t
-
-  const menuItemSelectorSchema = yup.object({
-    id: yup.string().required()
-  })
-
+ 
   const menuSchema = yup.object({
     name: yup.string().required(),
     alternateName: yup.string(),
@@ -264,7 +259,6 @@ export const useValidationSchemas = () => {
     menuSchema,
     loginSchema,
     ingredientSelectorSchema,
-    menuItemSelectorSchema,
     userRegisterSchema,
     employeeRegisterSchema,
     RestaurantAddEmployeeSchema,
