@@ -10,7 +10,7 @@ import { UserInfo } from "../../services/types";
 import DefaultPhoto from "../../assets/images/user.jpg"
 import { MenuScreenType } from "../../services/enums";
 import MenuList from "./menus/newMenus/MenuList";
-import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
+import RestaurantDashboardSection from "./dashboard/RestaurantDashboardSection";
 
 
 const RestaurantManager = () => {
