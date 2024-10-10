@@ -173,8 +173,9 @@
             "menuItemPriceRequired": "Price is required",
             "menuItemPriceMustBeNumber": "Price must be number",
             "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
-            "selectedFile": "Selected file"
-        
+            "selectedFile": "Selected file",
+            "sort": "Sort by"
+
         }
     },
     "tools": {
@@ -226,6 +227,10 @@
         "filter": "Filter",
         "reviews": "Reviews",
         "no-reviews": "No reviews",
-        "add-review": "Add review"
+        "add-review": "Add review",
+        "tags": "Tags"
+    },
+    "alt" : {
+        "delete": "Delete permanently"
     }
 }

@@ -230,13 +230,41 @@ export const useValidationSchemas = () => {
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
   });
 
+  // @todo t
+
+  const menuItemsSchema = yup.object({
+    price: yup.number().required().min(0).max(500),
+    name: yup.string().required().max(20),
+    alternateName: yup.string().max(50),
+    alcoholPercentage: yup.number().min(0).max(100),
+  })
+
+  // @todo t
+
+  const ingredientSelectorSchema = yup.object({
+    ingredientId: yup.string().required(),
+    amountUsed: yup.number().required()
+  })
+
+ 
+  const menuSchema = yup.object({
+    name: yup.string().required(),
+    alternateName: yup.string().required(),
+    menuType: yup.string().required(),
+    dateFrom: yup.string().required(),
+    dateUntil: yup.string().required(),
+  })
+
   return {
+    menuSchema,
     loginSchema,
+    ingredientSelectorSchema,
     userRegisterSchema,
     employeeRegisterSchema,
     RestaurantAddEmployeeSchema,
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
     RestaurantEditSchema,
+    menuItemsSchema,
   };
 };

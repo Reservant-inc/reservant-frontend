@@ -119,6 +119,12 @@ export type MenuItemType = {
   price: number;
   alcoholPercentage: number;
   photo: string;
+  ingredients: IngredientUsage[];
+}
+
+export type IngredientUsage = {
+  ingredientId: string,
+  amountUsed: number
 }
 
 export interface MenuItemWithDescriptionType {
@@ -242,6 +248,14 @@ export type UserInfo = {
   photo: string
 };
 
+export type Ingredient = {
+  ingredientId: string,
+  publicName: string,
+  unitOfMeasurement: string,
+  minimalAmount: number,
+  amountToOrder: number,
+  amount: number
+}
 export type ReviewType ={
   reviewId: number,
   restaurantId: number,
