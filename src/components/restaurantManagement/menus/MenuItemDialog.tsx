@@ -54,8 +54,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
     getIngredients();
   },[])
 
-
-
   useEffect (()=>{
     if(menuItemToEdit){
       getMenuItemToEditDetails()
@@ -83,8 +81,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         console.log("Unexpected error")
     }
   }
-
-  
 
   const getMenuItemToEditDetails = async () => {
     try{
@@ -152,9 +148,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               menuItemRes.menuItemId
             ],
           });
-          console.log(body)
-          let res = await fetchPOST(`/menus/${menu?.menuId}/items`, body);
-          console.log(res)
+          await fetchPOST(`/menus/${menu?.menuId}/items`, body);
+          onClose();
       } catch (error) {
         if (error instanceof FetchError) 
           console.log(error.formatErrors())
@@ -348,8 +343,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             amountUsed: ""
           }} 
           onSubmit={(values, {resetForm})=>{
-            addIngredient(values)
-            resetForm()
+            addIngredient(values);
+            resetForm();
           }}
           validationSchema={ingredientSelectorSchema}
         >

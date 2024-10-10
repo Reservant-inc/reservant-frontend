@@ -74,9 +74,10 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         restaurantId: activeRestaurantId,
         name: values.name,
         alternateName: values.alternateName,
-        menuType: values.type,
+        menuType: values.menuType,
         dateFrom: values.dateFrom,
         dateUntil: values.dateUntil,
+        photo: "test-jd.png"
       });
   
       responseMenu = await fetchPOST("/menus", body);
@@ -113,9 +114,10 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         restaurantId: activeRestaurantId,
         name: values.name,
         alternateName: values.alternateName,
-        menuType: values.type,
+        menuType: values.menuType,
         dateFrom: values.dateFrom,
         dateUntil: values.dateUntil,
+        photo: "test-jd.png"
       });
   
       await fetchPUT(`/menus/${menu?.menuId}`, body);
@@ -319,7 +321,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           </button>
         </form>
 
-        <div className="  dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full  h-full rounded-lg  pr-3">
+        <div className="  dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full  h-full rounded-lg pr-3">
           {selectedMenuItems.length>0
           ?
           <ul
@@ -327,7 +329,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           > 
             {
               selectedMenuItems.map((menuItem: MenuItemType ) => 
-                <li className="relative bg-white dark:bg-black rounded-lg " key={menuItem.menuItemId + menuItem.name }>
+                <li className="relative bg-white dark:bg-black rounded-lg  " key={menuItem.menuItemId + menuItem.name }>
                   <MenuItem
                       key={menuItem.menuItemId}
                       type={MenuScreenType.Preview}

@@ -16,9 +16,11 @@ interface MenuItemProps {
   type: MenuScreenType
   menu?: MenuType
   activeRestaurantId: number
+  trigger?: boolean
+  setTrigger?: Function
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaurantId }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaurantId, trigger, setTrigger }) => {
 
   const { t } = useTranslation("global");
 
@@ -64,6 +66,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
         itemIds: [menuItemId],
       });
       await fetchDELETE(`/menus/${menu?.menuId}/items`, body);
+      if(setTrigger!==undefined && trigger!==undefined)
+        setTrigger(!trigger)
       setIsConfirmationOpen(false);
     } catch (error) {
       if (error instanceof FetchError) {
@@ -78,6 +82,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
     try {
         const { menuItemId } = menuItem;
         await fetchDELETE(`/menu-items/${menuItemId}`);
+        if(setTrigger!==undefined && trigger!==undefined)
+          setTrigger(!trigger)
         setIsConfirmationOpen(false);
     } catch (error) {
       if (error instanceof FetchError) {
@@ -134,8 +140,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
             menu={menu}
             menuItemToEdit={menuItem}
             activeRestaurantId={activeRestaurantId}
-            onClose={()=>setIsEditingOpen(false)}
-          />
+            onClose={()=>{
+              if(setTrigger && trigger)
+                setTrigger(!trigger)
+              setIsEditingOpen(false)
+            }}
+            />
         </Dialog>
       }
       <ConfirmationDialog

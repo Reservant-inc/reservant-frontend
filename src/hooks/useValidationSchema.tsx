@@ -249,7 +249,7 @@ export const useValidationSchemas = () => {
  
   const menuSchema = yup.object({
     name: yup.string().required(),
-    alternateName: yup.string(),
+    alternateName: yup.string().required(),
     menuType: yup.string().required(),
     dateFrom: yup.string().required(),
     dateUntil: yup.string().required(),

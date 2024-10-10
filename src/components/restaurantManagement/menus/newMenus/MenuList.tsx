@@ -21,6 +21,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
     const [menuIndex, setMenuIndex] = useState<number>(0)
 
     const [isCreating, setIsCreating] = useState<boolean>(false)
+    const [trigger, setTrigger] = useState<boolean>(false);
 
     const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -34,7 +35,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
 
     useEffect(() => {
         fetchMenus()
-    }, [isCreating])
+    }, [trigger])
 
     useEffect(() => {
       scrollToMenu()
@@ -99,7 +100,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
             </div>
             <div className='overflow-y-auto scroll h-full flex flex-col gap-5 scroll-smooth'>
                 {menus.map((menu, index) => (
-                    <Menu key={menu.menuId + menu.name} menu={menu} activeRestaurantId={activeRestaurantId} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
+                    <Menu trigger={trigger} setTrigger={setTrigger} key={menu.menuId + menu.name} menu={menu} activeRestaurantId={activeRestaurantId} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
                 ))}
             </div>
             {isCreating && 
@@ -110,7 +111,10 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
               >
                 <MenuDialog
                   activeRestaurantId={activeRestaurantId}
-                  onClose={()=>setIsCreating(false)}
+                  onClose={()=>{
+                    setTrigger(!trigger)
+                    setIsCreating(false)
+                  }}
                 />
               </Dialog>
             }
