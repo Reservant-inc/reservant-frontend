@@ -203,14 +203,11 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
 
   const addIngredient = (
     values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
-    setSubmitting(true)
     setSelectedIngredients([...selectedIngredients, {
         ingredientId: values.ingredientId,
         amountUsed: values.amountUsed
-    }])
-    setSubmitting(false)
+    }]);
   }
 
 
@@ -221,7 +218,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
  
 
   return (
-    <div className=" flex justify-center h-[65vh] w-[90vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7">
+    <div className=" flex justify-center h-[55vh] w-[72vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7">
       <Formik
         id="menuitem-formik"
         initialValues={{
@@ -235,20 +232,21 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       >
         {(formik) => {
           return(
-            <Form className="h-full w-1/2 flex gap-7 pl-3">
-              <div className="relative w-72 h-72 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
+            <Form className="h-full flex gap-7 items-start">
+              <div className="relative min-w-72 min-h-72 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
 
                 <img className=" w-72 h-72 absolute rounded-lg" src={getImage(photoPath, DefaultMenuItemImage)} />
                   {
                     isHovered 
                     && 
                     <div className="bg-semi-trans w-72 h-72 absolute flex items-center justify-center rounded-lg">
-                      <button
-                        className={"shadow self-center h-10 w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary  dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary  " }
+                      <label
+                        htmlFor="photo"
+                        className={"shadow hover:cursor-pointer self-center h-10 w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary  dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary  " }
                       >
                         <CloudUploadIcon/>
                         Upload photo
-                      </button>
+                      </label>
                     </div>
                   } 
                   <VisuallyHiddenInput
@@ -343,26 +341,29 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         }}
       </Formik>
 
-      <div className="flex flex-col w-1/2 gap-7">
+      <div className="flex flex-col w-1/3 gap-7">
         <Formik  
           initialValues={{
             ingredientId: "",
             amountUsed: ""
           }} 
-          onSubmit={addIngredient}
+          onSubmit={(values, {resetForm})=>{
+            addIngredient(values)
+            resetForm()
+          }}
           validationSchema={ingredientSelectorSchema}
         >
           {(formik) => {
             return(
               <Form className="flex flex-col pr-3">
-                <div className="flex gap-7">
-                  <div className={`w-2/3 flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.amountUsed&&formik.touched.amountUsed?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                <div className="flex flex-col gap-7">
+                  <div className="flex  items-center justify-start gap-1 border-b-[1px] text-nowrap border-black text-black dark:text-grey-1 dark:border-white">
                     <label className="">Ingredient:</label>
                     <Field
                       as={"select"}
                       id="ingredientId" 
                       name="ingredientId" 
-                      className="border-0 w-1/2 dark:bg-black"
+                      className="border-0 w-full dark:bg-black"
                     >
                       <option value="" className="w-full" disabled={true} selected={true} id="ingredientSelector-option-default">Ingredient</option>
                         {/* //@TODO translation */}
@@ -373,50 +374,54 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           </option>)
                         }
                     </Field>
-                    <div className="flex w-1/2 justify-start items-center">
-
-                      <label htmlFor="alternateName">Amount:</label>
-                      <Field 
-                        type="text" 
-                        id="amountUsed" 
-                        name="amountUsed"
-                        className="w-1/3"
-                        //@TODO translation
-                      />
-                    </div>
                   </div>
-                  <button
-                    type="submit"
-                    className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-                    id="addIngridientToMenuItem"
-                    disabled={!formik.isValid || !formik.dirty}
-                    >
-                    <Add/> 
-                    Add usage
-                    {/* @TODO translation */}
-                  </button> 
+                  <div className="">
+                    <div className="flex items-center gap-7">
+                      <div className={`w-2/3 flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.amountUsed&&formik.touched.amountUsed?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                        <label htmlFor="alternateName">Amount:</label>
+                        <Field 
+                          type="text" 
+                          id="amountUsed" 
+                          name="amountUsed"
+                          className="w-1/3"
+                          //@TODO translation
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
+                        id="addIngridientToMenuItem"
+                        disabled={!formik.isValid || !formik.dirty}
+                      >
+                        <Add/> 
+                        Add usage
+                        {/* @TODO translation */}
+                      </button> 
+                    </div>
+                    {
+                      (formik.errors.amountUsed&&formik.touched.amountUsed) &&
+                      <ErrorMes msg={formik.errors.amountUsed}/>
+                    } 
+                  </div>
                 
                 </div>
-                {
-                  (formik.errors.amountUsed&&formik.touched.amountUsed) &&
-                  <ErrorMes msg={formik.errors.amountUsed}/>
-                }  
+               
               </Form>
             )
           }}
         </Formik>
 
-        <div className="  dark:bg-black bg-white overflow-y-auto w-full  h-full p-2 rounded-lg pr-3">
+        <div className="dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full   rounded-lg pr-3">
           {selectedIngredients.length>0
           ?
           <ul
-            className="flex flex-wrap h-fit max-h-full w-full gap-2"  
+            className="flex flex-col  max-h-full w-full gap-2"  
           > 
             {
               selectedIngredients.map((ingredient) => 
               <li 
                 key={ingredient.ingredientId+ingredient.amountUsed}
-                className="h-fit w-fit gap-1  bg-grey-0 dark:bg-black rounded-lg items-center p-2 justify-center flex"
+                className="h-fit w-full gap-1  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
               > 
                 <p className="overflow-hidden text-ellipsis">
                   {getIngredientDetails(ingredient)?.publicName}: {ingredient.amountUsed} {getIngredientDetails(ingredient)?.unitOfMeasurement}
