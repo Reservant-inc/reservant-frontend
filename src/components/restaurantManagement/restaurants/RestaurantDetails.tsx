@@ -12,7 +12,7 @@ import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagem
 import IngredientTable from "../Warehouse/IngredientTable";
 
 interface RestaurantDetailsProps {
-  activeRestaurantId: number | null;
+  activeRestaurantId: number ;
 }
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({

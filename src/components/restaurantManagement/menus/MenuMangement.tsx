@@ -6,7 +6,6 @@ import {
   fetchPOST,
   fetchPUT,
 } from "../../../services/APIconn";
-
 import MoreActions from "../../reusableComponents/MoreActions";
 import MenuDialog from "./MenuDialog";
 import MenuItemDialog from "./MenuItemDialog";
@@ -19,110 +18,69 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Button,
-  IconButton,
+  Menu,
+  Modal,
   TextField,
 } from "@mui/material";
-import FilterMenu from "./FilterMenu";
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { MenuItemType, MenuType } from "../../../services/types";
+import { FetchError } from "../../../services/Errors";
 
 interface MenuManagementProps {
-  activeRestaurantId: number | null;
+  activeRestaurantId: number;
+}
+
+interface Menu {
+  menuId: number;
+  name: string;
+  alternateName: string;
+  menuType: string;
+  dateFrom: string;
+  dateUntil: string | null;
+  menuItems: MenuItemType[];
 }
 
 const MenuManagement: React.FC<MenuManagementProps> = ({
   activeRestaurantId,
 }) => {
   const { t } = useTranslation("global");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(
-    null,
-  );
-  const [menus, setMenus] = useState<MenuType[]>([]);
-  const [menuNamesByRestaurant, setmenuNamesByRestaurant] = useState<{
-    [key: number]: string[];
-  }>({});
-  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(
-    null,
-  );
-  const [editMenu, setEditMenu] = useState<MenuType | null>(null);
-  const [editedMenuItem, setEditedMenuItem] = useState<MenuItemType | null>(
-    null,
-  );
-  const [isMenuPopupOpen, setIsMenuPopupOpen] = useState(false);
-  const [isEditMenuPopupOpen, setIsEditMenuPopupOpen] = useState(false);
-  const [isMenuItemPopupOpen, setIsMenuItemPopupOpen] = useState(false);
-  const [isMenuItemEditPopupOpen, setIsMenuItemEditPopupOpen] = useState(false);
+
+  const [menus, setMenus] = useState<Menu[]>([]); 
+  const [activeMenuIndex, setActiveMenuIndex] = useState<number>(0); 
   const [searchText, setSearchText] = useState<string>("");
-  const [openConfirmation, setOpenConfirmation] = useState(false);
+  
+  const [isNewMenuItemOpen, setIsNewMenuItemOpen] = useState(false);
+  const [menuItemToEdit, setMenuItemToEdit] = useState<MenuItemType | null>(null);
+
+  const [isNewMenuOpen, setIsNewMenuOpen] = useState(false);
+  const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (activeRestaurantId !== null) {
-      console.log(activeRestaurantId);
-      fetchMenus(activeRestaurantId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeRestaurantId]);
-
-  useEffect(() => {
-    const isMenuFetched =
-      selectedMenuIndex !== null &&
-      menus.length > selectedMenuIndex &&
-      menus[selectedMenuIndex].menuItems.length > 0;
-
-    if (!isMenuFetched) {
-      fetchMenuIemsForSelectedMenu();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [menus, selectedMenuIndex]);
-
-  const fetchMenuIemsForSelectedMenu = async () => {
-    if (selectedMenuIndex !== null && menus.length > selectedMenuIndex) {
-      const menuId = menus[selectedMenuIndex].menuId;
+    const fetchMenus = async () => {
       try {
-        const menuData = await fetchGET(`/menus/${menuId}`);
-        console.log("MenuType items for selected menu:", menuData);
-        if (!menuData.menuItems || menuData.menuItems.length === 0) {
-          return;
-        }
-        setMenus((prevMenus) => {
-          const updatedMenus = [...prevMenus];
-          updatedMenus[selectedMenuIndex] = {
-            ...updatedMenus[selectedMenuIndex],
-            menuItems: menuData.menuItems || [],
-          };
-          return updatedMenus;
-        });
+        const menus: MenuType[] = await fetchGET(
+          `/restaurants/${activeRestaurantId}/menus`,
+        )
+
+        const completeMenus = await Promise.all(
+          menus.map(async (menu) => {
+            const response = await fetchGET(`/menus/${menu.menuId}`);
+            return response;
+          })
+        );
+
+        setMenus(completeMenus)
       } catch (error) {
-        console.error("Error fetching menu items for selected menu:", error);
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error")
+        }
       }
-    }
-  };
-
-  const fetchMenus = async (restaurantId: number): Promise<MenuType[]> => {
-    try {
-
-      const menusData: MenuType[] = await fetchGET(
-        `/my-restaurants/${restaurantId}/menus`,
-      );
-
-      const validatedMenusData = menusData.map((menu) => ({
-        ...menu,
-        menuItems: menu.menuItems || [], // Jeśli brakuje menuItems, ustaw na pustą tablicę
-      }));
-
-      const allMenuNames = validatedMenusData.map((menu) => menu.name);
-
-      setMenus(validatedMenusData);
-      setmenuNamesByRestaurant({ [activeRestaurantId || 0]: allMenuNames });
-
-      return validatedMenusData;
-
-    } catch (error) {
-      console.error("Error fetching menus:", error);
-      return [];
-    }
-  };
+    };
+    fetchMenus();
+  }, [isNewMenuItemOpen, isDeleteMenuOpen]);
 
   const handleSaveNewMenu = async (values: { [key: string]: string }) => {
     console.log("New menu values:", values);
@@ -139,400 +97,229 @@ const MenuManagement: React.FC<MenuManagementProps> = ({
     try {
       const response = await fetchPOST("/menus", body);
       console.log("Response:", response);
-      setIsMenuPopupOpen(false);
-      if (activeRestaurantId !== null) {
-        fetchMenus(activeRestaurantId);
-      }
+      setIsNewMenuOpen(false);
+      
     } catch (error) {
       console.error("Error saving new menu:", error);
     }
   };
 
-  const handleEditMenu = () => {
-    if (
-      selectedMenuIndex !== null &&
-      menuNamesByRestaurant[activeRestaurantId || 0]
-    ) {
-      const selectedMenu = menus[selectedMenuIndex];
-      setEditMenu(selectedMenu);
-      setIsEditMenuPopupOpen(true);
-    }
-  };
-
-  const handleSaveEditedMenu = async (values: { [key: string]: string }) => {
-    if (
-      selectedMenuIndex !== null &&
-      menuNamesByRestaurant[activeRestaurantId || 0]
-    ) {
-      const body = JSON.stringify({
-        name: values.name,
-        alternateName: values.alternateName,
-        menuType: values.type,
-        dateFrom: values.dateFrom,
-        dateUntil: values.dateUntil,
-      });
-      try {
-        const menuId = menus[selectedMenuIndex].menuId;
-        const response = await fetchPUT(`/menus/${menuId}`, body);
-        console.log("Response:", response);
-        setIsEditMenuPopupOpen(false);
-        if (activeRestaurantId !== null) {
-          fetchMenus(activeRestaurantId);
-        }
-      } catch (error) {
-        console.error("Error while editing category:", error);
-      }
-    }
-  };
-
   const handleDeleteMenu = async () => {
     try {
-      if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
-        const menuId = menus[selectedMenuIndex].menuId;
+      if (menus[activeMenuIndex]) {
+        const menuId = menus[activeMenuIndex].menuId; 
         const response = await fetchDELETE(`/menus/${menuId}`);
-        setSelectedMenuIndex(null);
-      } else {
-        console.error("No menu selected to delete");
-      }
-    } catch (error) {
-      console.error("Error while deleting menu:", error);
-    }
-    if (activeRestaurantId !== null) {
-      fetchMenus(activeRestaurantId);
-    }
-  };
-
-  const handleSaveNewMenuItem = async (values: { [key: string]: string }) => {
-    try {
-      console.log(activeRestaurantId);
-
-      const body = JSON.stringify({
-        restaurantId: activeRestaurantId,
-        name: values.name,
-        alternateName: values.alternateName,
-        price: values.price,
-        alcoholPercentage: values.alcoholPercentage || null,
-        photofileName: values.photo, // Ensure this is set correctly
-      });
-      const response = await fetchPOST("/menu-items", body);
-      if (selectedMenuIndex !== null && menus[selectedMenuIndex]) {
-        const menuItemId = response.menuItemId;
-        const menuId = menus[selectedMenuIndex].menuId;
-        const response2 = await fetchPOST(
-          `/menus/${menuId}/items`,
-          JSON.stringify({ itemIds: [menuItemId] }),
-        );
-        console.log(response2);
-        setIsMenuItemPopupOpen(false);
-        fetchMenuIemsForSelectedMenu();
-      }
-    } catch (error) {
-      console.error("error while posting new menu item:", error);
-    }
-  };
-
-  const handleEditMenuItem = (menuItem: MenuItemType) => {
-    setEditedMenuItem(menuItem);
-    setIsMenuItemEditPopupOpen(true);
-  };
-
-  const handleSaveEditedMenuItem = async (values: {
-    [key: string]: string;
-  }) => {
-    try {
-      if (editedMenuItem) {
-        const { menuItemId } = editedMenuItem;
-        const photoFileName = values.photo.startsWith("/uploads/")
-          ? values.photo.slice(9)
-          : values.photo;
-        const body = JSON.stringify({
-          name: values.name,
-          alternateName: values.alternateName,
-          price: values.price,
-          alcoholPercentage: values.alcoholPercentage || null,
-          photofileName: photoFileName,
-        });
-        console.log(body);
-        const response = await fetchPUT(`/menu-items/${menuItemId}`, body);
         console.log(response);
-        setIsMenuItemEditPopupOpen(false);
-
-        fetchMenuIemsForSelectedMenu();
+        setIsDeleteMenuOpen(false)
       }
-    } catch (error) {
-      console.error("Error while saving edited menu item:", error);
-    }
-  };
+    }catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
+    };
+  }
 
-  const handleDeleteMenuItem = async (menuItem: MenuItemType) => {
+  const handleRemoveMenuItem = async (menuItem: MenuItemType) => {
     try {
       const { menuItemId } = menuItem;
-      const response = await fetchDELETE(`/menu-items/${menuItemId}`);
+      const body = JSON.stringify(
+      {
+        itemIds: [menuItemId],
+      });
+      const response = await fetchDELETE(`/menus/${menus[activeMenuIndex]?.menuId}/items`, body);
       console.log(response);
     } catch (error) {
-      console.error("Error while deleting menu item:", error);
-    }
-    fetchMenuIemsForSelectedMenu();
-  };
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleFilterOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setFilterAnchorEl(event.currentTarget);
-  };
-
-  const handleFilterClose = () => {
-    setFilterAnchorEl(null);
-  };
-
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSearchText(event.target.value);
-  };
-
-  const editedMenu = editMenu
-    ? {
-        name: editMenu.name,
-        alternateName: editMenu.alternateName,
-        type: editMenu.menuType,
-        dateFrom: editMenu.dateFrom,
-        dateUntil: editMenu.dateUntil || "",
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
       }
-    : null;
-
-  const actions = [
-    {
-      icon: <AddIcon />,
-      name: "Add menu",
-      onClick: () => setIsMenuPopupOpen(true),
-    },
-    { icon: <EditIcon />, name: "Edit menu", onClick: handleEditMenu },
-    {
-      icon: <DeleteIcon />,
-      name: "Delete menu",
-      onClick: () => setOpenConfirmation(true),
-    },
-  ];
-
-  const filteredMenuItems =
-    selectedMenuIndex !== null
-      ? menus[selectedMenuIndex]?.menuItems.filter((menuItem: MenuItemType) => {
-          const nameMatch = menuItem.name
-            .toLowerCase()
-            .includes(searchText.toLowerCase());
-          const priceMatch = menuItem.price
-            .toString()
-            .toLowerCase()
-            .includes(searchText.toLowerCase());
-          return nameMatch || priceMatch;
-        })
-      : [];
-
-  const sortMenuItems = (
-    sortFunction: (a: MenuItemType, b: MenuItemType) => number,
-  ) => {
-    if (selectedMenuIndex !== null) {
-      const sortedMenuItems = [...menus[selectedMenuIndex].menuItems].sort(
-        sortFunction,
-      );
-      setMenus((prevMenus) => {
-        const updatedMenus = [...prevMenus];
-        updatedMenus[selectedMenuIndex] = {
-          ...updatedMenus[selectedMenuIndex],
-          menuItems: sortedMenuItems,
-        };
-        return updatedMenus;
-      });
-      handleFilterClose();
     }
   };
 
-  const handleSortAlphabetically = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) =>
-      a.name.localeCompare(b.name),
-    );
-  };
-
-  const handleSortPriceAsc = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) => a.price - b.price);
-  };
-
-  const handleSortPriceDesc = () => {
-    sortMenuItems((a: MenuItemType, b: MenuItemType) => b.price - a.price);
-  };
-
-  const handleSortAlcoholAsc = () => {
-    sortMenuItems(
-      (a: MenuItemType, b: MenuItemType) =>
-        (a.alcoholPercentage ?? 0) - (b.alcoholPercentage ?? 0),
-    );
-  };
-
-  const handleSortAlcoholDesc = () => {
-    sortMenuItems(
-      (a: MenuItemType, b: MenuItemType) =>
-        (b.alcoholPercentage ?? 0) - (a.alcoholPercentage ?? 0),
-    );
-  };
-
-  const handleClearFilters = () => {
-    fetchMenuIemsForSelectedMenu();
+  const handleDeletePermanentlyMenuItem = async (menuItem: MenuItemType) => {
+    try {
+        const { menuItemId } = menuItem;
+        const response = await fetchDELETE(`/menu-items/${menuItemId}`);
+        console.log(response);
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
+    }
   };
 
   return (
-    <div className="h-full w-full flex-col space-y-2 rounded-lg bg-white p-2">
-      <div>
-        {selectedMenuIndex === null && (
-          <div className="flex justify-start">
-            <IconButton onClick={() => setIsMenuPopupOpen(true)}>
-              <AddIcon className="text-secondary-2" />
-              <span className="ml-1 text-black dark:text-white">ADD MENU</span>
-            </IconButton>
-          </div>
-        )}
-        <div className="float-end">
-          <IconButton
-            onClick={handleMenuOpen}
-            disabled={selectedMenuIndex === null}
+    <div className="h-full w-full">
+      <div className="bg-grey-1 h-[10%]">
+      
+        <div className="flex h-full gap-1">
+          {(activeRestaurantId !== null)
+          && menus.map(
+            (menuTab: MenuType) => (
+            <button
+              key={menuTab.menuId}
+              className={` rounded-t-md p-2 h-full w-full  text-lg  ${menuTab.menuId === menus[activeMenuIndex]?.menuId ? "bg-white  text-primxary dark:text-secondary-2 " : "text-grey-2 bg-grey-0"}`}
+              onClick={() =>
+                setActiveMenuIndex(
+                  menus.findIndex((menu: MenuType)=>menu.menuId===menuTab.menuId)
+                )
+              }
+            >
+              {menuTab.name}
+            </button>))
+          }
+          <button
+            className={` rounded-t-md p-2 h-full  w-1/6 text-lg "text-grey-2 bg-grey-0 `}
           >
-            {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-              <MoreActions actions={actions} />
+            
+            <MoreActions actions={[
+              {
+                icon: <AddIcon />,
+                name: "Add menu",
+                onClick: () => setIsNewMenuOpen(true),
+              },
+              { 
+                icon: <EditIcon />,
+                name: "Edit menu",
+                onClick: () => setIsEditMenuOpen(true),
+              },
+              {
+                icon: <DeleteIcon />,
+                name: "Delete menu",
+                onClick: () => setIsDeleteMenuOpen(true),
+              },
+            ]}/>
+            
+          </button>
+        </div>
+    
+      </div>
+      <div className="h-[95%] w-full flex-col rounded-t-none rounded-lg bg-white ">
+      
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            {menus[activeMenuIndex] && (
+              <Button
+                startIcon={<AddIcon className="text-secondary-2" />}
+                onClick={() => {
+                  setIsNewMenuItemOpen(true);
+                }}
+              >
+                <span className="ml-1 text-black dark:text-white">
+                  ADD MENU ITEM
+                {/* @todo t */}
+                </span>
+              </Button>
             )}
-          </IconButton>
+            
+          </div>
+          <div className="flex-grow">
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                }}
+              >
+                <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+                <TextField
+                  type="text"
+                  label={t("general.search")}
+    
+                  onChange={(e)=>{
+                    setSearchText(e.target.value)
+                  }}
+                  variant="standard"
+                  className="rounded-lg p-1 dark:bg-grey-6 dark:text-white"
+                />
+              </Box>
+          </div>
         </div>
-        <div className="flex justify-start">
-          {activeRestaurantId !== null &&
-          menuNamesByRestaurant[activeRestaurantId]
-            ? menuNamesByRestaurant[activeRestaurantId].map(
-                (name: string, index: number) => (
-                  <Button
-                    variant="text"
-                    key={index}
-                    className={`mr-1 p-1 text-2xl font-bold  ${index === selectedMenuIndex ? "bg-gray-200 text-primary dark:text-secondary-2 " : "text-grey-2"}`}
-                    onClick={() =>
-                      setSelectedMenuIndex(
-                        index === selectedMenuIndex ? null : index,
-                      )
-                    }
-                  >
-                    {name}
-                  </Button>
-                ),
-              )
-            : null}
-        </div>
-      </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          {selectedMenuIndex !== null && (
-            <Button
-              startIcon={<AddIcon className="text-secondary-2" />}
-              onClick={() => {
-                setIsMenuItemPopupOpen(true);
-              }}
-            >
-              <span className="ml-1 text-black dark:text-white">
-                ADD MENU ITEM
-              </span>
-            </Button>
-          )}
-          {selectedMenuIndex !== null && (
-            <FilterMenu
-              filterAnchorEl={filterAnchorEl}
-              handleFilterOpen={handleFilterOpen}
-              handleFilterClose={handleFilterClose}
-              handleSortAlphabetically={handleSortAlphabetically}
-              handleSortPriceAsc={handleSortPriceAsc}
-              handleSortPriceDesc={handleSortPriceDesc}
-              handleSortAlcoholAsc={handleSortAlcoholAsc}
-              handleSortAlcoholDesc={handleSortAlcoholDesc}
-              handleClearFilters={handleClearFilters}
-            />
-          )}
-        </div>
-        <div className="flex-grow">
-          {selectedMenuIndex !== null && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-              }}
-            >
-              <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-              <TextField
-                type="text"
-                label={t("general.search")}
-                onChange={handleSearchInputChange}
-                variant="standard"
-                className="rounded-lg p-1 dark:bg-grey-6 dark:text-white"
-              />
-            </Box>
+        <div className="m-1">
+          {menus[activeMenuIndex] && (
+            <div className=" flex flex-wrap gap-1">
+              {menus[activeMenuIndex].menuItems.filter((menuItem: MenuItemType)=>{
+                const nameMatch = menuItem.name
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase());
+                const priceMatch = menuItem.price
+                  .toString()
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase());
+                return nameMatch || priceMatch;
+              }).map((menuItem: MenuItemType) => (
+                <></>
+                // <MenuItem
+                //   key={menuItem.menuItemId}
+                //   menuItem={menuItem}
+                //   menuType={menus[activeMenuIndex].menuType}
+                //   onEdit={() => {
+                //     setMenuItemToEdit(menuItem);
+                //   }}
+                //   onDelete={() => handleRemoveMenuItem(menuItem)}
+                //   onAlt={() => handleDeletePermanentlyMenuItem(menuItem)}
+                // />
+              ))}
+            </div>
           )}
         </div>
-      </div>
+        
+        <Modal
+          className="flex items-center justify-center"
+          open={isNewMenuItemOpen}
+          onClose={() => setIsNewMenuItemOpen(false)}
+        >
+          <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
 
-      <div className="m-1 flex flex-wrap">
-        {selectedMenuIndex !== null && menus[selectedMenuIndex] && (
-          <>
-            {filteredMenuItems.map((menuItem: MenuItemType) => (
-              // <MenuItem
-              //   key={menuItem.menuItemId}
-              //   menuItem={{}}
-              // />
-              <>
-              </>
-            ))}
-          </>
-        )}
+          {/* <MenuItemDialog 
+          
+            menu={menus[activeMenuIndex]}
+            activeMenuItems={menus[activeMenuIndex]?.menuItems}
+          
+            activeRestaurantId={activeRestaurantId}
+          
+
+          /> */}
+          </div>
+
+        </Modal>
+        <Modal
+          className="flex items-center justify-center"
+          open={menuItemToEdit!==null}
+
+          onClose={() => setMenuItemToEdit(null)}
+
+        >
+          <div className=" h-[615px] w-[615px] rounded-xl  bg-white p-5">
+          
+            {/* <MenuItemDialog
+              menu={menus[activeMenuIndex]}
+              
+              activeMenuItems={menus[activeMenuIndex]?.menuItems}
+
+              activeRestaurantId={activeRestaurantId}
+              menuItemToEdit={menuItemToEdit}
+
+            /> */}
+
+          </div>
+        </Modal>
+        <ConfirmationDialog
+          open={isDeleteMenuOpen}
+          onClose={() => setIsDeleteMenuOpen(false)}
+          onConfirm={handleDeleteMenu}
+          confirmationText={`Are you sure you want to delete this menu?`} //@todo t
+        />
       </div>
-      <MenuDialog
-        open={isMenuPopupOpen}
-        onClose={() => setIsMenuPopupOpen(false)}
-        onSave={handleSaveNewMenu}
-      />
-      <MenuDialog
-        open={isEditMenuPopupOpen}
-        onClose={() => setIsEditMenuPopupOpen(false)}
-        onSave={handleSaveEditedMenu}
-        editedMenu={editedMenu}
-      />
-      <MenuItemDialog
-        open={isMenuItemPopupOpen}
-        onClose={() => setIsMenuItemPopupOpen(false)}
-        onSave={handleSaveNewMenuItem}
-        menuType={
-          selectedMenuIndex !== null
-            ? menus[selectedMenuIndex]?.menuType || ""
-            : ""
-        }
-      />
-      <MenuItemDialog
-        open={isMenuItemEditPopupOpen}
-        onClose={() => setIsMenuItemEditPopupOpen(false)}
-        onSave={handleSaveEditedMenuItem}
-        menuType={
-          selectedMenuIndex !== null
-            ? menus[selectedMenuIndex]?.menuType || ""
-            : ""
-        }
-        editedMenuItem={editedMenuItem}
-      />
-      <ConfirmationDialog
-        open={openConfirmation}
-        onClose={() => setOpenConfirmation(false)}
-        onConfirm={handleDeleteMenu}
-        confirmationText={`Are you sure you want to delete this menu?`}
-      />
     </div>
+  
   );
 };
 

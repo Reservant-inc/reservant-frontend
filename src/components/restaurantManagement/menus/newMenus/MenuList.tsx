@@ -7,6 +7,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Menu from './Menu';
 import AddIcon from '@mui/icons-material/Add';
 import { MenuScreenType } from '../../../../services/enums';
+import Dialog from "../../../reusableComponents/Dialog";
+import MenuDialog from '../MenuDialog';
 
 interface MenuListProps {
     activeRestaurantId: number
@@ -17,6 +19,9 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
 
     const [menus, setMenus] = useState<MenuType[]>([])
     const [menuIndex, setMenuIndex] = useState<number>(0)
+
+    const [isCreating, setIsCreating] = useState<boolean>(false)
+    const [trigger, setTrigger] = useState<boolean>(false);
 
     const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -30,7 +35,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
 
     useEffect(() => {
         fetchMenus()
-    }, [])
+    }, [trigger])
 
     useEffect(() => {
       scrollToMenu()
@@ -84,7 +89,10 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
                 </button>  
                 { 
                 type === MenuScreenType.Management &&
-                  <button className='flex items-center justify-center p-1 px-2 h-8 w-8 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'>
+                  <button 
+                    className='flex items-center justify-center p-1 px-2 h-8 w-8 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+                    onClick={()=>setIsCreating(true)}
+                  >
                     <AddIcon className='h-6 w-6'/>
                   </button>
                 }
@@ -92,9 +100,24 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
             </div>
             <div className='overflow-y-auto scroll h-full flex flex-col gap-5 scroll-smooth'>
                 {menus.map((menu, index) => (
-                    <Menu key={menu.menuId + menu.name} menu={menu} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
+                    <Menu trigger={trigger} setTrigger={setTrigger} key={menu.menuId + menu.name} menu={menu} activeRestaurantId={activeRestaurantId} ref={(el) => (menuRefs.current[index] = el)} type={type}/>
                 ))}
             </div>
+            {isCreating && 
+              <Dialog
+                open={isCreating}
+                onClose={()=>setIsCreating(false)}
+                title={`Creating a new menu...`} //@TODO translation
+              >
+                <MenuDialog
+                  activeRestaurantId={activeRestaurantId}
+                  onClose={()=>{
+                    setTrigger(!trigger)
+                    setIsCreating(false)
+                  }}
+                />
+              </Dialog>
+            }
         </div>
     )
 }
