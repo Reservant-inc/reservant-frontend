@@ -97,7 +97,7 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
 
           {filteredAndSortedReviews.length > 0 ? (
             filteredAndSortedReviews.map((review) => (
-              <RestaurantReview key={review.reviewId} review={review} />
+              <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} />
             ))
           ) : (
             <div className="mt-4 text-center">
