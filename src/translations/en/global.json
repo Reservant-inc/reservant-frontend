@@ -5,7 +5,8 @@
         "save": "Save",
         "results": "Results",
         "no-results": "No results",
-        "close": "Close"
+        "close": "Close",
+        "submit": "Submit"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -227,6 +228,8 @@
         "filter-tooltip": "filter reviews",
         "reviews": "Reviews",
         "no-reviews": "No reviews",
-        "add-review": "Add review"
+        "add-review": "Add review",
+        "review-text": "Explain your rating",
+        "rating": "Rating"
     }
 }

@@ -24,6 +24,7 @@ const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
         <Tooltip title={t("reviews.filter-tooltip")}>
           <button
             className="z-1 h-8 w-8 bg-trans hover:bg-grey-1 dark:hover:bg-grey-4 dark:text-grey-1 rounded-full"
+            onClick={()=> setValue(0)}
           >
             <CloseIcon />
           </button>

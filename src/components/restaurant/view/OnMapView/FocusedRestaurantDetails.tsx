@@ -28,7 +28,17 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
   const [t] = useTranslation("global")
  
+  const fetchRestaurantReviews = async () => {
+    try {
+      const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}/reviews`);
+      setReviews(data.items || []);
+    } catch (error) {
+      console.error("Error fetching restaurant reviews:", error);
+    }
+  };
+
   useEffect(() => {
+    // Pobieranie szczegółów restauracji
     const fetchRestaurantDetails = async () => {
       try {
         const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}`);
@@ -38,17 +48,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       }
     };
 
-    const fetchRestaurantReviews = async () => {
-      try {
-        const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}/reviews`);
-        setReviews(data.items || []);
-      } catch (error) {
-        console.error("Error fetching restaurant reviews:", error);
-      }
-    };
-
     fetchRestaurantDetails();
-    fetchRestaurantReviews();
+    fetchRestaurantReviews(); // Wywołanie funkcji pobierającej recenzje
   }, [activeRestaurant]);
 
   const averageRating = reviews.length
@@ -111,7 +112,13 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 </div>
               </div>
             </div>
-            <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} isDelivering={restaurant.provideDelivery}/>
+            <FocusedRestaurantReviewsList 
+            isPreview={false} 
+            reviews={reviews} 
+            isDelivering={restaurant.provideDelivery}
+            restaurantId={restaurant.restaurantId}
+            refreshReviews={fetchRestaurantReviews}
+            />
           </div>
         </>
       )}

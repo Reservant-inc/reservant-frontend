@@ -5,7 +5,8 @@
         "save": "Zapisz",
         "results": "Wyniki",
         "no-results": "Brak wyników",
-        "close": "Zamknij"
+        "close": "Zamknij",
+        "submit": "Prześlij"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -222,6 +223,8 @@
         "filter-tooltip": "filtruj opinie",
         "reviews": "Opinie",
         "no-reviews": "Brak opinii",
-        "add-review": "Dodaj opinie"
+        "add-review": "Dodaj opinie",
+        "review-text": "Wyjaśnij swoją ocenę",
+        "rating": "Ocena"
     }
 }
