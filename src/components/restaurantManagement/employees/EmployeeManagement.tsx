@@ -260,7 +260,7 @@ export default function EmployeeManagement() {
   ];
 
   return (
-    <div className="h-full w-full rounded-lg bg-white ">
+    <div className="h-full w-full rounded-b-lg bg-white ">
       <DataGrid
         rows={rows}
         columns={columns}
