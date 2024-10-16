@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   RestaurantDataType,
   RestaurantDetailsType,
+  ReviewType,
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
@@ -10,6 +11,9 @@ import EmployeeManagement from "../employees/EmployeeManagement";
 import MenuManagement from "../menus/MenuMangement";
 import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
 import IngredientTable from "../Warehouse/IngredientTable";
+import MenuList from "../menus/newMenus/MenuList";
+import { MenuScreenType } from "../../../services/enums";
+import FocusedRestaurantReviewsList from "../../restaurant/view/OnMapView/FocusedRestaurantReviewsList";
 
 interface RestaurantDetailsProps {
   activeRestaurantId: number ;
@@ -21,6 +25,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [t] = useTranslation("global");
+  const [reviews, setReviews] = useState<ReviewType[]>([]);
+
 
   useEffect(() => {
     if (activeRestaurantId != null) {
@@ -35,6 +41,17 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       fetchData();
     }
   }, [activeRestaurantId]);
+  useEffect(()=>{
+    const fetchRestaurantReviews = async () => {
+      try {
+        const data = await fetchGET(`/restaurants/${activeRestaurantId}/reviews`);
+        setReviews(data.items || []);
+      } catch (error) {
+        console.error("Error fetching restaurant reviews:", error);
+      }
+    };
+    fetchRestaurantReviews();
+  }, [])
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -61,15 +78,16 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 
   return (
     <div className="w-full h-full gap-4 overflow-y-auto scroll space-y-4">
-      <div className="w-full h-1/2 bg-white rounded-lg shadow-md"></div>
+      <div className="w-full h-1/2 bg-white rounded-b-lg shadow-md"></div>
       
       <div className="w-full h-1/2 flex gap-4">
-        <div className="h-full w-[50%] bg-white rounded-lg shadow-md"></div>
+        <div className="h-full w-[50%] bg-white rounded-lg shadow-md">
+
+        </div>
         <div className="h-full w-[50%] bg-white rounded-lg shadow-md flex flex-col p-4 gap-4">
-          <div className="h-[2rem] flex items-center">
-            <h1 className="text-xl font-mont-md">Customers opinions</h1>
+          <div className="h-[calc(100%-2rem)] overflow-auto">
+            <FocusedRestaurantReviewsList isPreview={true} reviews={reviews} activeRestaurantId={activeRestaurantId}/>
           </div>
-          <div className="h-[calc(100%-6rem)]"></div>
           <div className="flex h-[2rem] items-center justify-end">
             <Button
               className="text-md rounded-lg font-mont-md text-grey-2"
@@ -95,7 +113,9 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <h1 className="font-mont-md text-xl">Menus</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
-          <MenuManagement activeRestaurantId={activeRestaurantId} />
+          <div className="bg-white dark:bg-black p-3 rounded-b-lg h-full">
+            <MenuList activeRestaurantId={activeRestaurantId} type={MenuScreenType.Management}/>
+          </div>
         </div>
       </div>
 

@@ -37,25 +37,12 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
 
   return (
     <div id="menu-wrapper" className="">
-      <List id="menu-list">
-        <ListItem id="menu-listItem-dash" className="">
-          <ListItemButton
-            id="menu-listItem-dash-button"
-            className={`rounded-lg ${selectedIndex === 0 ? "bg-grey-1" : ""}`}
-            onClick={(event) => handleListItemClick(event, 0, `Hello, ${user.firstName}`)}
-          >
-            <ListItemIcon id="menu-listItem-dash-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
-              <AppsSharpIcon />
-            </ListItemIcon>
-            {size.width > 1330 &&
-              <ListItemText id="menu-listItem-dash-text" primary="Restaurant Dashboard" />
-            }
-          </ListItemButton>
-        </ListItem>
-        <ListItem id="menu-listItem-restaurants">
+      <List id="menu-list" className="flex text-nowrap gap-1 p-0">
+        
+        <ListItem id="menu-listItem-restaurants" className="p-0">
           <ListItemButton
             id="menu-listItem-restaurants-button"
-            className={`rounded-lg ${selectedIndex === 1 ? "bg-grey-1" : ""} `}
+            className={` ${selectedIndex === 1 ? "bg-white" : "bg-grey-0"} w-full h-full rounded-t-lg`}
             onClick={(event) => handleListItemClick(event, 1, 'My restaurants')}
           >
             <ListItemIcon id="menu-listItem-restaurants-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
@@ -65,10 +52,10 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
               <ListItemText id="menu-listItem-restaurants-text" primary="Restaurants" />}
           </ListItemButton>
         </ListItem>
-        <ListItem id="menu-listItem-employees">
+        <ListItem id="menu-listItem-employees" className="p-0">
           <ListItemButton
             id="menu-listItem-employees-button"
-            className={`rounded-lg ${selectedIndex === 2 ? "bg-grey-1" : ""}  `}
+            className={` ${selectedIndex === 2 ? "bg-white" : "bg-grey-0"} w-full h-full rounded-t-lg`}
             onClick={(event) => handleListItemClick(event, 2, 'Employee management')}
           >
             <ListItemIcon id="menu-listItem-emp-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
@@ -78,11 +65,11 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
               <ListItemText id="menu-listItem-emp-text" primary="Employee management" />}
           </ListItemButton>
         </ListItem>
-        <ListItem id="menu-listItem-menuManagement">
+        {/* <ListItem id="menu-listItem-menuManagement" className="p-0">
           <ListItemButton
             id="menu-listItem-menuManagement-button"
 
-            className={`rounded-lg ${selectedIndex === 3 ? "bg-grey-1" : ""} `}
+            className={` ${selectedIndex === 3 ? "bg-white" : "bg-grey-0"} w-full h-full rounded-t-lg`}
             onClick={(event) => handleListItemClick(event, 3, 'Menu management')}
           >
             <ListItemIcon id="menu-listItem-menuManagement-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
@@ -92,8 +79,8 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
               <ListItemText id="menu-listItem-menuManagement-text" primary="Menu management" />
             }
           </ListItemButton>
-        </ListItem>
-        <ListItem id="menu-listItem-shipment">
+        </ListItem> */}
+        {/* <ListItem id="menu-listItem-shipment">
           <ListItemButton
             id="menu-listItem-Shipment-button"
 
@@ -122,12 +109,12 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
               <ListItemText id="menu-listItem-stats-text" primary="Statistics" />
             }
           </ListItemButton>
-        </ListItem>
-        <ListItem id="menu-listItem-history">
+        </ListItem> */}
+        <ListItem id="menu-listItem-history" className="p-0">
           <ListItemButton
             id="menu-listItem-history-button"
 
-            className={`rounded-lg ${selectedIndex === 6 ? "bg-grey-1" : ""} `}
+            className={` ${selectedIndex === 6 ? "bg-white" : "bg-grey-0"} w-full h-full rounded-t-lg`}
             onClick={(event) => handleListItemClick(event, 6, 'Reservation history')}
           >
             <ListItemIcon id="menu-listItem-history-ico" className={` ${size.width > 1330 ? "" : "justify-center w-full h-full"}`}>
