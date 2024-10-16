@@ -5,6 +5,7 @@ import { ReviewType } from "../../../../services/types";
 import { useTranslation } from "react-i18next";
 import { FetchError } from "../../../../services/Errors";
 import { fetchGET } from "../../../../services/APIconn";
+import RestaurantEventsModal from "../../events/RestaurantEventsModal";
 
 interface FocusedRestaurantReviewsListProps {
   isPreview: boolean;
@@ -18,6 +19,8 @@ const FocusedRestaurantReviewsList: React.FC<
   const [ filteredAndSortedReviews, setFilteredAndSortedReviews ] = useState<ReviewType[]>(reviews)
   const [ value, setValue ] = useState<number>(0)
   const [ isOwner, setIsOwner ] = useState<boolean>(false)
+  const [showEventsModal, setShowEventsModal] = useState<boolean>(false); // temp bo idk gdzie to bedzie a zeby pokazac
+
 
   const [t] = useTranslation("global");
 
@@ -78,6 +81,24 @@ const FocusedRestaurantReviewsList: React.FC<
             </div>
           )}
         </div>
+
+        {/* Modal wydarzeń */}
+        {/* Tymczasowy przycisk do otwarcia RestaurantEventsModal */}
+        <div className="flex justify-center mt-4">
+        <button
+              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-2 dark:bg-secondary dark:hover:bg-secondary-2"
+              onClick={() => setShowEventsModal(true)}
+            >
+            Temporary - Show Events
+          </button>
+        </div>
+        {showEventsModal && (
+          <RestaurantEventsModal
+            open={showEventsModal}
+            onClose={() => setShowEventsModal(false)}
+            restaurantId={activeRestaurantId} 
+          />
+        )}
       </div>
     </div>
   );

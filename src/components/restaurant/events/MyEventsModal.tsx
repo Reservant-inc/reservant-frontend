@@ -129,8 +129,12 @@ const MyEventsModal: React.FC<MyEventsModalProps> = ({ open, onClose }) => {
     setSelectedEventId(null);
   };
 
+  const isEventPast = (eventTime: string) => {
+    return new Date(eventTime) < new Date();
+  };
+
   const activeButtonStyles = "bg-primary text-white";
-  const inactiveButtonStyles = "bg-grey-0 text-primary dark:text-secondary";
+  const inactiveButtonStyles = "w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition";
 
   return (
     <Modal open={open} onClose={onClose} aria-labelledby="my-events-title" aria-describedby="my-events-description">
@@ -164,19 +168,24 @@ const MyEventsModal: React.FC<MyEventsModalProps> = ({ open, onClose }) => {
                     createdEvents.map((event) => (
                       <div key={event.eventId} className="flex justify-between items-center mb-4">
                         <div>
-                          <p className="font-semibold dark:text-white">{event.description}</p>
+                          <p className="font-semibold dark:text-white">{event.name}</p>
                           <p className="text-sm dark:text-grey-2">Time: {new Date(event.time).toLocaleString()}</p>
                           <p className="text-sm dark:text-grey-2">Restaurant: {event.restaurantName}</p>
                         </div>
-                        <button className="" onClick={() => handleCreateThreadClick(event.eventId)}>
-                          <ChatBubbleIcon className="dark:text-grey-2" />
-                        </button>
-                        <button className="" onClick={() => handleEditClick(event)}>
-                          <EditIcon className="dark:text-grey-2" />
-                        </button>
-                        <button className="" onClick={() => handleDeleteClick(event.eventId)}>
-                          <DeleteIcon className="dark:text-grey-2" />
-                        </button>
+                        {/* Sprawdź, czy wydarzenie się odbyło, jeśli tak, nie wyświetlaj ikon */}
+                        {!isEventPast(event.time) && (
+                          <>
+                            <button className="" onClick={() => handleCreateThreadClick(event.eventId)}>
+                              <ChatBubbleIcon className="dark:text-grey-2" />
+                            </button>
+                            <button className="" onClick={() => handleEditClick(event)}>
+                              <EditIcon className="dark:text-grey-2" />
+                            </button>
+                            <button className="" onClick={() => handleDeleteClick(event.eventId)}>
+                              <DeleteIcon className="dark:text-grey-2" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -187,7 +196,7 @@ const MyEventsModal: React.FC<MyEventsModalProps> = ({ open, onClose }) => {
                     interestedEvents.map((event) => (
                       <div key={event.eventId} className="flex justify-between items-center mb-4">
                         <div>
-                          <p className="font-semibold dark:text-white">{event.description}</p>
+                          <p className="font-semibold dark:text-white">{event.name}</p>
                           <p className="text-sm dark:text-grey-2">Time: {new Date(event.time).toLocaleString()}</p>
                           <p className="text-sm dark:text-grey-2">Restaurant: {event.restaurantName}</p>
                         </div>

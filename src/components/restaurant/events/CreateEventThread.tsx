@@ -58,16 +58,16 @@ const CreateEventThread: React.FC<CreateEventThreadProps> = ({ open, onClose, ev
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-white shadow-lg p-6 rounded-lg">
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-white dark:bg-grey-5 shadow-lg p-6 rounded-lg">
         {loading ? (
-          <p>Loading event details...</p>
+          <p className="dark:text-white">Loading event details...</p>
         ) : error ? (
-          <p className="">{error}</p>
+          <p className="text-red-500 dark:text-red-400">{error}</p>
         ) : (
           <>
-            <h2 className="text-xl font-bold mb-4">Do you want to create a thread for this event?</h2>
+            <h2 className="text-xl font-bold mb-4 dark:text-white">Do you want to create a thread for this event?</h2>
             <div className="flex justify-end space-x-4">
-            <button
+              <button
                 onClick={handleCreateThread}
                 className="w-[180px] dark:bg-grey-5 bg-grey-0 rounded-lg text-primary dark:text-secondary dark:hover:bg-grey-6 hover:bg-white transition-all"
               >
