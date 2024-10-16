@@ -129,7 +129,6 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
             {t("general.cancel")}
           </Button>
           <Button 
-            
             onClick={handleSubmitReview} className="rounded-lg text-primary dark:text-secondary">
             {t("general.submit")}
           </Button>

@@ -3,6 +3,7 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Text
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { ReviewType } from "../../../../services/types";
 import { fetchPUT } from "../../../../services/APIconn"; // Assumes fetchPUT is a defined helper for PUT requests
+import { useTranslation } from "react-i18next";
 
 interface RestaurantReviewProps {
   review: ReviewType;
@@ -13,6 +14,8 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editedStars, setEditedStars] = useState<number>(review.stars);
   const [editedContents, setEditedContents] = useState<string>(review.contents);
+
+  const [t] = useTranslation("global");
 
   const reducedDescription =
     review.contents.length > 100 ? review.contents.substring(0, 100) + "..." : review.contents;
@@ -80,6 +83,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
       <Dialog open={isEditDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Edit Review</DialogTitle>
         <DialogContent>
+          <h2>{t("reviews.rating")}:</h2>
           <Rating
             name="star-rating-edit"
             value={editedStars}
