@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RestaurantReviewsFilters from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReviewsFilters";
 import RestaurantReview from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReview";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Rating } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating } from "@mui/material";
 import { ReviewType } from "../../../../services/types";
 import { useTranslation } from "react-i18next";
 import { fetchPOST } from "../../../../services/APIconn";
@@ -50,8 +50,6 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
       contents: reviewText,
     };
 
-
-    console.log(JSON.stringify(reviewData))
     try {
       await fetchPOST(`/restaurants/${restaurantId}/reviews`, JSON.stringify(reviewData));
       handleDialogClose();
@@ -60,6 +58,8 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
       console.error("Error submitting review:", error);
     }
   };
+
+  const isSubmitDisabled = !reviewText || starRating === null;
 
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
@@ -129,7 +129,10 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
             {t("general.cancel")}
           </Button>
           <Button 
-            onClick={handleSubmitReview} className="rounded-lg text-primary dark:text-secondary">
+            onClick={handleSubmitReview} 
+            className={`rounded-lg ${isSubmitDisabled ? "text-grey-3 dark:text-grey-5" : "text-primary dark:text-secondary"}`}
+            disabled={isSubmitDisabled}
+          >
             {t("general.submit")}
           </Button>
         </DialogActions>
