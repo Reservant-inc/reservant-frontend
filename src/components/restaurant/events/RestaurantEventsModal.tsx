@@ -55,12 +55,12 @@ const RestaurantEventsModal: React.FC<RestaurantEventsModalProps> = ({
                 className="flex justify-between items-center mb-4"
               >
                 <div>
-                  <p className="font-semibold dark:text-white">{event.description}</p>
+                  <p className="font-semibold dark:text-white">{event.name}</p>
                   <p className="text-sm dark:text-grey-2">Time: {new Date(event.time).toLocaleString()}</p>
                   <p className="text-sm dark:text-grey-2">Created by: {event.creatorFullName}</p>
                 </div>
                 <button
-                  className="text-primary hover:text-primary-2"
+                  className="text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2"
                   onClick={() => setSelectedEventId(event.eventId)} // Otworzenie Details Modal
                 >
                   <InfoIcon />

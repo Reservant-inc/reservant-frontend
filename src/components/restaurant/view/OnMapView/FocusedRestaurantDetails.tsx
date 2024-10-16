@@ -19,6 +19,8 @@ import CustomRating from "../../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../../reusableComponents/Dialog";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
+import EventCreationModal from "../../events/EventCreationModal";
+import EventDetailsModal from "../../events/EventDetailsModal";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -45,9 +47,11 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 }) => {
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>(activeRestaurant); 
   const [reviews, setReviews] = useState<ReviewType[]>([]);
-  const [option, setOption] = useState<Options | null>(null)
+  const [option, setOption] = useState<Options | null>(null);
+  const [createdEventId, setCreatedEventId] = useState<number | null>(null);
+  const [showMyEvents, setShowMyEvents] = useState<boolean>(false);
 
-  const [t] = useTranslation("global")
+  const [t] = useTranslation("global");
  
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
@@ -76,53 +80,67 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0;
 
-    
-    const handleDialogClose =() => {
-      setOption(null)
-    }
-    
-    const renderRestaurantDetails = () => {
-      return (
-        <div className="p-3 flex flex-col gap-2 w-full">
-          <div className="flex gap-5 items-center w-full justify-between">
-            <h2 className="text-2xl font-bold dark:text-white">{restaurant.name}</h2>
-            <div className="flex items-center gap-2 dark:text-white">
-              <h1>{averageRating.toFixed(2)}</h1>
-              <CustomRating rating={averageRating} readOnly={true}/>
-              <h1>({reviews.length})</h1>
-            </div>
+  const handleDialogClose = () => {
+    setOption(null);
+  };
+
+  const handleEventCreationSuccess = (eventId: number) => {
+    setCreatedEventId(eventId);  // Przechowuje ID wydarzenia po sukcesie
+    setOption(null);  // Zamykamy dialog formularza tworzenia eventu
+  };
+
+  const handleShowMyEvents = () => {
+    setShowMyEvents(true);
+  };
+
+  const renderRestaurantDetails = () => {
+    return (
+      <div className="p-3 flex flex-col gap-2 w-full">
+        <div className="flex gap-5 items-center w-full justify-between">
+          <h2 className="text-2xl font-bold dark:text-white">{restaurant.name}</h2>
+          <div className="flex items-center gap-2 dark:text-white">
+            <h1>{averageRating.toFixed(2)}</h1>
+            <CustomRating rating={averageRating} readOnly={true}/>
+            <h1>({reviews.length})</h1>
           </div>
-          <div className="flex flex-col gap-1">
-            <h1 className="text-sm dark:text-white">
-              {restaurant.address}, {restaurant.city}
-            </h1>
-            <div className="text-sm flex items-center gap-3">
-              {restaurant.provideDelivery && (
-                <div className="flex gap-2 items-center">
-                  <MopedIcon className="dark:text-white w-5 h-5"/> 
-                  <h1 className="dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
-                </div>
-              )}
-              <div className="flex gap-1 items-center">
-                <h1 className="dark:text-white">
-                  {t("home-page.is-delivering")}:
-                </h1>
-                {restaurant.provideDelivery ? (
-                  <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />
-                ) : (
-                  <CancelIcon className="text-red-500 dark:text-white w-5 h-5" />
-                )}
+        </div>
+        <div className="flex flex-col gap-1">
+          <h1 className="text-sm dark:text-white">
+            {restaurant.address}, {restaurant.city}
+          </h1>
+          <div className="text-sm flex items-center gap-3">
+            {restaurant.provideDelivery && (
+              <div className="flex gap-2 items-center">
+                <MopedIcon className="dark:text-white w-5 h-5"/> 
+                <h1 className="dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
               </div>
+            )}
+            <div className="flex gap-1 items-center">
+              <h1 className="dark:text-white">
+                {t("home-page.is-delivering")}:
+              </h1>
+              {restaurant.provideDelivery ? (
+                <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />
+              ) : (
+                <CancelIcon className="text-red-500 dark:text-white w-5 h-5" />
+              )}
             </div>
           </div>
         </div>
-    )
-  }
-  
+      </div>
+    );
+  };
+
   const renderDialogContent = {
     [Options.ORDER]: <></>,
-    [Options.MENU] : <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews}/>,
-    [Options.EVENT]: <></>,
+    [Options.MENU]: <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews} />,
+    [Options.EVENT]: (
+      <EventCreationModal
+        handleClose={handleDialogClose} // Zamykanie modala przez zamykanie dialogu
+        restaurantId={restaurant.restaurantId} 
+        onSuccess={handleEventCreationSuccess}  // Obsługa sukcesu
+      />
+    ),
     [Options.VISIT]: <></>,
   };
 
@@ -162,7 +180,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   <EditCalendarIcon className="w-6 h-6"/>
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
-                  <h1 className="text-[11px] text-primary dark:text-secondary">{t("home-page.reservation")}</h1>
+                  <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.reservation")}</h1>
                 </div>
               </div>
               <div className="flex h-full items-center flex-col gap-1 w-[70px]">
@@ -170,7 +188,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
                   onClick={() => setOption(Options.EVENT)}
                 >
-                    <EventIcon className="w-6 h-6"/>
+                  <EventIcon className="w-6 h-6"/>
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
                   <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.create-event")}</h1>
@@ -181,16 +199,15 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
                   onClick={() => setOption(Options.MENU)}
                 >
-                    <RestaurantMenuIcon className="w-6 h-6"/>
+                  <RestaurantMenuIcon className="w-6 h-6"/>
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
                   <h1 className="text-[11px] text-primary dark:text-secondary text-center">Menu</h1>
                 </div>
               </div>
-              {
-                restaurant.provideDelivery && (
-                  <div className="flex h-full items-center flex-col gap-1 w-[70px]">
-                    <button 
+              {restaurant.provideDelivery && (
+                <div className="flex h-full items-center flex-col gap-1 w-[70px]">
+                  <button 
                     className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
                     onClick={() => setOption(Options.ORDER)}
                   >
@@ -200,8 +217,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                     <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.order")}</h1>
                   </div>
                 </div>
-                )
-              }
+              )}
             </div>
             <span className="w-full bg-grey-1 h-[1px] dark:bg-grey-4"></span>
             <div className="p-3">
@@ -210,11 +226,24 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           </div>
         </>
       )}
-        <Dialog open={option !== null} onClose={() => handleDialogClose()} title={option !== null ? optionTitles[option] : ""}>
-          {option !== null && renderDialogContent[option]}
+  
+      
+      {option !== null && (
+        <Dialog open={option !== null} onClose={handleDialogClose} title={optionTitles[option]}>
+          {renderDialogContent[option]}
         </Dialog>
+      )}
+  
+      {/*  EventDetailsModal tylko gdy jest createdEventId */}
+      {createdEventId && (
+        <EventDetailsModal
+          eventId={createdEventId}
+          open={true}
+          onClose={() => setCreatedEventId(null)}
+        />
+      )}
     </>
-  );
+  );  
 };
 
 export default FocusedRestaurantDetails;
