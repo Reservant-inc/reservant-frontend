@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import RestaurantReviewsFilters from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReviewsFilters";
 import RestaurantReview from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReview";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Rating } from "@mui/material";
-import { ReviewType } from "../../../../services/types";
+import { ReviewType, User } from "../../../../services/types";
 import { useTranslation } from "react-i18next";
-import { fetchPOST } from "../../../../services/APIconn";
+import { fetchGET, fetchPOST } from "../../../../services/APIconn";
 
 interface FocusedRestaurantReviewsListProps {
   isPreview: boolean;
@@ -19,12 +19,26 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
   const [value, setValue] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [reviewText, setReviewText] = useState("");
+  const [user, setUser] = useState<User | null>(null);
   const [starRating, setStarRating] = useState<number | null>(0);
   const [t] = useTranslation("global");
+  
 
   useEffect(() => {
     setValue(0);
   }, [reviews]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await fetchGET('/user');
+        setUser(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    }
+    fetchUser();
+  }, [user]);
 
   useEffect(() => {
     setFilteredAndSortedReviews(
@@ -97,7 +111,7 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
 
           {filteredAndSortedReviews.length > 0 ? (
             filteredAndSortedReviews.map((review) => (
-              <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} />
+              <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} userId={user?.userId} />
             ))
           ) : (
             <div className="mt-4 text-center">

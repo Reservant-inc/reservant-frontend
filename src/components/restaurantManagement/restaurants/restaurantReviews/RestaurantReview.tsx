@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Rating } from "@mui/material";
 import CustomRating from "../../../reusableComponents/CustomRating";
-import { ReviewType } from "../../../../services/types";
+import { ReviewType, User } from "../../../../services/types";
 import { fetchPUT } from "../../../../services/APIconn"; // Assumes fetchPUT is a defined helper for PUT requests
 import { useTranslation } from "react-i18next";
 
 interface RestaurantReviewProps {
   review: ReviewType;
-  refreshReviews: () => void; // Function to refresh reviews after edit
+  refreshReviews: () => void;
+  userId: string | undefined;
 }
 
-const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshReviews }) => {
+const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshReviews, userId }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editedStars, setEditedStars] = useState<number>(review.stars);
   const [editedContents, setEditedContents] = useState<string>(review.contents);
@@ -64,19 +65,19 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
         )}
       </div>
       <div className="flex w-full justify-end gap-2">
-        <Button
+        {/* <Button
           id="RestaurantReviewMoreButton"
           className="rounded-lg text-primary dark:text-secondary"
         >
           Respond
-        </Button>
-        <Button
+        </Button> */}
+        {review.authorId === userId && <Button
           id="RestaurantReviewEditButton"
           className="rounded-lg text-primary dark:text-secondary"
           onClick={handleEditClick} // Open edit dialog
         >
           Edit
-        </Button>
+        </Button>}
       </div>
 
       {/* Edit Dialog */}
