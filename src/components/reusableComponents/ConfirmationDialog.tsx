@@ -6,6 +6,7 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmationDialogProps {
   open: boolean;
@@ -20,20 +21,22 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   onConfirm,
   confirmationText,
 }) => {
+
+  const [t] = useTranslation("global");
   const handleConfirm = () => {
     onConfirm();
     onClose();
   };
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirmation</DialogTitle>
+      <DialogTitle>{t("general.confirmation")}</DialogTitle>
       <DialogContent>{confirmationText}</DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t("general.cancel")}
         </Button>
         <Button onClick={handleConfirm} color="error">
-          Yes
+        {t("general.yes")}
         </Button>
       </DialogActions>
     </Dialog>

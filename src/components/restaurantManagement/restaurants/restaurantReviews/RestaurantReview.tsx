@@ -1,39 +1,62 @@
-import React, { useState } from "react";
-import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Rating } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Rating,
+} from "@mui/material";
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { ReviewType, User } from "../../../../services/types";
-import { fetchPUT } from "../../../../services/APIconn"; // Assumes fetchPUT is a defined helper for PUT requests
+import { fetchPUT, fetchDELETE, fetchGET, getImage } from "../../../../services/APIconn"; // Import getImage
 import { useTranslation } from "react-i18next";
+import ConfirmationDialog from "../../../reusableComponents/ConfirmationDialog";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface RestaurantReviewProps {
   review: ReviewType;
   refreshReviews: () => void;
-  userId: string | undefined;
+  user: User | null;
 }
 
-const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshReviews, userId }) => {
+const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshReviews, user }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [editedStars, setEditedStars] = useState<number>(review.stars);
   const [editedContents, setEditedContents] = useState<string>(review.contents);
+  const [authorData, setAuthorData] = useState<User | null>(null);
 
   const [t] = useTranslation("global");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetchGET(`/users/${review.authorId}`);
+        setAuthorData(response);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [review.authorId]);
 
   const reducedDescription =
     review.contents.length > 100 ? review.contents.substring(0, 100) + "..." : review.contents;
 
-  // Open dialog for editing
   const handleEditClick = () => {
     setEditedStars(review.stars);
     setEditedContents(review.contents);
     setIsEditDialogOpen(true);
   };
 
-  // Close dialog without saving
   const handleDialogClose = () => {
     setIsEditDialogOpen(false);
   };
 
-  // Save edited review
   const handleSaveEdit = async () => {
     try {
       const updatedReview = {
@@ -41,10 +64,20 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
         contents: editedContents,
       };
       await fetchPUT(`/reviews/${review.reviewId}`, JSON.stringify(updatedReview));
-      refreshReviews(); // Refresh reviews list after saving
-      setIsEditDialogOpen(false); // Close dialog
+      refreshReviews();
+      setIsEditDialogOpen(false);
     } catch (error) {
       console.error("Error updating review:", error);
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    try {
+      await fetchDELETE(`/reviews/${review.reviewId}`);
+      refreshReviews();
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      console.error("Error deleting review:", error);
     }
   };
 
@@ -52,7 +85,12 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
     <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-2 dark:bg-grey-6 bg-grey-0">
       <div className="flex items-center justify-between space-x-4">
         <div className="flex items-center gap-4">
-          <Avatar className="h-8 w-8">A</Avatar>
+          <Avatar
+            src={getImage(authorData?.photo || '', '/path/to/default/avatar.png')} // Use an empty string as a fallback
+            alt={authorData?.login}
+          >
+            {authorData ? `${authorData.firstName.charAt(0)}${authorData.lastName.charAt(0)}` : 'A'}
+          </Avatar>
           <p>{new Date(review.createdAt).toLocaleDateString()}</p>
         </div>
         <CustomRating rating={review.stars} readOnly={true} />
@@ -65,24 +103,28 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
         )}
       </div>
       <div className="flex w-full justify-end gap-2">
-        {/* <Button
-          id="RestaurantReviewMoreButton"
-          className="rounded-lg text-primary dark:text-secondary"
-        >
-          Respond
-        </Button> */}
-        {review.authorId === userId && <Button
-          id="RestaurantReviewEditButton"
-          className="rounded-lg text-primary dark:text-secondary"
-          onClick={handleEditClick} // Open edit dialog
-        >
-          Edit
-        </Button>}
+        {review.authorId === user?.userId && (
+          <>
+            <Button
+              id="RestaurantReviewEditButton"
+              className="rounded-lg text-primary dark:text-secondary"
+              onClick={handleEditClick}
+            >
+              {t("general.edit")}
+            </Button>
+            <Button
+              id="RestaurantReviewDeleteButton"
+              className="rounded-lg text-primary dark:text-secondary"
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
+              {t("general.delete")}
+            </Button>
+          </>
+        )}
       </div>
 
-      {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Edit Review</DialogTitle>
+        <DialogTitle>{t("reviews.edit-review")}</DialogTitle>
         <DialogContent>
           <h2>{t("reviews.rating")}:</h2>
           <Rating
@@ -99,13 +141,20 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} className="text-primary dark:text-secondary">
-            Cancel
+            {t("general.cancel")}
           </Button>
           <Button onClick={handleSaveEdit} className="text-primary dark:text-secondary">
-            Save
+            {t("general.save")}
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ConfirmationDialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteReview}
+        confirmationText={t("reviews.review-delete")}
+      />
     </div>
   );
 };
