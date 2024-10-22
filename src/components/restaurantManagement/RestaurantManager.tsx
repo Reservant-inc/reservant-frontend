@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Menu from "./TABZ";
+import Menu from "./ManagementTabs";
 import Cookies from "js-cookie";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
