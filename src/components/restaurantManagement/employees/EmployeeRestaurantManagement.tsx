@@ -39,7 +39,7 @@ interface EditToolbarProps {
 export default function EmployeeRestaurantManagement({
   activeRestaurantId,
 }: {
-  activeRestaurantId: string;
+  activeRestaurantId: number;
 }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -88,14 +88,13 @@ export default function EmployeeRestaurantManagement({
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <div className="z-1 flex h-[3rem] w-full items-center">
+        <div className="z-1 flex h-[3rem] w-full items-center p-1">
           <button
             id="RestaurantListAddRestaurantButton"
             onClick={() => setIsModalOpen(true)}
-            className="flex h-full items-center justify-center gap-2 rounded-lg p-2 text-primary hover:bg-grey-1"
+            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <AddIcon />
-            <h1 className="font-mont-md text-lg">Add employee</h1>
+            <h1 className="font-mont-md text-md">+ Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -294,7 +293,7 @@ export default function EmployeeRestaurantManagement({
   ];
 
   return (
-    <div className="h-full w-full rounded-lg bg-white ">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -314,7 +313,7 @@ export default function EmployeeRestaurantManagement({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="border-0"
+        className="border-0 scroll"
       />
       <Modal
         open={isModalOpen}
