@@ -39,7 +39,7 @@ interface EditToolbarProps {
 export default function EmployeeRestaurantManagement({
   activeRestaurantId,
 }: {
-  activeRestaurantId: string;
+  activeRestaurantId: number;
 }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});

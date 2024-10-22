@@ -75,7 +75,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="w-full h-full gap-4 rounded-tr-lg rounded-b-lg overflow-y-auto scroll space-y-4">
+    <div className="w-full h-full gap-4 rounded-lg overflow-y-auto scroll space-y-4">
       <div className="w-full h-1/2 bg-white rounded-b-lg shadow-md"></div>
       
       <div className="w-full h-1/2 flex gap-4">
@@ -102,7 +102,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <h1 className="font-mont-md text-xl">Employee management</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
-          <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId + ""} />
+          <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId} />
         </div>
       </div>
 
