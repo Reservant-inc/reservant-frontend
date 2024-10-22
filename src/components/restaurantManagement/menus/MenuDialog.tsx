@@ -77,7 +77,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         menuType: values.menuType,
         dateFrom: values.dateFrom,
         dateUntil: values.dateUntil,
-        photo: "test-jd.png"
+        photo: ""
       });
   
       responseMenu = await fetchPOST("/menus", body);
@@ -117,7 +117,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         menuType: values.menuType,
         dateFrom: values.dateFrom,
         dateUntil: values.dateUntil,
-        photo: "test-jd.png"
+        photo: ""
       });
   
       await fetchPUT(`/menus/${menu?.menuId}`, body);
@@ -133,7 +133,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       const body = JSON.stringify({
         itemIds: getSelectedMenuItemsIds()
       });
-      await fetchPOST(`/menus/${menu?.menuId}/items`, body);
+      await fetchPUT(`/menus/${menu?.menuId}/items`, body);
       setSubmitting(false)
       onClose();
 
