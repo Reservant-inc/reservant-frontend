@@ -25,9 +25,6 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
   const [cart, setCart] = useState<CartItemType[]>([]);
 
   const addToCart = (item: CartItemType) => {
-
-    console.log('asdasd')
-
     setCart((prevCart) => {
       const existingItem = prevCart.find(cartItem => cartItem.menuItemId === item.menuItemId);
 
@@ -41,8 +38,6 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
         return [...prevCart, { ...item, quantity: 1 }];
       }
     });
-
-    console.log(cart)
   };
 
   const incrementQuantity = (menuItemId: number) => {
