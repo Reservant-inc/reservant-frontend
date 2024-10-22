@@ -67,7 +67,7 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
     };
 
     return (
-        <div className="h-[90vh] w-[50vw] min-w-[700px] flex justify-center items-center">
+        <>
             {
                 !isOrdering ? (
                     <div className="w-full h-full">
@@ -133,7 +133,7 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                     </div>
                 )
             }
-        </div>
+        </>
     );
 };
 

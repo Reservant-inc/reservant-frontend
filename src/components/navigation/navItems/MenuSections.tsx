@@ -8,7 +8,7 @@ const Sections: React.FC<SectionProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const user =JSON.parse(Cookies.get("userInfo") as string);
+  const user = JSON.parse(Cookies.get("userInfo") as string);
 
   const userRoles = user.roles;
 
@@ -66,7 +66,7 @@ const Sections: React.FC<SectionProps> = () => {
             }
             onClick={() =>
               navigate(
-                `/${user.login}/restaurants`,
+                `/${user.firstName}_${user.lastName}/restaurants`,
               )
             }
           >

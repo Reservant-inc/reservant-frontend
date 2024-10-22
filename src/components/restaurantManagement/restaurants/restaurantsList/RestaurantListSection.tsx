@@ -52,8 +52,6 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
             }
 
             setRows(tmp)
-            console.log(response)
-            console.log(tmp)
           } catch (error) {
             console.error("Error populating table", error);
           }
