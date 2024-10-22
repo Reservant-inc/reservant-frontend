@@ -75,7 +75,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="w-full h-full gap-4 rounded-tr-lg rounded-b-lg overflow-y-auto scroll space-y-4">
+    <div className="w-full h-full gap-4 rounded-lg overflow-y-auto scroll space-y-4">
       <div className="w-full h-1/2 bg-white rounded-b-lg shadow-md"></div>
       
       <div className="w-full h-1/2 flex gap-4">

@@ -14,7 +14,7 @@ import IngredientTable from "./Warehouse/IngredientTable";
 
 const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number>(-1);
-  const [activePage, setActivePage] = useState<number>(1);
+  const [activePage, setActivePage] = useState<number>(0);
 
   const handleChangeActiveRestaurant = (restaurantId: number) => {
     setActiveRestaurantId(restaurantId);
@@ -38,7 +38,7 @@ const RestaurantManager = () => {
             >
               {
                 {
-                  0: <h1> STATS DASH </h1>,
+                  0: <div className="w-full h-full items-center justify-center flex bg-white"> STATS / PERSONAL DASHBOARD </div>,
                   1: <RestaurantListSection
                         handleChangeActiveRestaurant={
                           handleChangeActiveRestaurant
@@ -49,7 +49,7 @@ const RestaurantManager = () => {
                         activeRestaurantId={activeRestaurantId}
                       />,
                   4: <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId}/>,
-                  5: <div className="bg-white dark:bg-black p-3 rounded-tr-lg rounded-b-lg h-full">
+                  5: <div className="bg-white dark:bg-black p-3 rounded-lg h-full">
                       <MenuList activeRestaurantId={activeRestaurantId} type={MenuScreenType.Management}/>
                     </div>,
                   6: <IngredientTable activeRestaurantId={activeRestaurantId}/>,
