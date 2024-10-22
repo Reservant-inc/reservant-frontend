@@ -29,6 +29,7 @@ import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 
+
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (
@@ -314,7 +315,15 @@ export default function EmployeeRestaurantManagement({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="border-0"
+        sx={{
+          '& .MuiDataGrid-row.Mui-selected': {
+            border: '2px solid #a94c79', // Zmieniono kolor obwódki na primary
+            backgroundColor: 'rgba(0, 123, 255, 0.1)', // Opcjonalne: zmiana koloru tła zaznaczenia
+          },
+          '& .MuiDataGrid-cell:focus-within': {
+            outline: 'none', // Usunięcie obwódki na komórkach podczas edycji
+          },
+        }}
       />
       <Modal
         open={isModalOpen}
