@@ -10,7 +10,6 @@ import { Ingredient, IngredientUsage, MenuItemType, MenuType } from "../../../se
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
 import { CloseSharp, ArrowForwardIos, Add, Save, Clear, KeyboardDoubleArrowDown, Remove } from "@mui/icons-material";
-import MenuItem from "./MenuItem";
 import { FetchError } from "../../../services/Errors";
 import DefaultMenuItemImage from "../../../assets/images/defaultMenuItemImage.png"
 import ErrorMes from "../../reusableComponents/ErrorMessage";
