@@ -1,4 +1,13 @@
+import { ReactElement } from 'react';
 import { FriendStatus, LocalType } from './enums';
+
+export type Routing = {
+  path: string,
+  element: ReactElement,
+  isPrivate: boolean,
+  navbar: boolean,
+  roles: string[]
+}[]
 
 export type LoginResponseType = {
   token: string;
@@ -119,7 +128,6 @@ export type MenuItemType = {
   price: number;
   alcoholPercentage: number;
   photo: string;
-  ingredients: IngredientUsage[];
 }
 
 export type IngredientUsage = {
@@ -127,16 +135,15 @@ export type IngredientUsage = {
   amountUsed: number
 }
 
-export interface MenuItemWithDescriptionType {
-  menuItemId: number;
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  alternateName?: string;
-  alcoholPercentage?: number;
-  photo?: string;
+export type IngredientType = {
+  ingredientId: number,
+  publicName: string,
+  amountUsed: number
 }
+
+export type ItemWithIngredientsType = {
+  ingredients: IngredientType[]
+} & MenuItemType
 
 export type  MenuIteminOrderType = {
   name: string;
@@ -153,17 +160,6 @@ export type MenuType = {
   dateFrom: string;
   dateUntil: string | null;
   menuItems: MenuItemType[];
-}
-
-export type MenuWithDescriptionType = {
-  menuId: number;
-  name: string;
-  alternateName: string
-  menuType: string;
-  photo: string;
-  dateFrom: string;
-  dateUntil: string | null;
-  menuItems: MenuItemWithDescriptionType[];
 }
 
 export type FriendType = {
@@ -221,7 +217,9 @@ export type CartItemType = {
   name: string;
   price: number;
   quantity: number;
+  photo: string
 }
+
 export type UserSearchType = {
   friendStatus: FriendStatus;
 } & UserType;

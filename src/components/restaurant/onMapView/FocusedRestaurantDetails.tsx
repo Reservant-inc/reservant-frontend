@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../../services/APIconn";
+import { fetchGET } from "../../../services/APIconn";
 import {
   IconButton,
   CircularProgress,
@@ -12,15 +12,17 @@ import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import Carousel from "../../../reusableComponents/ImageCarousel/Carousel";
-import { RestaurantDetailsType, ReviewType } from "../../../../services/types";
+import Carousel from "../../reusableComponents/ImageCarousel/Carousel";
+import { RestaurantDetailsType, ReviewType } from "../../../services/types";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
-import CustomRating from "../../../reusableComponents/CustomRating";
+import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
-import Dialog from "../../../reusableComponents/Dialog";
+import Dialog from "../../reusableComponents/Dialog";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
-import EventCreationModal from "../../events/EventCreationModal";
-import EventDetailsModal from "../../events/EventDetailsModal";
+import CartContextProvider from "../../../contexts/CartContext";
+import Visit from "../visits/Visit";
+import EventCreationModal from "./../events/EventCreationModal";
+import EventDetailsModal from "./../events/EventDetailsModal";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -133,15 +135,15 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
   const renderDialogContent = {
     [Options.ORDER]: <></>,
-    [Options.MENU]: <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews} />,
+    [Options.MENU] : <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews}/>,
+    [Options.VISIT]: <Visit restaurant={activeRestaurant}/>,
     [Options.EVENT]: (
       <EventCreationModal
-        handleClose={handleDialogClose} // Zamykanie modala przez zamykanie dialogu
+        handleClose={handleDialogClose}
         restaurantId={restaurant.restaurantId} 
-        onSuccess={handleEventCreationSuccess}  // Obsługa sukcesu
+        onSuccess={handleEventCreationSuccess}
       />
     ),
-    [Options.VISIT]: <></>,
   };
 
   return (
@@ -226,7 +228,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           </div>
         </>
       )}
-  
       
       {option !== null && (
         <Dialog open={option !== null} onClose={handleDialogClose} title={optionTitles[option]}>

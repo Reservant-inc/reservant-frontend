@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import {  MenuType } from '../../../../services/types';
-import { fetchGET, getImage } from '../../../../services/APIconn';
-import { FetchError } from '../../../../services/Errors';
+import {  MenuType } from '../../../services/types';
+import { fetchGET } from '../../../services/APIconn';
+import { FetchError } from '../../../services/Errors';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import Menu from './Menu';
 import AddIcon from '@mui/icons-material/Add';
-import { MenuScreenType } from '../../../../services/enums';
-import Dialog from "../../../reusableComponents/Dialog";
-import MenuDialog from '../MenuDialog';
+import { MenuScreenType } from '../../../services/enums';
+import Dialog from "../../reusableComponents/Dialog";
+import MenuDialog from './MenuDialog';
+import Menu from './Menu';
 
 interface MenuListProps {
     activeRestaurantId: number

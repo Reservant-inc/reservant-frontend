@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 

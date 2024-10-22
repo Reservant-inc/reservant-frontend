@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import RestaurantReviewsFilters from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReviewsFilters";
-import RestaurantReview from "../../../restaurantManagement/restaurants/restaurantReviews/RestaurantReview";
-import { ReviewType } from "../../../../services/types";
+import RestaurantReviewsFilters from "../../restaurantManagement/restaurants/restaurantReviews/RestaurantReviewsFilters";
+import RestaurantReview from "../../restaurantManagement/restaurants/restaurantReviews/RestaurantReview";
+import { ReviewType } from "../../../services/types";
 import { useTranslation } from "react-i18next";
-import { FetchError } from "../../../../services/Errors";
-import { fetchGET } from "../../../../services/APIconn";
-import RestaurantEventsModal from "../../events/RestaurantEventsModal";
+import { FetchError } from "../../../services/Errors";
+import { fetchGET } from "../../../services/APIconn";
+import RestaurantEventsModal from "../events/RestaurantEventsModal";
 
 interface FocusedRestaurantReviewsListProps {
   isPreview: boolean;

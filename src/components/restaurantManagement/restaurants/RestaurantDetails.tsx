@@ -7,12 +7,11 @@ import {
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
 import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
-import EmployeeManagement from "../employees/EmployeeManagement";
 import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
 import IngredientTable from "../Warehouse/IngredientTable";
-import MenuList from "../menus/newMenus/MenuList";
+import MenuList from "../menus/MenuList";
 import { MenuScreenType } from "../../../services/enums";
-import FocusedRestaurantReviewsList from "../../restaurant/view/OnMapView/FocusedRestaurantReviewsList";
+import FocusedRestaurantReviewsList from "../../restaurant/onMapView/FocusedRestaurantReviewsList";
 
 interface RestaurantDetailsProps {
   activeRestaurantId: number ;

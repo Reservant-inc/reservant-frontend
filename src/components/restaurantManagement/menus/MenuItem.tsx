@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { MenuItemType, MenuType } from "../../../../services/types";
-import { FetchError } from "../../../../services/Errors";
-import { fetchDELETE, fetchGET, getImage } from "../../../../services/APIconn";
-import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
-import { MenuScreenType } from "../../../../services/enums";
+import { IngredientType, MenuItemType, ItemWithIngredientsType, MenuType } from "../../../services/types";
+import { FetchError } from "../../../services/Errors";
+import { fetchDELETE, fetchGET, getImage } from "../../../services/APIconn";
+import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import { MenuScreenType } from "../../../services/enums";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import ConfirmationDialog from "../../../reusableComponents/ConfirmationDialog";
+import { CartContext } from "../../../contexts/CartContext";
+import AddIcon from '@mui/icons-material/Add';
+import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
 import { useTranslation } from "react-i18next";
-import Dialog from "../../../reusableComponents/Dialog";
-import MenuItemDialog from "../MenuItemDialog";
+import Dialog from "../../reusableComponents/Dialog";
+import MenuItemDialog from "./MenuItemDialog";
 import { MenuListContext } from "./MenuList";
 
 interface MenuItemProps {
@@ -31,6 +33,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
   const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false);
 
 
+  const { addItemToCart } = useContext(CartContext)
+
+  const [item, setItem] = useState<ItemWithIngredientsType>({ ...menuItem, ingredients: []})
   const [ingredients, setIngredients] = useState<{
     ingredientId: number,
     publicName: string,
@@ -48,7 +53,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
         `/menu-items/${menuItem.menuItemId}`,
       )
 
-      setIngredients(menuInfo.ingredients)
+      const ingredients: IngredientType[] = menuInfo.ingredients
+
+      setItem({ ...menuItem, ingredients})
 
     } catch (error) {
       if (error instanceof FetchError) {
@@ -128,12 +135,29 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
             
           </div>
         }
+        {  
+          (type === MenuScreenType.Order) && 
+          <div className="absolute top-2 right-2 flex gap-2">
+            <button 
+              className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+              onClick={() => addItemToCart({ 
+                menuItemId: item.menuItemId,
+                name: item.name,
+                price: item.price,
+                photo: item.photo,
+                quantity: 0
+              })}
+            >
+                <AddIcon className='h-4 w-4'/>
+            </button>
+          </div>
+        }
       </div>
       {isEditingOpen && 
         <Dialog
           open={isEditingOpen}
           onClose={()=>setIsEditingOpen(false)}
-          title={`Editing ${menuItem.name}...`} //@TODO translation
+          title={`Editing ${menuItem.name}...`}
         >
           <MenuItemDialog
             menu={menu}

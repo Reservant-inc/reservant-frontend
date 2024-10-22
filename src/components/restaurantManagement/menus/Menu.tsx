@@ -1,16 +1,16 @@
 import React, { forwardRef, useContext, useState } from 'react';
-import { MenuType, MenuItemType } from '../../../../services/types';
+import { MenuType, MenuItemType } from '../../../services/types';
 import MenuItem from './MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-import { MenuScreenType } from '../../../../services/enums';
-import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog';
-import { fetchDELETE } from '../../../../services/APIconn';
-import { FetchError } from '../../../../services/Errors';
-import MenuItemDialog from '../MenuItemDialog';
-import Dialog from '../../../reusableComponents/Dialog';
-import MenuDialog from '../MenuDialog';
+import { MenuScreenType } from '../../../services/enums';
+import ConfirmationDialog from '../../reusableComponents/ConfirmationDialog';
+import { fetchDELETE } from '../../../services/APIconn';
+import { FetchError } from '../../../services/Errors';
+import MenuItemDialog from './MenuItemDialog';
+import Dialog from '../../reusableComponents/Dialog';
+import MenuDialog from './MenuDialog';
 import { MenuListContext } from './MenuList';
 
 interface MenuProps {
