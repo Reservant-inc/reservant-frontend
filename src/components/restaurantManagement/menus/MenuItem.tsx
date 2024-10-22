@@ -23,24 +23,15 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaurantId }) => {
 
-  const { t } = useTranslation("global");
-  const { fetchMenus } = useContext(MenuListContext)
-
-
   const [isHovering, setIsHovering] = useState<boolean>(false);
-
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
   const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false);
-
-
+  
+  const { t } = useTranslation("global");
+  const { fetchMenus } = useContext(MenuListContext)
   const { addItemToCart } = useContext(CartContext)
 
   const [item, setItem] = useState<ItemWithIngredientsType>({ ...menuItem, ingredients: []})
-  const [ingredients, setIngredients] = useState<{
-    ingredientId: number,
-    publicName: string,
-    amountUsed: number
-  }[]>([]);
 
   useEffect(() => {
     fetchIngredients()
@@ -99,7 +90,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
       }
     }
   };
-
+ 
   return (
     <>
       <div className="relative flex gap-2 w-full p-4 border-[1px] border-grey-1 dark:border-grey-5 rounded-lg" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
@@ -111,8 +102,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
           </div>
           {menuItem.alternateName && <h1 className="text-grey-3 h-[20px]">{menuItem.alternateName}</h1>}
           <div className="flex gap-1">
-            {ingredients.map((ingredient, index) => (
-              <h1 className="text-grey-3 h-[20px]">{ingredient.publicName}{index !== ingredients.length-1 && ','}</h1>
+            {item.ingredients.map((ingredient, index) => (
+              <h1 key={index} className="text-grey-3 h-[20px]">{ingredient.publicName}{index !== item.ingredients.length-1 && ','}</h1>
             ))} 
           </div>
           {menuItem.alcoholPercentage !== 0 && <h1 className="text-grey-3 h-[20px]">alcohol contents - {menuItem.alcoholPercentage}%</h1>}

@@ -23,7 +23,7 @@ const Cart: React.FC<CartProps> = () => {
 
     return (
         <OutsideClickHandler onOutsideClick={() => setIsOpen(false)} isPressed={isOpen}>
-            <div className="absolute top-2 right-2 w-12 h-12 flex items-center justify-center">
+            <div className="absolute top-[-6rem] right-2 w-12 h-12 flex items-center justify-center">
                 <button 
                     className="w-10 h-10 bg-grey-1 hover:bg-grey-0 dark:bg-grey-5 dark:hover:bg-grey-6 absolute rounded-full"
                     onClick={() => setIsOpen(true)}

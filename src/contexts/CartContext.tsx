@@ -38,6 +38,8 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
         return [...prevCart, { ...item, quantity: 1 }];
       }
     });
+
+    console.log(cart)
   };
 
   const incrementQuantity = (menuItemId: number) => {

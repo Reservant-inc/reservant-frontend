@@ -234,7 +234,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         <Dialog open={option !== null} onClose={handleDialogClose} title={optionTitles[option]}>
           <div className='flex flex-col gap- h-[calc(100%-2.25rem)] min-w-[600px] bg-white dark:bg-black items-center rounded-lg p-3'>
             <div className='flex gap-4 items-center w-full h-[15%]'>
-              <div className='flex gap-4 w-[60%]'>
                 <img src={getImage(restaurant.logo, DefaultImage)} className='w-[6rem] h-[6rem] rounded-lg'/>
                 <div className="flex flex-col w-[80%] justify-between">
                   <h2 className="text-xl font-bold dark:text-white">{restaurant.name}</h2>
@@ -267,9 +266,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
-            <div className="h-[85%] w-full">
+            <div className="w-full">
               {renderDialogContent[option]}
             </div>
           </div>
