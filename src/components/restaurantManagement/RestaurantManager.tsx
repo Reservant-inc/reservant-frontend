@@ -48,7 +48,7 @@ const RestaurantManager = () => {
             </div>
             <div
               id="asdasd"
-              className="h-[90%] w-full rounded-b-lg shadow-md"
+              className="h-[90%] w-full rounded-b-lg rounded-tr-lg shadow-md"
             >
               {
                 {
@@ -66,7 +66,7 @@ const RestaurantManager = () => {
                       />
                     ),
                   2: <EmployeeManagement />,
-                  3: <div className="bg-white dark:bg-black p-3 rounded-b-lg h-full">
+                  3: <div className="bg-white dark:bg-black p-3 rounded-tr-lg rounded-b-lg h-full">
                       <MenuList activeRestaurantId={1} type={MenuScreenType.Management}/>
                     </div>,
                   6: <ReservationOrderHeader activeRestaurantId={1} />, //order history ma być częścią reservations???

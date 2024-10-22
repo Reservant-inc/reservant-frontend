@@ -8,7 +8,6 @@ import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
 import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
 import EmployeeManagement from "../employees/EmployeeManagement";
-import MenuManagement from "../menus/MenuMangement";
 import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
 import IngredientTable from "../Warehouse/IngredientTable";
 import MenuList from "../menus/newMenus/MenuList";
@@ -77,7 +76,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="w-full h-full gap-4 overflow-y-auto scroll space-y-4">
+    <div className="w-full h-full gap-4 rounded-tr-lg rounded-b-lg overflow-y-auto scroll space-y-4">
       <div className="w-full h-1/2 bg-white rounded-b-lg shadow-md"></div>
       
       <div className="w-full h-1/2 flex gap-4">

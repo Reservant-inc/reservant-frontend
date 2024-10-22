@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useContext, useState } from 'react';
 import { MenuType, MenuItemType } from '../../../../services/types';
 import MenuItem from './MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,20 +11,21 @@ import { FetchError } from '../../../../services/Errors';
 import MenuItemDialog from '../MenuItemDialog';
 import Dialog from '../../../reusableComponents/Dialog';
 import MenuDialog from '../MenuDialog';
+import { MenuListContext } from './MenuList';
 
 interface MenuProps {
     menu: MenuType;
     type: MenuScreenType
     activeRestaurantId: number
-    setTrigger: Function
-    trigger: boolean
+
 }
 
-const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, activeRestaurantId, setTrigger, trigger }, ref) {
+const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, activeRestaurantId}, ref) {
 
     const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
     const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false);
     const [isCreating, setIsCreating] = useState<boolean>(false);
+    const { fetchMenus } = useContext(MenuListContext)
 
     const handleDeleteMenu = async () => {
         try {
@@ -71,7 +72,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
             </div>
             <div className='flex flex-col gap-2 py-2 pr-3'>
                 {menu.menuItems.map((item: MenuItemType) => (
-                    <MenuItem trigger={trigger} setTrigger={setTrigger} key={item.menuItemId} menuItem={item} type={type} menu={menu} activeRestaurantId={activeRestaurantId}/>
+                    <MenuItem key={item.menuItemId} menuItem={item} type={type} menu={menu} activeRestaurantId={activeRestaurantId}/>
                 ))}
             </div>
             {isEditingOpen && 
@@ -83,7 +84,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
                 <MenuDialog
                   activeRestaurantId={activeRestaurantId}
                   onClose={()=>{
-                    setTrigger(!trigger)
+                    fetchMenus()
                     setIsEditingOpen(false)
                   }}
                   menu={menu}
@@ -99,7 +100,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
                 <MenuItemDialog
                   activeRestaurantId={activeRestaurantId}
                   onClose={()=>{
-                    setTrigger(!trigger);
+                    fetchMenus()
                     setIsCreating(false);
                   }}
                   menu={menu}
@@ -110,8 +111,8 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
                 open={isConfirmationOpen}
                 onClose={()=>setIsConfirmationOpen(false)}
                 onConfirm={()=>{
-                    setTrigger(!trigger);
-                    handleDeleteMenu();
+                  handleDeleteMenu();
+                  fetchMenus();
                 }}
                 confirmationText={`Are you sure you want to delete ${menu.name}?`} //@TODO translation
             />

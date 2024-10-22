@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MenuItemType, MenuType } from "../../../../services/types";
 import { FetchError } from "../../../../services/Errors";
 import { fetchDELETE, fetchGET, getImage } from "../../../../services/APIconn";
@@ -10,19 +10,20 @@ import ConfirmationDialog from "../../../reusableComponents/ConfirmationDialog";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../../reusableComponents/Dialog";
 import MenuItemDialog from "../MenuItemDialog";
+import { MenuListContext } from "./MenuList";
 
 interface MenuItemProps {
   menuItem: MenuItemType
   type: MenuScreenType
   menu?: MenuType
   activeRestaurantId: number
-  trigger?: boolean
-  setTrigger?: Function
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaurantId, trigger, setTrigger }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaurantId }) => {
 
   const { t } = useTranslation("global");
+  const { fetchMenus } = useContext(MenuListContext)
+
 
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
@@ -66,8 +67,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
         itemIds: [menuItemId],
       });
       await fetchDELETE(`/menus/${menu?.menuId}/items`, body);
-      if(setTrigger!==undefined && trigger!==undefined)
-        setTrigger(!trigger)
+      fetchMenus()
       setIsConfirmationOpen(false);
     } catch (error) {
       if (error instanceof FetchError) {
@@ -82,8 +82,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
     try {
         const { menuItemId } = menuItem;
         await fetchDELETE(`/menu-items/${menuItemId}`);
-        if(setTrigger!==undefined && trigger!==undefined)
-          setTrigger(!trigger)
+        fetchMenus()
         setIsConfirmationOpen(false);
     } catch (error) {
       if (error instanceof FetchError) {
@@ -141,8 +140,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
             menuItemToEdit={menuItem}
             activeRestaurantId={activeRestaurantId}
             onClose={()=>{
-              if(setTrigger && trigger)
-                setTrigger(!trigger)
+              
+              fetchMenus()
               setIsEditingOpen(false)
             }}
             />
