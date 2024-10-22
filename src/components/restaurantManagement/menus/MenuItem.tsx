@@ -1,101 +1,185 @@
-import React, { useState } from "react";
-import { Card, CardContent } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import DefaultMenuItem from "../../../assets/images/defaultMenuItemImage.png";
-import DefaultDrinkItem from "../../../assets/images/defaultDrinkItemImage.png";
-import { useTranslation } from "react-i18next";
+import React, { useContext, useEffect, useState } from "react";
+import { IngredientType, MenuItemType, ItemWithIngredientsType, MenuType } from "../../../services/types";
+import { FetchError } from "../../../services/Errors";
+import { fetchDELETE, fetchGET, getImage } from "../../../services/APIconn";
+import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import { MenuScreenType } from "../../../services/enums";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { CartContext } from "../../../contexts/CartContext";
+import AddIcon from '@mui/icons-material/Add';
 import ConfirmationDialog from "../../reusableComponents/ConfirmationDialog";
-import { getImage } from "../../../services/APIconn";
-import DefaultPic from "../../../assets/images/no-image.png"
+import { useTranslation } from "react-i18next";
+import Dialog from "../../reusableComponents/Dialog";
+import MenuItemDialog from "./MenuItemDialog";
+import { MenuListContext } from "./MenuList";
 
 interface MenuItemProps {
-  name: string;
-  alternateName: string;
-  price: number;
-  alcoholPercentage: number;
-  menuType: string;
-  photo?: string; // Optional prop
-  onDelete: () => void;
-  onEdit: () => void;
+  menuItem: MenuItemType
+  type: MenuScreenType
+  menu?: MenuType
+  activeRestaurantId: number
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({
-  name,
-  alternateName,
-  price,
-  alcoholPercentage,
-  menuType,
-  photo,
-  onDelete,
-  onEdit,
-}) => {
+const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaurantId }) => {
+
   const { t } = useTranslation("global");
-  const defaultImage =
-    menuType === "Alcohol" ? DefaultDrinkItem : DefaultMenuItem;
-  const imagePath = photo || defaultImage;
-  const alcoholPercentageVisible = menuType === "Alcohol";
-  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const { fetchMenus } = useContext(MenuListContext)
 
-  const handleDeleteConfirmation = () => {
-    setConfirmationOpen(true);
+
+  const [isHovering, setIsHovering] = useState<boolean>(false);
+
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
+  const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false);
+
+
+  const { addItemToCart } = useContext(CartContext)
+
+  const [item, setItem] = useState<ItemWithIngredientsType>({ ...menuItem, ingredients: []})
+  const [ingredients, setIngredients] = useState<{
+    ingredientId: number,
+    publicName: string,
+    amountUsed: number
+  }[]>([]);
+
+  useEffect(() => {
+    fetchIngredients()
+  }, [isEditingOpen]);
+  
+  const fetchIngredients = async () => {
+    try {
+
+      const menuInfo = await fetchGET(
+        `/menu-items/${menuItem.menuItemId}`,
+      )
+
+      const ingredients: IngredientType[] = menuInfo.ingredients
+
+      setItem({ ...menuItem, ingredients})
+
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
+    }
   };
 
-  const handleDeleteConfirmed = () => {
-    onDelete();
-    setConfirmationOpen(false);
+  const handleRemoveMenuItem = async () => {
+    try {
+      const { menuItemId } = menuItem;
+      const body = JSON.stringify(
+      {
+        itemIds: [menuItemId],
+      });
+      await fetchDELETE(`/menus/${menu?.menuId}/items`, body);
+      fetchMenus()
+      setIsConfirmationOpen(false);
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
+    }
   };
 
-  const handleDeleteCancelled = () => {
-    setConfirmationOpen(false);
+  const handleDeletePermanentlyMenuItem = async () => {
+    try {
+        const { menuItemId } = menuItem;
+        await fetchDELETE(`/menu-items/${menuItemId}`);
+        fetchMenus()
+        setIsConfirmationOpen(false);
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log("Unexpected error")
+      }
+    }
   };
 
   return (
-    <Card className="m-1 w-64 rounded-lg dark:bg-grey-5 dark:text-grey-1">
-      <CardContent className="flex flex-col">
-        <img
-          src={getImage(imagePath, DefaultPic)}
-          alt="MenuItemImage"
-          className="mb-2 h-36 w-full rounded-lg"
-        />
-        <div className="flex items-start justify-between">
-          <div className="flex flex-col">
-            <h2 className="font-bold">{name}</h2>
-            {alternateName !== name && (
-              <h3 className="font-medium">{alternateName}</h3>
-            )}
+    <>
+      <div className="relative flex gap-2 w-full p-4 border-[1px] border-grey-1 dark:border-grey-5 rounded-lg" onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+        <img src={getImage(menuItem.photo, DefaultImage)} className="w-24 h-24 rounded-lg"/>
+        <div className="flex flex-col gap-1">
+          <div className="flex gap-3">
+            <h1 className="dark:text-white text-lg h-[22px]">{menuItem.name}</h1>
+            <h1 className="dark:text-white text-lg h-[22px]">{menuItem.price} zł</h1>
           </div>
-          <div className="flex space-x-1">
-            <button className="text-primary" onClick={onEdit}>
-              <EditIcon />
-            </button>
-            <button className="text-primary" onClick={handleDeleteConfirmation}>
-              <DeleteIcon />
-            </button>
+          {menuItem.alternateName && <h1 className="text-grey-3 h-[20px]">{menuItem.alternateName}</h1>}
+          <div className="flex gap-1">
+            {ingredients.map((ingredient, index) => (
+              <h1 className="text-grey-3 h-[20px]">{ingredient.publicName}{index !== ingredients.length-1 && ','}</h1>
+            ))} 
           </div>
+          {menuItem.alcoholPercentage !== 0 && <h1 className="text-grey-3 h-[20px]">alcohol contents - {menuItem.alcoholPercentage}%</h1>}
         </div>
-        <p className="text-sm">{price} PLN</p>
-        {alcoholPercentageVisible && (
-          <p className="text-xs">
-            {t("restaurant-management.menu.menuItemAlcoholPercentage")}:{" "}
-            {alcoholPercentage}%
-          </p>
-        )}
-        <ConfirmationDialog
-          open={confirmationOpen}
-          onClose={handleDeleteCancelled}
+        {
+          (isHovering && type === MenuScreenType.Management) && 
+          <div className="absolute top-2 right-2 flex gap-2">
+            <button 
+              className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+              onClick={()=>setIsEditingOpen(true)}
+            >
+                <EditIcon className='h-4 w-4'/>
+            </button>
+            <button 
+              className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+              onClick={()=>setIsConfirmationOpen(true)}
+            >  
+                <DeleteIcon className='h-4 w-4'/>
+            </button>
+            
+          </div>
+        }
+        {  
+          (type === MenuScreenType.Order) && 
+          <div className="absolute top-2 right-2 flex gap-2">
+            <button 
+              className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+              onClick={() => addItemToCart({ 
+                menuItemId: item.menuItemId,
+                name: item.name,
+                price: item.price,
+                photo: item.photo,
+                quantity: 0
+              })}
+            >
+                <AddIcon className='h-4 w-4'/>
+            </button>
+          </div>
+        }
+      </div>
+      {isEditingOpen && 
+        <Dialog
+          open={isEditingOpen}
+          onClose={()=>setIsEditingOpen(false)}
+          title={`Editing ${menuItem.name}...`}
         >
-        <div className="p-4 flex flex-col justify-between h-[20vh] w-[20vw]">
-          <h1>Delete?</h1>
-          <p>you wanna delete?</p>
-          <div className="flex justify-between">
-            <button onClick={handleDeleteConfirmed}>YES</button>
-            <button onClick={handleDeleteCancelled}>nono</button>
-          </div>
-        </div>
-        </ConfirmationDialog>
-      </CardContent>
-    </Card>
+          <MenuItemDialog
+            menu={menu}
+            menuItemToEdit={menuItem}
+            activeRestaurantId={activeRestaurantId}
+            onClose={()=>{
+              
+              fetchMenus()
+              setIsEditingOpen(false)
+            }}
+            />
+        </Dialog>
+      }
+      <ConfirmationDialog
+        open={isConfirmationOpen}
+        onClose={()=>setIsConfirmationOpen(false)}
+        onConfirm={handleRemoveMenuItem}
+        onAlt={handleDeletePermanentlyMenuItem}
+        confirmationText={`Are you sure you want to remove ${menuItem.name} from this menu?`} //@TODO translation
+        altText={t("alt.delete")}
+      />
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RestaurantDetailsType } from "../../../services/types";
-import MenuList from "../../restaurantManagement/menus/newMenus/MenuList";
+import MenuList from "../../restaurantManagement/menus/MenuList";
 import { MenuScreenType } from "../../../services/enums";
 import Cart from "../Cart";
 import { fetchGET } from "../../../services/APIconn";

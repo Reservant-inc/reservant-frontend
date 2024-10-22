@@ -3,7 +3,7 @@ import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { RestaurantDetailsType, ReviewType } from '../../../services/types';
-import Menu from '../../restaurantManagement/menus/newMenus/MenuList';
+import Menu from '../../restaurantManagement/menus/MenuList';
 import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from 'react-i18next';
 import { getImage } from '../../../services/APIconn';

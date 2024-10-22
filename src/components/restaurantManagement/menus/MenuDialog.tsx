@@ -9,7 +9,7 @@ import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Add, Save } from "@mui/icons-material";
 import { MenuItemType, MenuType } from "../../../services/types";
 import { FetchError } from "../../../services/Errors";
-import MenuItem from "./newMenus/MenuItem";
+import MenuItem from "./MenuItem";
 import {MenuScreenType} from "../../../services/enums"
 import ErrorMes from "../../reusableComponents/ErrorMessage";
 import Remove from "@mui/icons-material/Remove";
