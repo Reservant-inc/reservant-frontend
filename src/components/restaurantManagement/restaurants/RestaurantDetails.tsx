@@ -102,7 +102,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <h1 className="font-mont-md text-xl">Employee management</h1>
         </div>
         <div className="h-[calc(100%-6rem)]">
-          <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId + ""} />
+          <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId} />
         </div>
       </div>
 
