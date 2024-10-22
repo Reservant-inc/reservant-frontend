@@ -1,28 +1,50 @@
 import React, { ReactNode } from "react";
 import {
+  Button,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
-import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmationDialogProps {
   open: boolean;
   onClose: () => void;
-  children: ReactNode;
+  onConfirm: () => void;
+  confirmationText: string;
+  onAlt?: () => void;
+  altText?: string;
 }
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
   onClose,
-  children,
+  onConfirm,
+  onAlt,
+  altText,
+  confirmationText,
 }) => {
-  
-  return createPortal(
+  const { t } = useTranslation("global");
+
+  return (
     <Dialog open={open} onClose={onClose}>
-      <div>
-        {children}
-      </div>
-    </Dialog>,
-    document.getElementById('modal') || document.body
+      <DialogTitle>Confirmation</DialogTitle>
+      <DialogContent>{confirmationText}</DialogContent>
+      <DialogActions>
+        <Button onClick={onConfirm} >
+          Yes
+        </Button>
+        {(onAlt || altText) &&
+        <Button onClick={onAlt} color="error">
+          {altText}  
+        </Button>}
+        <Button onClick={onClose} color="primary">
+          Cancel
+        </Button>
+        
+      </DialogActions>
+    </Dialog>
   );
 };
 

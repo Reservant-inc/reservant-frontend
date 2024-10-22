@@ -130,6 +130,11 @@ export type MenuItemType = {
   photo: string;
 }
 
+export type IngredientUsage = {
+  ingredientId: string,
+  amountUsed: number
+}
+
 export type IngredientType = {
   ingredientId: number,
   publicName: string,
@@ -241,6 +246,14 @@ export type UserInfo = {
   photo: string
 };
 
+export type Ingredient = {
+  ingredientId: string,
+  publicName: string,
+  unitOfMeasurement: string,
+  minimalAmount: number,
+  amountToOrder: number,
+  amount: number
+}
 export type ReviewType ={
   reviewId: number,
   restaurantId: number,

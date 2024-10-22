@@ -169,8 +169,8 @@
             "menuItemPriceRequired": "Cena jest wymagana",
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
             "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
-            "selectedFile": "Wybrano plik"
-            
+            "selectedFile": "Wybrano plik",
+            "sort": "Sortuj"
         }
     },
     "tools": {
@@ -221,6 +221,10 @@
         "filter": "Filtruj",
         "reviews": "Opinie",
         "no-reviews": "Brak opinii",
-        "add-review": "Dodaj opinie"
+        "add-review": "Dodaj opinie",
+        "tags": "Tagi"
+    },
+    "alt" : {
+        "delete": "Usuń na amen"
     }
 }
