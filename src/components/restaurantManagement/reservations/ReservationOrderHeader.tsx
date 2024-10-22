@@ -13,7 +13,7 @@ const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({
   const [activeTab, setActiveTab] = useState<string>("reservation");
 
   return (
-    <div className="w-full h-full p-2 flex-col space-y-2 bg-white rounded-lg">
+    <div className="w-full h-full flex-col space-y-2 bg-white dark:bg-black rounded-lg">
       <div className="flex justify-start p-2">
         <ButtonGroup>
           <Button
@@ -38,7 +38,7 @@ const ReservationOrderHeader: React.FC<ReservationOrderHeaderProps> = ({
           </Button>
         </ButtonGroup>
       </div>
-      <div className="mt-4">
+      <div className="h-[calc(100%-56px)] w-full">
         {activeTab === "reservation" ? (
           <ReservationHistory activeRestaurantId={activeRestaurantId} />
         ) : (

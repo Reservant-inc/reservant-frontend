@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Menu from "./TABZ";
+import Menu from "./ManagementTabs";
 import Cookies from "js-cookie";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
@@ -29,7 +29,7 @@ const RestaurantManager = () => {
         
         <div className="flex h-full w-full flex-col gap-6 p-6">
           <div className="h-full w-full flex flex-col">
-            <div className="flex  w-full flex-col gap-2 dark:bg-black">
+            <div className="flex  w-full flex-col gap-2 dark:bg-grey-7">
               <Menu setActivePage={setActivePage} activePage={activePage} activeRestaurantId={activeRestaurantId} setActiveRestaurantId={setActiveRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
             </div>
             <div
@@ -38,7 +38,7 @@ const RestaurantManager = () => {
             >
               {
                 {
-                  0: <div className="w-full h-full items-center justify-center flex bg-white"> STATS / PERSONAL DASHBOARD </div>,
+                  0: <div className="w-full h-full items-center justify-center dark:bg-black dark:text-grey-1 rounded-tr-lg rounded-b-lg flex bg-white"> STATS / PERSONAL DASHBOARD </div>,
                   1: <RestaurantListSection
                         handleChangeActiveRestaurant={
                           handleChangeActiveRestaurant
