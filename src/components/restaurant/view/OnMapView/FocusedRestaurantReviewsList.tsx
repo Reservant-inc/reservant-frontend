@@ -47,7 +47,8 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const data = await fetchGET(`/restaurants/${restaurantId}/reviews?page=${currentPage - 1}&perPage=${perPage}`);
+        // Include orderBy parameter based on the sortOrder state
+        const data = await fetchGET(`/restaurants/${restaurantId}/reviews?page=${currentPage - 1}&perPage=${perPage}&orderBy=${sortOrder === 'asc' ? 'DateAsc' : 'DateDesc'}`);
         setFilteredAndSortedReviews(data.items || []);
         setTotalReviews(data.totalPages || 0);
       } catch (error) {
@@ -56,7 +57,7 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
     };
 
     fetchReviews();
-  }, [currentPage, perPage, restaurantId]);
+  }, [currentPage, perPage, restaurantId, sortOrder]); // Add sortOrder as a dependency
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -69,18 +70,6 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
     };
     fetchUser();
   }, []);
-
-  useEffect(() => {
-    const sortedReviews = [...reviews]
-      .filter((review) => (value > 0 ? review.stars === value : true))
-      .sort((a, b) => {
-        const dateA = new Date(a.createdAt); 
-        const dateB = new Date(b.createdAt);
-        return sortOrder === 'asc' ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
-      });
-
-    setFilteredAndSortedReviews(sortedReviews);
-  }, [reviews, value, sortOrder]); // Add sortOrder as a dependency
 
   useEffect(() => {
     if (user) {
@@ -150,7 +139,7 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
             <div className="flex w-full gap-2">
               <Tooltip title={t("reviews.sort")}>
                 <Button
-                  className={` dark:bg-grey-5 bg-grey-0 rounded-lg text-black dark:text-white dark:hover:bg-grey-6 hover:bg-white`}
+                  className="dark:bg-grey-5 bg-grey-0 rounded-lg text-black dark:text-white dark:hover:bg-grey-6 hover:bg-white"
                   onClick={toggleSortOrder}
                 >
                   <SwapVertIcon />
