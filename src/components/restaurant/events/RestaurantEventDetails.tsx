@@ -75,8 +75,22 @@ const RestaurantEventDetails: React.FC<RestaurantEventDetailsProps> = ({
 
   if (!open || !eventDetails || !user) return null;
 
-  const currentParticipants = eventDetails?.participants?.length || 0;
-  const maxParticipantsReached = currentParticipants >= eventDetails.maxPeople;
+  // Obliczanie participants + creator dodatkowo
+  const currentParticipants = eventDetails.participants?.length || 0;
+  const totalParticipants = eventDetails.creatorId ? currentParticipants + 1 : currentParticipants;
+  const maxParticipantsReached = totalParticipants >= eventDetails.maxPeople;
+
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -87,14 +101,14 @@ const RestaurantEventDetails: React.FC<RestaurantEventDetailsProps> = ({
           <p className="dark:text-grey-2">Loading event details...</p>
         ) : (
           <>
-            <p className="dark:text-white"><strong>Event ID:</strong> {eventDetails.eventId}</p>
-            <p className="dark:text-white"><strong>Created At:</strong> {eventDetails.createdAt}</p>
+            <p className="dark:text-white"><strong>Event Name:</strong> {eventDetails.name}</p>
+            <p className="dark:text-white"><strong>Created At:</strong> {formatDate(eventDetails.createdAt)}</p>
             <p className="dark:text-white"><strong>Description:</strong> {eventDetails.description}</p>
-            <p className="dark:text-white"><strong>Event Time:</strong> {eventDetails.time}</p>
-            <p className="dark:text-white"><strong>Must Join Until:</strong> {eventDetails.mustJoinUntil}</p>
+            <p className="dark:text-white"><strong>Event Time:</strong> {formatDate(eventDetails.time)}</p>
+            <p className="dark:text-white"><strong>Must Join Until:</strong> {formatDate(eventDetails.mustJoinUntil)}</p>
             <p className="dark:text-white"><strong>Creator:</strong> {eventDetails.creatorFullName}</p>
             <p className="dark:text-white"><strong>Restaurant:</strong> {eventDetails.restaurantName}</p>
-            <p className="dark:text-white"><strong>Participants:</strong> {currentParticipants} / {eventDetails.maxPeople}</p>
+            <p className="dark:text-white"><strong>Participants:</strong> {totalParticipants} / {eventDetails.maxPeople}</p>
 
             {currentParticipants > 0 && (
               <div className="mt-4">
