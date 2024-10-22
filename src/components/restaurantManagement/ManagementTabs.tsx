@@ -76,7 +76,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
       </div>
       :
       <div className="flex gap-2">
-        <div className="p-0">
+        <div className="flex items-center justify-center pl-2 py-2">
           <ListItemButton
             id="menu-listItem-back-button"
             className={`  bg-grey-0 hover:bg-white dark:bg-grey-5 dark:hover:bg-black  dark:text-grey-1 w-8 h-8 rounded-full flex justify-center items-center `}

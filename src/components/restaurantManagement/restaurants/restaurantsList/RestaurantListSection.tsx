@@ -158,7 +158,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
       };
 
     return(
-        <div className="h-full w-full bg-white rounded-b-lg rounded-tr-lg">
+        <div className="h-full w-full bg-white dark:bg-black rounded-b-lg rounded-tr-lg">
             <DataGrid
                 rows={rows}
                 columns={columns}

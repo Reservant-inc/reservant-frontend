@@ -204,7 +204,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
   ];
 
   return (
-    <div className="h-full w-full rounded-lg bg-white shadow-md">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black shadow-md">
       <DataGrid
         rows={rows}
         columns={columns}

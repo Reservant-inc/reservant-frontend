@@ -294,7 +294,7 @@ export default function EmployeeRestaurantManagement({
   ];
 
   return (
-    <div className="h-full w-full rounded-lg bg-white ">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black">
       <DataGrid
         rows={rows}
         columns={columns}

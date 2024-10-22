@@ -280,7 +280,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
   );
 
   return (
-    <div className="h-full w-full rounded-lg bg-white dark:bg-grey-6 flex flex-col">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black flex flex-col">
       <DataGrid
         rows={ingredients.map((ingredient, index) => ({
           ...ingredient,
@@ -290,7 +290,6 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         pageSizeOptions={[5, 10, 25]}
         disableRowSelectionOnClick
         slots={{ toolbar: EditToolbar as GridSlots["toolbar"] }}
-        className="border-0 text-black dark:text-white"
       />
       {/* Formularz dodawania składnika */}
       <Dialog open={isModalOpen} onClose={handleCloseModal}>
