@@ -20,21 +20,15 @@ const RestaurantManager = () => {
     setActiveRestaurantId(restaurantId);
   };
   
-  const user: UserInfo = JSON.parse(Cookies.get("userInfo") as string);
-
-  const [activeSectionName, setActiveSectionName] = useState<string>(`Hello, ${user.firstName}`)
-  
   return (
     <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-6">
       <div className="z-[0] flex flex-col w-full">
-        
         <div className="flex h-full w-full flex-col gap-6 p-6">
           <div className="h-full w-full flex flex-col">
             <div className="flex  w-full flex-col gap-2 dark:bg-black">
-              <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
+              <Menu setActivePage={setActivePage} activePage={activePage} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
             </div>
             <div
-              id="asdasd"
               className="h-[90%] w-full rounded-b-lg rounded-tr-lg shadow-md"
             >
               {
@@ -45,7 +39,6 @@ const RestaurantManager = () => {
                         handleChangeActiveRestaurant={
                           handleChangeActiveRestaurant
                         }
-                        setActiveSectionName={setActiveSectionName}
                       />
                     ) : (
                       <RestaurantDetails

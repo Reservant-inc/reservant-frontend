@@ -6,11 +6,10 @@ import { GridToolbarContainer, GridRowModesModel, GridColDef, GridRowsProp, Data
 import { fetchGET } from "../../../../services/APIconn";
 import { LocalType } from "../../../../services/enums";
 import { RestaurantType } from "../../../../services/types";
-import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
+import { ArrowForwardIos } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
-  setActiveSectionName: (sectionName: string) => void;
 }
 
 interface EditToolbarProps {
@@ -20,7 +19,7 @@ interface EditToolbarProps {
     ) => void;
   }
 
-const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant, setActiveSectionName }) => {
+const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -151,7 +150,6 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
 
       const handleDetails: Function = (id: any) =>{
         handleChangeActiveRestaurant(rows[parseInt(id.toString())].restaurantId)
-        setActiveSectionName(rows[parseInt(id.toString())].name)
       }
 
       const handleRowClick = (params: any) => {

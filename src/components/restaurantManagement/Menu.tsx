@@ -1,24 +1,17 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, } from "@mui/material";
-import React, { useState } from "react";
-import AppsSharpIcon from '@mui/icons-material/AppsSharp';
+import { ListItemButton } from "@mui/material";
+import React from "react";
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
-import MenuBookSharpIcon from '@mui/icons-material/MenuBookSharp';
-import InventorySharpIcon from '@mui/icons-material/InventorySharp';
-import MovingSharpIcon from '@mui/icons-material/MovingSharp';
 import ScheduleSharpIcon from '@mui/icons-material/ScheduleSharp';
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
-import Cookies from "js-cookie";
 import useWindowDimensions from "../../hooks/useWindowResize";
-import { UserInfo } from "../../services/types";
 
 interface MenuInterface {
     setActivePage: Function
     activePage: Number
-    setActiveSectionName: Function
     handleChangeActiveRestaurant: Function
 }
 
-const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSectionName, handleChangeActiveRestaurant }) => {
+const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, handleChangeActiveRestaurant }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(activePage);
 
     const handleListItemClick = (
@@ -27,18 +20,14 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, setActiveSect
         name: string
     ) => {
         handleChangeActiveRestaurant(null)
-        setActiveSectionName(name)
         setActivePage(index)
         setSelectedIndex(index);
     };
     const size = useWindowDimensions();
 
-  const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string))
-
   return (
     <div id="menu-wrapper" className="">
       <div className="flex gap-2">
-        
         <div className="p-0">
           <ListItemButton
             id="menu-listItem-restaurants-button"

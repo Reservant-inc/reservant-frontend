@@ -17,7 +17,6 @@ interface MenuProps {
     menu: MenuType;
     type: MenuScreenType
     activeRestaurantId: number
-
 }
 
 const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, activeRestaurantId}, ref) {
