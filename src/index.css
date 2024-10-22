@@ -5,7 +5,6 @@ html {
 body {
   margin: 0;
   height: 100%;
-  height: 100%;
   width: 100%;
 }
 
@@ -65,7 +64,6 @@ dialog::backdrop {
     opacity: 1;
   }
 }
-
 
 .fade-in-opacity {
   transition: opacity 0.1s ease-in;
@@ -168,6 +166,12 @@ dialog::backdrop {
 
 .leaflet-tooltip-bottom:before {
   border-bottom-color: transparent !important
+}
+
+/* MUI shenanigans */
+
+.MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within  {
+  outline: none !important
 }
 
 @tailwind base;
