@@ -169,6 +169,10 @@ dialog::backdrop {
 
 /* Mui DataGrid style */
 
+.MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within {
+  outline: none !important
+}
+
 .dark .css-1llmzjh-MuiDataGrid-root {
   --DataGrid-containerBackground: var(--tw-color-black) !important;
   --DataGrid-rowBorderColor: var(--tw-color-grey-5) !important;
