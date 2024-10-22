@@ -24,6 +24,7 @@ import EventDetailsModal from "./../events/EventDetailsModal";
 import { MenuScreenType } from "../../../services/enums";
 import MenuList from "../../restaurantManagement/menus/MenuList";
 import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import CartContextProvider from "../../../contexts/CartContext";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -268,7 +269,9 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 </div>
             </div>
             <div className="w-full">
-              {renderDialogContent[option]}
+              <CartContextProvider>
+                {renderDialogContent[option]}
+              </CartContextProvider>
             </div>
           </div>
         </Dialog>
