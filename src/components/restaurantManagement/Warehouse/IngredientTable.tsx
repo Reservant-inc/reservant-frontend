@@ -187,7 +187,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         params.row.amount > params.row.minimalAmount ? (
           <span className="text-black dark:text-white">Enough in stock</span>
         ) : (
-          <span className="w-full rounded bg-primary dark:bg-secondary p-2 text-center text-white">
+          <span className="w-full rounded bg-white dark:bg-black border-[1px] border-error p-2 text-center text-black dark:text-white">
             Needs restocking
           </span>
         ),
@@ -258,21 +258,21 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
   const EditToolbar = () => (
     <GridToolbarContainer>
       <div className="flex w-full items-center justify-between">
-        <div className="z-1 flex h-[3rem] items-center gap-2">
+        <div className="z-1 flex h-[3rem] items-center gap-2 p-1">
           <button
-            id="IngredientAddButton"
+            id="RestaurantListAddRestaurantButton"
             onClick={() => setIsModalOpen(true)}
-            className="flex h-full items-center justify-center gap-2 rounded-lg p-2 text-primary dark:text-secondary hover:bg-grey-1 dark:hover:bg-secondary-2"
+            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <AddIcon />
-            <h1 className="font-mont-md text-lg">Add ingredient</h1>
+            <h1 className="font-mont-md text-md">+ Add an employee</h1>
           </button>
+
           <button
             id="GenerateGroceryListButton"
             onClick={handleGenerateGroceryList}
-            className="flex h-full items-center justify-center gap-2 rounded-lg bg-primary dark:bg-secondary p-2 text-white hover:bg-primary-2 dark:hover:bg-secondary-2"
+            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-lg">Generate grocery list</h1>
+            <h1 className="font-mont-md text-md">Generate grocery list</h1>
           </button>
         </div>
       </div>

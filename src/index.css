@@ -185,11 +185,11 @@ dialog::backdrop {
   border-width: 0 !important;
 }
 
-.dark .css-lnpwct-MuiTablePagination-displayedRows, .dark .css-1llmzjh-MuiDataGrid-root {
+.dark .css-lnpwct-MuiTablePagination-displayedRows, .dark .css-1llmzjh-MuiDataGrid-root, .dark .MuiTablePagination-selectLabel, .dark .css-1rxbn6c-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem, .dark .css-194a1fa-MuiSelect-select-MuiInputBase-input{
   color: var(--tw-color-white)
 }
 
-.css-lnpwct-MuiTablePagination-displayedRows, .css-1llmzjh-MuiDataGrid-root {
+.css-lnpwct-MuiTablePagination-displayedRows, .css-1llmzjh-MuiDataGrid-root, .MuiTablePagination-selectLabel, .css-1rxbn6c-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem, .css-194a1fa-MuiSelect-select-MuiInputBase-input {
   color: var(--tw-color-black)
 }
 
@@ -197,12 +197,20 @@ dialog::backdrop {
   fill: var(--tw-color-white)
 }
 
-.dark .css-1w53k9d-MuiDataGrid-overlay {
+.dark .css-1w53k9d-MuiDataGrid-overlay, .dark .css-6hp17o-MuiList-root-MuiMenu-list {
   background-color: var(--tw-color-black)
 }
 
-.css-1w53k9d-MuiDataGrid-overlay {
+.css-1w53k9d-MuiDataGrid-overlay, .css-6hp17o-MuiList-root-MuiMenu-list {
   background-color: var(--tw-color-white)
+}
+
+.MuiDataGrid-withBorderColor {
+  border-color: var(--tw-color-grey-1) !important
+}
+
+.dark .MuiDataGrid-withBorderColor {
+  border-color: var(--tw-color-grey-5) !important
 }
 
 @tailwind base;
@@ -213,19 +221,19 @@ dialog::backdrop {
     @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans p-2;
   }
   
-  .scroll::-webkit-scrollbar {
+  .css-1rtad1, .scroll::-webkit-scrollbar {
     @apply w-[6px] h-[6px] rounded-full
   }
   
-  .scroll::-webkit-scrollbar-thumb {
+  .css-1rtad1, .scroll::-webkit-scrollbar-thumb {
     @apply rounded-full bg-grey-2 dark:bg-grey-4
   }
 
-  .scroll::-webkit-scrollbar-track {
+  .css-1rtad1, .scroll::-webkit-scrollbar-track {
     @apply bg-grey-0 dark:bg-grey-5
   }
   
-  .scroll::-webkit-scrollbar-thumb:hover {
+  .css-1rtad1, .scroll::-webkit-scrollbar-thumb:hover {
     @apply bg-grey-4 dark:bg-grey-3
   }
   

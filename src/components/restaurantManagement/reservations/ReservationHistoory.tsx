@@ -204,7 +204,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
   ];
 
   return (
-    <div className="h-full w-full rounded-lg bg-white dark:bg-black shadow-md">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -218,7 +218,7 @@ const ReservationHistory: React.FC<OrderHistoryProps> = ({
           pagination: { paginationModel: { pageSize: 5 } },
         }}
         pageSizeOptions={[5, 10, 25]}
-        className="border-0"
+        className="border-0 w-full h-full"
       />
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Order Details</DialogTitle>
