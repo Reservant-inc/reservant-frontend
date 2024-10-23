@@ -190,12 +190,11 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         params.row.amount > params.row.minimalAmount ? (
           <span className="text-black dark:text-white">Enough in stock</span>
         ) : (
-          <span className="w-full rounded bg-primary dark:bg-secondary p-2 text-center text-white">
-            {t("warehouse.needs-restocking")}
           <span className="w-full rounded bg-white dark:bg-black border-[1px] border-error p-2 text-center text-black dark:text-white">
             {t("warehouse.needs-restocking")}
           </span>
         ),
+
     },
     {
       field: "daysTillExpiration",
@@ -419,6 +418,6 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
       </Dialog>
     </div>
   );
-};
+}
 
-export default IngredientTable;
+export default IngredientTable
