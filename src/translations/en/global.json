@@ -177,6 +177,7 @@
             "sort": "Sort by"
 
         }
+
     },
     "tools": {
         "main":{
@@ -232,5 +233,32 @@
     },
     "alt" : {
         "delete": "Delete permanently"
+    },
+    "warehouse": {
+        "name": "Name",
+        "quantity": "Quantity",
+        "minimal-quantity": "Minimal quantity",
+        "state": "State",
+        "till-expiration": "Days until expiration",
+        "unit": "Unit",
+        "edit": "Edit",
+        "needs-restocking": "Needs restocking",
+        "add-ingredient": "Add ingredient",
+        "generate-list": "Generate grocery list",
+        "add-new-ingredient": "Add new ingredient",
+        "new-name": "Name",
+        "new-unit": "Unit of measurement",
+        "new-minimal": "Minimal amount",
+        "new-amount": "Amount (optional)",
+        "new-cancel": "Cancel",
+        "new-add": "Add",
+        "grocery-list": "Grocery list",
+        "grocery-name": "Name",
+        "grocery-amount": "Amount to order",
+        "grocery-actions": "Actions",
+        "grocery-order": "Order",
+        "delivery-confirmation": "Delivery request sent. Delivery Id: ",
+        "confirmation": "Confirmation"
     }
+    
 }

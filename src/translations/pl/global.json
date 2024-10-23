@@ -226,5 +226,31 @@
     },
     "alt" : {
         "delete": "Usuń na amen"
+    },
+    "warehouse": {
+        "name": "Nazwa",
+        "quantity": "Ilość",
+        "minimal-quantity": "Minimalna ilość",
+        "state": "Stan",
+        "till-expiration": "Dni do upłynięcia daty ważności",
+        "unit": "Jednostka",
+        "edit": "Edytuj",
+        "needs-restocking": "Wymaga uzupełnienia",
+        "add-ingredient": "Dodaj nowy składnik",
+        "generate-list": "Wygeneruj listę zakupów",
+        "add-new-ingredient": "Dodaj nowy składnik",
+        "new-name": " Nazwa",
+        "new-unit": "Jednostka",
+        "new-minimal": "Minimalna ilość",
+        "new-amount": "Ilość (opcjonalnie)",
+        "new-cancel": "Anuluj",
+        "new-add": "Dodaj",
+        "grocery-list": "Lista zakupów",
+        "grocery-name": "Nazwa",
+        "grocery-amount": "Ilość do zamówienia",
+        "grocery-actions": "Akcje",
+        "grocery-order": "Zamów",
+        "delivery-confirmation": "Wysłano żądanie dostawy. Identyfikator dostawy: ",
+        "confirmation": "Potwierdzenie"
     }
 }
