@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { fetchGET, fetchPOST, fetchDELETE } from "../../../../services/APIconn";
+import React, { useState, useEffect } from "react";
+import { fetchGET } from "../../../../services/APIconn";
 import SearchIcon from "@mui/icons-material/Search";
 import OutsideClickHandler from "../../../reusableComponents/OutsideClickHandler";
 import {
@@ -9,7 +9,6 @@ import { PaginationType, UserSearchType } from "../../../../services/types";
 import SearchedUser from "./SearchedUser";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FetchError } from "../../../../services/Errors";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 const FriendSearchBar: React.FC = () => {
@@ -70,6 +69,9 @@ const FriendSearchBar: React.FC = () => {
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
+      {
+        
+      }
       <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
         <input
           type="text"

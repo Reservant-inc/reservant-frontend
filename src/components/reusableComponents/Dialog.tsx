@@ -43,7 +43,7 @@ const Dialog: React.FC<PopupProps> = ({ open = true, children, onClose, title })
 
   return createPortal(
     <dialog ref={dialog} onClose={() => onClose()} className="h-full w-full bg-trans flex items-center justify-center overflow-y-hidden z-[1]">
-      <div ref={div} className="min-h-[100px] min-w-[100px] dark:bg-black bg-white rounded-lg">
+      <div ref={div} className="min-h-[100px] max-h-[90vh] min-w-[100px] dark:bg-black bg-white rounded-lg">
         {
           title && (
           <div className="h-[2.25rem] py-1 px-4 flex justify-between items-center dark:bg-black bg-white rounded-t-lg border-b-[1px] border-grey-1 dark:border-grey-4">

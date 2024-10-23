@@ -19,10 +19,8 @@ import {
   GridSlots,
 } from "@mui/x-data-grid";
 import {
-  EmployeeEmployedType,
   EmployeeType,
   EmploymentType,
-  RestaurantType,
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
@@ -76,7 +74,6 @@ export default function EmployeeManagement() {
               employments: tmp.slice(),
             });
           }
-        console.log(employees);
 
         setRows(employees);
       } catch (error) {

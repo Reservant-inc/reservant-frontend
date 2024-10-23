@@ -127,7 +127,7 @@ export default function HomePage() {
   return (
     <div
       id="homePage-wrapper"
-      className="relative flex h-[calc(100%-3.5rem)] w-full bg-grey-1 dark:bg-black"
+      className="relative flex h-[calc(100%-3.5rem)] w-full min-w-[550px] bg-grey-1 dark:bg-black"
     >
       {isMenuOpen ? (
         <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] flex h-[calc(100%-1rem)] w-[300px] flex-col rounded-lg bg-white shadow-2xl dark:bg-black">

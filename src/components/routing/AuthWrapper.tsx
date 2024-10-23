@@ -90,7 +90,7 @@ export const AuthWrapper = () => {
                   key={i}
                   path={r.path}
                   element={
-                    <div className="flex h-full w-full flex-col">
+                    <div className="flex h-full w-full flex-col min-w-[770px]">
                       {r.navbar && <NavBar />}
                       {r.element}
                     </div>

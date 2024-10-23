@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET } from "../../../services/APIconn";
+import { fetchGET, getImage } from "../../../services/APIconn";
 import {
   IconButton,
   CircularProgress,
@@ -18,11 +18,13 @@ import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../reusableComponents/Dialog";
-import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
-import CartContextProvider from "../../../contexts/CartContext";
 import Visit from "../visits/Visit";
 import EventCreationModal from "./../events/EventCreationModal";
 import EventDetailsModal from "./../events/EventDetailsModal";
+import { MenuScreenType } from "../../../services/enums";
+import MenuList from "../../restaurantManagement/menus/MenuList";
+import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import CartContextProvider from "../../../contexts/CartContext";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -38,7 +40,7 @@ enum Options {
 
 const optionTitles: Record<Options, string> = {
   [Options.ORDER]: "Order",
-  [Options.MENU]: "Menu",
+  [Options.MENU] : "Menu",
   [Options.EVENT]: "Event",
   [Options.VISIT]: "Reservation",
 };
@@ -135,7 +137,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
   const renderDialogContent = {
     [Options.ORDER]: <></>,
-    [Options.MENU] : <FocusedRestaurantMenuList restaurant={activeRestaurant} reviews={reviews}/>,
+    [Options.MENU] : <MenuList activeRestaurantId={activeRestaurant.restaurantId} type={MenuScreenType.Preview}/>,
     [Options.VISIT]: <Visit restaurant={activeRestaurant}/>,
     [Options.EVENT]: (
       <EventCreationModal
@@ -231,7 +233,47 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       
       {option !== null && (
         <Dialog open={option !== null} onClose={handleDialogClose} title={optionTitles[option]}>
-          {renderDialogContent[option]}
+          <div className='flex flex-col gap- h-[calc(100%-2.25rem)] min-w-[600px] bg-white dark:bg-black items-center rounded-lg p-3'>
+            <div className='flex gap-4 items-center w-full h-[15%]'>
+                <img src={getImage(restaurant.logo, DefaultImage)} className='w-[6rem] h-[6rem] rounded-lg'/>
+                <div className="flex flex-col w-[80%] justify-between">
+                  <h2 className="text-xl font-bold dark:text-white">{restaurant.name}</h2>
+                  <div className="flex items-center gap-2 dark:text-white">
+                    <h1 className='text-[16px]'>{averageRating.toFixed(2)}</h1>
+                    <CustomRating rating={averageRating} readOnly={true} className='text-[18px]'/>
+                    <h1 className='text-[16px]'>({reviews.length})</h1>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <h1 className="text-[14px] dark:text-white">
+                      {restaurant.address}, {restaurant.city}
+                    </h1>
+                    <div className="text-[14px] flex items-center gap-3">
+                      {restaurant.provideDelivery && (
+                        <div className="flex gap-2 items-center">
+                          <MopedIcon className="dark:text-white w-4 h-4"/> 
+                          <h1 className="text-[14px] dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
+                        </div>
+                      )}
+                      <div className="flex gap-1 items-center">
+                        <h1 className="text-[12px] dark:text-white">
+                          {t("home-page.is-delivering")}:
+                        </h1>
+                        {restaurant.provideDelivery ? (
+                          <CheckCircleIcon className="text-green-500 dark:text-white w-4 h-4" />
+                        ) : (
+                          <CancelIcon className="text-red-500 dark:text-white w-4 h-4" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div className="w-full h-[85%]">
+              <CartContextProvider>
+                {renderDialogContent[option]}
+              </CartContextProvider>
+            </div>
+          </div>
         </Dialog>
       )}
   

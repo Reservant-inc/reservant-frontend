@@ -6,7 +6,7 @@ import { GridToolbarContainer, GridRowModesModel, GridColDef, GridRowsProp, Data
 import { fetchGET } from "../../../../services/APIconn";
 import { LocalType } from "../../../../services/enums";
 import { RestaurantType } from "../../../../services/types";
-import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
+import { ArrowForwardIos } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
@@ -52,8 +52,6 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
             }
 
             setRows(tmp)
-            console.log(response)
-            console.log(tmp)
           } catch (error) {
             console.error("Error populating table", error);
           }

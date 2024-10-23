@@ -9,7 +9,6 @@ import {
   IconButton,
   Box,
   Typography,
-  Paper,
   TablePagination,
 } from "@mui/material";
 import {
