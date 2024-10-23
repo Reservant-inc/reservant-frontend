@@ -30,8 +30,9 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
     const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
     const navigate = useNavigate()
-
-    const { items } = useContext(CartContext)
+    const { items, totalPrice } = useContext(CartContext)
+    
+    const data = { items: items, totalPrice: totalPrice, date: date, guests: guests, restaurant: restaurant }
 
     useEffect(() => {
         if (date && guests) {
@@ -146,7 +147,7 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                     <div className="w-full flex flex-row-reverse gap-2">
                         <button
                             id="RestaurantListAddRestaurantButton"
-                            onClick={() => navigate("/checkout", { state: { items } })}
+                            onClick={() => navigate("/checkout", { state: data })}
                             className="flex gap-2 items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                         >
                             <AccountBalanceIcon className="w-5 h-5"/>
@@ -171,7 +172,7 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                     <div className="flex flex-row-reverse w-full">
                         <button
                             id="RestaurantListAddRestaurantButton"
-                            onClick={() => navigate("/checkout", { state: { items } })}
+                            onClick={() => navigate("/checkout", { state: data })}
                             className="flex gap-2 items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                         >
                             <AccountBalanceIcon className="w-5 h-5"/>
