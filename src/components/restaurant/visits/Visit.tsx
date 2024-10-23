@@ -1,137 +1,186 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RestaurantDetailsType } from "../../../services/types";
 import MenuList from "../../restaurantManagement/menus/MenuList";
 import { MenuScreenType } from "../../../services/enums";
 import Cart from "../Cart";
 import { fetchGET } from "../../../services/APIconn";
+import { FetchError } from "../../../services/Errors";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../../contexts/CartContext";
 
 interface VisitProps {
     restaurant: RestaurantDetailsType;
 }
 
+const getParsedDate = (): string => {
+    const today = new Date();
+    return today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+}
+
 const Visit: React.FC<VisitProps> = ({ restaurant }) => {
+    
+    const today = getParsedDate()
+
     const [isOrdering, setIsOrdering] = useState<boolean>(false);
-    const [visitDate, setVisitDate] = useState<string>("");
-    const [guestCount, setGuestCount] = useState<number>(1);
-    const [availableTimes, setAvailableTimes] = useState<string[]>([]);
-    const [selectedTime, setSelectedTime] = useState<string>("");
+    const [guests, setGuests] = useState<number>(1);
+    const [date, setDate] = useState<string>(today);
+    const [availableHours, setAvailableHours] = useState<{ from: string, until: string }[]>([]);
+    const [timeSlots, setTimeSlots] = useState<string[]>([]);
+
+    const navigate = useNavigate()
+
+    const { items } = useContext(CartContext)
 
     useEffect(() => {
-        if (visitDate) {
-            fetchAvailableVisits();
+        if (date && guests) {
+            fetchAvailableHours();
         }
-    }, [visitDate]);
+    }, [date, guests]);
 
-    const fetchAvailableVisits = async () => {
+    useEffect(() => {
+        if (availableHours.length > 0) {
+            generateTimeSlots();
+        } else {
+            setTimeSlots([])
+        }
+    }, [availableHours]);
+
+    const fetchAvailableHours = async () => {
         try {
-            const response = await fetchGET(`/restaurants/${restaurant.restaurantId}/visits?dateStart=${visitDate}T00:00:00&dateEnd=${visitDate}T23:59:59`)
-            const visits = response.items;
-            calculateAvailableTimeSlots(visits);
+            const visitHours = await fetchGET(`/restaurants/${restaurant.restaurantId}/available-hours?date=${date}&numberOfGuests=${guests}`);
+            setAvailableHours(visitHours);
         } catch (error) {
-            console.error("Error fetching visits", error);
-        }
-    };
-
-    const calculateAvailableTimeSlots = (visits: any[]) => {
-        const reservedSlots: string[] = visits.map((visit) => visit.date);
-        const times: string[] = [];
-
-        for (let hour = 13; hour <= 21; hour++) {
-            for (let minutes of [0, 30]) {
-                const time = `${hour}:${minutes === 0 ? "00" : minutes}`;
-                const endTime = `${hour + 2}:${minutes === 0 ? "00" : minutes}`;
-                if (!reservedSlots.includes(time) && !reservedSlots.includes(endTime)) {
-                    times.push(time);
-                }
+            if (error instanceof FetchError) {
+                console.log(error.formatErrors());
+            } else {
+                console.log('unexpected error', error);
             }
         }
-        setAvailableTimes(times);
     };
 
-    const findSmallestTable = () => {
-        const suitableTables = restaurant.tables
-            .filter((table) => table.capacity >= guestCount)
-            .sort((a, b) => a.capacity - b.capacity);
-        return suitableTables[0];
+    const generateTimeSlots = () => {
+        const slots: string[] = [];
+        const now = new Date();
+        const isToday = date === getParsedDate();
+
+        availableHours.forEach(({ from, until }) => {
+            let currentTime = parseTime(from);
+            const endTime = parseTime(until);
+
+            while (currentTime <= endTime) {
+                if (!isToday || currentTime >= now) {
+                    slots.push(formatTime(currentTime));
+                }
+                currentTime = new Date(currentTime.getTime() + 30 * 60000);
+            }
+        });
+        setTimeSlots(slots);
     };
 
-    const handleReserve = () => {
-        const table = findSmallestTable();
-        if (!table) {
-            alert("No available table for the selected guest count.");
-            return;
-        }
-        
+    const parseTime = (time: string): Date => {
+        const [hours, minutes, seconds] = time.split(':').map(Number);
+        const date = new Date();
+        date.setHours(hours, minutes, seconds, 0);
+        return date;
+    };
 
-        // do zrobienia
+    const formatTime = (date: Date): string => {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        return `${formattedHours}:${formattedMinutes} ${ampm}`;
     };
 
     return (
         <>
-            {
-                !isOrdering ? (
-                    <div className="w-full h-full">
-                        <div className="mb-4">
-                            <label htmlFor="date">Select Date:</label>
-                            <input
-                                type="date"
-                                id="date"
-                                value={visitDate}
-                                onChange={(e) => setVisitDate(e.target.value)}
-                                className="border px-2 py-1"
-                            />
+            {!isOrdering ? (
+                <div className="w-full flex flex-col gap-5 pt-3 relative">
+                    <div className="flex gap-2">
+                        <div className="flex flex-col gap-2 w-[45%]">
+                            <div className="w-full flex items-center gap-4 justify-between">
+                                <label className="text-md font-mont-md">No. guests:</label>
+                                <input
+                                    type="number"
+                                    value={guests}
+                                    min={1}
+                                    onChange={(e) => setGuests(parseInt(e.target.value))}
+                                    className="w-32 border-[1px] border-grey-2 rounded-md h-7"
+                                />
+                            </div>
+                            <div className="w-full flex items-center gap-2 justify-between">
+                                <label className="text-md font-mont-md">Date:</label>
+                                <input
+                                    type="date"
+                                    value={date}
+                                    min={today}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    className="border-[1px] border-grey-2 rounded-md h-7 w-32"
+                                />
+                            </div>
+
                         </div>
-                        <div className="mb-4">
-                            <label htmlFor="guests">Number of Guests:</label>
-                            <input
-                                type="number"
-                                id="guests"
-                                value={guestCount}
-                                onChange={(e) => setGuestCount(parseInt(e.target.value))}
-                                className="border px-2 py-1"
-                                min="1"
-                            />
+                        <div className="flex items-center justify-center w-[60%] p-2">
+                            {
+                                timeSlots.length > 0 ? (
+                                    <div className="w-full h-full flex items-center justify-center gap-3">
+                                        <label className="font-mont-md">Available Time Slots</label>
+                                        <select className="border-[1px] border-grey-2 rounded-md h-7 w-32 text-sm py-0 px-4 scroll ring-none">
+                                            {timeSlots.map((slot, index) => (
+                                                <option key={index} value={slot} className="hover:bg-grey-1">
+                                                    {slot}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                ) : (
+                                    <h1>No available visit hours.</h1>
+                                )
+                            }
                         </div>
-                        <div className="mb-4">
-                            <label>Select Time:</label>
-                            <select
-                                value={selectedTime}
-                                onChange={(e) => setSelectedTime(e.target.value)}
-                                className="border px-2 py-1"
-                            >
-                                <option value="">Select Time</option>
-                                {availableTimes.map((time) => (
-                                    <option key={time} value={time}>
-                                        {time}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+
+                    </div>
+                    <div className="w-full flex flex-row-reverse gap-2">
                         <button
-                            onClick={handleReserve}
-                            className="px-4 py-2 bg-blue-500 rounded-lg"
+                            id="RestaurantListAddRestaurantButton"
+                            onClick={() => navigate("/checkout", { state: { items } })}
+                            className="flex gap-2 items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                         >
-                            Reserve
+                            <AccountBalanceIcon className="w-5 h-5"/>
+                            <h1 className="font-mont-md text-md">Proceed to checkout</h1>
                         </button>
                         <button
+                            id="RestaurantListAddRestaurantButton"
                             onClick={() => setIsOrdering(true)}
-                            className="px-4 py-2 bg-green-500 rounded-lg mt-4"
+                            className="flex gap-2 items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                         >
-                            Proceed to Order
+                            <ShoppingCartIcon className="w-5 h-5"/>
+                            <h1 className="font-mont-md text-md">Order</h1>
+                        </button>
+                    </div>    
+                </div>
+            ) : (
+                <div className="relative w-full h-full px-3 py-3 flex flex-col gap-5 items-center">
+                    <MenuList
+                        activeRestaurantId={restaurant.restaurantId}
+                        type={MenuScreenType.Order}
+                    />
+                    <div className="flex flex-row-reverse w-full">
+                        <button
+                            id="RestaurantListAddRestaurantButton"
+                            onClick={() => navigate("/checkout", { state: { items } })}
+                            className="flex gap-2 items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                        >
+                            <AccountBalanceIcon className="w-5 h-5"/>
+                            <h1 className="font-mont-md text-md">Skip order</h1>
                         </button>
                     </div>
-                ) : (
-                    <div className="relative w-full h-full px-3 py-3 flex flex-col gap-5 items-center">
-                        <MenuList activeRestaurantId={restaurant.restaurantId} type={MenuScreenType.Order} />
-                        <div className="flex flex-row-reverse w-full">
-                            <button className="px-3 py-1 mr-3 rounded-lg font-mont-md text-primary hover:text-white hover:bg-primary dark:hover:bg-secondary dark:hover:text-black dark:text-secondary border-[1px] border-primary dark:border-secondary">
-                                Skip order
-                            </button>
-                        </div>
-                        <Cart />
-                    </div>
-                )
-            }
+                    <Cart />
+                </div>
+            )}
         </>
     );
 };
