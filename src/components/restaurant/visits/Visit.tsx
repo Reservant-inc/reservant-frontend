@@ -99,7 +99,7 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
     return (
         <>
             {!isOrdering ? (
-                <div className="w-full flex flex-col gap-5 pt-3 relative">
+                <div className="w-full h-[135px] flex flex-col gap-5 pt-3 relative">
                     <div className="flex gap-2">
                         <div className="flex flex-col gap-2 w-[45%]">
                             <div className="w-full flex items-center gap-4 justify-between">
@@ -164,12 +164,14 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                     </div>    
                 </div>
             ) : (
-                <div className="relative w-full h-full px-3 py-3 flex flex-col gap-5 items-center">
-                    <MenuList
-                        activeRestaurantId={restaurant.restaurantId}
-                        type={MenuScreenType.Order}
-                    />
-                    <div className="flex flex-row-reverse w-full">
+                <div className="relative w-full h-[550px] p-3 flex flex-col gap-5 items-center">
+                    <div className="w-full h-[calc(100%-3rem)]">
+                        <MenuList
+                            activeRestaurantId={restaurant.restaurantId}
+                            type={MenuScreenType.Order}
+                        />
+                    </div>
+                    <div className="flex flex-row-reverse w-full h-8">
                         <button
                             id="RestaurantListAddRestaurantButton"
                             onClick={() => navigate("/checkout", { state: data })}

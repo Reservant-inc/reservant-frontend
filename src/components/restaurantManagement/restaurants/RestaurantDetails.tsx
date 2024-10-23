@@ -6,12 +6,6 @@ import {
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
-import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
-import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
-import IngredientTable from "../Warehouse/IngredientTable";
-import MenuList from "../menus/MenuList";
-import { MenuScreenType } from "../../../services/enums";
-import FocusedRestaurantReviewsList from "../../restaurant/onMapView/FocusedRestaurantReviewsList";
 
 interface RestaurantDetailsProps {
   activeRestaurantId: number ;

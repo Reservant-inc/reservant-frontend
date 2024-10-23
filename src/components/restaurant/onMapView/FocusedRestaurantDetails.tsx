@@ -268,7 +268,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   </div>
                 </div>
             </div>
-            <div className="w-full">
+            <div className="w-full h-[85%]">
               <CartContextProvider>
                 {renderDialogContent[option]}
               </CartContextProvider>
