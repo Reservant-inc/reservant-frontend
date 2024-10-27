@@ -21,7 +21,6 @@ interface FocusedRestaurantReviewsListProps {
   reviews: ReviewType[];
   isDelivering: boolean;
   restaurantId: number;
-  refreshReviews: () => void;
 }
 
 const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> = ({
@@ -29,40 +28,55 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
   reviews,
   isDelivering,
   restaurantId,
-  refreshReviews,
 }) => {
   const [filteredAndSortedReviews, setFilteredAndSortedReviews] = useState<ReviewType[]>([]);
-  const [value, setValue] = useState<number>(0);
+  const [ratingFilter, setRatingFilter] = useState<number>(0); // Track selected rating filter
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [starRating, setStarRating] = useState<number | null>(0);
   const [hasReviewed, setHasReviewed] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1); 
-  const [perPage] = useState<number>(10); 
-  const [totalReviews, setTotalReviews] = useState<number>(0);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // State to manage sorting order
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [perPage] = useState<number>(10);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [t] = useTranslation("global");
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        // Include orderBy parameter based on the sortOrder state
-        const data = await fetchGET(`/restaurants/${restaurantId}/reviews?page=${currentPage - 1}&perPage=${perPage}&orderBy=${sortOrder === 'asc' ? 'DateAsc' : 'DateDesc'}`);
-        setFilteredAndSortedReviews(data.items || []);
-        setTotalReviews(data.totalPages || 0);
-      } catch (error) {
-        console.error("Error fetching restaurant reviews:", error);
-      }
-    };
+  // Function to fetch reviews with filtering and sorting applied
+  const fetchReviews = async () => {
+    try {
+      // Fetch data from API with the selected sort order and page settings
+      const data = await fetchGET(
+        `/restaurants/${restaurantId}/reviews?page=${currentPage - 1}&perPage=${perPage}&orderBy=${
+          sortOrder === 'asc' ? 'DateAsc' : 'DateDesc'
+        }`
+      );
 
+      // Apply local filter for star rating
+      const filteredReviews = data.items?.filter((review: ReviewType) => {
+        return ratingFilter === 0 || review.stars === ratingFilter;
+      });
+
+      setFilteredAndSortedReviews(filteredReviews || []);
+      setTotalPages(data.totalPages || 0);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching restaurant reviews:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchReviews();
-  }, [currentPage, perPage, restaurantId, sortOrder]); // Add sortOrder as a dependency
+  }, [currentPage, perPage, restaurantId, sortOrder, ratingFilter]); // Add ratingFilter as a dependency
+
+  const refreshReviews = () => {
+    fetchReviews();
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await fetchGET('/user');
+        const user = await fetchGET("/user");
         setUser(user);
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -108,7 +122,6 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
 
   const isSubmitDisabled = !reviewText || starRating === null;
 
-  // Function to toggle sort order
   const toggleSortOrder = () => {
     setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
@@ -116,6 +129,7 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
   return (
     <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
       <div className="flex h-full w-full flex-col gap-2">
+        {/* Action buttons */}
         <div className="w-full h-[50px] rounded-lg flex gap-2">
           <button className="dark:bg-grey-5 bg-grey-0 rounded-lg dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary w-full transition hover:scale-105">
             {t("home-page.reservation")}
@@ -133,59 +147,61 @@ const FocusedRestaurantReviewsList: React.FC<FocusedRestaurantReviewsListProps> 
         <h1 className="text-2xl font-mont-bd text-black dark:text-white">Menu:</h1>
         <div className="w-full h-[150px] dark:bg-grey-5 rounded-lg"></div>
 
-        <div className="flex flex-col gap-2 h-full w-full">
-          <h1 className="text-2xl font-mont-bd text-black dark:text-white">{t("reviews.reviews")}:</h1>
-          {!isPreview && (
-            <div className="flex w-full gap-2">
-              <Tooltip title={t("reviews.sort")}>
-                <Button
-                  className="dark:bg-grey-5 bg-grey-0 rounded-lg text-black dark:text-white dark:hover:bg-grey-6 hover:bg-white"
-                  onClick={toggleSortOrder}
-                >
-                  <SwapVertIcon />
-                </Button>
-              </Tooltip>
-              <RestaurantReviewsFilters setValue={setValue} value={value} />
-              <Button
-                className={`w-[180px] dark:bg-grey-5 bg-grey-0 rounded-lg text-primary dark:text-secondary ${
-                  hasReviewed ? "cursor-not-allowed" : "dark:hover:bg-grey-6 hover:bg-white"
-                }`}
-                onClick={handleAddReviewClick}
-                disabled={hasReviewed}
+        {/* Reviews and Filters */}
+        <h1 className="text-2xl font-mont-bd text-black dark:text-white">{t("reviews.reviews")}:</h1>
+        {!isPreview && (
+          <div className="flex w-full gap-2">
+            <Tooltip title={t("reviews.sort")}>
+              <button
+                className="z-1 h-12 w-12 dark:bg-grey-5 bg-grey-0 rounded-lg text-black dark:text-white dark:hover:bg-grey-6 hover:bg-white"
+                onClick={toggleSortOrder}
               >
-                {hasReviewed ? (
-                  <>
-                    {t("reviews.review-submitted")} <CheckIcon />
-                  </>
-                ) : (
-                  `+ ${t("reviews.add-review")}`
-                )}
-              </Button>
-            </div>
-          )}
-
-          {filteredAndSortedReviews.length > 0 ? (
-            filteredAndSortedReviews.map((review) => (
-              <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} user={user} />
-            ))
-          ) : (
-            <div className="mt-4 text-center">
-              <h1>{t("reviews.no-reviews")}</h1>
-            </div>
-          )}
-
-          <div className="flex justify-end mt-4"> 
-            <Pagination
-              count={Math.ceil(totalReviews / perPage) + (totalReviews % perPage === 0 ? 0 : 1)}
-              page={currentPage}
-              onChange={(event, value) => setCurrentPage(value)}
-              variant="outlined"
-              shape="rounded"
-            />
+                <SwapVertIcon />
+              </button>
+            </Tooltip>
+            <RestaurantReviewsFilters setValue={setRatingFilter} value={ratingFilter} />
+            <button
+              className={`z-1 h-12 w-[180px] dark:bg-grey-5 bg-grey-0 rounded-lg text-primary dark:text-secondary ${
+                hasReviewed ? "cursor-not-allowed" : "dark:hover:bg-grey-6 hover:bg-white"
+              }`}
+              onClick={handleAddReviewClick}
+              disabled={hasReviewed}
+            >
+              {hasReviewed ? (
+                <>
+                  {t("reviews.review-submitted")} <CheckIcon />
+                </>
+              ) : (
+                `+ ${t("reviews.add-review")}`
+              )}
+            </button>
           </div>
+        )}
+
+        {/* Display Reviews */}
+        {filteredAndSortedReviews.length > 0 ? (
+          filteredAndSortedReviews.map((review) => (
+            <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} user={user} />
+          ))
+        ) : (
+          <div className="mt-4 text-center">
+            <h1>{t("reviews.no-reviews")}</h1>
+          </div>
+        )}
+
+        {/* Pagination */}
+        <div className="flex justify-end mt-4">
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(event, value) => setCurrentPage(value)}
+            variant="outlined"
+            shape="rounded"
+          />
         </div>
       </div>
 
+      {/* Add Review Dialog */}
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>{t("reviews.add-review")}</DialogTitle>
         <DialogContent>
