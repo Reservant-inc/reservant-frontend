@@ -1,6 +1,8 @@
 import React from "react";
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
+import { Tooltip } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface RestaurantReviewsFiltersProps {
   setValue: Function
@@ -19,6 +21,14 @@ const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
       <div className="flex gap-2 items-center rounded-lg p-2">
         <h1>{t("reviews.filter")}:</h1>
         <CustomRating readOnly={false} rating={value} onChange={setValue}/>
+        <Tooltip title={t("reviews.filter-tooltip")}>
+          <button
+            className="h-8 w-8 bg-trans hover:bg-grey-1 dark:hover:bg-grey-4 dark:text-grey-1 rounded-full"
+            onClick={() => setValue(0)}
+          >
+            <CloseIcon />
+          </button>
+        </Tooltip>
       </div>
     </div>
   );

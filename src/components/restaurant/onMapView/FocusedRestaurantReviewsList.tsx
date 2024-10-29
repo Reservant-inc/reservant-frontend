@@ -128,6 +128,7 @@ const FocusedRestaurantReviewsList: React.FC<
           <h1 className="text-xl font-mont-bd text-black dark:text-white">{t("reviews.reviews")}:</h1>
           {!isPreview && (
           <div className="flex w-full gap-2">
+            <RestaurantReviewsFilters setValue={setRatingFilter} value={ratingFilter} />
             <Tooltip title={t("reviews.sort")}>
               <button
                 className="border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
@@ -136,7 +137,6 @@ const FocusedRestaurantReviewsList: React.FC<
                 <SwapVertIcon />
               </button>
             </Tooltip>
-            <RestaurantReviewsFilters setValue={setRatingFilter} value={ratingFilter} />
             <button
               className={`w-1/2 border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary ${
                 hasReviewed ? "cursor-not-allowed" : "dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
