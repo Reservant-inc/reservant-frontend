@@ -37,6 +37,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
       try {
         const response = await fetchGET(`/users/${review.authorId}`);
         setAuthorData(response);
+     
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -104,25 +105,33 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
           <p className="italic">No description.</p>
         )}
       </div>
-      <div className="flex w-full justify-end gap-2">
-        {review.authorId === user?.userId && (
-          <>
-            <Button
-              id="RestaurantReviewEditButton"
-              className="rounded-lg text-primary dark:text-secondary"
-              onClick={handleEditClick}
-            >
-              {t("general.edit")}
-            </Button>
-            <Button
-              id="RestaurantReviewDeleteButton"
-              className="rounded-lg text-primary dark:text-secondary"
-              onClick={() => setIsDeleteDialogOpen(true)}
-            >
-              {t("general.delete")}
-            </Button>
-          </>
+      <div className="flex w-full items-center gap-2">
+        {review.dateEdited && (
+          <span className="italic text-sm text-grey-4">
+            {t("reviews.edited-at")}: {new Date(review.dateEdited).toLocaleDateString()}
+          </span>
         )}
+        
+        <div className="flex gap-2 ml-auto">
+          {review.authorId === user?.userId && (
+            <>
+              <Button
+                id="RestaurantReviewEditButton"
+                className="rounded-lg text-primary dark:text-secondary"
+                onClick={handleEditClick}
+              >
+                {t("general.edit")}
+              </Button>
+              <Button
+                id="RestaurantReviewDeleteButton"
+                className="rounded-lg text-primary dark:text-secondary"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                {t("general.delete")}
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
       <Dialog open={isEditDialogOpen} onClose={handleDialogClose}>

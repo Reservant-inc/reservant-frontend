@@ -231,7 +231,8 @@
         "filter-tooltip": "Wyczyść filtr",
         "review-text": "Wyjaśnij swoją ocenę",
         "review-submitted": "Dodano opinie",
-        "review-delete": "Na pewno chcesz usunąć swoją opinię?"
+        "review-delete": "Na pewno chcesz usunąć swoją opinię?",
+        "edited-at": "Edytowano"
     },
     "alt" : {
         "delete": "Usuń na amen"

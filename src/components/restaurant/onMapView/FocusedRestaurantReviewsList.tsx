@@ -53,7 +53,6 @@ const FocusedRestaurantReviewsList: React.FC<
 
       setFilteredAndSortedReviews(filteredReviews || []);
       setTotalPages(data.totalPages || 0);
-      console.log(data);
     } catch (error) {
       console.error("Error fetching restaurant reviews:", error);
     }

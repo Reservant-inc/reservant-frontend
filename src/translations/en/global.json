@@ -238,7 +238,8 @@
         "filter-tooltip": "Clear filter",
         "review-text": "Explain your rating",
         "review-submitted": "Review added",
-        "review-delete": "Are you sure you want to delete your review?"
+        "review-delete": "Are you sure you want to delete your review?",
+        "edited-at": "Edited at"
     },
     "alt" : {
         "delete": "Delete permanently"
