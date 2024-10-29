@@ -151,7 +151,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             : `${review.contents.substring(0, 100)}...`}
           {review.contents.length > 100 && !isExpanded && (
             <span
-              className="text-blue-500 cursor-pointer"
+              className="text-grey-2 cursor-pointer"
               onClick={toggleExpand}
             >
               {t("general.read-more")}
@@ -159,7 +159,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           )}
           {isExpanded && (
             <span
-              className="text-blue-500 cursor-pointer"
+              className="text-grey-2 cursor-pointer"
               onClick={toggleExpand}
             >
               {t("general.read-less")}

@@ -8,7 +8,9 @@
         "close": "Zamknij",
         "submit": "Wyślij",
         "delete": "Usuń", 
-        "edit": "Edytuj"
+        "edit": "Edytuj",
+        "read-more": "WIĘCEJ",
+        "read-less": "MNIEJ"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",

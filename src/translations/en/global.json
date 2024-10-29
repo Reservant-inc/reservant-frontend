@@ -8,7 +8,9 @@
         "close": "Close",
         "submit": "Submit",
         "delete": "Delete", 
-        "edit": "Edit"
+        "edit": "Edit",
+        "read-more": " MORE",
+        "read-less": " LESS"
     },
     "landing-page": {
         "loginButton": "Sign in",
