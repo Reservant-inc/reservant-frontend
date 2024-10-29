@@ -232,7 +232,13 @@
         "review-text": "Wyjaśnij swoją ocenę",
         "review-submitted": "Dodano opinie",
         "review-delete": "Na pewno chcesz usunąć swoją opinię?",
-        "edited-at": "Edytowano"
+        "edited-at": "Edytowano",
+        "respond": "Odpowiedz",
+        "edit-review": "Edytuj opinie",
+        "edit-response": "Edytuj odpowiedź",
+        "add-response": "Dodaj odpowiedź",
+        "response-placeholder": "Napisz swoją odpowiedź"
+        
     },
     "alt" : {
         "delete": "Usuń na amen"

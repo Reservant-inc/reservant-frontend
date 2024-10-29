@@ -239,7 +239,12 @@
         "review-text": "Explain your rating",
         "review-submitted": "Review added",
         "review-delete": "Are you sure you want to delete your review?",
-        "edited-at": "Edited at"
+        "edited-at": "Edited at",
+        "respond": "Respond",
+        "edit-review": "Edit review",
+        "edit-response": "Edit response",
+        "add-response": "Add response",
+        "response-placeholder": "Write your response"
     },
     "alt" : {
         "delete": "Delete permanently"

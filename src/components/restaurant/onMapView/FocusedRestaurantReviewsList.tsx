@@ -13,7 +13,7 @@ import { Check as CheckIcon, SwapVert as SwapVertIcon } from "@mui/icons-materia
 interface FocusedRestaurantReviewsListProps {
   isPreview: boolean;
   reviews: ReviewType[];
-  activeRestaurantId: number
+  activeRestaurantId: number  
 }
 
 const FocusedRestaurantReviewsList: React.FC<
@@ -157,7 +157,7 @@ const FocusedRestaurantReviewsList: React.FC<
         {/* Display Reviews */}
         {filteredAndSortedReviews.length > 0 ? (
           filteredAndSortedReviews.map((review) => (
-            <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} user={user} onReviewDeleted={() => setHasReviewed(false)}/>
+            <RestaurantReview key={review.reviewId} review={review} refreshReviews={refreshReviews} user={user} onReviewDeleted={() => setHasReviewed(false)} restaurantId={activeRestaurantId}/>
           ))
         ) : (
           <div className="mt-4 text-center">
