@@ -1,51 +1,99 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Rating,
+} from "@mui/material";
 import CustomRating from "../../../reusableComponents/CustomRating";
-import { ReviewType, UserInfo } from "../../../../services/types";
-import { fetchGET, getImage } from "../../../../services/APIconn";
-import { FetchError } from "../../../../services/Errors";
-import DefaultImage from '../../../../assets/images/user.jpg'
+import { ReviewType, User } from "../../../../services/types";
+import { fetchPUT, fetchDELETE, fetchGET, getImage } from "../../../../services/APIconn"; // Import getImage
+import { useTranslation } from "react-i18next";
+import ConfirmationDialog from "../../../reusableComponents/ConfirmationDialog";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface RestaurantReviewProps {
-  review: ReviewType
-  isOwner: boolean
+  review: ReviewType;
+  refreshReviews: () => void;
+  user: User | null;
+  onReviewDeleted?: () => void;
 }
 
-const RestaurantReview: React.FC<RestaurantReviewProps> = ({
-  review,
-  isOwner
-}) => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null)
+const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshReviews, user, onReviewDeleted }) => {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [editedStars, setEditedStars] = useState<number>(review.stars);
+  const [editedContents, setEditedContents] = useState<string>(review.contents);
+  const [authorData, setAuthorData] = useState<User | null>(null);
+
+  const [t] = useTranslation("global");
 
   useEffect(() => {
-    const getAuthorInfo = async () => {
-    try {
-      const response = await fetchGET(`/users/${review.authorId}`)
-      setUserInfo(response)
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.log(error.formatErrors())
-      } else {
-        console.log(error)
+    const fetchUserData = async () => {
+      try {
+        const response = await fetchGET(`/users/${review.authorId}`);
+        setAuthorData(response);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-    }
-    }
+    };
 
-    getAuthorInfo()
-  }, [])
+    fetchUserData();
+  }, [review.authorId]);
 
   const reducedDescription =
-  review.contents.length > 100 ? review.contents.substring(0, 100) + "..." : review.contents;
+    review.contents.length > 100 ? review.contents.substring(0, 100) + "..." : review.contents;
+
+  const handleEditClick = () => {
+    setEditedStars(review.stars);
+    setEditedContents(review.contents);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsEditDialogOpen(false);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const updatedReview = {
+        stars: editedStars,
+        contents: editedContents,
+      };
+      await fetchPUT(`/reviews/${review.reviewId}`, JSON.stringify(updatedReview));
+      refreshReviews();
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      console.error("Error updating review:", error);
+    }
+  };
+
+  const handleDeleteReview = async () => {
+    try {
+      await fetchDELETE(`/reviews/${review.reviewId}`);
+      refreshReviews();
+      onReviewDeleted && onReviewDeleted();
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      console.error("Error deleting review:", error);
+    }
+  };
 
   return (
-    <div className="flex flex-col justify-between gap-4 rounded-lg border-grey-0 p-3 dark:bg-grey-6 bg-grey-0">
-      <div className="flex items-center items-center justify-between space-x-4">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex gap-3 items-center">
-            <img src={getImage(userInfo?.photo as string, DefaultImage)} className="h-8 w-8 rounded-full"/>
-            <p className="text-sm text-grey-5 dark:text-white">{review.authorFullName}</p>
-          </div>
-          <p className="text-sm text-grey-5 dark:text-white">{new Date(review.createdAt).toLocaleDateString()}</p>
+    <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-2 dark:bg-grey-6 bg-grey-0">
+      <div className="flex items-center justify-between space-x-4">
+        <div className="flex items-center gap-4">
+          <Avatar
+            src={getImage(authorData?.photo || '', '/path/to/default/avatar.png')} // Use an empty string as a fallback
+            alt={authorData?.login}
+          >
+            {authorData ? `${authorData.firstName.charAt(0)}${authorData.lastName.charAt(0)}` : 'A'}
+          </Avatar>
+          <p>{new Date(review.createdAt).toLocaleDateString()}</p>
         </div>
         <CustomRating rating={review.stars} readOnly={true} />
       </div>
@@ -55,23 +103,63 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
         ) : (
           <p className="italic">No description.</p>
         )}
-        <div className="flex justify-end">
-        </div>
       </div>
-      {
-        isOwner && (
-        <div className="flex w-full justify-end">
-          <Button
-            id="RestaurantReviewMoreButton"
-            className="rounded-lg text-primary dark:text-secondary"
-          >
-            Respond
+      <div className="flex w-full justify-end gap-2">
+        {review.authorId === user?.userId && (
+          <>
+            <Button
+              id="RestaurantReviewEditButton"
+              className="rounded-lg text-primary dark:text-secondary"
+              onClick={handleEditClick}
+            >
+              {t("general.edit")}
+            </Button>
+            <Button
+              id="RestaurantReviewDeleteButton"
+              className="rounded-lg text-primary dark:text-secondary"
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
+              {t("general.delete")}
+            </Button>
+          </>
+        )}
+      </div>
+
+      <Dialog open={isEditDialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>{t("reviews.edit-review")}</DialogTitle>
+        <DialogContent>
+          <h2>{t("reviews.rating")}:</h2>
+          <Rating
+            name="star-rating-edit"
+            value={editedStars}
+            onChange={(event, newValue) => setEditedStars(newValue || review.stars)}
+          />
+          <textarea
+            rows={4}
+            value={editedContents}
+            onChange={(e) => setEditedContents(e.target.value)}
+            className="w-full p-4 border rounded dark:bg-grey-6 dark:text-white dark:border-grey-4"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} className="text-primary dark:text-secondary">
+            {t("general.cancel")}
           </Button>
-        </div>
-        )
-      }
+          <Button onClick={handleSaveEdit} className="text-primary dark:text-secondary">
+            {t("general.save")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ConfirmationDialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteReview}
+        confirmationText={t("reviews.review-delete")}
+      />
     </div>
   );
 };
 
 export default RestaurantReview;
+
