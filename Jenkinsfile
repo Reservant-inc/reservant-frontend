@@ -20,5 +20,13 @@ pipeline {
                 sh "docker run --detach --restart=on-failure -v	skalmar_nginx_config:/etc/nginx/conf.d --name skalmar -p 800:80 reservant-front"
             }
         }
+        stage ('Run tests') {
+            when {
+                branch 'main'
+            }
+            steps {
+                build job: 'Reservant Frontend-Tests/main', parameters: [string(name: 'label_string', value: 'FRONTEND DEPLOY')]
+            }
+        }
     }
 }

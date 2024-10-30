@@ -1,4 +1,13 @@
+import { ReactElement } from 'react';
 import { FriendStatus, LocalType } from './enums';
+
+export type Routing = {
+  path: string,
+  element: ReactElement,
+  isPrivate: boolean,
+  navbar: boolean,
+  roles: string[]
+}[]
 
 export type LoginResponseType = {
   token: string;
@@ -7,7 +16,6 @@ export type LoginResponseType = {
   roles: string[];
   userId: string;
 };
-
 
 export type RestaurantDetailsType = {
   restaurantId: number,
@@ -113,7 +121,6 @@ export type EmploymentType = {
   restaurantName: string
 }
 
-
 export type MenuItemType = {
   menuItemId: number;
   name: string;
@@ -123,16 +130,20 @@ export type MenuItemType = {
   photo: string;
 }
 
-export interface MenuItemWithDescriptionType {
-  menuItemId: number;
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  alternateName?: string;
-  alcoholPercentage?: number;
-  photo?: string;
+export type IngredientUsage = {
+  ingredientId: string,
+  amountUsed: number
 }
+
+export type IngredientType = {
+  ingredientId: number,
+  publicName: string,
+  amountUsed: number
+}
+
+export type ItemWithIngredientsType = {
+  ingredients: IngredientType[]
+} & MenuItemType
 
 export type  MenuIteminOrderType = {
   name: string;
@@ -150,18 +161,6 @@ export type MenuType = {
   dateUntil: string | null;
   menuItems: MenuItemType[];
 }
-
-export type MenuWithDescriptionType = {
-  menuId: number;
-  name: string;
-  alternateName: string
-  menuType: string;
-  photo: string;
-  dateFrom: string;
-  dateUntil: string | null;
-  menuItems: MenuItemWithDescriptionType[];
-}
-
 
 export type FriendType = {
   userId: string,
@@ -218,7 +217,9 @@ export type CartItemType = {
   name: string;
   price: number;
   quantity: number;
+  photo: string
 }
+
 export type UserSearchType = {
   friendStatus: FriendStatus;
 } & UserType;
@@ -245,6 +246,14 @@ export type UserInfo = {
   photo: string
 };
 
+export type Ingredient = {
+  ingredientId: string,
+  publicName: string,
+  unitOfMeasurement: string,
+  minimalAmount: number,
+  amountToOrder: number,
+  amount: number
+}
 export type ReviewType ={
   reviewId: number,
   restaurantId: number,

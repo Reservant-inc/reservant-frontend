@@ -9,7 +9,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import StarPurple500SharpIcon from "@mui/icons-material/StarPurple500Sharp";
 import LocalOfferSharpIcon from "@mui/icons-material/LocalOfferSharp";
-import FocusedRestaurantDetails from "./restaurant/view/OnMapView/FocusedRestaurantDetails";
+import FocusedRestaurantDetails from "./restaurant/onMapView/FocusedRestaurantDetails";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import { fetchGET, getImage } from "../services/APIconn";
 import OutsideClickHandler from "./reusableComponents/OutsideClickHandler";
@@ -91,6 +91,7 @@ export default function HomePage() {
           );
           return newIds;
         });
+        
       } catch (error) {
         if (error instanceof FetchError) {
           console.log(error.formatErrors());

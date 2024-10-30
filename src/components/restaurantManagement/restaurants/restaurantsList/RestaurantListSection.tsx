@@ -10,7 +10,6 @@ import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
-  setActiveSectionName: (sectionName: string) => void;
 }
 
 interface EditToolbarProps {
@@ -20,7 +19,7 @@ interface EditToolbarProps {
     ) => void;
   }
 
-const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant, setActiveSectionName }) => {
+const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -65,14 +64,13 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
       const EditToolbar = (props: EditToolbarProps) => {
         return (
           <GridToolbarContainer>
-            <div className="h-[3rem] w-full z-1 flex items-center">
+            <div className="h-[3rem] w-full z-1 flex items-center p-1">
                     <button
                         id="RestaurantListAddRestaurantButton"
                         onClick={() => setIsModalOpen(true)}
-                        className="h-full rounded-lg text-primary justify-center items-center flex gap-2 hover:bg-grey-1 p-2"
+                        className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                     >
-                        <AddIcon />
-                        <h1 className="text-lg font-mont-md">Add restaurant</h1>
+                        <h1 className="text-md font-mont-md">+ Add a restaurant</h1>
                     </button>
                 </div>
           </GridToolbarContainer>
@@ -151,7 +149,6 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
 
       const handleDetails: Function = (id: any) =>{
         handleChangeActiveRestaurant(rows[parseInt(id.toString())].restaurantId)
-        setActiveSectionName(rows[parseInt(id.toString())].name)
       }
 
       const handleRowClick = (params: any) => {
@@ -160,7 +157,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
       };
 
     return(
-        <div className="h-full w-full bg-white rounded-lg">
+        <div className="h-full w-full bg-white dark:bg-black rounded-b-lg rounded-tr-lg">
             <DataGrid
                 rows={rows}
                 columns={columns}

@@ -10,11 +10,16 @@ import {
 } from "@mui/material";
 import CustomRating from "../../../reusableComponents/CustomRating";
 import { ReviewType, User } from "../../../../services/types";
-import { fetchPUT, fetchDELETE, fetchGET, getImage } from "../../../../services/APIconn"; // Import getImage
+import {
+  fetchPUT,
+  fetchDELETE,
+  fetchGET,
+  getImage,
+} from "../../../../services/APIconn"; // Import getImage
 import { useTranslation } from "react-i18next";
 import ConfirmationDialog from "../../../reusableComponents/ConfirmationDialog";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface RestaurantReviewProps {
   review: ReviewType;
@@ -22,7 +27,11 @@ interface RestaurantReviewProps {
   user: User | null;
 }
 
-const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshReviews, user }) => {
+const RestaurantReview: React.FC<RestaurantReviewProps> = ({
+  review,
+  refreshReviews,
+  user,
+}) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [editedStars, setEditedStars] = useState<number>(review.stars);
@@ -45,7 +54,9 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
   }, [review.authorId]);
 
   const reducedDescription =
-    review.contents.length > 100 ? review.contents.substring(0, 100) + "..." : review.contents;
+    review.contents.length > 100
+      ? review.contents.substring(0, 100) + "..."
+      : review.contents;
 
   const handleEditClick = () => {
     setEditedStars(review.stars);
@@ -63,7 +74,10 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
         stars: editedStars,
         contents: editedContents,
       };
-      await fetchPUT(`/reviews/${review.reviewId}`, JSON.stringify(updatedReview));
+      await fetchPUT(
+        `/reviews/${review.reviewId}`,
+        JSON.stringify(updatedReview),
+      );
       refreshReviews();
       setIsEditDialogOpen(false);
     } catch (error) {
@@ -82,14 +96,19 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
   };
 
   return (
-    <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 p-2 dark:bg-grey-6 bg-grey-0">
+    <div className="flex h-[10rem] flex-col justify-between gap-2 rounded-lg border-grey-0 bg-grey-0 p-2 dark:bg-grey-6">
       <div className="flex items-center justify-between space-x-4">
         <div className="flex items-center gap-4">
           <Avatar
-            src={getImage(authorData?.photo || '', '/path/to/default/avatar.png')} // Use an empty string as a fallback
+            src={getImage(
+              authorData?.photo || "",
+              "/path/to/default/avatar.png",
+            )}
             alt={authorData?.login}
           >
-            {authorData ? `${authorData.firstName.charAt(0)}${authorData.lastName.charAt(0)}` : 'A'}
+            {authorData
+              ? `${authorData.firstName.charAt(0)}${authorData.lastName.charAt(0)}`
+              : "A"}
           </Avatar>
           <p>{new Date(review.createdAt).toLocaleDateString()}</p>
         </div>
@@ -130,20 +149,28 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({ review, refreshRevi
           <Rating
             name="star-rating-edit"
             value={editedStars}
-            onChange={(event, newValue) => setEditedStars(newValue || review.stars)}
+            onChange={(event, newValue) =>
+              setEditedStars(newValue || review.stars)
+            }
           />
           <textarea
             rows={4}
             value={editedContents}
             onChange={(e) => setEditedContents(e.target.value)}
-            className="w-full p-4 border rounded dark:bg-grey-6 dark:text-white dark:border-grey-4"
+            className="w-full rounded border p-4 dark:border-grey-4 dark:bg-grey-6 dark:text-white"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} className="text-primary dark:text-secondary">
+          <Button
+            onClick={handleDialogClose}
+            className="text-primary dark:text-secondary"
+          >
             {t("general.cancel")}
           </Button>
-          <Button onClick={handleSaveEdit} className="text-primary dark:text-secondary">
+          <Button
+            onClick={handleSaveEdit}
+            className="text-primary dark:text-secondary"
+          >
             {t("general.save")}
           </Button>
         </DialogActions>

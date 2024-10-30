@@ -1,77 +1,64 @@
-import React, { useEffect, useState } from "react";
-import Menu from "./Menu";
+import React, { useState } from "react";
+import Menu from "./ManagementTabs";
 import Cookies from "js-cookie";
-import RestaurantDashboardSection from "./Dashboard/RestaurantDashboardSection";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
-import MenuManagement from "./menus/MenuMangement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
-import OrderHistory from "./reservations/OrderHistory";
 import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
-import { fetchGET, getImage } from "../../services/APIconn";
-import { User, UserInfo } from "../../services/types";
-import { AccountCircle } from "@mui/icons-material";
-import { checkPrimeSync } from "crypto";
-import { wait } from "@testing-library/user-event/dist/utils";
-import DefaultPhoto from "../../assets/images/user.jpg"
+import { UserInfo } from "../../services/types";
+import { MenuScreenType } from "../../services/enums";
+import MenuList from "./menus/MenuList";
+import EmployeeRestaurantManagement from "./employees/EmployeeRestaurantManagement";
+import IngredientTable from "./Warehouse/IngredientTable";
+
 
 const RestaurantManager = () => {
-  const [activeRestaurantId, setActiveRestaurantId] = useState<number | null>(
-    null,
-  );
+  const [activeRestaurantId, setActiveRestaurantId] = useState<number>(-1);
   const [activePage, setActivePage] = useState<number>(0);
 
   const handleChangeActiveRestaurant = (restaurantId: number) => {
     setActiveRestaurantId(restaurantId);
+    setActivePage(3)
   };
   
-  const [user, setUser] = useState<UserInfo>(JSON.parse(Cookies.get("userInfo") as string));
+  const user: UserInfo = JSON.parse(Cookies.get("userInfo") as string);
 
-  const [activeSectionName, setActiveSectionName] = useState<string>(`Hello, ${user.firstName}`)
-  
   return (
     <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-6">
-      <div className="z-[0] flex w-full">
-        <div className="flex h-full w-[16%] flex-col gap-2 bg-white shadow-md dark:bg-black">
-          <Menu setActivePage={setActivePage} activePage={activePage} setActiveSectionName={setActiveSectionName} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
-        </div>
-        <div className="flex h-full w-[84%] flex-col gap-6 p-6">
-          <div className="flex h-[10%] w-full items-center justify-between">
-            <h1 className="font-mont-bd text-[35px]">{activeSectionName}</h1>
-            <div className="flex items-center justify-center gap-4">
-              <div className="flex flex-col items-end">
-                <h1 className="font-mont-md text-md">{`${user.firstName} ${user.lastName}`}</h1>
-                <h1 className="font-mont-l text-sm">Owner</h1>
-              </div>
-              <img className="h-14 w-14 rounded-full" src={getImage(user.photo, DefaultPhoto)}/>
+      <div className="z-[0] flex flex-col w-full">
+        
+        <div className="flex h-full w-full flex-col gap-6 p-6">
+          <div className="h-full w-full flex flex-col">
+            <div className="flex  w-full flex-col gap-2 dark:bg-grey-7">
+              <Menu setActivePage={setActivePage} activePage={activePage} activeRestaurantId={activeRestaurantId} setActiveRestaurantId={setActiveRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
+            </div>
+            <div
+              id="asdasd"
+              className="h-[90%] w-full rounded-b-lg rounded-tr-lg shadow-md"
+            >
+              {
+                {
+                  0: <div className="w-full h-full items-center justify-center dark:bg-black dark:text-grey-1 rounded-tr-lg rounded-b-lg flex bg-white"> STATS / PERSONAL DASHBOARD </div>,
+                  1: <RestaurantListSection
+                        handleChangeActiveRestaurant={
+                          handleChangeActiveRestaurant
+                        }
+                      />,
+                  2: <EmployeeManagement />,
+                  3:  <RestaurantDetails
+                        activeRestaurantId={activeRestaurantId}
+                      />,
+                  4: <EmployeeRestaurantManagement activeRestaurantId={activeRestaurantId}/>,
+                  5: <div className="bg-white dark:bg-black p-3 rounded-lg h-full">
+                      <MenuList activeRestaurantId={activeRestaurantId} type={MenuScreenType.Management}/>
+                    </div>,
+                  6: <IngredientTable activeRestaurantId={activeRestaurantId}/>,
+                  7: <ReservationOrderHeader activeRestaurantId={activeRestaurantId} />, //order history ma być częścią reservations???
+                }[activePage]
+              }
             </div>
           </div>
-          <div
-            id="asdasd"
-            className="h-[calc(90%-1.5rem)] w-full rounded-lg shadow-md"
-          >
-            {
-              {
-                0: <RestaurantDashboardSection />,
-                1:
-                  activeRestaurantId === null ? (
-                    <RestaurantListSection
-                      handleChangeActiveRestaurant={
-                        handleChangeActiveRestaurant
-                      }
-                      setActiveSectionName={setActiveSectionName}
-                    />
-                  ) : (
-                    <RestaurantDetails
-                      activeRestaurantId={activeRestaurantId}
-                    />
-                  ),
-                2: <EmployeeManagement />,
-                3: <MenuManagement activeRestaurantId={1} />,
-                6: <ReservationOrderHeader activeRestaurantId={1} />, //order history ma być częścią reservations???
-              }[activePage]
-            }
-          </div>
+
         </div>
       </div>
     </div>

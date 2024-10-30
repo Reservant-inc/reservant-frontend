@@ -178,9 +178,11 @@
             "menuItemPriceRequired": "Price is required",
             "menuItemPriceMustBeNumber": "Price must be number",
             "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
-            "selectedFile": "Selected file"
-        
+            "selectedFile": "Selected file",
+            "sort": "Sort by"
+
         }
+
     },
     "tools": {
         "main":{
@@ -238,6 +240,37 @@
         "edit-review": "Edit review",
         "review-submitted": "Added review",
         "review-delete": "Are you sure you want to delete your review",
-        "sort": "Sort by data"
+        "sort": "Sort by data",
+        "tags": "Tags"
+    },
+    "alt" : {
+        "delete": "Delete permanently"
+    },
+    "warehouse": {
+        "name": "Name",
+        "quantity": "Quantity",
+        "minimal-quantity": "Minimal quantity",
+        "state": "State",
+        "till-expiration": "Days until expiration",
+        "unit": "Unit",
+        "edit": "Edit",
+        "needs-restocking": "Needs restocking",
+        "add-ingredient": "Add ingredient",
+        "generate-list": "Generate grocery list",
+        "add-new-ingredient": "Add new ingredient",
+        "new-name": "Name",
+        "new-unit": "Unit of measurement",
+        "new-minimal": "Minimal amount",
+        "new-amount": "Amount (optional)",
+        "new-cancel": "Cancel",
+        "new-add": "Add",
+        "grocery-list": "Grocery list",
+        "grocery-name": "Name",
+        "grocery-amount": "Amount to order",
+        "grocery-actions": "Actions",
+        "grocery-order": "Order",
+        "delivery-confirmation": "Delivery request sent. Delivery Id: ",
+        "confirmation": "Confirmation"
     }
+    
 }
