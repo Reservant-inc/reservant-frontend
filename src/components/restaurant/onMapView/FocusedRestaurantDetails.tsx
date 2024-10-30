@@ -242,8 +242,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <FocusedRestaurantReviewsList
                 isPreview={false}
                 reviews={reviews}
-                restaurantId={restaurant.restaurantId}
-                isDelivering={restaurant.provideDelivery}
+                activeRestaurantId={restaurant.restaurantId}
               />
             </div>
           </div>

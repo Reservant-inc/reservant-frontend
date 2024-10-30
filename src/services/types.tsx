@@ -262,6 +262,7 @@ export type ReviewType ={
   stars: number,
   createdAt: string,
   contents: string,
+  dateEdited: string,
   answeredAt: string,
   restaurantResponse: string
 }
