@@ -5,7 +5,12 @@
         "save": "Zapisz",
         "results": "Wyniki",
         "no-results": "Brak wyników",
-        "close": "Zamknij"
+        "close": "Zamknij",
+        "submit": "Prześlij",
+        "yes": "Tak",
+        "confirmation": "Potwierdzenie",
+        "delete": "Usuń",
+        "edit": "Edytuj"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -219,9 +224,16 @@
     },
     "reviews": {
         "filter": "Filtruj",
+        "filter-tooltip": "wyczyść filtry",
         "reviews": "Opinie",
         "no-reviews": "Brak opinii",
-        "add-review": "Dodaj opinie",
+        "add-review": "DODAJ OPINIE",
+        "review-text": "Wyjaśnij swoją ocenę",
+        "rating": "Ocena",
+        "edit-review": "Edytuj ocenę",
+        "review-submitted": "Dodano opinie",
+        "review-delete": "Czy na pewno chcesz usunąć swoją opinie?",
+        "sort": "Sortuj po dacie",
         "tags": "Tagi"
     },
     "alt" : {

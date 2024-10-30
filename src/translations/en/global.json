@@ -5,7 +5,12 @@
         "save": "Save",
         "results": "Results",
         "no-results": "No results",
-        "close": "Close"
+        "close": "Close",
+        "submit": "Submit",
+        "yes": "Yes",
+        "confirmation": "Confirmation",
+        "delete": "Delete",
+        "edit": "Edit"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -226,9 +231,16 @@
     },
     "reviews": {
         "filter": "Filter",
+        "filter-tooltip": "Clear filter",
         "reviews": "Reviews",
         "no-reviews": "No reviews",
         "add-review": "Add review",
+        "review-text": "Explain your rating",
+        "rating": "Rating",
+        "edit-review": "Edit review",
+        "review-submitted": "Added review",
+        "review-delete": "Are you sure you want to delete your review",
+        "sort": "Sort by data",
         "tags": "Tags"
     },
     "alt" : {
