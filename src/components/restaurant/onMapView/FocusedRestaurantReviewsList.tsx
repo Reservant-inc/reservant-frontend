@@ -37,16 +37,14 @@ const FocusedRestaurantReviewsList: React.FC<
 
   const [t] = useTranslation("global");
 
-  // Function to fetch reviews with filtering and sorting applied
   const fetchReviews = async () => {
     try {
-      // Fetch data from API with the selected sort order and page settings
       const data = await fetchGET(
         `/restaurants/${activeRestaurantId}/reviews?page=${currentPage - 1}&perPage=${perPage}&orderBy=${
           sortOrder === 'asc' ? 'DateAsc' : 'DateDesc'
         }`
       );
-      // Apply local filter for star rating
+      
       const filteredReviews = data.items?.filter((review: ReviewType) => {
         return ratingFilter === 0 || review.stars === ratingFilter;
       });
@@ -60,7 +58,7 @@ const FocusedRestaurantReviewsList: React.FC<
 
   useEffect(() => {
     fetchReviews();
-  }, [currentPage, perPage, activeRestaurantId, sortOrder, ratingFilter]); // Add ratingFilter as a dependency
+  }, [currentPage, perPage, activeRestaurantId, sortOrder, ratingFilter]);
 
   const refreshReviews = () => {
     fetchReviews();
@@ -107,7 +105,7 @@ const FocusedRestaurantReviewsList: React.FC<
       await fetchPOST(`/restaurants/${activeRestaurantId}/reviews`, JSON.stringify(reviewData));
       handleDialogClose();
       refreshReviews();
-      setCurrentPage(1); // Reset to the first page after submitting a review
+      setCurrentPage(1);
       setHasReviewed(true)
     } catch (error) {
       console.error("Error submitting review:", error);
