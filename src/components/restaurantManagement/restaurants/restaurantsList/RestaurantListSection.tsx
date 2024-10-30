@@ -10,6 +10,7 @@ import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
+  setActiveName: Function
 }
 
 interface EditToolbarProps {
@@ -19,7 +20,7 @@ interface EditToolbarProps {
     ) => void;
   }
 
-const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant }) => {
+const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleChangeActiveRestaurant, setActiveName }) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -149,6 +150,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
 
       const handleDetails: Function = (id: any) =>{
         handleChangeActiveRestaurant(rows[parseInt(id.toString())].restaurantId)
+        setActiveName(rows[parseInt(id.toString())].name)
       }
 
       const handleRowClick = (params: any) => {

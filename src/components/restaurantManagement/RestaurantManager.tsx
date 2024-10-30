@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
-import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
+import ReservationOrderHeader from "./reservations/HistoryTab";
 import { UserInfo } from "../../services/types";
 import { MenuScreenType } from "../../services/enums";
 import MenuList from "./menus/MenuList";
@@ -14,6 +14,7 @@ import IngredientTable from "./Warehouse/IngredientTable";
 
 const RestaurantManager = () => {
   const [activeRestaurantId, setActiveRestaurantId] = useState<number>(-1);
+  const [activeName, setActiveName] = useState<string>("");
   const [activePage, setActivePage] = useState<number>(0);
 
   const handleChangeActiveRestaurant = (restaurantId: number) => {
@@ -29,9 +30,13 @@ const RestaurantManager = () => {
         
         <div className="flex h-full w-full flex-col gap-6 p-6">
           <div className="h-full w-full flex flex-col">
-            <div className="flex  w-full flex-col gap-2 dark:bg-grey-7">
-              <Menu setActivePage={setActivePage} activePage={activePage} activeRestaurantId={activeRestaurantId} setActiveRestaurantId={setActiveRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
-            </div>
+            <div className="flex ">
+              <div className="flex  w-full flex-col gap-2 dark:bg-grey-7">
+                <Menu setActivePage={setActivePage} activePage={activePage} activeRestaurantId={activeRestaurantId} setActiveRestaurantId={setActiveRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
+              </div>
+              <h1 className="text-xl text-nowrap px-12 dark:text-grey-0">{activePage>2 && activeName}</h1>
+          </div>
+
             <div
               id="asdasd"
               className="h-[90%] w-full rounded-b-lg rounded-tr-lg shadow-md"
@@ -43,6 +48,7 @@ const RestaurantManager = () => {
                         handleChangeActiveRestaurant={
                           handleChangeActiveRestaurant
                         }
+                        setActiveName={setActiveName}
                       />,
                   2: <EmployeeManagement />,
                   3:  <RestaurantDetails
@@ -53,7 +59,7 @@ const RestaurantManager = () => {
                       <MenuList activeRestaurantId={activeRestaurantId} type={MenuScreenType.Management}/>
                     </div>,
                   6: <IngredientTable activeRestaurantId={activeRestaurantId}/>,
-                  7: <ReservationOrderHeader activeRestaurantId={activeRestaurantId} />, //order history ma być częścią reservations???
+                  7: <ReservationOrderHeader activeRestaurantId={activeRestaurantId} />, 
                 }[activePage]
               }
             </div>

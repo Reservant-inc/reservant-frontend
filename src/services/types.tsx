@@ -146,10 +146,11 @@ export type ItemWithIngredientsType = {
 } & MenuItemType
 
 export type  MenuIteminOrderType = {
-  name: string;
-  amount: number;
-  price: number;
-  status: string;
+  menuItemId : number,
+  amount : number,
+  price : number,
+  cost : number,
+  status :  string 
 }
 
 export type MenuType = {
@@ -265,4 +266,32 @@ export type ReviewType ={
   dateEdited: string,
   answeredAt: string,
   restaurantResponse: string
+}
+
+export type VisitType = {
+  id: number
+  clientId: string
+  date: string
+  deposit: number
+  endTime: string
+  numberOfGuests: 1
+  orders: OrderType[]
+  participants: UserType[]
+  paymentTime: string
+  reservationDate: string
+  restaurant: RestaurantDetailsType
+  tableId: number
+  takeaway: boolean
+  tip: number
+  visitId: number
+}
+
+export type OrderType = {
+  id: number,
+  orderId : number,
+  visitId : number,
+  cost : number,
+  status :  string ,
+  items : MenuIteminOrderType[],
+  employees : UserType[]
 }
