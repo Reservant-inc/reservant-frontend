@@ -3,9 +3,7 @@ import RestaurantReviewsFilters from "../../restaurantManagement/restaurants/res
 import RestaurantReview from "../../restaurantManagement/restaurants/restaurantReviews/RestaurantReview";
 import { ReviewType , User} from "../../../services/types";
 import { useTranslation } from "react-i18next";
-import { FetchError } from "../../../services/Errors";
 import { fetchGET, fetchPOST } from "../../../services/APIconn";
-import RestaurantEventsModal from "../events/RestaurantEventsModal";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Rating, Tooltip } from "@mui/material";
 import { Check as CheckIcon, SwapVert as SwapVertIcon } from "@mui/icons-material";
 
@@ -207,27 +205,7 @@ const FocusedRestaurantReviewsList: React.FC<
           </DialogActions>
         </Dialog>
       </div>
-       
-
-        {/* Modal wydarzeń */}
-        {/* Tymczasowy przycisk do otwarcia RestaurantEventsModal */}
-        <div className="flex justify-center mt-4">
-        <button
-              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-2 dark:bg-secondary dark:hover:bg-secondary-2"
-              onClick={() => setShowEventsModal(true)}
-            >
-            Temporary - Show Events
-          </button>
-        </div>
-        {showEventsModal && (
-          <RestaurantEventsModal
-            open={showEventsModal}
-            onClose={() => setShowEventsModal(false)}
-            restaurantId={activeRestaurantId} 
-          />
-        )}
-      </div>
- 
+    </div>
   );
 };
 

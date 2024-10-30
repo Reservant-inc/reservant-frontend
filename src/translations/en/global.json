@@ -7,10 +7,12 @@
         "no-results": "No results",
         "close": "Close",
         "submit": "Submit",
-        "delete": "Delete", 
-        "edit": "Edit",
         "read-more": " MORE",
-        "read-less": " LESS"
+        "read-less": " LESS",
+        "yes": "Yes",
+        "confirmation": "Confirmation",
+        "delete": "Delete",
+        "edit": "Edit"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -234,19 +236,19 @@
         "reviews": "Reviews",
         "no-reviews": "No reviews",
         "add-review": "Add review",
-        "tags": "Tags",
-        "sort": "Sort by data",
-        "rating": "Rating",
         "filter-tooltip": "Clear filter",
-        "review-text": "Explain your rating",
-        "review-submitted": "Review added",
-        "review-delete": "Are you sure you want to delete your review?",
         "edited-at": "Edited at",
         "respond": "Respond",
-        "edit-review": "Edit review",
         "edit-response": "Edit response",
         "add-response": "Add response",
-        "response-placeholder": "Write your response"
+        "response-placeholder": "Write your response",
+        "review-text": "Explain your rating",
+        "rating": "Rating",
+        "edit-review": "Edit review",
+        "review-submitted": "Added review",
+        "review-delete": "Are you sure you want to delete your review",
+        "sort": "Sort by data",
+        "tags": "Tags"
     },
     "alt" : {
         "delete": "Delete permanently"
