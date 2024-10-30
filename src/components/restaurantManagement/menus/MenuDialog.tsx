@@ -172,6 +172,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full "
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.name&&formik.touched.name) &&
@@ -188,6 +189,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.alternateName&&formik.touched.alternateName) &&
@@ -213,6 +215,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                       </option>)
                     }
                   </Field>
+                  <label>*</label>
                   </div>
                   {
                     (formik.errors.menuType&&formik.touched.menuType) &&
@@ -229,6 +232,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.dateFrom&&formik.touched.dateFrom) &&
@@ -245,6 +249,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.dateUntil&&formik.touched.dateUntil) &&

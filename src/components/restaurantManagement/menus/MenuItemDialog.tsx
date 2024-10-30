@@ -266,11 +266,29 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       className="w-full "
                       //@TODO translation
                     />
+                    <label>*</label>
                   </div>
                   {
                     (formik.errors.name&&formik.touched.name) &&
                     <ErrorMes msg={formik.errors.name}/>
                   }
+                </div>
+                <div>
+                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price&&formik.touched.price?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label htmlFor="alternateName">Price:</label>
+                    <Field 
+                      type="text" 
+                      id="price" 
+                      name="price"
+                      className="w-full"
+                      //@TODO translation
+                    />
+                    <label>*</label>
+                  </div>
+                  {
+                    (formik.errors.price&&formik.touched.price) &&
+                    <ErrorMes msg={formik.errors.price}/>
+                  }                  
                 </div>
                 <div>
                   <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName&&formik.touched.alternateName?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
@@ -286,22 +304,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   {
                     (formik.errors.alternateName&&formik.touched.alternateName) &&
                     <ErrorMes msg={formik.errors.alternateName}/>
-                  }                  
-                </div>
-                <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price&&formik.touched.price?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
-                    <label htmlFor="alternateName">Price:</label>
-                    <Field 
-                      type="text" 
-                      id="price" 
-                      name="price"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                  </div>
-                  {
-                    (formik.errors.price&&formik.touched.price) &&
-                    <ErrorMes msg={formik.errors.price}/>
                   }                  
                 </div>
                 <div>
