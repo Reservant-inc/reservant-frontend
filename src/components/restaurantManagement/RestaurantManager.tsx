@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import RestaurantListSection from "./restaurants/restaurantsList/RestaurantListSection";
 import EmployeeManagement from "./employees/EmployeeManagement";
 import RestaurantDetails from "./restaurants/RestaurantDetails";
-import ReservationOrderHeader from "./reservations/ReservationOrderHeader";
+import ReservationOrderHeader from "./reservations/HistoryTab";
 import { UserInfo } from "../../services/types";
 import { MenuScreenType } from "../../services/enums";
 import MenuList from "./menus/MenuList";
