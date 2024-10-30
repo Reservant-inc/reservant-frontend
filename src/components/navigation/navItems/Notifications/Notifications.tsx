@@ -15,6 +15,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+  const [showAll, setShowAll] = useState<boolean>(false);
 
   const pressHandler = () => {
     setIsPressed(!isPressed);
@@ -45,10 +46,12 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
       <Button
         id="NotificationsButton"
         className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 text-black dark:text-grey-1 ${isPressed && "text-primary dark:text-secondary"}`}
-        onClick={pressHandler}
+        onClick={() => {
+          pressHandler();
+          setShowAll(false);
+        }}
       >
         <NotificationsIcon className="h-[23px] w-[23px]" />
-        {/* Wyświetl span tylko jeśli są nieprzeczytane powiadomienia */}
         {unreadNotificationCount > 0 && !loading && (
           <span className="absolute right-[-2px] top-0 h-4 w-4 rounded-full bg-primary dark:bg-secondary text-white text-xs flex items-center justify-center">
             {unreadNotificationCount}
@@ -56,8 +59,24 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
         )}
       </Button>
       {isPressed && (
-        <div className="nav-dropdown flex h-[calc(100%-4.5rem)] w-[300px] flex-col items-center z-[1] bg-white dark:bg-black">
-          <NotificationList updateUnreadCount={updateUnreadCount} />
+        <div
+          className={`nav-dropdown flex w-[300px] flex-col items-center z-[1] bg-white dark:bg-black ${
+            showAll ? "h-[calc(100%-4.5rem)]" : "h-auto" // pełna albo auto do 3 nowych powiadomień defaultowo
+          }`}
+        >
+          <NotificationList
+            updateUnreadCount={updateUnreadCount}
+            showAll={showAll}
+          />
+          {/* Jeśli wyświetlamy tylko 3 najnowsze to dodatkowo guzik do pokazania reszty */}
+          {!showAll && (
+            <button
+              onClick={() => setShowAll(true)}
+              className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded"
+            >
+              Wyświetl więcej powiadomień
+            </button>
+          )}
         </div>
       )}
     </OutsideClickHandler>

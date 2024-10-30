@@ -36,6 +36,7 @@ const Notification: React.FC<NotificationProps> = ({
       try {
         await fetchPOST("/notifications/mark-read", JSON.stringify({ notificationIds: [notificationId] }));
         setIsRead(true);
+        markAsRead();
       } catch (error: any) {
         console.error("Error marking notification as read:", error);
       }
@@ -113,7 +114,13 @@ const Notification: React.FC<NotificationProps> = ({
       className={`rounded-md p-3 dark:bg-black cursor-pointer mb-1 ${
         isExpanded || isRead ? "bg-grey-1 dark:bg-grey-5" : "hover:bg-grey-1 dark:hover:bg-grey-5"
       }`}
-      onClick={!noExpandNotificationTypes.includes(notificationType) ? toggleExpand : undefined}
+      onClick={() => {
+        if (!noExpandNotificationTypes.includes(notificationType)) {
+          toggleExpand();
+        } else {
+          toggleExpand();
+        }
+      }}
     >
       {/* Główna sekcja powiadomienia */}
       <div className="flex items-center space-x-2">
@@ -194,11 +201,12 @@ const Notification: React.FC<NotificationProps> = ({
         </div>
       )}
 
-      <div className="flex justify-between items-center mt-1">
+      {/* Strzałka i wyświetlono na dole */}
+      <div className="flex justify-end items-center mt-1">
         {!noExpandNotificationTypes.includes(notificationType) && (
           <span>{isExpanded ? "^" : "v"}</span>
         )}
-        {isRead && <span className="text-xs">Wyświetlono</span>}
+        {isRead && <span className="text-xs ml-auto">Wyświetlono</span>}
       </div>
     </div>
   );
