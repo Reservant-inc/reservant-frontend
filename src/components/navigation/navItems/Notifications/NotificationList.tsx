@@ -25,9 +25,13 @@ interface FriendRequestData {
 
 interface NotificationListProps {
   updateUnreadCount: () => void;
+  showAll: boolean;
 }
 
-const NotificationList: React.FC<NotificationListProps> = ({ updateUnreadCount }) => {
+const NotificationList: React.FC<NotificationListProps> = ({
+  updateUnreadCount,
+  showAll,
+}) => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [friendRequests, setFriendRequests] = useState<FriendRequestData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,6 +67,11 @@ const NotificationList: React.FC<NotificationListProps> = ({ updateUnreadCount }
     fetchFriendRequests();
   }, []);
 
+  // na początku wyświetlaj tylko max 3 nieodczytane powiadomienia (sortowane są wcześniej)
+  const filteredNotifications = showAll
+    ? notifications
+    : notifications.filter((n) => !n.dateRead).slice(0, 3);
+
   if (loading) {
     return <p>Loading notifications...</p>;
   }
@@ -72,13 +81,13 @@ const NotificationList: React.FC<NotificationListProps> = ({ updateUnreadCount }
       <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
         <p className="font-mont-bd text-xl">Notifications</p>
       </div>
-      <div className="flex-grow overflow-y-auto">
-        {notifications.length === 0 ? (
+      <div className="flex-grow overflow-y-auto scroll">
+        {filteredNotifications.length === 0 ? (
           <div className="flex justify-center items-center py-1 italic">
-            <p className="text-center">Brak powiadomień</p>
+            <p className="text-center">Brak nowych powiadomień</p>
           </div>
         ) : (
-          notifications.map((notification) => (
+          filteredNotifications.map((notification) => (
             <Notification
               key={notification.notificationId}
               notificationId={notification.notificationId}
@@ -93,28 +102,31 @@ const NotificationList: React.FC<NotificationListProps> = ({ updateUnreadCount }
         )}
       </div>
 
-      {/* Sekcja zaproszeń do znajomych */}
-      <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
-        <p className="font-mont-bd text-xl">Friend requests</p>
-      </div>
-      <div className="flex-grow overflow-y-auto">
-        {friendRequests.length === 0 ? (
-          <div className="flex justify-center items-center py-1 italic">
-            <p className="text-center text-grey-3">Brak zaproszeń do znajomych</p>
+      {showAll && (
+        <>
+          <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
+            <p className="font-mont-bd text-xl">Friend requests</p>
           </div>
-        ) : (
-          friendRequests.map((request) => (
-            <FriendReq
-              key={request.otherUser.userId}
-              userId={request.otherUser.userId}
-              firstName={request.otherUser.firstName}
-              lastName={request.otherUser.lastName}
-              dateSent={request.dateSent}
-              photo={request.otherUser.photo}
-            />
-          ))
-        )}
-      </div>
+          <div className="flex-grow overflow-y-auto">
+            {friendRequests.length === 0 ? (
+              <div className="flex justify-center items-center py-1 italic">
+                <p className="text-center text-grey-3">Brak zaproszeń do znajomych</p>
+              </div>
+            ) : (
+              friendRequests.map((request) => (
+                <FriendReq
+                  key={request.otherUser.userId}
+                  userId={request.otherUser.userId}
+                  firstName={request.otherUser.firstName}
+                  lastName={request.otherUser.lastName}
+                  dateSent={request.dateSent}
+                  photo={request.otherUser.photo}
+                />
+              ))
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };
