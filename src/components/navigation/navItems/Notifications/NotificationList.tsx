@@ -36,6 +36,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
   const [friendRequests, setFriendRequests] = useState<FriendRequestData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Pobieranie powiadomień
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
