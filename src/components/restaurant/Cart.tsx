@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import OutsideClickHandler from "../reusableComponents/OutsideClickHandler";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SellIcon from '@mui/icons-material/Sell';
 import { CartContext } from "../../contexts/CartContext";
 import { getImage } from "../../services/APIconn";
 import DefaultImage from "../../assets/images/defaulImage.jpeg"
@@ -18,6 +17,7 @@ const Cart: React.FC<CartProps> = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const { items, totalPrice, decrementItemQuantity, incrementItemQuantity } = useContext(CartContext)
+
 
     const navigate = useNavigate();
 
@@ -75,15 +75,7 @@ const Cart: React.FC<CartProps> = () => {
                             No items in the cart yet
                         </h1>
                     )}
-                    <div className="w-full px-2">
-                        <button 
-                            className="flex gap-2 items-center justify-center text-sm w-full rounded-lg py-1 px-3 text-primary hover:text-white hover:bg-primary dark:hover:bg-secondary dark:hover:text-black dark:text-secondary border-[1px] border-primary dark:border-secondary"
-                            onClick={() => navigate("/checkout", { state: { items } })}
-                        >
-                            {`CHECKOUT ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
-                            <SellIcon/>
-                        </button>
-                    </div>
+                    
                 </div>
             }
         </OutsideClickHandler>

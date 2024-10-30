@@ -1,15 +1,66 @@
 import React, { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { CartItemType, RestaurantDetailsType } from "../../services/types";
-import { getImage } from "../../services/APIconn";
+import { fetchPOST, getImage } from "../../services/APIconn";
 import DefaultImage from "../../assets/images/defaulImage.jpeg"
 import Cookies from "js-cookie";
+import { FetchError } from "../../services/Errors";
 
 const Checkout: React.FC = () => {
     const { state } = useLocation();
     const { items, totalPrice, guests, date, restaurant } = state as { items: CartItemType[], totalPrice: number, guests: number, date: string, restaurant: RestaurantDetailsType };
     const userInfo = Cookies.get('userInfo');
-    const user = userInfo ? JSON.parse(userInfo) : null;    
+    const user = userInfo ? JSON.parse(userInfo) : null;   
+    
+    const onSubmit = async () => {
+        let res;
+        try {
+            const body = JSON.stringify(
+                {
+                     date :  date ,
+                     endTime :  "" ,
+                     numberOfGuests : guests,
+                     tip : 0,
+                     takeaway : false,
+                     restaurantId : restaurant.restaurantId,
+                     participantIds : [
+                         user.userId 
+                    ]
+                },
+            );
+            res = await fetchPOST(
+              `/visits`,
+              body,
+            );
+            alert("visit created")
+        } catch (error) {
+            if (error instanceof FetchError) 
+                console.log(error.formatErrors())
+            else 
+                console.log("Unexpected error")
+        }
+        if(items.length > 0 && res){
+            try {
+                const body = JSON.stringify(
+                    {
+                        visitId: res.visitId,
+                        note: "",
+                        items: items
+                    },
+                );
+                await fetchPOST(
+                  `/visits`,
+                  body,
+                );
+                alert("order created")
+            } catch (error) {
+                if (error instanceof FetchError) 
+                    console.log(error.formatErrors())
+                else 
+                    console.log("Unexpected error")
+            }
+        }
+    }
 
     return (
         <div className="checkout-container flex flex-col items-center gap-7 p-10 h-full w-full">

@@ -9,6 +9,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../../contexts/CartContext";
+import SellIcon from '@mui/icons-material/Sell';
+
 
 interface VisitProps {
     restaurant: RestaurantDetailsType;
@@ -171,7 +173,14 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                             type={MenuScreenType.Order}
                         />
                     </div>
-                    <div className="flex flex-row-reverse w-full h-8">
+                    <div className="flex flex-row-reverse gap-3 w-full h-8">
+                        <button 
+                            className="flex gap-2 items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                            onClick={() => navigate("/checkout", { state:  data  })}
+                        >
+                            {`CHECKOUT ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
+                            <SellIcon/>
+                        </button>
                         <button
                             id="RestaurantListAddRestaurantButton"
                             onClick={() => navigate("/checkout", { state: data })}
@@ -180,7 +189,9 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                             <AccountBalanceIcon className="w-5 h-5"/>
                             <h1 className="font-mont-md text-md">Skip order</h1>
                         </button>
+                        
                     </div>
+                    
                     <Cart />
                 </div>
             )}
