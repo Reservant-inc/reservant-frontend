@@ -5,7 +5,7 @@ import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import useWindowDimensions from "../../hooks/useWindowResize";
 import { ArrowBack, Dashboard, Dining, History, Warehouse } from "@mui/icons-material";
 
-interface MenuInterface {
+interface ManagementTabsProps {
     setActivePage: Function
     setActiveRestaurantId: Function
     activeRestaurantId: number
@@ -13,7 +13,7 @@ interface MenuInterface {
     handleChangeActiveRestaurant: Function
 }
 
-const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaurantId, setActiveRestaurantId }) => {
+const ManagementTabs:React.FC<ManagementTabsProps> = ({ setActivePage, activePage, activeRestaurantId, setActiveRestaurantId }) => {
   
     const size = useWindowDimensions();
 
@@ -29,7 +29,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4">
               <Dashboard className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1>
                   Dashboard
                 </h1>
@@ -47,7 +47,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4">
               <LocalDiningSharpIcon className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1>
                   Restaurants
                 </h1>
@@ -65,7 +65,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
               <PeopleAltSharpIcon
                className='w-6 h-6'
               />
-              {size.width > 700 &&
+              {size.width > 1600 &&
               <h1>
                 Employee management
               </h1>
@@ -98,7 +98,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4 w-full">
               <Dashboard className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1 className="text-nowrap">
                   Restaurant dashboard
                 </h1>
@@ -116,7 +116,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4 w-full">
               <PeopleAltSharpIcon className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1 className="text-nowrap">
                   Employee management
                 </h1>
@@ -134,7 +134,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4 w-full">
               <Dining className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1 className="text-nowrap">
                   Menus management
                 </h1>
@@ -152,7 +152,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4 w-full">
               <Warehouse className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1 className="text-nowrap">
                   Warehouse management
                 </h1>
@@ -170,7 +170,7 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
           >
             <div className="flex items-center gap-4 w-full">
               <History className='w-6 h-6' />
-              {size.width > 700 &&
+              {size.width > 1600 &&
                 <h1 className="text-nowrap">
                   Reservation history
                 </h1>
@@ -184,4 +184,4 @@ const Menu:React.FC<MenuInterface> = ({ setActivePage, activePage, activeRestaur
   );
 };
 
-export default Menu;
+export default ManagementTabs;

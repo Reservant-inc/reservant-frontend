@@ -81,7 +81,7 @@ const HistoryTab: React.FC<HistoryTabProps> = ({
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: "Details",
       width: 150,
       cellClassName: "actions",
       getActions: ({ id }) => {
