@@ -134,7 +134,7 @@ const HistoryTab: React.FC<HistoryTabProps> = ({
                 <ArrowBackIcon/>
                 <h1 className="font-mont-md text-md"> Back </h1>
               </button>
-              <h1 className="font-mont-md text-md"> Visit {activeVisitId?activeVisitId:""} orders </h1>
+              <h1 className="font-mont-md text-md dark:text-grey-0"> Visit {activeVisitId?activeVisitId:""} orders </h1>
             </div>
             <div className="">
               <OrderHistory orders={activeOrders}  />

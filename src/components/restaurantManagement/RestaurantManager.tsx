@@ -34,7 +34,7 @@ const RestaurantManager = () => {
               <div className="flex  w-full flex-col gap-2 dark:bg-grey-7">
                 <Menu setActivePage={setActivePage} activePage={activePage} activeRestaurantId={activeRestaurantId} setActiveRestaurantId={setActiveRestaurantId} handleChangeActiveRestaurant={handleChangeActiveRestaurant}/>
               </div>
-              <h1 className="text-xl text-nowrap px-12 ">{activePage>2 && activeName}</h1>
+              <h1 className="text-xl text-nowrap px-12 dark:text-grey-0">{activePage>2 && activeName}</h1>
           </div>
 
             <div
@@ -59,7 +59,7 @@ const RestaurantManager = () => {
                       <MenuList activeRestaurantId={activeRestaurantId} type={MenuScreenType.Management}/>
                     </div>,
                   6: <IngredientTable activeRestaurantId={activeRestaurantId}/>,
-                  7: <ReservationOrderHeader activeRestaurantId={activeRestaurantId} />, //order history ma być częścią reservations???
+                  7: <ReservationOrderHeader activeRestaurantId={activeRestaurantId} />, 
                 }[activePage]
               }
             </div>
