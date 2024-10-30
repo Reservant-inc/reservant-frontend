@@ -104,7 +104,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         console.log("Unexpected error")
     } 
   };
-  const handleEditedNewMenu = async (
+  const handleEditMenu = async (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
@@ -117,10 +117,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         menuType: values.menuType,
         dateFrom: values.dateFrom,
         dateUntil: values.dateUntil,
-        photo: ""
+        photo: "",
+        menuItemsIds: getSelectedMenuItemsIds()
       });
   
       await fetchPUT(`/menus/${menu?.menuId}`, body);
+      onClose();
       
     }catch (error) {
       if (error instanceof FetchError) {
@@ -129,20 +131,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         console.log("Unexpected error")
       }
     }
-    try{
-      const body = JSON.stringify({
-        itemIds: getSelectedMenuItemsIds()
-      });
-      await fetchPUT(`/menus/${menu?.menuId}/items`, body);
-      setSubmitting(false)
-      onClose();
-
-    } catch (error) {
-      if (error instanceof FetchError) 
-        console.log(error.formatErrors())
-      else 
-        console.log("Unexpected error")
-    } 
+    
   };
   
 
@@ -166,7 +155,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           dateFrom: menu?menu.dateFrom:"",
           dateUntil: menu?menu.dateUntil:"",
         }} 
-        onSubmit={menu?handleEditedNewMenu:handleSaveNewMenu}
+        onSubmit={menu?handleEditMenu:handleSaveNewMenu}
         validationSchema={menuSchema}
         className="w-1/3 "
       >
@@ -289,7 +278,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               <option value="" className="w-full" disabled={true} selected={true} id="MI-option-default">Menu item</option>
               {/* @todo t  */}
               {
-                menuItems.filter(menuItem=>!menu?.menuItems.find(activeMenuItem=>activeMenuItem.menuItemId==menuItem.menuItemId))
+                menuItems
                 .filter(menuItem=>!selectedMenuItems.find(selectedMenuItem=>selectedMenuItem.menuItemId==menuItem.menuItemId))
                 .map
                 (
