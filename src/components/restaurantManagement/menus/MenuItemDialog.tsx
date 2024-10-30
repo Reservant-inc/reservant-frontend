@@ -212,14 +212,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
  
 
   return (
-    <div className=" flex justify-center h-[55vh] w-[72vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7">
+    <div className=" flex justify-center h-[35vh] w-[50vw] min-w-[1000px] min-h-[370px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         id="menuitem-formik"
         initialValues={{
           price: menuItemToEdit?.price,
           name: menuItemToEdit?.name,
           alternateName: menuItemToEdit?.alternateName?menuItemToEdit.alternateName:"",
-          alcoholPercentage: menuItemToEdit?.alcoholPercentage?menuItemToEdit.alcoholPercentage:0
+          alcoholPercentage: menuItemToEdit?.alcoholPercentage?menuItemToEdit.alcoholPercentage:""
         }}
         validationSchema={menuItemsSchema}
         onSubmit={menuItemToEdit?onSubmitEditedMenuItem:onSubmitNewMenuItem}
@@ -227,13 +227,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         {(formik) => {
           return(
             <Form className="h-full flex gap-7 items-start">
-              <div className="relative min-w-72 min-h-72 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
+              <div className="relative min-w-64 min-h-64 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
 
-                <img className=" w-72 h-72 absolute rounded-lg" src={getImage(photoPath, DefaultMenuItemImage)} />
+                <img className=" w-64 h-64 absolute rounded-lg" src={getImage(photoPath, DefaultMenuItemImage)} />
                   {
                     isHovered 
                     && 
-                    <div className="bg-semi-trans w-72 h-72 absolute flex items-center justify-center rounded-lg">
+                    <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
                       <label
                         htmlFor="photo"
                         className={"shadow hover:cursor-pointer self-center h-10 w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary  dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary  " }
@@ -322,14 +322,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                     <ErrorMes msg={formik.errors.alcoholPercentage}/>
                   }                  
                 </div>
-                <button 
+                <button
                   id="addmenuitemsubmit"
                   type="submit"
                   disabled={!formik.isValid || (!formik.dirty && !menuItemToEdit) || selectedIngredients.length<=0}
-                  className={"shadow h-10 self-center w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-                >
+                  className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                  >
                   <Save/>
-                  {t("general.save")}
+                  <h1 className="font-mont-md text-md">{t("general.save")}</h1>
                 </button>
               </div>
             </Form>
@@ -379,20 +379,19 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           type="text" 
                           id="amountUsed" 
                           name="amountUsed"
-                          className="w-1/3"
+                          className="w-full"
                           //@TODO translation
                         />
                       </div>
                       <button
-                        type="submit"
-                        className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
                         id="addIngridientToMenuItem"
+                        type="submit"
                         disabled={!formik.isValid || !formik.dirty}
-                      >
-                        <Add/> 
-                        Add usage
-                        {/* @TODO translation */}
-                      </button> 
+                        className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                        >
+                        <Add/>
+                        <h1 className="text-nowrap font-mont-md text-md">Add usage</h1>
+                      </button>
                     </div>
                     {
                       (formik.errors.amountUsed&&formik.touched.amountUsed) &&

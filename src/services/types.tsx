@@ -91,11 +91,12 @@ export type RestaurantDataType = {
 
 export type EmployeeType = {
   id: number;
-  empID: string;
+  userId: string;
   login: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  birthDate: string,
   employments: EmploymentType[];
 };
 

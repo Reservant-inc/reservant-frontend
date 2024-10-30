@@ -149,33 +149,24 @@ export default function EmployeeRestaurantManagement({
   };
 
   const columns: GridColDef[] = [
-    { field: "empID", headerName: "ID", width: 180, editable: false },
-    {
-      field: "login",
-      headerName: "Login",
-      type: "string",
-      width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-    },
+   
     {
       field: "firstName",
-      headerName: "Name",
+      headerName: "First name",
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "lastName",
-      headerName: "Surname",
+      headerName: "Last Name",
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "phoneNumber",
-      headerName: "Phone Number",
+      headerName: "Phone number",
       type: "string",
       width: 180,
       align: "left",
@@ -255,17 +246,7 @@ export default function EmployeeRestaurantManagement({
         }
 
         return [
-          <GridActionsCellItem
-            icon={<Restaurant />}
-            label="Employments"
-            id={
-              "EmployeeManagementEmploymentButton" +
-              rows[parseInt(id.toString())].login
-            }
-            className="textPrimary"
-            onClick={handleEmploymentClick(rows[parseInt(id.toString())].empID)}
-            color="inherit"
-          />,
+         
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
@@ -293,7 +274,7 @@ export default function EmployeeRestaurantManagement({
   ];
 
   return (
-    <div className="h-full w-full rounded-lg bg-white dark:bg-black">
+    <div className="h-full w-full rounded-lg ">
       <DataGrid
         rows={rows}
         columns={columns}

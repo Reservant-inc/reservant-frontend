@@ -130,7 +130,7 @@ const HistoryTab: React.FC<HistoryTabProps> = ({
         ) : (
           <div className="h-full w-full rounded-lg bg-white dark:bg-black">
             <div className="flex gap-6  items-center">
-              <button onClick={()=>setOrdersOpen(false)} className=" m-3 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black">
+              <button onClick={()=>setOrdersOpen(false)} className="gap-1 m-3 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black">
                 <ArrowBackIcon/>
                 <h1 className="font-mont-md text-md"> Back </h1>
               </button>

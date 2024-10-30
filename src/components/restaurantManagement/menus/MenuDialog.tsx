@@ -146,7 +146,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
 
 
   return (
-    <div className=" flex justify-center h-[65vh] w-[60vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
+    <div className=" flex justify-center h-[40vh] w-[50vw] w-fit min-w-[950px] min-h-[435px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         initialValues={{ 
           name: menu?menu.name:"",
@@ -256,14 +256,14 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                   <ErrorMes msg={formik.errors.dateUntil}/>
                 }   
               </div>
-              <button 
+              <button
                 id="addmenuSubmit"
                 type="submit"
                 disabled={!formik.isValid || (!formik.dirty && menu===null) }
-                className={" self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 shadow dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-              >
+                className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                >
                 <Save/>
-                {t("general.save")}
+                <h1 className="font-mont-md text-md">{t("general.save")}</h1>
               </button>
             </Form>
           )
@@ -296,9 +296,6 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
             </select>
           </div>
           <button
-            className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-            
-            id="addMenuItemToMenu"
             onClick={()=>{
               let tmp = menuItems.find((menuItem)=>menuItem.menuItemId==Number(selectedMenuItemId))
               setSelectedMenuItemId("")
@@ -309,10 +306,14 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               }
             }
             disabled={!Number(selectedMenuItemId)}
-          >
+            id="addMenuItemToMenu"
+            className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            >
             <Add/>
-            Add to menu
+
+            <h1 className="font-mont-md text-md">Add to menu</h1>
           </button>
+          
         </form>
 
         <div className="  dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full  h-full rounded-lg pr-3">

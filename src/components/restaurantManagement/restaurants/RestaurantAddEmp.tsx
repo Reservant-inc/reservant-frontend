@@ -14,10 +14,6 @@ const initialValues = {
   isHallEmployee: "",
 };
 
-type restaurant = {
-  name: string;
-  restaurantID: string;
-};
 
 const RestaurantAddEmp = ({ empid }: { empid: string }) => {
   const [t] = useTranslation("global");
@@ -78,7 +74,6 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
   ) => {
     try {
       setSubmitting(true);
-      // console.log(id)
       const body = JSON.stringify([
         {
           employeeId: empid,
@@ -92,7 +87,6 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
       ]);
 
       console.log(body);
-      // console.log("AAAAAAAA"+values.selectedRestaurant)
       console.log(`/my-restaurants/${values.selectedRestaurant}/employees`);
       await fetchPOST(
         `/my-restaurants/${values.selectedRestaurant}/employees`,
@@ -108,7 +102,7 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
   return (
     <div
       id="restaurantAddEmp-container-register"
-      className="container-register"
+      className="dark:text-grey-0 p-3"
     >
       <Formik
         initialValues={initialValues}
@@ -118,76 +112,58 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
         {(formik) => {
           return (
             <Form>
-              <div className="form-container">
-                <div className="form-control flex flex-col">
-                  <Field id="selectedRestaurant" default="Select a restaurant" name="selectedRestaurant" component="select">
-                    <option value="" id="addEmp-option-default">Select a restaurant</option>
-                    {
-                      restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
-                    }
-                    
-                  </Field>
-                  <span className="">
+              <div className="form-control flex gap-6">
+                <Field id="selectedRestaurant" default="Select a restaurant" className="dark:bg-black dark:text-grey-0" name="selectedRestaurant" component="select">
+                  <option  value="" disabled={true} selected={true} id="addEmp-option-default">Restaurant</option>
+                  {
+                    restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
+                  }
+                  
+                </Field>
+                <div className="flex flex-col">
+                  <span className="flex items-center gap-2">
                     <Field
                       type="checkbox"
                       id="isBackdoorEmployee"
                       name="isBackdoorEmployee"
                       checked={formik.values.isBackdoorEmployee}
-                      className={
-                        !(
-                          (formik.errors.isHallEmployee &&
-                            formik.touched.isHallEmployee) ||
-                          (formik.errors.isBackdoorEmployee &&
-                            formik.touched.isBackdoorEmployee)
-                        )
-                          ? "me-1"
-                          : "outline-pink me-1 outline"
-                      }
+                      className="border-[1px]"
                     />
                     <label htmlFor="isBackdoorEmployee">
                       {t("add-employee.isBackdoorEmployee")}
                     </label>
                   </span>
-                  <span className="">
+                  <span className="flex items-center gap-2">
                     <Field
                       type="checkbox"
                       id="isHallEmployee"
                       name="isHallEmployee"
                       checked={formik.values.isHallEmployee}
-                      className={
-                        !(
-                          (formik.errors.isHallEmployee &&
-                            formik.touched.isHallEmployee) ||
-                          (formik.errors.isBackdoorEmployee &&
-                            formik.touched.isBackdoorEmployee)
-                        )
-                          ? "me-1"
-                          : "outline-pink me-1 outline"
-                      }
+                      className="border-[1px]"
                     />
                     <label htmlFor="isHallEmployee">
                       {t("add-employee.isHallEmployee")}
                     </label>
                   </span>
-
-                  <ErrorMessage name="isBackdoorEmployee">
-                    {(msg) => <ErrorMes msg={msg} />}
-                  </ErrorMessage>
-                  {!formik.touched.isBackdoorEmployee && (
-                    <ErrorMessage name="isHallEmployee">
-                      {(msg) => <ErrorMes msg={msg} />}
-                    </ErrorMessage>
-                  )}
                 </div>
 
-                <button
-                  id="RestaurantAddEmpSubmitButton"
-                  type="submit"
-                  disabled={!formik.dirty || !formik.isValid}
-                >
-                  {t("add-employee.addEmployee")}
-                </button>
+                <ErrorMessage name="isBackdoorEmployee">
+                  {(msg) => <ErrorMes msg={msg} />}
+                </ErrorMessage>
+                {!formik.touched.isBackdoorEmployee && (
+                  <ErrorMessage name="isHallEmployee">
+                    {(msg) => <ErrorMes msg={msg} />}
+                  </ErrorMessage>
+                )}
               </div>
+
+              <button
+                id="RestaurantAddEmpSubmitButton"
+                type="submit"
+                disabled={!formik.dirty || !formik.isValid}
+              >
+                {t("add-employee.addEmployee")}
+              </button>
             </Form>
           );
         }}

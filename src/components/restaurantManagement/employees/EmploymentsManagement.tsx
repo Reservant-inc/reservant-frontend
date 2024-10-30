@@ -10,40 +10,22 @@ import {
   GridRowModes,
   DataGrid,
   GridColDef,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-  GridSlots,
 } from "@mui/x-data-grid";
 import {
-  EmployeeEmployedType,
-  EmployeeType,
   EmploymentType,
-  RestaurantType,
 } from "../../../services/types";
 import { fetchDELETE, fetchGET, fetchPUT } from "../../../services/APIconn";
-import { Modal } from "@mui/material";
-import EmployeeRegister from "../../register/EmployeeRegister";
-import { Restaurant } from "@mui/icons-material";
-import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
-}
 
 export default function EmploymentsManagement({ empid }: { empid: string }) {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const populateRows = async () => {
@@ -59,8 +41,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                   id: response[i].employments[j].employmentId,
                   restaurantName: response[i].employments[j].restaurantName,
                   restaurantId: response[i].employments[j].restaurantId,
-                  isBackdoorEmployee:
-                    response[i].employments[j].isBackdoorEmployee,
+                  isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
                   isHallEmployee: response[i].employments[j].isHallEmployee,
                 });
               }
@@ -88,11 +69,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleEmploymentClick = (id: string) => () => {
-    setIsEmploymentOpen(true);
-    setSelectedId(id);
-  };
-
+ 
   const handleDeleteClick = (id: GridRowId) => async () => {
     setRows(rows.filter((row) => row.id !== id));
 
@@ -136,10 +113,9 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 180, editable: false },
     {
       field: "restaurantName",
-      headerName: "restaurantName",
+      headerName: "Restaurant",
       type: "string",
       width: 180,
       align: "left",
@@ -148,14 +124,14 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     },
     {
       field: "isHallEmployee",
-      headerName: "isHallEmployee",
+      headerName: "Hall role",
       type: "boolean",
       width: 180,
       editable: true,
     },
     {
       field: "isBackdoorEmployee",
-      headerName: "isBackdoorEmployee",
+      headerName: "Backdoor role",
       type: "boolean",
       width: 180,
       editable: true,
@@ -215,7 +191,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   return (
     <div
       id="employmentsManagement-wrapper"
-      className="h-full w-full rounded-lg bg-white "
+      className="h-full w-full rounded-lg  "
     >
       <DataGrid
         rows={rows}
