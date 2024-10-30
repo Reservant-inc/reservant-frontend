@@ -212,7 +212,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
  
 
   return (
-    <div className=" flex justify-center h-[35vh] w-[50vw] min-w-[1000px] min-h-[370px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
+    <div className=" flex justify-center w-[1000px] h-[450px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         id="menuitem-formik"
         initialValues={{
@@ -326,7 +326,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   id="addmenuitemsubmit"
                   type="submit"
                   disabled={!formik.isValid || (!formik.dirty && !menuItemToEdit) || selectedIngredients.length<=0}
-                  className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                  className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                   >
                   <Save/>
                   <h1 className="font-mont-md text-md">{t("general.save")}</h1>
@@ -387,7 +387,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         id="addIngridientToMenuItem"
                         type="submit"
                         disabled={!formik.isValid || !formik.dirty}
-                        className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                        className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                         >
                         <Add/>
                         <h1 className="text-nowrap font-mont-md text-md">Add usage</h1>
@@ -416,13 +416,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               selectedIngredients.map((ingredient) => 
               <li 
                 key={ingredient.ingredientId+ingredient.amountUsed}
-                className="h-fit w-full gap-1  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
+                className="h-fit w-full gap-1 dark:text-grey-0  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
               > 
                 <p className="overflow-hidden text-ellipsis">
                   {getIngredientDetails(ingredient)?.publicName}: {ingredient.amountUsed} {getIngredientDetails(ingredient)?.unitOfMeasurement}
                 </p>
                 <button
-                  className=' dark:bg-black flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+                  className=' dark:bg-black  flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
                   onClick={()=>{
                     setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>
                        ingredientToRemove.ingredientId!==ingredient.ingredientId
@@ -436,7 +436,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             }
           </ul>
           :
-          <h1 className="p-2">Selected ingredients will appear here.</h1> //@TODO translation
+          <h1 className="p-2 dark:text-grey-0">Selected ingredients will appear here.</h1> //@TODO translation
           }
         </div>
       </div>

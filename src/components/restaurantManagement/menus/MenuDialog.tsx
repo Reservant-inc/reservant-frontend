@@ -146,7 +146,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
 
 
   return (
-    <div className=" flex justify-center h-[40vh] w-[50vw] w-fit min-w-[950px] min-h-[435px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
+    <div className=" flex justify-center  w-fit w-[950px] h-[535px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         initialValues={{ 
           name: menu?menu.name:"",
@@ -259,8 +259,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               <button
                 id="addmenuSubmit"
                 type="submit"
-                disabled={!formik.isValid || (!formik.dirty && menu===null) }
-                className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                disabled={!formik.isValid || !formik.dirty }
+                className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                 >
                 <Save/>
                 <h1 className="font-mont-md text-md">{t("general.save")}</h1>
@@ -307,7 +307,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
             }
             disabled={!Number(selectedMenuItemId)}
             id="addMenuItemToMenu"
-            className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
             >
             <Add/>
 

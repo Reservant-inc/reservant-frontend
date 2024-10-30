@@ -295,9 +295,13 @@ export default function EmployeeManagement() {
         onClose={() => setIsEmploymentOpen(false)}
         title="Employments"
       >
-        <div className=" h-[50vh] w-[50vw]  ">
-          <RestaurantAddEmp empid={selectedId} />
-          <EmploymentsManagement empid={selectedId} />
+        <div className=" h-[50vh] w-fit">
+          <div className="h-[30%]">
+            <RestaurantAddEmp empid={selectedId} />
+          </div>
+          <div className="h-[70%]">
+            <EmploymentsManagement empid={selectedId} />
+          </div>
         </div>
       </Dialog>}
     </>

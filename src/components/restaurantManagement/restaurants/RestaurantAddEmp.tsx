@@ -7,6 +7,7 @@ import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import ErrorMes from "../../reusableComponents/ErrorMessage";
 import { EmploymentType } from "../../../services/types";
 import { RestaurantShortType } from "../../../services/types";
+import { Add } from "@mui/icons-material";
 
 const initialValues = {
   selectedRestaurant: "",
@@ -112,58 +113,67 @@ const RestaurantAddEmp = ({ empid }: { empid: string }) => {
         {(formik) => {
           return (
             <Form>
-              <div className="form-control flex gap-6">
-                <Field id="selectedRestaurant" default="Select a restaurant" className="dark:bg-black dark:text-grey-0" name="selectedRestaurant" component="select">
-                  <option  value="" disabled={true} selected={true} id="addEmp-option-default">Restaurant</option>
-                  {
-                    restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
-                  }
-                  
-                </Field>
-                <div className="flex flex-col">
-                  <span className="flex items-center gap-2">
-                    <Field
-                      type="checkbox"
-                      id="isBackdoorEmployee"
-                      name="isBackdoorEmployee"
-                      checked={formik.values.isBackdoorEmployee}
-                      className="border-[1px]"
-                    />
-                    <label htmlFor="isBackdoorEmployee">
-                      {t("add-employee.isBackdoorEmployee")}
-                    </label>
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <Field
-                      type="checkbox"
-                      id="isHallEmployee"
-                      name="isHallEmployee"
-                      checked={formik.values.isHallEmployee}
-                      className="border-[1px]"
-                    />
-                    <label htmlFor="isHallEmployee">
-                      {t("add-employee.isHallEmployee")}
-                    </label>
-                  </span>
+              <div className="w-full flex flex-col items-start gap-3 justify-center">
+                <div className="form-control flex gap-6 w-full justify-start">
+                  <Field id="selectedRestaurant" default="Select a restaurant" className="dark:bg-black dark:text-grey-0 rounded-lg" name="selectedRestaurant" component="select">
+                    <option  value="" disabled={true} selected={true} id="addEmp-option-default">Restaurant</option>
+                    {
+                      restaurants.map((restaurant) => <option value={restaurant.restaurantId}> {restaurant.name} </option>)
+                    }
+                    
+                  </Field>
+                  <div className="flex flex-col">
+                    <span className="flex items-center gap-2">
+                      <Field
+                        type="checkbox"
+                        id="isBackdoorEmployee"
+                        name="isBackdoorEmployee"
+                        checked={formik.values.isBackdoorEmployee}
+                        className={`border-[1px] hover:cursor-pointer ${((formik.errors.isHallEmployee||formik.errors.isBackdoorEmployee)&&(formik.touched.isHallEmployee||formik.touched.isBackdoorEmployee))?"border-error":"border-black dark:border-grey-0"}`}
+                      />
+                      <label htmlFor="isBackdoorEmployee"
+                        className={`${((formik.errors.isHallEmployee||formik.errors.isBackdoorEmployee)&&(formik.touched.isHallEmployee||formik.touched.isBackdoorEmployee))?"text-error":"dark:text-grey-0 text-black"}`}
+                      >
+                        {t("add-employee.isBackdoorEmployee")}
+                      </label>
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Field
+                        type="checkbox"
+                        id="isHallEmployee"
+                        name="isHallEmployee"
+                        checked={formik.values.isHallEmployee}
+                        className={`border-[1px] hover:cursor-pointer ${((formik.errors.isHallEmployee||formik.errors.isBackdoorEmployee)&&(formik.touched.isHallEmployee||formik.touched.isBackdoorEmployee))?"border-error":"border-black dark:border-grey-0"}`}
+                      />
+                      <label htmlFor="isHallEmployee"
+                        className={`${((formik.errors.isHallEmployee||formik.errors.isBackdoorEmployee)&&(formik.touched.isHallEmployee||formik.touched.isBackdoorEmployee))?"text-error":"dark:text-grey-0 text-black"}`}
+                      >
+                        {t("add-employee.isHallEmployee")}
+                      </label>
+                    </span>
+                  </div>
                 </div>
-
-                <ErrorMessage name="isBackdoorEmployee">
-                  {(msg) => <ErrorMes msg={msg} />}
-                </ErrorMessage>
-                {!formik.touched.isBackdoorEmployee && (
-                  <ErrorMessage name="isHallEmployee">
+                <button
+                  id="RestaurantAddEmpSubmitButton"
+                  type="submit"
+                  disabled={!formik.dirty || !formik.isValid}
+                  className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                  >
+                  <Add/>
+                  <h1 className="font-mont-md text-md">{t("add-employee.addEmployee")}</h1>
+                </button>
+                <div className="">
+                  <ErrorMessage name="isBackdoorEmployee">
                     {(msg) => <ErrorMes msg={msg} />}
                   </ErrorMessage>
-                )}
+                  {!formik.touched.isBackdoorEmployee && (
+                    <ErrorMessage name="isHallEmployee">
+                      {(msg) => <ErrorMes msg={msg} />}
+                    </ErrorMessage>
+                  )}
+                </div>
               </div>
 
-              <button
-                id="RestaurantAddEmpSubmitButton"
-                type="submit"
-                disabled={!formik.dirty || !formik.isValid}
-              >
-                {t("add-employee.addEmployee")}
-              </button>
             </Form>
           );
         }}
