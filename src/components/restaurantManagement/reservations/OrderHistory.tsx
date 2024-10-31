@@ -101,6 +101,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
                   <IconButton
                     aria-label="expand row"
                     size="small"
+                    className="dark:text-grey-0"
                     onClick={()=>{toggleDetails();console.log(row)}}
                   >
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -167,6 +168,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
           </TableBody>
         </Table>
         <TablePagination
+          className="dark:text-grey-0"
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
