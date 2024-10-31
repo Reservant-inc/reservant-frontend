@@ -20,14 +20,10 @@ import {
 } from "@mui/x-data-grid";
 import {
   EmployeeEmployedType,
-  EmployeeType,
-  RestaurantType,
 } from "../../../services/types";
-import { fetchDELETE, fetchGET } from "../../../services/APIconn";
+import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
-import { Restaurant } from "@mui/icons-material";
-import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -45,8 +41,6 @@ export default function EmployeeRestaurantManagement({
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const populateRows = async () => {
@@ -113,10 +107,7 @@ export default function EmployeeRestaurantManagement({
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleEmploymentClick = (id: string) => () => {
-    setIsEmploymentOpen(true);
-    setSelectedId(id);
-  };
+ 
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
@@ -305,15 +296,7 @@ export default function EmployeeRestaurantManagement({
           <EmployeeRegister setIsModalOpen={setIsModalOpen} />
         </div>
       </Modal>
-      <Modal
-        open={isEmploymentOpen}
-        onClose={() => setIsEmploymentOpen(false)}
-        className="flex items-center justify-center"
-      >
-        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
-          <RestaurantAddEmp empid={selectedId} />
-        </div>
-      </Modal>
+      
     </div>
   );
 }

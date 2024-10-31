@@ -25,7 +25,6 @@ import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
-import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
 import Dialog from '../../reusableComponents/Dialog';
 import EmploymentsManagement from "./EmploymentsManagement";
 
@@ -295,14 +294,7 @@ export default function EmployeeManagement() {
         onClose={() => setIsEmploymentOpen(false)}
         title="Employments"
       >
-        <div className=" h-[50vh] w-fit">
-          <div className="h-[30%]">
-            <RestaurantAddEmp empid={selectedId} />
-          </div>
-          <div className="h-[70%]">
-            <EmploymentsManagement empid={selectedId} />
-          </div>
-        </div>
+        <EmploymentsManagement empid={selectedId} />
       </Dialog>}
     </>
 
