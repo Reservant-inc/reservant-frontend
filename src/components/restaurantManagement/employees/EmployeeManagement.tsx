@@ -284,10 +284,9 @@ export default function EmployeeManagement() {
       <Dialog
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        title="Creating a new employee..."
       >
-        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
-          <EmployeeRegister setIsModalOpen={setIsModalOpen} />
-        </div>
+        <EmployeeRegister setIsModalOpen={setIsModalOpen} />
       </Dialog>}
       {isEmploymentOpen && <Dialog
         open={isEmploymentOpen}
