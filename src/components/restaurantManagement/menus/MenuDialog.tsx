@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { fetchPOST, fetchGET, fetchPUT } from "../../../services/APIconn";
 import { Field, Form, Formik, FormikValues } from "formik";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
-import { Add, Save } from "@mui/icons-material";
+import { Add, Save, SaveOutlined } from "@mui/icons-material";
 import { MenuItemType, MenuType } from "../../../services/types";
 import { FetchError } from "../../../services/Errors";
 import MenuItem from "./MenuItem";
@@ -260,9 +260,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 id="addmenuSubmit"
                 type="submit"
                 disabled={!formik.isValid || !formik.dirty }
-                className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                className="self-center gap-2 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                 >
-                <Save/>
+                <SaveOutlined/>
                 <h1 className="font-mont-md text-md">{t("general.save")}</h1>
               </button>
             </Form>

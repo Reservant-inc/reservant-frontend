@@ -24,6 +24,7 @@ import {
 import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
+import Dialog from "../../reusableComponents/Dialog";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -88,7 +89,8 @@ export default function EmployeeRestaurantManagement({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-md">+ Add an employee</h1>
+            <AddIcon />
+            <h1 className="font-mont-md text-md">Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -265,7 +267,7 @@ export default function EmployeeRestaurantManagement({
   ];
 
   return (
-    <div className="h-full w-full rounded-lg ">
+    <div className="h-full w-full rounded-lg bg-white dark:bg-black">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -287,15 +289,15 @@ export default function EmployeeRestaurantManagement({
         }}
         className="border-0 scroll"
       />
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        className="flex items-center justify-center"
-      >
-        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
+      { isModalOpen && 
+        <Dialog
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Creating a new employee..."
+        > 
           <EmployeeRegister setIsModalOpen={setIsModalOpen} />
-        </div>
-      </Modal>
+        </Dialog>
+      }
       
     </div>
   );

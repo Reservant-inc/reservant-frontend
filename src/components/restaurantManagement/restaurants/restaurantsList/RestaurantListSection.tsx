@@ -6,7 +6,7 @@ import { GridToolbarContainer, GridRowModesModel, GridColDef, GridRowsProp, Data
 import { fetchGET } from "../../../../services/APIconn";
 import { LocalType } from "../../../../services/enums";
 import { RestaurantType } from "../../../../services/types";
-import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
+import { Add, ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
 
 interface RestaurantListSectionProps {
   handleChangeActiveRestaurant: (restaurantGroupId: number) => void;
@@ -71,7 +71,8 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
                         onClick={() => setIsModalOpen(true)}
                         className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                     >
-                        <h1 className="text-md font-mont-md">+ Add a restaurant</h1>
+                      <Add />
+                      <h1 className="text-md font-mont-md">Add a restaurant</h1>
                     </button>
                 </div>
           </GridToolbarContainer>

@@ -9,7 +9,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Ingredient, IngredientUsage, MenuItemType, MenuType } from "../../../services/types";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
-import { CloseSharp, ArrowForwardIos, Add, Save, Clear, KeyboardDoubleArrowDown, Remove } from "@mui/icons-material";
+import { CloseSharp, ArrowForwardIos, Add, Save, Clear, KeyboardDoubleArrowDown, Remove, SaveOutlined } from "@mui/icons-material";
 import { FetchError } from "../../../services/Errors";
 import DefaultMenuItemImage from "../../../assets/images/defaultMenuItemImage.png"
 import ErrorMes from "../../reusableComponents/ErrorMessage";
@@ -326,9 +326,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   id="addmenuitemsubmit"
                   type="submit"
                   disabled={!formik.isValid || (!formik.dirty && !menuItemToEdit) || selectedIngredients.length<=0}
-                  className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                  className="self-center gap-2 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                   >
-                  <Save/>
+                  <SaveOutlined/>
                   <h1 className="font-mont-md text-md">{t("general.save")}</h1>
                 </button>
               </div>

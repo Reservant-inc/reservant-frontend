@@ -22,6 +22,9 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTranslation } from "react-i18next";
+import { Checklist, InsertDriveFileRounded } from "@mui/icons-material";
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 
 interface IngredientTableProps {
   activeRestaurantId: number | null;
@@ -261,22 +264,24 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
 
   const EditToolbar = () => (
     <GridToolbarContainer>
+       
       <div className="flex w-full items-center justify-between">
         <div className="z-1 flex h-[3rem] items-center gap-2 p-1">
           <button
             id="RestaurantListAddRestaurantButton"
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
             <AddIcon />
-            <h1 className="font-mont-md text-md">{t("warehouse.add-ingredient")}</h1>
+            <h1 className="font-mont-md text-md "> {t("warehouse.add-ingredient")}</h1>
           </button>
 
           <button
             id="GenerateGroceryListButton"
             onClick={handleGenerateGroceryList}
-            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="gap-2 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
+            <InventoryOutlinedIcon />
             <h1 className="font-mont-md text-md">{t("warehouse.generate-list")}</h1>
           </button>
         </div>

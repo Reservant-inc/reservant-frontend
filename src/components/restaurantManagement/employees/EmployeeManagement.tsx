@@ -24,7 +24,7 @@ import {
 import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
-import { Restaurant } from "@mui/icons-material";
+import { Add, Restaurant } from "@mui/icons-material";
 import Dialog from '../../reusableComponents/Dialog';
 import EmploymentsManagement from "./EmploymentsManagement";
 
@@ -92,7 +92,8 @@ export default function EmployeeManagement() {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-md">+ Add an employee</h1>
+            <Add />
+            <h1 className="font-mont-md text-md">Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
