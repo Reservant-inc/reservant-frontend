@@ -71,7 +71,7 @@ const RestaurantListSection: React.FC<RestaurantListSectionProps> = ({ handleCha
                         onClick={() => setIsModalOpen(true)}
                         className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                     >
-                      <Add />
+                      <Add  className="dark:fill-secondary"/>
                       <h1 className="text-md font-mont-md">Add a restaurant</h1>
                     </button>
                 </div>

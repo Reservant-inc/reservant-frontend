@@ -89,7 +89,7 @@ export default function EmployeeRestaurantManagement({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <AddIcon />
+            <AddIcon className="dark:fill-secondary"/>
             <h1 className="font-mont-md text-md">Add an employee</h1>
           </button>
         </div>

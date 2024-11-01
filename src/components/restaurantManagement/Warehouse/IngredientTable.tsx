@@ -272,7 +272,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
             onClick={() => setIsModalOpen(true)}
             className="gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <AddIcon />
+            <AddIcon  className="dark:fill-secondary"/>
             <h1 className="font-mont-md text-md "> {t("warehouse.add-ingredient")}</h1>
           </button>
 
@@ -281,7 +281,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
             onClick={handleGenerateGroceryList}
             className="gap-2 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <InventoryOutlinedIcon />
+            <InventoryOutlinedIcon  className="dark:fill-secondary"/>
             <h1 className="font-mont-md text-md">{t("warehouse.generate-list")}</h1>
           </button>
         </div>
