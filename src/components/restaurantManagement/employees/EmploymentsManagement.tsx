@@ -37,34 +37,34 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
   useEffect(() => {
-    const populateRows = async () => {
-      try {
-        const response = await fetchGET("/user/employees");
-        const tmp: EmploymentType[] = [];
-
-        if (response.length)
-          for (const i in response) {
-            if (response[i].userId === empid)
-              for (const j in response[i].employments) {
-                tmp.push({
-                  id: response[i].employments[j].employmentId,
-                  restaurantName: response[i].employments[j].restaurantName,
-                  restaurantId: response[i].employments[j].restaurant.restaurantId,
-                  isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
-                  isHallEmployee: response[i].employments[j].isHallEmployee,
-                });
-              }
-          }
-
-        setRows(tmp);
-
-      } catch (error) {
-        console.error("Error populating table", error);
-      }
-    };
-
     populateRows();
   }, []);
+
+  const populateRows = async () => {
+    try {
+      const response = await fetchGET("/user/employees");
+      const tmp: EmploymentType[] = [];
+
+      if (response.length)
+        for (const i in response) {
+          if (response[i].userId === empid)
+            for (const j in response[i].employments) {
+              tmp.push({
+                id: response[i].employments[j].employmentId,
+                restaurantName: response[i].employments[j].restaurantName,
+                restaurantId: response[i].employments[j].restaurant.restaurantId,
+                isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+                isHallEmployee: response[i].employments[j].isHallEmployee,
+              });
+            }
+        }
+
+      setRows(tmp);
+
+    } catch (error) {
+      console.error("Error populating table", error);
+    }
+  };
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -247,10 +247,8 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
 
   const handleSubmit = async (
     values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
     try {
-      setSubmitting(true);
       const body = JSON.stringify([
         {
           employeeId: empid,
@@ -267,10 +265,14 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
         `/my-restaurants/${values.selectedRestaurant}/employees`,
         body,
       );
+      
+      populateRows();
+      
+      let selector: HTMLSelectElement = document.getElementById("selectedRestaurant") as HTMLSelectElement;
+      selector.selectedIndex=0;
+      
     } catch (error) {
       console.log(error);
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -280,8 +282,11 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
         <Formik
           initialValues={initialValues}
           validationSchema={RestaurantAddEmployeeSchema}
-          onSubmit={handleSubmit}
-        >
+          onSubmit={(values, {resetForm})=>{
+            handleSubmit(values);
+            resetForm();
+          }}
+          >
           {(formik) => {
             return (
               <Form>
