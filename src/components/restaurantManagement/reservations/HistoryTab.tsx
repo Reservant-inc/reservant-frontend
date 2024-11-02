@@ -11,27 +11,26 @@ import { fetchGET } from "../../../services/APIconn";
 import { FetchError } from "../../../services/Errors";
 import { OrderType, VisitType } from "../../../services/types";
 import { ArrowForwardIos } from "@mui/icons-material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface HistoryTabProps {
   activeRestaurantId: number;
 }
 
-const HistoryTab: React.FC<HistoryTabProps> = ({
-  activeRestaurantId,
-}) => {
+const HistoryTab: React.FC<HistoryTabProps> = ({ activeRestaurantId }) => {
   const [ordersOpen, setOrdersOpen] = useState<boolean>(false);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [activeOrders, setActiveOrders] = useState<OrderType[]>([]);
-  const [activeVisitId, setActiveVisitId] = useState<number|null>(null);
+  const [activeVisitId, setActiveVisitId] = useState<number | null>(null);
 
   useEffect(() => {
     const populateRows = async () => {
       try {
-        const response = await fetchGET(`/restaurants/${activeRestaurantId}/visits`);
-        let tmp: VisitType[] = []
+        const response = await fetchGET(
+          `/restaurants/${activeRestaurantId}/visits`,
+        );
+        let tmp: VisitType[] = [];
         let indx = 0;
         for (const i in response.items) {
           tmp.push({
@@ -52,32 +51,91 @@ const HistoryTab: React.FC<HistoryTabProps> = ({
             visitId: response.items[i].visitId,
           });
         }
-          setRows(tmp);
-          console.log(response);
-          console.log(tmp);
-      }catch (error) {
+        setRows(tmp);
+        console.log(response);
+        console.log(tmp);
+      } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.log(error.formatErrors());
         } else {
-          console.log("Unexpected error")
+          console.log("Unexpected error");
         }
-      };
+      }
     };
     populateRows();
   }, []);
 
   const columns: GridColDef[] = [
-   
-    { field: "visitId", headerName: "Visit ID", width: 150, editable: false, type: "string" },
-    { field: "date", headerName: "Started at", width: 200, editable: false, type: "string" },
-    { field: "endTime", headerName: "Finished at", width: 200, editable: false, type: "string" },
-    { field: "reservationDate", headerName: "Date of reservation", width: 200, editable: false, type: "string" },
-    { field: "paymentTime", headerName: "Date of payment", width: 200, editable: false, type: "string" },
-    { field: "deposit", headerName: "Deposit amount", width: 150, editable: false, type: "number" },
-    { field: "tip", headerName: "Tip", width: 150, editable: false, type: "number" },
-    { field: "takeaway", headerName: "Takeaway?", width: 150, editable: false, type: "boolean" },
-    { field: "numberOfGuests", headerName: "Number of guests", width: 150, editable: false, type: "number" },
-    { field: "tableId", headerName: "Table number", width: 150, editable: false, type: "number" },
+    {
+      field: "visitId",
+      headerName: "Visit ID",
+      width: 150,
+      editable: false,
+      type: "string",
+    },
+    {
+      field: "date",
+      headerName: "Started at",
+      width: 200,
+      editable: false,
+      type: "string",
+    },
+    {
+      field: "endTime",
+      headerName: "Finished at",
+      width: 200,
+      editable: false,
+      type: "string",
+    },
+    {
+      field: "reservationDate",
+      headerName: "Date of reservation",
+      width: 200,
+      editable: false,
+      type: "string",
+    },
+    {
+      field: "paymentTime",
+      headerName: "Date of payment",
+      width: 200,
+      editable: false,
+      type: "string",
+    },
+    {
+      field: "deposit",
+      headerName: "Deposit amount",
+      width: 150,
+      editable: false,
+      type: "number",
+    },
+    {
+      field: "tip",
+      headerName: "Tip",
+      width: 150,
+      editable: false,
+      type: "number",
+    },
+    {
+      field: "takeaway",
+      headerName: "Takeaway?",
+      width: 150,
+      editable: false,
+      type: "boolean",
+    },
+    {
+      field: "numberOfGuests",
+      headerName: "Number of guests",
+      width: 150,
+      editable: false,
+      type: "number",
+    },
+    {
+      field: "tableId",
+      headerName: "Table number",
+      width: 150,
+      editable: false,
+      type: "number",
+    },
     {
       field: "actions",
       type: "actions",
@@ -85,62 +143,63 @@ const HistoryTab: React.FC<HistoryTabProps> = ({
       width: 150,
       cellClassName: "actions",
       getActions: ({ id }) => {
-
         return [
           <GridActionsCellItem
             icon={<ArrowForwardIos />}
             label="Details"
-            
             id={
               "VisitSeeDetailsButton" +
-              rows[parseInt(id.toString())].id+
+              rows[parseInt(id.toString())].id +
               rows[parseInt(id.toString())].name
             }
             className="textPrimary"
-            onClick = {() => {
-              setActiveOrders(rows[parseInt(id.toString())].orders)
-              setActiveVisitId(rows[parseInt(id.toString())].visitId)
-              setOrdersOpen(true)
+            onClick={() => {
+              setActiveOrders(rows[parseInt(id.toString())].orders);
+              setActiveVisitId(rows[parseInt(id.toString())].visitId);
+              setOrdersOpen(true);
             }}
             color="inherit"
-          />
+          />,
         ];
       },
     },
   ];
 
   return (
-    <div className="w-full h-full flex-col space-y-2 bg-white dark:bg-black rounded-lg">
-        {!ordersOpen ? (
-          <div className="h-full w-full rounded-lg bg-white dark:bg-black">
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              editMode="row"
-              rowModesModel={rowModesModel}
-              disableRowSelectionOnClick
-              initialState={{
-                pagination: { paginationModel: { pageSize: 5 } },
-              }}
-              pageSizeOptions={[5, 10, 25]}
-              className="border-0 w-full h-full"
-            />
-            
+    <div className="h-full w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
+      {!ordersOpen ? (
+        <div className="h-full w-full rounded-lg bg-white dark:bg-black">
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            editMode="row"
+            rowModesModel={rowModesModel}
+            disableRowSelectionOnClick
+            initialState={{
+              pagination: { paginationModel: { pageSize: 5 } },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            className="h-full w-full border-0"
+          />
+        </div>
+      ) : (
+        <div className="h-full w-full rounded-lg bg-white dark:bg-black">
+          <div className="flex items-center  gap-6">
+            <button
+              onClick={() => setOrdersOpen(false)}
+              className="m-3 flex items-center justify-center gap-1 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+            >
+              <ArrowBackIcon />
+              <h1 className="text-md font-mont-md"> Back </h1>
+            </button>
+            <h1 className="text-md font-mont-md dark:text-grey-0">
+              {" "}
+              Visit {activeVisitId ? activeVisitId : ""} orders{" "}
+            </h1>
           </div>
-        ) : (
-          <div className="h-full w-full rounded-lg bg-white dark:bg-black">
-            <div className="flex gap-6  items-center">
-              <button onClick={()=>setOrdersOpen(false)} className="gap-1 m-3 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black">
-                <ArrowBackIcon/>
-                <h1 className="font-mont-md text-md"> Back </h1>
-              </button>
-              <h1 className="font-mont-md text-md dark:text-grey-0"> Visit {activeVisitId?activeVisitId:""} orders </h1>
-            </div>
-            <div className="">
-              <OrderHistory orders={activeOrders}  />
-            </div>
-          </div>
-        )}
+          <OrderHistory orders={activeOrders} />
+        </div>
+      )}
     </div>
   );
 };

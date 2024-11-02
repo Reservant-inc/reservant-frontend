@@ -4,6 +4,7 @@ import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp';
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp';
 import useWindowDimensions from "../../hooks/useWindowResize";
 import { ArrowBack, Dashboard, Dining, History, Warehouse } from "@mui/icons-material";
+import ReviewsManagement from "./ReviewsMenagment";
 
 interface ManagementTabsProps {
     setActivePage: Function
@@ -178,6 +179,24 @@ const ManagementTabs:React.FC<ManagementTabsProps> = ({ setActivePage, activePag
             </div>
           </ListItemButton>
         </div>
+        {/* <div className="p-0">
+          <ListItemButton
+            id="menu-listItem-restaurant-reviews-button"
+            className={` ${activePage === 8 ? "bg-white dark:bg-black" : "bg-grey-0 dark:bg-grey-5"}  dark:text-grey-1 w-full h-full rounded-t-lg px-4`}
+            onClick={() => {
+              setActivePage(8);
+            }}
+          >
+            <div className="flex items-center gap-4 w-full">
+              <History className='w-6 h-6' />
+              {size.width > 700 &&
+                <h1 className="text-nowrap">
+                  Reviews
+                </h1>
+              }
+            </div>
+          </ListItemButton>
+        </div> */}
       </div>
       }
     </div>

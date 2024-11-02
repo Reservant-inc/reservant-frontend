@@ -19,10 +19,10 @@ const RestaurantReviewsFilters: React.FC<RestaurantReviewsFiltersProps> = ({
     <div>
       <div className="flex items-center gap-2 rounded-lg bg-grey-0 p-2 dark:bg-grey-5">
         <h1>{t("reviews.filter")}:</h1>
-        <CustomRating readOnly={false} rating={value} onChange={setValue} />
+        <CustomRating readOnly={false} rating={value} onChange={setValue}/>
         <Tooltip title={t("reviews.filter-tooltip")}>
           <button
-            className="h-8 w-8 rounded-full bg-trans hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-4"
+            className="h-8 w-8 bg-trans hover:bg-grey-1 dark:hover:bg-grey-4 dark:text-grey-1 rounded-full"
             onClick={() => setValue(0)}
           >
             <CloseIcon />

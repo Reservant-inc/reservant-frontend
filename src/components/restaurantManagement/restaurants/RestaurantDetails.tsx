@@ -12,6 +12,7 @@ import IngredientTable from "../Warehouse/IngredientTable";
 import MenuList from "../menus/MenuList";
 import { MenuScreenType } from "../../../services/enums";
 import FocusedRestaurantReviewsList from "../../restaurant/onMapView/FocusedRestaurantReviewsList";
+import ReviewsManagement from "../ReviewsMenagment";
 
 interface RestaurantDetailsProps {
   activeRestaurantId: number ;
@@ -76,7 +77,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 
   return (
     <div className="w-full h-full gap-4 rounded-lg overflow-y-auto scroll space-y-4 bg-white dark:bg-black">
-
+      {/* Temporary place for reviews menagment for ReviewsManagement */}
+      <div className="overflow-y-auto mt-2 p-2">
+            <ReviewsManagement activeRestaurantId={activeRestaurantId} />
+          </div>
     </div>
   );
 };
