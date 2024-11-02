@@ -18,8 +18,8 @@ import Dialog from "../../reusableComponents/Dialog";
 import FocusedRestaurantMenuList from "./FocusedRestaurantMenuList";
 import CartContextProvider from "../../../contexts/CartContext";
 import Visit from "../visits/Visit";
-import EventCreationModal from "./../events/EventCreationModal";
-import EventDetailsModal from "./../events/EventDetailsModal";
+import EventCreationModal from "../events/EventCreationModal";
+import EventDetailsModal from "../events/EventDetailsModal";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;

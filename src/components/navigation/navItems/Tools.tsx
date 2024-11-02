@@ -15,7 +15,6 @@ import {
 import { CSSTransition } from "react-transition-group";
 import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
-import { AuthContext, AuthData } from "../../routing/AuthWrapper";
 import { useTranslation } from "react-i18next";
 
 export interface ToolsProps {
@@ -33,8 +32,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
   const mainHeight = 360;
 
   const [menuHeight, setMenuHeight] = useState(mainHeight);
-
-  const { logout } = AuthData();
 
   const theme = createTheme({
     components: {
@@ -76,8 +73,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
     setMenuHeight(height);
   }
 
-  const handleLogout = () => logout();
-
   const pressHandler = () => {
     setIsPressed(!isPressed);
   };
@@ -88,18 +83,8 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
     setIsChanged(!isChanged);
   };
 
-  function deleteAllCookies() {
-    const cookies = document.cookie.split(";");
+  function deleteAllCookies() {}
 
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
-      const eqPos = cookie.indexOf("=");
-      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-      handleLogout();
-    }
-  }
-  
   function DropdownItem(props: any) {
     const onClicked = () => {
       if (props.logout === true) {

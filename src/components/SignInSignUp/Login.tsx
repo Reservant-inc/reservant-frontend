@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, FormikValues } from "formik";
 import { useTranslation } from "react-i18next";
-import { AuthData } from "../routing/AuthWrapper";
-import { fetchPOST } from "../../services/APIconn";
+import { fetchGET, fetchPOST } from "../../services/APIconn";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import LogoPrimary from "../../assets/images/LOGO-PRIMARY.png";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FetchError } from "../../services/Errors";
 import { TextField } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Cookies from "js-cookie";
+import { LoginResponseType } from "../../services/types";
 
 const initialValues = {
   login: "",
@@ -18,11 +19,11 @@ const initialValues = {
 
 const Login: React.FC = () => {
   const [t] = useTranslation("global");
-  const { login } = AuthData();
   const { loginSchema } = useValidationSchemas();
-  const [ loginError, setLoginError ] = useState<string>("")
-  const [ requestLoading, setRequestLoading ] = useState<boolean>(false)
+  const [loginError, setLoginError] = useState<string>("");
+  const [requestLoading, setRequestLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate(); // initialize navigate
 
   const onSubmit = async (
     values: FormikValues,
@@ -37,7 +38,6 @@ const Login: React.FC = () => {
       login(response);
     } catch (error) {
       if (error instanceof FetchError) {
-       
         setLoginError("");
       } else {
         console.log("Unexpected error:", error);
@@ -47,7 +47,35 @@ const Login: React.FC = () => {
       setRequestLoading(false);
     }
   };
-  // bg-[url('/src/assets/images/bg.png')]
+
+  const login = async (data: LoginResponseType) => {
+    Cookies.set("token", data.token, { expires: 1 });
+
+    try {
+      const userInfo = await fetchGET("/user");
+
+      Cookies.set(
+        "userInfo",
+        JSON.stringify({
+          userId: userInfo.userId,
+          firstName: userInfo.firstName,
+          lastName: userInfo.lastName,
+          roles: userInfo.roles,
+          photo: userInfo.photo,
+        }),
+        { expires: 1 },
+      );
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors());
+      } else {
+        console.log("unexpected error");
+      }
+    }
+
+    navigate("/reservant"); // Use navigate to redirect after setting cookies
+  };
+
   return (
     <div className="h-full w-full bg-[url('/src/assets/images/bg.png')] bg-cover">
       <div className="login-gradient flex h-full w-full items-center justify-center bg-opacity-20">
@@ -85,35 +113,36 @@ const Login: React.FC = () => {
                         color="primary"
                         as={TextField}
                       />
-                      <div id="passFieldArea"                         
-                        className="relative w-4/5">
-
-                      <Field
-                        id="password"
-                        name="password"
-                        type={showPassword ? 'text' : 'password'}
-                        helperText={(formik.errors.password && formik.touched.password) && formik.errors.password} 
-                        label="PASSWORD" 
-                        variant="standard" 
-                        className={` w-full [&>*]:font-mont-md [&>*]:text-md ${!(formik.errors.password && formik.touched.password) ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error" }`} 
-                        color="primary"
-                        as={TextField}
-                      />
-
-                      {
-                        !formik.errors.password && formik.dirty
-                        &&
-                        <span id="showPassLogin" className="absolute right-[0%] top-[40%] text-white hover:text-primary cursor-pointer " 
-                        onClick={()=>{setShowPassword(!showPassword)}}>{
-                          showPassword?<VisibilityOff/>:<Visibility/>
+                      <div id="passFieldArea" className="relative w-4/5">
+                        <Field
+                          id="password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          helperText={
+                            formik.errors.password &&
+                            formik.touched.password &&
+                            formik.errors.password
                           }
-                        </span>
-                      }
+                          label="PASSWORD"
+                          variant="standard"
+                          className={` [&>*]:text-md w-full [&>*]:font-mont-md ${!(formik.errors.password && formik.touched.password) ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          color="primary"
+                          as={TextField}
+                        />
 
-
+                        {!formik.errors.password && formik.dirty && (
+                          <span
+                            id="showPassLogin"
+                            className="absolute right-[0%] top-[40%] cursor-pointer text-white hover:text-primary "
+                            onClick={() => {
+                              setShowPassword(!showPassword);
+                            }}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </span>
+                        )}
                       </div>
                     </div>
-
 
                     <button
                       id="LoginLoginButton"

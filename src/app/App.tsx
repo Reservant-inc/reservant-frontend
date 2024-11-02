@@ -1,5 +1,46 @@
 import React, { useEffect } from "react";
-import { AuthWrapper } from "../components/routing/AuthWrapper";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LandingPage from "../components/LandingPage";
+import UserRegister from "../components/SignInSignUp/UserRegister";
+import HomePage from "../components/HomePage";
+import { checkAuthLoader, redirectIfLoggedIn } from "../services/auth";
+import Root from "../components/ProtectedLayout";
+import Login from "../components/SignInSignUp/Login";
+import RestaurantManager from "../components/restaurantManagement/RestaurantManager";
+import Visit from "../components/restaurant/visits/Visit";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "reservant",
+    element: <Root />,
+    loader: checkAuthLoader,
+    children: [
+      {
+        path: "",
+        element: <HomePage />,
+      },
+      {
+        path: "management",
+        element: <RestaurantManager />,
+        children: [{}],
+      },
+    ],
+  },
+  {
+    path: "login",
+    element: <Login />,
+    loader: redirectIfLoggedIn,
+  },
+  {
+    path: "register",
+    element: <UserRegister />,
+    loader: redirectIfLoggedIn,
+  },
+]);
 
 const App = () => {
   useEffect(() => {
@@ -17,7 +58,7 @@ const App = () => {
   return (
     <div id="AppWrapper" className="App font-mont-md">
       <div id="AppMainSection" className="h-screen">
-        <AuthWrapper />
+        <RouterProvider router={router} />
       </div>
       {/* <Footer /> */}
     </div>
