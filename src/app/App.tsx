@@ -7,7 +7,6 @@ import { checkAuthLoader, redirectIfLoggedIn } from "../services/auth";
 import Root from "../components/ProtectedLayout";
 import Login from "../components/SignInSignUp/Login";
 import RestaurantManager from "../components/restaurantManagement/RestaurantManager";
-import Visit from "../components/restaurant/visits/Visit";
 
 const router = createBrowserRouter([
   {
