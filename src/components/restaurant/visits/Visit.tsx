@@ -64,13 +64,9 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
 
   const fetchAvailableHours = async () => {
     try {
-      console.log(date);
-
       const visitHours = await fetchGET(
         `/restaurants/${restaurant.restaurantId}/available-hours?date=${date}&numberOfGuests=${guests}`,
       );
-
-      console.log(visitHours);
 
       setAvailableHours(visitHours);
     } catch (error) {
@@ -87,7 +83,11 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
     const now = new Date();
     const isToday = date === getParsedDate();
 
+    console.log(availableHours);
+
     availableHours.forEach(({ from, until }) => {
+      console.log(from);
+
       let currentTime = parseTime(from);
       const endTime = parseTime(until);
 
@@ -102,10 +102,10 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
     setTimeSlots(slots);
   };
 
-  const parseTime = (time: string): Date => {
-    const [hours, minutes, seconds] = time.split(":").map(Number);
+  const parseTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
     const date = new Date();
-    date.setHours(hours, minutes, seconds, 0);
+    date.setHours(hours, minutes, 0, 0);
     return date;
   };
 
