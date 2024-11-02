@@ -93,7 +93,7 @@ const Checkout: React.FC = () => {
                             <label>{restaurant.reservationDeposit?restaurant.reservationDeposit:0 + totalPrice} zł</label>
                         </span>
                     </div>   
-                    <button className="h-1/6 px-7 self-center rounded-lg border-[1px] border-grey-1 shadow-lg hover:text-primary" onClick={()=>{}}> Proceed to payment</button>
+                    <button className="h-1/6 px-7 self-center rounded-lg border-[1px] border-grey-1 shadow-lg hover:text-primary" onClick={onSubmit}> Proceed to payment</button>
                 </div>
                 {items.length > 0 &&
                     <div className="w-1/4 flex gap-10 h-full flex-col">
