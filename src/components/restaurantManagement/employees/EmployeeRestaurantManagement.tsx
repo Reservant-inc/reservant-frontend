@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
@@ -18,16 +17,13 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import {
-  EmployeeEmployedType,
-  EmployeeType,
-  RestaurantType,
-} from "../../../services/types";
-import { fetchDELETE, fetchGET } from "../../../services/APIconn";
+import { EmployeeEmployedType } from "../../../services/types";
+import { fetchGET } from "../../../services/APIconn";
 import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Restaurant } from "@mui/icons-material";
 import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
+import { useParams } from "react-router-dom";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -36,17 +32,18 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmployeeRestaurantManagement({
-  activeRestaurantId,
-}: {
-  activeRestaurantId: number;
-}) {
+export default function EmployeeRestaurantManagement() {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
+
+  const { restaurantId } = useParams();
+
+  const activeRestaurantId =
+    restaurantId === undefined ? -1 : parseInt(restaurantId);
 
   useEffect(() => {
     const populateRows = async () => {
@@ -92,9 +89,9 @@ export default function EmployeeRestaurantManagement({
           <button
             id="RestaurantListAddRestaurantButton"
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-md">+ Add an employee</h1>
+            <h1 className="text-md font-mont-md">+ Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -313,7 +310,7 @@ export default function EmployeeRestaurantManagement({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="border-0 scroll"
+        className="scroll border-0"
       />
       <Modal
         open={isModalOpen}

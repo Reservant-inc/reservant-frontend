@@ -16,18 +16,20 @@ import { CSSTransition } from "react-transition-group";
 import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 export interface ToolsProps {
   setIsDark: Function;
 }
 
 const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
-  const [isThemeAreaHovered, setIsThemeAreaHovered] = useState(false);
-  const [t, i18n] = useTranslation("global");
+  const [t] = useTranslation("global");
 
   const [isPressed, setIsPressed] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [activeMenu, setActiveMenu] = useState("main");
+
+  const navigate = useNavigate();
 
   const mainHeight = 360;
 
@@ -83,12 +85,14 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
     setIsChanged(!isChanged);
   };
 
-  function deleteAllCookies() {}
-
   function DropdownItem(props: any) {
     const onClicked = () => {
       if (props.logout === true) {
-        deleteAllCookies();
+        navigate("/logout");
+      }
+
+      if (props.profile) {
+        navigate("profile");
       }
 
       props.goToMenu && setActiveMenu(props.goToMenu);
@@ -103,17 +107,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
     return (
       <div className=" p-2 ">
         <a
-          onMouseEnter={() => {
-            if (props.id === "ThemeDropdownItem") {
-              setIsThemeAreaHovered(true);
-            }
-          }}
-          onMouseLeave={() => {
-            if (props.id === "ThemeDropdownItem") {
-              setIsThemeAreaHovered(false);
-            }
-          }}
-          href="#"
           id={props.id}
           className={
             props.className
@@ -143,7 +136,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
       {isPressed && (
         <div
           style={{ height: menuHeight }}
-          className="nav-dropdown dark:bg-black"
+          className="nav-dropdown z-[1] dark:bg-black"
         >
           <CSSTransition
             in={activeMenu === "main"}
@@ -157,8 +150,8 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 <DropdownItem
                   leftIcon={<AccountCircle />}
                   id="profileDropdownItem"
+                  profile={true}
                 >
-                  {" "}
                   {t("tools.main.profile")}{" "}
                 </DropdownItem>
                 <DropdownItem
@@ -167,7 +160,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   id="settingsDropdownItem"
                   goToMenu="settings"
                 >
-                  {" "}
                   {t("tools.main.settings")}{" "}
                 </DropdownItem>
                 <DropdownItem
@@ -176,7 +168,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   goToMenu="languages"
                   id="languagesDropdownItem"
                 >
-                  {" "}
                   {t("tools.main.language")}{" "}
                 </DropdownItem>
                 <DropdownItem
@@ -200,7 +191,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   }
                   id="ThemeDropdownItem"
                 >
-                  {" "}
                   {t("tools.main.mode")}{" "}
                 </DropdownItem>
                 <DropdownItem
@@ -208,7 +198,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   id="logoutDropdownItem"
                   logout={true}
                 >
-                  {" "}
                   {t("tools.main.signout")}{" "}
                 </DropdownItem>
               </ThemeProvider>

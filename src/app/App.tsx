@@ -7,6 +7,16 @@ import { checkAuthLoader, redirectIfLoggedIn } from "../services/auth";
 import Root from "../components/ProtectedLayout";
 import Login from "../components/SignInSignUp/Login";
 import RestaurantManager from "../components/restaurantManagement/RestaurantManager";
+import Profile from "../components/profile/Profile";
+import Dashboard from "../components/restaurantManagement/dashboard/Dashboard";
+import EmployeeManagement from "../components/restaurantManagement/employees/EmployeeManagement";
+import RestaurantListSection from "../components/restaurantManagement/restaurants/restaurantsList/RestaurantListSection";
+import EmployeeRestaurantManagement from "../components/restaurantManagement/employees/EmployeeRestaurantManagement";
+import Menu from "../components/restaurantManagement/menus/Menu";
+import IngredientTable from "../components/restaurantManagement/Warehouse/IngredientTable";
+import HistoryTab from "../components/restaurantManagement/reservations/HistoryTab";
+import MenuList from "../components/restaurantManagement/menus/MenuList";
+import { MenuScreenType } from "../services/enums";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +29,55 @@ const router = createBrowserRouter([
     loader: checkAuthLoader,
     children: [
       {
-        path: "",
+        path: "home",
         element: <HomePage />,
       },
       {
-        path: "management",
+        path: ":name/management",
         element: <RestaurantManager />,
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard />,
+          },
+          {
+            path: "employee-management",
+            element: <EmployeeManagement />,
+          },
+          {
+            path: "restaurants",
+            element: <RestaurantListSection />,
+          },
+          {
+            path: "restaurant/:restaurantId",
+            children: [
+              {
+                path: "restaurant-dashboard",
+                element: <Dashboard />,
+              },
+              {
+                path: "restaurant-employee-management",
+                element: <EmployeeRestaurantManagement />,
+              },
+              {
+                path: "menu-management",
+                element: <MenuList type={MenuScreenType.Management} />,
+              },
+              {
+                path: "warehouse-management",
+                element: <IngredientTable />,
+              },
+              {
+                path: "reservation-history",
+                element: <HistoryTab />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "profile",
+        element: <Profile />,
         children: [{}],
       },
     ],

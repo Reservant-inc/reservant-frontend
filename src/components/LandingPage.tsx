@@ -14,7 +14,7 @@ const LandingPage = () => {
     >
       <a
         id="localhostLink"
-        href="http://localhost:3000/reservant"
+        href="http://localhost:3000/reservant/home"
         className="p-2"
       >
         localhost
