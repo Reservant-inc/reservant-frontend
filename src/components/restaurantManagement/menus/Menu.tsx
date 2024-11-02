@@ -30,8 +30,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu({ menu, type, a
     const handleDeleteMenu = async () => {
         try {
             const menuId = menu.menuId; 
-            const response = await fetchDELETE(`/menus/${menuId}`);
-            console.log(response);
+            await fetchDELETE(`/menus/${menuId}`);
             setIsConfirmationOpen(false)
         }
         catch (error) {

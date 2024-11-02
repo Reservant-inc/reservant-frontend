@@ -119,6 +119,8 @@ export const useValidationSchemas = () => {
       )
       .required(t("errors.user-register.phoneNumber.required")),
 
+    birthDate: yup.string().required(),
+
     password: yup
       .string()
       .matches(

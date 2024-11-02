@@ -38,7 +38,6 @@ const RestaurantManager = () => {
           </div>
 
             <div
-              id="asdasd"
               className="h-[90%] w-full rounded-b-lg rounded-tr-lg shadow-md"
             >
               {
