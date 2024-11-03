@@ -43,7 +43,7 @@ const ManagementTabs: React.FC = ({}) => {
             <ListItemButton
               id="menu-listItem-back-button"
               className={`flex h-8 w-8 items-center justify-center rounded-full bg-grey-0 hover:bg-white dark:bg-grey-5 dark:text-grey-1 dark:hover:bg-black `}
-              onClick={() => navigate("dashboard")}
+              onClick={() => navigate("restaurants")}
             >
               <ArrowBack className="h-6 w-6" />
             </ListItemButton>

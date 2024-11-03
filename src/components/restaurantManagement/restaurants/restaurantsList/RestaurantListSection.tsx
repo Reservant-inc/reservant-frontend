@@ -145,7 +145,7 @@ const RestaurantListSection: React.FC = () => {
             color="inherit"
             onClick={() =>
               navigate(
-                `../restaurant/${rows[parseInt(id.toString())].restaurantId}`,
+                `../restaurant/${rows[parseInt(id.toString())].restaurantId}/restaurant-dashboard`,
               )
             }
           />,
