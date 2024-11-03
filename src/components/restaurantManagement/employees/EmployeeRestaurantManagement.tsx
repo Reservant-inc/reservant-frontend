@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
@@ -18,13 +17,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
-import {
-  EmployeeEmployedType,
-} from "../../../services/types";
+import { useParams } from "react-router-dom";
+import { EmployeeEmployedType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import Dialog from "../../reusableComponents/Dialog";
+import AddIcon from "@mui/icons-material/Add";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -33,15 +31,15 @@ interface EditToolbarProps {
   ) => void;
 }
 
-export default function EmployeeRestaurantManagement({
-  activeRestaurantId,
-}: {
-  activeRestaurantId: number;
-}) {
+export default function EmployeeRestaurantManagement() {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  const { restaurantId } = useParams();
+
+  const activeRestaurantId =
+    restaurantId === undefined ? -1 : parseInt(restaurantId);
 
   useEffect(() => {
     const populateRows = async () => {
@@ -87,10 +85,10 @@ export default function EmployeeRestaurantManagement({
           <button
             id="RestaurantListAddRestaurantButton"
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <AddIcon className="dark:fill-secondary"/>
-            <h1 className="font-mont-md text-md">Add an employee</h1>
+            <AddIcon className="dark:fill-secondary" />
+            <h1 className="text-md font-mont-md">Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -108,8 +106,6 @@ export default function EmployeeRestaurantManagement({
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
-
- 
 
   const handleSaveClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
@@ -142,7 +138,6 @@ export default function EmployeeRestaurantManagement({
   };
 
   const columns: GridColDef[] = [
-   
     {
       field: "firstName",
       headerName: "First name",
@@ -239,7 +234,6 @@ export default function EmployeeRestaurantManagement({
         }
 
         return [
-         
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
@@ -287,18 +281,17 @@ export default function EmployeeRestaurantManagement({
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-        className="border-0 scroll"
+        className="scroll border-0"
       />
-      { isModalOpen && 
+      {isModalOpen && (
         <Dialog
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           title="Creating a new employee..."
-        > 
+        >
           <EmployeeRegister setIsModalOpen={setIsModalOpen} />
         </Dialog>
-      }
-      
+      )}
     </div>
   );
 }

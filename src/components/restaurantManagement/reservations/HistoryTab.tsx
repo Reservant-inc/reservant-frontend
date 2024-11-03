@@ -12,17 +12,19 @@ import { FetchError } from "../../../services/Errors";
 import { OrderType, VisitType } from "../../../services/types";
 import { ArrowForwardIos } from "@mui/icons-material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useParams } from "react-router-dom";
 
-interface HistoryTabProps {
-  activeRestaurantId: number;
-}
-
-const HistoryTab: React.FC<HistoryTabProps> = ({ activeRestaurantId }) => {
+const HistoryTab: React.FC = ({}) => {
   const [ordersOpen, setOrdersOpen] = useState<boolean>(false);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [activeOrders, setActiveOrders] = useState<OrderType[]>([]);
   const [activeVisitId, setActiveVisitId] = useState<number | null>(null);
+
+  const { restaurantId } = useParams();
+
+  const activeRestaurantId =
+    restaurantId === undefined ? -1 : parseInt(restaurantId);
 
   useEffect(() => {
     const populateRows = async () => {
@@ -187,7 +189,7 @@ const HistoryTab: React.FC<HistoryTabProps> = ({ activeRestaurantId }) => {
           <div className="flex items-center  gap-6">
             <button
               onClick={() => setOrdersOpen(false)}
-              className="m-3 flex items-center justify-center gap-1 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+              className=" m-3 flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
               <ArrowBackIcon />
               <h1 className="text-md font-mont-md"> Back </h1>
@@ -197,7 +199,9 @@ const HistoryTab: React.FC<HistoryTabProps> = ({ activeRestaurantId }) => {
               Visit {activeVisitId ? activeVisitId : ""} orders{" "}
             </h1>
           </div>
-          <OrderHistory orders={activeOrders} />
+          <div className="">
+            <OrderHistory orders={activeOrders} />
+          </div>
         </div>
       )}
     </div>
