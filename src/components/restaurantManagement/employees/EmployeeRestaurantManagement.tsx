@@ -17,13 +17,12 @@ import {
   GridRowEditStopReasons,
   GridSlots,
 } from "@mui/x-data-grid";
+import { useParams } from "react-router-dom";
 import { EmployeeEmployedType } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
-import { Restaurant } from "@mui/icons-material";
-import RestaurantAddEmp from "../restaurants/RestaurantAddEmp";
-import { useParams } from "react-router-dom";
+import Dialog from "../../reusableComponents/Dialog";
+import AddIcon from "@mui/icons-material/Add";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -36,9 +35,6 @@ export default function EmployeeRestaurantManagement() {
   const [rows, setRows] = useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string>("");
 
   const { restaurantId } = useParams();
 
@@ -91,7 +87,8 @@ export default function EmployeeRestaurantManagement() {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ Add an employee</h1>
+            <AddIcon className="dark:fill-secondary" />
+            <h1 className="text-md font-mont-md">Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -108,11 +105,6 @@ export default function EmployeeRestaurantManagement() {
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleEmploymentClick = (id: string) => () => {
-    setIsEmploymentOpen(true);
-    setSelectedId(id);
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
@@ -146,33 +138,23 @@ export default function EmployeeRestaurantManagement() {
   };
 
   const columns: GridColDef[] = [
-    { field: "empID", headerName: "ID", width: 180, editable: false },
-    {
-      field: "login",
-      headerName: "Login",
-      type: "string",
-      width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
-    },
     {
       field: "firstName",
-      headerName: "Name",
+      headerName: "First name",
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "lastName",
-      headerName: "Surname",
+      headerName: "Last Name",
       type: "string",
       width: 180,
       editable: true,
     },
     {
       field: "phoneNumber",
-      headerName: "Phone Number",
+      headerName: "Phone number",
       type: "string",
       width: 180,
       align: "left",
@@ -253,17 +235,6 @@ export default function EmployeeRestaurantManagement() {
 
         return [
           <GridActionsCellItem
-            icon={<Restaurant />}
-            label="Employments"
-            id={
-              "EmployeeManagementEmploymentButton" +
-              rows[parseInt(id.toString())].login
-            }
-            className="textPrimary"
-            onClick={handleEmploymentClick(rows[parseInt(id.toString())].empID)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
             id={
@@ -312,24 +283,15 @@ export default function EmployeeRestaurantManagement() {
         }}
         className="scroll border-0"
       />
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        className="flex items-center justify-center"
-      >
-        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
+      {isModalOpen && (
+        <Dialog
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Creating a new employee..."
+        >
           <EmployeeRegister setIsModalOpen={setIsModalOpen} />
-        </div>
-      </Modal>
-      <Modal
-        open={isEmploymentOpen}
-        onClose={() => setIsEmploymentOpen(false)}
-        className="flex items-center justify-center"
-      >
-        <div className="h-[500px] w-[500px] rounded-xl bg-white p-3">
-          <RestaurantAddEmp empid={selectedId} />
-        </div>
-      </Modal>
+        </Dialog>
+      )}
     </div>
   );
 }

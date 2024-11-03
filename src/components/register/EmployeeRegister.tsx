@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useValidationSchemas } from "../../hooks/useValidationSchema";
 import { fetchGET, fetchPOST } from "../../services/APIconn";
 import ErrorMes from "../reusableComponents/ErrorMessage";
+import { Save } from "@mui/icons-material";
 
 const initialValues = {
   login: "",
@@ -14,6 +15,7 @@ const initialValues = {
   phoneNumber: "",
   password: "",
   confirmPassword: "",
+  birthDate: "",
 };
 
 interface RegisterEmpProps {
@@ -37,6 +39,7 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
         lastName: values.lastName,
         phoneNumber: values.phoneNumber,
         password: values.password,
+        birthDate: values.birthDate
       });
 
       await fetchPOST("/auth/register-restaurant-employee", body);
@@ -50,151 +53,152 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
   };
 
   return (
-    <div className="container-register">
+    <div className="container-register w-[500px] h-[700px] p-7">
       <Formik
         initialValues={initialValues}
         validationSchema={employeeRegisterSchema}
-        //potencjalnie do rozważenia, więcej o tym niżej
-        ////////////////////////////////////////////////
         validateOnChange={false}
         validateOnBlur={true}
-        ////////////////////////////////////////////////
         onSubmit={handleSubmit}
       >
         {(formik) => (
           <Form>
-            <div className="form-container">
-              <div className="form-control">
-                <label htmlFor="firstName">{t("auth.firstName")}:</label>
-                <Field
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  className={
-                    !(formik.errors.firstName && formik.touched.firstName)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
+            <div className="form-container flex flex-col justify-start gap-7">
+              <div>
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.firstName&&formik.touched.firstName?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="firstName">{t("auth.firstName")}:</label>
+                  <Field
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    className="w-full"
+                    />
+                  <label>*</label>
+                </div>
                 <ErrorMessage name="firstName">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
 
-              <div className="form-control">
-                <label htmlFor="lastName">{t("auth.lastName")}:</label>
-                <Field
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  className={
-                    !(formik.errors.lastName && formik.touched.lastName)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
+              <div>
+
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.lastName&&formik.touched.lastName?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="lastName">{t("auth.lastName")}:</label>
+                  <Field
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    className="w-full"
+                  />
+                  <label>*</label>
+                </div>
                 <ErrorMessage name="lastName">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
+
               </div>
-
-              <div className="form-control">
-                <label htmlFor="login">Login:</label>
-                {/* 
-                
-                    @TODO ... ?
-
-                    nie moge nigdzie znalezc satysfakcjonującego rozwiązania pozwalającego na walidację tylko jednego pola w inny sposób (on blur zamiast on change).
-                    na razie zmieniam walidacje calego forma na validateOnBlur - mniej żądań będzie przy sprawdzaniu loginu
+              <div>
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.login&&formik.touched.login?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="login">Login:</label>
+                  <Field
+                    type="text"
+                    id="login"
+                    name="login"
+                    className="w-full"
                     
-                    update: 
-                      ig trzeba było wziąć angulara 
-                      https://stackoverflow.com/questions/68137377/how-to-validate-a-field-onblur-and-other-field-onchange-using-formik
+                    />
+                  <label>*</label>
 
-                */}
-
-                <Field
-                  type="text"
-                  id="login"
-                  name="login"
-                  className={
-                    !(formik.errors.login && formik.touched.login)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
+                </div>
                 <ErrorMessage name="login">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
+              <div>
+                <div className={`  flex items-center justify-start gap-3 border-b-[1px] text-nowrap ${formik.errors.phoneNumber&&formik.touched.phoneNumber?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
+                  <Field
+                    as={PhoneInput}
+                    international
+                    defaultCountry="PL"
+                    name={"phoneNumber"}
+                    value={formik.values.phoneNumber}
+                    onChange={(value: string) =>
+                      formik.setFieldValue("phoneNumber", value)
+                    }
+                    className="w-full"
+                    
+                    />
+                  <label>*</label>
 
-              <div className="form-control">
-                <label htmlFor="phoneNumber">{t("auth.phoneNumber")}:</label>
-                <Field
-                  as={PhoneInput}
-                  international
-                  defaultCountry="PL"
-                  name={"phoneNumber"}
-                  value={formik.values.phoneNumber}
-                  onChange={(value: string) =>
-                    formik.setFieldValue("phoneNumber", value)
-                  }
-                  className={
-                    !(formik.errors.phoneNumber && formik.touched.phoneNumber)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
+                </div>
                 <ErrorMessage name="phoneNumber">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
+              <div>
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.birthDate&&formik.touched.birthDate?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="birthDate">Birth date:</label>
+                  <Field
+                    type="Date"
+                    id="birthDate"
+                    name="birthDate"
+                    className="w-full"
+                  />
+                  <label>*</label>
 
-              <div className="form-control">
-                <label htmlFor="password">{t("auth.password")}:</label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  className={
-                    !(formik.errors.password && formik.touched.password)
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
+                </div>
+                <ErrorMessage name="birthDate">
+                  {(msg) => <ErrorMes msg={msg} />}
+                </ErrorMessage>
+              </div>
+              <div>
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.password&&formik.touched.password?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="password">{t("auth.password")}:</label>
+                  <Field
+                    type="password"
+                    id="password"
+                    name="password"
+                    className="w-full"
+                    
+                    />
+                  <label>*</label>
+
+                </div>
                 <ErrorMessage name="password">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
+              <div>
+                <div className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.confirmPassword&&formik.touched.confirmPassword?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                  <label htmlFor="confirmPassword">
+                    {t("auth.confirmPassword")}:
+                  </label>
+                  <Field
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    className="w-full"
+                    
+                    />
+                  <label>*</label>
 
-              <div className="form-control">
-                <label htmlFor="confirmPassword">
-                  {t("auth.confirmPassword")}:
-                </label>
-                <Field
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  className={
-                    !(
-                      formik.errors.confirmPassword &&
-                      formik.touched.confirmPassword
-                    )
-                      ? "border-none"
-                      : "border-pink border-2 border-solid"
-                  }
-                />
+                </div>
                 <ErrorMessage name="confirmPassword">
                   {(msg) => <ErrorMes msg={msg} />}
                 </ErrorMessage>
               </div>
-
               <button
+                className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                 id="EmployeeRegisterSubmitButton"
                 type="submit"
                 disabled={!formik.isValid}
               >
-                {t("auth.registerButton")}
+                <Save/>
+                <h1 className="font-mont-md text-md">
+                  {t("auth.registerButton")}
+                </h1>
+
               </button>
             </div>
           </Form>

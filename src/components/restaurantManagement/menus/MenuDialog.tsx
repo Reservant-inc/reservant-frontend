@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { fetchPOST, fetchGET, fetchPUT } from "../../../services/APIconn";
 import { Field, Form, Formik, FormikValues } from "formik";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
-import { Add, Save } from "@mui/icons-material";
+import { Add, Save, SaveOutlined } from "@mui/icons-material";
 import { MenuItemType, MenuType } from "../../../services/types";
 import { FetchError } from "../../../services/Errors";
 import MenuItem from "./MenuItem";
@@ -104,7 +104,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         console.log("Unexpected error")
     } 
   };
-  const handleEditedNewMenu = async (
+  const handleEditMenu = async (
     values: FormikValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) => {
@@ -117,10 +117,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         menuType: values.menuType,
         dateFrom: values.dateFrom,
         dateUntil: values.dateUntil,
-        photo: ""
+        photo: "",
+        menuItemsIds: getSelectedMenuItemsIds()
       });
   
       await fetchPUT(`/menus/${menu?.menuId}`, body);
+      onClose();
       
     }catch (error) {
       if (error instanceof FetchError) {
@@ -129,20 +131,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         console.log("Unexpected error")
       }
     }
-    try{
-      const body = JSON.stringify({
-        itemIds: getSelectedMenuItemsIds()
-      });
-      await fetchPUT(`/menus/${menu?.menuId}/items`, body);
-      setSubmitting(false)
-      onClose();
-
-    } catch (error) {
-      if (error instanceof FetchError) 
-        console.log(error.formatErrors())
-      else 
-        console.log("Unexpected error")
-    } 
+    
   };
   
 
@@ -157,7 +146,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
 
 
   return (
-    <div className=" flex justify-center h-[65vh] w-[60vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
+    <div className=" flex justify-center  w-fit w-[950px] h-[535px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         initialValues={{ 
           name: menu?menu.name:"",
@@ -166,7 +155,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           dateFrom: menu?menu.dateFrom:"",
           dateUntil: menu?menu.dateUntil:"",
         }} 
-        onSubmit={menu?handleEditedNewMenu:handleSaveNewMenu}
+        onSubmit={menu?handleEditMenu:handleSaveNewMenu}
         validationSchema={menuSchema}
         className="w-1/3 "
       >
@@ -183,6 +172,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full "
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.name&&formik.touched.name) &&
@@ -199,6 +189,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.alternateName&&formik.touched.alternateName) &&
@@ -224,6 +215,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                       </option>)
                     }
                   </Field>
+                  <label>*</label>
                   </div>
                   {
                     (formik.errors.menuType&&formik.touched.menuType) &&
@@ -240,6 +232,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.dateFrom&&formik.touched.dateFrom) &&
@@ -256,20 +249,21 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
+                  <label>*</label>
                 </div>
                 {
                   (formik.errors.dateUntil&&formik.touched.dateUntil) &&
                   <ErrorMes msg={formik.errors.dateUntil}/>
                 }   
               </div>
-              <button 
+              <button
                 id="addmenuSubmit"
                 type="submit"
-                disabled={!formik.isValid || (!formik.dirty && menu===null) }
-                className={" self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 shadow dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-              >
-                <Save/>
-                {t("general.save")}
+                disabled={!formik.isValid || !formik.dirty }
+                className="self-center gap-2 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                >
+                <SaveOutlined/>
+                <h1 className="font-mont-md text-md">{t("general.save")}</h1>
               </button>
             </Form>
           )
@@ -289,7 +283,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               <option value="" className="w-full" disabled={true} selected={true} id="MI-option-default">Menu item</option>
               {/* @todo t  */}
               {
-                menuItems.filter(menuItem=>!menu?.menuItems.find(activeMenuItem=>activeMenuItem.menuItemId==menuItem.menuItemId))
+                menuItems
                 .filter(menuItem=>!selectedMenuItems.find(selectedMenuItem=>selectedMenuItem.menuItemId==menuItem.menuItemId))
                 .map
                 (
@@ -302,9 +296,6 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
             </select>
           </div>
           <button
-            className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-            
-            id="addMenuItemToMenu"
             onClick={()=>{
               let tmp = menuItems.find((menuItem)=>menuItem.menuItemId==Number(selectedMenuItemId))
               setSelectedMenuItemId("")
@@ -315,10 +306,14 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               }
             }
             disabled={!Number(selectedMenuItemId)}
-          >
+            id="addMenuItemToMenu"
+            className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+            >
             <Add/>
-            Add to menu
+
+            <h1 className="font-mont-md text-md">Add to menu</h1>
           </button>
+          
         </form>
 
         <div className="  dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full  h-full rounded-lg pr-3">
