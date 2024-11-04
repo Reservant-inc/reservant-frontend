@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const RestaurantManager = () => {
   return (
-    <div className="flex h-[calc(100%-3.5rem)] w-full bg-grey-1 bg-grey-1 dark:bg-grey-6">
+    <div className="flex h-full w-full bg-grey-1 bg-grey-1 dark:bg-grey-6">
       <div className="z-[0] flex w-full flex-col">
         <div className="flex h-full w-full flex-col gap-6 p-6">
           <div className="flex h-full w-full flex-col">
