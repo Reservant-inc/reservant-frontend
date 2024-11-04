@@ -19,6 +19,7 @@ import { MenuScreenType } from "../services/enums";
 import Account from "../components/profile/Account";
 import ReservationHistory from "../components/profile/ReservationHistory";
 import EventHistory from "../components/profile/EventHistory";
+import NotFound from "../components/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
     path: "register",
     element: <UserRegister />,
     loader: redirectIfLoggedIn,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
