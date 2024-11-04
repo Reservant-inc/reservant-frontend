@@ -19,6 +19,8 @@ import { MenuScreenType } from "../services/enums";
 import Account from "../components/profile/Account";
 import ReservationHistory from "../components/profile/ReservationHistory";
 import EventHistory from "../components/profile/EventHistory";
+import Visit from "../components/restaurant/visits/Visit";
+import Checkout from "../components/restaurant/Checkout";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +94,21 @@ const router = createBrowserRouter([
           {
             path: "event-history",
             element: <EventHistory />,
+          },
+        ],
+      },
+      {
+        path: "restaurant",
+        children: [
+          {
+            path: "reservation",
+            element: <Visit />,
+            children: [
+              {
+                path: "checkout",
+                element: <Checkout />,
+              },
+            ]
           },
         ],
       },

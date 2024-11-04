@@ -63,12 +63,12 @@ const Checkout: React.FC = () => {
     }
 
     return (
-        <div className="checkout-container flex flex-col items-center gap-7 p-10 h-full w-full">
-            <h1 className="text-xl font-mont-bd dark:text-white">Checkout</h1>
+        <div className="checkout-container flex flex-col dark:bg-black dark:text-grey-0 items-center gap-7 p-10 h-full w-full">
+            <h1 className="text-xl font-mont-bd ">Checkout</h1>
             <div className="flex justify-center w-full h-full gap-14">
                 <div className="flex flex-col h-full w-1/4 gap-10">
                     <div className="w-full flex h-2/6 flex-col gap-7 p-5 border-grey-1 border-[1px] rounded-lg">
-                        <h1 className="self-center text-xl font-mont-bd dark:text-white">User details</h1>
+                        <h1 className="self-center text-xl font-mont-bd ">User details</h1>
                         <span className="flex justify-between">
                             <label>First name:</label>
                             <label>{user.firstName}</label>
@@ -79,7 +79,7 @@ const Checkout: React.FC = () => {
                         </span>
                     </div>   
                     <div className="w-full flex h-3/6 flex-col gap-7 p-5 border-grey-1 border-[1px] rounded-lg">
-                        <h1 className="self-center text-xl font-mont-bd dark:text-white">Reservation details</h1>
+                        <h1 className="self-center text-xl font-mont-bd ">Reservation details</h1>
                         <span className="flex justify-between">
                             <label>Number of guests:</label>
                             <label>{guests}</label>
@@ -98,7 +98,7 @@ const Checkout: React.FC = () => {
                 {items.length > 0 &&
                     <div className="w-1/4 flex gap-10 h-full flex-col">
                         <div className="flex flex-col p-5 h-2/3 border-grey-1 border-[1px] rounded-lg">
-                            <h1 className="self-center text-xl font-mont-bd dark:text-white">Order details</h1>
+                            <h1 className="self-center text-xl font-mont-bd ">Order details</h1>
                             <div className="flex flex-col gap-4 w-full separator divide-y-[1px] ">
                                 {items.map((item) => (
                                     <div key={item.menuItemId} className=" flex items-center gap-4 p-4 ">
@@ -117,7 +117,7 @@ const Checkout: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex flex-col h-1/3 p-5 border-grey-1 border-[1px] rounded-lg gap-7">
-                            <h1 className="self-center text-xl font-mont-bd dark:text-white">Additional notes</h1>
+                            <h1 className="self-center text-xl font-mont-bd ">Additional notes</h1>
                             <textarea/>
 
                         </div>

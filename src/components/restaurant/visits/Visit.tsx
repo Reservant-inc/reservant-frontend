@@ -7,12 +7,11 @@ import { fetchGET } from "../../../services/APIconn";
 import { FetchError } from "../../../services/Errors";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CartContext } from "../../../contexts/CartContext";
 import SellIcon from "@mui/icons-material/Sell";
 
 interface VisitProps {
-  restaurant: RestaurantDetailsType;
 }
 
 const getParsedDate = (): string => {
@@ -26,8 +25,11 @@ const getParsedDate = (): string => {
   );
 };
 
-const Visit: React.FC<VisitProps> = ({ restaurant }) => {
+const Visit: React.FC<VisitProps> = () => {
   const today = getParsedDate();
+
+  const { state } = useLocation();
+  const { restaurant } = state as { restaurant: RestaurantDetailsType };
 
   const [isOrdering, setIsOrdering] = useState<boolean>(false);
   const [guests, setGuests] = useState<number>(1);
@@ -162,14 +164,14 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
                   </select>
                 </div>
               ) : (
-                <h1>No available visit hours.</h1>
+                <h1>No available visit hours.</h1> 
               )}
             </div>
           </div>
           <div className="flex w-full flex-row-reverse gap-2">
             <button
               id="RestaurantListAddRestaurantButton"
-              onClick={() => navigate("/checkout", { state: data })}
+              onClick={() => navigate("./checkout", { state: data })}
               className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
               <AccountBalanceIcon className="h-5 w-5" />
@@ -196,14 +198,14 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
           <div className="flex h-8 w-full flex-row-reverse gap-3">
             <button
               className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-              onClick={() => navigate("/checkout", { state: data })}
+              onClick={() => navigate("./checkout", { state: data })}
             >
               {`CHECKOUT ${totalPrice > 0 ? totalPrice + "zł" : ""}`}
               <SellIcon />
             </button>
             <button
               id="RestaurantListAddRestaurantButton"
-              onClick={() => navigate("/checkout", { state: data })}
+              onClick={() => navigate("./checkout", { state: data })}
               className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
               <AccountBalanceIcon className="h-5 w-5" />
@@ -214,6 +216,8 @@ const Visit: React.FC<VisitProps> = ({ restaurant }) => {
           <Cart />
         </div>
       )}
+      <Outlet />
+
     </>
   );
 };

@@ -15,13 +15,13 @@ import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
 import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../reusableComponents/Dialog";
-import Visit from "../visits/Visit";
 import { MenuScreenType } from "../../../services/enums";
 import MenuList from "../../restaurantManagement/menus/MenuList";
 import DefaultImage from "../../../assets/images/defaulImage.jpeg";
 import CartContextProvider from "../../../contexts/CartContext";
 import EventCreationModal from "../events/EventCreationModal";
 import EventDetailsModal from "../events/EventDetailsModal";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -52,6 +52,13 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [option, setOption] = useState<Options | null>(null);
   const [createdEventId, setCreatedEventId] = useState<number | null>(null);
   const [showMyEvents, setShowMyEvents] = useState<boolean>(false);
+
+
+  const navigate = useNavigate();
+  const data = {
+    restaurant: restaurant,
+  };
+
 
   const [t] = useTranslation("global");
 
@@ -149,7 +156,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         type={MenuScreenType.Preview}
       />
     ),
-    [Options.VISIT]: <Visit restaurant={activeRestaurant} />,
+    [Options.VISIT]: <></>,
     [Options.EVENT]: (
       <EventCreationModal
         handleClose={handleDialogClose}
@@ -187,7 +194,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                  onClick={() => setOption(Options.VISIT)}
+                  onClick={() => navigate("../restaurant/reservation", { state: data })}
+
                 >
                   <EditCalendarIcon className="h-6 w-6" />
                 </button>
