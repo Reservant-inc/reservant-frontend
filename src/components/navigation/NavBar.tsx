@@ -11,7 +11,7 @@ const NavBar: React.FC = () => {
   const [isDark, setIsDark] = useState(localStorage.theme === "dark");
 
   return (
-    <div className="z-[2] flex h-[55px] w-full items-center shadow-md dark:bg-black">
+    <div className="relative z-[2] flex h-full w-full items-center shadow-md dark:bg-black">
       <div className="mx-1 flex h-full w-full items-center p-1">
         <div className="flex h-full flex-1 items-center gap-2">
           {isDark ? (

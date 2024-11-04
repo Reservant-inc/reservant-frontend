@@ -73,7 +73,7 @@ const Login: React.FC = () => {
       }
     }
 
-    navigate("/reservant"); // Use navigate to redirect after setting cookies
+    navigate("/reservant/home");
   };
 
   return (
