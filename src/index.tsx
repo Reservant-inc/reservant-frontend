@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./app/App";
 import reportWebVitals from "./other/reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
 import global_en from "./translations/en/global.json";
 import global_pl from "./translations/pl/global.json";
 import i18next from "i18next";
@@ -20,7 +19,7 @@ const theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          fontFamily: 'Montserrat-md',
+          fontFamily: "Montserrat-md",
         },
       },
     },
@@ -48,9 +47,7 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18next}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <App />
       </I18nextProvider>
     </ThemeProvider>
   </React.StrictMode>,

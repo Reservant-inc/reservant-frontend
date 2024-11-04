@@ -14,7 +14,7 @@ const NavBar: React.FC = () => {
   const size = useWindowDimensions();
 
   return (
-    <div className="z-[2] flex h-[55px] w-full min-w-[550px] items-center shadow-md dark:bg-black">
+    <div className="relative z-[2] flex h-full w-full items-center shadow-md dark:bg-black">
       <div className="mx-1 flex h-full w-full items-center p-1">
         <div className="flex h-full flex-1 items-center gap-2">
           {isDark ? (
@@ -30,8 +30,7 @@ const NavBar: React.FC = () => {
               className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
             />
           )}
-          {
-            size.width > 880 &&
+          {size.width > 880 && (
             <h1
               className={
                 "font-mont-md text-xl" +
@@ -40,7 +39,7 @@ const NavBar: React.FC = () => {
             >
               RESERVANT
             </h1>
-          }
+          )}
         </div>
 
         <Sections />

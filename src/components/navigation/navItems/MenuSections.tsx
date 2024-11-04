@@ -7,15 +7,15 @@ interface SectionProps {}
 const Sections: React.FC<SectionProps> = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const user = JSON.parse(Cookies.get("userInfo") as string);
 
   const userRoles = user.roles;
 
-  const isClickedRestaurants =
-    location.pathname ===
-    `/${user.login}/restaurants`;
-  const isClickedHome = location.pathname === "/home";
+  const isClickedRestaurants = location.pathname.startsWith(
+    `/reservant/${user.firstName}-${user.lastName}/management`,
+  );
+  const isClickedHome = location.pathname === "/reservant/home";
 
   return (
     <div className="flex h-full items-center gap-3">
@@ -28,7 +28,7 @@ const Sections: React.FC<SectionProps> = () => {
               ? " hover:bg-transpartent fill-primary dark:fill-secondary dark:hover:bg-none"
               : " hover:bg-grey-1 dark:hover:bg-grey-5")
           }
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("home")}
         >
           <svg
             className="absolute top-1/2 h-6 -translate-y-1/2 transform"
@@ -66,7 +66,7 @@ const Sections: React.FC<SectionProps> = () => {
             }
             onClick={() =>
               navigate(
-                `/${user.firstName}_${user.lastName}/restaurants`,
+                `${user.firstName + "-" + user.lastName}/management/dashboard`,
               )
             }
           >

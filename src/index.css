@@ -214,6 +214,25 @@ dialog::backdrop {
   border-color: var(--tw-color-grey-5) !important
 }
 
+.dark .MuiTableCell-root, .MuiTableCell-head, .MuiTableCell-sizeMedium, .css-nfqv2w-MuiTableCell-root {
+  color: var(--tw-color-grey-0);
+  border-color: var(--tw-color-grey-5) !important
+}
+
+.MuiTableCell-root, .MuiTableCell-head, .MuiTableCell-sizeMedium, .css-nfqv2w-MuiTableCell-root {
+  color: var(--tw-color-black);
+  border-color: var(--tw-color-grey-1) !important
+}
+
+.dark .MuiTablePagination-selectIcon{
+  color: inherit !important
+}
+
+.dark .css-zylse7-MuiButtonBase-root-MuiIconButton-root{
+  color: var(--tw-color-grey-2) !important
+}
+
+
 @tailwind base;
 
 @layer base{

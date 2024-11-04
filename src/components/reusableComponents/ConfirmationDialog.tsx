@@ -25,24 +25,27 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   altText,
   confirmationText,
 }) => {
-  const { t } = useTranslation("global");
-
+  const [t] = useTranslation("global");
+  const handleConfirm = () => {
+    onConfirm();
+    onClose();
+  };
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirmation</DialogTitle>
+      <DialogTitle>{t("general.confirmation")}</DialogTitle>
       <DialogContent>{confirmationText}</DialogContent>
       <DialogActions>
-        <Button onClick={onConfirm} >
-          Yes
-        </Button>
-        {(onAlt || altText) &&
-        <Button onClick={onAlt} color="error">
-          {altText}  
-        </Button>}
+        {(onAlt || altText) && (
+          <Button onClick={onAlt} color="error">
+            {altText}
+          </Button>
+        )}
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t("general.cancel")}
         </Button>
-        
+        <Button onClick={handleConfirm} color="error">
+          {t("general.yes")}
+        </Button>
       </DialogActions>
     </Dialog>
   );

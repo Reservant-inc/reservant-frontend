@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { fetchGET, getImage } from "../../../services/APIconn";
-import {
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
-import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import EventIcon from '@mui/icons-material/Event';
+import { IconButton, CircularProgress } from "@mui/material";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
-import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import MopedIcon from "@mui/icons-material/Moped";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -19,12 +16,12 @@ import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../reusableComponents/Dialog";
 import Visit from "../visits/Visit";
-import EventCreationModal from "./../events/EventCreationModal";
-import EventDetailsModal from "./../events/EventDetailsModal";
 import { MenuScreenType } from "../../../services/enums";
 import MenuList from "../../restaurantManagement/menus/MenuList";
-import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import DefaultImage from "../../../assets/images/defaulImage.jpeg";
 import CartContextProvider from "../../../contexts/CartContext";
+import EventCreationModal from "../events/EventCreationModal";
+import EventDetailsModal from "../events/EventDetailsModal";
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType;
@@ -35,12 +32,12 @@ enum Options {
   "ORDER",
   "MENU",
   "EVENT",
-  "VISIT"
+  "VISIT",
 }
 
 const optionTitles: Record<Options, string> = {
   [Options.ORDER]: "Order",
-  [Options.MENU] : "Menu",
+  [Options.MENU]: "Menu",
   [Options.EVENT]: "Event",
   [Options.VISIT]: "Reservation",
 };
@@ -49,18 +46,21 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   activeRestaurant,
   onClose,
 }) => {
-  const [restaurant, setRestaurant] = useState<RestaurantDetailsType>(activeRestaurant); 
+  const [restaurant, setRestaurant] =
+    useState<RestaurantDetailsType>(activeRestaurant);
   const [reviews, setReviews] = useState<ReviewType[]>([]);
   const [option, setOption] = useState<Options | null>(null);
   const [createdEventId, setCreatedEventId] = useState<number | null>(null);
   const [showMyEvents, setShowMyEvents] = useState<boolean>(false);
 
   const [t] = useTranslation("global");
- 
+
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
-        const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}`);
+        const data = await fetchGET(
+          `/restaurants/${activeRestaurant.restaurantId}`,
+        );
         setRestaurant(data);
       } catch (error) {
         console.error("Error fetching restaurant details:", error);
@@ -69,7 +69,9 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
     const fetchRestaurantReviews = async () => {
       try {
-        const data = await fetchGET(`/restaurants/${activeRestaurant.restaurantId}/reviews`);
+        const data = await fetchGET(
+          `/restaurants/${activeRestaurant.restaurantId}/reviews`,
+        );
         setReviews(data.items || []);
       } catch (error) {
         console.error("Error fetching restaurant reviews:", error);
@@ -89,8 +91,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   };
 
   const handleEventCreationSuccess = (eventId: number) => {
-    setCreatedEventId(eventId);  // Przechowuje ID wydarzenia po sukcesie
-    setOption(null);  // Zamykamy dialog formularza tworzenia eventu
+    setCreatedEventId(eventId); // Przechowuje ID wydarzenia po sukcesie
+    setOption(null); // Zamykamy dialog formularza tworzenia eventu
   };
 
   const handleShowMyEvents = () => {
@@ -99,12 +101,14 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
   const renderRestaurantDetails = () => {
     return (
-      <div className="p-3 flex flex-col gap-2 w-full">
-        <div className="flex gap-5 items-center w-full justify-between">
-          <h2 className="text-2xl font-bold dark:text-white">{restaurant.name}</h2>
+      <div className="flex w-full flex-col gap-2 p-3">
+        <div className="flex w-full items-center justify-between gap-5">
+          <h2 className="text-2xl font-bold dark:text-white">
+            {restaurant.name}
+          </h2>
           <div className="flex items-center gap-2 dark:text-white">
             <h1>{averageRating.toFixed(2)}</h1>
-            <CustomRating rating={averageRating} readOnly={true}/>
+            <CustomRating rating={averageRating} readOnly={true} />
             <h1>({reviews.length})</h1>
           </div>
         </div>
@@ -112,21 +116,23 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           <h1 className="text-sm dark:text-white">
             {restaurant.address}, {restaurant.city}
           </h1>
-          <div className="text-sm flex items-center gap-3">
+          <div className="flex items-center gap-3 text-sm">
             {restaurant.provideDelivery && (
-              <div className="flex gap-2 items-center">
-                <MopedIcon className="dark:text-white w-5 h-5"/> 
-                <h1 className="dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
+              <div className="flex items-center gap-2">
+                <MopedIcon className="h-5 w-5 dark:text-white" />
+                <h1 className="dark:text-white">
+                  {t("home-page.delivery-fee")} 5,99 zł
+                </h1>
               </div>
             )}
-            <div className="flex gap-1 items-center">
+            <div className="flex items-center gap-1">
               <h1 className="dark:text-white">
                 {t("home-page.is-delivering")}:
               </h1>
               {restaurant.provideDelivery ? (
-                <CheckCircleIcon className="text-green-500 dark:text-white w-5 h-5" />
+                <CheckCircleIcon className="text-green-500 h-5 w-5 dark:text-white" />
               ) : (
-                <CancelIcon className="text-red-500 dark:text-white w-5 h-5" />
+                <CancelIcon className="text-red-500 h-5 w-5 dark:text-white" />
               )}
             </div>
           </div>
@@ -137,12 +143,17 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 
   const renderDialogContent = {
     [Options.ORDER]: <></>,
-    [Options.MENU] : <MenuList activeRestaurantId={activeRestaurant.restaurantId} type={MenuScreenType.Preview}/>,
-    [Options.VISIT]: <Visit restaurant={activeRestaurant}/>,
+    [Options.MENU]: (
+      <MenuList
+        activeRestaurantId={activeRestaurant.restaurantId}
+        type={MenuScreenType.Preview}
+      />
+    ),
+    [Options.VISIT]: <Visit restaurant={activeRestaurant} />,
     [Options.EVENT]: (
       <EventCreationModal
         handleClose={handleDialogClose}
-        restaurantId={restaurant.restaurantId} 
+        restaurantId={restaurant.restaurantId}
         onSuccess={handleEventCreationSuccess}
       />
     ),
@@ -161,114 +172,138 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             >
               <CloseIcon />
             </IconButton>
-            <div className="w-full h-[250px]">
+            <div className="h-[250px] w-full">
               {restaurant && (
                 <Carousel
-                  images={[
-                    restaurant.logo,
-                    ...(restaurant.photos || []),
-                  ]}
+                  images={[restaurant.logo, ...(restaurant.photos || [])]}
                 />
               )}
             </div>
           </div>
           <div className="flex flex-col">
             {renderRestaurantDetails()}
-            <span className="w-full bg-grey-1 h-[1px] dark:bg-grey-4"></span>
-            <div className="p-3 w-full rounded-lg flex gap-2 justify-around">
-              <div className="flex h-full items-center flex-col gap-1 w-[70px]">
-                <button 
-                  className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+            <span className="h-[1px] w-full bg-grey-1 dark:bg-grey-4"></span>
+            <div className="flex w-full justify-around gap-2 rounded-lg p-3">
+              <div className="flex h-full w-[70px] flex-col items-center gap-1">
+                <button
+                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setOption(Options.VISIT)}
                 >
-                  <EditCalendarIcon className="w-6 h-6"/>
+                  <EditCalendarIcon className="h-6 w-6" />
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
-                  <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.reservation")}</h1>
+                  <h1 className="text-center text-[11px] text-primary dark:text-secondary">
+                    {t("home-page.reservation")}
+                  </h1>
                 </div>
               </div>
-              <div className="flex h-full items-center flex-col gap-1 w-[70px]">
-                <button 
-                  className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+              <div className="flex h-full w-[70px] flex-col items-center gap-1">
+                <button
+                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setOption(Options.EVENT)}
                 >
-                  <EventIcon className="w-6 h-6"/>
+                  <EventIcon className="h-6 w-6" />
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
-                  <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.create-event")}</h1>
+                  <h1 className="text-center text-[11px] text-primary dark:text-secondary">
+                    {t("home-page.create-event")}
+                  </h1>
                 </div>
               </div>
-              <div className="flex h-full items-center flex-col gap-1 w-[70px]">
-                <button 
-                  className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+              <div className="flex h-full w-[70px] flex-col items-center gap-1">
+                <button
+                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setOption(Options.MENU)}
                 >
-                  <RestaurantMenuIcon className="w-6 h-6"/>
+                  <RestaurantMenuIcon className="h-6 w-6" />
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
-                  <h1 className="text-[11px] text-primary dark:text-secondary text-center">Menu</h1>
+                  <h1 className="text-center text-[11px] text-primary dark:text-secondary">
+                    Menu
+                  </h1>
                 </div>
               </div>
               {restaurant.provideDelivery && (
-                <div className="flex h-full items-center flex-col gap-1 w-[70px]">
-                  <button 
-                    className="w-12 h-12 border-[1px] border-primary dark:border-secondary rounded-full dark:text-secondary text-primary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary transition hover:scale-105"
+                <div className="flex h-full w-[70px] flex-col items-center gap-1">
+                  <button
+                    className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                     onClick={() => setOption(Options.ORDER)}
                   >
-                    <DeliveryDiningIcon className="w-6 h-6"/>
+                    <DeliveryDiningIcon className="h-6 w-6" />
                   </button>
                   <div className="flex h-[30px] items-center justify-center">
-                    <h1 className="text-[11px] text-primary dark:text-secondary text-center">{t("home-page.order")}</h1>
+                    <h1 className="text-center text-[11px] text-primary dark:text-secondary">
+                      {t("home-page.order")}
+                    </h1>
                   </div>
                 </div>
               )}
             </div>
-            <span className="w-full bg-grey-1 h-[1px] dark:bg-grey-4"></span>
-            <div className="p-3">
-              <FocusedRestaurantReviewsList isPreview={false} reviews={reviews} activeRestaurantId={restaurant.restaurantId}/>
+            <span className="h-[1px] w-full bg-grey-1 dark:bg-grey-4"></span>
+            <div className="h-full p-3">
+              <FocusedRestaurantReviewsList
+                isPreview={false}
+                reviews={reviews}
+                activeRestaurantId={restaurant.restaurantId}
+              />
             </div>
           </div>
         </>
       )}
-      
+
       {option !== null && (
-        <Dialog open={option !== null} onClose={handleDialogClose} title={optionTitles[option]}>
-          <div className='flex flex-col gap- h-[calc(100%-2.25rem)] min-w-[600px] bg-white dark:bg-black items-center rounded-lg p-3'>
-            <div className='flex gap-4 items-center w-full h-[15%]'>
-                <img src={getImage(restaurant.logo, DefaultImage)} className='w-[6rem] h-[6rem] rounded-lg'/>
-                <div className="flex flex-col w-[80%] justify-between">
-                  <h2 className="text-xl font-bold dark:text-white">{restaurant.name}</h2>
-                  <div className="flex items-center gap-2 dark:text-white">
-                    <h1 className='text-[16px]'>{averageRating.toFixed(2)}</h1>
-                    <CustomRating rating={averageRating} readOnly={true} className='text-[18px]'/>
-                    <h1 className='text-[16px]'>({reviews.length})</h1>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-[14px] dark:text-white">
-                      {restaurant.address}, {restaurant.city}
-                    </h1>
-                    <div className="text-[14px] flex items-center gap-3">
-                      {restaurant.provideDelivery && (
-                        <div className="flex gap-2 items-center">
-                          <MopedIcon className="dark:text-white w-4 h-4"/> 
-                          <h1 className="text-[14px] dark:text-white">{t("home-page.delivery-fee")} 5,99 zł</h1>
-                        </div>
-                      )}
-                      <div className="flex gap-1 items-center">
-                        <h1 className="text-[12px] dark:text-white">
-                          {t("home-page.is-delivering")}:
+        <Dialog
+          open={option !== null}
+          onClose={handleDialogClose}
+          title={optionTitles[option]}
+        >
+          <div className="gap- flex h-[calc(100%-2.25rem)] min-w-[600px] flex-col items-center rounded-lg bg-white p-3 dark:bg-black">
+            <div className="flex h-[15%] w-full items-center gap-4">
+              <img
+                src={getImage(restaurant.logo, DefaultImage)}
+                className="h-[6rem] w-[6rem] rounded-lg"
+              />
+              <div className="flex w-[80%] flex-col justify-between">
+                <h2 className="text-xl font-bold dark:text-white">
+                  {restaurant.name}
+                </h2>
+                <div className="flex items-center gap-2 dark:text-white">
+                  <h1 className="text-[16px]">{averageRating.toFixed(2)}</h1>
+                  <CustomRating
+                    rating={averageRating}
+                    readOnly={true}
+                    className="text-[18px]"
+                  />
+                  <h1 className="text-[16px]">({reviews.length})</h1>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h1 className="text-[14px] dark:text-white">
+                    {restaurant.address}, {restaurant.city}
+                  </h1>
+                  <div className="flex items-center gap-3 text-[14px]">
+                    {restaurant.provideDelivery && (
+                      <div className="flex items-center gap-2">
+                        <MopedIcon className="h-4 w-4 dark:text-white" />
+                        <h1 className="text-[14px] dark:text-white">
+                          {t("home-page.delivery-fee")} 5,99 zł
                         </h1>
-                        {restaurant.provideDelivery ? (
-                          <CheckCircleIcon className="text-green-500 dark:text-white w-4 h-4" />
-                        ) : (
-                          <CancelIcon className="text-red-500 dark:text-white w-4 h-4" />
-                        )}
                       </div>
+                    )}
+                    <div className="flex items-center gap-1">
+                      <h1 className="text-[12px] dark:text-white">
+                        {t("home-page.is-delivering")}:
+                      </h1>
+                      {restaurant.provideDelivery ? (
+                        <CheckCircleIcon className="text-green-500 h-4 w-4 dark:text-white" />
+                      ) : (
+                        <CancelIcon className="text-red-500 h-4 w-4 dark:text-white" />
+                      )}
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
-            <div className="w-full h-[85%]">
+            <div className="h-[85%] w-full">
               <CartContextProvider>
                 {renderDialogContent[option]}
               </CartContextProvider>
@@ -276,7 +311,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           </div>
         </Dialog>
       )}
-  
+
       {/*  EventDetailsModal tylko gdy jest createdEventId */}
       {createdEventId && (
         <EventDetailsModal
@@ -286,7 +321,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         />
       )}
     </>
-  );  
+  );
 };
 
 export default FocusedRestaurantDetails;

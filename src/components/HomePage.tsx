@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Map from "./map/Map";
-import {
-  Button,
-  List,
-  ListItemButton,
-  Typography,
-} from "@mui/material";
+import { Button, List, ListItemButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import StarPurple500SharpIcon from "@mui/icons-material/StarPurple500Sharp";
 import LocalOfferSharpIcon from "@mui/icons-material/LocalOfferSharp";
@@ -21,10 +16,12 @@ import { RestaurantDetailsType } from "../services/types";
 import CustomRating from "./reusableComponents/CustomRating";
 
 export default function HomePage() {
-  //change from any once backend finishes the API endpoint
-  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([]); 
-  const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>([]); 
-  const [activeRestaurant, setActiveRestaurant] = useState<RestaurantDetailsType | null>( null); 
+  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([]);
+  const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
+    [],
+  );
+  const [activeRestaurant, setActiveRestaurant] =
+    useState<RestaurantDetailsType | null>(null);
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
     new Set(),
   );
@@ -91,7 +88,6 @@ export default function HomePage() {
           );
           return newIds;
         });
-        
       } catch (error) {
         if (error instanceof FetchError) {
           console.log(error.formatErrors());
@@ -127,7 +123,7 @@ export default function HomePage() {
   return (
     <div
       id="homePage-wrapper"
-      className="relative flex h-[calc(100%-3.5rem)] w-full min-w-[550px] bg-grey-1 dark:bg-black"
+      className="relative flex h-full w-full bg-grey-1 dark:bg-black"
     >
       {isMenuOpen ? (
         <div className="absolute left-[0.5rem] top-[0.5rem] z-[1] flex h-[calc(100%-1rem)] w-[300px] flex-col rounded-lg bg-white shadow-2xl dark:bg-black">
@@ -193,9 +189,9 @@ export default function HomePage() {
                             (restaurant.rating + Number.EPSILON) * 100,
                           ) / 100}
                         </h1>
-                        <CustomRating 
-                          rating={restaurant.rating} 
-                          readOnly={true} 
+                        <CustomRating
+                          rating={restaurant.rating}
+                          readOnly={true}
                           className={"text-[18px]"}
                         />
                         <h1 className="text-sm dark:text-white">{`(${restaurant.numberReviews})`}</h1>
@@ -301,7 +297,7 @@ export default function HomePage() {
                     <Typography component="legend" className="dark:text-white">
                       {value}.0
                     </Typography>
-                    <CustomRating rating={value} readOnly={true}/>
+                    <CustomRating rating={value} readOnly={true} />
                   </ListItemButton>
                 ))}
               </List>
@@ -371,7 +367,7 @@ export default function HomePage() {
           <div
             className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[450px] overflow-y-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? "left-[calc(1rem+300px)]" : "left-[0.5rem]"}`}
           >
-            <div className="overflow-y-auto scroll h-full dark:bg-black">
+            <div className="scroll h-full overflow-y-auto dark:bg-black">
               <FocusedRestaurantDetails
                 activeRestaurant={activeRestaurant}
                 onClose={() => setActiveRestaurant(null)}

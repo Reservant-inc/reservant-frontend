@@ -1,148 +1,131 @@
 import React, { useEffect, useState } from "react";
-import { fetchGET, fetchPOST, fetchDELETE } from "../../../../services/APIconn";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-  Avatar,
-  ListItemAvatar,
-  Typography,
-  Grid,
-  Box,
-  CircularProgress,
-} from "@mui/material";
-import { RequestType } from "../../../../services/types";
+import Notification from "./Notification";
+import { fetchGET } from "../../../../services/APIconn";
+import FriendReq from "./FriendReq";
+
+interface NotificationData {
+  notificationId: number;
+  dateCreated: string;
+  dateRead: string | null;
+  notificationType: string;
+  details: any;
+  photo: any;
+}
+
+interface FriendRequestData {
+  dateSent: string;
+  dateRead: string | null;
+  otherUser: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    photo: any;
+  };
+}
 
 interface NotificationListProps {
-  setHasNotifications: (hasNotifications: boolean) => void;
+  updateUnreadCount: () => void;
+  showAll: boolean;
 }
 
 const NotificationList: React.FC<NotificationListProps> = ({
-  setHasNotifications,
+  updateUnreadCount,
+  showAll,
 }) => {
-  const [friendRequests, setFriendRequests] = useState<RequestType[]>([]);
+  const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequestData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Pobieranie powiadomień
   useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetchGET("/notifications");
+        const sortedNotifications = response.items.sort((a: NotificationData, b: NotificationData) => {
+          if (a.dateRead === null && b.dateRead !== null) return -1;
+          if (a.dateRead !== null && b.dateRead === null) return 1;
+          return new Date(b.dateCreated).getTime() - new Date(a.dateCreated).getTime();
+        });
+        setNotifications(sortedNotifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchFriendRequests = async () => {
+      try {
+        const response = await fetchGET("/friends/incoming");
+        setFriendRequests(response.items);
+      } catch (error) {
+        console.error("Error fetching friend requests:", error);
+      }
+    };
+
+    fetchNotifications();
     fetchFriendRequests();
   }, []);
 
-  const fetchFriendRequests = async () => {
-    try {
-      setLoading(true);
-      const response = await fetchGET("/friends/incoming");
-      setFriendRequests(response.items);
-      if (response.items.length === 0) {
-        setHasNotifications(false);
-      }
-    } catch (error) {
-      console.error("Error fetching incoming friend requests:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // na początku wyświetlaj tylko max 3 nieodczytane powiadomienia (sortowane są wcześniej)
+  const filteredNotifications = showAll
+    ? notifications
+    : notifications.filter((n) => !n.dateRead).slice(0, 3);
 
-  const handleAction = async (
-    senderId: string,
-    action: "accept" | "reject",
-  ) => {
-    try {
-      if (action === "accept") {
-        await fetchPOST(
-          `/friends/${senderId}/accept-request`,
-          JSON.stringify({}),
-        );
-      } else {
-        await fetchDELETE(`/friends/${senderId}`);
-      }
-      fetchFriendRequests();
-      const friendsData = await fetchGET("/friends");
-      console.log("Friends List:", friendsData);
-    } catch (error) {
-      console.error(
-        `Error ${action === "accept" ? "accepting" : "rejecting"} friend request:`,
-        error,
-      );
-    }
-  };
+  if (loading) {
+    return <p>Loading notifications...</p>;
+  }
 
   return (
-    <div className="h-full w-full">
-      {loading ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="100px"
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
-        <div className="flex h-full w-full flex-col">
-          <div className="custom-transition flex h-14 w-full items-center justify-between px-3 pt-4">
-            <h1 className="font-mont-bd text-xl">Notifications</h1>
+    <div className="h-full w-full flex flex-col px-2">
+      <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
+        <p className="font-mont-bd text-xl">Notifications</p>
+      </div>
+      <div className="flex-grow overflow-y-auto scroll">
+        {filteredNotifications.length === 0 ? (
+          <div className="flex justify-center items-center py-1 italic">
+            <p className="text-center">Brak nowych powiadomień</p>
           </div>
-          <div className="flex h-full items-center justify-center">
+        ) : (
+          filteredNotifications.map((notification) => (
+            <Notification
+              key={notification.notificationId}
+              notificationId={notification.notificationId}
+              dateCreated={notification.dateCreated}
+              dateRead={notification.dateRead}
+              notificationType={notification.notificationType}
+              details={notification.details}
+              photo={notification.photo}
+              markAsRead={updateUnreadCount}
+            />
+          ))
+        )}
+      </div>
+
+      {showAll && (
+        <>
+          <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
+            <p className="font-mont-bd text-xl">Friend requests</p>
+          </div>
+          <div className="flex-grow overflow-y-auto">
             {friendRequests.length === 0 ? (
-              <Typography
-                variant="subtitle1"
-                color="textSecondary"
-                align="center"
-                className="py-1 italic"
-              >
-                Brak zaproszeń do znajomych
-              </Typography>
+              <div className="flex justify-center items-center py-1 italic">
+                <p className="text-center text-grey-3">Brak zaproszeń do znajomych</p>
+              </div>
             ) : (
-              <List className="p-0">
-                {friendRequests.map((request) => (
-                  <ListItem
-                    key={request.otherUser.userId}
-                    button
-                    style={{ marginBottom: "16px" }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar />
-                    </ListItemAvatar>
-                    <Grid container direction="column">
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Zaproszenie do znajomych od
-                      </Typography>
-                      <ListItemText primary={request.otherUser.firstName} />
-                      <Typography variant="body2" color="textSecondary">
-                        Wysłano{" "}
-                        {new Date(request.dateSent).toLocaleDateString()}
-                      </Typography>
-                      <Box display="flex" justifyContent="space-between" mt={1}>
-                        <Button
-                          variant="contained"
-                          className="bg-primary"
-                          onClick={() =>
-                            handleAction(request.otherUser.userId, "accept")
-                          }
-                        >
-                          Akceptuj
-                        </Button>
-                        <Button
-                          variant="contained"
-                          style={{
-                            backgroundColor: "#e0e0e0",
-                            color: "#333",
-                          }}
-                          onClick={() =>
-                            handleAction(request.otherUser.userId, "reject")
-                          }
-                        >
-                          Odrzuć
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </ListItem>
-                ))}
-              </List>
+              friendRequests.map((request) => (
+                <FriendReq
+                  key={request.otherUser.userId}
+                  userId={request.otherUser.userId}
+                  firstName={request.otherUser.firstName}
+                  lastName={request.otherUser.lastName}
+                  dateSent={request.dateSent}
+                  photo={request.otherUser.photo}
+                />
+              ))
             )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );

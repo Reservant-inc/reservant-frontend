@@ -21,12 +21,10 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 
-interface IngredientTableProps {
-  activeRestaurantId: number | null;
-}
-
-const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId }) => {
+const IngredientTable: React.FC = () => {
   const [ingredients, setIngredients] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGroceryListOpen, setIsGroceryListOpen] = useState(false);
@@ -39,6 +37,13 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
     minimalAmount: "",
     amount: "",
   });
+
+  const [t] = useTranslation("global");
+
+  const { restaurantId } = useParams();
+
+  const activeRestaurantId =
+    restaurantId === undefined ? -1 : parseInt(restaurantId);
 
   useEffect(() => {
     if (activeRestaurantId) {
@@ -72,7 +77,9 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
     setIsGroceryListOpen(true);
   };
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
@@ -103,7 +110,10 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         },
       };
 
-      await fetchPOST(`/restaurants/${activeRestaurantId}/ingredients`, JSON.stringify(payload));
+      await fetchPOST(
+        `/restaurants/${activeRestaurantId}/ingredients`,
+        JSON.stringify(payload),
+      );
       handleCloseModal();
       fetchIngredients();
     } catch (error) {
@@ -151,10 +161,13 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         })),
       };
 
-      const response = await fetchPOST(`/deliveries`, JSON.stringify(orderPayload));
+      const response = await fetchPOST(
+        `/deliveries`,
+        JSON.stringify(orderPayload),
+      );
 
       const deliveryId = response.deliveryId;
-      setInfoMessage(`Delivery request sent. Delivery Id: ${deliveryId}`);
+      setInfoMessage(`${t("warehouse.delivery-confirmation")} ${deliveryId}`);
       setIsInfoDialogOpen(true);
       setIsGroceryListOpen(false);
     } catch (error) {
@@ -163,47 +176,57 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
   };
 
   const columns: GridColDef[] = [
-    { field: "publicName", headerName: "Name", flex: 1, sortable: true },
+    {
+      field: "publicName",
+      headerName: `${t("warehouse.name")}`,
+      flex: 1,
+      sortable: true,
+    },
     {
       field: "amount",
-      headerName: "Quantity",
+      headerName: `${t("warehouse.quantity")}`,
       flex: 1,
       sortable: true,
       disableColumnMenu: true,
     },
     {
       field: "minimalAmount",
-      headerName: "Minimal quantity",
+      headerName: `${t("warehouse.minimal-quantity")}`,
       flex: 1,
       sortable: true,
       disableColumnMenu: true,
     },
     {
       field: "state",
-      headerName: "State",
+      headerName: `${t("warehouse.state")}`,
       flex: 1,
       disableColumnMenu: true,
       renderCell: (params: GridRenderCellParams) =>
         params.row.amount > params.row.minimalAmount ? (
           <span className="text-black dark:text-white">Enough in stock</span>
         ) : (
-          <span className="w-full rounded bg-white dark:bg-black border-[1px] border-error p-2 text-center text-black dark:text-white">
-            Needs restocking
+          <span className="w-full rounded border-[1px] border-error bg-white p-2 text-center text-black dark:bg-black dark:text-white">
+            {t("warehouse.needs-restocking")}
           </span>
         ),
     },
     {
       field: "daysTillExpiration",
-      headerName: "Days till expiration",
+      headerName: `${t("warehouse.till-expiration")}`,
       flex: 1,
       valueGetter: () => 1, // hardcoded
       sortable: true,
       disableColumnMenu: true,
     },
-    { field: "unitOfMeasurement", headerName: "Unit", flex: 1, sortable: true },
+    {
+      field: "unitOfMeasurement",
+      headerName: `${t("warehouse.unit")}`,
+      flex: 1,
+      sortable: true,
+    },
     {
       field: "edit",
-      headerName: "Edit",
+      headerName: `${t("warehouse.edit")}`,
       flex: 1,
       disableColumnMenu: true,
       sortable: false,
@@ -219,10 +242,14 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
   ];
 
   const groceryListColumns: GridColDef[] = [
-    { field: "publicName", headerName: "Name", flex: 1 },
+    {
+      field: "publicName",
+      headerName: `${t("warehouse.grocery-name")}`,
+      flex: 1,
+    },
     {
       field: "amountToOrder",
-      headerName: "Amount to Order",
+      headerName: `${t("warehouse.grocery-amount")}`,
       flex: 1,
       editable: true,
       type: "number",
@@ -230,7 +257,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
     {
       field: "actions",
       type: "actions",
-      headerName: "Actions",
+      headerName: `${t("warehouse.grocery-actions")}`,
       width: 150,
       getActions: (params) => [
         <GridActionsCellItem
@@ -262,17 +289,22 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
           <button
             id="RestaurantListAddRestaurantButton"
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-md">+ Add an employee</h1>
+            <AddIcon />
+            <h1 className="text-md font-mont-md">
+              {t("warehouse.add-ingredient")}
+            </h1>
           </button>
 
           <button
             id="GenerateGroceryListButton"
             onClick={handleGenerateGroceryList}
-            className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+            className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-md">Generate grocery list</h1>
+            <h1 className="text-md font-mont-md">
+              {t("warehouse.generate-list")}
+            </h1>
           </button>
         </div>
       </div>
@@ -280,7 +312,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
   );
 
   return (
-    <div className="h-full w-full rounded-lg bg-white dark:bg-black flex flex-col">
+    <div className="flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
       <DataGrid
         rows={ingredients.map((ingredient, index) => ({
           ...ingredient,
@@ -296,68 +328,79 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         <DialogTitle>Add New Ingredient</DialogTitle>
         <DialogContent>
           <div className="flex flex-col gap-3">
-            <label className="text-sm">Name</label>
+            <label className="text-sm">{t("warehouse.new-name")}</label>
             <input
               type="text"
               name="name"
               value={formValues.name}
               onChange={handleFormChange}
-              className="w-full p-2 border border-grey-2 rounded dark:bg-grey-5 dark:text-white"
+              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
               required
             />
 
-            <label className="text-sm">Unit of measurement</label>
+            <label className="text-sm">{t("warehouse.new-unit")}</label>
             <select
               name="unitOfMeasurement"
               value={formValues.unitOfMeasurement}
               onChange={handleFormChange}
-              className="w-full p-2 border border-grey-2 rounded dark:bg-grey-5 dark:text-white"
+              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
             >
               <option value="Gram">Gram</option>
               <option value="Liter">Liter</option>
               <option value="Unit">Unit</option>
             </select>
 
-            <label className="text-sm">Minimal amount</label>
+            <label className="text-sm">{t("warehouse.new-minimal")}</label>
             <input
               type="number"
               name="minimalAmount"
               value={formValues.minimalAmount}
               onChange={handleFormChange}
-              className="w-full p-2 border border-grey-2 rounded dark:bg-grey-5 dark:text-white"
+              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
               required
             />
 
-            <label className="text-sm">Amount (optional)</label>
+            <label className="text-sm">{t("warehouse.new-amount")}</label>
             <input
               type="number"
               name="amount"
               value={formValues.amount}
               onChange={handleFormChange}
-              className="w-full p-2 border border-grey-2 rounded dark:bg-grey-5 dark:text-white"
+              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
             />
           </div>
         </DialogContent>
         <DialogActions>
-          <Button className="text-primary dark:text-secondary" onClick={handleCloseModal}>
-            Cancel
+          <Button
+            className="text-primary dark:text-secondary"
+            onClick={handleCloseModal}
+          >
+            {t("warehouse.new-cancel")}
           </Button>
-          <Button className="text-primary dark:text-secondary" onClick={handleAddIngredient}>
-            Add
+          <Button
+            className="text-primary dark:text-secondary"
+            onClick={handleAddIngredient}
+          >
+            {t("warehouse.new-add")}
           </Button>
         </DialogActions>
       </Dialog>
       {/* Wysuwana lista zakupów */}
       {isGroceryListOpen && (
-        <div className="fixed bottom-0 left-0 mb-4 flex h-[800px] w-[900px] flex-col rounded-lg bg-white dark:bg-grey-6 p-4 shadow-lg">
+        <div
+          className="fixed bottom-0 left-0 mb-4 flex w-[900px] flex-col rounded-lg bg-white p-4 shadow-lg dark:bg-grey-6"
+          style={{ maxHeight: "60vh" }}
+        >
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-mont-md text-2xl text-primary dark:text-secondary">Grocery list</h2>
+            <h2 className="font-mont-md text-2xl text-primary dark:text-secondary">
+              {t("warehouse.grocery-list")}
+            </h2>
             <div className="flex items-center gap-4">
               <button
-                className="rounded bg-primary dark:bg-secondary px-6 py-3 text-xl text-white hover:bg-primary-2 dark:hover:bg-secondary-2"
+                className="rounded bg-primary px-6 py-3 text-xl text-white hover:bg-primary-2 dark:bg-secondary dark:hover:bg-secondary-2"
                 onClick={handleOrder}
               >
-                Order
+                {t("warehouse.grocery-order")}
               </button>
               <button
                 className="text-primary dark:text-secondary"
@@ -367,21 +410,25 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
               </button>
             </div>
           </div>
-          <DataGrid
-            rows={groceryList}
-            columns={groceryListColumns}
-            pageSizeOptions={[5, 10]}
-            disableRowSelectionOnClick
-            autoHeight
-            sx={{
-              "& .MuiDataGrid-cell": {
-                fontSize: "18px",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                fontSize: "20px",
-              },
-            }}
-          />
+          <div style={{ overflowY: "auto" }}>
+            {" "}
+            {/* Przewijanie jeśli sie nie mieści */}
+            <DataGrid
+              rows={groceryList}
+              columns={groceryListColumns}
+              pageSizeOptions={[5, 10]}
+              disableRowSelectionOnClick
+              autoHeight
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  fontSize: "18px",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontSize: "20px",
+                },
+              }}
+            />
+          </div>
         </div>
       )}
 
@@ -390,7 +437,7 @@ const IngredientTable: React.FC<IngredientTableProps> = ({ activeRestaurantId })
         open={isInfoDialogOpen}
         onClose={() => setIsInfoDialogOpen(false)}
       >
-        <DialogTitle>Information</DialogTitle>
+        <DialogTitle>{t("warehouse.confirmation")}</DialogTitle>
         <DialogContent>
           <p>{infoMessage}</p>
         </DialogContent>

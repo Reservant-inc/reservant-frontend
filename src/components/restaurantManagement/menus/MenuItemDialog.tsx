@@ -9,7 +9,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Ingredient, IngredientUsage, MenuItemType, MenuType } from "../../../services/types";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { Field, Form, Formik, FormikValues } from "formik";
-import { CloseSharp, ArrowForwardIos, Add, Save, Clear, KeyboardDoubleArrowDown, Remove } from "@mui/icons-material";
+import { CloseSharp, ArrowForwardIos, Add, Save, Clear, KeyboardDoubleArrowDown, Remove, SaveOutlined } from "@mui/icons-material";
 import { FetchError } from "../../../services/Errors";
 import DefaultMenuItemImage from "../../../assets/images/defaultMenuItemImage.png"
 import ErrorMes from "../../reusableComponents/ErrorMessage";
@@ -212,14 +212,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
  
 
   return (
-    <div className=" flex justify-center h-[55vh] w-[72vw] min-w-[950px] bg-white rounded-lg dark:bg-black p-7 gap-7">
+    <div className=" flex justify-center w-[1000px] h-[450px] bg-white rounded-lg dark:bg-black p-7 gap-7 ">
       <Formik
         id="menuitem-formik"
         initialValues={{
           price: menuItemToEdit?.price,
           name: menuItemToEdit?.name,
           alternateName: menuItemToEdit?.alternateName?menuItemToEdit.alternateName:"",
-          alcoholPercentage: menuItemToEdit?.alcoholPercentage?menuItemToEdit.alcoholPercentage:0
+          alcoholPercentage: menuItemToEdit?.alcoholPercentage?menuItemToEdit.alcoholPercentage:""
         }}
         validationSchema={menuItemsSchema}
         onSubmit={menuItemToEdit?onSubmitEditedMenuItem:onSubmitNewMenuItem}
@@ -227,13 +227,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         {(formik) => {
           return(
             <Form className="h-full flex gap-7 items-start">
-              <div className="relative min-w-72 min-h-72 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
+              <div className="relative min-w-64 min-h-64 flex items-center justify-center" onMouseEnter={()=>setIsHovered(true)} onMouseLeave={()=>setIsHovered(false)}>
 
-                <img className=" w-72 h-72 absolute rounded-lg" src={getImage(photoPath, DefaultMenuItemImage)} />
+                <img className=" w-64 h-64 absolute rounded-lg" src={getImage(photoPath, DefaultMenuItemImage)} />
                   {
                     isHovered 
                     && 
-                    <div className="bg-semi-trans w-72 h-72 absolute flex items-center justify-center rounded-lg">
+                    <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
                       <label
                         htmlFor="photo"
                         className={"shadow hover:cursor-pointer self-center h-10 w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary  dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary  " }
@@ -266,11 +266,29 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       className="w-full "
                       //@TODO translation
                     />
+                    <label>*</label>
                   </div>
                   {
                     (formik.errors.name&&formik.touched.name) &&
                     <ErrorMes msg={formik.errors.name}/>
                   }
+                </div>
+                <div>
+                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price&&formik.touched.price?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
+                    <label htmlFor="alternateName">Price:</label>
+                    <Field 
+                      type="text" 
+                      id="price" 
+                      name="price"
+                      className="w-full"
+                      //@TODO translation
+                    />
+                    <label>*</label>
+                  </div>
+                  {
+                    (formik.errors.price&&formik.touched.price) &&
+                    <ErrorMes msg={formik.errors.price}/>
+                  }                  
                 </div>
                 <div>
                   <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName&&formik.touched.alternateName?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
@@ -289,22 +307,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   }                  
                 </div>
                 <div>
-                  <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price&&formik.touched.price?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
-                    <label htmlFor="alternateName">Price:</label>
-                    <Field 
-                      type="text" 
-                      id="price" 
-                      name="price"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                  </div>
-                  {
-                    (formik.errors.price&&formik.touched.price) &&
-                    <ErrorMes msg={formik.errors.price}/>
-                  }                  
-                </div>
-                <div>
                   <div className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alcoholPercentage&&formik.touched.alcoholPercentage?"border-error text-error":"border-black text-black dark:text-grey-1 dark:border-white"}`}>
                     <label htmlFor="alternateName">Alcohol percentage:</label>
                     <Field 
@@ -320,14 +322,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                     <ErrorMes msg={formik.errors.alcoholPercentage}/>
                   }                  
                 </div>
-                <button 
+                <button
                   id="addmenuitemsubmit"
                   type="submit"
                   disabled={!formik.isValid || (!formik.dirty && !menuItemToEdit) || selectedIngredients.length<=0}
-                  className={"shadow h-10 self-center w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
-                >
-                  <Save/>
-                  {t("general.save")}
+                  className="self-center gap-2 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                  >
+                  <SaveOutlined/>
+                  <h1 className="font-mont-md text-md">{t("general.save")}</h1>
                 </button>
               </div>
             </Form>
@@ -377,20 +379,19 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                           type="text" 
                           id="amountUsed" 
                           name="amountUsed"
-                          className="w-1/3"
+                          className="w-full"
                           //@TODO translation
                         />
                       </div>
                       <button
-                        type="submit"
-                        className={"shadow self-center h-10  w-48 justify-center items-center gap-1 flex rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black enabled:hover:text-white enabled:hover:bg-primary  " }
                         id="addIngridientToMenuItem"
+                        type="submit"
                         disabled={!formik.isValid || !formik.dirty}
-                      >
-                        <Add/> 
-                        Add usage
-                        {/* @TODO translation */}
-                      </button> 
+                        className="self-center gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                        >
+                        <Add/>
+                        <h1 className="text-nowrap font-mont-md text-md">Add usage</h1>
+                      </button>
                     </div>
                     {
                       (formik.errors.amountUsed&&formik.touched.amountUsed) &&
@@ -415,13 +416,13 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               selectedIngredients.map((ingredient) => 
               <li 
                 key={ingredient.ingredientId+ingredient.amountUsed}
-                className="h-fit w-full gap-1  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
+                className="h-fit w-full gap-1 dark:text-grey-0  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
               > 
                 <p className="overflow-hidden text-ellipsis">
                   {getIngredientDetails(ingredient)?.publicName}: {ingredient.amountUsed} {getIngredientDetails(ingredient)?.unitOfMeasurement}
                 </p>
                 <button
-                  className=' dark:bg-black flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
+                  className=' dark:bg-black  flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
                   onClick={()=>{
                     setSelectedIngredients(selectedIngredients.filter((ingredientToRemove)=>
                        ingredientToRemove.ingredientId!==ingredient.ingredientId
@@ -435,7 +436,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             }
           </ul>
           :
-          <h1 className="p-2">Selected ingredients will appear here.</h1> //@TODO translation
+          <h1 className="p-2 dark:text-grey-0">Selected ingredients will appear here.</h1> //@TODO translation
           }
         </div>
       </div>
