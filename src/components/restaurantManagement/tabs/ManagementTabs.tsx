@@ -8,8 +8,9 @@ import {
   Dashboard,
   Dining,
   History,
-  Warehouse,
+  Warehouse
 } from "@mui/icons-material";
+import RateReviewIcon from "@mui/icons-material/RateReview";
 import ReviewsManagement from "../ReviewsMenagment";
 import Tab from "./Tab";
 import { useNavigate, useParams } from "react-router-dom";
@@ -72,6 +73,11 @@ const ManagementTabs: React.FC = ({}) => {
             path={`restaurant/${restaurantId}/reservation-history`}
             title="Reservation history"
             icon={<History />}
+          />
+          <Tab
+            path={`restaurant/${restaurantId}/reviews-management`}
+            title="Reviews"
+            icon={<RateReviewIcon />}
           />
           {/* <div className="p-0">
           <ListItemButton

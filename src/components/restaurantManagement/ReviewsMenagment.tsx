@@ -6,13 +6,11 @@ import { useTranslation } from "react-i18next";
 import { fetchGET } from "../../services/APIconn";
 import { Pagination, Tooltip } from "@mui/material";
 import { SwapVert as SwapVertIcon } from "@mui/icons-material";
+import { useParams } from "react-router-dom";
 
-interface ReviewsManagementProps {
-  activeRestaurantId: number;
- 
-}
 
-const ReviewsManagement: React.FC<ReviewsManagementProps> = ({ activeRestaurantId }) => {
+
+const ReviewsManagement: React.FC = () => {
   const [filteredAndSortedReviews, setFilteredAndSortedReviews] = useState<ReviewType[] | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [ratingFilter, setRatingFilter] = useState<number>(0); // Track selected rating filter
@@ -21,6 +19,11 @@ const ReviewsManagement: React.FC<ReviewsManagementProps> = ({ activeRestaurantI
   const { t } = useTranslation("global");
   const [perPage] = useState<number>(5);
   const [user, setUser] = useState<User | null>(null);
+
+  const { restaurantId } = useParams();
+
+  const activeRestaurantId =
+    restaurantId === undefined ? -1 : parseInt(restaurantId);
 
   // Function to fetch reviews with filtering and sorting applied
   const fetchReviews = async () => {
