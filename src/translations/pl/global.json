@@ -222,7 +222,8 @@
         "create-event": "Stwórz wydarzenie",
         "order": "Zamów",
         "is-delivering": "Dostawa",
-        "delivery-fee": "Koszt dostawy"
+        "delivery-fee": "Koszt dostawy",
+        "events": "Wydarzenia:"
     },
     "reviews": {
         "filter": "Filtruj",

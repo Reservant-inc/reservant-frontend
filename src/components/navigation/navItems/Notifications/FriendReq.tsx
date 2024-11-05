@@ -56,20 +56,20 @@ const FriendReq: React.FC<FriendReqProps> = ({ userId, firstName, lastName, date
 
       {/* Przyciski akceptacji/odrzucenia / komunikat */}
       {actionMessage ? (
-        <p className="mt-2 ">{actionMessage}</p>
+        <p className="mt-2 text-grey-3">{actionMessage}</p>
       ) : (
-        <div className="mt-2 flex justify-between">
+        <div className="mt-2 flex justify-around">
           <button
             onClick={handleAccept}
             disabled={loading}
-            className="bg-primary hover:bg-primary-2 text-white p-1 rounded"
+            className="bg-primary hover:bg-primary-2 text-white p-1 rounded transition hover:scale-105"
           >
             Zaakceptuj
           </button>
           <button
             onClick={handleReject}
             disabled={loading}
-            className="bg-primary-2 hover:bg-primary-3 text-white p-1 rounded"
+            className="bg-primary-2 hover:bg-primary-3 text-white p-1 rounded transition hover:scale-105"
           >
             Odrzuć
           </button>

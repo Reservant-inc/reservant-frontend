@@ -72,7 +72,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
           {!showAll && (
             <button
               onClick={() => setShowAll(true)}
-              className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded"
+              className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
             >
               Wyświetl więcej powiadomień
             </button>
