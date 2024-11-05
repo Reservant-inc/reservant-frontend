@@ -17,6 +17,7 @@ import i18next from "i18next";
 import { ThemeProvider } from "@emotion/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export interface ToolsProps {
   setIsDark: Function;
@@ -88,11 +89,14 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
   function DropdownItem(props: any) {
     const onClicked = () => {
       if (props.logout === true) {
-        navigate("/logout");
+        Cookies.remove("token");
+        Cookies.remove("userInfo");
+        navigate("/");
       }
 
       if (props.profile) {
-        navigate("profile");
+        const user = JSON.parse(Cookies.get("userInfo") as string);
+        navigate(`profile/${user.userId}`);
       }
 
       props.goToMenu && setActiveMenu(props.goToMenu);
@@ -105,7 +109,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
     };
 
     return (
-      <div className=" p-2 ">
+      <div className="p-2 hover:cursor-pointer">
         <a
           id={props.id}
           className={
