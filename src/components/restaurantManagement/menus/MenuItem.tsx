@@ -29,7 +29,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
   
   const { t } = useTranslation("global");
   const { fetchMenus } = useContext(MenuListContext)
-  const { addItemToCart } = useContext(CartContext)
+  const { addToCart } = useContext(CartContext)
 
   const [item, setItem] = useState<ItemWithIngredientsType>({ ...menuItem, ingredients: []})
 
@@ -131,12 +131,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ menuItem, type, menu, activeRestaur
           <div className="absolute top-2 right-2 flex gap-2">
             <button 
               className='flex items-center justify-center p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm'
-              onClick={() => addItemToCart({ 
+              onClick={() => addToCart({ 
                 menuItemId: item.menuItemId,
                 name: item.name,
                 price: item.price,
                 photo: item.photo,
-                quantity: 0
+                quantity: 1
               })}
             >
                 <AddIcon className='h-4 w-4'/>

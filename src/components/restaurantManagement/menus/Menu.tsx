@@ -30,7 +30,6 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
 
   const handleDeleteMenu = async () => {
     try {
-      //co tu sie? nie sprawdza response, to po co on jest?
       const menuId = menu.menuId;
       await fetchDELETE(`/menus/${menuId}`);
       setIsConfirmationOpen(false);

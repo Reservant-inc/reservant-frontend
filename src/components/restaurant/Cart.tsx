@@ -6,7 +6,6 @@ import { getImage } from "../../services/APIconn";
 import DefaultImage from "../../assets/images/defaulImage.jpeg"
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { useNavigate } from "react-router-dom";
 
 interface CartProps {
 
@@ -16,17 +15,14 @@ const Cart: React.FC<CartProps> = () => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
-    const { items, totalPrice, decrementItemQuantity, incrementItemQuantity } = useContext(CartContext)
-
-
-    const navigate = useNavigate();
+    const { items, totalPrice, decrementQuantity, incrementQuantity } = useContext(CartContext)
 
     return (
         <OutsideClickHandler onOutsideClick={() => setIsOpen(false)} isPressed={isOpen}>
-            <div className="absolute top-[-6rem] right-2 w-12 h-12 flex items-center justify-center">
+            <div className="absolute top-2 right-2 w-12 h-12 flex items-center justify-center">
                 <button 
                     className="w-10 h-10 bg-grey-1 hover:bg-grey-0 dark:bg-grey-5 dark:hover:bg-grey-6 absolute rounded-full"
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => setIsOpen(!isOpen)}
                 >
                     <ShoppingCartIcon className="dark:text-grey-1"/>
                 </button>
@@ -37,7 +33,7 @@ const Cart: React.FC<CartProps> = () => {
                 }
             </div>
             {isOpen && 
-                <div className="absolute top-[-2.5rem] right-3 w-[14rem] h-[20rem] bg-white dark:bg-grey-6 shadow-md rounded-lg flex flex-col items-center py-2 gap-2">
+                <div className="absolute top-2 right-14 w-[14rem] h-[20rem] bg-white dark:bg-grey-6 shadow-md rounded-lg flex flex-col items-center py-2 gap-2">
                     <h1 className="text-xl font-mont-bd dark:text-white">Cart</h1>
                     {items.length > 0 ? (
                         <div className="w-full overflow-y-auto scroll h-full flex flex-col divide-solid divide-y divide-grey-1 dark:divide-grey-5 border-y-[1px] border-grey-1 dark:border-grey-5 px-2">
@@ -52,7 +48,7 @@ const Cart: React.FC<CartProps> = () => {
                                         <div className="flex h-[20px] w-[58px] border-[1px] border-grey-1 dark:border-grey-5 rounded-sm">
                                             <button 
                                                 className="bg-grey-1 dark:bg-grey-6 text-black dark:text-white flex items-center justify-center w-[20px] rounded-l-sm"
-                                                onClick={() => decrementItemQuantity(item.menuItemId)}
+                                                onClick={() => decrementQuantity(item.menuItemId)}
                                             >
                                                 <RemoveIcon className="h-3 w-3"/>
                                             </button>
@@ -61,7 +57,7 @@ const Cart: React.FC<CartProps> = () => {
                                             </div>
                                             <button 
                                                 className="bg-grey-1 dark:bg-grey-6 text-black dark:text-white flex items-center justify-center w-[20px] rounded-r-sm"
-                                                onClick={() => incrementItemQuantity(item.menuItemId)}
+                                                onClick={() => incrementQuantity(item.menuItemId)}
                                             >
                                                 <AddIcon className="h-3 w-3"/>
                                             </button>
