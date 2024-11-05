@@ -50,7 +50,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [option, setOption] = useState<Options | null>(null);
   const [createdEventId, setCreatedEventId] = useState<number | null>(null);
   const [showMyEvents, setShowMyEvents] = useState<boolean>(false);
-
+//
   const [t] = useTranslation("global");
 
   useEffect(() => {
