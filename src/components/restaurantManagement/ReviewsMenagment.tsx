@@ -67,8 +67,8 @@ const ReviewsManagement: React.FC = () => {
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 rounded-lg dark:text-grey-1">
-      <div className="flex flex-col gap-2 h-full w-full">
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex flex-col gap-2 h-full w-full bg-white dark:bg-black dark:text-grey-1 rounded-lg p-4 relative"> {/* Now the main container has a relative position */}
         {/* Filter and Sort Controls */}
         <div className="flex w-full gap-2">
           <RestaurantReviewsFilters setValue={setRatingFilter} value={ratingFilter} />
@@ -83,28 +83,60 @@ const ReviewsManagement: React.FC = () => {
         </div>
 
         {/* Display Filtered and Sorted Reviews */}
-        {filteredAndSortedReviews === null || filteredAndSortedReviews.length === 0 ? (
-          <div className="mt-4 text-center">
-            <h1>{t("reviews.no-reviews")}</h1>
-          </div>
-        ) : (
-          filteredAndSortedReviews.map((review) => (
-            <RestaurantReview key={review.reviewId} review={review} refreshReviews={fetchReviews} user={user} isOwnerView={true} restaurantId={activeRestaurantId}/>
-          ))
-        )}
-      </div>
-      {/* Pagination */}
-      <div className="flex justify-end mt-4">
-            <Pagination
-              count={totalPages}
-              page={currentPage}
-              onChange={(event, value) => setCurrentPage(value)}
-              variant="outlined"
-              shape="rounded"
-            />
+        <div className="flex-1 overflow-y-auto max-h-[500px] mb-4"> {/* Scrollable review section */}
+          {filteredAndSortedReviews === null || filteredAndSortedReviews.length === 0 ? (
+            <div className="text-center">
+              <h1>{t("reviews.no-reviews")}</h1>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              {/* Kolumna 1 */}
+              <div className="flex flex-col gap-2 w-1/2">
+                {filteredAndSortedReviews
+                  .filter((_, index) => index % 2 === 0) // Parzyste indeksy
+                  .map((review) => (
+                    <RestaurantReview
+                      key={review.reviewId}
+                      review={review}
+                      refreshReviews={fetchReviews}
+                      user={user}
+                      isOwnerView={true}
+                      restaurantId={activeRestaurantId}
+                    />
+                  ))}
+              </div>
+
+              {/* Kolumna 2 */}
+              <div className="flex flex-col gap-2 w-1/2">
+                {filteredAndSortedReviews
+                  .filter((_, index) => index % 2 !== 0) // Nieparzyste indeksy
+                  .map((review) => (
+                    <RestaurantReview
+                      key={review.reviewId}
+                      review={review}
+                      refreshReviews={fetchReviews}
+                      user={user}
+                      isOwnerView={true}
+                      restaurantId={activeRestaurantId}
+                    />
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Pagination at the Bottom */}
+        <div className="flex justify-end absolute bottom-4 right-4"> {/* Using absolute positioning for pagination */}
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(event, value) => setCurrentPage(value)}
+            variant="outlined"
+            shape="rounded"
+          />
+        </div>
+      </div>
     </div>
-    
   );
 };
 
