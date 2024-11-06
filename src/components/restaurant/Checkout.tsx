@@ -143,7 +143,7 @@ const Checkout: React.FC = () => {
                 <input
                   type="radio"
                   name="paymentMethod"
-                  defaultChecked={true}
+                  defaultChecked={!canAfford}
                   className=" h-5 w-5 cursor-pointer border-[1px] border-grey-2 text-grey-3 checked:text-primary dark:checked:text-secondary"
                 />
                 <span className="">Card</span>
