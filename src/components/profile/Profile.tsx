@@ -64,7 +64,7 @@ const Profile: React.FC = () => {
           <h1 className="text-sm">Events</h1>
         </button>
       </div>
-      <div className="h-full w-[1000px] rounded-lg">
+      <div className="flex justify-center h-full w-[500px] rounded-lg">
         <Outlet />
       </div>
     </div>

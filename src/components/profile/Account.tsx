@@ -124,8 +124,8 @@ const Account: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full gap-2">
-      <div className="flex h-fit flex-col w-1/2 bg-white rounded-lg p-4 gap-4">
+    <div className="flex flex-col h-full gap-2">
+      <div className="flex h-fit flex-col w-full bg-white rounded-lg p-4 gap-4">
         <div className="flex justify-between w-full">
           <h1 className="text-lg font-mont-bd">Account</h1>
           <button
@@ -176,7 +176,7 @@ const Account: React.FC = () => {
           </Formik>
         </div>
       </div>
-      <div className="bg-white w-1/2 h-fit rounded-lg p-4">
+      <div className="bg-white w-full h-fit rounded-lg p-4">
         <div className="flex justify-between">
           <h1 className="text-lg font-mont-bd">Wallet</h1>
           <button

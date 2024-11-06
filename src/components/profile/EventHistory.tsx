@@ -90,7 +90,7 @@ const EventHistory: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col bg-white rounded-lg">
+    <div className="flex flex-col bg-white rounded-lg w-full h-fit">
       {/* Circular Progress do ładowania */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
