@@ -1,27 +1,29 @@
-import React, { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LandingPage from '../components/LandingPage'
-import UserRegister from '../components/auth/UserRegister'
-import HomePage from '../components/HomePage'
-import { checkAuthLoader, redirectIfLoggedIn } from '../components/auth/auth'
-import Root from '../components/ProtectedLayout'
-import Login from '../components/auth/Login'
-import RestaurantManager from '../components/restaurantManagement/RestaurantManager'
-import Profile from '../components/profile/Profile'
-import Dashboard from '../components/restaurantManagement/dashboard/Dashboard'
-import EmployeeManagement from '../components/restaurantManagement/employees/EmployeeManagement'
-import RestaurantListSection from '../components/restaurantManagement/restaurants/restaurantsList/RestaurantListSection'
-import EmployeeRestaurantManagement from '../components/restaurantManagement/employees/EmployeeRestaurantManagement'
-import IngredientTable from '../components/restaurantManagement/Warehouse/IngredientTable'
-import HistoryTab from '../components/restaurantManagement/reservations/HistoryTab'
-import MenuList from '../components/restaurantManagement/menus/MenuList'
-import { MenuScreenType } from '../services/enums'
-import Account from '../components/profile/Account'
-import ReservationHistory from '../components/profile/ReservationHistory'
-import EventHistory from '../components/profile/EventHistory'
-import Visit from '../components/restaurant/visits/Visit'
-import Checkout from '../components/restaurant/Checkout'
-import VisitWrapper from '../components/restaurant/visits/VisitWrapper'
+import React, { useEffect } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LandingPage from "../components/LandingPage";
+import UserRegister from "../components/auth/UserRegister";
+import HomePage from "../components/HomePage";
+import { checkAuthLoader, redirectIfLoggedIn } from "../components/auth/auth";
+import Root from "../components/ProtectedLayout";
+import Login from "../components/auth/Login";
+import RestaurantManager from "../components/restaurantManagement/RestaurantManager";
+import Profile from "../components/profile/Profile";
+import Dashboard from "../components/restaurantManagement/dashboard/Dashboard";
+import EmployeeManagement from "../components/restaurantManagement/employees/EmployeeManagement";
+import RestaurantListSection from "../components/restaurantManagement/restaurants/restaurantsList/RestaurantListSection";
+import EmployeeRestaurantManagement from "../components/restaurantManagement/employees/EmployeeRestaurantManagement";
+import IngredientTable from "../components/restaurantManagement/Warehouse/IngredientTable";
+import HistoryTab from "../components/restaurantManagement/reservations/HistoryTab";
+import MenuList from "../components/restaurantManagement/menus/MenuList";
+import { MenuScreenType } from "../services/enums";
+import Account from "../components/profile/Account";
+import ReservationHistory from "../components/profile/ReservationHistory";
+import EventHistory from "../components/profile/EventHistory";
+import NotFound from "../components/NotFound";
+import ReviewsManagement from "../components/restaurantManagement/ReviewsMenagment";
+import Checkout from "../components/restaurant/Checkout";
+import Visit from "../components/restaurant/visits/Visit";
+import VisitWrapper from "../components/restaurant/visits/VisitWrapper";
 
 const router = createBrowserRouter([
   {
@@ -73,12 +75,16 @@ const router = createBrowserRouter([
                 element: <IngredientTable />
               },
               {
-                path: 'reservation-history',
-                element: <HistoryTab />
+                path: "reservation-history",
+                element: <HistoryTab />,
+              },
+              {
+                path: "reviews-management",
+                element: <ReviewsManagement />
               }
-            ]
-          }
-        ]
+            ],
+          },
+        ],
       },
       {
         path: 'profile/:userId',
@@ -122,9 +128,13 @@ const router = createBrowserRouter([
   {
     path: 'register',
     element: <UserRegister />,
-    loader: redirectIfLoggedIn
-  }
-])
+    loader: redirectIfLoggedIn,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);
 
 const App = () => {
   useEffect(() => {

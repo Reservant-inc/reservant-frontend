@@ -23,7 +23,7 @@ export const fetchGET = async (connString: string) => {
   return data;
 };
 
-export const fetchPOST = async (connString: string, body?: any) => {
+export const fetchPOST = async (connString: string, body?: any, p0?: { headers: { "Content-Type": string; }; }) => {
   const token = Cookies.get("token");
 
   const fetchOptions: RequestInit = {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchGET, getImage } from "../../../services/APIconn";
-import { IconButton, CircularProgress } from "@mui/material";
+import { IconButton, CircularProgress, ListItemButton } from "@mui/material";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import EventIcon from "@mui/icons-material/Event";
@@ -12,6 +12,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Carousel from "../../reusableComponents/ImageCarousel/Carousel";
 import { RestaurantDetailsType, ReviewType } from "../../../services/types";
 import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
+import FocusedRestaurantEventsList from "./FocusedRestaurantEventsList";
 import CustomRating from "../../reusableComponents/CustomRating";
 import { useTranslation } from "react-i18next";
 import Dialog from "../../reusableComponents/Dialog";
@@ -49,9 +50,10 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [restaurant, setRestaurant] =
     useState<RestaurantDetailsType>(activeRestaurant);
   const [reviews, setReviews] = useState<ReviewType[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
   const [option, setOption] = useState<Options | null>(null);
   const [createdEventId, setCreatedEventId] = useState<number | null>(null);
-  const [showMyEvents, setShowMyEvents] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<"reviews" | "events">("reviews");
 
 
   const navigate = useNavigate();
@@ -85,9 +87,25 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       }
     };
 
+    // Funkcja do pobierania wydarzeń
+    const fetchRestaurantEvents = async () => {
+      try {
+        const data = await fetchGET(
+          `/restaurants/${activeRestaurant.restaurantId}/events`
+        );
+        setEvents(data.items || []);
+      } catch (error) {
+        console.error("Error fetching restaurant events:", error);
+      }
+    };
+    
+    fetchRestaurantEvents();
     fetchRestaurantDetails();
     fetchRestaurantReviews();
+ 
   }, [activeRestaurant]);
+
+  
 
   const averageRating = reviews.length
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
@@ -98,12 +116,12 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   };
 
   const handleEventCreationSuccess = (eventId: number) => {
-    setCreatedEventId(eventId); // Przechowuje ID wydarzenia po sukcesie
-    setOption(null); // Zamykamy dialog formularza tworzenia eventu
+    setCreatedEventId(eventId);
+    setOption(null);
   };
 
-  const handleShowMyEvents = () => {
-    setShowMyEvents(true);
+  const handleTabChange = (tab: "reviews" | "events") => {
+    setActiveTab(tab);
   };
 
   const renderRestaurantDetails = () => {
@@ -190,6 +208,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           <div className="flex flex-col">
             {renderRestaurantDetails()}
             <span className="h-[1px] w-full bg-grey-1 dark:bg-grey-4"></span>
+
+            {/* Przyciski do rezerwacji, menu, tworzenia eventu i zamówienia */}
             <div className="flex w-full justify-around gap-2 rounded-lg p-3">
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
@@ -207,7 +227,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               </div>
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
-                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setOption(Options.EVENT)}
                 >
                   <EventIcon className="h-6 w-6" />
@@ -220,7 +240,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               </div>
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
-                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                  className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setOption(Options.MENU)}
                 >
                   <RestaurantMenuIcon className="h-6 w-6" />
@@ -234,7 +254,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               {restaurant.provideDelivery && (
                 <div className="flex h-full w-[70px] flex-col items-center gap-1">
                   <button
-                    className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                    className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                     onClick={() => setOption(Options.ORDER)}
                   >
                     <DeliveryDiningIcon className="h-6 w-6" />
@@ -247,13 +267,42 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 </div>
               )}
             </div>
-            <span className="h-[1px] w-full bg-grey-1 dark:bg-grey-4"></span>
+
+            {/* Zakładki Reviews i Events */}
+            <div className="flex justify-around border-t border-grey-1 bg-grey-0 pt-1">
+              <ListItemButton
+                onClick={() => handleTabChange("reviews")}
+                className={`${
+                  activeTab === "reviews"
+                    ? "bg-white dark:bg-black text-primary"
+                    : "bg-grey-0 dark:bg-grey-5"
+                } h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
+              >
+                {t("reviews.reviews")}
+              </ListItemButton>
+              <ListItemButton
+                onClick={() => handleTabChange("events")}
+                className={`${
+                  activeTab === "events"
+                    ? "bg-white dark:bg-black text-primary"
+                    : "bg-grey-0 dark:bg-grey-5"
+                } h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
+              >
+                {t("home-page.events")}
+              </ListItemButton>
+            </div>
+
+            {/* Wybór treści zakładki */}
             <div className="h-full p-3">
-              <FocusedRestaurantReviewsList
-                isPreview={false}
-                reviews={reviews}
-                activeRestaurantId={restaurant.restaurantId}
-              />
+              {activeTab === "reviews" ? (
+                <FocusedRestaurantReviewsList
+                  isPreview={false}
+                  reviews={reviews}
+                  activeRestaurantId={restaurant.restaurantId}
+                />
+              ) : (
+                <FocusedRestaurantEventsList events={events} /> // Przekazanie danych wydarzeń do komponentu
+              )}
             </div>
           </div>
         </>
@@ -320,7 +369,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         </Dialog>
       )}
 
-      {/*  EventDetailsModal tylko gdy jest createdEventId */}
       {createdEventId && (
         <EventDetailsModal
           eventId={createdEventId}
