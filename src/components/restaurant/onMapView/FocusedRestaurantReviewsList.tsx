@@ -5,7 +5,7 @@ import { ReviewType , User} from "../../../services/types";
 import { useTranslation } from "react-i18next";
 import { fetchGET, fetchPOST } from "../../../services/APIconn";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Rating, Tooltip } from "@mui/material";
-import { Check as CheckIcon, SwapVert as SwapVertIcon } from "@mui/icons-material";
+import { Check as CheckIcon, SwapVert as SwapVertIcon, Add as AddIcon } from "@mui/icons-material";
 
 
 interface FocusedRestaurantReviewsListProps {
@@ -18,9 +18,6 @@ const FocusedRestaurantReviewsList: React.FC<
   FocusedRestaurantReviewsListProps
 > = ({ isPreview, reviews, activeRestaurantId }) => {
   const [ filteredAndSortedReviews, setFilteredAndSortedReviews ] = useState<ReviewType[]>(reviews)
-  const [ value, setValue ] = useState<number>(0)
-  const [ isOwner, setIsOwner ] = useState<boolean>(false)
-  const [showEventsModal, setShowEventsModal] = useState<boolean>(false); // temp bo idk gdzie to bedzie a zeby pokazac
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -126,14 +123,14 @@ const FocusedRestaurantReviewsList: React.FC<
             <RestaurantReviewsFilters setValue={setRatingFilter} value={ratingFilter} />
             <Tooltip title={t("reviews.sort")}>
               <button
-                className="border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
+                className="border-[1px] p-1 border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
                 onClick={toggleSortOrder}
               >
-                <SwapVertIcon />
+                <SwapVertIcon className="w-5 h-5"/>
               </button>
             </Tooltip>
             <button
-              className={`w-1/2 border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary ${
+              className={`w-1/2 flex items-center justify-center gap-1 border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary ${
                 hasReviewed ? "cursor-not-allowed" : "dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
               }`}
               onClick={handleAddReviewClick}
@@ -141,10 +138,14 @@ const FocusedRestaurantReviewsList: React.FC<
             >
               {hasReviewed ? (
                 <>
-                  {t("reviews.review-submitted")} <CheckIcon />
+                  <h1>{t("reviews.review-submitted")}</h1> 
+                  <CheckIcon className="w-5 h-5"/>
                 </>
               ) : (
-                `+ ${t("reviews.add-review")}`
+                <>
+                  <AddIcon className="w-5 h-5"/>
+                  <h1 className="text-sm">{t("reviews.add-review")}</h1>
+                </>
               )}
             </button>
           </div>

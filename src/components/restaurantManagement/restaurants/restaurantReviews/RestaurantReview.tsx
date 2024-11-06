@@ -141,21 +141,29 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           <Avatar
             src={getImage(authorData?.photo || "", "/path/to/default/avatar.png")}
             alt={authorData?.login}
-          >
-            {authorData
-              ? `${authorData.firstName.charAt(0)}${authorData.lastName.charAt(0)}`
-              : "A"}
+            className="h-7 w-7"
+            >
+            <h1 className="text-sm">
+              {
+                authorData
+                ? `${authorData.firstName.charAt(0)}${authorData.lastName.charAt(0)}`
+                : "A"
+              }
+            </h1>
           </Avatar>
-          <p>{new Date(review.createdAt).toLocaleDateString()}</p>
+          <p className="text-sm">{authorData?.firstName + ' ' + authorData?.lastName}</p>
+          <p className="text-sm">{new Date(review.createdAt).toLocaleDateString()}</p>
         </div>
-        <CustomRating rating={review.stars} readOnly={true} />
+        <CustomRating rating={review.stars} readOnly={true} className="text-[20px]"/>
       </div>
 
-      <div className="review-content flex flex-col items-start">
+      <div className="review-content flex flex-col items-start p-1">
         <p>
-          {isExpanded || review.contents.length <= 100
-            ? review.contents
-            : `${review.contents.substring(0, 100)}...`}
+          <h1 className="text-sm">
+            {isExpanded || review.contents.length <= 100
+              ? review.contents
+              : `${review.contents.substring(0, 100)}...`}
+          </h1>
           {review.contents.length > 100 && !isExpanded && (
             <span
               className="text-grey-2 cursor-pointer text-sm"
@@ -212,7 +220,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       </div>
 
       {review.restaurantResponse && (
-        <div className="bg-grey-1 dark:bg-grey-5 response-section mt-4 p-4 rounded-lg border-l-4 border-primary dark:border-secondary flex items-start gap-4">
+        <div className="bg-grey-1 dark:bg-grey-5 response-section p-4 rounded-lg border-l-4 border-primary dark:border-secondary flex items-start gap-4">
           <Avatar src={getImage(restaurantLogo || "", "/path/to/default/logo.png")} alt="Restaurant Logo" />
           <div className="response-content flex-grow">
             <p>{new Date(review.answeredAt).toLocaleDateString()}</p>

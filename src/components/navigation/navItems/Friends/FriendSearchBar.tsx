@@ -84,7 +84,7 @@ const FriendSearchBar: React.FC = () => {
         <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
       </div>
       {isPressed && (
-        <div className="absolute right-0 top-0 w-[460px]">
+        <div className="absolute z-[2] right-0 top-0 w-[460px]">
           {users.length > 0 ? (
             <div className="nav-dropdown scroll left-0 flex h-[15rem] w-[450px] items-center overflow-y-hidden dark:bg-black">
               <div className="custom-transition flex h-14 w-full items-center justify-between px-3 py-4">
