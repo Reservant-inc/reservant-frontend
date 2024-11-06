@@ -5,7 +5,7 @@ import {
   RestaurantDetailsType,
   UserType
 } from '../../services/types'
-import { fetchPOST, getImage } from '../../services/APIconn'
+import { fetchGET, fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -29,12 +29,30 @@ const Checkout: React.FC = () => {
     restaurant: restaurant
   }
 
+  const [wallet, setWallet] = useState<number>(0)
+
+  useEffect(() => {
+    const getWallet = async () => {
+      try {
+        const res = await fetchGET('/wallet/status')
+        setWallet(res.balance)
+      } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log('Unexpected error')
+        }
+      }
+    }
+    getWallet()
+  }, [])
+
   const userInfo = Cookies.get('userInfo')
   const user = userInfo ? JSON.parse(userInfo) : null
   const [note, setNote] = useState<string>('')
 
   const navigate = useNavigate()
-  const wallet = 50
+
   const canAfford =
     wallet >=
     (restaurant.reservationDeposit
