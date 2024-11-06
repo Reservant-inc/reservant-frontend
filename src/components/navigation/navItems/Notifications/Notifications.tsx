@@ -61,7 +61,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
       {isPressed && (
         <div
           className={`nav-dropdown flex w-[300px] flex-col items-center z-[1] bg-white dark:bg-black ${
-            showAll ? "h-[calc(100%-4.5rem)]" : "h-auto" // pełna albo auto do 3 nowych powiadomień defaultowo
+            showAll ? "" : "h-auto" // pełna albo auto do 3 nowych powiadomień defaultowo
           }`}
         >
           <NotificationList

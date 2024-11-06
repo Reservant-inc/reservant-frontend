@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Notification from "./Notification";
 import { fetchGET } from "../../../../services/APIconn";
 import FriendReq from "./FriendReq";
-import { ListItemButton } from "@mui/material";
+import { ListItemButton, CircularProgress } from "@mui/material";
 
 interface NotificationData {
   notificationId: number;
@@ -39,9 +39,6 @@ const NotificationList: React.FC<NotificationListProps> = ({
   const [activeTab, setActiveTab] = useState<"notifications" | "friendRequests">(
     "notifications"
   );
-
-  const unreadNotificationsCount = notifications.filter((n) => !n.dateRead).length;
-  const unreadFriendRequestsCount = friendRequests.filter((fr) => !fr.dateRead).length;
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -83,31 +80,35 @@ const NotificationList: React.FC<NotificationListProps> = ({
     : notifications.filter((n) => !n.dateRead).slice(0, 3);
 
   if (loading) {
-    return <p>Loading notifications...</p>;
+    return (
+      <div className="flex flex-col items-center justify-center h-64 w-full transition-all duration-500 ease-in-out text-grey-3">
+        <CircularProgress className="mb-4" />
+        <p>Loading notifications...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="h-full w-full flex flex-col px-2">
+    <div
+      className={`h-full w-full flex flex-col px-2 transition-all duration-500 ease-in-out ${
+        showAll ? "h-auto" : "h-[300px]"
+      }`}
+    >
       <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
         <p className="font-mont-bd text-xl">Notifications</p>
       </div>
 
       {showAll && (
-        <div className="flex justify-around">
+        <div className="flex justify-around transition-all duration-500 ease-in-out">
           <ListItemButton
             onClick={() => setActiveTab("notifications")}
             className={`${
               activeTab === "notifications"
                 ? "bg-white dark:bg-black text-primary"
                 : "bg-grey-0 dark:bg-grey-5"
-            } h-full w-full rounded-t-lg px-4 dark:text-grey-1 relative`}
+            } h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
           >
             Notifications
-            {unreadNotificationsCount > 0 && (
-              <span className="absolute right-3 top-1 h-4 w-4 rounded-full bg-primary dark:bg-secondary text-white text-xs flex items-center justify-center">
-                {unreadNotificationsCount}
-              </span>
-            )}
           </ListItemButton>
           <ListItemButton
             onClick={() => setActiveTab("friendRequests")}
@@ -115,19 +116,14 @@ const NotificationList: React.FC<NotificationListProps> = ({
               activeTab === "friendRequests"
                 ? "bg-white dark:bg-black text-primary"
                 : "bg-grey-0 dark:bg-grey-5"
-            } h-full w-full rounded-t-lg px-4 dark:text-grey-1 relative`}
+            } h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
           >
             Friends
-            {unreadFriendRequestsCount > 0 && (
-              <span className="absolute right-3 top-1 h-4 w-4 rounded-full bg-primary dark:bg-secondary text-white text-xs flex items-center justify-center">
-                {unreadFriendRequestsCount}
-              </span>
-            )}
           </ListItemButton>
         </div>
       )}
 
-      <div className="flex-grow overflow-y-auto scroll">
+      <div className="flex-grow overflow-y-auto scroll transition-all duration-500 ease-in-out">
         {activeTab === "notifications" && (
           <>
             {filteredNotifications.length === 0 ? (

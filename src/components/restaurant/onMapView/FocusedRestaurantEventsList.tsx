@@ -36,7 +36,7 @@ const FocusedRestaurantEventsList: React.FC<FocusedRestaurantEventsListProps> = 
         events.filter((event) => event.name.toLowerCase().includes(query))
       );
     } else {
-      setFilteredEvents(events); // Resetuje filtry, gdy mniej niż 3 znaki
+      setFilteredEvents(events); // Resetuje filtry gdy mniej niż 3 znaki
     }
   };
 

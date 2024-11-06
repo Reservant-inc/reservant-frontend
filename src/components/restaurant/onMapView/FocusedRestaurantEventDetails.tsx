@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getImage, fetchPOST, fetchGET, fetchDELETE } from "../../../services/APIconn";
 import Cookies from "js-cookie";
+import Dialog from "../../reusableComponents/Dialog";
 
 interface Participant {
   userId: string;
@@ -34,6 +35,7 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
   const userId = JSON.parse(Cookies.get("userInfo") as string).userId;
   const isCreator = userId === event.creator.userId;
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const isParticipant = participants.some((participant) => participant.userId === userId);
 
   const fetchParticipants = async () => {
@@ -58,10 +60,11 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
     }
   };
 
-  const handleLeaveEventClick = async () => {
+  const handleLeaveEvent = async () => {
     try {
       await fetchDELETE(`/events/${event.eventId}/interested`);
       fetchParticipants();
+      setShowLeaveDialog(false); // Zamknij dialog po usunięciu zainteresowania
     } catch (error) {
       console.error("Error leaving event:", error);
     }
@@ -96,11 +99,11 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
           </div>
         </div>
 
-        {/* Interest Button */}
+        {/* przycisk zainteresowania */}
         <div className="mt-4 flex justify-center">
           {!isCreator && (
             <button
-              onClick={isParticipant ? handleLeaveEventClick : handleInterestClick}
+              onClick={isParticipant ? () => setShowLeaveDialog(true) : handleInterestClick}
               className={`w-3/4 py-2 rounded-lg transition hover:scale-105 ${
                 isParticipant
                   ? "bg-primary text-white hover:bg-primary-2"
@@ -120,6 +123,35 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
           )}
         </div>
       </div>
+
+      {/* Dialog potwierdzenia wyjścia */}
+      {showLeaveDialog && (
+        <Dialog
+          open={showLeaveDialog}
+          onClose={() => setShowLeaveDialog(false)}
+          title="Potwierdzenie wyjścia"
+        >
+          <div className="p-4">
+            <p className="mb-4">
+              Czy na pewno chcesz opuścić wydarzenie <strong>{event.name}</strong>?
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
+                onClick={handleLeaveEvent}
+              >
+                Tak
+              </button>
+              <button
+                className="bg-grey-2 hover:bg-grey-3 text-white py-1 px-3 rounded transition hover:scale-105"
+                onClick={() => setShowLeaveDialog(false)}
+              >
+                Nie
+              </button>
+            </div>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 };

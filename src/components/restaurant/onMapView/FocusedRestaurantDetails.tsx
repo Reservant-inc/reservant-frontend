@@ -48,7 +48,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [restaurant, setRestaurant] =
     useState<RestaurantDetailsType>(activeRestaurant);
   const [reviews, setReviews] = useState<ReviewType[]>([]);
-  const [events, setEvents] = useState<any[]>([]); // Nowy stan do przechowywania wydarzeń
+  const [events, setEvents] = useState<any[]>([]);
   const [option, setOption] = useState<Options | null>(null);
   const [createdEventId, setCreatedEventId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<"reviews" | "events">("reviews");
@@ -78,7 +78,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       }
     };
 
-    // Funkcja do pobierania wydarzeń restauracji
+    // Funkcja do pobierania wydarzeń
     const fetchRestaurantEvents = async () => {
       try {
         const data = await fetchGET(
@@ -200,7 +200,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             {renderRestaurantDetails()}
             <span className="h-[1px] w-full bg-grey-1 dark:bg-grey-4"></span>
 
-            {/* Przyciski do rezerwacji, menu, eventu i zamówienia */}
+            {/* Przyciski do rezerwacji, menu, tworzenia eventu i zamówienia */}
             <div className="flex w-full justify-around gap-2 rounded-lg p-3">
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
