@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FetchError } from "../../services/Errors";
 import { fetchGET, fetchPUT, getImage } from "../../services/APIconn";
-import { UserType } from "../../services/types";
+import { PaginationType, TransactionType, UserType } from "../../services/types";
 import DefaultImage from '../../assets/images/user.jpg'
-import { Form, Formik, Field, ErrorMessage } from "formik";
+import { Form, Formik, Field } from "formik";
 import * as yup from "yup";
 import { TextField } from "@mui/material";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  CircularProgress,
+} from "@mui/material";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const UserEditSchema = yup.object({
   phoneNumber: yup.string()
@@ -21,7 +27,27 @@ const UserEditSchema = yup.object({
 
 const Account: React.FC = () => {
   
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
+  const [wallet, setWallet] = useState<number>(0)
+  const [transactions, setTransactions] = useState<TransactionType[]>([])
+
+  useEffect(() => {
+    const getWallet = async () => {
+      try {
+        const res = await fetchGET('/wallet/status')
+        setWallet(res.balance)
+      } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log('Unexpected error')
+        }
+      }
+    }
+    getWallet()
+  }, [])
   
   const initialValues = {
     phoneNumber: userInfo.phoneNumber,
@@ -44,6 +70,33 @@ const Account: React.FC = () => {
         console.log(error)
     }
   }
+
+  const fetchTransactions = async () => {
+    try {
+      const result: PaginationType = await fetchGET(
+        `/wallet/history`
+      );
+      const newTransactions = result.items as TransactionType[]
+
+      if (newTransactions.length < 10) setHasMore(false);
+
+      if (page > 0) {
+        setTransactions((prevTransactions) => [...prevTransactions, ...newTransactions]);
+      } else {
+        setTransactions(newTransactions);
+      }
+    } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log("Unexpected error:", error);
+        }
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions()
+  }, [page])
 
   const updateUserData = async (userData: any) => {
 
@@ -76,8 +129,9 @@ const Account: React.FC = () => {
         <div className="flex justify-between w-full">
           <h1 className="text-lg font-mont-bd">Account</h1>
           <button
-            className="px-2 pr-2 w-[150px] text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white"
+            className="flex items-center justify-center gap-2 px-2 pr-2 w-[175px] text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white"
           >
+            <DeleteForeverIcon className="w-5 h-5"/>
             Delete account
           </button>
         </div>
@@ -122,9 +176,47 @@ const Account: React.FC = () => {
           </Formik>
         </div>
       </div>
-      <div className="bg-white w-1/2 h-[70%] rounded-lg p-4">
-        <h1 className="text-lg font-mont-bd">Wallet</h1>
-
+      <div className="bg-white w-1/2 h-fit rounded-lg p-4">
+        <div className="flex justify-between">
+          <h1 className="text-lg font-mont-bd">Wallet</h1>
+          <button
+            className="flex items-center justify-center gap-2 px-2 pr-2 w-[175px] text-sm border-[1px] rounded-lg p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
+          >
+            <AttachMoneyIcon className="w-5 h-5"/>
+            Add wallet funds
+          </button>
+        </div>
+        <div className="flex flex-col gap-2 justify-center pt-2">
+          <h1 className="text-sm font-mont-bd">{`Account balance: ${wallet} zł`}</h1>
+          <h1 className="text-sm">Transaction history:</h1>
+          <div className="w-full h-[300px] bg-grey-0 rounded-lg overflow-y-auto scroll">
+            <InfiniteScroll
+              dataLength={transactions.length}
+              next={() => setPage((prevPage) => prevPage + 1)}
+              hasMore={hasMore}
+              loader={<CircularProgress className=""/>}
+              scrollableTarget="scrollableDiv"
+              className="hidescroll flex flex-col items-center justify-center text-grey-2"
+            >
+              <div className="flex flex-col p-2 h-full items-center">
+                {
+                  transactions.length > 0 ? (
+                    transactions.map((transaction, index) => (
+                      <div
+                        key={index}
+                        className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
+                      >
+                        {transaction.title}
+                      </div>
+                    ))
+                  ) : (
+                    <h1 className="text-grey-2 text-sm">No transactions yet</h1>
+                  )
+                }
+              </div>
+            </InfiniteScroll>
+          </div>
+        </div>
       </div>
     </div>
   )
