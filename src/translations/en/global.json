@@ -229,7 +229,8 @@
         "create-event": "Create event",
         "order": "Order",
         "is-delivering": "Delivery",
-        "delivery-fee": "Delivery fee"
+        "delivery-fee": "Delivery fee",
+        "events": "Events"
     },
     "reviews": {
         "filter": "Filter",

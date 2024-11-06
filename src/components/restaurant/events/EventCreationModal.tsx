@@ -1,56 +1,88 @@
 import React, { useState } from "react";
-import { fetchPOST } from "../../../services/APIconn";
+import { Formik, Form, Field, FormikHelpers } from "formik";
+import * as Yup from "yup";
+import { fetchPOST, fetchFilesPOST, getImage } from "../../../services/APIconn";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DefaultImage from "../../../assets/images/no-image.png";
+import Image from "../../../assets/images/defaulImage.jpeg";
+import { TextField, styled } from "@mui/material";
 
 interface EventCreationModalProps {
   handleClose: () => void;
   restaurantId: number;
-  onSuccess: (eventId: number) => void;  // Nowa funkcja przekazana z FocusedRestaurantDetails
+  onSuccess: (eventId: number) => void;
 }
+
+interface EventFormValues {
+  name: string;
+  description: string;
+  time: string;
+  mustJoinUntil: string;
+  maxPeople: number;
+  photoFileName: string | null;
+}
+
+const validationSchema = Yup.object({
+  name: Yup.string().required("Event Name is required"),
+  description: Yup.string().required("Description is required"),
+  time: Yup.string().required("Event Time is required"),
+  mustJoinUntil: Yup.string().required("Must Join Until is required"),
+  maxPeople: Yup.number().min(1, "Must be at least 1").required("Max People is required"),
+});
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const EventCreationModal: React.FC<EventCreationModalProps> = ({
   handleClose,
   restaurantId,
-  onSuccess, // Funkcja do obsługi sukcesu
+  onSuccess,
 }) => {
-  const [name, setName] = useState<string>("");  // Nowy stan dla pola name
-  const [description, setDescription] = useState<string>("");
-  const [time, setTime] = useState<string>("");
-  const [mustJoinUntil, setMustJoinUntil] = useState<string>("");
-  const [maxPeople, setMaxPeople] = useState<number | "">("");
+  const [photoPath, setPhotoPath] = useState<string>(DefaultImage);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
 
-  // Resetowanie inputów
-  const resetFormFields = () => {
-    setName("");  
-    setDescription("");
-    setTime("");
-    setMustJoinUntil("");
-    setMaxPeople("");
+  const uploadPhoto = async (photoFile: File) => {
+    try {
+      const res = await fetchFilesPOST("/uploads", photoFile);
+      setPhotoPath(res.path);
+      return res.fileName;
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      return null;
+    }
   };
 
-  // Obsługa tworzenia eventu
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const eventData = {
-      name,  
-      description,
-      time,
-      mustJoinUntil,
+  const handleSubmit = async (
+    values: EventFormValues,
+    { setSubmitting, resetForm }: FormikHelpers<EventFormValues>
+  ) => {
+    setSubmitting(true);
+    const body = JSON.stringify({
       restaurantId,
-      maxPeople,
-    };
+      name: values.name,
+      description: values.description,
+      time: values.time,
+      mustJoinUntil: values.mustJoinUntil,
+      maxPeople: values.maxPeople,
+      photo: values.photoFileName || "",
+    });
 
     try {
-      const response = await fetchPOST("/events", JSON.stringify(eventData));
-      resetFormFields();
-      onSuccess(response.eventId);  // Wywołanie na sukcesie, przekazanie ID wydarzenia
+      const response = await fetchPOST("/events", body);
+      resetForm();
+      onSuccess(response.eventId);
     } catch (error: any) {
-      if (error.errors) {
-        const errorMessages = Object.values(error.errors).flat();
-        setErrorMessage(errorMessages.join("\n"));
-      } else {
-        setErrorMessage(error.message || "An unknown error occurred.");
-      }
+      setErrorMessage(error.message || "An unknown error occurred.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -59,94 +91,141 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
       <h2 id="modal-title" className="text-xl font-bold mb-4 dark:text-white">
         Create Event
       </h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium dark:text-grey-2">
-            Event Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            className="mt-1 block w-full p-2 border border-grey-2 rounded-md"
-            value={name}
-            onChange={(e) => setName(e.target.value)} 
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium dark:text-grey-2">
-            Description
-          </label>
-          <input
-            type="text"
-            id="description"
-            className="mt-1 block w-full p-2 border border-grey-2 rounded-md"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="time" className="block text-sm font-medium dark:text-grey-2">
-            Event Time
-          </label>
-          <input
-            type="datetime-local"
-            id="time"
-            className="mt-1 block w-full p-2 border border-grey-2 rounded-md"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="mustJoinUntil" className="block text-sm font-medium dark:text-grey-2">
-            Must Join Until
-          </label>
-          <input
-            type="datetime-local"
-            id="mustJoinUntil"
-            className="mt-1 block w-full p-2 border border-grey-2 rounded-md"
-            value={mustJoinUntil}
-            onChange={(e) => setMustJoinUntil(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="maxPeople" className="block text-sm font-medium dark:text-grey-2">
-            Max People
-          </label>
-          <input
-            type="number"
-            id="maxPeople"
-            className="mt-1 block w-full p-2 border border-grey-2 rounded-md"
-            value={maxPeople}
-            onChange={(e) => setMaxPeople(Number(e.target.value))}
-            required
-            min="1"
-          />
-        </div>
+      <Formik<EventFormValues>
+        initialValues={{
+          name: "",
+          description: "",
+          time: "",
+          mustJoinUntil: "",
+          maxPeople: 1,
+          photoFileName: null,
+        }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ setFieldValue, isSubmitting, values, errors, touched }) => (
+          <Form>
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium dark:text-grey-2">
+                Event Name
+              </label>
+              <Field
+                as={TextField}
+                name="name"
+                id="name"
+                fullWidth
+                error={touched.name && Boolean(errors.name)}
+                helperText={touched.name && errors.name}
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="description" className="block text-sm font-medium dark:text-grey-2">
+                Description
+              </label>
+              <Field
+                as={TextField}
+                name="description"
+                id="description"
+                fullWidth
+                error={touched.description && Boolean(errors.description)}
+                helperText={touched.description && errors.description}
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="time" className="block text-sm font-medium dark:text-grey-2">
+                Event Time
+              </label>
+              <Field
+                as={TextField}
+                name="time"
+                type="datetime-local"
+                id="time"
+                fullWidth
+                error={touched.time && Boolean(errors.time)}
+                helperText={touched.time && errors.time}
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="mustJoinUntil" className="block text-sm font-medium dark:text-grey-2">
+                Must Join Until
+              </label>
+              <Field
+                as={TextField}
+                name="mustJoinUntil"
+                type="datetime-local"
+                id="mustJoinUntil"
+                fullWidth
+                error={touched.mustJoinUntil && Boolean(errors.mustJoinUntil)}
+                helperText={touched.mustJoinUntil && errors.mustJoinUntil}
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="maxPeople" className="block text-sm font-medium dark:text-grey-2">
+                Max People
+              </label>
+              <Field
+                as={TextField}
+                name="maxPeople"
+                type="number"
+                id="maxPeople"
+                fullWidth
+                error={touched.maxPeople && Boolean(errors.maxPeople)}
+                helperText={touched.maxPeople && errors.maxPeople}
+              />
+            </div>
 
-        {errorMessage && (
-          <p className="mb-4">{errorMessage}</p>
+            {/* Podgląd zdjęcia i przycisk przesyłania */}
+            <div
+              className="relative min-w-64 min-h-64 flex items-center justify-center mb-4"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <img className="w-64 h-64 absolute rounded-lg" src={getImage(photoPath, DefaultImage)} alt="Event preview" />
+              {isHovered && (
+                <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
+                  <label
+                    htmlFor="photo"
+                    className="shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary"
+                  >
+                    <CloudUploadIcon />
+                    Upload photo
+                  </label>
+                </div>
+              )}
+              <VisuallyHiddenInput
+                type="file"
+                id="photo"
+                accept="image/*"
+                onChange={async (e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    const fileName = await uploadPhoto(e.target.files[0]);
+                    setFieldValue("photoFileName", fileName);
+                  }
+                }}
+              />
+            </div>
+
+            {errorMessage && <p className="mb-4 text-red-500">{errorMessage}</p>}
+
+            <div className="flex justify-end space-x-4 mt-6">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition"
+              >
+                Create Event
+              </button>
+              <button
+                type="button"
+                onClick={handleClose}
+                className="w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </Form>
         )}
-
-        <div className="flex justify-end space-x-4 mt-6">
-          <button
-            type="submit"
-            className="w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition"
-          >
-            Create Event
-          </button>
-          <button
-            type="button"
-            onClick={handleClose} 
-            className="w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+      </Formik>
     </div>
   );
 };

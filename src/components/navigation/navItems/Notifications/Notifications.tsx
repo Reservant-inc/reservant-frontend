@@ -61,7 +61,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
       {isPressed && (
         <div
           className={`nav-dropdown flex w-[300px] flex-col items-center z-[1] bg-white dark:bg-black ${
-            showAll ? "h-[calc(100%-4.5rem)]" : "h-auto" // pełna albo auto do 3 nowych powiadomień defaultowo
+            showAll ? "" : "h-auto" // pełna albo auto do 3 nowych powiadomień defaultowo
           }`}
         >
           <NotificationList
@@ -72,7 +72,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
           {!showAll && (
             <button
               onClick={() => setShowAll(true)}
-              className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded"
+              className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
             >
               Wyświetl więcej powiadomień
             </button>
