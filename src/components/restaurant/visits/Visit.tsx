@@ -181,14 +181,10 @@ const Visit: React.FC<VisitProps> = () => {
             {guestsErr && <h1 className="text-error">{guestsErr}</h1>}
           </div>
           <div className=" flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
-            <h1 className="pl-2">
-              Some of your guests have an account?
-              <br />
-              Tag them!
-            </h1>
             <FriendSelector
               friendsToAdd={friendsToAdd}
               setFriendsToAdd={setFriendsToAdd}
+              placeholder="Some of your guests have an account? Tag them!"
             />
           </div>
           <div className="flex w-full items-center justify-between gap-2">

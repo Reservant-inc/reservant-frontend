@@ -12,7 +12,7 @@ interface CartProps {}
 const Cart: React.FC<CartProps> = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const { items, totalPrice, decrementQuantity, incrementQuantity } =
+  const { items, decrementQuantity, incrementQuantity } =
     useContext(CartContext)
 
   return (

@@ -12,11 +12,13 @@ import SearchIcon from '@mui/icons-material/Search'
 interface FriendSelectorProps {
   friendsToAdd: FriendType[]
   setFriendsToAdd: Function
+  placeholder?: string
 }
 
 const FriendSelector: React.FC<FriendSelectorProps> = ({
   friendsToAdd,
-  setFriendsToAdd
+  setFriendsToAdd,
+  placeholder
 }) => {
   const [isLoadingFriends, setIsLoadingFriends] = useState<boolean>(false)
   const [friendSearchQuery, setFriendSearchQuery] = useState<string>('')
@@ -68,13 +70,13 @@ const FriendSelector: React.FC<FriendSelectorProps> = ({
       <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-2 font-mont-md dark:border-grey-6 dark:bg-grey-5">
         <input
           type="text"
-          placeholder={t('friends.search')}
+          placeholder={placeholder ?? t('friends.search')}
           value={friendSearchQuery}
           onChange={e => {
             setFriendSearchQuery(e.target.value)
             handleSearchChange(e)
           }}
-          className="clean-input h-8 w-full p-2 placeholder:text-grey-2 dark:text-grey-1"
+          className="clean-input h-8 w-full p-2 placeholder:text-grey-2 placeholder:text-[13px] dark:text-grey-1"
         />
         <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
       </div>
