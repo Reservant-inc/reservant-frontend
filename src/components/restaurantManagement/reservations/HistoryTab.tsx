@@ -13,7 +13,7 @@ import { OrderType, VisitType } from "../../../services/types";
 import { ArrowForwardIos } from "@mui/icons-material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useParams } from "react-router-dom";
-
+  
 const HistoryTab: React.FC = ({}) => {
   const [ordersOpen, setOrdersOpen] = useState<boolean>(false);
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});

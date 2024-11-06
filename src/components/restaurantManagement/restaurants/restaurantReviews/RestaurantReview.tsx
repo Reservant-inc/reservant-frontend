@@ -48,6 +48,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       try {
         const response = await fetchGET(`/users/${review.authorId}`);
         setAuthorData(response);
+        console.log(review.reviewId)
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -109,26 +110,32 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
     setIsRespondDialogOpen(true);
   };
 
-  const handleSaveResponse = async () => {
-    try {
-      const updatedReview = {
-        stars: review.stars,
-        ownerResponse: responseContents,
-      };
-      await fetchPUT(`/reviews/${review.reviewId}`, JSON.stringify(updatedReview));
-      refreshReviews();
-      setIsRespondDialogOpen(false);
-    } catch (error) {
-      console.error("Error saving response:", error);
-    }
-  };
+  
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded); // Toggle the expansion state
   };
 
+  const handleSaveResponse = async () => {
+  try {
+    const responseBody = {
+      response: responseContents, // restaurant's response content
+    };
+
+    await fetchPUT(`/reviews/${review.reviewId}/restaurant-response`, JSON.stringify(responseBody));
+
+    // Close the dialog and refresh the reviews
+    setIsRespondDialogOpen(false);
+    refreshReviews();
+
+  } catch (error) {
+    console.error("Error saving restaurant response:", error);
+  }
+};
+
+
   return (
-    <div className="flex flex-col gap-4 p-4 rounded-lg dark:bg-grey-6 bg-grey-0">
+    <div className="flex flex-col gap-1 p-2 rounded-lg dark:bg-grey-6 bg-grey-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 ">
           <Avatar
@@ -144,14 +151,14 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
         <CustomRating rating={review.stars} readOnly={true} />
       </div>
 
-      <div className="review-content flex flex-col items-start gap-2">
+      <div className="review-content flex flex-col items-start">
         <p>
           {isExpanded || review.contents.length <= 100
             ? review.contents
             : `${review.contents.substring(0, 100)}...`}
           {review.contents.length > 100 && !isExpanded && (
             <span
-              className="text-grey-2 cursor-pointer"
+              className="text-grey-2 cursor-pointer text-sm"
               onClick={toggleExpand}
             >
               {t("general.read-more")}
@@ -159,7 +166,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           )}
           {isExpanded && (
             <span
-              className="text-grey-2 cursor-pointer"
+              className="text-grey-2 cursor-pointer text-sm"
               onClick={toggleExpand}
             >
               {t("general.read-less")}
@@ -170,11 +177,11 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
 
       <div className="flex items-center">
         {review.dateEdited && (
-          <span className="flex-grow italic text-sm text-grey-3">
+          <span className="flex-grow italic text-xs text-grey-3">
             {t("reviews.edited-at")}: {new Date(review.dateEdited).toLocaleDateString()}
           </span>
         )}
-        <div className="review-actions flex items-center gap-2 ml-auto">
+        <div className="review-actions flex items-center gap-1 ml-auto">
           {review.authorId === user?.userId && (
             <>
               <Button
@@ -213,7 +220,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             <div className="flex mt-2 justify-end">
               <Button
                 onClick={handleRespondClick}
-                className="text-primary dark:text-secondary"
+                className="text-primary dark:text-secondary pb-0"
               >
                 {t("reviews.edit-response")}
               </Button>

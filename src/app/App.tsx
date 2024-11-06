@@ -19,6 +19,8 @@ import { MenuScreenType } from "../services/enums";
 import Account from "../components/profile/Account";
 import ReservationHistory from "../components/profile/ReservationHistory";
 import EventHistory from "../components/profile/EventHistory";
+import NotFound from "../components/NotFound";
+import ReviewsManagement from "../components/restaurantManagement/ReviewsMenagment";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +75,10 @@ const router = createBrowserRouter([
                 path: "reservation-history",
                 element: <HistoryTab />,
               },
+              {
+                path: "reviews-management",
+                element: <ReviewsManagement />
+              }
             ],
           },
         ],
@@ -106,6 +112,10 @@ const router = createBrowserRouter([
     path: "register",
     element: <UserRegister />,
     loader: redirectIfLoggedIn,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
