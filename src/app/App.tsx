@@ -16,7 +16,6 @@ import IngredientTable from "../components/restaurantManagement/Warehouse/Ingred
 import HistoryTab from "../components/restaurantManagement/reservations/HistoryTab";
 import MenuList from "../components/restaurantManagement/menus/MenuList";
 import { MenuScreenType } from "../services/enums";
-import Account from "../components/profile/Account";
 import ReservationHistory from "../components/profile/ReservationHistory";
 import EventHistory from "../components/profile/EventHistory";
 import NotFound from "../components/NotFound";
@@ -24,6 +23,7 @@ import ReviewsManagement from "../components/restaurantManagement/ReviewsMenagme
 import Checkout from "../components/restaurant/Checkout";
 import Visit from "../components/restaurant/visits/Visit";
 import VisitWrapper from "../components/restaurant/visits/VisitWrapper";
+import Account from "../components/profile/Account";
 
 const router = createBrowserRouter([
   {

@@ -22,7 +22,6 @@ import {
   EmploymentType,
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
-import { Modal } from "@mui/material";
 import EmployeeRegister from "../../register/EmployeeRegister";
 import { Add, Restaurant } from "@mui/icons-material";
 import Dialog from '../../reusableComponents/Dialog';
