@@ -291,7 +291,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   activeRestaurantId={restaurant.restaurantId}
                 />
               ) : (
-                <FocusedRestaurantEventsList events={events} /> // Przekazanie danych wydarzeń do komponentu
+                <FocusedRestaurantEventsList events={events} />
               )}
             </div>
           </div>
