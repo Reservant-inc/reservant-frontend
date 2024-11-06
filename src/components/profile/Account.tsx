@@ -71,61 +71,61 @@ const Account: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full gap-2">
-        <div className="flex flex-col bg-white rounded-lg p-4 gap-4">
-          <div className="flex justify-between w-full">
-            <h1 className="text-lg font-mont-bd">Account</h1>
-            <button
-              className="px-2 text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white"
-            >
-              Delete account
-            </button>
-          </div>
-          <div className="flex items-center gap-4 w-full">
-            <img src={getImage(userInfo.photo, DefaultImage)} className="h-44 w-44 rounded-lg"/>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={UserEditSchema}
-              enableReinitialize
-              onSubmit={(values, { setSubmitting }) => {
-                updateUserData(values)
-                setSubmitting(false);
-              }}
-            >
-              {({ isSubmitting, errors, touched }) => (
-                <Form>
-                  <div className="flex-col flex gap-2 w-full">
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="phoneNumber" className="text-sm">Phone Number</label>
-                      <Field name="phoneNumber" type="text" as={TextField} error={touched.phoneNumber && Boolean(errors.phoneNumber)} className="w-[150px]"/>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="firstName" className="text-sm">First Name</label>
-                      <Field name="firstName" type="text" as={TextField} error={touched.firstName && Boolean(errors.firstName)} className="w-[150px]"/>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="lastName" className="text-sm">Last Name</label>
-                      <Field name="lastName" type="text" as={TextField} error={touched.lastName && Boolean(errors.lastName)} className="w-[150px]"/>
-                    </div>
-
-                    <button
-                      className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                      type="submit" disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save Changes'}
-                    </button>
+    <div className="flex h-full gap-2">
+      <div className="flex h-fit flex-col w-1/2 bg-white rounded-lg p-4 gap-4">
+        <div className="flex justify-between w-full">
+          <h1 className="text-lg font-mont-bd">Account</h1>
+          <button
+            className="px-2 pr-2 w-[150px] text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white"
+          >
+            Delete account
+          </button>
+        </div>
+        <div className="flex items-center justify-between gap-4 w-full">
+          <img src={getImage(userInfo.photo, DefaultImage)} className="h-44 w-44 rounded-full"/>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={UserEditSchema}
+            enableReinitialize
+            onSubmit={(values, { setSubmitting }) => {
+              updateUserData(values)
+              setSubmitting(false);
+            }}
+          >
+            {({ isSubmitting, errors, touched }) => (
+              <Form>
+                <div className="flex-col gap-2 flex w-full">
+                  <div className="flex items-center justify-between items-end gap-2">
+                    <label htmlFor="phoneNumber" className="text-sm p-0">Phone Number</label>
+                    <Field name="phoneNumber" type="text" as={TextField} error={touched.phoneNumber && Boolean(errors.phoneNumber)} className="w-[150px]"/>
                   </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </div>
-        <div className="bg-white h-1/2 rounded-lg p-4">
-          <h1 className="text-lg font-mont-bd">Wallet</h1>
 
+                  <div className="flex items-center justify-between items-end gap-2">
+                    <label htmlFor="firstName" className="text-sm p-0">First Name</label>
+                    <Field name="firstName" type="text" as={TextField} error={touched.firstName && Boolean(errors.firstName)} className="w-[150px]"/>
+                  </div>
+
+                  <div className="flex items-center justify-between items-end gap-2">
+                    <label htmlFor="lastName" className="text-sm p-0">Last Name</label>
+                    <Field name="lastName" type="text" as={TextField} error={touched.lastName && Boolean(errors.lastName)} className="w-[150px]"/>
+                  </div>
+
+                  <button
+                    className="border-[1px] self-end w-[150px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                    type="submit" disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
+      </div>
+      <div className="bg-white w-1/2 h-[70%] rounded-lg p-4">
+        <h1 className="text-lg font-mont-bd">Wallet</h1>
+
+      </div>
     </div>
   )
 };

@@ -37,7 +37,7 @@ const Profile: React.FC = () => {
             <>
               <img
                 src={getImage(user.photo, DefaultImage)}
-                className="h-10 w-10 rounded-full"
+                className="h-8 w-8 rounded-full"
               />
               <h1 className="font-mont-bd text-xl">
                 {user.firstName} {user.lastName}
@@ -49,25 +49,19 @@ const Profile: React.FC = () => {
           className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("account")}
         >
-          <h1>Account</h1>
-        </button>
-        <button
-          className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-          onClick={() => navigate("account")}
-        >
-          <h1>Wallet</h1>
+          <h1 className="text-sm">Account</h1>
         </button>
         <button
           className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("reservation-history")}
         >
-          <h1>Reservations</h1>
+          <h1 className="text-sm">Reservations</h1>
         </button>
         <button
           className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("event-history")}
         >
-          <h1>Events</h1>
+          <h1 className="text-sm">Events</h1>
         </button>
       </div>
       <div className="h-full w-[1000px] rounded-lg">
