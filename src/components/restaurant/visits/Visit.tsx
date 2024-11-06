@@ -70,7 +70,7 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   useEffect(() => {
-    if (guests < friendsToAdd.length + 1) {
+    if (guests < friendsToAdd.length + 1 || !guests) {
       setGuestsErr('invalid number')
     } else {
       setGuestsErr(null)
@@ -80,13 +80,6 @@ const Visit: React.FC<VisitProps> = () => {
   useEffect(() => {
     if (date && guests) {
       fetchAvailableHours()
-      setSelectedTimeslot('')
-      if (timeSlots.length > 0) {
-        let tmp: HTMLSelectElement = document.getElementById(
-          'timeselect'
-        ) as HTMLSelectElement
-        tmp.selectedIndex = 0
-      }
     }
   }, [date, guests])
 
@@ -103,6 +96,18 @@ const Visit: React.FC<VisitProps> = () => {
       setTimeSlots([])
     }
   }, [availableHours])
+
+  useEffect(() => {
+    if (timeSlots.length > 0) {
+      let tmp: HTMLSelectElement = document.getElementById(
+        'timeselect'
+      ) as HTMLSelectElement
+      tmp.selectedIndex = 0
+      setSelectedTimeslot(tmp.value)
+    } else {
+      setSelectedTimeslot('')
+    }
+  }, [timeSlots])
 
   const fetchAvailableHours = async () => {
     try {
@@ -125,11 +130,7 @@ const Visit: React.FC<VisitProps> = () => {
     const now = new Date()
     const isToday = date === getParsedDate()
 
-    console.log(availableHours)
-
     availableHours.forEach(({ from, until }) => {
-      console.log(from)
-
       let currentTime = parseTime(from)
       const endTime = parseTime(until)
 
@@ -162,7 +163,7 @@ const Visit: React.FC<VisitProps> = () => {
 
   return (
     <div className="relative flex h-full w-full gap-12 text-nowrap px-12 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
-      <div className="relative flex h-full w-1/4 flex-col gap-5 pt-7">
+      <div className="relative flex h-full w-1/4 min-w-[300px] flex-col gap-5 pt-7">
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
@@ -194,27 +195,23 @@ const Visit: React.FC<VisitProps> = () => {
               value={date}
               min={today}
               onChange={e => setDate(e.target.value)}
-              className="flex h-7 w-36 items-center  rounded-md border-[1px] border-grey-2 px-2 py-0"
+              className=" flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-2 py-0 text-sm"
             />
           </div>
           <div className="flex h-full w-full items-center  justify-between gap-3 text-nowrap">
             <label className="font-mont-md">Time: </label>
-            {timeSlots.length > 0 ? (
-              <select
-                id="timeselect"
-                onChange={e => setSelectedTimeslot(e.target.value)}
-                className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
-              >
-                <option className="hover:bg-grey-1">Time</option>
-                {timeSlots.map((slot, index) => (
-                  <option key={index} value={slot} className="hover:bg-grey-1">
-                    {slot}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <h1>No avaliable hours</h1>
-            )}
+            <select
+              id="timeselect"
+              onChange={e => setSelectedTimeslot(e.target.value)}
+              className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
+            >
+              {timeSlots.length <= 0 && <option>Not avaliable</option>}
+              {timeSlots.map((slot, index) => (
+                <option key={index} value={slot} className="hover:bg-grey-1">
+                  {slot}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
@@ -225,9 +222,9 @@ const Visit: React.FC<VisitProps> = () => {
             type={MenuScreenType.Order}
           />
         </div>
-        <div className="flex h-8 w-full flex-row-reverse gap-3">
+        <div className="flex h-8 w-full  flex-row-reverse gap-3">
           <button
-            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black"
+            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
             onClick={() => navigate('../checkout', { state: skipData })}
             disabled={selectedTimeslot === '' || guestsErr !== null}
           >
@@ -235,7 +232,7 @@ const Visit: React.FC<VisitProps> = () => {
             <ArrowForward />
           </button>
           <button
-            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black"
+            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
             onClick={() => navigate('../checkout', { state: data })}
             disabled={selectedTimeslot === '' || guestsErr !== null}
           >
