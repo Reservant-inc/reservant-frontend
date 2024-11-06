@@ -107,30 +107,30 @@ const MenuItem: React.FC<MenuItemProps> = ({
       >
         <img
           src={getImage(menuItem.photo, DefaultImage)}
-          className="h-24 w-24 rounded-lg"
+          className="h-16 w-16 rounded-lg"
         />
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col">
           <div className="flex gap-3">
-            <h1 className="h-[22px] text-lg dark:text-white">
+            <h1 className="text-md dark:text-white">
               {menuItem.name}
             </h1>
-            <h1 className="h-[22px] text-lg dark:text-white">
+            <h1 className="text-md dark:text-white">
               {menuItem.price} zł
             </h1>
           </div>
           {menuItem.alternateName && (
-            <h1 className="h-[20px] text-grey-3">{menuItem.alternateName}</h1>
+            <h1 className="text-sm text-grey-3">{menuItem.alternateName}</h1>
           )}
           <div className="flex gap-1">
             {item.ingredients.map((ingredient, index) => (
-              <h1 key={index} className="h-[20px] text-grey-3">
+              <h1 key={index} className="text-sm text-grey-3">
                 {ingredient.publicName}
                 {index !== item.ingredients.length - 1 && ','}
               </h1>
             ))}
           </div>
           {menuItem.alcoholPercentage !== 0 && (
-            <h1 className="h-[20px] text-grey-3">
+            <h1 className="text-sm text-grey-3">
               alcohol contents - {menuItem.alcoholPercentage}%
             </h1>
           )}
