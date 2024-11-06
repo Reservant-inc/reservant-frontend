@@ -5,6 +5,7 @@ import { UserType } from "../../services/types";
 import DefaultImage from '../../assets/images/user.jpg'
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
+import { TextField } from "@mui/material";
 
 const UserEditSchema = yup.object({
   phoneNumber: yup.string()
@@ -91,25 +92,22 @@ const Account: React.FC = () => {
                 setSubmitting(false);
               }}
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting, errors, touched }) => (
                 <Form>
-                  <div className="flex-col flex gap-2 w-[350px]">
+                  <div className="flex-col flex gap-2 w-full">
                     <div className="flex items-center justify-between">
                       <label htmlFor="phoneNumber" className="text-sm">Phone Number</label>
-                      <Field name="phoneNumber" type="text" className='w-40 border-[1px] rounded-lg text-sm'/>
-                      <ErrorMessage name="phoneNumber" component="div" className="error" />
+                      <Field name="phoneNumber" type="text" as={TextField} error={touched.phoneNumber && Boolean(errors.phoneNumber)} className="w-[150px]"/>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <label htmlFor="firstName" className="text-sm">First Name</label>
-                      <Field name="firstName" type="text" className='w-40 border-[1px] rounded-lg text-sm'/>
-                      <ErrorMessage name="firstName" component="div" className="error" />
+                      <Field name="firstName" type="text" as={TextField} error={touched.firstName && Boolean(errors.firstName)} className="w-[150px]"/>
                     </div>
 
                     <div className="flex items-center justify-between">
                       <label htmlFor="lastName" className="text-sm">Last Name</label>
-                      <Field name="lastName" type="text" className='w-40 border-[1px] rounded-lg text-sm'/>
-                      <ErrorMessage name="lastName" component="div" className="error" />
+                      <Field name="lastName" type="text" as={TextField} error={touched.lastName && Boolean(errors.lastName)} className="w-[150px]"/>
                     </div>
 
                     <button
