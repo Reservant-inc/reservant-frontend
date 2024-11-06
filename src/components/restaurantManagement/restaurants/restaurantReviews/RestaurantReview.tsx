@@ -48,7 +48,6 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       try {
         const response = await fetchGET(`/users/${review.authorId}`);
         setAuthorData(response);
-        console.log(review.reviewId)
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

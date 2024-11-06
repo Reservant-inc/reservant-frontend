@@ -90,7 +90,7 @@ const EventHistory: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col p-4">
+    <div className="flex flex-col bg-white rounded-lg">
       {/* Circular Progress do ładowania */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
@@ -99,107 +99,109 @@ const EventHistory: React.FC = () => {
       ) : (
         <>
           {/* zmiana zakładki aktywnej */}
-          <div className="flex justify-around mb-4">
-            <ListItemButton
+          <div className="flex gap-1 bg-grey-1">
+            <button
               onClick={() => setActiveTab("created")}
               className={`${
                 activeTab === "created"
                   ? "bg-white dark:bg-black text-primary"
                   : "bg-grey-0 dark:bg-grey-5"
-              } w-full rounded-t-lg px-4 dark:text-grey-1`}
+              } rounded-t-lg px-4 py-2 dark:text-grey-1`}
             >
               Utworzone
-            </ListItemButton>
-            <ListItemButton
+            </button>
+            <button
               onClick={() => setActiveTab("interested")}
               className={`${
                 activeTab === "interested"
                   ? "bg-white dark:bg-black text-primary"
                   : "bg-grey-0 dark:bg-grey-5"
-              } w-full rounded-t-lg px-4 dark:text-grey-1`}
+              } rounded-t-lg px-4 dark:text-grey-1`}
             >
               Zainteresowane
-            </ListItemButton>
+            </button>
           </div>
 
           {/* input do filtrowania, działa od 3 znaków */}
-          <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-1 font-mont-md dark:border-grey-6 dark:bg-grey-5 mb-4">
-            <input
-              type="text"
-              placeholder="Search events"
-              className="w-full placeholder:text-grey-2"
-              onChange={handleSearchChange}
-            />
-            <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
-          </div>
+          <div className="p-4 rounded-lg shadow-md">
+            <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6 mb-4">
+              <input
+                type="text"
+                placeholder="Search events"
+                className="w-full placeholder:text-grey-2"
+                onChange={handleSearchChange}
+              />
+              <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
+            </div>
 
-          {/* wydarzenia */}
-          <div className="flex flex-col gap-4">
-            {filteredTabEvents.length === 0 ? (
-              <p className="italic text-center">
-                {activeTab === "created"
-                  ? "Brak utworzonych wydarzeń."
-                  : "Brak zainteresowanych wydarzeń."}
-              </p>
-            ) : (
-              filteredTabEvents.map((event) => (
-                <div
+            {/* wydarzenia */}
+            <div className="flex flex-col gap-4 bg-white overflow-y-auto h-[70vh] scroll">
+              {filteredTabEvents.length === 0 ? (
+                <p className="italic text-center">
+                  {activeTab === "created"
+                    ? "Brak utworzonych wydarzeń."
+                    : "Brak zainteresowanych wydarzeń."}
+                </p>
+              ) : (
+                filteredTabEvents.map((event) => (
+                  <div
                   key={event.eventId}
-                  className="p-4 rounded-lg bg-grey-1 dark:text-grey-1 dark:bg-grey-2"
-                >
-                  {event.photo && (
-                    <img
+                  className="rounded-l dark:text-grey-1 dark:bg-grey-2"
+                  >
+                    {event.photo && (
+                      <img
                       src={getImage(event.photo, "")}
                       alt={`${event.name} event`}
                       className="w-full h-auto rounded-t-lg object-cover mb-2"
                       style={{ maxHeight: "200px" }}
-                    />
-                  )}
-                  <h2 className="font-bold text-xl">{event.name}</h2>
-                  <p className="text-sm">{event.description}</p>
-                  <p className="text-sm">
-                    <strong>Data wydarzenia:</strong>{" "}
-                    {new Date(event.time).toLocaleString()}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Restauracja:</strong> {event.restaurant.name}, {event.restaurant.city}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Liczba zainteresowanych:</strong> {event.numberInterested}
-                  </p>
+                      />
+                    )}
+                    <h2 className="font-bold text-xl">{event.name}</h2>
+                    <p className="text-sm">{event.description}</p>
+                    <p className="text-sm">
+                      <strong>Data wydarzenia:</strong>{" "}
+                      {new Date(event.time).toLocaleString()}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Restauracja:</strong> {event.restaurant.name}, {event.restaurant.city}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Liczba zainteresowanych:</strong> {event.numberInterested}
+                    </p>
 
-                  {activeTab === "created" ? (
-                    <div className="flex gap-2 mt-4">
+                    {activeTab === "created" ? (
+                      <div className="flex gap-2 mt-4">
+                        <button
+                          className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+                          onClick={() => console.log("Edytuj")}
+                          >
+                          Edytuj
+                        </button>
+                        <button
+                          className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+                          onClick={() => {
+                            setShowDeleteDialog(true);
+                            setEventToDelete(event);
+                          }}
+                          >
+                          Usuń
+                        </button>
+                      </div>
+                    ) : (
                       <button
-                        className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
-                        onClick={() => console.log("Edytuj")}
-                      >
-                        Edytuj
-                      </button>
-                      <button
-                        className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
-                        onClick={() => {
-                          setShowDeleteDialog(true);
-                          setEventToDelete(event);
-                        }}
-                      >
-                        Usuń
-                      </button>
-                    </div>
-                  ) : (
-                    <button
                       className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105 mt-4"
                       onClick={() => {
                         setShowDeleteDialog(true);
                         setEventToDelete(event);
                       }}
-                    >
-                      Usuń zainteresowanie
-                    </button>
-                  )}
-                </div>
-              ))
-            )}
+                      >
+                        Usuń zainteresowanie
+                      </button>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
 
           {/* dialog do potwierdzenia usuwania */}

@@ -30,14 +30,14 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="z-[0] flex h-full w-full items-center justify-center gap-3 bg-grey-0 p-4">
-      <div className="flex w-[200px] flex-col gap-2 self-start rounded-lg bg-white p-3">
+    <div className="z-[0] flex h-full w-full items-center justify-center gap-5 bg-grey-1 p-4">
+      <div className="flex flex-col gap-2 self-start p-3">
         <div className="mb-5 flex items-center gap-4">
           {user && (
             <>
               <img
                 src={getImage(user.photo, DefaultImage)}
-                className="h-12 w-12 rounded-full"
+                className="h-10 w-10 rounded-full"
               />
               <h1 className="font-mont-bd text-xl">
                 {user.firstName} {user.lastName}
@@ -45,32 +45,32 @@ const Profile: React.FC = () => {
             </>
           )}
         </div>
-        <Button
-          className="w-full text-black"
+        <button
+          className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("account")}
         >
           <h1>Account</h1>
-        </Button>
-        <Button
-          className="w-full text-black"
+        </button>
+        <button
+          className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("account")}
         >
           <h1>Wallet</h1>
-        </Button>
-        <Button
-          className="w-full text-black"
+        </button>
+        <button
+          className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("reservation-history")}
         >
           <h1>Reservations</h1>
-        </Button>
-        <Button
-          className="w-full text-black"
+        </button>
+        <button
+          className="border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate("event-history")}
         >
           <h1>Events</h1>
-        </Button>
+        </button>
       </div>
-      <div className="h-full w-[1000px] rounded-lg bg-white">
+      <div className="h-full w-[1000px] rounded-lg">
         <Outlet />
       </div>
     </div>
