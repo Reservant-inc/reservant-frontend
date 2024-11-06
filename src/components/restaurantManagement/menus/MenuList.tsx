@@ -64,8 +64,10 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
           return response;
         }),
       );
-
-      setMenus(completeMenus);
+      type===MenuScreenType.Order?
+        setMenus(completeMenus.filter(menu=>menu.menuItems.length>0))
+        :
+        setMenus(completeMenus);
     } catch (error) {
       if (error instanceof FetchError) {
         console.log(error.formatErrors());
@@ -122,15 +124,18 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
           </div>
         </div>
         <div className="scroll flex h-full flex-col gap-5 overflow-y-auto scroll-smooth">
-          {menus.map((menu, index) => (
-            <Menu
-              key={menu.menuId + menu.name}
-              menu={menu}
-              activeRestaurantId={activeRestaurantId ?? -1}
-              ref={(el) => (menuRefs.current[index] = el)}
-              type={type}
-            />
-          ))}
+          {
+           
+            menus.map((menu, index) => (
+              <Menu
+                key={menu.menuId + menu.name}
+                menu={menu}
+                activeRestaurantId={activeRestaurantId ?? -1}
+                ref={(el) => (menuRefs.current[index] = el)}
+                type={type}
+              />
+            ))
+          }
         </div>
         {isCreating && (
           <Dialog

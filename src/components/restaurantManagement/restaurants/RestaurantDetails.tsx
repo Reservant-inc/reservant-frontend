@@ -6,16 +6,10 @@ import {
 } from "../../../services/types";
 import { fetchGET } from "../../../services/APIconn";
 import { useTranslation } from "react-i18next";
-import { Avatar, Box, Button, Modal, Rating } from "@mui/material";
-import EmployeeRestaurantManagement from "../employees/EmployeeRestaurantManagement";
-import IngredientTable from "../Warehouse/IngredientTable";
-import MenuList from "../menus/MenuList";
-import { MenuScreenType } from "../../../services/enums";
-import FocusedRestaurantReviewsList from "../../restaurant/onMapView/FocusedRestaurantReviewsList";
 import ReviewsManagement from "../ReviewsMenagment";
 
 interface RestaurantDetailsProps {
-  activeRestaurantId: number ;
+  activeRestaurantId: number;
 }
 
 const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
@@ -25,7 +19,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [t] = useTranslation("global");
   const [reviews, setReviews] = useState<ReviewType[]>([]);
-
 
   useEffect(() => {
     if (activeRestaurantId != null) {
@@ -40,17 +33,19 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       fetchData();
     }
   }, [activeRestaurantId]);
-  useEffect(()=>{
+  useEffect(() => {
     const fetchRestaurantReviews = async () => {
       try {
-        const data = await fetchGET(`/restaurants/${activeRestaurantId}/reviews`);
+        const data = await fetchGET(
+          `/restaurants/${activeRestaurantId}/reviews`,
+        );
         setReviews(data.items || []);
       } catch (error) {
         console.error("Error fetching restaurant reviews:", error);
       }
     };
     fetchRestaurantReviews();
-  }, [])
+  }, []);
 
   const handleOpen = () => {
     setIsOpen(true);

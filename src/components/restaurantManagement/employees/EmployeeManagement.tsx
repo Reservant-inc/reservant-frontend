@@ -72,7 +72,6 @@ export default function EmployeeManagement() {
               employments: tmp.slice(),
             });
           }
-        console.log(employees);
 
         setRows(employees);
       } catch (error) {

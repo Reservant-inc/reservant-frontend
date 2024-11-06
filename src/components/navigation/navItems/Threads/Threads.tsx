@@ -19,28 +19,26 @@ import { FetchError } from "../../../../services/Errors";
 import InfiniteScroll from "react-infinite-scroll-component";
 import InactiveThread from "./InactiveThread";
 import { useTranslation } from "react-i18next";
+import FriendSelector from "../../../reusableComponents/FriendSelector";
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const [isLoadingThreads, setIsLoadingThreads] = useState<boolean>(false);
-  const [isLoadingFriends, setIsLoadingFriends] = useState<boolean>(false);
   const [isCreatingThread, setIsCreatingThread] = useState<boolean>(false);
-  const [friendSearchQuery, setFriendSearchQuery] = useState<string>("");
-  const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([]);
   const [threadTitle, setThreadTitle] = useState<string>("");
   const [threads, setThreads] = useState<ThreadType[]>([]);
-  const [friends, setFriends] = useState<UserType[]>([]);
   const [activeThreads, setActiveThreads] = useState<ThreadType[]>([]);
   const [inactiveThreads, setInactiveThreads] = useState<ThreadType[]>([]);
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([]);
+
 
   const [t] = useTranslation("global");
 
   const clearStates = () => {
-    setFriendSearchQuery("");
     setThreadTitle("");
-    setFriendsToAdd([]);
+    setFriendsToAdd([])
   };
 
   const pressHandler = () => {
@@ -55,36 +53,8 @@ const Threads: React.FC = () => {
     setIsPressed(!isPressed);
   };
 
-  const fetchFriends = async (name: string) => {
-    try {
-      setIsLoadingFriends(true);
+  
 
-      const result: PaginationType = await fetchGET(
-        `/users?name=${name}&filter=friendsOnly`,
-      );
-      const val: UserType[] = result.items as UserType[];
-      const filteredResult = val.filter(
-        (newFriend: UserType) =>
-          !friendsToAdd.some((friend) => friend.userId === newFriend.userId),
-      );
-
-      setFriends(filteredResult);
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.log(error.formatErrors());
-      } else {
-        console.log("Unexpected error:", error);
-      }
-    } finally {
-      setIsLoadingFriends(false);
-    }
-  };
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value;
-    if (name.length >= 1) fetchFriends(name);
-    else setFriends([]);
-  };
 
   const getThreads = async () => {
     try {
@@ -150,15 +120,7 @@ const Threads: React.FC = () => {
     }
   };
 
-  const handleDeleteFriendToAdd = (id: string) => {
-    const filtered = friendsToAdd.filter((friend) => friend.userId !== id);
-    setFriendsToAdd(filtered);
-  };
-
-  const onFriendSelect = async (friendToAdd: UserType) => {
-    setFriendsToAdd([...friendsToAdd, friendToAdd]);
-  };
-
+ 
   const handleThreadOpen = (thread: ThreadType) => {
     setIsPressed(false);
 
@@ -348,79 +310,7 @@ const Threads: React.FC = () => {
           onChange={(e) => setThreadTitle(e.target.value)}
         />
       </div>
-      <div className="flex items-center gap-2 pb-2 pt-1">
-        <h1 className="font-mont-md text-sm dark:text-grey-1">
-          {t("threads.friends")}:
-        </h1>
-        <input
-          type="text"
-          value={friendSearchQuery}
-          onChange={(e) => {
-            setFriendSearchQuery(e.target.value);
-            handleSearchChange(e);
-          }}
-          className={inputClass + " w-[200px]"}
-        />
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {friendsToAdd.length > 0 &&
-          friendsToAdd.map((friend) => (
-            <div
-              key={friend.userId}
-              className="flex h-6 items-center justify-center gap-1 rounded-full bg-grey-1 px-2 text-sm"
-            >
-              {friend.firstName}
-              <button
-                className="flex h-4 w-4 items-center justify-center rounded-full bg-grey-2"
-                onClick={() => handleDeleteFriendToAdd(friend.userId)}
-              >
-                <CloseIcon className="h-3 w-3 text-white" />
-              </button>
-            </div>
-          ))}
-      </div>
-      {friendSearchQuery.length > 0 && (
-        <div
-          className={`h-[${friends.length <= 4 ? friends.length * 50 : 200}] ${
-            friends.length > 4 && "scroll overflow-y-scroll"
-          }`}
-        >
-          {friends.length > 0 ? (
-            <List className="w-full p-0 py-1 font-mont-md dark:bg-black">
-              {friends.map(
-                (friend) =>
-                  !friendsToAdd.includes(friend) && (
-                    <ListItemButton
-                      key={friend.userId}
-                      className="rounded-lg px-2 py-2 hover:bg-grey-0 dark:hover:bg-grey-5"
-                      onClick={() => onFriendSelect(friend)}
-                    >
-                      <div className="flex w-full items-center gap-[5px] overflow-x-hidden text-sm">
-                        <img
-                          src={getImage(friend.photo, DefaultPhoto)}
-                          alt="user photo"
-                          className="h-8 w-8 rounded-full"
-                        />
-                        <h1 className="dark:text-white">{friend.firstName}</h1>
-                        <h1 className="dark:text-white">{friend.lastName}</h1>
-                      </div>
-                    </ListItemButton>
-                  ),
-              )}
-            </List>
-          ) : isLoadingFriends ? (
-            <div className="flex flex-col items-center gap-2">
-              <CircularProgress className="h-8 w-8 text-grey-2" />
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-3">
-              <h1 className="text-center text-sm italic text-grey-6 dark:text-grey-2">
-                {t("general.no-results")}
-              </h1>
-            </div>
-          )}
-        </div>
-      )}
+      <FriendSelector friendsToAdd={friendsToAdd} setFriendsToAdd={setFriendsToAdd}/>
     </div>
   );
 
