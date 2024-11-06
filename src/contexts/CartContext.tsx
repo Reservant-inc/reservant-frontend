@@ -32,11 +32,11 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
       if (existingItem) {
         return prevCart.map(cartItem =>
           cartItem.menuItemId === item.menuItemId
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            ? { ...cartItem, amount: cartItem.amount + 1 }
             : cartItem
         )
       } else {
-        return [...prevCart, { ...item, quantity: 1 }]
+        return [...prevCart, { ...item, amount: 1 }]
       }
     })
   }
@@ -45,7 +45,7 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
     setCart(prevCart =>
       prevCart.map(cartItem =>
         cartItem.menuItemId === menuItemId
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          ? { ...cartItem, amount: cartItem.amount + 1 }
           : cartItem
       )
     )
@@ -56,16 +56,16 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
       prevCart
         .map(cartItem =>
           cartItem.menuItemId === menuItemId
-            ? { ...cartItem, quantity: cartItem.quantity - 1 }
+            ? { ...cartItem, amount: cartItem.amount - 1 }
             : cartItem
         )
-        .filter(cartItem => cartItem.quantity > 0)
+        .filter(cartItem => cartItem.amount > 0)
     )
   }
 
   const totalPrice = useMemo(() => {
     return cart.reduce((total, cartItem) => {
-      return total + cartItem.price * cartItem.quantity
+      return total + cartItem.price * cartItem.amount
     }, 0)
   }, [cart])
 

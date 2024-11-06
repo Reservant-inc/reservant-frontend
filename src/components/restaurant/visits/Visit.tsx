@@ -41,6 +41,7 @@ const Visit: React.FC<VisitProps> = () => {
   const { items, totalPrice } = useContext(CartContext)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
   const [selectedTimeslot, setSelectedTimeslot] = useState<string>('')
+  const [guestsErr, setGuestsErr] = useState<string | null>(null)
 
   const parseDateTime = (date: string, timeSlot: string): Date => {
     const [time, ampm] = timeSlot.split(' ')
@@ -69,8 +70,23 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   useEffect(() => {
+    if (guests < friendsToAdd.length + 1) {
+      setGuestsErr('invalid number')
+    } else {
+      setGuestsErr(null)
+    }
+  }, [guests])
+
+  useEffect(() => {
     if (date && guests) {
       fetchAvailableHours()
+      setSelectedTimeslot('')
+      if (timeSlots.length > 0) {
+        let tmp: HTMLSelectElement = document.getElementById(
+          'timeselect'
+        ) as HTMLSelectElement
+        tmp.selectedIndex = 0
+      }
     }
   }, [date, guests])
 
@@ -145,18 +161,24 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full gap-12 text-nowrap px-12">
+    <div className="relative flex h-full w-full gap-12 text-nowrap px-12 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
       <div className="relative flex h-full w-1/4 flex-col gap-5 pt-7">
         <div className="flex w-full flex-col gap-5">
-          <div className="flex w-full items-center justify-between gap-4">
-            <label className="text-md font-mont-md">Guests in total:</label>
-            <input
-              type="number"
-              value={guests}
-              min={1 + friendsToAdd.length}
-              onChange={e => setGuests(parseInt(e.target.value))}
-              className="flex h-7 w-36 items-center  rounded-md border-[1px] border-grey-2 px-2 py-0 text-center"
-            />
+          <div className="flex flex w-full flex-col justify-between gap-4">
+            <div className="flex w-full justify-between">
+              <label className="text-md  font-mont-md ">Guests in total:</label>
+              <input
+                type="number"
+                value={guests}
+                min={1 + friendsToAdd.length}
+                onChange={e => {
+                  setGuests(parseInt(e.target.value))
+                }}
+                className={`flex h-7 w-36 items-center rounded-md  border-[1px] border-grey-2 px-2 py-0 text-center dark:text-grey-0 ${guestsErr ? 'text-error' : 'text-black'}`}
+              />
+            </div>
+
+            {guestsErr && <h1 className="text-error">{guestsErr}</h1>}
           </div>
           <div className=" flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
             <h1 className="pl-2">
@@ -183,8 +205,9 @@ const Visit: React.FC<VisitProps> = () => {
             <label className="font-mont-md">Time: </label>
             {timeSlots.length > 0 ? (
               <select
+                id="timeselect"
                 onChange={e => setSelectedTimeslot(e.target.value)}
-                className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4  py-0 text-sm"
+                className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
               >
                 <option className="hover:bg-grey-1">Time</option>
                 {timeSlots.map((slot, index) => (
@@ -208,15 +231,17 @@ const Visit: React.FC<VisitProps> = () => {
         </div>
         <div className="flex h-8 w-full flex-row-reverse gap-3">
           <button
-            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black"
             onClick={() => navigate('../checkout', { state: skipData })}
+            disabled={selectedTimeslot === '' || guestsErr !== null}
           >
             {`SKIP ORDER`}
             <ArrowForward />
           </button>
           <button
-            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black"
             onClick={() => navigate('../checkout', { state: data })}
+            disabled={selectedTimeslot === '' || guestsErr !== null}
           >
             {`CHECKOUT ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
             <SellIcon />
