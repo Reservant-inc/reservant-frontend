@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FetchError } from "../../services/Errors";
-import { fetchGET, getImage } from "../../services/APIconn";
+import { fetchGET, fetchPUT, getImage } from "../../services/APIconn";
 import { UserType } from "../../services/types";
 import DefaultImage from '../../assets/images/user.jpg'
-import { Formik, Field, ErrorMessage } from "formik";
-import { Form } from "react-router-dom";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
 const UserEditSchema = yup.object({
@@ -46,13 +45,27 @@ const Account: React.FC = () => {
   }
 
   const updateUserData = async (userData: any) => {
+
+    console.log('test')
+
     try {
+      const response = await fetchPUT('/user', JSON.stringify({
+        phoneNumber: userData.phoneNumber,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        birthDate: "1999-12-31",
+        photo: userInfo.photo
+      }))
+
+      console.log(response)
 
     } catch (error) {
       if (error instanceof FetchError)
         console.log(error.formatErrors())
       else 
         console.log(error)
+    } finally {
+      fetchUserData()
     }
   }
 
@@ -75,7 +88,6 @@ const Account: React.FC = () => {
               enableReinitialize
               onSubmit={(values, { setSubmitting }) => {
                 updateUserData(values)
-
                 setSubmitting(false);
               }}
             >
