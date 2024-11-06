@@ -6,9 +6,12 @@ import Tools from "./navItems/Tools";
 import Notifications from "./navItems/Notifications/Notifications";
 import FriendSearchBar from "./navItems/Friends/FriendSearchBar";
 import Threads from "./navItems/Threads/Threads";
+import useWindowDimensions from "../../hooks/useWindowResize";
 
 const NavBar: React.FC = () => {
   const [isDark, setIsDark] = useState(localStorage.theme === "dark");
+
+  const size = useWindowDimensions();
 
   return (
     <div className="flex h-full w-full items-center shadow-md dark:bg-black">
@@ -18,23 +21,25 @@ const NavBar: React.FC = () => {
             <img
               src={LogoSecondary}
               alt="logo"
-              className="h-[45px] min-w-[45px]"
+              className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
             />
           ) : (
             <img
               src={LogoPrimary}
               alt="logo"
-              className="h-[45px] min-w-[45px]"
+              className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
             />
           )}
-          <h1
-            className={
-              "font-mont-md text-xl" +
-              (isDark ? " text-secondary" : " text-primary")
-            }
-          >
-            RESERVANT
-          </h1>
+          {size.width > 880 && (
+            <h1
+              className={
+                "font-mont-md text-xl" +
+                (isDark ? " text-secondary" : " text-primary")
+              }
+            >
+              RESERVANT
+            </h1>
+          )}
         </div>
 
         <Sections />

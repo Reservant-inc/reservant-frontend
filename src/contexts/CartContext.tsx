@@ -1,86 +1,85 @@
-import React, { createContext, ReactNode, useState, useMemo } from 'react';
-import { CartItemType } from '../services/types';
+import React, { createContext, ReactNode, useState, useMemo } from 'react'
+import { CartItemType } from '../services/types'
 
 interface CartContextProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 interface CartContextValue {
-  items: CartItemType[];
-  addItemToCart: (item: CartItemType) => void;
-  incrementItemQuantity: (menuItemId: number) => void;
-  decrementItemQuantity: (menuItemId: number) => void;
-  totalPrice: number;
+  items: CartItemType[]
+  addToCart: (item: CartItemType) => void
+  incrementQuantity: (menuItemId: number) => void
+  decrementQuantity: (menuItemId: number) => void
+  totalPrice: number
 }
 
 export const CartContext = createContext<CartContextValue>({
   items: [],
-  addItemToCart: () => {},
-  incrementItemQuantity: () => {},
-  decrementItemQuantity: () => {},
+  addToCart: () => {},
+  incrementQuantity: () => {},
+  decrementQuantity: () => {},
   totalPrice: 0
-});
+})
 
 const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
-  const [cart, setCart] = useState<CartItemType[]>([]);
+  const [cart, setCart] = useState<CartItemType[]>([])
 
   const addToCart = (item: CartItemType) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find(cartItem => cartItem.menuItemId === item.menuItemId);
-
+    setCart(prevCart => {
+      const existingItem = prevCart.find(
+        cartItem => cartItem.menuItemId === item.menuItemId
+      )
       if (existingItem) {
         return prevCart.map(cartItem =>
           cartItem.menuItemId === item.menuItemId
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            ? { ...cartItem, amount: cartItem.amount + 1 }
             : cartItem
-        );
+        )
       } else {
-        return [...prevCart, { ...item, quantity: 1 }];
+        return [...prevCart, { ...item, amount: 1 }]
       }
-    });
-  };
+    })
+  }
 
   const incrementQuantity = (menuItemId: number) => {
-    setCart((prevCart) =>
+    setCart(prevCart =>
       prevCart.map(cartItem =>
         cartItem.menuItemId === menuItemId
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          ? { ...cartItem, amount: cartItem.amount + 1 }
           : cartItem
       )
-    );
-  };
+    )
+  }
 
   const decrementQuantity = (menuItemId: number) => {
-    setCart((prevCart) =>
+    setCart(prevCart =>
       prevCart
         .map(cartItem =>
           cartItem.menuItemId === menuItemId
-          ? { ...cartItem, quantity: cartItem.quantity - 1 } 
-          : cartItem
+            ? { ...cartItem, amount: cartItem.amount - 1 }
+            : cartItem
         )
-        .filter(cartItem => cartItem.quantity > 0)
-    );
-  };
+        .filter(cartItem => cartItem.amount > 0)
+    )
+  }
 
   const totalPrice = useMemo(() => {
     return cart.reduce((total, cartItem) => {
-      return total + cartItem.price * cartItem.quantity;
-    }, 0);
+      return total + cartItem.price * cartItem.amount
+    }, 0)
   }, [cart])
 
   const ctxValue = {
     items: cart,
-    addItemToCart: addToCart,
-    incrementItemQuantity: incrementQuantity,
-    decrementItemQuantity: decrementQuantity,
+    addToCart: addToCart,
+    incrementQuantity: incrementQuantity,
+    decrementQuantity: decrementQuantity,
     totalPrice
-  };
+  }
 
   return (
-    <CartContext.Provider value={ctxValue}>
-      {children}
-    </CartContext.Provider>
-  );
-};
+    <CartContext.Provider value={ctxValue}>{children}</CartContext.Provider>
+  )
+}
 
-export default CartContextProvider;
+export default CartContextProvider

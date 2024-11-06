@@ -20,56 +20,59 @@ import ReservationHistory from "../components/profile/ReservationHistory";
 import EventHistory from "../components/profile/EventHistory";
 import NotFound from "../components/NotFound";
 import ReviewsManagement from "../components/restaurantManagement/ReviewsMenagment";
+import Checkout from "../components/restaurant/Checkout";
+import Visit from "../components/restaurant/visits/Visit";
+import VisitWrapper from "../components/restaurant/visits/VisitWrapper";
 import Account from "../components/profile/Account";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <LandingPage />,
+    path: '/',
+    element: <LandingPage />
   },
   {
-    path: "reservant",
+    path: 'reservant',
     element: <Root />,
     loader: checkAuthLoader,
     children: [
       {
-        path: "home",
-        element: <HomePage />,
+        path: 'home',
+        element: <HomePage />
       },
       {
-        path: ":name/management",
+        path: ':name/management',
         element: <RestaurantManager />,
         children: [
           {
-            path: "dashboard",
-            element: <Dashboard />,
+            path: 'dashboard',
+            element: <Dashboard />
           },
           {
-            path: "employee-management",
-            element: <EmployeeManagement />,
+            path: 'employee-management',
+            element: <EmployeeManagement />
           },
           {
-            path: "restaurants",
-            element: <RestaurantListSection />,
+            path: 'restaurants',
+            element: <RestaurantListSection />
           },
           {
-            path: "restaurant/:restaurantId",
+            path: 'restaurant/:restaurantId',
             children: [
               {
-                path: "restaurant-dashboard",
-                element: <Dashboard />,
+                path: 'restaurant-dashboard',
+                element: <Dashboard />
               },
               {
-                path: "restaurant-employee-management",
-                element: <EmployeeRestaurantManagement />,
+                path: 'restaurant-employee-management',
+                element: <EmployeeRestaurantManagement />
               },
               {
-                path: "menu-management",
-                element: <MenuList type={MenuScreenType.Management} />,
+                path: 'menu-management',
+                element: <MenuList type={MenuScreenType.Management} />
               },
               {
-                path: "warehouse-management",
-                element: <IngredientTable />,
+                path: 'warehouse-management',
+                element: <IngredientTable />
               },
               {
                 path: "reservation-history",
@@ -84,32 +87,46 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "profile/:userId",
+        path: 'profile/:userId',
         element: <Profile />,
         children: [
           {
-            path: "account",
-            element: <Account />,
+            path: 'account',
+            element: <Account />
           },
           {
-            path: "reservation-history",
-            element: <ReservationHistory />,
+            path: 'reservation-history',
+            element: <ReservationHistory />
           },
           {
-            path: "event-history",
-            element: <EventHistory />,
-          },
-        ],
+            path: 'event-history',
+            element: <EventHistory />
+          }
+        ]
       },
-    ],
+      {
+        path: 'restaurant',
+        element: <VisitWrapper />,
+        children: [
+          {
+            path: 'reservation',
+            element: <Visit />
+          },
+          {
+            path: 'checkout',
+            element: <Checkout />
+          }
+        ]
+      }
+    ]
   },
   {
-    path: "login",
+    path: 'login',
     element: <Login />,
-    loader: redirectIfLoggedIn,
+    loader: redirectIfLoggedIn
   },
   {
-    path: "register",
+    path: 'register',
     element: <UserRegister />,
     loader: redirectIfLoggedIn,
   },
@@ -122,15 +139,15 @@ const router = createBrowserRouter([
 const App = () => {
   useEffect(() => {
     if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add('dark')
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove('dark')
     }
-  });
+  })
 
   return (
     <div id="AppWrapper" className="App font-mont-md">
@@ -139,7 +156,7 @@ const App = () => {
       </div>
       {/* <Footer /> */}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
