@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   CartItemType,
   RestaurantDetailsType,
@@ -8,6 +8,8 @@ import {
 import { fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+
 import { FetchError } from '../../services/Errors'
 import { forEach } from 'lodash'
 
@@ -22,10 +24,16 @@ const Checkout: React.FC = () => {
       date: Date
       restaurant: RestaurantDetailsType
     }
+
+  const data = {
+    restaurant: restaurant
+  }
+
   const userInfo = Cookies.get('userInfo')
   const user = userInfo ? JSON.parse(userInfo) : null
   const [note, setNote] = useState<string>('')
 
+  const navigate = useNavigate()
   const wallet = 50
   const canAfford =
     wallet >=
@@ -93,23 +101,23 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 p-4 text-sm dark:bg-grey-6 dark:text-grey-0">
-      <div className="flex h-[90%] w-full items-center justify-center gap-12">
+    <div className="relative flex h-full w-full flex-col gap-4 p-4 text-sm dark:bg-grey-6 dark:text-grey-0">
+      <div className="flex h-[90%] w-full items-center justify-center gap-6">
         <div className="flex h-full w-1/2 flex-col items-end justify-center gap-4">
-          <div className="flex h-1/4 w-1/2 flex-col gap-2 rounded-lg   bg-grey-0 p-5 dark:bg-black ">
+          <div className="flex h-[150px] w-[350px] flex-col gap-2   rounded-lg bg-grey-0 p-5 dark:bg-black ">
             <h1 className="self-center font-mont-bd text-xl ">User details</h1>
-            <div className="separator flex flex-col gap-2 divide-y-[1px] divide-grey-2  ">
-              <span className="flex justify-between">
+            <div className="separator flex flex-col divide-y-[1px] divide-grey-2  ">
+              <span className="flex justify-between py-1">
                 <label>First name:</label>
                 <label>{user.firstName}</label>
               </span>
-              <span className="flex justify-between">
+              <span className="flex justify-between py-1">
                 <label>Last name:</label>
                 <label>{user.lastName}</label>
               </span>
             </div>
           </div>
-          <div className="flex h-1/4 w-1/2 flex-col gap-2 rounded-lg bg-grey-0 p-5 dark:bg-black ">
+          <div className="flex h-[150px] w-[350px] flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black ">
             <h1 className="self-center font-mont-bd text-xl ">
               Select payment method
             </h1>
@@ -143,7 +151,7 @@ const Checkout: React.FC = () => {
             </div>
           </div>
           {items?.length > 0 && (
-            <div className="flex h-1/2 w-1/2 flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black">
+            <div className="flex h-[300px] w-[350px] flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl ">
                 Additional notes
               </h1>
@@ -157,24 +165,24 @@ const Checkout: React.FC = () => {
           )}
         </div>
         <div className="flex h-full w-1/2 flex-col items-start justify-center gap-4">
-          <div className=" flex h-1/2 w-1/2 flex-col gap-2 rounded-lg bg-grey-0 p-5 dark:bg-black">
+          <div className=" flex h-[calc(300px+1rem)] w-[350px] flex-col gap-2 rounded-lg bg-grey-0 p-5 dark:bg-black">
             <h1 className="self-center font-mont-bd text-xl ">
               Reservation details
             </h1>
-            <div className="separator flex flex-col gap-2 divide-y-[1px] divide-grey-2">
-              <span className="flex justify-between">
+            <div className="separator flex flex-col  divide-y-[1px] divide-grey-2">
+              <span className="flex justify-between py-1">
                 <label>Total number of guests:</label>
                 <label>{guests}</label>
               </span>
-              <span className="flex justify-between">
+              <span className="flex justify-between py-1">
                 <label>Date of reservation:</label>
                 <label>{formatDateTime(date)}</label>
               </span>
-              <span className="flex justify-between">
+              <span className="flex justify-between py-1">
                 <label>Reservation duration:</label>
                 <label>{'30' + ' ' + 'min'}</label>
               </span>
-              <span className="flex justify-between">
+              <span className="flex justify-between py-1">
                 <label>Reservation deposit:</label>
                 <label>
                   {restaurant.reservationDeposit
@@ -183,11 +191,11 @@ const Checkout: React.FC = () => {
                   zł
                 </label>
               </span>
-              <span className="flex justify-between">
+              <span className="flex justify-between py-1">
                 <label>Order cost:</label>
                 <label>{totalPrice ? totalPrice : 0} zł</label>
               </span>
-              <span className="flex justify-between">
+              <span className="flex justify-between py-1">
                 <label>Total cost:</label>
                 <label>
                   {restaurant.reservationDeposit
@@ -202,7 +210,7 @@ const Checkout: React.FC = () => {
           </div>
 
           {items?.length > 0 && (
-            <div className="flex h-1/2 w-1/2 flex-col  gap-1 rounded-lg  bg-grey-0 p-5 dark:bg-black">
+            <div className="flex h-[300px] w-[350px]  flex-col  gap-1 rounded-lg  bg-grey-0 p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl ">
                 Order details
               </h1>
@@ -234,6 +242,13 @@ const Checkout: React.FC = () => {
         onClick={onSubmit}
       >
         Proceed to payment
+      </button>
+      <button
+        onClick={() => navigate('../reservation', { state: data })}
+        className=" absolute left-2 top-2 flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+      >
+        <ArrowBackIcon />
+        <h1 className="text-md font-mont-md"> Back </h1>
       </button>
     </div>
   )
