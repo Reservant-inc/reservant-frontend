@@ -32,15 +32,17 @@ const Visit: React.FC<VisitProps> = () => {
 
   const [guests, setGuests] = useState<number>(1)
   const [date, setDate] = useState<string>(today)
-  const [availableHours, setAvailableHours] = useState<{ from: string; until: string }[]>([])
+  const [availableHours, setAvailableHours] = useState<
+    { from: string; until: string }[]
+  >([])
   const [timeSlots, setTimeSlots] = useState<string[]>([])
   const { items, totalPrice } = useContext(CartContext)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
   const [selectedTimeslot, setSelectedTimeslot] = useState<string>('')
   const [guestsErr, setGuestsErr] = useState<string | null>(null)
-  
+
   const navigate = useNavigate()
-  
+
   const parseDateTime = (date: string, timeSlot: string): Date => {
     const [time, ampm] = timeSlot.split(' ')
     const [hours, minutes] = time.split(':').map(Number)
@@ -160,16 +162,14 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full gap-12 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
+    <div className="relative flex h-full w-full gap-4 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
       <div className="h-full w-3/4 items-center shadow-md">
         <MenuList
           activeRestaurantId={restaurant.restaurantId}
           type={MenuScreenType.Order}
         />
-        <Cart 
-        />
       </div>
-      <div className="flex h-full w-1/4 min-w-[300px] flex-col justify-between bg-white rounded-lg p-3 shadow-md">
+      <div className="flex h-full w-1/4 min-w-[360px] flex-col justify-between bg-white rounded-lg p-3 shadow-md">
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
@@ -219,6 +219,7 @@ const Visit: React.FC<VisitProps> = () => {
               ))}
             </select>
           </div>
+          <Cart />
         </div>
         <div className="flex h-8 w-full  flex-row-reverse gap-3">
           <button
