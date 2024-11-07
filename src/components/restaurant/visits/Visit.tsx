@@ -10,64 +10,42 @@ import { CartContext } from '../../../contexts/CartContext'
 import SellIcon from '@mui/icons-material/Sell'
 import FriendSelector from '../../reusableComponents/FriendSelector'
 import { ArrowForward, ChevronRight, SkipNext } from '@mui/icons-material'
+import { ReservationContext } from '../../../contexts/ReservationContext'
 
 interface VisitProps {}
 
-const getParsedDate = (): string => {
-  const today = new Date()
-  return (
-    today.getFullYear() +
-    '-' +
-    String(today.getMonth() + 1).padStart(2, '0') +
-    '-' +
-    String(today.getDate()).padStart(2, '0')
-  )
-}
-
 const Visit: React.FC<VisitProps> = () => {
-  const today = getParsedDate()
-
   const { state } = useLocation()
   const { restaurant } = state as { restaurant: RestaurantDetailsType }
 
-  const [guests, setGuests] = useState<number>(1)
-  const [date, setDate] = useState<string>(today)
   const [availableHours, setAvailableHours] = useState<
     { from: string; until: string }[]
   >([])
+
   const [timeSlots, setTimeSlots] = useState<string[]>([])
 
+  const data = {
+    restaurant: restaurant
+  }
   const navigate = useNavigate()
+
   const { items, totalPrice } = useContext(CartContext)
-  const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
-  const [selectedTimeslot, setSelectedTimeslot] = useState<string>('')
+
+  const {
+    friendsToAdd,
+    setFriendsToAdd,
+    setGuests,
+    selectedTimeslot,
+    setSelectedTimeslot,
+    setDate,
+    guests,
+    date,
+    getParsedDate
+  } = useContext(ReservationContext)
+
   const [guestsErr, setGuestsErr] = useState<string | null>(null)
 
-  const parseDateTime = (date: string, timeSlot: string): Date => {
-    const [time, ampm] = timeSlot.split(' ')
-    const [hours, minutes] = time.split(':').map(Number)
-
-    const formattedHours = ampm === 'PM' && hours !== 12 ? hours + 12 : hours
-    return new Date(
-      `${date}T${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
-    )
-  }
-
-  const data = {
-    items: items,
-    totalPrice: totalPrice,
-    date: parseDateTime(date, selectedTimeslot),
-    guests: guests,
-    friendsToAdd: friendsToAdd,
-    restaurant: restaurant
-  }
-
-  const skipData = {
-    date: parseDateTime(date, selectedTimeslot),
-    guests: guests,
-    friendsToAdd: friendsToAdd,
-    restaurant: restaurant
-  }
+  const today = getParsedDate()
 
   useEffect(() => {
     if (guests < friendsToAdd.length + 1 || !guests) {
@@ -225,7 +203,7 @@ const Visit: React.FC<VisitProps> = () => {
         <div className="flex h-8 w-full  flex-row-reverse gap-3">
           <button
             className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
-            onClick={() => navigate('../checkout', { state: skipData })}
+            onClick={() => navigate('../checkout', { state: data })}
             disabled={selectedTimeslot === '' || guestsErr !== null}
           >
             {`SKIP ORDER`}

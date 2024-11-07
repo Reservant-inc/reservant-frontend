@@ -1,33 +1,38 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-  CartItemType,
-  RestaurantDetailsType,
-  UserType
-} from '../../services/types'
 import { fetchGET, fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import { FetchError } from '../../services/Errors'
-import { forEach } from 'lodash'
+import { CartContext } from '../../contexts/CartContext'
+import { ReservationContext } from '../../contexts/ReservationContext'
+import { RestaurantDetailsType } from '../../services/types'
 
 const Checkout: React.FC = () => {
+  const parseDateTime = (date: string, timeSlot: string): Date => {
+    const [time, ampm] = timeSlot.split(' ')
+    const [hours, minutes] = time.split(':').map(Number)
+
+    const formattedHours = ampm === 'PM' && hours !== 12 ? hours + 12 : hours
+    return new Date(
+      `${date}T${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
+    )
+  }
+
+  const { friendsToAdd, selectedTimeslot, guests, date } =
+    useContext(ReservationContext)
+
+  const { items, totalPrice } = useContext(CartContext)
+
   const { state } = useLocation()
-  const { items, totalPrice, guests, date, friendsToAdd, restaurant } =
-    state as {
-      friendsToAdd: UserType[]
-      items: CartItemType[]
-      totalPrice: number
-      guests: number
-      date: Date
-      restaurant: RestaurantDetailsType
-    }
+  const { restaurant } = state as { restaurant: RestaurantDetailsType }
 
   const data = {
     restaurant: restaurant
   }
+  const dateTime = parseDateTime(date, selectedTimeslot)
 
   const [wallet, setWallet] = useState<number>(0)
 
@@ -65,8 +70,8 @@ const Checkout: React.FC = () => {
     let res
     try {
       const body = JSON.stringify({
-        date: date,
-        endTime: new Date(new Date(date).getTime() + 30 * 60000).toJSON(),
+        date: dateTime,
+        endTime: new Date(new Date(dateTime).getTime() + 30 * 60000).toJSON(),
         numberOfGuests: guests - getParticipantsIds.length,
         tip: 0,
         takeaway: false,
@@ -194,7 +199,7 @@ const Checkout: React.FC = () => {
               </span>
               <span className="flex justify-between py-1">
                 <label>Date of reservation:</label>
-                <label>{formatDateTime(date)}</label>
+                <label>{formatDateTime(dateTime)}</label>
               </span>
               <span className="flex justify-between py-1">
                 <label>Reservation duration:</label>

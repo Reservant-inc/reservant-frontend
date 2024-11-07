@@ -1,12 +1,15 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import CartContextProvider from '../../../contexts/CartContext'
+import ReservationContextProvider from '../../../contexts/ReservationContext'
 
 const VisitWrapper: React.FC = () => {
   return (
     <>
       <CartContextProvider>
-        <Outlet />
+        <ReservationContextProvider>
+          <Outlet />
+        </ReservationContextProvider>
       </CartContextProvider>
     </>
   )
