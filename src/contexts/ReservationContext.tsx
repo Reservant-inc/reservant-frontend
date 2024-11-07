@@ -61,7 +61,6 @@ const ReservationContextProvider: React.FC<ReservationContextProps> = ({
   const { state } = useLocation()
 
   const { restaurant } = state as { restaurant: RestaurantDetailsType }
-  const data = { restaurant: restaurant }
 
   const [availableHours, setAvailableHours] = useState<
     { from: string; until: string }[]
@@ -96,8 +95,11 @@ const ReservationContextProvider: React.FC<ReservationContextProps> = ({
 
   useEffect(() => {
     if (timeSlots.length > 0) {
-      const index = timeSlots.findIndex(ts => ts === selectedTimeslot) ?? 0
-      setSelectedTimeslot(timeSlots[index])
+      const index = timeSlots.findIndex(ts => ts === selectedTimeslot)
+      setSelectedTimeslot(timeSlots[index >= 0 ? index : 0])
+      console.log(timeSlots)
+      console.log(index)
+      console.log(selectedTimeslot)
     } else {
       setSelectedTimeslot('')
     }
