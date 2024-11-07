@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchGET, fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
@@ -20,15 +20,21 @@ const Checkout: React.FC = () => {
     )
   }
 
-  const { friendsToAdd, selectedTimeslot, guests, date, restaurant } =
-    useContext(ReservationContext)
+  const { reservationData } = useContext(ReservationContext)
 
   const { items, totalPrice } = useContext(CartContext)
+
+  const { state } = useLocation()
+
+  const { restaurant } = state
 
   const data = {
     restaurant: restaurant
   }
-  const dateTime = parseDateTime(date, selectedTimeslot)
+  const dateTime = parseDateTime(
+    reservationData?.date ?? '',
+    reservationData?.selectedTimeslot ?? ''
+  )
 
   const [wallet, setWallet] = useState<number>(0)
 
@@ -68,7 +74,9 @@ const Checkout: React.FC = () => {
       const body = JSON.stringify({
         date: dateTime,
         endTime: new Date(new Date(dateTime).getTime() + 30 * 60000).toJSON(),
-        numberOfGuests: guests - getParticipantsIds.length,
+        numberOfGuests: reservationData
+          ? reservationData.guests - getParticipantsIds.length
+          : 0,
         tip: 0,
         takeaway: false,
         restaurantId: restaurant?.restaurantId,
@@ -103,11 +111,13 @@ const Checkout: React.FC = () => {
 
   const getParticipantsIds = () => {
     let res: string[] = []
-    for (let friend of friendsToAdd) {
-      res.push(friend.userId)
-    }
-    res.push(user.userId)
-    return res
+    if (reservationData)
+      for (let friend of reservationData.friendsToAdd) {
+        res.push(friend.userId)
+        res.push(user.userId)
+        return res
+      }
+    return []
   }
 
   const formatDateTime = (date: Date) => {
@@ -191,7 +201,7 @@ const Checkout: React.FC = () => {
             <div className="separator flex flex-col  divide-y-[1px] divide-grey-2">
               <span className="flex justify-between py-1">
                 <label>Total number of guests:</label>
-                <label>{guests}</label>
+                <label>{reservationData?.guests}</label>
               </span>
               <span className="flex justify-between py-1">
                 <label>Date of reservation:</label>

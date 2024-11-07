@@ -19,9 +19,9 @@ import { MenuScreenType } from '../services/enums'
 import Account from '../components/profile/Account'
 import ReservationHistory from '../components/profile/ReservationHistory'
 import EventHistory from '../components/profile/EventHistory'
-import Visit from '../components/restaurant/visits/Visit'
 import Checkout from '../components/restaurant/Checkout'
 import VisitWrapper from '../components/restaurant/visits/VisitRoot'
+import Visit from '../components/restaurant/visits/Visit'
 
 const router = createBrowserRouter([
   {
