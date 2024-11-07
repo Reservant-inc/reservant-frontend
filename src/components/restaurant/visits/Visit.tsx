@@ -5,11 +5,11 @@ import { MenuScreenType } from '../../../services/enums'
 import Cart from '../Cart'
 import { fetchGET } from '../../../services/APIconn'
 import { FetchError } from '../../../services/Errors'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { CartContext } from '../../../contexts/CartContext'
 import SellIcon from '@mui/icons-material/Sell'
 import FriendSelector from '../../reusableComponents/FriendSelector'
-import { ArrowForward, ChevronRight, SkipNext } from '@mui/icons-material'
+import { ArrowForward } from '@mui/icons-material'
 
 interface VisitProps {}
 
@@ -32,17 +32,15 @@ const Visit: React.FC<VisitProps> = () => {
 
   const [guests, setGuests] = useState<number>(1)
   const [date, setDate] = useState<string>(today)
-  const [availableHours, setAvailableHours] = useState<
-    { from: string; until: string }[]
-  >([])
+  const [availableHours, setAvailableHours] = useState<{ from: string; until: string }[]>([])
   const [timeSlots, setTimeSlots] = useState<string[]>([])
-
-  const navigate = useNavigate()
   const { items, totalPrice } = useContext(CartContext)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
   const [selectedTimeslot, setSelectedTimeslot] = useState<string>('')
   const [guestsErr, setGuestsErr] = useState<string | null>(null)
-
+  
+  const navigate = useNavigate()
+  
   const parseDateTime = (date: string, timeSlot: string): Date => {
     const [time, ampm] = timeSlot.split(' ')
     const [hours, minutes] = time.split(':').map(Number)
@@ -162,8 +160,16 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full gap-12 text-nowrap px-12 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
-      <div className="relative flex h-full w-1/4 min-w-[300px] flex-col gap-5 pt-7">
+    <div className="relative flex h-full w-full gap-12 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
+      <div className="h-full w-3/4 items-center shadow-md">
+        <MenuList
+          activeRestaurantId={restaurant.restaurantId}
+          type={MenuScreenType.Order}
+        />
+        <Cart 
+        />
+      </div>
+      <div className="flex h-full w-1/4 min-w-[300px] flex-col justify-between bg-white rounded-lg p-3 shadow-md">
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
@@ -181,7 +187,7 @@ const Visit: React.FC<VisitProps> = () => {
 
             {guestsErr && <h1 className="text-error">{guestsErr}</h1>}
           </div>
-          <div className=" flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
+          <div className="flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
             <FriendSelector
               friendsToAdd={friendsToAdd}
               setFriendsToAdd={setFriendsToAdd}
@@ -214,14 +220,6 @@ const Visit: React.FC<VisitProps> = () => {
             </select>
           </div>
         </div>
-      </div>
-      <div className=" flex h-full w-3/4 flex-col items-center gap-5 p-3">
-        <div className="h-[calc(100%-3rem)] w-full">
-          <MenuList
-            activeRestaurantId={restaurant.restaurantId}
-            type={MenuScreenType.Order}
-          />
-        </div>
         <div className="flex h-8 w-full  flex-row-reverse gap-3">
           <button
             className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
@@ -240,8 +238,6 @@ const Visit: React.FC<VisitProps> = () => {
             <SellIcon />
           </button>
         </div>
-
-        <Cart />
       </div>
     </div>
   )

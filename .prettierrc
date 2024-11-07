@@ -19,6 +19,4 @@
   "parser": "typescript",
   "jsxSingleQuote": false,
   "vueIndentScriptAndStyle": false
-   
-   
 }

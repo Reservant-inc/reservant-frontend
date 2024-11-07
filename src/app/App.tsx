@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LandingPage from "../components/LandingPage";
 import UserRegister from "../components/auth/UserRegister";
 import HomePage from "../components/HomePage";
-import { checkAuthLoader, redirectIfLoggedIn } from "../components/auth/auth";
+import { checkAuthLoader, checkIfOwner, redirectIfLoggedIn } from "../components/auth/auth";
 import Root from "../components/ProtectedLayout";
 import Login from "../components/auth/Login";
 import RestaurantManager from "../components/restaurantManagement/RestaurantManager";
@@ -42,6 +42,7 @@ const router = createBrowserRouter([
       {
         path: ':name/management',
         element: <RestaurantManager />,
+        loader: checkIfOwner,
         children: [
           {
             path: 'dashboard',

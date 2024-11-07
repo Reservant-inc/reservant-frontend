@@ -16,26 +16,6 @@ const Cart: React.FC<CartProps> = () => {
     useContext(CartContext)
 
   return (
-    <OutsideClickHandler
-      onOutsideClick={() => setIsOpen(false)}
-      isPressed={isOpen}
-    >
-      <div className="absolute right-2 top-2 flex h-12 w-12 items-center justify-center">
-        <button
-          className="absolute h-10 w-10 rounded-full bg-grey-1 hover:bg-grey-0 dark:bg-grey-5 dark:hover:bg-grey-6"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <ShoppingCartIcon className="dark:text-grey-1" />
-        </button>
-        {items.length > 0 && (
-          <div className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary dark:bg-secondary dark:text-white">
-            <h1 className="text-[12px] text-white dark:text-black">
-              {items.length}
-            </h1>
-          </div>
-        )}
-      </div>
-      {isOpen && (
         <div className="absolute right-14 top-2 flex h-[20rem] w-[14rem] flex-col items-center gap-2 rounded-lg bg-white py-2 shadow-md dark:bg-grey-6">
           <h1 className="font-mont-bd text-xl dark:text-white">Cart</h1>
           {items.length > 0 ? (
@@ -81,8 +61,6 @@ const Cart: React.FC<CartProps> = () => {
             </h1>
           )}
         </div>
-      )}
-    </OutsideClickHandler>
   )
 }
 
