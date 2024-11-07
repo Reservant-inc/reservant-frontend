@@ -1,32 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { RestaurantDetailsType, UserType } from '../../../services/types'
+import React, { useContext } from 'react'
 import MenuList from '../../restaurantManagement/menus/MenuList'
 import { MenuScreenType } from '../../../services/enums'
 import Cart from '../Cart'
-import { fetchGET } from '../../../services/APIconn'
-import { FetchError } from '../../../services/Errors'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { CartContext } from '../../../contexts/CartContext'
 import SellIcon from '@mui/icons-material/Sell'
 import FriendSelector from '../../reusableComponents/FriendSelector'
-import { ArrowForward, ChevronRight, SkipNext } from '@mui/icons-material'
+import { ArrowForward } from '@mui/icons-material'
 import { ReservationContext } from '../../../contexts/ReservationContext'
 
 interface VisitProps {}
 
 const Visit: React.FC<VisitProps> = () => {
-  const { state } = useLocation()
-  const { restaurant } = state as { restaurant: RestaurantDetailsType }
-
-  const [availableHours, setAvailableHours] = useState<
-    { from: string; until: string }[]
-  >([])
-
-  const [timeSlots, setTimeSlots] = useState<string[]>([])
-
-  const data = {
-    restaurant: restaurant
-  }
   const navigate = useNavigate()
 
   const { items, totalPrice } = useContext(CartContext)
@@ -39,106 +24,18 @@ const Visit: React.FC<VisitProps> = () => {
     setSelectedTimeslot,
     setDate,
     guests,
+    restaurant,
+    timeSlots,
+    guestsErr,
     date,
     getParsedDate
   } = useContext(ReservationContext)
 
-  const [guestsErr, setGuestsErr] = useState<string | null>(null)
-
   const today = getParsedDate()
 
-  useEffect(() => {
-    if (guests < friendsToAdd.length + 1 || !guests) {
-      setGuestsErr('invalid number')
-    } else {
-      setGuestsErr(null)
-    }
-  }, [guests])
-
-  useEffect(() => {
-    if (date && guests) {
-      fetchAvailableHours()
-    }
-  }, [date, guests])
-
-  useEffect(() => {
-    if (friendsToAdd.length >= guests) {
-      setGuests(guests + 1)
-    }
-  }, [friendsToAdd])
-
-  useEffect(() => {
-    if (availableHours.length > 0) {
-      generateTimeSlots()
-    } else {
-      setTimeSlots([])
-    }
-  }, [availableHours])
-
-  useEffect(() => {
-    if (timeSlots.length > 0) {
-      let tmp: HTMLSelectElement = document.getElementById(
-        'timeselect'
-      ) as HTMLSelectElement
-      tmp.selectedIndex = 0
-      setSelectedTimeslot(tmp.value)
-    } else {
-      setSelectedTimeslot('')
-    }
-  }, [timeSlots])
-
-  const fetchAvailableHours = async () => {
-    try {
-      const visitHours = await fetchGET(
-        `/restaurants/${restaurant.restaurantId}/available-hours?date=${date}&numberOfGuests=${guests}`
-      )
-
-      setAvailableHours(visitHours)
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.log(error.formatErrors())
-      } else {
-        console.log('unexpected error', error)
-      }
-    }
+  const data = {
+    restaurant: restaurant
   }
-
-  const generateTimeSlots = () => {
-    const slots: string[] = []
-    const now = new Date()
-    const isToday = date === getParsedDate()
-
-    availableHours.forEach(({ from, until }) => {
-      let currentTime = parseTime(from)
-      const endTime = parseTime(until)
-
-      while (currentTime <= endTime) {
-        if (!isToday || currentTime >= now) {
-          slots.push(formatTime(currentTime))
-        }
-        currentTime = new Date(currentTime.getTime() + 30 * 60000)
-      }
-    })
-
-    setTimeSlots(slots)
-  }
-
-  const parseTime = (timeString: string) => {
-    const [hours, minutes] = timeString.split(':').map(Number)
-    const date = new Date()
-    date.setHours(hours, minutes, 0, 0)
-    return date
-  }
-
-  const formatTime = (date: Date): string => {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const ampm = hours >= 12 ? 'PM' : 'AM'
-    const formattedHours = hours % 12 || 12
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-    return `${formattedHours}:${formattedMinutes} ${ampm}`
-  }
-
   return (
     <div className="relative flex h-full w-full gap-12 text-nowrap px-12 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
       <div className="relative flex h-full w-1/4 min-w-[300px] flex-col gap-5 pt-7">
@@ -181,6 +78,7 @@ const Visit: React.FC<VisitProps> = () => {
             <select
               id="timeselect"
               onChange={e => setSelectedTimeslot(e.target.value)}
+              value={selectedTimeslot}
               className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
             >
               {timeSlots.length <= 0 && <option>Not avaliable</option>}
@@ -196,7 +94,7 @@ const Visit: React.FC<VisitProps> = () => {
       <div className=" flex h-full w-3/4 flex-col items-center gap-5 p-3">
         <div className="h-[calc(100%-3rem)] w-full">
           <MenuList
-            activeRestaurantId={restaurant.restaurantId}
+            activeRestaurantId={restaurant?.restaurantId}
             type={MenuScreenType.Order}
           />
         </div>

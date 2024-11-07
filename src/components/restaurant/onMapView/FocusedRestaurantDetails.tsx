@@ -1,110 +1,108 @@
-import React, { useEffect, useState } from "react";
-import { fetchGET, getImage } from "../../../services/APIconn";
-import { IconButton, CircularProgress } from "@mui/material";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar";
-import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
-import EventIcon from "@mui/icons-material/Event";
-import CloseIcon from "@mui/icons-material/Close";
-import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
-import MopedIcon from "@mui/icons-material/Moped";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import Carousel from "../../reusableComponents/ImageCarousel/Carousel";
-import { RestaurantDetailsType, ReviewType } from "../../../services/types";
-import FocusedRestaurantReviewsList from "./FocusedRestaurantReviewsList";
-import CustomRating from "../../reusableComponents/CustomRating";
-import { useTranslation } from "react-i18next";
-import Dialog from "../../reusableComponents/Dialog";
-import { MenuScreenType } from "../../../services/enums";
-import MenuList from "../../restaurantManagement/menus/MenuList";
-import DefaultImage from "../../../assets/images/defaulImage.jpeg";
-import CartContextProvider from "../../../contexts/CartContext";
-import EventCreationModal from "../events/EventCreationModal";
-import EventDetailsModal from "../events/EventDetailsModal";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { fetchGET, getImage } from '../../../services/APIconn'
+import { IconButton, CircularProgress } from '@mui/material'
+import EditCalendarIcon from '@mui/icons-material/EditCalendar'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
+import EventIcon from '@mui/icons-material/Event'
+import CloseIcon from '@mui/icons-material/Close'
+import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining'
+import MopedIcon from '@mui/icons-material/Moped'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CancelIcon from '@mui/icons-material/Cancel'
+import Carousel from '../../reusableComponents/ImageCarousel/Carousel'
+import { RestaurantDetailsType, ReviewType } from '../../../services/types'
+import FocusedRestaurantReviewsList from './FocusedRestaurantReviewsList'
+import CustomRating from '../../reusableComponents/CustomRating'
+import { useTranslation } from 'react-i18next'
+import Dialog from '../../reusableComponents/Dialog'
+import { MenuScreenType } from '../../../services/enums'
+import MenuList from '../../restaurantManagement/menus/MenuList'
+import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import CartContextProvider from '../../../contexts/CartContext'
+import EventCreationModal from '../events/EventCreationModal'
+import EventDetailsModal from '../events/EventDetailsModal'
+import { useNavigate } from 'react-router-dom'
 
 interface FocusedRestaurantDetailsProps {
-  activeRestaurant: RestaurantDetailsType;
-  onClose: () => void;
+  activeRestaurant: RestaurantDetailsType
+  onClose: () => void
 }
 
 enum Options {
-  "ORDER",
-  "MENU",
-  "EVENT",
-  "VISIT",
+  'ORDER',
+  'MENU',
+  'EVENT',
+  'VISIT'
 }
 
 const optionTitles: Record<Options, string> = {
-  [Options.ORDER]: "Order",
-  [Options.MENU]: "Menu",
-  [Options.EVENT]: "Event",
-  [Options.VISIT]: "Reservation",
-};
+  [Options.ORDER]: 'Order',
+  [Options.MENU]: 'Menu',
+  [Options.EVENT]: 'Event',
+  [Options.VISIT]: 'Reservation'
+}
 
 const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   activeRestaurant,
-  onClose,
+  onClose
 }) => {
   const [restaurant, setRestaurant] =
-    useState<RestaurantDetailsType>(activeRestaurant);
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
-  const [option, setOption] = useState<Options | null>(null);
-  const [createdEventId, setCreatedEventId] = useState<number | null>(null);
-  const [showMyEvents, setShowMyEvents] = useState<boolean>(false);
+    useState<RestaurantDetailsType>(activeRestaurant)
+  const [reviews, setReviews] = useState<ReviewType[]>([])
+  const [option, setOption] = useState<Options | null>(null)
+  const [createdEventId, setCreatedEventId] = useState<number | null>(null)
+  const [showMyEvents, setShowMyEvents] = useState<boolean>(false)
 
-
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const data = {
-    restaurant: restaurant,
-  };
+    restaurant: restaurant
+  }
 
-
-  const [t] = useTranslation("global");
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     const fetchRestaurantDetails = async () => {
       try {
         const data = await fetchGET(
-          `/restaurants/${activeRestaurant.restaurantId}`,
-        );
-        setRestaurant(data);
+          `/restaurants/${activeRestaurant.restaurantId}`
+        )
+        setRestaurant(data)
       } catch (error) {
-        console.error("Error fetching restaurant details:", error);
+        console.error('Error fetching restaurant details:', error)
       }
-    };
+    }
 
     const fetchRestaurantReviews = async () => {
       try {
         const data = await fetchGET(
-          `/restaurants/${activeRestaurant.restaurantId}/reviews`,
-        );
-        setReviews(data.items || []);
+          `/restaurants/${activeRestaurant.restaurantId}/reviews`
+        )
+        setReviews(data.items || [])
       } catch (error) {
-        console.error("Error fetching restaurant reviews:", error);
+        console.error('Error fetching restaurant reviews:', error)
       }
-    };
+    }
 
-    fetchRestaurantDetails();
-    fetchRestaurantReviews();
-  }, [activeRestaurant]);
+    fetchRestaurantDetails()
+    fetchRestaurantReviews()
+  }, [activeRestaurant])
 
   const averageRating = reviews.length
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
-    : 0;
+    : 0
 
   const handleDialogClose = () => {
-    setOption(null);
-  };
+    setOption(null)
+  }
 
   const handleEventCreationSuccess = (eventId: number) => {
-    setCreatedEventId(eventId); // Przechowuje ID wydarzenia po sukcesie
-    setOption(null); // Zamykamy dialog formularza tworzenia eventu
-  };
+    setCreatedEventId(eventId) // Przechowuje ID wydarzenia po sukcesie
+    setOption(null) // Zamykamy dialog formularza tworzenia eventu
+  }
 
   const handleShowMyEvents = () => {
-    setShowMyEvents(true);
-  };
+    setShowMyEvents(true)
+  }
 
   const renderRestaurantDetails = () => {
     return (
@@ -128,13 +126,13 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex items-center gap-2">
                 <MopedIcon className="h-5 w-5 dark:text-white" />
                 <h1 className="dark:text-white">
-                  {t("home-page.delivery-fee")} 5,99 zł
+                  {t('home-page.delivery-fee')} 5,99 zł
                 </h1>
               </div>
             )}
             <div className="flex items-center gap-1">
               <h1 className="dark:text-white">
-                {t("home-page.is-delivering")}:
+                {t('home-page.is-delivering')}:
               </h1>
               {restaurant.provideDelivery ? (
                 <CheckCircleIcon className="text-green-500 h-5 w-5 dark:text-white" />
@@ -145,8 +143,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           </div>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderDialogContent = {
     [Options.ORDER]: <></>,
@@ -163,8 +161,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         restaurantId={restaurant.restaurantId}
         onSuccess={handleEventCreationSuccess}
       />
-    ),
-  };
+    )
+  }
 
   return (
     <>
@@ -194,14 +192,15 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                  onClick={() => navigate("../restaurant/reservation", { state: data })}
-
+                  onClick={() =>
+                    navigate('../restaurant/reservation', { state: data })
+                  }
                 >
                   <EditCalendarIcon className="h-6 w-6" />
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
                   <h1 className="text-center text-[11px] text-primary dark:text-secondary">
-                    {t("home-page.reservation")}
+                    {t('home-page.reservation')}
                   </h1>
                 </div>
               </div>
@@ -214,7 +213,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 </button>
                 <div className="flex h-[30px] items-center justify-center">
                   <h1 className="text-center text-[11px] text-primary dark:text-secondary">
-                    {t("home-page.create-event")}
+                    {t('home-page.create-event')}
                   </h1>
                 </div>
               </div>
@@ -241,7 +240,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                   </button>
                   <div className="flex h-[30px] items-center justify-center">
                     <h1 className="text-center text-[11px] text-primary dark:text-secondary">
-                      {t("home-page.order")}
+                      {t('home-page.order')}
                     </h1>
                   </div>
                 </div>
@@ -293,13 +292,13 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                       <div className="flex items-center gap-2">
                         <MopedIcon className="h-4 w-4 dark:text-white" />
                         <h1 className="text-[14px] dark:text-white">
-                          {t("home-page.delivery-fee")} 5,99 zł
+                          {t('home-page.delivery-fee')} 5,99 zł
                         </h1>
                       </div>
                     )}
                     <div className="flex items-center gap-1">
                       <h1 className="text-[12px] dark:text-white">
-                        {t("home-page.is-delivering")}:
+                        {t('home-page.is-delivering')}:
                       </h1>
                       {restaurant.provideDelivery ? (
                         <CheckCircleIcon className="text-green-500 h-4 w-4 dark:text-white" />
@@ -329,7 +328,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default FocusedRestaurantDetails;
+export default FocusedRestaurantDetails

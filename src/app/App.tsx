@@ -21,7 +21,7 @@ import ReservationHistory from '../components/profile/ReservationHistory'
 import EventHistory from '../components/profile/EventHistory'
 import Visit from '../components/restaurant/visits/Visit'
 import Checkout from '../components/restaurant/Checkout'
-import VisitWrapper from '../components/restaurant/visits/VisitWrapper'
+import VisitWrapper from '../components/restaurant/visits/VisitRoot'
 
 const router = createBrowserRouter([
   {

@@ -1,9 +1,13 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import CartContextProvider from '../../../contexts/CartContext'
 import ReservationContextProvider from '../../../contexts/ReservationContext'
+import { RestaurantDetailsType } from '../../../services/types'
 
-const VisitWrapper: React.FC = () => {
+const VisitRoot: React.FC = () => {
+  const { state } = useLocation()
+  const { restaurant } = state as { restaurant: RestaurantDetailsType }
+  const data = { restaurant: restaurant }
   return (
     <>
       <CartContextProvider>
@@ -15,4 +19,4 @@ const VisitWrapper: React.FC = () => {
   )
 }
 
-export default VisitWrapper
+export default VisitRoot

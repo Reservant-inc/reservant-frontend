@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { fetchGET, fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
@@ -8,7 +8,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { FetchError } from '../../services/Errors'
 import { CartContext } from '../../contexts/CartContext'
 import { ReservationContext } from '../../contexts/ReservationContext'
-import { RestaurantDetailsType } from '../../services/types'
 
 const Checkout: React.FC = () => {
   const parseDateTime = (date: string, timeSlot: string): Date => {
@@ -21,13 +20,10 @@ const Checkout: React.FC = () => {
     )
   }
 
-  const { friendsToAdd, selectedTimeslot, guests, date } =
+  const { friendsToAdd, selectedTimeslot, guests, date, restaurant } =
     useContext(ReservationContext)
 
   const { items, totalPrice } = useContext(CartContext)
-
-  const { state } = useLocation()
-  const { restaurant } = state as { restaurant: RestaurantDetailsType }
 
   const data = {
     restaurant: restaurant
@@ -60,7 +56,7 @@ const Checkout: React.FC = () => {
 
   const canAfford =
     wallet >=
-    (restaurant.reservationDeposit
+    (restaurant?.reservationDeposit
       ? restaurant.reservationDeposit
       : 0 + totalPrice
         ? totalPrice
@@ -75,7 +71,7 @@ const Checkout: React.FC = () => {
         numberOfGuests: guests - getParticipantsIds.length,
         tip: 0,
         takeaway: false,
-        restaurantId: restaurant.restaurantId,
+        restaurantId: restaurant?.restaurantId,
         participantIds: getParticipantsIds()
       })
       console.log(body)
@@ -208,7 +204,7 @@ const Checkout: React.FC = () => {
               <span className="flex justify-between py-1">
                 <label>Reservation deposit:</label>
                 <label>
-                  {restaurant.reservationDeposit
+                  {restaurant?.reservationDeposit
                     ? restaurant.reservationDeposit
                     : 0}{' '}
                   zł
@@ -221,7 +217,7 @@ const Checkout: React.FC = () => {
               <span className="flex justify-between py-1">
                 <label>Total cost:</label>
                 <label>
-                  {restaurant.reservationDeposit
+                  {restaurant?.reservationDeposit
                     ? restaurant.reservationDeposit
                     : 0 + totalPrice
                       ? totalPrice
