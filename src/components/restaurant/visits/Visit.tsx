@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { RestaurantDetailsType, UserType } from '../../../services/types'
 import MenuList from '../../restaurantManagement/menus/MenuList'
 import { MenuScreenType } from '../../../services/enums'
 import Cart from '../Cart'
-import { fetchGET } from '../../../services/APIconn'
-import { FetchError } from '../../../services/Errors'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CartContext } from '../../../contexts/CartContext'
 import SellIcon from '@mui/icons-material/Sell'
 import FriendSelector from '../../reusableComponents/FriendSelector'
 import { ArrowForward } from '@mui/icons-material'
+import { ReservationContext } from '../../../contexts/ReservationContext'
+import { UserType } from '../../../services/types'
+import { fetchGET } from '../../../services/APIconn'
+import { FetchError } from '../../../services/Errors'
 
 interface VisitProps {}
 
@@ -25,69 +26,50 @@ const getParsedDate = (): string => {
 }
 
 const Visit: React.FC<VisitProps> = () => {
+  const navigate = useNavigate()
+
   const today = getParsedDate()
 
-  const { state } = useLocation()
-  const { restaurant } = state as { restaurant: RestaurantDetailsType }
+  const { setReservationData, reservationData } = useContext(ReservationContext)
 
-  const [guests, setGuests] = useState<number>(1)
-  const [date, setDate] = useState<string>(today)
+  const [guests, setGuests] = useState<number>(reservationData?.guests ?? 0)
+  const [date, setDate] = useState<string>(
+    reservationData ? reservationData.date : today
+  )
+  const [selectedTimeslot, setSelectedTimeslot] = useState<string>(
+    reservationData ? reservationData.selectedTimeslot : ''
+  )
+  const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>(
+    reservationData ? reservationData.friendsToAdd : []
+  )
+
   const [availableHours, setAvailableHours] = useState<
     { from: string; until: string }[]
   >([])
+
   const [timeSlots, setTimeSlots] = useState<string[]>([])
-  const { items, totalPrice } = useContext(CartContext)
-  const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
-  const [selectedTimeslot, setSelectedTimeslot] = useState<string>('')
-  const [guestsErr, setGuestsErr] = useState<string | null>(null)
 
-  const navigate = useNavigate()
+  const { totalPrice } = useContext(CartContext)
 
-  const parseDateTime = (date: string, timeSlot: string): Date => {
-    const [time, ampm] = timeSlot.split(' ')
-    const [hours, minutes] = time.split(':').map(Number)
+  const { state } = useLocation()
 
-    const formattedHours = ampm === 'PM' && hours !== 12 ? hours + 12 : hours
-    return new Date(
-      `${date}T${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
-    )
-  }
+  const { restaurant } = state
 
   const data = {
-    items: items,
-    totalPrice: totalPrice,
-    date: parseDateTime(date, selectedTimeslot),
-    guests: guests,
-    friendsToAdd: friendsToAdd,
-    restaurant: restaurant
-  }
-
-  const skipData = {
-    date: parseDateTime(date, selectedTimeslot),
-    guests: guests,
-    friendsToAdd: friendsToAdd,
     restaurant: restaurant
   }
 
   useEffect(() => {
-    if (guests < friendsToAdd.length + 1 || !guests) {
-      setGuestsErr('invalid number')
-    } else {
-      setGuestsErr(null)
+    if (friendsToAdd.length >= guests) {
+      setGuests(prevState => prevState + 1)
     }
-  }, [guests])
+  }, [guests, friendsToAdd])
 
   useEffect(() => {
     if (date && guests) {
       fetchAvailableHours()
     }
   }, [date, guests])
-
-  useEffect(() => {
-    if (friendsToAdd.length >= guests) {
-      setGuests(guests + 1)
-    }
-  }, [friendsToAdd])
 
   useEffect(() => {
     if (availableHours.length > 0) {
@@ -99,11 +81,11 @@ const Visit: React.FC<VisitProps> = () => {
 
   useEffect(() => {
     if (timeSlots.length > 0) {
-      let tmp: HTMLSelectElement = document.getElementById(
-        'timeselect'
-      ) as HTMLSelectElement
-      tmp.selectedIndex = 0
-      setSelectedTimeslot(tmp.value)
+      const index = timeSlots.findIndex(
+        ts =>
+          ts === selectedTimeslot || ts === reservationData?.selectedTimeslot
+      )
+      setSelectedTimeslot(timeSlots[index >= 0 ? index : 0])
     } else {
       setSelectedTimeslot('')
     }
@@ -169,7 +151,8 @@ const Visit: React.FC<VisitProps> = () => {
           type={MenuScreenType.Order}
         />
       </div>
-      <div className="flex h-full w-1/4 min-w-[360px] flex-col justify-between bg-white rounded-lg p-3 shadow-md">
+      <div className=" flex h-full overflow-y-auto scroll rounded-lg shadow-md w-1/4 min-w-[360px] flex-col justify-between bg-white items-center gap-5 p-3">
+        <h1 className="text-lg font-mont-bd">Reservation</h1>
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
@@ -181,11 +164,9 @@ const Visit: React.FC<VisitProps> = () => {
                 onChange={e => {
                   setGuests(parseInt(e.target.value))
                 }}
-                className={`flex h-7 w-36 items-center rounded-md  border-[1px] border-grey-2 px-2 py-0 text-center dark:text-grey-0 ${guestsErr ? 'text-error' : 'text-black'}`}
+                className={`flex h-7 w-36 items-center rounded-md  border-[1px] border-grey-2 px-2 py-0 text-center dark:text-grey-0 text-black`}
               />
             </div>
-
-            {guestsErr && <h1 className="text-error">{guestsErr}</h1>}
           </div>
           <div className="flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
             <FriendSelector
@@ -209,6 +190,7 @@ const Visit: React.FC<VisitProps> = () => {
             <select
               id="timeselect"
               onChange={e => setSelectedTimeslot(e.target.value)}
+              value={selectedTimeslot}
               className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
             >
               {timeSlots.length <= 0 && <option>Not avaliable</option>}
@@ -219,21 +201,39 @@ const Visit: React.FC<VisitProps> = () => {
               ))}
             </select>
           </div>
-          <Cart />
         </div>
+
+        <Cart />
+
         <div className="flex h-8 w-full  flex-row-reverse gap-3">
           <button
             className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
-            onClick={() => navigate('../checkout', { state: skipData })}
-            disabled={selectedTimeslot === '' || guestsErr !== null}
+            onClick={() => {
+              setReservationData({
+                friendsToAdd: friendsToAdd,
+                selectedTimeslot: selectedTimeslot,
+                guests: guests,
+                date: date
+              })
+              navigate('../checkout', { state: data })
+            }}
+            disabled={selectedTimeslot === ''}
           >
             {`SKIP ORDER`}
             <ArrowForward />
           </button>
           <button
             className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
-            onClick={() => navigate('../checkout', { state: data })}
-            disabled={selectedTimeslot === '' || guestsErr !== null}
+            onClick={() => {
+              setReservationData({
+                friendsToAdd: friendsToAdd,
+                selectedTimeslot: selectedTimeslot,
+                guests: guests,
+                date: date
+              })
+              navigate('../checkout', { state: data })
+            }}
+            disabled={selectedTimeslot === ''}
           >
             {`CHECKOUT ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
             <SellIcon />

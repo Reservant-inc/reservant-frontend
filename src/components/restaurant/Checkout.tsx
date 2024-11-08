@@ -1,31 +1,39 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-  CartItemType,
-  RestaurantDetailsType,
-  UserType
-} from '../../services/types'
 import { fetchGET, fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { FetchError } from '../../services/Errors'
+import { CartContext } from '../../contexts/CartContext'
+import { ReservationContext } from '../../contexts/ReservationContext'
 
 const Checkout: React.FC = () => {
+  const parseDateTime = (date: string, timeSlot: string): Date => {
+    const [time, ampm] = timeSlot.split(' ')
+    const [hours, minutes] = time.split(':').map(Number)
+
+    const formattedHours = ampm === 'PM' && hours !== 12 ? hours + 12 : hours
+    return new Date(
+      `${date}T${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
+    )
+  }
+
+  const { reservationData } = useContext(ReservationContext)
+
+  const { items, totalPrice } = useContext(CartContext)
+
   const { state } = useLocation()
-  const { items, totalPrice, guests, date, friendsToAdd, restaurant } =
-    state as {
-      friendsToAdd: UserType[]
-      items: CartItemType[]
-      totalPrice: number
-      guests: number
-      date: Date
-      restaurant: RestaurantDetailsType
-    }
+
+  const { restaurant } = state
 
   const data = {
     restaurant: restaurant
   }
+  const dateTime = parseDateTime(
+    reservationData?.date ?? '',
+    reservationData?.selectedTimeslot ?? ''
+  )
 
   const [wallet, setWallet] = useState<number>(0)
 
@@ -53,7 +61,7 @@ const Checkout: React.FC = () => {
 
   const canAfford =
     wallet >=
-    (restaurant.reservationDeposit
+    (restaurant?.reservationDeposit
       ? restaurant.reservationDeposit
       : 0 + totalPrice
         ? totalPrice
@@ -63,12 +71,14 @@ const Checkout: React.FC = () => {
     let res
     try {
       const body = JSON.stringify({
-        date: date,
-        endTime: new Date(new Date(date).getTime() + 30 * 60000).toJSON(),
-        numberOfGuests: guests - getParticipantsIds.length,
+        date: dateTime,
+        endTime: new Date(new Date(dateTime).getTime() + 30 * 60000).toJSON(),
+        numberOfGuests: reservationData
+          ? reservationData.guests - getParticipantsIds.length
+          : 0,
         tip: 0,
         takeaway: false,
-        restaurantId: restaurant.restaurantId,
+        restaurantId: restaurant?.restaurantId,
         participantIds: getParticipantsIds()
       })
       console.log(body)
@@ -100,11 +110,13 @@ const Checkout: React.FC = () => {
 
   const getParticipantsIds = () => {
     let res: string[] = []
-    for (let friend of friendsToAdd) {
-      res.push(friend.userId)
-    }
-    res.push(user.userId)
-    return res
+    if (reservationData)
+      for (let friend of reservationData.friendsToAdd) {
+        res.push(friend.userId)
+        res.push(user.userId)
+        return res
+      }
+    return []
   }
 
   const formatDateTime = (date: Date) => {
@@ -117,10 +129,10 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col gap-4 p-4 bg-grey-1 text-sm dark:bg-grey-6 dark:text-grey-0">
+    <div className="relative flex h-full w-full flex-col gap-4 p-4 text-sm dark:bg-grey-6 dark:text-grey-0">
       <div className="flex h-[90%] w-full items-center justify-center gap-6">
         <div className="flex h-full w-1/2 flex-col items-end justify-center gap-4">
-          <div className="flex h-[150px] w-[350px] flex-col gap-2 rounded-lg bg-white p-5 dark:bg-black ">
+          <div className="flex h-[150px] w-[350px] flex-col gap-2   rounded-lg bg-grey-0 p-5 dark:bg-black ">
             <h1 className="self-center font-mont-bd text-xl ">User details</h1>
             <div className="separator flex flex-col divide-y-[1px] divide-grey-2  ">
               <span className="flex justify-between py-1">
@@ -133,7 +145,7 @@ const Checkout: React.FC = () => {
               </span>
             </div>
           </div>
-          <div className="flex h-[150px] w-[350px] flex-col gap-3 rounded-lg bg-white p-5 dark:bg-black ">
+          <div className="flex h-[150px] w-[350px] flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black ">
             <h1 className="self-center font-mont-bd text-xl ">
               Select payment method
             </h1>
@@ -167,7 +179,7 @@ const Checkout: React.FC = () => {
             </div>
           </div>
           {items?.length > 0 && (
-            <div className="flex h-[300px] w-[350px] flex-col gap-3 rounded-lg bg-white p-5 dark:bg-black">
+            <div className="flex h-[300px] w-[350px] flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl ">
                 Additional notes
               </h1>
@@ -181,18 +193,18 @@ const Checkout: React.FC = () => {
           )}
         </div>
         <div className="flex h-full w-1/2 flex-col items-start justify-center gap-4">
-          <div className=" flex h-[calc(300px+1rem)] w-[350px] flex-col gap-2 rounded-lg bg-white p-5 dark:bg-black">
+          <div className=" flex h-[calc(300px+1rem)] w-[350px] flex-col gap-2 rounded-lg bg-grey-0 p-5 dark:bg-black">
             <h1 className="self-center font-mont-bd text-xl ">
               Reservation details
             </h1>
             <div className="separator flex flex-col  divide-y-[1px] divide-grey-2">
               <span className="flex justify-between py-1">
                 <label>Total number of guests:</label>
-                <label>{guests}</label>
+                <label>{reservationData?.guests}</label>
               </span>
               <span className="flex justify-between py-1">
                 <label>Date of reservation:</label>
-                <label>{formatDateTime(date)}</label>
+                <label>{formatDateTime(dateTime)}</label>
               </span>
               <span className="flex justify-between py-1">
                 <label>Reservation duration:</label>
@@ -201,7 +213,7 @@ const Checkout: React.FC = () => {
               <span className="flex justify-between py-1">
                 <label>Reservation deposit:</label>
                 <label>
-                  {restaurant.reservationDeposit
+                  {restaurant?.reservationDeposit
                     ? restaurant.reservationDeposit
                     : 0}{' '}
                   zł
@@ -214,7 +226,7 @@ const Checkout: React.FC = () => {
               <span className="flex justify-between py-1">
                 <label>Total cost:</label>
                 <label>
-                  {restaurant.reservationDeposit
+                  {restaurant?.reservationDeposit
                     ? restaurant.reservationDeposit
                     : 0 + totalPrice
                       ? totalPrice
@@ -226,7 +238,7 @@ const Checkout: React.FC = () => {
           </div>
 
           {items?.length > 0 && (
-            <div className="flex h-[300px] w-[350px]  flex-col  gap-1 rounded-lg  bg-white p-5 dark:bg-black">
+            <div className="flex h-[300px] w-[350px]  flex-col  gap-1 rounded-lg  bg-grey-0 p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl ">
                 Order details
               </h1>

@@ -305,3 +305,10 @@ export type OrderType = {
   items: MenuIteminOrderType[]
   employees: UserType[]
 }
+
+export type ReservationType = {
+  friendsToAdd: UserType[]
+  selectedTimeslot: string
+  guests: number
+  date: string
+}
