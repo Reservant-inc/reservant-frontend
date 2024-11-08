@@ -8,10 +8,9 @@ import SellIcon from '@mui/icons-material/Sell'
 import FriendSelector from '../../reusableComponents/FriendSelector'
 import { ArrowForward } from '@mui/icons-material'
 import { ReservationContext } from '../../../contexts/ReservationContext'
-import { ReservationType, UserType } from '../../../services/types'
+import { UserType } from '../../../services/types'
 import { fetchGET } from '../../../services/APIconn'
 import { FetchError } from '../../../services/Errors'
-import { rest } from 'lodash'
 
 interface VisitProps {}
 
@@ -87,9 +86,6 @@ const Visit: React.FC<VisitProps> = () => {
           ts === selectedTimeslot || ts === reservationData?.selectedTimeslot
       )
       setSelectedTimeslot(timeSlots[index >= 0 ? index : 0])
-      console.log(timeSlots)
-      console.log(index)
-      console.log(selectedTimeslot)
     } else {
       setSelectedTimeslot('')
     }
