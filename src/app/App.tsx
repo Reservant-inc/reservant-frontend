@@ -3,7 +3,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import LandingPage from '../components/LandingPage'
 import UserRegister from '../components/auth/UserRegister'
 import HomePage from '../components/HomePage'
-import { checkAuthLoader, redirectIfLoggedIn } from '../components/auth/auth'
+import {
+  checkAuthLoader,
+  checkIfOwner,
+  redirectIfLoggedIn
+} from '../components/auth/auth'
 import Root from '../components/ProtectedLayout'
 import Login from '../components/auth/Login'
 import RestaurantManager from '../components/restaurantManagement/RestaurantManager'
@@ -22,6 +26,8 @@ import EventHistory from '../components/profile/EventHistory'
 import Checkout from '../components/restaurant/Checkout'
 import VisitWrapper from '../components/restaurant/visits/VisitRoot'
 import Visit from '../components/restaurant/visits/Visit'
+import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagment'
+import NotFound from '../components/NotFound'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +46,7 @@ const router = createBrowserRouter([
       {
         path: ':name/management',
         element: <RestaurantManager />,
+        loader: checkIfOwner,
         children: [
           {
             path: 'dashboard',
@@ -75,6 +82,10 @@ const router = createBrowserRouter([
               {
                 path: 'reservation-history',
                 element: <HistoryTab />
+              },
+              {
+                path: 'reviews-management',
+                element: <ReviewsManagement />
               }
             ]
           }
@@ -123,6 +134,10 @@ const router = createBrowserRouter([
     path: 'register',
     element: <UserRegister />,
     loader: redirectIfLoggedIn
+  },
+  {
+    path: '*',
+    element: <NotFound />
   }
 ])
 

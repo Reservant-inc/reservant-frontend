@@ -191,7 +191,7 @@ export type PaginationType = {
   totalPages: number
   perPage: number
   orderByOptions: string[]
-  items: ThreadType[] | MessageType[] | UserSearchType[] | UserType[]
+  items: ThreadType[] | MessageType[] | UserSearchType[] | UserType[] | TransactionType[]
 }
 
 export type UserType = {
@@ -214,6 +214,13 @@ export type ActionType = {
   icon: React.ReactNode
   name: string
   onClick: () => void
+}
+
+export type TransactionType = {
+  transactionId: number,
+  title: string,
+  amount: number,
+  time: Date
 }
 
 export type CartItemType = {

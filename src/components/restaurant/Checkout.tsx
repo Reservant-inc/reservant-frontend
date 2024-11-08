@@ -4,7 +4,6 @@ import { fetchGET, fetchPOST, getImage } from '../../services/APIconn'
 import DefaultImage from '../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-
 import { FetchError } from '../../services/Errors'
 import { CartContext } from '../../contexts/CartContext'
 import { ReservationContext } from '../../contexts/ReservationContext'

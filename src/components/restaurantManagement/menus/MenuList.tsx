@@ -79,7 +79,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
 
   return (
     <MenuListContext.Provider value={{ fetchMenus }}>
-      <div className="flex h-full w-full flex-col gap-2 bg-white p-2 dark:bg-black">
+      <div className="flex h-full w-full flex-col gap-2 bg-white p-2 dark:bg-black rounded-lg">
         <div className="flex h-16 w-full justify-between gap-2">
           <button
             className="h-8 min-w-8 rounded-full bg-grey-0 hover:bg-grey-1 dark:bg-grey-6 dark:hover:bg-grey-5"

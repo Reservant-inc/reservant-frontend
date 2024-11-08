@@ -55,8 +55,6 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
         let indx = 0;
         for (const i in orders) {
           const response = await fetchGET(`/orders/${orders[i].orderId}`);
-          console.log("response:");
-          console.log(response);
           tmp.push({
             id: Number(indx++),
             orderId: response.orderId,
@@ -68,8 +66,6 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
           });
         }
         setRows(tmp);
-        console.log("rows:");
-        console.log(rows);
       } catch (error) {
         if (error instanceof FetchError) {
           console.log(error.formatErrors());
@@ -104,7 +100,6 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
                       className="dark:text-grey-0"
                       onClick={() => {
                         toggleDetails();
-                        console.log(row);
                       }}
                     >
                       {open ? (

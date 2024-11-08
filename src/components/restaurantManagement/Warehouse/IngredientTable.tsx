@@ -23,7 +23,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-
+  
 const IngredientTable: React.FC = () => {
   const [ingredients, setIngredients] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);

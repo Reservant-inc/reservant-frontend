@@ -96,7 +96,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
 
       if (props.profile) {
         const user = JSON.parse(Cookies.get("userInfo") as string);
-        navigate(`profile/${user.userId}`);
+        navigate(`profile/${user.userId}/account`);
       }
 
       props.goToMenu && setActiveMenu(props.goToMenu);

@@ -20,7 +20,7 @@ const LandingPage = () => {
         localhost
       </a>{" "}
       <br />
-      <a id="serverLink" href="http://172.21.40.127:800/home" className="p-2">
+      <a id="serverLink" href="http://172.21.40.127:800/reservant/home" className="p-2">
         serwer
       </a>
     </div>

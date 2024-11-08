@@ -144,8 +144,15 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full gap-12 text-nowrap px-12 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
-      <div className="relative flex h-full w-1/4 min-w-[300px] flex-col gap-5 pt-7">
+    <div className="relative flex h-full w-full gap-4 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
+      <div className="h-full w-3/4 items-center shadow-md">
+        <MenuList
+          activeRestaurantId={restaurant.restaurantId}
+          type={MenuScreenType.Order}
+        />
+      </div>
+      <div className=" flex h-full overflow-y-auto scroll rounded-lg shadow-md w-1/4 min-w-[360px] flex-col justify-between bg-white items-center gap-5 p-3">
+        <h1 className="text-lg font-mont-bd">Reservation</h1>
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
@@ -157,11 +164,11 @@ const Visit: React.FC<VisitProps> = () => {
                 onChange={e => {
                   setGuests(parseInt(e.target.value))
                 }}
-                className="flex h-7 w-36 items-center rounded-md  border-[1px] border-grey-2 px-2 py-0 text-center text-black dark:text-grey-0"
+                className={`flex h-7 w-36 items-center rounded-md  border-[1px] border-grey-2 px-2 py-0 text-center dark:text-grey-0 text-black`}
               />
             </div>
           </div>
-          <div className=" flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
+          <div className="flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
             <FriendSelector
               friendsToAdd={friendsToAdd}
               setFriendsToAdd={setFriendsToAdd}
@@ -195,14 +202,9 @@ const Visit: React.FC<VisitProps> = () => {
             </select>
           </div>
         </div>
-      </div>
-      <div className=" flex h-full w-3/4 flex-col items-center gap-5 p-3">
-        <div className="h-[calc(100%-3rem)] w-full">
-          <MenuList
-            activeRestaurantId={restaurant.restaurantId}
-            type={MenuScreenType.Order}
-          />
-        </div>
+
+        <Cart />
+
         <div className="flex h-8 w-full  flex-row-reverse gap-3">
           <button
             className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
@@ -237,8 +239,6 @@ const Visit: React.FC<VisitProps> = () => {
             <SellIcon />
           </button>
         </div>
-
-        <Cart />
       </div>
     </div>
   )

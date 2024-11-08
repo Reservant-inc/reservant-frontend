@@ -71,11 +71,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   };
 
   return (
-    <div className="scroll h-full w-full gap-4 space-y-4 overflow-y-auto rounded-lg bg-white dark:bg-black">
-      {/* Temporary place for reviews menagment for ReviewsManagement */}
-      <div className="mt-2 overflow-y-auto p-2">
-        <ReviewsManagement activeRestaurantId={activeRestaurantId} />
-      </div>
+    <div className="w-full h-full gap-4 rounded-lg overflow-y-auto scroll space-y-4 bg-white dark:bg-black">
+     
     </div>
   );
 };

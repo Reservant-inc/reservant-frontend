@@ -325,7 +325,7 @@ const Threads: React.FC = () => {
           <CommentRoundedIcon className="h-[23px] w-[23px]" />
         </Button>
         {isPressed && (
-          <div className="nav-dropdown z-[1] flex h-[calc(100%-4.5rem)) w-[300px] flex-col items-center bg-white dark:bg-black">
+          <div className="nav-dropdown z-[1] flex h-[calc(100vh-4.5rem)] w-[300px] flex-col items-center bg-white dark:bg-black">
             <div className="flex h-14 w-full items-center justify-between px-3 py-2">
               <h1 className="font-mont-bd text-xl text-black dark:text-white">
                 {t("threads.threads")}
