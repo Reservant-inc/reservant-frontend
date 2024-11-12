@@ -63,6 +63,12 @@ const Profile: React.FC = () => {
         >
           <h1 className="text-sm">Events</h1>
         </button>
+        <button
+          className="border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          onClick={() => navigate("friends")}
+        >
+          <h1 className="text-sm">Friends</h1>
+        </button>
       </div>
       <div className="flex justify-center h-full w-[500px] rounded-lg">
         <Outlet />
