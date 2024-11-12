@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Box, Modal } from "@mui/material";
-import RestaurantRegister from "../../../register/restaurantRegister/RestaurantRegister";
-import AddIcon from "@mui/icons-material/Add";
+import React, { useEffect, useState } from 'react'
+import { Box, Modal } from '@mui/material'
+import RestaurantRegister from '../../../register/restaurantRegister/RestaurantRegister'
 import {
   GridToolbarContainer,
   GridRowModesModel,
@@ -9,39 +8,39 @@ import {
   GridRowsProp,
   DataGrid,
   GridSlots,
-  GridActionsCellItem,
-} from "@mui/x-data-grid";
-import { fetchGET } from "../../../../services/APIconn";
-import { LocalType } from "../../../../services/enums";
-import { RestaurantType } from "../../../../services/types";
-import { ArrowForward, ArrowForwardIos, Details } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+  GridActionsCellItem
+} from '@mui/x-data-grid'
+import { fetchGET } from '../../../../services/APIconn'
+import { LocalType } from '../../../../services/enums'
+import { RestaurantType } from '../../../../services/types'
+import { ArrowForward, ArrowForwardIos, Details } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 
 interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
   setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void
 }
 
 const RestaurantListSection: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [rows, setRows] = useState<GridRowsProp>([]);
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [rows, setRows] = useState<GridRowsProp>([])
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const populateRows = async () => {
       try {
-        const response = await fetchGET("/my-restaurant-groups");
-        const tmp: RestaurantType[] = [];
+        const response = await fetchGET('/my-restaurant-groups')
+        const tmp: RestaurantType[] = []
 
-        let indx = 0;
+        let indx = 0
         for (const group of response) {
           const response2 = await fetchGET(
-            `/my-restaurant-groups/${group.restaurantGroupId}`,
-          );
+            `/my-restaurant-groups/${group.restaurantGroupId}`
+          )
 
           for (const i in response2.restaurants) {
             tmp.push({
@@ -53,20 +52,18 @@ const RestaurantListSection: React.FC = () => {
                 .restaurantType as LocalType,
               address: response2.restaurants[i].address,
               city: response2.restaurants[i].city,
-              isVerified: response2.restaurants[i].isVerified,
-            });
+              isVerified: response2.restaurants[i].isVerified
+            })
           }
         }
 
-        setRows(tmp);
-        console.log(response);
-        console.log(tmp);
+        setRows(tmp)
       } catch (error) {
-        console.error("Error populating table", error);
+        console.error('Error populating table', error)
       }
-    };
-    populateRows();
-  }, []);
+    }
+    populateRows()
+  }, [])
 
   const EditToolbar = (props: EditToolbarProps) => {
     return (
@@ -81,63 +78,63 @@ const RestaurantListSection: React.FC = () => {
           </button>
         </div>
       </GridToolbarContainer>
-    );
-  };
+    )
+  }
 
   const columns: GridColDef[] = [
-    { field: "restaurantId", headerName: "ID", width: 180, editable: false },
+    { field: 'restaurantId', headerName: 'ID', width: 180, editable: false },
     {
-      field: "name",
-      headerName: "Name",
-      type: "string",
+      field: 'name',
+      headerName: 'Name',
+      type: 'string',
       width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: false,
+      align: 'left',
+      headerAlign: 'left',
+      editable: false
     },
     {
-      field: "restaurantType",
-      headerName: "Local type",
-      type: "string",
+      field: 'restaurantType',
+      headerName: 'Local type',
+      type: 'string',
       width: 180,
-      editable: false,
+      editable: false
     },
     {
-      field: "city",
-      headerName: "City",
-      type: "string",
+      field: 'city',
+      headerName: 'City',
+      type: 'string',
       width: 180,
-      editable: false,
+      editable: false
     },
     {
-      field: "isVerified",
-      headerName: "Is verified?",
-      type: "boolean",
+      field: 'isVerified',
+      headerName: 'Is verified?',
+      type: 'boolean',
       width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: false,
+      align: 'left',
+      headerAlign: 'left',
+      editable: false
     },
     {
-      field: "groupName",
-      headerName: "Group",
+      field: 'groupName',
+      headerName: 'Group',
       width: 180,
       editable: false,
-      type: "string",
+      type: 'string'
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
       width: 100,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
             icon={<ArrowForwardIos />}
             label="Details"
             id={
-              "RestaurantSeeDetailsButton" +
+              'RestaurantSeeDetailsButton' +
               rows[parseInt(id.toString())].id +
               rows[parseInt(id.toString())].name
             }
@@ -145,18 +142,18 @@ const RestaurantListSection: React.FC = () => {
             color="inherit"
             onClick={() =>
               navigate(
-                `../restaurant/${rows[parseInt(id.toString())].restaurantId}/restaurant-dashboard`,
+                `../restaurant/${rows[parseInt(id.toString())].restaurantId}/restaurant-dashboard`
               )
             }
-          />,
-        ];
-      },
-    },
-  ];
+          />
+        ]
+      }
+    }
+  ]
 
   const handleRowClick = (params: any) => {
     // const rowData = params.row;
-  };
+  }
 
   return (
     <div className="h-full w-full rounded-b-lg rounded-tr-lg bg-white dark:bg-black">
@@ -168,14 +165,14 @@ const RestaurantListSection: React.FC = () => {
         disableRowSelectionOnClick
         onRowClick={handleRowClick}
         initialState={{
-          pagination: { paginationModel: { pageSize: 5 } },
+          pagination: { paginationModel: { pageSize: 5 } }
         }}
         pageSizeOptions={[5, 10, 25]}
         slots={{
-          toolbar: EditToolbar as GridSlots["toolbar"],
+          toolbar: EditToolbar as GridSlots['toolbar']
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel }
         }}
         className="border-0"
       />
@@ -185,7 +182,7 @@ const RestaurantListSection: React.FC = () => {
         </Box>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default RestaurantListSection;
+export default RestaurantListSection

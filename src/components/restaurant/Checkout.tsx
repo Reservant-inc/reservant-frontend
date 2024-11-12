@@ -129,10 +129,10 @@ const Checkout: React.FC = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col gap-4 p-4 text-sm dark:bg-grey-6 dark:text-grey-0">
+    <div className="relative flex h-full w-full flex-col gap-4 p-4 text-sm  bg-grey-1 dark:bg-grey-6 dark:text-grey-0">
       <div className="flex h-[90%] w-full items-center justify-center gap-6">
         <div className="flex h-full w-1/2 flex-col items-end justify-center gap-4">
-          <div className="flex h-[150px] w-[350px] flex-col gap-2   rounded-lg bg-grey-0 p-5 dark:bg-black ">
+          <div className="flex h-[150px] w-[350px] flex-col gap-2   rounded-lg bg-white shadow-md p-5 dark:bg-black ">
             <h1 className="self-center font-mont-bd text-xl ">User details</h1>
             <div className="separator flex flex-col divide-y-[1px] divide-grey-2  ">
               <span className="flex justify-between py-1">
@@ -145,7 +145,7 @@ const Checkout: React.FC = () => {
               </span>
             </div>
           </div>
-          <div className="flex h-[150px] w-[350px] flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black ">
+          <div className="flex h-[150px] w-[350px] flex-col gap-3 rounded-lg bg-white shadow-md p-5 dark:bg-black ">
             <h1 className="self-center font-mont-bd text-xl ">
               Select payment method
             </h1>
@@ -179,7 +179,7 @@ const Checkout: React.FC = () => {
             </div>
           </div>
           {items?.length > 0 && (
-            <div className="flex h-[300px] w-[350px] flex-col gap-3 rounded-lg bg-grey-0 p-5 dark:bg-black">
+            <div className="flex h-[300px] w-[350px] flex-col gap-3 rounded-lg bg-white shadow-md p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl ">
                 Additional notes
               </h1>
@@ -193,7 +193,7 @@ const Checkout: React.FC = () => {
           )}
         </div>
         <div className="flex h-full w-1/2 flex-col items-start justify-center gap-4">
-          <div className=" flex h-[calc(300px+1rem)] w-[350px] flex-col gap-2 rounded-lg bg-grey-0 p-5 dark:bg-black">
+          <div className=" flex h-[calc(300px+1rem)] w-[350px] flex-col gap-2 rounded-lg bg-white shadow-md p-5 dark:bg-black">
             <h1 className="self-center font-mont-bd text-xl ">
               Reservation details
             </h1>
@@ -238,7 +238,7 @@ const Checkout: React.FC = () => {
           </div>
 
           {items?.length > 0 && (
-            <div className="flex h-[300px] w-[350px]  flex-col  gap-1 rounded-lg  bg-grey-0 p-5 dark:bg-black">
+            <div className="flex h-[300px] w-[350px]  flex-col  gap-1 rounded-lg  bg-white shadow-md p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl ">
                 Order details
               </h1>

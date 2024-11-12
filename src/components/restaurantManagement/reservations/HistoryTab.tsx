@@ -1,39 +1,39 @@
-import OrderHistory from "./OrderHistory";
-import React, { useEffect, useState } from "react";
+import OrderHistory from './OrderHistory'
+import React, { useEffect, useState } from 'react'
 import {
   GridRowsProp,
   GridRowModesModel,
   DataGrid,
   GridColDef,
-  GridActionsCellItem,
-} from "@mui/x-data-grid";
-import { fetchGET } from "../../../services/APIconn";
-import { FetchError } from "../../../services/Errors";
-import { OrderType, VisitType } from "../../../services/types";
-import { ArrowForwardIos } from "@mui/icons-material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useParams } from "react-router-dom";
-  
-const HistoryTab: React.FC = ({}) => {
-  const [ordersOpen, setOrdersOpen] = useState<boolean>(false);
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const [rows, setRows] = useState<GridRowsProp>([]);
-  const [activeOrders, setActiveOrders] = useState<OrderType[]>([]);
-  const [activeVisitId, setActiveVisitId] = useState<number | null>(null);
+  GridActionsCellItem
+} from '@mui/x-data-grid'
+import { fetchGET } from '../../../services/APIconn'
+import { FetchError } from '../../../services/Errors'
+import { OrderType, VisitType } from '../../../services/types'
+import { ArrowForwardIos } from '@mui/icons-material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useParams } from 'react-router-dom'
 
-  const { restaurantId } = useParams();
+const HistoryTab: React.FC = ({}) => {
+  const [ordersOpen, setOrdersOpen] = useState<boolean>(false)
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
+  const [rows, setRows] = useState<GridRowsProp>([])
+  const [activeOrders, setActiveOrders] = useState<OrderType[]>([])
+  const [activeVisitId, setActiveVisitId] = useState<number | null>(null)
+
+  const { restaurantId } = useParams()
 
   const activeRestaurantId =
-    restaurantId === undefined ? -1 : parseInt(restaurantId);
+    restaurantId === undefined ? -1 : parseInt(restaurantId)
 
   useEffect(() => {
     const populateRows = async () => {
       try {
         const response = await fetchGET(
-          `/restaurants/${activeRestaurantId}/visits`,
-        );
-        let tmp: VisitType[] = [];
-        let indx = 0;
+          `/restaurants/${activeRestaurantId}/visits`
+        )
+        let tmp: VisitType[] = []
+        let indx = 0
         for (const i in response.items) {
           tmp.push({
             id: Number(indx++),
@@ -50,122 +50,120 @@ const HistoryTab: React.FC = ({}) => {
             tableId: response.items[i].tableId,
             takeaway: response.items[i].takeaway,
             tip: response.items[i].tip,
-            visitId: response.items[i].visitId,
-          });
+            visitId: response.items[i].visitId
+          })
         }
-        setRows(tmp);
-        console.log(response);
-        console.log(tmp);
+        setRows(tmp)
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors());
+          console.log(error.formatErrors())
         } else {
-          console.log("Unexpected error");
+          console.log('Unexpected error')
         }
       }
-    };
-    populateRows();
-  }, []);
+    }
+    populateRows()
+  }, [])
 
   const columns: GridColDef[] = [
     {
-      field: "visitId",
-      headerName: "Visit ID",
+      field: 'visitId',
+      headerName: 'Visit ID',
       width: 150,
       editable: false,
-      type: "string",
+      type: 'string'
     },
     {
-      field: "date",
-      headerName: "Started at",
+      field: 'date',
+      headerName: 'Started at',
       width: 200,
       editable: false,
-      type: "string",
+      type: 'string'
     },
     {
-      field: "endTime",
-      headerName: "Finished at",
+      field: 'endTime',
+      headerName: 'Finished at',
       width: 200,
       editable: false,
-      type: "string",
+      type: 'string'
     },
     {
-      field: "reservationDate",
-      headerName: "Date of reservation",
+      field: 'reservationDate',
+      headerName: 'Date of reservation',
       width: 200,
       editable: false,
-      type: "string",
+      type: 'string'
     },
     {
-      field: "paymentTime",
-      headerName: "Date of payment",
+      field: 'paymentTime',
+      headerName: 'Date of payment',
       width: 200,
       editable: false,
-      type: "string",
+      type: 'string'
     },
     {
-      field: "deposit",
-      headerName: "Deposit amount",
+      field: 'deposit',
+      headerName: 'Deposit amount',
       width: 150,
       editable: false,
-      type: "number",
+      type: 'number'
     },
     {
-      field: "tip",
-      headerName: "Tip",
+      field: 'tip',
+      headerName: 'Tip',
       width: 150,
       editable: false,
-      type: "number",
+      type: 'number'
     },
     {
-      field: "takeaway",
-      headerName: "Takeaway?",
+      field: 'takeaway',
+      headerName: 'Takeaway?',
       width: 150,
       editable: false,
-      type: "boolean",
+      type: 'boolean'
     },
     {
-      field: "numberOfGuests",
-      headerName: "Number of guests",
+      field: 'numberOfGuests',
+      headerName: 'Number of guests',
       width: 150,
       editable: false,
-      type: "number",
+      type: 'number'
     },
     {
-      field: "tableId",
-      headerName: "Table number",
+      field: 'tableId',
+      headerName: 'Table number',
       width: 150,
       editable: false,
-      type: "number",
+      type: 'number'
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Details",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Details',
       width: 150,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
             icon={<ArrowForwardIos />}
             label="Details"
             id={
-              "VisitSeeDetailsButton" +
+              'VisitSeeDetailsButton' +
               rows[parseInt(id.toString())].id +
               rows[parseInt(id.toString())].name
             }
             className="textPrimary"
             onClick={() => {
-              setActiveOrders(rows[parseInt(id.toString())].orders);
-              setActiveVisitId(rows[parseInt(id.toString())].visitId);
-              setOrdersOpen(true);
+              setActiveOrders(rows[parseInt(id.toString())].orders)
+              setActiveVisitId(rows[parseInt(id.toString())].visitId)
+              setOrdersOpen(true)
             }}
             color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
+          />
+        ]
+      }
+    }
+  ]
 
   return (
     <div className="h-full w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
@@ -178,7 +176,7 @@ const HistoryTab: React.FC = ({}) => {
             rowModesModel={rowModesModel}
             disableRowSelectionOnClick
             initialState={{
-              pagination: { paginationModel: { pageSize: 5 } },
+              pagination: { paginationModel: { pageSize: 5 } }
             }}
             pageSizeOptions={[5, 10, 25]}
             className="h-full w-full border-0"
@@ -195,8 +193,8 @@ const HistoryTab: React.FC = ({}) => {
               <h1 className="text-md font-mont-md"> Back </h1>
             </button>
             <h1 className="text-md font-mont-md dark:text-grey-0">
-              {" "}
-              Visit {activeVisitId ? activeVisitId : ""} orders{" "}
+              {' '}
+              Visit {activeVisitId ? activeVisitId : ''} orders{' '}
             </h1>
           </div>
           <div className="">
@@ -205,7 +203,7 @@ const HistoryTab: React.FC = ({}) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default HistoryTab;
+export default HistoryTab
