@@ -34,6 +34,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isRespondDialogOpen, setIsRespondDialogOpen] = useState(false);
+  const [isDeleteResponseDialogOpen, setIsDeleteResponseDialogOpen] = useState(false);
   const [editedStars, setEditedStars] = useState<number>(review.stars);
   const [editedContents, setEditedContents] = useState<string>(review.contents);
   const [responseContents, setResponseContents] = useState<string>(review.restaurantResponse || "");
@@ -118,7 +119,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   const handleSaveResponse = async () => {
   try {
     const responseBody = {
-      response: responseContents, // restaurant's response content
+      restaurantResponseText: responseContents, // restaurant's response content
     };
 
     await fetchPUT(`/reviews/${review.reviewId}/restaurant-response`, JSON.stringify(responseBody));
@@ -129,6 +130,16 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
 
   } catch (error) {
     console.error("Error saving restaurant response:", error);
+  }
+};
+
+const handleDeleteResponse = async () => {
+  try {
+    await fetchDELETE(`/reviews/${review.reviewId}/restaurant-response`);
+    setIsDeleteResponseDialogOpen(false);
+    refreshReviews();
+  } catch (error) {
+    console.error("Error deleting restaurant response:", error);
   }
 };
 
@@ -224,13 +235,19 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           <div className="response-content flex-grow">
             <p>{new Date(review.answeredAt).toLocaleDateString()}</p>
             <p>{review.restaurantResponse}</p>
-            <div className="flex mt-2 justify-end">
+            <div className="flex justify-end">
               <Button
                 onClick={handleRespondClick}
                 className="text-primary dark:text-secondary pb-0"
               >
                 {t("reviews.edit-response")}
               </Button>
+              <Button
+                  onClick={() => setIsDeleteResponseDialogOpen(true)}
+                  className="text-primary dark:text-secondary pb-0"
+                >
+                  {t("general.delete")}
+                </Button>
             </div>
           </div>
         </div>
@@ -283,6 +300,13 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ConfirmationDialog
+        open={isDeleteResponseDialogOpen}
+        onClose={() => setIsDeleteResponseDialogOpen(false)}
+        onConfirm={handleDeleteResponse}
+        confirmationText={t("reviews.response-delete-confirmation")}
+      />
 
       <ConfirmationDialog
         open={isDeleteDialogOpen}

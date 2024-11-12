@@ -247,9 +247,10 @@
         "rating": "Rating",
         "edit-review": "Edit review",
         "review-submitted": "Added review",
-        "review-delete": "Are you sure you want to delete your review",
+        "review-delete": "Are you sure you want to delete your review?",
         "sort": "Sort by data",
-        "tags": "Tags"
+        "tags": "Tags",
+        "response-delete-confirmation": "Are you sure you want to delete your response?" 
     },
     "alt" : {
         "delete": "Delete permanently"
