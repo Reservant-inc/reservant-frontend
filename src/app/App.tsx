@@ -92,6 +92,10 @@ const router = createBrowserRouter([
         ]
       },
       {
+        path: 'events',
+        element: <EventHistory />
+      },
+      {
         path: 'profile/:userId',
         element: <Profile />,
         children: [

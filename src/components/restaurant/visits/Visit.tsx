@@ -145,7 +145,8 @@ const Visit: React.FC<VisitProps> = () => {
 
   return (
     <div className="relative flex h-full w-full gap-4 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
-      <div className="h-full w-3/4 items-center shadow-md">
+      <div className="h-full w-3/4 items-center shadow-md flex flex-col items-center bg-white rounded-lg p-3">
+        <h1 className="font-mont-bd text-lg">Menu</h1>
         <MenuList
           activeRestaurantId={restaurant.restaurantId}
           type={MenuScreenType.Order}
