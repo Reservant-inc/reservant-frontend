@@ -242,7 +242,8 @@
         "review-submitted": "Dodano opinie",
         "review-delete": "Czy na pewno chcesz usunąć swoją opinie?",
         "sort": "Sortuj po dacie",
-        "tags": "Tagi"
+        "tags": "Tagi",
+        "response-delete-confirmation": "Czy na pewno chcesz usunąć swoją odpowiedź?"
     },
     "alt" : {
         "delete": "Usuń na amen"
