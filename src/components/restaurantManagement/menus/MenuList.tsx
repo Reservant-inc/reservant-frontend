@@ -1,81 +1,80 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { MenuType } from "../../../services/types";
-import { fetchGET } from "../../../services/APIconn";
-import { FetchError } from "../../../services/Errors";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import AddIcon from "@mui/icons-material/Add";
-import { MenuScreenType } from "../../../services/enums";
-import Dialog from "../../reusableComponents/Dialog";
-import MenuDialog from "./MenuDialog";
-import Menu from "./Menu";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react'
+import { MenuType } from '../../../services/types'
+import { fetchGET } from '../../../services/APIconn'
+import { FetchError } from '../../../services/Errors'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import AddIcon from '@mui/icons-material/Add'
+import { MenuScreenType } from '../../../services/enums'
+import Dialog from '../../reusableComponents/Dialog'
+import MenuDialog from './MenuDialog'
+import Menu from './Menu'
+import { useParams } from 'react-router-dom'
 
 interface MenuListProps {
-  activeRestaurantId?: number;
-  type: MenuScreenType;
+  activeRestaurantId?: number
+  type: MenuScreenType
 }
 interface MenuListContextProps {
-  fetchMenus: () => Promise<void>;
+  fetchMenus: () => Promise<void>
 }
 export const MenuListContext = React.createContext<MenuListContextProps>({
-  fetchMenus: async () => {},
-});
+  fetchMenus: async () => {}
+})
 
 const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
-  const [menus, setMenus] = useState<MenuType[]>([]);
-  const [menuIndex, setMenuIndex] = useState<number>(0);
+  const [menus, setMenus] = useState<MenuType[]>([])
+  const [menuIndex, setMenuIndex] = useState<number>(0)
 
-  const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [isCreating, setIsCreating] = useState<boolean>(false)
 
-  const menuRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const menuRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  const { restaurantId } = useParams();
+  const { restaurantId } = useParams()
 
   if (activeRestaurantId === undefined)
     activeRestaurantId =
-      restaurantId === undefined ? -1 : parseInt(restaurantId);
+      restaurantId === undefined ? -1 : parseInt(restaurantId)
 
   const scrollToMenu = () => {
-    const menuElement = menuRefs.current[menuIndex];
+    const menuElement = menuRefs.current[menuIndex]
 
     if (menuElement) {
-      menuElement.scrollIntoView();
+      menuElement.scrollIntoView()
     }
-  };
+  }
 
   useEffect(() => {
-    fetchMenus();
-  }, []);
+    fetchMenus()
+  }, [])
 
   useEffect(() => {
-    scrollToMenu();
-  }, [menuIndex]);
+    scrollToMenu()
+  }, [menuIndex])
 
   const fetchMenus = async () => {
     try {
       const menus: MenuType[] = await fetchGET(
-        `/restaurants/${activeRestaurantId}/menus`,
-      );
+        `/restaurants/${activeRestaurantId}/menus`
+      )
 
       const completeMenus = await Promise.all(
-        menus.map(async (menu) => {
-          const response = await fetchGET(`/menus/${menu.menuId}`);
-          return response;
-        }),
-      );
-      type===MenuScreenType.Order?
-        setMenus(completeMenus.filter(menu=>menu.menuItems.length>0))
-        :
-        setMenus(completeMenus);
+        menus.map(async menu => {
+          const response = await fetchGET(`/menus/${menu.menuId}`)
+          return response
+        })
+      )
+      type === MenuScreenType.Order
+        ? setMenus(completeMenus.filter(menu => menu.menuItems.length > 0))
+        : setMenus(completeMenus)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors());
+        console.log(error.formatErrors())
       } else {
-        console.log("Unexpected error");
+        console.log('Unexpected error', error)
       }
     }
-  };
+  }
 
   return (
     <MenuListContext.Provider value={{ fetchMenus }}>
@@ -86,7 +85,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
             onClick={() =>
               menuIndex === 0
                 ? setMenuIndex(menus.length - 1)
-                : setMenuIndex((index) => index - 1)
+                : setMenuIndex(index => index - 1)
             }
           >
             <ChevronLeftIcon className="h-6 w-6 dark:text-white" />
@@ -96,7 +95,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
               <button
                 key={menu.menuId + menu.name}
                 onClick={() => setMenuIndex(index)}
-                className={`h-8 flex-shrink-0 rounded-full p-1 px-2 text-sm ${menuIndex === index ? "bg-primary text-white dark:bg-secondary dark:text-black" : "bg-grey-0 hover:bg-grey-1 dark:bg-grey-6 dark:text-white dark:hover:bg-grey-5"} `}
+                className={`h-8 flex-shrink-0 rounded-full p-1 px-2 text-sm ${menuIndex === index ? 'bg-primary text-white dark:bg-secondary dark:text-black' : 'bg-grey-0 hover:bg-grey-1 dark:bg-grey-6 dark:text-white dark:hover:bg-grey-5'} `}
               >
                 {menu.name}
               </button>
@@ -108,7 +107,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
               onClick={() =>
                 menuIndex === menus.length - 1
                   ? setMenuIndex(0)
-                  : setMenuIndex((index) => index + 1)
+                  : setMenuIndex(index => index + 1)
               }
             >
               <ChevronRightIcon className="h-6 w-6 dark:text-white" />
@@ -124,18 +123,15 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
           </div>
         </div>
         <div className="scroll flex h-full flex-col gap-5 overflow-y-auto scroll-smooth">
-          {
-           
-            menus.map((menu, index) => (
-              <Menu
-                key={menu.menuId + menu.name}
-                menu={menu}
-                activeRestaurantId={activeRestaurantId ?? -1}
-                ref={(el) => (menuRefs.current[index] = el)}
-                type={type}
-              />
-            ))
-          }
+          {menus.map((menu, index) => (
+            <Menu
+              key={menu.menuId + menu.name}
+              menu={menu}
+              activeRestaurantId={activeRestaurantId ?? -1}
+              ref={el => (menuRefs.current[index] = el)}
+              type={type}
+            />
+          ))}
         </div>
         {isCreating && (
           <Dialog
@@ -146,15 +142,15 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
             <MenuDialog
               activeRestaurantId={activeRestaurantId}
               onClose={() => {
-                fetchMenus();
-                setIsCreating(false);
+                fetchMenus()
+                setIsCreating(false)
               }}
             />
           </Dialog>
         )}
       </div>
     </MenuListContext.Provider>
-  );
-};
+  )
+}
 
-export default MenuList;
+export default MenuList

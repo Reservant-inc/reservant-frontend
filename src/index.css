@@ -237,7 +237,7 @@ dialog::backdrop {
 
 @layer base{
 
-  input[type], input:focus, select, label {
+  input[type], input:focus, select {
     @apply focus:ring-0 focus:ring-offset-0 focus:border-0 focus:outline-none border-0 bg-trans p-2;
   }
   
