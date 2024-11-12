@@ -29,14 +29,21 @@ interface Event {
 
 interface FocusedRestaurantEventDetailsProps {
   event: Event;
+  interestedEventsIds: number[];
+  updateInterestedEvents: (updatedIds: number[]) => void;
 }
 
-const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps> = ({ event }) => {
+const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps> = ({
+  event,
+  interestedEventsIds,
+  updateInterestedEvents,
+}) => {
   const userId = JSON.parse(Cookies.get("userInfo") as string).userId;
   const isCreator = userId === event.creator.userId;
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [showLeaveDialog, setShowLeaveDialog] = useState(false);
   const isParticipant = participants.some((participant) => participant.userId === userId);
+  const isInterested = interestedEventsIds.includes(event.eventId);
 
   const fetchParticipants = async () => {
     try {
@@ -55,8 +62,19 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
     try {
       await fetchPOST(`/events/${event.eventId}/interested`);
       fetchParticipants();
+      updateInterestedEvents([...interestedEventsIds, event.eventId]);
     } catch (error) {
       console.error("Error sending interest request:", error);
+    }
+  };
+
+  const handleRemoveInterest = async () => {
+    try {
+      await fetchDELETE(`/events/${event.eventId}/interested`);
+      fetchParticipants();
+      updateInterestedEvents(interestedEventsIds.filter((id) => id !== event.eventId));
+    } catch (error) {
+      console.error("Error removing interest:", error);
     }
   };
 
@@ -64,7 +82,7 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
     try {
       await fetchDELETE(`/events/${event.eventId}/interested`);
       fetchParticipants();
-      setShowLeaveDialog(false); // Zamknij dialog po usunięciu zainteresowania
+      setShowLeaveDialog(false);
     } catch (error) {
       console.error("Error leaving event:", error);
     }
@@ -85,32 +103,38 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
         <p className="text-left mb-4">{event.description}</p>
 
         <div className="flex justify-between text-sm text-left">
-          {/* lewa */}
           <div className="flex flex-col gap-2">
-            <p><strong>Event Time:</strong> {new Date(event.time).toLocaleString()}</p>
-            <p><strong>Join Until:</strong> {new Date(event.mustJoinUntil).toLocaleString()}</p>
-            <p><strong>Created by:</strong> {event.creator.firstName} {event.creator.lastName}</p>
+            <p><strong className="text-primary">Kiedy? </strong> {new Date(event.time).toLocaleString()}</p>
+            <p><strong className="text-primary">Zgłoszenia do: </strong> {new Date(event.mustJoinUntil).toLocaleString()}</p>
+            <p><strong className="text-primary">Kto? :</strong> {event.creator.firstName} {event.creator.lastName}</p>
           </div>
-
-          {/* prawa */}
           <div className="flex flex-col gap-2">
-            <p><strong>Participants:</strong> {event.numberInterested}</p>
-            <p><strong>Max Participants:</strong> {event.maxPeople}</p>
+            <p><strong className="text-primary">Uczestnicy: </strong> {event.numberInterested}</p>
+            <p><strong className="text-primary">Maks. uczestników:</strong> {event.maxPeople}</p>
           </div>
         </div>
 
-        {/* przycisk zainteresowania */}
         <div className="mt-4 flex justify-center">
           {!isCreator && (
             <button
-              onClick={isParticipant ? () => setShowLeaveDialog(true) : handleInterestClick}
-              className={`w-3/4 py-2 rounded-lg transition hover:scale-105 ${
+              onClick={
                 isParticipant
+                  ? () => setShowLeaveDialog(true)
+                  : isInterested
+                  ? handleRemoveInterest
+                  : handleInterestClick
+              }
+              className={`w-3/4 py-2 rounded-lg transition hover:scale-105 ${
+                isParticipant || isInterested
                   ? "bg-primary text-white hover:bg-primary-2"
                   : "bg-primary text-white hover:bg-primary-2"
               }`}
             >
-              {isParticipant ? "Opuść wydarzenie" : "Zainteresuj się"}
+              {isParticipant
+                ? "Opuść wydarzenie"
+                : isInterested
+                ? "Usuń zainteresowanie"
+                : "Zainteresuj się"}
             </button>
           )}
           {isCreator && (
@@ -124,7 +148,6 @@ const FocusedRestaurantEventDetails: React.FC<FocusedRestaurantEventDetailsProps
         </div>
       </div>
 
-      {/* Dialog potwierdzenia wyjścia */}
       {showLeaveDialog && (
         <Dialog
           open={showLeaveDialog}
