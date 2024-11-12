@@ -174,7 +174,7 @@ const Login: React.FC = () => {
             </h1>
             <Link
               id="login-notRegistered-link"
-              to="/user/register"
+              to="/register"
               className="flex h-12 w-48 items-center justify-center rounded-lg bg-primary p-3 font-mont-md text-white"
             >
               {t("landing-page.registerButton")}

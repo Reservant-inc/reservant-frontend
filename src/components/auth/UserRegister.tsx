@@ -36,19 +36,22 @@ const UserRegister: React.FC = () => {
       setSubmitting(true);
       setRequestLoading(true);
 
+      const formattedPhoneNumber = values.phoneNumber.replace(/\s|-/g, "");
+
       const body = JSON.stringify({
         firstName: values.firstName,
         lastName: values.lastName,
         login: values.login,
         email: values.email,
-        phoneNumber: values.phoneNumber,
+        phoneNumber: formattedPhoneNumber,
         birthDate: values.birthDate,
         password: values.password,
       });
 
+      console.log(body);
       await fetchPOST("/auth/register-customer", body);
 
-      navigate("/user/login");
+      navigate("/login");
     } catch (error) {
       console.log(error);
       setRegisterError("Registration failed. Please try again.");
