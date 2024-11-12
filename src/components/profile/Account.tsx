@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FetchError } from '../../services/Errors'
-import { fetchGET, fetchPUT, getImage } from '../../services/APIconn'
+import { fetchGET, fetchPOST, fetchPUT, getImage } from '../../services/APIconn'
 import { PaginationType, TransactionType, UserType } from '../../services/types'
 import DefaultImage from '../../assets/images/user.jpg'
 import { Form, Formik, Field } from 'formik'
@@ -38,22 +38,6 @@ const Account: React.FC = () => {
   const [transactions, setTransactions] = useState<TransactionType[]>([])
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  useEffect(() => {
-    const getWallet = async () => {
-      try {
-        const res = await fetchGET('/wallet/status')
-        setWallet(res.balance)
-      } catch (error) {
-        if (error instanceof FetchError) {
-          console.log(error.formatErrors())
-        } else {
-          console.log('Unexpected error')
-        }
-      }
-    }
-    getWallet()
-  }, [])
-
   const initialValues = {
     phoneNumber: userInfo.phoneNumber,
     firstName: userInfo.firstName,
@@ -61,16 +45,30 @@ const Account: React.FC = () => {
   }
 
   useEffect(() => {
+    fetchWalletBalance()
     fetchUserData()
   }, [])
+
+  const fetchWalletBalance = async () => {
+    try {
+      const res = await fetchGET('/wallet/status')
+      setWallet(res.balance)
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.error(error.formatErrors())
+      } else {
+        console.error('Unexpected error')
+      }
+    }
+  }
 
   const fetchUserData = async () => {
     try {
       const user = await fetchGET('/user')
       setUserInfo(user)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log(error)
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error(error)
     }
   }
 
@@ -81,7 +79,9 @@ const Account: React.FC = () => {
       )
       const newTransactions = result.items as TransactionType[]
 
-      if (newTransactions.length < 10) setHasMore(false)
+      if (newTransactions.length < 10) {
+        setHasMore(false)
+      }
 
       if (page > 0) {
         setTransactions(prevTransactions => [
@@ -90,12 +90,13 @@ const Account: React.FC = () => {
         ])
       } else {
         setTransactions(newTransactions)
+        setHasMore(true)
       }
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     }
   }
@@ -123,6 +124,36 @@ const Account: React.FC = () => {
       setIsEditing(false)
       fetchUserData()
     }
+  }
+
+  const addFunds = async () => {
+    try {
+      const body = JSON.stringify({
+        title: 'deposit',
+        amount: 100
+      })
+
+      await fetchPOST('/wallet/add-money', body)
+
+      await fetchWalletBalance()
+      setPage(0)
+    } catch (error) {
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error(error)
+    }
+  }
+
+  const formatDate = (timestamp: string): string => {
+    const date = new Date(timestamp)
+
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0')
+
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+
+    return `${year}-${month}-${day}, ${hours}:${minutes}`
   }
 
   return (
@@ -237,7 +268,10 @@ const Account: React.FC = () => {
       <div className="bg-white w-full h-fit rounded-lg p-4">
         <div className="flex justify-between">
           <h1 className="text-lg font-mont-bd">Wallet</h1>
-          <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white">
+          <button
+            className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
+            onClick={() => addFunds()}
+          >
             <AttachMoneyIcon className="w-4 h-4" />
             Add wallet funds
           </button>
@@ -247,24 +281,30 @@ const Account: React.FC = () => {
           <h1 className="text-sm">Transaction history:</h1>
           <div
             id="scrollableDiv"
-            className="w-full h-[300px] bg-grey-0 rounded-lg overflow-y-auto scroll"
+            className="w-full h-[300px] rounded-lg overflow-y-auto scroll bg-grey-0"
           >
             <InfiniteScroll
               dataLength={transactions.length}
               next={() => setPage(prevPage => prevPage + 1)}
               hasMore={hasMore}
-              loader={<CircularProgress className="" />}
+              loader={
+                <CircularProgress className="self-center text-grey-2 w-10 h-10" />
+              }
               scrollableTarget="scrollableDiv"
-              className="hidescroll flex flex-col items-center justify-center text-grey-2"
+              className="overflow-y-hidden flex flex-col rounded-lg p-2"
             >
-              <div className="flex flex-col p-2 h-full items-center">
+              <div className="flex flex-col gap-1 h-full items-center divide-y-[1px] divide-grey-2">
                 {transactions.length > 0 ? (
                   transactions.map((transaction, index) => (
                     <div
                       key={index}
-                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
+                      className="flex w-full p-2 hover:bg-grey-1 dark:hover:bg-grey-5 justify-between"
                     >
-                      {transaction.title}
+                      <div className="flex gap-2">
+                        <h1 className="">{transaction.title}:</h1>
+                        <h1>{transaction.amount}</h1>
+                      </div>
+                      <h1>{formatDate(transaction.time.toString())}</h1>
                     </div>
                   ))
                 ) : (
