@@ -4,7 +4,6 @@ import { fetchGET, getImage } from '../../services/APIconn'
 import { UserType } from '../../services/types'
 import DefaultImage from '../../assets/images/user.jpg'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Button } from '@mui/material'
 
 const Profile: React.FC = () => {
   const [user, setUser] = useState<UserType>()
@@ -13,7 +12,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     fetchUserData()
-  })
+  }, [])
 
   const fetchUserData = async () => {
     try {
@@ -65,7 +64,7 @@ const Profile: React.FC = () => {
         </button>
         <button
           className="border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-          onClick={() => navigate("friends")}
+          onClick={() => navigate('friends')}
         >
           <h1 className="text-sm">Friends</h1>
         </button>

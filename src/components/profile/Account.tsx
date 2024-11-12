@@ -79,8 +79,12 @@ const Account: React.FC = () => {
       )
       const newTransactions = result.items as TransactionType[]
 
+      console.log(page, newTransactions.length)
+
       if (newTransactions.length < 10) {
         setHasMore(false)
+      } else {
+        if (!hasMore) setHasMore(true)
       }
 
       if (page > 0) {
@@ -90,7 +94,6 @@ const Account: React.FC = () => {
         ])
       } else {
         setTransactions(newTransactions)
-        setHasMore(true)
       }
     } catch (error) {
       if (error instanceof FetchError) {
@@ -135,8 +138,13 @@ const Account: React.FC = () => {
 
       await fetchPOST('/wallet/add-money', body)
 
-      await fetchWalletBalance()
-      setPage(0)
+      if (page === 0) {
+        fetchTransactions()
+      } else {
+        setPage(0)
+      }
+
+      fetchWalletBalance()
     } catch (error) {
       if (error instanceof FetchError) console.error(error.formatErrors())
       else console.error(error)
