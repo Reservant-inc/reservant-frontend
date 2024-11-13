@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchGET, fetchDELETE, getImage } from "../../services/APIconn";
+import { fetchGET, fetchDELETE, fetchPOST, getImage } from "../../services/APIconn";
 import DefaultImage from "../../assets/images/user.jpg";
 import Dialog from '../reusableComponents/Dialog';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -21,12 +21,14 @@ const FriendsManagement: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [friends, setFriends] = useState<Friend[]>([]);
     const [outgoingRequests, setOutgoingRequests] = useState<Friend[]>([]);
+    const [incomingRequests, setIncomingRequests] = useState<Friend[]>([]);
     const [filteredFriends, setFilteredFriends] = useState<Friend[]>([]);
     const [filteredOutgoingRequests, setFilteredOutgoingRequests] = useState<Friend[]>([]);
+    const [filteredIncomingRequests, setFilteredIncomingRequests] = useState<Friend[]>([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [activeTab, setActiveTab] = useState<"friends" | "requests">("friends");
+    const [activeTab, setActiveTab] = useState<"friends" | "requests" | "incoming">("friends");
 
     const fetchFriendsData = async () => {
         setLoading(true);
@@ -35,11 +37,15 @@ const FriendsManagement: React.FC = () => {
             const acceptedFriends = friendsResponse.items || [];
             const outgoingResponse = await fetchGET("/friends/outgoing");
             const outgoingRequests = outgoingResponse.items || [];
+            const incomingResponse = await fetchGET("/friends/incoming");
+            const incomingRequests = incomingResponse.items || [];
 
             setFriends(acceptedFriends);
             setOutgoingRequests(outgoingRequests);
+            setIncomingRequests(incomingRequests);
             setFilteredFriends(acceptedFriends);
             setFilteredOutgoingRequests(outgoingRequests);
+            setFilteredIncomingRequests(incomingRequests);
         } catch (error) {
             console.error("Error fetching friends data:", error);
         } finally {
@@ -72,6 +78,24 @@ const FriendsManagement: React.FC = () => {
         }
     };
 
+    const handleAcceptRequest = async (userId: string) => {
+        try {
+            await fetchPOST(`/friends/${userId}/accept-request`);
+            fetchFriendsData();
+        } catch (error) {
+            console.error("Error accepting friend request:", error);
+        }
+    };
+
+    const handleRejectRequest = async (userId: string) => {
+        try {
+            await fetchDELETE(`/friends/${userId}`);
+            fetchFriendsData();
+        } catch (error) {
+            console.error("Error rejecting friend request:", error);
+        }
+    };
+
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value.toLowerCase();
         setSearchQuery(query);
@@ -87,9 +111,15 @@ const FriendsManagement: React.FC = () => {
                     (`${request.otherUser.firstName} ${request.otherUser.lastName}`).toLowerCase().includes(query)
                 )
             );
+            setFilteredIncomingRequests(
+                incomingRequests.filter((request) =>
+                    (`${request.otherUser.firstName} ${request.otherUser.lastName}`).toLowerCase().includes(query)
+                )
+            );
         } else {
             setFilteredFriends(friends);
             setFilteredOutgoingRequests(outgoingRequests);
+            setFilteredIncomingRequests(incomingRequests);
         }
     };
 
@@ -117,6 +147,16 @@ const FriendsManagement: React.FC = () => {
                 >
                     Wysłane zaproszenia
                 </button>
+                <button
+                    onClick={() => setActiveTab("incoming")}
+                    className={`${
+                        activeTab === "incoming"
+                            ? "bg-white dark:bg-black text-primary rounded-t-lg"
+                            : "bg-grey-0 dark:bg-grey-5 text-grey-2"
+                    } px-4 py-2 text-center`}
+                >
+                    Przychodzące zaproszenia
+                </button>
             </div>
 
             <div className="bg-white dark:bg-black rounded-lg rounded-tl-none shadow-md p-6 mt-0 gap-6">
@@ -132,7 +172,7 @@ const FriendsManagement: React.FC = () => {
                     <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
                 </div>
 
-                {/* Friends albo Outgoing requests */}
+                {/* Znajomi, Wysłane zaproszenia, albo przychodzące zaproszenia */}
                 {loading ? (
                     <div className="flex justify-center items-center h-full">
                         <CircularProgress />
@@ -140,6 +180,7 @@ const FriendsManagement: React.FC = () => {
                 ) : (
                     <div className="flex flex-col gap-4 min-h-[250px] justify-center">
                         {activeTab === "friends" ? (
+                            // Znajomi
                             filteredFriends.length > 0 ? (
                                 <ul className="flex flex-col gap-4">
                                     {filteredFriends.map((friend) => (
@@ -167,12 +208,13 @@ const FriendsManagement: React.FC = () => {
                                                         setSelectedFriend(friend);
                                                         setDialogOpen(true);
                                                     }}
-                                                    className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                                                    className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
                                                 >
                                                     Usuń znajomego
                                                 </button>
-                                                <button className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-                                                    Rozpocznij wątek
+                                                <button className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white">
+                                                    Wyślij wiadomość
+                                                    {/* TODO  */}
                                                 </button>
                                             </div>
                                         </li>
@@ -181,7 +223,8 @@ const FriendsManagement: React.FC = () => {
                             ) : (
                                 <p className="text-center italic text-grey-2">Brak pasujących znajomych</p>
                             )
-                        ) : (
+                            // Wysłane zaproszenia
+                        ) : activeTab === "requests" ? (
                             filteredOutgoingRequests.length > 0 ? (
                                 <ul className="flex flex-col gap-4">
                                     {filteredOutgoingRequests.map((request) => (
@@ -203,7 +246,7 @@ const FriendsManagement: React.FC = () => {
                                             </div>
                                             <button
                                                 onClick={() => handleCancelRequest(request.otherUser.userId)}
-                                                className="mt-2 border-[1px] text-sm p-2 w-fit rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                                                className="mt-2 border-[1px] text-sm p-2 w-fit rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
                                             >
                                                 Cofnij zaproszenie
                                             </button>
@@ -212,6 +255,47 @@ const FriendsManagement: React.FC = () => {
                                 </ul>
                             ) : (
                                 <p className="text-center italic text-grey-2">Brak wysłanych zaproszeń</p>
+                            )
+                        ) : (
+                            // Przychodzące zaproszenia
+                            filteredIncomingRequests.length > 0 ? (
+                                <ul className="flex flex-col gap-4">
+                                    {filteredIncomingRequests.map((request) => (
+                                        <li key={request.otherUser.userId} className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px]">
+                                            <div className="flex items-center gap-6">
+                                                <img
+                                                    src={getImage(request.otherUser.photo, DefaultImage)}
+                                                    alt={`${request.otherUser.firstName} ${request.otherUser.lastName}`}
+                                                    className="w-24 h-24 rounded-full"
+                                                />
+                                                <div>
+                                                    <span className="text-xl font-medium">
+                                                        {request.otherUser.firstName} {request.otherUser.lastName}
+                                                    </span>
+                                                    <p className="text-sm text-grey-2">
+                                                        Wysłano: {new Date(request.dateSent).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-4 mt-2">
+                                                <button
+                                                    onClick={() => handleAcceptRequest(request.otherUser.userId)}
+                                                    className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                                                >
+                                                    Zaakceptuj
+                                                </button>
+                                                <button
+                                                    onClick={() => handleRejectRequest(request.otherUser.userId)}
+                                                    className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                                                >
+                                                    Odrzuć
+                                                </button>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p className="text-center italic text-grey-2">Brak przychodzących zaproszeń</p>
                             )
                         )}
                     </div>
@@ -231,13 +315,13 @@ const FriendsManagement: React.FC = () => {
                         <div className="flex gap-4 mt-4 justify-end">
                             <button
                                 onClick={handleDeleteFriend}
-                                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
                             >
                                 Tak
                             </button>
                             <button
                                 onClick={() => setDialogOpen(false)}
-                                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
                             >
                                 Nie
                             </button>
