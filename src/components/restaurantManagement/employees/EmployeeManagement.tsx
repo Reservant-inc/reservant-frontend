@@ -41,7 +41,6 @@ export default function EmployeeManagement() {
   const [selectedId, setSelectedId] = useState<string>('')
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
   const [empToDel, setEmpToDel] = useState<string>('')
-  const [empToSave, setEmpToSave] = useState<GridRowId | null>(null)
 
   useEffect(() => {
     populateRows()
@@ -124,7 +123,6 @@ export default function EmployeeManagement() {
       ...prevModel,
       [id]: { mode: GridRowModes.View }
     }))
-    setEmpToSave(id)
   }
 
   const handleDeleteClick = (id: GridRowId) => {
@@ -133,7 +131,7 @@ export default function EmployeeManagement() {
     setIsConfirmationOpen(true)
   }
 
-  const handleDeleteEmp = async (id: GridRowId | null) => {
+  const handleDeleteEmp = async (id: string) => {
     if (id === null) return
     try {
       await fetchDELETE(`/user/${id}`)
@@ -145,6 +143,7 @@ export default function EmployeeManagement() {
         console.log('Unexpected error')
       }
     }
+    populateRows()
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
