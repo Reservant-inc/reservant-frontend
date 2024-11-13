@@ -87,7 +87,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
             <p className="italic text-center">{noEventsMessage[listType]}</p>
           ) : (
             filteredEvents.map(event => (
-              <Event event={event} key={event.eventId} />
+              <Event event={event} listType={listType} key={event.eventId} />
             ))
           )}
         </div>
