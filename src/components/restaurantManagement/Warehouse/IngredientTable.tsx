@@ -56,7 +56,7 @@ const IngredientTable: React.FC = () => {
       const data = await fetchGET(
         `/restaurants/${activeRestaurantId}/ingredients?page=0&perPage=10`,
       );
-      setIngredients(data.items);
+      console.log(data)
     } catch (error) {
       console.error("Error fetching ingredients:", error);
     }
@@ -291,9 +291,8 @@ const IngredientTable: React.FC = () => {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <AddIcon />
             <h1 className="text-md font-mont-md">
-              {t("warehouse.add-ingredient")}
+              + {t("warehouse.add-ingredient")}
             </h1>
           </button>
 

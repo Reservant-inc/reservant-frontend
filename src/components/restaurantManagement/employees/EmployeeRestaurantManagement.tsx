@@ -85,8 +85,7 @@ export default function EmployeeRestaurantManagement() {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <AddIcon className="dark:fill-secondary" />
-            <h1 className="text-md font-mont-md">Add an employee</h1>
+            <h1 className="text-md font-mont-md">+ Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
