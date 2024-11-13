@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { fetchDELETE, fetchGET, getImage } from '../../../services/APIconn'
-import { EventDataType, UserType } from '../../../services/types'
+import React from 'react'
+import { getImage } from '../../../services/APIconn'
+import { EventDataType } from '../../../services/types'
 import { EventListType } from '../../../services/enums'
 
 interface EventProps {
