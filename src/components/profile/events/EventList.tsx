@@ -71,7 +71,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
 
   return (
     <div className="flex flex-col bg-white rounded-lg w-full h-full">
-      <div className="flex flex-col gap-4 p-4 rounded-lg shadow-md h-full">
+      <div className="flex flex-col gap-4 h-full">
         <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6">
           <input
             type="text"
@@ -82,7 +82,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
           <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
         </div>
 
-        <div className="flex flex-col gap-4 bg-white pr-2 overflow-y-auto h-full scroll">
+        <div className="flex flex-col h-full gap-2 overflow-y-auto scroll">
           {filteredEvents.length === 0 ? (
             <p className="italic text-center">{noEventsMessage[listType]}</p>
           ) : (
