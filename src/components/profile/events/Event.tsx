@@ -35,7 +35,7 @@ const Event: React.FC<EventProps> = ({ listType, event }) => {
         </p>
       </div>
 
-      <div>
+      <div className="flex gap-2">
         {listType === EventListType.History && (
           <button
             className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
@@ -46,7 +46,7 @@ const Event: React.FC<EventProps> = ({ listType, event }) => {
         )}
         {listType === EventListType.Interested && (
           <button
-            className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105 mt-4"
+            className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105 mt-4"
             onClick={() => console.log('uninterested')}
           >
             Usuń zainteresowanie
@@ -54,7 +54,7 @@ const Event: React.FC<EventProps> = ({ listType, event }) => {
         )}
         {listType === EventListType.Participates && (
           <button
-            className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105 mt-4"
+            className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105 mt-4"
             onClick={() => console.log('leave')}
           >
             Opuść

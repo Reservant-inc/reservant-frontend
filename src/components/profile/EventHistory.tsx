@@ -312,7 +312,7 @@ const EventHistory: React.FC = () => {
                 </p>
                 <div className="flex justify-end gap-2">
                   <button
-                    className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+                    className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
                     onClick={handleDeleteEvent}
                   >
                     Tak
