@@ -84,7 +84,7 @@ const EventHistory: React.FC = () => {
 
       // Teraz jest friendsOnly ale można zmienić
       const createdEndpoint = pathname.includes('/events')
-        ? '/events?friendsOnly=true'
+        ? '/events?friendsOnly=false'
         : '/user/events?category=CreatedBy'
 
       // Pobiera eventy którymi jesteśmy zainteresowanie
@@ -216,7 +216,7 @@ const EventHistory: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col bg-white rounded-lg rounded-tl-none w-full h-fit">
+    <div className="flex flex-col bg-white rounded-lg w-full h-full">
       {/* Circular Progress do ładowania */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
@@ -224,13 +224,19 @@ const EventHistory: React.FC = () => {
         </div>
       ) : (
         <>
-          {/* Nie wyświetlaj zakładek  jeżeli pathname zawiera /events */}
-          {showTabs && (
-            <ProfileTabs activeTab={activeTab} onTabChange={handleTabChange} />
-          )}
+          <div className="flex flex-col gap-4 p-4 rounded-lg shadow-md h-full h-full">
+            <div className="flex justify-between items-center">
+              <h1 className="font-mont-bd text-lg">Events</h1>
+              {/* Nie wyświetlaj zakładek  jeżeli pathname zawiera /events */}
+              {showTabs && (
+                <ProfileTabs
+                  activeTab={activeTab}
+                  onTabChange={handleTabChange}
+                />
+              )}
+            </div>
 
-          <div className="p-4 rounded-lg shadow-md">
-            <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6 mb-4">
+            <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6">
               <input
                 type="text"
                 placeholder="Search events"
@@ -240,7 +246,7 @@ const EventHistory: React.FC = () => {
               <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
             </div>
 
-            <div className="flex flex-col gap-4 bg-white overflow-y-auto h-[70vh] scroll">
+            <div className="flex flex-col gap-4 bg-white pr-2 overflow-y-auto h-full scroll">
               {filteredEvents.length === 0 ? (
                 <p className="italic text-center">
                   {activeTab === 'created'

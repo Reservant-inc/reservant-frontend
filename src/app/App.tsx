@@ -29,6 +29,7 @@ import Visit from '../components/restaurant/visits/Visit'
 import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagment'
 import NotFound from '../components/NotFound'
 import FriendsManagement from '../components/profile/FriendsManagement'
+import Feed from '../components/feed/Feed'
 
 const router = createBrowserRouter([
   {
@@ -94,7 +95,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: <EventHistory />
+        element: <Feed />
       },
       {
         path: 'profile/:userId',
