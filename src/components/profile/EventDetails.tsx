@@ -59,7 +59,13 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   const isParticipatedTab = activeTab === 'participated'
 
   return (
-    <div className="dark:text-grey-1 dark:bg-grey-2">
+    <div className="flex flex-col gap-2">
+      {/* {isCreatedTab && (
+        <h1 className="text-sm italic">
+          One or more of your friends participated in this event.
+        </h1>
+      )} */}
+
       {event.photo && (
         <img
           src={getImage(event.photo, '')}

@@ -19,7 +19,7 @@ import EmployeeRestaurantManagement from '../components/restaurantManagement/emp
 import IngredientTable from '../components/restaurantManagement/Warehouse/IngredientTable'
 import HistoryTab from '../components/restaurantManagement/reservations/HistoryTab'
 import MenuList from '../components/restaurantManagement/menus/MenuList'
-import { MenuScreenType } from '../services/enums'
+import { EventListType, MenuScreenType } from '../services/enums'
 import Account from '../components/profile/Account'
 import ReservationHistory from '../components/profile/ReservationHistory'
 import EventHistory from '../components/profile/EventHistory'
@@ -29,7 +29,9 @@ import Visit from '../components/restaurant/visits/Visit'
 import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagment'
 import NotFound from '../components/NotFound'
 import FriendsManagement from '../components/profile/FriendsManagement'
-import Feed from '../components/feed/Feed'
+import EventTab from '../components/profile/events/EventTab'
+import path from 'path'
+import EventList from '../components/profile/events/EventList'
 
 const router = createBrowserRouter([
   {
@@ -95,7 +97,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: <Feed />
+        element: <EventList listType={EventListType.History} />
       },
       {
         path: 'profile/:userId',
@@ -111,7 +113,21 @@ const router = createBrowserRouter([
           },
           {
             path: 'event-history',
-            element: <EventHistory />
+            element: <EventTab />,
+            children: [
+              {
+                path: 'created',
+                element: <EventList listType={EventListType.Created} />
+              },
+              {
+                path: 'interested',
+                element: <EventList listType={EventListType.Interested} />
+              },
+              {
+                path: 'participates',
+                element: <EventList listType={EventListType.Participates} />
+              }
+            ]
           },
           {
             path: 'friends',
