@@ -49,7 +49,7 @@ const Visit: React.FC<VisitProps> = () => {
 
   const [timeSlots, setTimeSlots] = useState<string[]>([])
 
-  const { totalPrice } = useContext(CartContext)
+  const { totalPrice, clearCart } = useContext(CartContext)
 
   const { state } = useLocation()
 
@@ -210,6 +210,7 @@ const Visit: React.FC<VisitProps> = () => {
           <button
             className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
             onClick={() => {
+              clearCart()
               setReservationData({
                 friendsToAdd: friendsToAdd,
                 selectedTimeslot: selectedTimeslot,

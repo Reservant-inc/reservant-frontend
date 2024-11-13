@@ -64,7 +64,7 @@ const ManagementTabs: React.FC = ({}) => {
           />
           <Tab
             path={`restaurant/${restaurantId}/restaurant-employee-management`}
-            title="Employee management"
+            title="Employments management"
             icon={<PeopleAltSharpIcon />}
             id="management_restaurant_employees"
           />

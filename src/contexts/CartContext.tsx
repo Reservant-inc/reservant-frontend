@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useState, useMemo } from 'react'
 import { CartItemType } from '../services/types'
+import { clear } from 'console'
 
 interface CartContextProps {
   children: ReactNode
@@ -11,6 +12,7 @@ interface CartContextValue {
   incrementQuantity: (menuItemId: number) => void
   decrementQuantity: (menuItemId: number) => void
   totalPrice: number
+  clearCart: () => void
 }
 
 export const CartContext = createContext<CartContextValue>({
@@ -18,7 +20,8 @@ export const CartContext = createContext<CartContextValue>({
   addToCart: () => {},
   incrementQuantity: () => {},
   decrementQuantity: () => {},
-  totalPrice: 0
+  totalPrice: 0,
+  clearCart: () => {}
 })
 
 const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
@@ -39,6 +42,10 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
         return [...prevCart, { ...item, amount: 1 }]
       }
     })
+  }
+
+  const clearCart = () => {
+    setCart([])
   }
 
   const incrementQuantity = (menuItemId: number) => {
@@ -74,7 +81,8 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
     addToCart: addToCart,
     incrementQuantity: incrementQuantity,
     decrementQuantity: decrementQuantity,
-    totalPrice
+    totalPrice,
+    clearCart: clearCart
   }
 
   return (
