@@ -32,6 +32,7 @@ import FriendsManagement from '../components/profile/FriendsManagement'
 import EventTab from '../components/profile/events/EventTab'
 import path from 'path'
 import EventList from '../components/profile/events/EventList'
+import Feed from '../components/feed/Feed'
 
 const router = createBrowserRouter([
   {
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: <EventList listType={EventListType.History} />
+        element: <Feed />
       },
       {
         path: 'profile/:userId',

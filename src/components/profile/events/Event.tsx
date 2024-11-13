@@ -12,6 +12,12 @@ const Event: React.FC<EventProps> = ({ listType, event }) => {
   return (
     <>
       <div className="flex flex-col gap-2">
+        {listType === EventListType.History && (
+          <h1 className="text-sm italic">
+            One or more of your friends participated in this event.
+          </h1>
+        )}
+
         {event.photo && (
           <img
             src={getImage(event.photo, '')}
