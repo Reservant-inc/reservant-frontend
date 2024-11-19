@@ -6,13 +6,6 @@ import Event from './Event'
 import { EventDataType, PaginationType } from '../../../services/types'
 import { EventListType } from '../../../services/enums'
 
-interface InterestedUser {
-  userId: string
-  firstName: string
-  lastName: string
-  photo: string
-}
-
 interface EventListProps {
   listType: EventListType
 }
@@ -59,6 +52,10 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
     }
   }
 
+  const refreshEvents = () => {
+    fetchEvents()
+  }
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase()
 
@@ -87,7 +84,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
             <p className="italic text-center">{noEventsMessage[listType]}</p>
           ) : (
             filteredEvents.map(event => (
-              <Event event={event} listType={listType} key={event.eventId} />
+              <Event event={event} listType={listType} refreshEvents={refreshEvents} key={event.eventId} />
             ))
           )}
         </div>
