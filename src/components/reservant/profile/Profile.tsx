@@ -73,7 +73,7 @@ const Profile: React.FC = () => {
           <h1 className="text-sm">Friends</h1>
         </button>
       </div>
-      <div className="flex justify-center h-full w-[700px] rounded-lg">
+      <div className="flex justify-center h-full w-[800px] rounded-lg">
         <Outlet />
       </div>
     </div>
