@@ -35,3 +35,9 @@ export enum ReservationListType {
   Incoming = 'Incoming',
   Finished = 'Finished'
 }
+
+export enum FriendListType {
+  List = 'List',
+  Outgoing = 'Outgoing',
+  Incoming = 'Incoming'
+}
