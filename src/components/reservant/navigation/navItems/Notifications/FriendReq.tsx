@@ -52,7 +52,7 @@ const FriendReq: React.FC<FriendReqProps> = ({
   }
 
   return (
-    <div className="rounded-md p-3 dark:bg-black bg-white mb-1 hover:bg-grey-1 dark:hover:bg-grey-5">
+    <div className="rounded-md p-3 dark:bg-black bg-white mb-1 hover:bg-grey-1 dark:hover:bg-grey-5 dark:text-white">
       {/* Sekcja główna zaproszenia */}
       <div className="flex items-center space-x-2">
         <img
@@ -74,16 +74,19 @@ const FriendReq: React.FC<FriendReqProps> = ({
       ) : (
         <div className="mt-2 flex justify-around">
           <button
+            id={`${firstName}${lastName}NotificationAcceptFriendRequest`}
             onClick={handleAccept}
             disabled={loading}
-            className="bg-primary hover:bg-primary-2 text-white p-1 rounded transition hover:scale-105"
+            className="border-[1px] bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5 p-1 rounded transition hover:scale-105"
           >
             Zaakceptuj
           </button>
           <button
+            id={`${firstName}${lastName}NotificationDeclineFriendRequest`}
             onClick={handleReject}
             disabled={loading}
-            className="bg-primary-2 hover:bg-primary-3 text-white p-1 rounded transition hover:scale-105"
+            className="border-[1px] bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5 p-1 rounded transition hover:scale-105"
+            
           >
             Odrzuć
           </button>

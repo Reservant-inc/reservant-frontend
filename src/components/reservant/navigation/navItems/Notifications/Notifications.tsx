@@ -45,7 +45,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
       <Button
-        id="NotificationsButton"
+        id="navbarNotificationsButton"
         className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5 text-black dark:text-grey-1 ${isPressed && 'text-primary dark:text-secondary'}`}
         onClick={() => {
           pressHandler()
@@ -72,8 +72,9 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
           {/* Jeśli wyświetlamy tylko 3 najnowsze to dodatkowo guzik do pokazania reszty */}
           {!showAll && (
             <button
+              id='showMoreNotificationsButton'
               onClick={() => setShowAll(true)}
-              className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+              className="dark:bg-grey-5 dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black bg-white border-[1px] border-primary text-primary hover:text-white hover:bg-primary my-2 py-1 px-3 rounded transition hover:scale-105"
             >
               Wyświetl więcej powiadomień
             </button>

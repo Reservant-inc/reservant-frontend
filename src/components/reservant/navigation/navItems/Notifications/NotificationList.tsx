@@ -95,12 +95,13 @@ const NotificationList: React.FC<NotificationListProps> = ({
       }`}
     >
       <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
-        <p className="font-mont-bd text-xl">Notifications</p>
+        <p className="font-mont-bd text-xl dark:text-white">Notifications</p>
       </div>
 
       {showAll && (
         <div className="flex justify-around transition-all duration-500 ease-in-out">
           <ListItemButton
+            id='notificationsNotificationsTab'
             onClick={() => setActiveTab('notifications')}
             className={`${
               activeTab === 'notifications'
@@ -111,6 +112,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
             Notifications
           </ListItemButton>
           <ListItemButton
+            id='notificationsFriendsTab'
             onClick={() => setActiveTab('friendRequests')}
             className={`${
               activeTab === 'friendRequests'
@@ -123,55 +125,59 @@ const NotificationList: React.FC<NotificationListProps> = ({
         </div>
       )}
 
-      <div className="flex-grow overflow-y-auto scroll transition-all duration-500 ease-in-out">
-        {activeTab === 'notifications' && (
-          <>
-            {filteredNotifications.length === 0 ? (
-              <div className="flex justify-center items-center py-1 italic">
-                <p className="text-center text-grey-3">
-                  Brak nowych powiadomień
-                </p>
-              </div>
-            ) : (
-              filteredNotifications.map(notification => (
-                <Notification
-                  key={notification.notificationId}
-                  notificationId={notification.notificationId}
-                  dateCreated={notification.dateCreated}
-                  dateRead={notification.dateRead}
-                  notificationType={notification.notificationType}
-                  details={notification.details}
-                  photo={notification.photo}
-                  markAsRead={updateUnreadCount}
-                />
-              ))
-            )}
-          </>
-        )}
+<div
+  className={`flex-grow overflow-y-auto scroll transition-all duration-500 ease-in-out ${
+    showAll ? 'max-h-[500px]' : 'max-h-[300px]'
+  }`}
+>
+  {activeTab === 'notifications' && (
+    <>
+      {filteredNotifications.length === 0 ? (
+        <div className="flex justify-center items-center py-1 italic">
+          <p className="text-center text-grey-3">
+            Brak nowych powiadomień
+          </p>
+        </div>
+      ) : (
+        filteredNotifications.map(notification => (
+          <Notification
+            key={notification.notificationId}
+            notificationId={notification.notificationId}
+            dateCreated={notification.dateCreated}
+            dateRead={notification.dateRead}
+            notificationType={notification.notificationType}
+            details={notification.details}
+            photo={notification.photo}
+            markAsRead={updateUnreadCount}
+          />
+        ))
+      )}
+    </>
+  )}
 
-        {activeTab === 'friendRequests' && (
-          <>
-            {friendRequests.length === 0 ? (
-              <div className="flex justify-center items-center py-1 italic">
-                <p className="text-center text-grey-3">
-                  Brak zaproszeń do znajomych
-                </p>
-              </div>
-            ) : (
-              friendRequests.map(request => (
-                <FriendReq
-                  key={request.otherUser.userId}
-                  userId={request.otherUser.userId}
-                  firstName={request.otherUser.firstName}
-                  lastName={request.otherUser.lastName}
-                  dateSent={request.dateSent}
-                  photo={request.otherUser.photo}
-                />
-              ))
-            )}
-          </>
-        )}
-      </div>
+  {activeTab === 'friendRequests' && (
+    <>
+      {friendRequests.length === 0 ? (
+        <div className="flex justify-center items-center py-1 italic">
+          <p className="text-center text-grey-3">
+            Brak zaproszeń do znajomych
+          </p>
+        </div>
+      ) : (
+        friendRequests.map(request => (
+          <FriendReq
+            key={request.otherUser.userId}
+            userId={request.otherUser.userId}
+            firstName={request.otherUser.firstName}
+            lastName={request.otherUser.lastName}
+            dateSent={request.dateSent}
+            photo={request.otherUser.photo}
+          />
+        ))
+      )}
+    </>
+  )}
+</div>
     </div>
   )
 }

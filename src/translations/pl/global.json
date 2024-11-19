@@ -273,5 +273,27 @@
         "grocery-order": "Zamów",
         "delivery-confirmation": "Wysłano żądanie dostawy. Identyfikator dostawy: ",
         "confirmation": "Potwierdzenie"
+    },
+    "profile": {
+        "friends": {
+            "friends-tab": "Znajomi",
+            "outgoing-tab": "Wysłane zaproszenia",
+            "incoming-tab": "Przychodzące zaproszenia",
+            "friend-search-input": "Wyszukaj znajomych",
+            "remove-friend-button": "Usuń znajomego",
+            "message-friend-button": "Wyślij wiadomość",
+            "revoke-outgoing-request": "Cofnij zaproszenie",
+            "accept-incoming-request": "Zaapcektuj",
+            "decline-incoming-request": "Odrzuć",
+            "no-friends-message": "Nie znaleziono znajomych",
+            "no-outgoing-message": "Nie znaleziono wysłanych zaproszeń",
+            "no-incoming-message": "Nie znaleziono przychodzących zaproszeń",
+            "friend-added": "Dodano ",
+            "request-sent": "Wysłano ",
+            "friend-removal-dialog-1": "Na pewno chcesz usunąć użytkownika ",
+            "friend-removal-dialog-2": " z Twoich znajomych?",
+            "removal-accept": "Tak",
+            "removal-decline": "Nie"
+        }
     }
 }

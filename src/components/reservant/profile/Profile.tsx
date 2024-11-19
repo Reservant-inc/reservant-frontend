@@ -45,24 +45,28 @@ const Profile: React.FC = () => {
           )}
         </div>
         <button
+          id='profileAccountSection'
           className="border-[1px] rounded-lg p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('account')}
         >
           <h1 className="text-sm">Account</h1>
         </button>
         <button
+          id='profileReservationSection'
           className="border-[1px] rounded-lg p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('reservation-history')}
         >
           <h1 className="text-sm">Reservations</h1>
         </button>
         <button
+          id='profileEventsSection'
           className="border-[1px] rounded-lg p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('event-history/created')}
         >
           <h1 className="text-sm">Events</h1>
         </button>
         <button
+          id='profileFriendsSection'
           className="border-[1px] rounded-lg p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('friends')}
         >

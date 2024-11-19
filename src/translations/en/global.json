@@ -280,6 +280,28 @@
         "grocery-order": "Order",
         "delivery-confirmation": "Delivery request sent. Delivery Id: ",
         "confirmation": "Confirmation"
+    },
+    "profile": {
+        "friends": {
+            "friends-tab": "Friends",
+            "outgoing-tab": "Outgoing friend requests",
+            "incoming-tab": "Incoming friend requests",
+            "friend-search-input": "Look for friends",
+            "remove-friend-button": "Remove friend",
+            "message-friend-button": "Message",
+            "revoke-outgoing-request": "Revoke friend request",
+            "accept-incoming-request": "Accept",
+            "decline-incoming-request": "Decline",
+            "no-friends-message": "No friends found",
+            "no-outgoing-message": "No outgoing friend requests found",
+            "no-incoming-message": "No incoming friend requests found",
+            "friend-added": "Added on ",
+            "request-sent": "Sent on ",
+            "friend-removal-dialog-1": "Are you sure you want to remove ",
+            "friend-removal-dialog-2": " from your friends list?",
+            "removal-accept": "Yes",
+            "removal-decline": "No"
+        }
     }
     
 }
