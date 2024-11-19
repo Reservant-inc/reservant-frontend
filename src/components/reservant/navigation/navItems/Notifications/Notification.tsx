@@ -120,7 +120,7 @@ const Notification: React.FC<NotificationProps> = ({
 
   return (
     <div
-      className={`rounded-md p-3 dark:bg-black cursor-pointer mb-1 ${
+      className={`rounded-md p-3 dark:bg-black cursor-pointer mb-1 dark:text-white ${
         isExpanded || isRead
           ? 'bg-grey-1 dark:bg-grey-5'
           : 'hover:bg-grey-1 dark:hover:bg-grey-5'
