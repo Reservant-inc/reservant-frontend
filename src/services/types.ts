@@ -350,3 +350,15 @@ export type EventDataType = {
   numberInterested: number
   photo: string | null
 }
+
+export type EventDialogState = {
+  isOpen: boolean
+  type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit' | null
+}
+
+export type InterestedUser = {
+  userId: string
+  firstName: string
+  lastName: string
+  photo: string
+}
