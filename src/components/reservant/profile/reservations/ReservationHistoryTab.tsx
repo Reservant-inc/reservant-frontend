@@ -1,13 +1,13 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import EventListTabs from './EventListTabs'
+import ReservationHistoryTabs from './ReservationHistoryTabs'
 
-const EventTab: React.FC = () => {
+const ReservationHistoryTab: React.FC = () => {
   return (
     <div className="flex flex-col bg-white rounded-lg w-full h-full p-4 gap-4 shadow-md">
       <div className="flex h-[2rem] justify-between items-center">
         <h1 className="font-mont-bd text-lg">Events</h1>
-        <EventListTabs />
+        <ReservationHistoryTabs />
       </div>
       <div className="w-full h-[calc(100%-3rem)]">
         <Outlet />
@@ -16,4 +16,4 @@ const EventTab: React.FC = () => {
   )
 }
 
-export default EventTab
+export default ReservationHistoryTab

@@ -20,7 +20,6 @@ import HistoryTab from '../components/reservant/restaurantManagement/reservation
 import MenuList from '../components/reservant/restaurantManagement/menus/MenuList'
 import { EventListType, MenuScreenType } from '../services/enums'
 import Account from '../components/reservant/profile/Account'
-import ReservationHistory from '../components/reservant/profile/ReservationHistory'
 import Checkout from '../components/reservant/restaurant/Checkout'
 import VisitWrapper from '../components/reservant/restaurant/visits/VisitRoot'
 import Visit from '../components/reservant/restaurant/visits/Visit'
@@ -33,6 +32,7 @@ import Feed from '../components/reservant/feed/Feed'
 import CustomerService from '../components/customerService/CustomerService'
 import HomePage from '../components/reservant/HomePage'
 import LandingPage from '../components/guest/LandingPage'
+import ReservationHistoryTab from '../components/reservant/profile/reservations/ReservationHistoryTab'
 
 const router = createBrowserRouter([
   {
@@ -111,7 +111,15 @@ const router = createBrowserRouter([
           },
           {
             path: 'reservation-history',
-            element: <ReservationHistory />
+            element: <ReservationHistoryTab />,
+            children: [
+              {
+                path: 'incoming'
+              },
+              {
+                path: 'finished'
+              }
+            ]
           },
           {
             path: 'event-history',

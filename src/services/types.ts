@@ -198,6 +198,7 @@ export type PaginationType = {
     | UserType[]
     | TransactionType[]
     | EventDataType[]
+    | VisitType[]
 }
 
 export type UserType = {
