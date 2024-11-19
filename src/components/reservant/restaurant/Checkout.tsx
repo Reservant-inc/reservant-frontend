@@ -7,16 +7,24 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { FetchError } from '../../../services/Errors'
 import { CartContext } from '../../../contexts/CartContext'
 import { ReservationContext } from '../../../contexts/ReservationContext'
+import { format, parse, setHours, setMinutes } from 'date-fns'
 
 const Checkout: React.FC = () => {
   const parseDateTime = (date: string, timeSlot: string): Date => {
     const [time, ampm] = timeSlot.split(' ')
     const [hours, minutes] = time.split(':').map(Number)
-
-    const formattedHours = ampm === 'PM' && hours !== 12 ? hours + 12 : hours
-    return new Date(
-      `${date}T${String(formattedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`
+    const formattedHours =
+      ampm === 'PM' && hours !== 12
+        ? hours + 12
+        : ampm === 'AM' && hours === 12
+          ? 0
+          : hours
+    const parsedDate = parse(date, 'yyyy-MM-dd', new Date())
+    const updatedDate = setMinutes(
+      setHours(parsedDate, formattedHours),
+      minutes
     )
+    return updatedDate
   }
 
   const { reservationData } = useContext(ReservationContext)
@@ -120,13 +128,8 @@ const Checkout: React.FC = () => {
     return res
   }
 
-  const formatDateTime = (date: Date) => {
-    const day = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = date.getFullYear()
-    const hours = String(date.getHours()).padStart(2, '0')
-    const minutes = String(date.getMinutes()).padStart(2, '0')
-    return `${day}.${month}.${year} ${hours}:${minutes}`
+  const formatDateTime = (date: Date): string => {
+    return format(date, 'dd.MM.yyyy HH:mm')
   }
 
   return (

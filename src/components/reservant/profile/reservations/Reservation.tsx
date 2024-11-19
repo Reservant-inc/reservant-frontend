@@ -4,6 +4,7 @@ import { ReservationListType } from '../../../../services/enums'
 import { fetchGET, getImage } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import { FetchError } from '../../../../services/Errors'
+import { format } from 'date-fns'
 
 interface ReservationProps {
   reservation: VisitType
@@ -24,9 +25,10 @@ const Reservation: React.FC<ReservationProps> = ({
       const fetchedOrders = await Promise.all(
         reservation.orders.map(async order => {
           const response = await fetchGET(`/orders/${order.orderId}`)
-          return response.data
+          return response
         })
       )
+
       setOrders(fetchedOrders)
       setLoading(false)
     } catch (error) {
@@ -49,8 +51,8 @@ const Reservation: React.FC<ReservationProps> = ({
   }, [reservation.orders])
 
   return (
-    <div className="w-fill h-fit p-2 flex justify-between">
-      <div className="flex gap-3">
+    <div className="w-fill h-fit flex justify-between">
+      <div className="flex gap-5">
         <img
           src={getImage(reservation.restaurant.logo, DefaultImage)}
           alt="restaurant logo"
@@ -60,20 +62,28 @@ const Reservation: React.FC<ReservationProps> = ({
           <h1 className="text-lg font-mont-bd">
             {reservation.restaurant.name} {reservation.restaurant.city}
           </h1>
-          <h1 className="text-sm">
-            {reservation.orders.length > 0
-              ? `Pozycje: ${reservation.orders.length} za ${totalCost}zł`
-              : 'Brak zamówień'}
-          </h1>
-          {!loading && orders.length > 0 && (
-            <ul className="mt-2">
-              {orders.map(order => (
-                <li key={order.orderId} className="text-sm">
-                  Order #{order.orderId} - {order.status} - {order.cost}zł
-                </li>
-              ))}
-            </ul>
-          )}
+
+          <div className="flex gap-2">
+            <h1 className="text-sm">
+              {reservation.orders.length > 0
+                ? `Pozycje: ${reservation.orders.length} za ${totalCost}zł`
+                : 'Brak zamówień'}
+              ,
+            </h1>
+            <h1 className="text-sm">
+              {format(new Date(reservation.reservationDate), 'dd.MM HH:mm')}
+            </h1>
+          </div>
+          <div
+            className="flex flex-col gap-2"
+            onMouseEnter={() => console.log(orders)}
+          >
+            {orders.map(order =>
+              order.items.map(item => (
+                <h1 key={item.menuItemId}>{item.menuItemId}</h1>
+              ))
+            )}
+          </div>
         </div>
       </div>
       <div></div>
