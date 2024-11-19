@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+import { Formik, Form, Field, FieldArray, ErrorMessage, FormikValues } from "formik";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
 import { RestaurantDataType } from "../../../services/types";
 import { LocalType } from "../../../services/enums";
 import { fetchFilesPOST, fetchGET, fetchPOST } from "../../../services/APIconn";
+import { CSSTransition } from "react-transition-group";
+
 // Material-UI imports
 import Snackbar from "@mui/material/Snackbar";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -13,45 +15,50 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import Button from "@mui/material/Button";
+import { Checkbox, FormControlLabel, FormGroup, FormLabel, MenuItem, NativeSelect, Select, TextField } from "@mui/material";
+import { group } from "console";
+import { Close } from "@mui/icons-material";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
+
+
+const initialValues: RestaurantDataType = {
+  name: "",
+  address: "",
+  postalIndex: "",
+  city: "",
+  nip: "",
+  restaurantType: "",
+  idCard: null,
+  businessPermission: null,
+  rentalContract: null,
+  alcoholLicense: null,
+  tags: [],
+  provideDelivery: false,
+  logo: null,
+  photos: [],
+  description: "",
+  groupId: null,
+  reservationDeposit: null,
+  openingHours: [],
+  maxReservationDurationMinutes: null
+};
 
 const RestaurantRegister: React.FC = () => {
-  const [isStep1, setIsStep1] = useState(true);
-  const [formDataStep1, setFormDataStep1] = useState<
-    Partial<RestaurantDataType>
-  >({});
-  const [formDataStep2, setFormDataStep2] = useState<
-    Partial<RestaurantDataType>
-  >({});
+  const [activeStep, setActiveStep] = useState<number>(1);
+  const [requestLoading, setRequestLoading] = useState<boolean>(false);
+   
   const [tags, setTags] = useState<string[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [formProgress, setFormProgress] = useState<number>(0);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const { t } = useTranslation("global");
-  const navigate = useNavigate();
-  const { RestaurantRegisterStep1Schema, RestaurantRegisterStep2Schema } =
+
+  const { RestaurantRegisterStep1Schema, RestaurantRegisterStep2Schema, RestaurantRegisterStep3Schema } =
     useValidationSchemas();
 
-  const initialValuesStep1: Partial<RestaurantDataType> = {
-    name: formDataStep1.name || "",
-    address: formDataStep1.address || "",
-    postalIndex: formDataStep1.postalIndex || "",
-    city: formDataStep1.city || "",
-    nip: formDataStep1.nip || "",
-    restaurantType: formDataStep1.restaurantType || LocalType.Restaurant,
-    idCard: formDataStep1.idCard || null,
-    businessPermission: formDataStep1.businessPermission || null,
-    rentalContract: formDataStep1.rentalContract || null,
-    alcoholLicense: formDataStep1.alcoholLicense || null,
-  };
-
-  const initialValuesStep2: Partial<RestaurantDataType> = {
-    tags: [],
-    provideDelivery: formDataStep2.provideDelivery || false,
-    logo: formDataStep2.logo || null,
-    photos: formDataStep2.photos || [],
-    description: formDataStep2.description || "",
-  };
+ 
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -66,501 +73,496 @@ const RestaurantRegister: React.FC = () => {
     fetchTags();
   }, []);
 
-  useEffect(() => {
-    const calculateProgress = () => {
-      let progress = 0;
-      if (!isStep1 && !isFormSubmitted) {
-        progress = 50;
-      } else if (!isStep1 && isFormSubmitted) {
-        progress = 100;
-      }
-      setFormProgress(progress);
-    };
-
-    calculateProgress();
-  }, [isStep1, isFormSubmitted]);
-
-  const handleStep1Submit = (data: Partial<RestaurantDataType>) => {
-    setFormDataStep1((prevData) => ({ ...prevData, ...data }));
-    setIsStep1(false);
-  };
-
-  const handleStep2Submit = (data: Partial<RestaurantDataType>) => {
-    setFormDataStep2((prevData) => ({ ...prevData, ...data }));
-    handleSubmit({ ...formDataStep1, ...data });
-  };
-
-  const handleBack = () => {
-    setIsStep1(true);
-  };
-
-  const handleSubmit = async (data: Partial<RestaurantDataType>) => {
-    try {
-      console.log(data);
-      const filesToUpload: { name: keyof RestaurantDataType }[] = [
-        { name: "idCard" },
-        { name: "logo" },
-        { name: "businessPermission" },
-        { name: "rentalContract" },
-        { name: "alcoholLicense" },
-      ];
-
-      for (const { name } of filesToUpload) {
-        const file = data[name] as File | null;
-        if (file) {
-          try {
-            const fileResponse = await fetchFilesPOST("/uploads", file);
-            data[name] = fileResponse.fileName;
-          } catch (error) {
-            console.error(`Failed to upload ${name}:`, error);
-          }
-        }
-      }
-
-      if (data.photos) {
-        const photosToUpload: (string | File)[] = [];
-        for (const photoFile of data.photos) {
-          if (photoFile instanceof File) {
-            try {
-              const photoResponse = await fetchFilesPOST("/uploads", photoFile);
-              photosToUpload.push(photoResponse.fileName);
-            } catch (error) {
-              console.error("Failed to upload photo file:", error);
-            }
-          } else if (typeof photoFile === "string") {
-            photosToUpload.push(photoFile);
-          } else {
-            console.error("Invalid photo file:", photoFile);
-          }
-        }
-        const photoFileNames: string[] = photosToUpload
-          .filter((item) => typeof item === "string")
-          .map((item) => item as string);
-
-        data.photos = photoFileNames;
-      } else {
-        console.warn("No photos to upload.");
-      }
-
-      console.log(data);
-
-      await fetchPOST("/my-restaurants", JSON.stringify(data));
-
-      setIsFormSubmitted(true);
-      setSnackbarOpen(true);
-    } catch (error) {
-      console.error("Error while creating restaurant:", error);
+  const handleNextClick = async (formik: any) => {
+    
+    if (formik.isSubmitting || !formik.isValid || !formik.dirty) {
+      return; 
     }
+    
+    setRequestLoading(true); // Ustawienie loading state
+
+    try {
+
+      const body = JSON.stringify({
+        name: formik.values.name,
+        nip: formik.values.nip,
+        restaurantType: formik.values.restaurantType,
+        address: formik.values.address,
+        postalIndex: formik.values.postalIndex,
+        city: formik.values.city,
+        //groupId: 0
+      });
+      
+      const response = await fetchPOST("/my-restaurants/validate-first-step", body);
+      
+        setServerError(null); 
+        setActiveStep(2); 
+     
+    } catch (error) {
+      setServerError(t("restaurant-register.serverError"));
+
+    } finally {
+      setRequestLoading(false); 
+    }
+  };
+
+  const handleSubmit = async () => {
+   
   };
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
-    navigate("/home");
   };
 
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const hour = h.toString().padStart(2, '0');
+        const minute = m.toString().padStart(2, '0');
+        times.push(`${hour}:${minute}`);
+      }
+    }
+    return times;
+  };
+  const timeOptions = generateTimeOptions();
+  
+
   return (
-    <div id="restaurantRegister-div-wrapper">
+    <div id="restaurantRegister-div-wrapper" >
       <h1
         id="restaurantRegister-header"
         className="mb-8 text-center text-3xl font-bold"
       >
         {t("restaurant-register.header")}
       </h1>
-      <Stepper
-        id="restuarantRegister-stepper"
-        activeStep={isStep1 ? 0 : isFormSubmitted ? 2 : 1}
-        alternativeLabel
-      >
-        <Step id="restaurantRegister-step1">
-          <StepLabel id="restaurantRegister-step1-label">
-            {t("restaurant-register.step1")}
-          </StepLabel>
-        </Step>
-        <Step id="restaurantRegister-step2">
-          <StepLabel id="restaurantRegister-step2-label">
-            {t("restaurant-register.step2")}
-          </StepLabel>
-        </Step>
-        <Step id="restaurantRegister-step3">
-          <StepLabel id="restaurantRegister-step3-label">
-            {t("restaurant-register.submit")}
-          </StepLabel>
-        </Step>
-      </Stepper>
       <Formik
-        id="restaurantRegister-formik"
-        initialValues={isStep1 ? initialValuesStep1 : initialValuesStep2}
-        validationSchema={
-          isStep1
-            ? RestaurantRegisterStep1Schema
-            : RestaurantRegisterStep2Schema
-        }
-        onSubmit={isStep1 ? handleStep1Submit : handleStep2Submit}
-      >
-        {(formik) => (
-          <Form id="restaurantRegister-form">
-            <div id="restaurantRegister-stepsWrapper">
-              {isStep1 && (
-                <>
-                  <div id="restuarantRegister-form-control-name">
-                    <label id="restaurantRegister-label-name" htmlFor="name">
-                      {t("restaurant-register.name")}:
-                    </label>
-                    <Field type="text" id="name" name="name" />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-name"
-                      name="name"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-address">
-                    <label
-                      id="restaurantRegister-label-address"
-                      htmlFor="address"
+              initialValues={initialValues}
+              validationSchema={activeStep === 1 ? RestaurantRegisterStep1Schema : RestaurantRegisterStep2Schema}
+              onSubmit={(values: FormikValues) => {
+                // Logic for form submission (if needed)
+                console.log(values);
+              }}
+            >
+              {(formik) => (
+                <Form className="w-full h-full mt-[10%]">
+                  <div className="form-container h-full flex flex-col items-center gap-4">
+                    {/* Pasek postępu */}
+                    <div className="relative w-4/5 h-4 bg-grey-0 rounded-full overflow-hidden">
+                      <div
+                        className="absolute h-full bg-primary rounded-full transition-all"
+                        style={{
+                          width: `${(activeStep / 3) * 100}%`,
+                        }}
+                      />
+                    </div>
+                    <span className="text-sm text-black font-mont-md">
+                      {`Step ${activeStep} of 3`}
+                    </span>
+                    {/* Step 1 */}
+                    <CSSTransition
+                      in={activeStep === 1}
+                      timeout={500}
+                      classNames="menu-primary"
+                      unmountOnExit
                     >
-                      {t("restaurant-register.address")}:
-                    </label>
-                    <Field type="text" id="address" name="address" />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-address"
-                      name="address"
-                      component="div"
-                    />
-                  </div>
+                      <div className="flex w-full flex-col items-center gap-4">
+                        <Field
+                          type="text"
+                          id="name"
+                          name="name"
+                          label="Restaurant Name *"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.name && formik.touched.name && formik.errors.name}
+                        />
+                        <Field
+                          type="text"
+                          id="address"
+                          name="address"
+                          label="Address *"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.address && formik.touched.address) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.address && formik.touched.address && formik.errors.address}
+                        />
+                        <Field
+                          type="text"
+                          id="postalIndex"
+                          name="postalIndex"
+                          label="Postal Code *"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.postalIndex && formik.touched.postalIndex) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.postalIndex && formik.touched.postalIndex && formik.errors.postalIndex}
+                        />
+                        <Field
+                          type="text"
+                          id="city"
+                          name="city"
+                          label="City *"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.city && formik.touched.city) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.city && formik.touched.city && formik.errors.city}
+                        />
+                        <Field
+                          type="text"
+                          id="nip"
+                          name="nip"
+                          label="NIP *"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.nip && formik.touched.nip) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.nip && formik.touched.nip && formik.errors.nip}
+                        />
+                        <Field
+                          type="text"
+                          id="restaurantType"
+                          name="restaurantType"
+                          label="Restaurant Type *"
+                          variant="standard"
+                          as={Select}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.restaurantType && formik.touched.restaurantType) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.restaurantType && formik.touched.restaurantType && formik.errors.restaurantType}
+                        >
+                           <MenuItem id="restaurantRegister-opt-restaurant" value={LocalType.Restaurant}>
+                              {t("restaurant-register.types.restaurant")}
+                            </MenuItem>
+                            <MenuItem id="restaurantRegister-opt-bar" value={LocalType.Bar}>
+                              {t("restaurant-register.types.bar")}
+                            </MenuItem>
+                            <MenuItem id="restaurantRegister-opt-cafe" value={LocalType.Cafe}>
+                              {t("restaurant-register.types.cafe")}
+                            </MenuItem>
+                        </Field>
+                        <div className="flex flex-col items-center gap-4">
+                          <button
+                            type="button"
+                            onClick={() => handleNextClick(formik)}
+                            disabled={formik.isSubmitting || !formik.isValid || !formik.dirty || requestLoading}
+                            className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty && !requestLoading ? "bg-primary text-white" : "bg-grey-1"}`}
+                          >
+                            Next
+                          </button>
+                          {serverError && (
+                            <div className="text-error p-2">Server Error</div>
+                          )}
+                        </div>
 
-                  <div id="restuarantRegister-form-control-postalIndex">
-                    <label
-                      id="restaurantRegister-label-postalIndex"
-                      htmlFor="postalIndex"
+                      </div>
+                    </CSSTransition>
+
+                    {/* Step 2 */}
+                    <CSSTransition
+                      in={activeStep === 2}
+                      timeout={500}
+                      classNames="menu-secondary"
+                      unmountOnExit
                     >
-                      {t("restaurant-register.postalCode")}:
-                    </label>
-                    <Field type="text" id="postalIndex" name="postalIndex" />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-postalIndex"
-                      name="postalIndex"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-city">
-                    <label id="restaurantRegister-label-city" htmlFor="city">
-                      {t("restaurant-register.city")}:
-                    </label>
-                    <Field type="text" id="city" name="city" />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-city"
-                      name="city"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-nip">
-                    <label id="restaurantRegister-label-nip" htmlFor="nip">
-                      {t("restaurant-register.tin")}:
-                    </label>
-                    <Field type="text" id="nip" name="nip" />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-nip"
-                      name="nip"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-restaurantType">
-                    <label
-                      id="restaurantRegister-label-restaurantType"
-                      htmlFor="restaurantType"
-                    >
-                      {t("restaurant-register.businessType")}:
-                    </label>
-                    <Field
-                      as="select"
-                      id="restaurantType"
-                      name="restaurantType"
-                    >
-                      <option
-                        id="restaurantRegister-opt-restaurant"
-                        value={LocalType.Restaurant}
-                      >
-                        {t("restaurant-register.types.restaurant")}
-                      </option>
-                      <option
-                        id="restaurantRegister-opt-bar"
-                        value={LocalType.Bar}
-                      >
-                        {t("restaurant-register.types.bar")}
-                      </option>
-                      <option
-                        id="restaurantRegister-opt-cafe"
-                        value={LocalType.Cafe}
-                      >
-                        {t("restaurant-register.types.cafe")}
-                      </option>
-                    </Field>
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-restaurantType"
-                      name="restaurantType"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-idCard">
-                    <label
-                      id="restaurantRegister-label-idCard"
-                      htmlFor="idCard"
-                    >
-                      {t("restaurant-register.id")}:
-                    </label>
-                    <input
-                      type="file"
-                      id="idCard"
-                      name="idCard"
-                      accept=".pdf"
-                      onChange={(e) =>
-                        formik.setFieldValue(
-                          "idCard",
-                          e.target.files && e.target.files[0],
-                        )
-                      }
-                    />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-idCard"
-                      name="idCard"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-businessPermission">
-                    <label
-                      id="restaurantRegister-label-businessPermission"
-                      htmlFor="businessPermission"
-                    >
-                      {t("restaurant-register.businessLicense")}:
-                    </label>
-                    <input
-                      type="file"
-                      id="businessPermission"
-                      name="businessPermission"
-                      accept=".pdf"
-                      onChange={(e) =>
-                        formik.setFieldValue(
-                          "businessPermission",
-                          e.target.files && e.target.files[0],
-                        )
-                      }
-                    />
-                    <ErrorMessage
-                      id="restaruantRegister-errorMessage-businessPermission"
-                      name="businessPermission"
-                      component="div"
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-rentalContract">
-                    <label
-                      id="restaurantRegister-label-rentalContract"
-                      htmlFor="rentalContract"
-                    >
-                      {t("restaurant-register.leaseAgreement")}:
-                    </label>
-                    <input
-                      type="file"
-                      id="rentalContract"
-                      name="rentalContract"
-                      accept=".pdf"
-                      onChange={(e) =>
-                        formik.setFieldValue(
-                          "rentalContract",
-                          e.target.files && e.target.files[0],
-                        )
-                      }
-                    />
-                  </div>
-
-                  <div id="restuarantRegister-form-control-alcoholLicense">
-                    <label
-                      id="restaurantRegister-label-alcoholLicense"
-                      htmlFor="alcoholLicense"
-                    >
-                      {t("restaurant-register.alcoholLicense")}:
-                    </label>
-                    <input
-                      type="file"
-                      id="alcoholLicense"
-                      name="alcoholLicense"
-                      accept=".pdf"
-                      onChange={(e) =>
-                        formik.setFieldValue(
-                          "alcoholLicense",
-                          e.target.files && e.target.files[0],
-                        )
-                      }
-                    />
-                  </div>
-                </>
-              )}
-
-              {!isStep1 && (
-                <>
-                  <div id="restaurantRegister-from-control-tags">
-                    <label id="restaurantRegister-label-tags">
-                      {t("restaurant-register.tags")}:
-                    </label>
-                    <FieldArray name="tags">
-                      {({ push, remove }) => (
-                        <>
-                          {tags.map((tag, index) => (
-                            <div key={tag}>
-                              <label id="restaurantRegister-wrapper-tags">
-                                <Field
-                                  type="checkbox"
-                                  name={`tags.${index}`}
-                                  id={`tags.${index}`}
-                                  value={tag}
-                                  checked={(formik.values.tags || []).includes(
-                                    tag,
-                                  )}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>,
-                                  ) => {
-                                    if (e.target.checked) {
-                                      push(tag);
-                                    } else {
-                                      remove(index);
+                      <div className="flex w-full flex-col items-center gap-4">
+                        <FieldArray name="tags">
+                          {({ push, remove }) => (
+                            <div className="flex flex-col w-4/5">
+                              <FormLabel className="text text-black font-mont-md mb-2">Tags:</FormLabel>
+                              <FormGroup>
+                                {tags.map((tag, index) => (
+                                  <FormControlLabel
+                                    key={index}
+                                    control={
+                                      <Checkbox
+                                        className={
+                                          formik.values.tags.includes(tag)
+                                            ? "text-primary [&.Mui-checked]:text-secondary"
+                                            : "text-grey-1"
+                                        }
+                                        checked={formik.values.tags.includes(tag)}
+                                        onChange={(e) => {
+                                          if (e.target.checked) {
+                                            push(tag);
+                                          } else {
+                                            const idx = formik.values.tags.indexOf(tag);
+                                            remove(idx);
+                                          }
+                                        }}
+                                      />
                                     }
-                                  }}
-                                />
-                                {tag}
-                              </label>
+                                    label={<span className="text-sm text-black font-mont-md">{tag}</span>}
+                                  />
+                                ))}
+                              </FormGroup>
                             </div>
-                          ))}
-                        </>
-                      )}
-                    </FieldArray>
-                    <ErrorMessage name="tags" component="div" />
-                  </div>
+                          )}
+                        </FieldArray>
+                        <div className="w-[85%]">
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                id="provideDelivery"
+                                name="provideDelivery"
+                                checked={formik.values.provideDelivery}
+                                onChange={formik.handleChange}
+                                className="text-grey-1 [&.Mui-checked]:text-secondary"
+                              />
+                            }
+                            label="Provide Delivery:"
+                            labelPlacement="start"  // Etykieta na początku (z lewej)
+                            className="flex items-center gap-2 justify-between w-full"  // Dodatkowo użyj 'justify-between'
+                          />
+                        </div>
+                        <FieldArray name="openingHours">
+                          {({ push, remove }) => (
+                            <div className="flex flex-col w-4/5 gap-4">
+                              <FormLabel className="text text-black font-mont-md mb-2">Opening Hours:</FormLabel>
+                              {formik.values.openingHours.map((timeSlot, index) => (
+                                <div key={index} className="flex items-center gap-4">
+                                  <Field
+                                    as={NativeSelect}
+                                    id={`openingHours[${index}].from`}
+                                    name={`openingHours[${index}].from`}
+                                    className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary"
+                                  >
+                                    <option value="" disabled>
+                                      From
+                                    </option>
+                                    {timeOptions.map((time) => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                  <span className="text-sm font-bold text-gray-500">-</span>
+                                  <Field
+                                    as={NativeSelect}
+                                    id={`openingHours[${index}].until`}
+                                    name={`openingHours[${index}].until`}
+                                    className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary"
+                                  >
+                                    <option value="" disabled>
+                                      Until
+                                    </option>
+                                    {timeOptions.map((time) => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                  <button
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                    className="text-red-500 font-bold"
+                                  >
+                                    <Close />
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() => push({ from: "", until: "" })}
+                                className="text-primary"
+                              >
+                                + Add Time Slot
+                              </button>
+                            </div>
+                          )}
+                        </FieldArray>
+                        <Field
+                          type="text"
+                          id="description"
+                          name="description"
+                          label="Description"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.description && formik.touched.description) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.description && formik.touched.description && formik.errors.description}
+                        />
+                         <Field
+                          type="text"
+                          id="reservationDeposit"
+                          name="reservationDeposit"
+                          label="Reservation deposit"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.reservationDeposit && formik.touched.reservationDeposit) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.reservationDeposit && formik.touched.reservationDeposit && formik.errors.reservationDeposit}
+                        />
+                        <Field
+                          type="text"
+                          id="maxReservationDurationMinutes"
+                          name="maxReservationDurationMinutes"
+                          label="Maximum reservation duration in minutes"
+                          variant="standard"
+                          as={TextField}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helperText={formik.errors.reservationDeposit && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
+                        />
+                        <div className="flex gap-5">
+                          <button
+                            type="button"
+                            onClick={() => setActiveStep(1)}
+                            className="btn-back"
+                          >
+                            Back
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setActiveStep(3)}
+                            disabled={formik.isSubmitting || !formik.isValid || !formik.dirty || requestLoading}
+                            className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty && !requestLoading ? "bg-primary text-white" : "bg-grey-1"}`}
+                          >
+                            Next
+                          </button>
+                          {serverError && (
+                            <div className="text-error mt-2">Server Error</div>
+                          )}
+                        </div>
+                        
+                      </div>
+                    </CSSTransition>
 
-                  <div id="restaurantRegister-from-control-provideDelivery">
-                    <label
-                      id="restaurantRegister-label-provideDelivery"
-                      htmlFor="provideDelivery"
+                    {/* Step 3 */}
+                    <CSSTransition
+                      in={activeStep === 3}
+                      timeout={500}
+                      classNames="menu-secondary"
+                      unmountOnExit
                     >
-                      {t("restaurant-register.provideDelivery")}:
-                    </label>
-                    <Field
-                      type="checkbox"
-                      id="provideDelivery"
-                      name="provideDelivery"
-                    />
-                  </div>
+                      <div className="flex w-full flex-col items-center gap-4">
+                      <div className="flex items-center w-4/5 gap-4">
+                          <label htmlFor="logo" className="font-mont-md text-black text-sm flex-1">
+                            Logo
+                          </label>
+                          <button
+                            type="button"
+                            className="flex items-center"
+                            onClick={() => document.getElementById("logo")?.click()}
+                          >
+                            <AttachFileIcon className="text-primary" />
+                          </button>
+                          <input
+                            type="file"
+                            id="logo"
+                            name="logo"
+                            onChange={(event) => {
+                              const file = event.currentTarget.files?.[0];
+                              formik.setFieldValue("logo", file);
+                            }}
+                            className="hidden"
+                          />
+                          {formik.errors.logo && formik.touched.logo && (
+                            <div className="text-error text-xs">{formik.errors.logo}</div>
+                          )}
+                        </div>
 
-                  <div id="restaurantRegister-from-control-logo">
-                    <label id="restaurantRegister-label-logo" htmlFor="logo">
-                      {t("restaurant-register.logo")}:
-                    </label>
-                    <input
-                      type="file"
-                      id="logo"
-                      name="logo"
-                      accept=".png, .jpeg, .jpg .pdf"
-                      onChange={(e) =>
-                        formik.setFieldValue(
-                          "logo",
-                          e.target.files && e.target.files[0],
-                        )
-                      }
-                    />
-                    <ErrorMessage
-                      id="restaurantRegister-errorMessage-provideDelivery"
-                      name="logo"
-                      component="div"
-                    />
-                  </div>
+                        <div className="flex items-center w-4/5 gap-4">
+                          <label htmlFor="photos" className="font-mont-md text-black text-sm flex-1">
+                            Photos
+                          </label>
+                          <button
+                            type="button"
+                            className="flex items-center"
+                            onClick={() => document.getElementById("photos")?.click()}
+                          >
+                            <AttachFileIcon className="text-primary" />
+                          </button>
+                          <input
+                            type="file"
+                            id="photos"
+                            name="photos"
+                            multiple
+                            onChange={(event) => {
+                              const files = Array.from(event.currentTarget.files || []);
+                              formik.setFieldValue("photos", files);
+                            }}
+                            className="hidden"
+                          />
+                          {formik.errors.photos && formik.touched.photos && (
+                            <div className="text-error text-xs">{formik.errors.photos}</div>
+                          )}
+                        </div>
 
-                  <div id="restaurantRegister-from-control-photos">
-                    <label
-                      id="restaurantRegister-label-photos"
-                      htmlFor="photos"
-                    >
-                      {t("restaurant-register.photos")}:
-                    </label>
-                    <input
-                      type="file"
-                      id="photos"
-                      name="photos"
-                      multiple
-                      accept=".png, .jpeg, .jpg"
-                      onChange={(e) => {
-                        const files = e.target.files;
-                        if (files) {
-                          const selectedPhotosArray = Array.from(files);
-                          formik.setFieldValue("photos", selectedPhotosArray);
-                        }
-                      }}
-                    />
-                    <ErrorMessage
-                      id="restaurantRegister-errorMessage-photos"
-                      name="photos"
-                      component="div"
-                    />
-                  </div>
+                        <div className="flex items-center w-4/5 gap-4">
+                          <label htmlFor="idCard" className="font-mont-md text-black text-sm flex-1">
+                            ID Card
+                          </label>
+                          <button
+                            type="button"
+                            className="flex items-center"
+                            onClick={() => document.getElementById("idCard")?.click()}
+                          >
+                            <AttachFileIcon className="text-primary" />
+                          </button>
+                          <input
+                            type="file"
+                            id="idCard"
+                            name="idCard"
+                            onChange={(event) => {
+                              const file = event.currentTarget.files?.[0];
+                              formik.setFieldValue("idCard", file);
+                            }}
+                            className="hidden"
+                          />
+                          {formik.errors.idCard && formik.touched.idCard && (
+                            <div className="text-error text-xs">{formik.errors.idCard}</div>
+                          )}
+                        </div>
 
-                  <div id="restaurantRegister-from-control-description">
-                    <label
-                      id="restaurantRegister-label-description"
-                      htmlFor="description"
-                    >
-                      {t("restaurant-register.description")}:
-                    </label>
-                    <Field
-                      type="text"
-                      id="description"
-                      name="description"
-                      value={formik.values.description || ""} // Tutaj zmiana
-                    />
-                    <ErrorMessage
-                      id="restaurantRegister-errorMessage-provideDelivery"
-                      name="description"
-                      component="div"
-                    />
+                        <div className="flex items-center w-4/5 gap-4">
+                          <label
+                            htmlFor="businessPermission"
+                            className="font-mont-md text-black text-sm flex-1"
+                          >
+                            Business Permission
+                          </label>
+                          <button
+                            type="button"
+                            className="flex items-center"
+                            onClick={() => document.getElementById("businessPermission")?.click()}
+                          >
+                            <AttachFileIcon className="text-primary" />
+                          </button>
+                          <input
+                            type="file"
+                            id="businessPermission"
+                            name="businessPermission"
+                            onChange={(event) => {
+                              const file = event.currentTarget.files?.[0];
+                              formik.setFieldValue("businessPermission", file);
+                            }}
+                            className="hidden"
+                          />
+                          {formik.errors.businessPermission &&
+                            formik.touched.businessPermission && (
+                              <div className="text-error text-xs">
+                                {formik.errors.businessPermission}
+                              </div>
+                            )}
+                        </div>
+  
+                        <div className="flex gap-5">
+                          <button
+                            type="button"
+                            onClick={() => setActiveStep(2)}
+                            className="btn-back"
+                          >
+                            Back
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={!formik.isValid || requestLoading}
+                            className="btn-submit"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </CSSTransition>
                   </div>
-                </>
+                </Form>
               )}
-
-              <LinearProgress
-                id="restaurantRegister-proggresBar"
-                variant="determinate"
-                value={formProgress}
-                sx={{ width: "100%", marginTop: "20px" }}
-              />
-              <Button
-                id="RestaurantRegisterNextButton"
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={!formik.isValid || isFormSubmitted}
-              >
-                {isStep1
-                  ? t("restaurant-register.nextButton")
-                  : t("restaurant-register.saveButton")}
-              </Button>
-
-              {!isStep1 && (
-                <Button
-                  id="RestaurantRegisterBackButton"
-                  variant="contained"
-                  onClick={handleBack}
-                  disabled={isFormSubmitted}
-                >
-                  {t("restaurant-register.backButton")}
-                </Button>
-              )}
-            </div>
-          </Form>
-        )}
-      </Formik>
+            </Formik>
+     
 
       <Snackbar
         id="restaurantRegister-snackBar"
@@ -574,3 +576,4 @@ const RestaurantRegister: React.FC = () => {
 };
 
 export default RestaurantRegister;
+

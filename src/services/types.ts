@@ -70,6 +70,11 @@ export type RestaurantType = {
   isVerified: boolean
 }
 
+export type OpeningHoursType = {
+  from: string;
+  until: string;
+};
+
 export type RestaurantDataType = {
   name: string
   address: string
@@ -87,6 +92,9 @@ export type RestaurantDataType = {
   photos: File[] | null | string[]
   description: string
   groupId: number | null
+  reservationDeposit: number | null,
+  openingHours: OpeningHoursType[];
+  maxReservationDurationMinutes: number | null
 }
 
 export type EmployeeType = {

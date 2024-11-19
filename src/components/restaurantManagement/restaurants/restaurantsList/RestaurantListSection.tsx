@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Modal } from '@mui/material'
+import { Box, Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material'
 import RestaurantRegister from '../../../register/restaurantRegister/RestaurantRegister'
 import {
   GridToolbarContainer,
@@ -13,8 +13,9 @@ import {
 import { fetchGET } from '../../../../services/APIconn'
 import { LocalType } from '../../../../services/enums'
 import { RestaurantType } from '../../../../services/types'
-import { ArrowForward, ArrowForwardIos, Details } from '@mui/icons-material'
+import { ArrowForwardIos, Close } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -24,11 +25,13 @@ interface EditToolbarProps {
 }
 
 const RestaurantListSection: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
 
   const navigate = useNavigate()
+
+  const { t } = useTranslation("global");
 
   useEffect(() => {
     const populateRows = async () => {
@@ -41,7 +44,6 @@ const RestaurantListSection: React.FC = () => {
           const response2 = await fetchGET(
             `/my-restaurant-groups/${group.restaurantGroupId}`
           )
-
           for (const i in response2.restaurants) {
             tmp.push({
               id: Number(indx++),
@@ -71,7 +73,7 @@ const RestaurantListSection: React.FC = () => {
         <div className="z-1 flex h-[3rem] w-full items-center p-1">
           <button
             id="RestaurantListAddRestaurantButton"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsDialogOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
             <h1 className="text-md font-mont-md">+ Add a restaurant</h1>
@@ -176,11 +178,43 @@ const RestaurantListSection: React.FC = () => {
         }}
         className="border-0"
       />
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Box>
-          <RestaurantRegister />
-        </Box>
-      </Modal>
+      <Dialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          sx={{
+            '& .MuiDialog-paper': {
+              width: '35%', 
+              maxWidth: 'none',  // Usuwa domyślną maksymalną szerokość
+              height: '80%',    // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
+              maxHeight: 'none', // Wyłącza ograniczenia wysokości
+              margin: 0,         // Usuwa marginesy, by dialog rozciągał się maksymalnie
+              display: 'flex',   // Umożliwia elastyczne układanie zawartości
+              flexDirection: 'column', // Ustawia układ kolumnowy (przydatne dla treści)
+            }
+          }}
+          
+          
+        >
+        <DialogTitle className="text-center text-3xl font-bold">
+          <IconButton
+            aria-label="close"
+            onClick={() => setIsDialogOpen(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent >
+          <Box>
+            <RestaurantRegister />
+          </Box>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

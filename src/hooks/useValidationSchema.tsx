@@ -169,6 +169,17 @@ export const useValidationSchemas = () => {
       },
     );
 
+  const RestaurantRegisterStep3Schema = yup.object({
+    logo: yup.mixed().required(t("errors.restaurant-register.logo.required")),
+    photos: yup
+      .mixed()
+      .required(t("errors.restaurant-register.photos.required")),
+    idCard: yup.mixed().required(t("errors.restaurant-register.id.required")),
+    businessPermission: yup
+      .mixed()
+      .required(t("errors.restaurant-register.businessPermission.required")),
+  });
+
   const RestaurantRegisterStep2Schema = yup.object({
     description: yup
       .string()
@@ -176,10 +187,18 @@ export const useValidationSchemas = () => {
       .min(3, t("errors.restaurant-register.description.min"))
       .required(t("errors.restaurant-register.description.required")),
     tags: yup.array().min(3, t("errors.restaurant-register.tags.min")),
-    logo: yup.mixed().required(t("errors.restaurant-register.logo.required")),
-    photos: yup
-      .mixed()
-      .required(t("errors.restaurant-register.photos.required")),
+    reservationDeposit: yup
+    .number()
+    .typeError(t("errors.restaurant-register.reservationDeposit.number")) // Komunikat dla nieprawidłowej liczby
+    .min(0, t("errors.restaurant-register.reservationDeposit.min"))
+    .max(300, t("errors.restaurant-register.reservationDeposit.max"))
+    .required(t("errors.restaurant-register.reservationDeposit.required")),
+    maxReservationDurationMinutes: yup
+    .number()
+    .typeError(t("errors.restaurant-register.maxReservationDurationMinutes.number")) // Komunikat dla nieprawidłowej liczby
+    .min(0, t("errors.restaurant-register.maxReservationDurationMinutes.min"))
+    .max(2000, t("errors.restaurant-register.maxReservationDurationMinutes.max"))
+    .required(t("errors.restaurant-register.maxReservationDurationMinutes.required")),
   });
 
   const RestaurantRegisterStep1Schema = yup.object({
@@ -202,10 +221,6 @@ export const useValidationSchemas = () => {
     restaurantType: yup
       .string()
       .required(t("errors.restaurant-register.businessType.required")),
-    idCard: yup.mixed().required(t("errors.restaurant-register.id.required")),
-    businessPermission: yup
-      .mixed()
-      .required(t("errors.restaurant-register.businessPermission.required")),
   });
 
   const RestaurantEditSchema = yup.object({
@@ -266,6 +281,7 @@ export const useValidationSchemas = () => {
     RestaurantAddEmployeeSchema,
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
+    RestaurantRegisterStep3Schema,
     RestaurantEditSchema,
     menuItemsSchema,
   };
