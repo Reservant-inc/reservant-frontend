@@ -1,7 +1,12 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 const CustomerService: React.FC = () => {
-  return <></>
+  return (
+    <>
+      <Outlet />
+    </>
+  )
 }
 
 export default CustomerService
