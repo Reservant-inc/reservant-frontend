@@ -5,6 +5,7 @@ import UserRegister from '../components/auth/UserRegister'
 import HomePage from '../components/HomePage'
 import {
   checkAuthLoader,
+  checkIfCustomerService,
   checkIfOwner,
   redirectIfLoggedIn
 } from '../components/auth/auth'
@@ -29,6 +30,7 @@ import Visit from '../components/restaurant/visits/Visit'
 import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagment'
 import NotFound from '../components/NotFound'
 import FriendsManagement from '../components/profile/FriendsManagement'
+import CustomerService from '../components/customerService/CustomerService'
 
 const router = createBrowserRouter([
   {
@@ -133,6 +135,11 @@ const router = createBrowserRouter([
         ]
       }
     ]
+  },
+  {
+    path: 'customer-service',
+    element: <CustomerService />,
+    loader: checkIfCustomerService
   },
   {
     path: 'login',
