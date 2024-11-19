@@ -79,8 +79,6 @@ const Account: React.FC = () => {
       )
       const newTransactions = result.items as TransactionType[]
 
-      console.log(page, newTransactions.length)
-
       if (newTransactions.length < 10) {
         setHasMore(false)
       } else {

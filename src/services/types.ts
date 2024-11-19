@@ -191,7 +191,13 @@ export type PaginationType = {
   totalPages: number
   perPage: number
   orderByOptions: string[]
-  items: ThreadType[] | MessageType[] | UserSearchType[] | UserType[] | TransactionType[]
+  items:
+    | ThreadType[]
+    | MessageType[]
+    | UserSearchType[]
+    | UserType[]
+    | TransactionType[]
+    | EventDataType[]
 }
 
 export type UserType = {
@@ -217,9 +223,9 @@ export type ActionType = {
 }
 
 export type TransactionType = {
-  transactionId: number,
-  title: string,
-  amount: number,
+  transactionId: number
+  title: string
+  amount: number
   time: Date
 }
 
@@ -311,4 +317,48 @@ export type ReservationType = {
   selectedTimeslot: string
   guests: number
   date: string
+}
+
+export type EventDataType = {
+  eventId: number
+  name: string
+  description: string
+  time: string
+  maxPeople: number
+  mustJoinUntil: string
+  creator: {
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string | null
+  }
+  participants: Array<{
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string
+  }>
+  restaurant: {
+    restaurantId: number
+    name: string
+    address: string
+    city: string
+    logo: string
+    rating: number
+    numberReviews: number
+  }
+  numberInterested: number
+  photo: string | null
+}
+
+export type EventDialogState = {
+  isOpen: boolean
+  type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit' | null
+}
+
+export type InterestedUser = {
+  userId: string
+  firstName: string
+  lastName: string
+  photo: string
 }

@@ -1,47 +1,47 @@
-import React from "react";
-import { getImage } from "../../services/APIconn";
+import React from 'react'
+import { getImage } from '../../services/APIconn'
 
 interface EventData {
-  eventId: number;
-  name: string;
-  description: string;
-  time: string;
-  maxPeople: number;
-  mustJoinUntil: string;
+  eventId: number
+  name: string
+  description: string
+  time: string
+  maxPeople: number
+  mustJoinUntil: string
   creator: {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    photo: string | null;
-  };
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string | null
+  }
   participants: Array<{
-    userId: string;
-    firstName: string;
-    lastName: string;
-    photo: string;
-  }>;
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string
+  }>
   restaurant: {
-    restaurantId: number;
-    name: string;
-    address: string;
-    city: string;
-    logo: string;
-    rating: number;
-    numberReviews: number;
-  };
-  numberInterested: number;
-  photo: string | null;
+    restaurantId: number
+    name: string
+    address: string
+    city: string
+    logo: string
+    rating: number
+    numberReviews: number
+  }
+  numberInterested: number
+  photo: string | null
 }
 
 interface EventDetailsProps {
-  event: EventData;
-  activeTab: "created" | "interested" | "participated";
-  onDelete: () => void;
-  onManageParticipants: () => void;
-  onEdit: () => void;
-  onLeave: () => void;
-  onDetails: () => void;
-  useDetailsButton?: boolean;
+  event: EventData
+  activeTab: 'created' | 'interested' | 'participated'
+  onDelete: () => void
+  onManageParticipants: () => void
+  onEdit: () => void
+  onLeave: () => void
+  onDetails: () => void
+  useDetailsButton?: boolean
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({
@@ -52,29 +52,37 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   onEdit,
   onLeave,
   onDetails,
-  useDetailsButton = false,
+  useDetailsButton = false
 }) => {
-  const isCreatedTab = activeTab === "created";
-  const isInterestedTab = activeTab === "interested";
-  const isParticipatedTab = activeTab === "participated";
+  const isCreatedTab = activeTab === 'created'
+  const isInterestedTab = activeTab === 'interested'
+  const isParticipatedTab = activeTab === 'participated'
 
   return (
-    <div className="rounded-l dark:text-grey-1 dark:bg-grey-2">
+    <div className="flex flex-col gap-2">
+      {/* {isCreatedTab && (
+        <h1 className="text-sm italic">
+          One or more of your friends participated in this event.
+        </h1>
+      )} */}
+
       {event.photo && (
         <img
-          src={getImage(event.photo, "")}
+          src={getImage(event.photo, '')}
           alt={`${event.name} event`}
-          className="w-full h-auto rounded-t-lg object-cover mb-2"
-          style={{ maxHeight: "200px" }}
+          className="w-full h-auto object-cover"
+          style={{ maxHeight: '200px' }}
         />
       )}
       <h2 className="font-bold text-xl">{event.name}</h2>
       <p className="text-sm">{event.description}</p>
       <p className="text-sm">
-        <strong>Data wydarzenia:</strong> {new Date(event.time).toLocaleString()}
+        <strong>Data wydarzenia:</strong>{' '}
+        {new Date(event.time).toLocaleString()}
       </p>
       <p className="text-sm">
-        <strong>Restauracja:</strong> {event.restaurant.name}, {event.restaurant.city}
+        <strong>Restauracja:</strong> {event.restaurant.name},{' '}
+        {event.restaurant.city}
       </p>
       <p className="text-sm">
         <strong>Liczba zainteresowanych:</strong> {event.numberInterested}
@@ -82,7 +90,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
 
       {useDetailsButton ? (
         <button
-          className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105 mt-4"
+          className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
           onClick={onDetails}
         >
           Szczegóły
@@ -90,21 +98,21 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       ) : (
         <>
           {isCreatedTab && (
-            <div className="flex gap-2 mt-4">
+            <div className="flex gap-2 ">
               <button
-                className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+                className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
                 onClick={onEdit}
               >
                 Edytuj
               </button>
               <button
-                className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+                className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
                 onClick={onManageParticipants}
               >
                 Zarządzaj uczestnikami
               </button>
               <button
-                className="bg-primary hover:bg-primary-2 text-white my-2 py-1 px-3 rounded transition hover:scale-105"
+                className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
                 onClick={onDelete}
               >
                 Usuń
@@ -130,7 +138,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default EventDetails;
+export default EventDetails

@@ -20,16 +20,18 @@ import EmployeeRestaurantManagement from '../components/restaurantManagement/emp
 import IngredientTable from '../components/restaurantManagement/Warehouse/IngredientTable'
 import HistoryTab from '../components/restaurantManagement/reservations/HistoryTab'
 import MenuList from '../components/restaurantManagement/menus/MenuList'
-import { MenuScreenType } from '../services/enums'
+import { EventListType, MenuScreenType } from '../services/enums'
 import Account from '../components/profile/Account'
 import ReservationHistory from '../components/profile/ReservationHistory'
-import EventHistory from '../components/profile/EventHistory'
 import Checkout from '../components/restaurant/Checkout'
 import VisitWrapper from '../components/restaurant/visits/VisitRoot'
 import Visit from '../components/restaurant/visits/Visit'
 import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagment'
 import NotFound from '../components/NotFound'
 import FriendsManagement from '../components/profile/FriendsManagement'
+import EventTab from '../components/profile/events/EventTab'
+import EventList from '../components/profile/events/EventList'
+import Feed from '../components/feed/Feed'
 import CustomerService from '../components/customerService/CustomerService'
 
 const router = createBrowserRouter([
@@ -96,7 +98,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: <EventHistory />
+        element: <Feed />
       },
       {
         path: 'profile/:userId',
@@ -112,7 +114,21 @@ const router = createBrowserRouter([
           },
           {
             path: 'event-history',
-            element: <EventHistory />
+            element: <EventTab />,
+            children: [
+              {
+                path: 'created',
+                element: <EventList listType={EventListType.Created} />
+              },
+              {
+                path: 'interested',
+                element: <EventList listType={EventListType.Interested} />
+              },
+              {
+                path: 'participates',
+                element: <EventList listType={EventListType.Participates} />
+              }
+            ]
           },
           {
             path: 'friends',
