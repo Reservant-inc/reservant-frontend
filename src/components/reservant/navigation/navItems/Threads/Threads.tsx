@@ -314,7 +314,7 @@ const Threads: React.FC = () => {
     <div>
       <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
         <Button
-          id="NotificationsButton"
+          id="navbarThreadsButton"
           className={`relative flex h-[40px] w-[40px] min-w-[40px] items-center justify-center rounded-full bg-grey-1 text-black dark:bg-grey-5 dark:text-grey-1 ${isPressed && 'text-primary dark:text-secondary'}`}
           onClick={pressHandler}
         >

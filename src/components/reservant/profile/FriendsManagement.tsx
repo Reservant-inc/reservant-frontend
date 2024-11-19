@@ -9,6 +9,7 @@ import DefaultImage from '../../../assets/images/user.jpg'
 import Dialog from '../../reusableComponents/Dialog'
 import CircularProgress from '@mui/material/CircularProgress'
 import SearchIcon from '@mui/icons-material/Search'
+import { useTranslation } from 'react-i18next'
 
 interface Friend {
   dateSent: string
@@ -40,6 +41,8 @@ const FriendsManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
     'friends' | 'requests' | 'incoming'
   >('friends')
+
+  const [t] = useTranslation('global')
 
   const fetchFriendsData = async () => {
     setLoading(true)
@@ -145,34 +148,37 @@ const FriendsManagement: React.FC = () => {
       {/* Zakładki */}
       <div className="flex gap-1 bg-grey-1">
         <button
+          id='profileFriendsTab'
           onClick={() => setActiveTab('friends')}
           className={`${
             activeTab === 'friends'
-              ? 'bg-white dark:bg-black text-primary rounded-t-lg'
+              ? 'bg-white dark:bg-black text-primary rounded-t-lg dark:text-secondary'
               : 'bg-grey-0 dark:bg-grey-5 text-grey-2'
           } px-4 py-2 text-center`}
         >
-          Znajomi
+          {t('profile.friends.friends-tab')}
         </button>
         <button
+          id='profileOutgoingRequests'
           onClick={() => setActiveTab('requests')}
           className={`${
             activeTab === 'requests'
-              ? 'bg-white dark:bg-black text-primary rounded-t-lg'
+              ? 'bg-white dark:bg-black text-primary rounded-t-lg dark:text-secondary'
               : 'bg-grey-0 dark:bg-grey-5 text-grey-2'
           } px-4 py-2 text-center`}
         >
-          Wysłane zaproszenia
+          {t('profile.friends.outgoing-tab')}
         </button>
         <button
+          id='profileIncominggRequests'
           onClick={() => setActiveTab('incoming')}
           className={`${
             activeTab === 'incoming'
-              ? 'bg-white dark:bg-black text-primary rounded-t-lg'
+              ? 'bg-white dark:bg-black text-primary rounded-t-lg dark:text-secondary'
               : 'bg-grey-0 dark:bg-grey-5 text-grey-2'
           } px-4 py-2 text-center`}
         >
-          Przychodzące zaproszenia
+          {t('profile.friends.incoming-tab')}
         </button>
       </div>
 
@@ -180,9 +186,10 @@ const FriendsManagement: React.FC = () => {
         {/* Search Bar */}
         <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-2 font-mont-md dark:border-grey-6 mb-4">
           <input
+            id='profileFriendsFilterInput'
             type="text"
-            placeholder="Search friends"
-            className="w-full placeholder:text-grey-2"
+            placeholder={`${t('profile.friends.friend-search-input')}`}
+            className="w-full placeholder:text-grey-2 dark:text-grey-2"
             value={searchQuery}
             onChange={handleSearchChange}
           />
@@ -203,7 +210,7 @@ const FriendsManagement: React.FC = () => {
                   {filteredFriends.map(friend => (
                     <li
                       key={friend.otherUser.userId}
-                      className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px]"
+                      className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px] dark:text-grey-2 dark:bg-grey-5"
                     >
                       <div className="flex items-center gap-6">
                         <img
@@ -218,7 +225,7 @@ const FriendsManagement: React.FC = () => {
                           </span>
                           {friend.dateAccepted && (
                             <p className="text-sm text-grey-2">
-                              Dodano:{' '}
+                              {t('profile.friends.friend-added')}
                               {new Date(
                                 friend.dateAccepted
                               ).toLocaleDateString()}
@@ -228,16 +235,17 @@ const FriendsManagement: React.FC = () => {
                       </div>
                       <div className="flex gap-4 mt-2">
                         <button
+                          id={`${friend.otherUser.firstName}${friend.otherUser.lastName}RemoveFriend`}
                           onClick={() => {
                             setSelectedFriend(friend)
                             setDialogOpen(true)
                           }}
-                          className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                          className="dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5 border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
                         >
-                          Usuń znajomego
+                          {t('profile.friends.remove-friend-button')}
                         </button>
-                        <button className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white">
-                          Wyślij wiadomość
+                        <button className="dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5 border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white">
+                        {t('profile.friends.message-friend-button')}
                           {/* TODO  */}
                         </button>
                       </div>
@@ -246,7 +254,7 @@ const FriendsManagement: React.FC = () => {
                 </ul>
               ) : (
                 <p className="text-center italic text-grey-2">
-                  Brak pasujących znajomych
+                  {t('profile.friends.no-friends-message')}
                 </p>
               )
             ) : // Wysłane zaproszenia
@@ -256,7 +264,7 @@ const FriendsManagement: React.FC = () => {
                   {filteredOutgoingRequests.map(request => (
                     <li
                       key={request.otherUser.userId}
-                      className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px]"
+                      className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px] dark:text-grey-2 dark:bg-grey-5"
                     >
                       <div className="flex items-center gap-6">
                         <img
@@ -270,25 +278,26 @@ const FriendsManagement: React.FC = () => {
                             {request.otherUser.lastName}
                           </span>
                           <p className="text-sm text-grey-2">
-                            Wysłano:{' '}
+                          {t('profile.friends.request-sent')}
                             {new Date(request.dateSent).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
                       <button
+                        id={`${request.otherUser.firstName}${request.otherUser.lastName}RemoveOutgoingRequest`}
                         onClick={() =>
                           handleCancelRequest(request.otherUser.userId)
                         }
-                        className="mt-2 border-[1px] text-sm p-2 w-fit rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                        className="mt-2 border-[1px] text-sm p-2 w-fit rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5"
                       >
-                        Cofnij zaproszenie
+                        {t('profile.friends.revoke-outgoing-request')}
                       </button>
                     </li>
                   ))}
                 </ul>
               ) : (
                 <p className="text-center italic text-grey-2">
-                  Brak wysłanych zaproszeń
+                  {t('profile.friends.no-outgoing-message')}
                 </p>
               )
             ) : // Przychodzące zaproszenia
@@ -297,7 +306,7 @@ const FriendsManagement: React.FC = () => {
                 {filteredIncomingRequests.map(request => (
                   <li
                     key={request.otherUser.userId}
-                    className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px]"
+                    className="flex flex-col gap-2 bg-grey-1 p-2 rounded-lg min-h-[186px] dark:text-grey-2 dark:bg-grey-5"
                   >
                     <div className="flex items-center gap-6">
                       <img
@@ -311,27 +320,29 @@ const FriendsManagement: React.FC = () => {
                           {request.otherUser.lastName}
                         </span>
                         <p className="text-sm text-grey-2">
-                          Wysłano:{' '}
+                        {t('profile.friends.request-sent')}
                           {new Date(request.dateSent).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="flex gap-4 mt-2">
                       <button
+                        id={`${request.otherUser.firstName}${request.otherUser.lastName}AcceptIncomingRequest`}
                         onClick={() =>
                           handleAcceptRequest(request.otherUser.userId)
                         }
-                        className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                        className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5"
                       >
-                        Zaakceptuj
+                        {t('profile.friends.accept-incoming-request')}
                       </button>
                       <button
+                        id={`${request.otherUser.firstName}${request.otherUser.lastName}DeclineIncomingRequest`}
                         onClick={() =>
                           handleRejectRequest(request.otherUser.userId)
                         }
-                        className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                        className="border-[1px] text-sm p-2 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5"
                       >
-                        Odrzuć
+                        {t('profile.friends.decline-incoming-request')}
                       </button>
                     </div>
                   </li>
@@ -339,7 +350,7 @@ const FriendsManagement: React.FC = () => {
               </ul>
             ) : (
               <p className="text-center italic text-grey-2">
-                Brak przychodzących zaproszeń
+                {t('profile.friends.no-incoming-message')}
               </p>
             )}
           </div>
@@ -349,22 +360,22 @@ const FriendsManagement: React.FC = () => {
       {dialogOpen && selectedFriend && (
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="">
           <div className="p-4">
-            <p className="text-lg">
-              Czy na pewno chcesz usunąć {selectedFriend.otherUser.firstName}{' '}
-              {selectedFriend.otherUser.lastName} ze znajomych?
+            <p className="text-lg dark:text-grey-2">
+            {t('profile.friends.friend-removal-dialog-1')}{selectedFriend.otherUser.firstName}{' '}
+              {selectedFriend.otherUser.lastName}{t('profile.friends.friend-removal-dialog-2')}
             </p>
             <div className="flex gap-4 mt-4 justify-end">
               <button
                 onClick={handleDeleteFriend}
-                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5"
               >
-                Tak
+                {t('profile.friends.removal-accept')}
               </button>
               <button
                 onClick={() => setDialogOpen(false)}
-                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                className="px-3 border-[1px] rounded-lg p-1 bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5"
               >
-                Nie
+                {t('profile.friends.removal-decline')}
               </button>
             </div>
           </div>
