@@ -70,15 +70,27 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
     let responseMenu
     try {
       setSubmitting(true);
-      const body = JSON.stringify({
-        restaurantId: activeRestaurantId,
-        name: values.name,
-        alternateName: values.alternateName,
-        menuType: values.menuType,
-        dateFrom: values.dateFrom,
-        dateUntil: values.dateUntil,
-        photo: ""
-      });
+      const body = JSON.stringify(
+        values.alternateName
+          ? {
+              restaurantId: activeRestaurantId,
+              name: values.name,
+              alternateName: values.alternateName,
+              menuType: values.menuType,
+              dateFrom: values.dateFrom,
+              dateUntil: values.dateUntil,
+              photo: "",
+            }
+          : {
+              restaurantId: activeRestaurantId,
+              name: values.name,
+              menuType: values.menuType,
+              dateFrom: values.dateFrom,
+              dateUntil: values.dateUntil,
+              photo: "",
+            }
+      );
+  
   
       responseMenu = await fetchPOST("/menus", body);
       
@@ -189,7 +201,6 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="w-full"
                     //@TODO translation
                   />
-                  <label>*</label>
                 </div>
                 {
                   (formik.errors.alternateName&&formik.touched.alternateName) &&
