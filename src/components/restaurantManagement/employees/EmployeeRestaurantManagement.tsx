@@ -19,10 +19,12 @@ import {
 } from '@mui/x-data-grid'
 import { useParams } from 'react-router-dom'
 import { EmployeeEmployedType } from '../../../services/types'
-import { fetchGET } from '../../../services/APIconn'
+import { fetchDELETE, fetchGET, fetchPUT } from '../../../services/APIconn'
 import EmployeeRegister from '../../register/EmployeeRegister'
 import Dialog from '../../reusableComponents/Dialog'
 import AddIcon from '@mui/icons-material/Add'
+import ConfirmationDialog from '../../reusableComponents/ConfirmationDialog'
+import { FetchError } from '../../../services/Errors'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -35,6 +37,8 @@ export default function EmployeeRestaurantManagement() {
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
+  const [empToDel, setEmpToDel] = useState<string>('')
 
   const { restaurantId } = useParams()
 
@@ -42,40 +46,38 @@ export default function EmployeeRestaurantManagement() {
     restaurantId === undefined ? -1 : parseInt(restaurantId)
 
   useEffect(() => {
-    const populateRows = async () => {
-      try {
-        const response = await fetchGET(
-          `/my-restaurants/${activeRestaurantId}/employees`
-        )
-
-        let employees: EmployeeEmployedType[] = []
-
-        if (response.length)
-          for (const i in response) {
-            employees.push({
-              id: Number(i),
-              empID: response[i].employeeId,
-              login: response[i].login,
-              firstName: response[i].firstName,
-              lastName: response[i].lastName,
-              phoneNumber: response[i].phoneNumber,
-              isBackdoorEmployee: response[i].isBackdoorEmployee,
-              isHallEmployee: response[i].isHallEmployee,
-              dateFrom: response[i].dateFrom,
-              dateUntil: response[i].dateUntil,
-              employmentId: response[i].employmentId
-            })
-          }
-
-        setRows(employees)
-      } catch (error) {
-        console.error('Error populating table', error)
-      }
-    }
-
     populateRows()
   }, [])
+  const populateRows = async () => {
+    try {
+      const response = await fetchGET(
+        `/my-restaurants/${activeRestaurantId}/employees`
+      )
 
+      let employees: EmployeeEmployedType[] = []
+
+      if (response.length)
+        for (const i in response) {
+          employees.push({
+            id: Number(i),
+            empID: response[i].employeeId,
+            login: response[i].login,
+            firstName: response[i].firstName,
+            lastName: response[i].lastName,
+            phoneNumber: response[i].phoneNumber,
+            isBackdoorEmployee: response[i].isBackdoorEmployee,
+            isHallEmployee: response[i].isHallEmployee,
+            dateFrom: response[i].dateFrom,
+            dateUntil: response[i].dateUntil,
+            employmentId: response[i].employmentId
+          })
+        }
+
+      setRows(employees)
+    } catch (error) {
+      console.error('Error populating table', error)
+    }
+  }
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
@@ -85,8 +87,7 @@ export default function EmployeeRestaurantManagement() {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <AddIcon className="dark:fill-secondary" />
-            <h1 className="text-md font-mont-md">Add an employee</h1>
+            <h1 className="text-md font-mont-md">+ Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -101,6 +102,21 @@ export default function EmployeeRestaurantManagement() {
     }
   }
 
+  const handleDeleteEmp = async (id: string) => {
+    if (id === null) return
+    try {
+      await fetchDELETE(`/employments/${id}`)
+      setEmpToDel('')
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log('Unexpected error')
+      }
+    }
+    populateRows()
+  }
+
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
   }
@@ -110,7 +126,9 @@ export default function EmployeeRestaurantManagement() {
   }
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter(row => row.id !== id))
+    const emp = rows.find(row => row.id == id)?.employmentId
+    setEmpToDel(emp)
+    setIsConfirmationOpen(true)
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -125,9 +143,18 @@ export default function EmployeeRestaurantManagement() {
     }
   }
 
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
+    if (!(newRow.isHallEmployee || newRow.isBackdoorEmployee)) return
     const updatedRow = { ...newRow, isNew: false }
-    setRows(rows?.map(row => (row.id === newRow.id ? updatedRow : row)))
+    setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
+    const body = JSON.stringify([
+      {
+        employmentId: newRow.employmentId,
+        isBackdoorEmployee: newRow.isBackdoorEmployee,
+        isHallEmployee: newRow.isHallEmployee
+      }
+    ])
+    await fetchPUT('/employments', body)
     return updatedRow
   }
 
@@ -141,14 +168,14 @@ export default function EmployeeRestaurantManagement() {
       headerName: 'First name',
       type: 'string',
       width: 180,
-      editable: true
+      editable: false
     },
     {
       field: 'lastName',
       headerName: 'Last Name',
       type: 'string',
       width: 180,
-      editable: true
+      editable: false
     },
     {
       field: 'phoneNumber',
@@ -157,7 +184,7 @@ export default function EmployeeRestaurantManagement() {
       width: 180,
       align: 'left',
       headerAlign: 'left',
-      editable: true
+      editable: false
     },
     {
       field: 'isHallEmployee',
@@ -166,7 +193,7 @@ export default function EmployeeRestaurantManagement() {
       width: 180,
       align: 'left',
       headerAlign: 'left',
-      editable: false
+      editable: true
     },
     {
       field: 'isBackdoorEmployee',
@@ -175,7 +202,7 @@ export default function EmployeeRestaurantManagement() {
       width: 180,
       align: 'left',
       headerAlign: 'left',
-      editable: false
+      editable: true
     },
     {
       field: 'dateFrom',
@@ -193,7 +220,7 @@ export default function EmployeeRestaurantManagement() {
       width: 180,
       align: 'left',
       headerAlign: 'left',
-      editable: true
+      editable: false
     },
     {
       field: 'actions',
@@ -290,6 +317,15 @@ export default function EmployeeRestaurantManagement() {
           <EmployeeRegister setIsModalOpen={setIsModalOpen} />
         </Dialog>
       )}
+      <ConfirmationDialog
+        open={isConfirmationOpen}
+        onClose={() => setIsConfirmationOpen(false)}
+        onConfirm={() => {
+          handleDeleteEmp(empToDel)
+          populateRows()
+        }}
+        confirmationText={`Are you sure you want to delete this employment?`} //@TODO translation
+      />
     </div>
   )
 }

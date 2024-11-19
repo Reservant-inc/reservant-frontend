@@ -5,6 +5,7 @@ import UserRegister from '../components/auth/UserRegister'
 import HomePage from '../components/HomePage'
 import {
   checkAuthLoader,
+  checkIfCustomerService,
   checkIfOwner,
   redirectIfLoggedIn
 } from '../components/auth/auth'
@@ -22,7 +23,6 @@ import MenuList from '../components/restaurantManagement/menus/MenuList'
 import { EventListType, MenuScreenType } from '../services/enums'
 import Account from '../components/profile/Account'
 import ReservationHistory from '../components/profile/ReservationHistory'
-import EventHistory from '../components/profile/EventHistory'
 import Checkout from '../components/restaurant/Checkout'
 import VisitWrapper from '../components/restaurant/visits/VisitRoot'
 import Visit from '../components/restaurant/visits/Visit'
@@ -30,9 +30,9 @@ import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagme
 import NotFound from '../components/NotFound'
 import FriendsManagement from '../components/profile/FriendsManagement'
 import EventTab from '../components/profile/events/EventTab'
-import path from 'path'
 import EventList from '../components/profile/events/EventList'
 import Feed from '../components/feed/Feed'
+import CustomerService from '../components/customerService/CustomerService'
 
 const router = createBrowserRouter([
   {
@@ -151,6 +151,11 @@ const router = createBrowserRouter([
         ]
       }
     ]
+  },
+  {
+    path: 'customer-service',
+    element: <CustomerService />,
+    loader: checkIfCustomerService
   },
   {
     path: 'login',

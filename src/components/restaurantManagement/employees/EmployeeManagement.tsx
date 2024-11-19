@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import React, { useEffect, useState } from 'react'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/DeleteOutlined'
+import SaveIcon from '@mui/icons-material/Save'
+import CancelIcon from '@mui/icons-material/Close'
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -15,71 +15,72 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-  GridSlots,
-} from "@mui/x-data-grid";
-import {
-  EmployeeType,
-  EmploymentType,
-} from "../../../services/types";
-import { fetchGET } from "../../../services/APIconn";
-import EmployeeRegister from "../../register/EmployeeRegister";
-import { Add, Restaurant } from "@mui/icons-material";
-import Dialog from '../../reusableComponents/Dialog';
-import EmploymentsManagement from "./EmploymentsManagement";
+  GridSlots
+} from '@mui/x-data-grid'
+import { EmployeeType, EmploymentType } from '../../../services/types'
+import { fetchDELETE, fetchGET, fetchPUT } from '../../../services/APIconn'
+import EmployeeRegister from '../../register/EmployeeRegister'
+import { Add, Restaurant } from '@mui/icons-material'
+import Dialog from '../../reusableComponents/Dialog'
+import EmploymentsManagement from './EmploymentsManagement'
+import ConfirmationDialog from '../../reusableComponents/ConfirmationDialog'
+import { FetchError } from '../../../services/Errors'
 
 interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
   setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void;
+    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
+  ) => void
 }
 
 export default function EmployeeManagement() {
-  const [rows, setRows] = useState<GridRowsProp>([]);
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<string>("");
+  const [rows, setRows] = useState<GridRowsProp>([])
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isEmploymentOpen, setIsEmploymentOpen] = useState<boolean>(false)
+  const [selectedId, setSelectedId] = useState<string>('')
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
+  const [empToDel, setEmpToDel] = useState<string>('')
 
   useEffect(() => {
-    const populateRows = async () => {
-      try {
-        const response = await fetchGET("/user/employees");
+    populateRows()
+  }, [])
 
-        let employees: EmployeeType[] = [];
+  const populateRows = async () => {
+    try {
+      const response = await fetchGET('/user/employees')
 
-        if (response.length)
-          for (const i in response) {
-            const tmp: EmploymentType[] = [];
-            for (const j in response[i].employments) {
-              tmp.push({
-                id: response[i].employments[j].employmentId,
-                restaurantId: response[i].employments[j].restaurantId,
-                isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
-                isHallEmployee: response[i].employments[j].isHallEmployee,
-                restaurantName: response[i].employments[j].restaurantName,
-              });
-            }
-            employees.push({
-              id: Number(i),
-              userId: response[i].userId,
-              login: response[i].login,
-              firstName: response[i].firstName,
-              lastName: response[i].lastName,
-              birthDate: response[i].birthDate,
-              phoneNumber: response[i].phoneNumber,
-              employments: tmp.slice(),
-            });
+      let employees: EmployeeType[] = []
+
+      if (response.length)
+        for (const i in response) {
+          const tmp: EmploymentType[] = []
+          for (const j in response[i].employments) {
+            tmp.push({
+              id: response[i].employments[j].employmentId,
+              restaurantId: response[i].employments[j].restaurantId,
+              isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
+              isHallEmployee: response[i].employments[j].isHallEmployee,
+              restaurantName: response[i].employments[j].restaurantName
+            })
           }
+          employees.push({
+            id: Number(i),
+            userId: response[i].userId,
+            login: response[i].login,
+            firstName: response[i].firstName,
+            lastName: response[i].lastName,
+            birthDate: response[i].birthDate,
+            phoneNumber: response[i].phoneNumber,
+            employments: tmp.slice()
+          })
+        }
 
-        setRows(employees);
-      } catch (error) {
-        console.error("Error populating table", error);
-      }
-    };
-
-    populateRows();
-  }, []);
+      setRows(employees)
+    } catch (error) {
+      console.error('Error populating table', error)
+    }
+  }
 
   const EditToolbar = (props: EditToolbarProps) => {
     return (
@@ -90,168 +91,215 @@ export default function EmployeeManagement() {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <Add  className="dark:fill-secondary" />
-            <h1 className="font-mont-md text-md">Add an employee</h1>
+            <h1 className="font-mont-md text-md">+ Add an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
-    );
-  };
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
+    )
+  }
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
-    event,
+    event
   ) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+      event.defaultMuiPrevented = true
     }
-  };
+  }
 
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
+  const handleEmploymentClick = (id: string) => {
+    setIsEmploymentOpen(true)
+    setSelectedId(id)
+  }
 
-  const handleEmploymentClick = (id: string) => () => {
-    setIsEmploymentOpen(true);
-    setSelectedId(id);
-  };
+  const handleEditClick = async (id: GridRowId) => {
+    setRowModesModel(prevModel => ({
+      ...prevModel,
+      [id]: { mode: GridRowModes.Edit }
+    }))
+  }
 
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
+  const handleSaveClick = (id: GridRowId) => {
+    setRowModesModel(prevModel => ({
+      ...prevModel,
+      [id]: { mode: GridRowModes.View }
+    }))
+  }
 
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
+  const handleDeleteClick = (id: GridRowId) => {
+    const emp = rows.find(row => row.id == id)?.userId
+    setEmpToDel(emp)
+    setIsConfirmationOpen(true)
+  }
+
+  const handleDeleteEmp = async (id: string) => {
+    if (id === null) return
+    try {
+      await fetchDELETE(`/user/${id}`)
+      setEmpToDel('')
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log('Unexpected error')
+      }
+    }
+    populateRows()
+  }
 
   const handleCancelClick = (id: GridRowId) => () => {
     setRowModesModel({
       ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
-  };
+      [id]: { mode: GridRowModes.View, ignoreModifications: true }
+    })
+  }
 
   const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows?.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
-  };
+    const putEmp = async (updatedRow: GridRowModel) => {
+      try {
+        const body = JSON.stringify({
+          phoneNumber: updatedRow.phoneNumber,
+          firstName: updatedRow.firstName,
+          lastName: updatedRow.lastName,
+          birthDate: updatedRow.birthDate,
+          photo: 'string'
+        })
+
+        await fetchPUT(`/users/${updatedRow.userId}`, body)
+
+        populateRows()
+      } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log('Unexpected error')
+        }
+      }
+    }
+
+    const updatedRow = { ...newRow, isNew: false }
+    setRows(prevRows =>
+      prevRows.map(row => (row.id === newRow.id ? updatedRow : row))
+    )
+
+    putEmp(updatedRow)
+
+    return updatedRow
+  }
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    setRowModesModel(newRowModesModel);
-  };
+    setRowModesModel(newRowModesModel)
+  }
 
   const columns: GridColDef[] = [
-   
     {
-      field: "firstName",
-      headerName: "First name",
-      type: "string",
+      field: 'firstName',
+      headerName: 'First name',
+      type: 'string',
       width: 180,
-      editable: true,
+      editable: true
     },
     {
-      field: "lastName",
-      headerName: "Last name",
-      type: "string",
+      field: 'lastName',
+      headerName: 'Last name',
+      type: 'string',
       width: 180,
-      editable: true,
+      editable: true
     },
     {
-      field: "phoneNumber",
-      headerName: "Phone number",
-      type: "string",
+      field: 'phoneNumber',
+      headerName: 'Phone number',
+      type: 'string',
       width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true
     },
     {
-      field: "birthDate",
-      headerName: "Birth date",
-      type: "string",
+      field: 'birthDate',
+      headerName: 'Birth date',
+      type: 'string',
       width: 180,
-      align: "left",
-      headerAlign: "left",
-      editable: true,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true
     },
     {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
       width: 100,
-      cellClassName: "actions",
+      cellClassName: 'actions',
       getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
         if (isInEditMode) {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
               label="Save"
               id={
-                "EmployeeManagementSaveButton" +
+                'EmployeeManagementSaveButton' +
                 rows[parseInt(id.toString())].login
               }
               sx={{
-                color: "primary.main",
+                color: 'primary.main'
               }}
-              onClick={handleSaveClick(id)}
+              onClick={() => handleSaveClick(id)}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
               id={
-                "EmployeeManagementCancelEditButton" +
+                'EmployeeManagementCancelEditButton' +
                 rows[parseInt(id.toString())].login
               }
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
-            />,
-          ];
+            />
+          ]
         }
 
-        return [
-          <GridActionsCellItem
-            icon={<Restaurant />}
-            label="Employments"
-            id={
-              "EmployeeManagementEmploymentButton" +
-              rows[parseInt(id.toString())].login
-            }
-            className="textPrimary"
-            onClick={handleEmploymentClick(rows[parseInt(id.toString())].userId)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            id={
-              "EmployeeManagementEditButton" +
-              rows[parseInt(id.toString())].login
-            }
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            id={
-              "EmployeeManagementDeleteButton" +
-              rows[parseInt(id.toString())].login
-            }
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
+        return rows[parseInt(id.toString())].birthDate !== '0001-01-01'
+          ? [
+              <GridActionsCellItem
+                icon={<Restaurant />}
+                label="Employments"
+                id={
+                  'EmployeeManagementEmploymentButton' +
+                  rows[parseInt(id.toString())].login
+                }
+                className="textPrimary"
+                onClick={() =>
+                  handleEmploymentClick(rows[parseInt(id.toString())].userId)
+                }
+                color="inherit"
+              />,
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                id={
+                  'EmployeeManagementEditButton' +
+                  rows[parseInt(id.toString())].login
+                }
+                className="textPrimary"
+                onClick={() => handleEditClick(id)}
+                color="inherit"
+              />,
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                id={
+                  'EmployeeManagementDeleteButton' +
+                  rows[parseInt(id.toString())].login
+                }
+                label="Delete"
+                onClick={() => handleDeleteClick(id)}
+                color="inherit"
+              />
+            ]
+          : []
+      }
+    }
+  ]
 
   return (
     <>
@@ -266,35 +314,45 @@ export default function EmployeeManagement() {
           disableRowSelectionOnClick
           processRowUpdate={processRowUpdate}
           initialState={{
-            pagination: { paginationModel: { pageSize: 5 } },
+            pagination: { paginationModel: { pageSize: 5 } }
           }}
           pageSizeOptions={[5, 10, 25]}
           slots={{
-            toolbar: EditToolbar as GridSlots["toolbar"],
+            toolbar: EditToolbar as GridSlots['toolbar']
           }}
           slotProps={{
-            toolbar: { setRows, setRowModesModel },
+            toolbar: { setRows, setRowModesModel }
           }}
           className="border-0"
         />
-        
       </div>
-      {isModalOpen &&
-      <Dialog
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Creating a new employee..."
-      >
-        <EmployeeRegister setIsModalOpen={setIsModalOpen} />
-      </Dialog>}
-      {isEmploymentOpen && <Dialog
-        open={isEmploymentOpen}
-        onClose={() => setIsEmploymentOpen(false)}
-        title="Employments"
-      >
-        <EmploymentsManagement empid={selectedId} />
-      </Dialog>}
+      {isModalOpen && (
+        <Dialog
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title="Creating a new employee..."
+        >
+          <EmployeeRegister setIsModalOpen={setIsModalOpen} />
+        </Dialog>
+      )}
+      {isEmploymentOpen && (
+        <Dialog
+          open={isEmploymentOpen}
+          onClose={() => setIsEmploymentOpen(false)}
+          title="Employments"
+        >
+          <EmploymentsManagement empid={selectedId} />
+        </Dialog>
+      )}
+      <ConfirmationDialog
+        open={isConfirmationOpen}
+        onClose={() => setIsConfirmationOpen(false)}
+        onConfirm={() => {
+          handleDeleteEmp(empToDel)
+          populateRows()
+        }}
+        confirmationText={`Are you sure you want to delete this employee?`} //@TODO translation
+      />
     </>
-
-  );
+  )
 }

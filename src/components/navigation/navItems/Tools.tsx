@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
-import OutsideClickHandler from "../../reusableComponents/OutsideClickHandler";
-import User from "../../../assets/images/user.jpg";
-import { Icon, Switch, alpha, createTheme, styled } from "@mui/material";
+import React, { useContext, useState } from 'react'
+import OutsideClickHandler from '../../reusableComponents/OutsideClickHandler'
+import User from '../../../assets/images/user.jpg'
+import { Icon, Switch, alpha, createTheme, styled } from '@mui/material'
 import {
   AccountCircle,
   ChevronLeft,
@@ -10,103 +10,103 @@ import {
   Language,
   LightMode,
   Logout,
-  Settings,
-} from "@mui/icons-material";
-import { CSSTransition } from "react-transition-group";
-import i18next from "i18next";
-import { ThemeProvider } from "@emotion/react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+  Settings
+} from '@mui/icons-material'
+import { CSSTransition } from 'react-transition-group'
+import i18next from 'i18next'
+import { ThemeProvider } from '@emotion/react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 export interface ToolsProps {
-  setIsDark: Function;
+  setIsDark: Function
 }
 
 const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
-  const [t] = useTranslation("global");
+  const [t] = useTranslation('global')
 
-  const [isPressed, setIsPressed] = useState(false);
-  const [isChanged, setIsChanged] = useState(false);
-  const [activeMenu, setActiveMenu] = useState("main");
+  const [isPressed, setIsPressed] = useState(false)
+  const [isChanged, setIsChanged] = useState(false)
+  const [activeMenu, setActiveMenu] = useState('main')
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const mainHeight = 360;
+  const mainHeight = 360
 
-  const [menuHeight, setMenuHeight] = useState(mainHeight);
+  const [menuHeight, setMenuHeight] = useState(mainHeight)
 
   const theme = createTheme({
     components: {
       MuiSwitch: {
         styleOverrides: {
           switchBase: {
-            color: "#222222",
+            color: '#222222'
           },
           colorPrimary: {
-            "&.Mui-checked": {
-              color: "#64c3a6",
-            },
+            '&.Mui-checked': {
+              color: '#64c3a6'
+            }
           },
           track: {
-            backgroundColor: "#222222",
-            ".Mui-checked.Mui-checked + &": {
-              backgroundColor: "#b1e1d2",
-            },
-          },
-        },
-      },
-    },
-  });
-  const toggleTheme = () => {
-    if (!(document.documentElement.className === "dark")) {
-      localStorage.theme = "dark";
-      document.documentElement.classList.add("dark");
-
-      setIsDark(true);
-      return;
+            backgroundColor: '#222222',
+            '.Mui-checked.Mui-checked + &': {
+              backgroundColor: '#b1e1d2'
+            }
+          }
+        }
+      }
     }
-    localStorage.theme = "light";
-    document.documentElement.classList.remove("dark");
-    setIsDark(false);
-  };
+  })
+  const toggleTheme = () => {
+    if (!(document.documentElement.className === 'dark')) {
+      localStorage.theme = 'dark'
+      document.documentElement.classList.add('dark')
+
+      setIsDark(true)
+      return
+    }
+    localStorage.theme = 'light'
+    document.documentElement.classList.remove('dark')
+    setIsDark(false)
+  }
 
   function calcHeight(el: any) {
-    const height = el.offsetHeight;
-    setMenuHeight(height);
+    const height = el.offsetHeight
+    setMenuHeight(height)
   }
 
   const pressHandler = () => {
-    setIsPressed(!isPressed);
-  };
+    setIsPressed(!isPressed)
+  }
 
   const setLanguage = (lang: string) => {
-    i18next.changeLanguage(lang);
-    localStorage.setItem("i18nextLng", lang);
-    setIsChanged(!isChanged);
-  };
+    i18next.changeLanguage(lang)
+    localStorage.setItem('i18nextLng', lang)
+    setIsChanged(!isChanged)
+  }
 
   function DropdownItem(props: any) {
     const onClicked = () => {
       if (props.logout === true) {
-        Cookies.remove("token");
-        Cookies.remove("userInfo");
-        navigate("/");
+        Cookies.remove('token')
+        Cookies.remove('userInfo')
+        navigate('/')
       }
 
       if (props.profile) {
-        const user = JSON.parse(Cookies.get("userInfo") as string);
-        navigate(`profile/${user.userId}/account`);
+        const user = JSON.parse(Cookies.get('userInfo') as string)
+        navigate(`profile/${user.userId}/account`)
       }
 
-      props.goToMenu && setActiveMenu(props.goToMenu);
+      props.goToMenu && setActiveMenu(props.goToMenu)
 
       if (props.language) {
-        setLanguage(props.language);
-        setIsPressed(false);
-        setMenuHeight(mainHeight);
+        setLanguage(props.language)
+        setIsPressed(false)
+        setMenuHeight(mainHeight)
       }
-    };
+    }
 
     return (
       <div className="p-2 hover:cursor-pointer">
@@ -115,7 +115,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           className={
             props.className
               ? props.className
-              : "menu-item flex flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+              : 'menu-item flex flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5'
           }
           onClick={onClicked}
         >
@@ -124,7 +124,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           <span className="icon-right ml-auto">{props.rightIcon}</span>
         </a>
       </div>
-    );
+    )
   }
 
   return (
@@ -143,7 +143,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           className="nav-dropdown z-[1] dark:bg-black"
         >
           <CSSTransition
-            in={activeMenu === "main"}
+            in={activeMenu === 'main'}
             unmountOnExit
             timeout={500}
             classNames="menu-primary"
@@ -156,7 +156,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   id="profileDropdownItem"
                   profile={true}
                 >
-                  {t("tools.main.profile")}{" "}
+                  {t('tools.main.profile')}{' '}
                 </DropdownItem>
                 <DropdownItem
                   leftIcon={<Settings />}
@@ -164,7 +164,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   id="settingsDropdownItem"
                   goToMenu="settings"
                 >
-                  {t("tools.main.settings")}{" "}
+                  {t('tools.main.settings')}{' '}
                 </DropdownItem>
                 <DropdownItem
                   leftIcon={<Language />}
@@ -172,12 +172,12 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                   goToMenu="languages"
                   id="languagesDropdownItem"
                 >
-                  {t("tools.main.language")}{" "}
+                  {t('tools.main.language')}{' '}
                 </DropdownItem>
                 <DropdownItem
                   className="menu-item flex flex h-14 cursor-default items-center rounded-lg p-2 text-black  hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
                   leftIcon={
-                    document.documentElement.className === "dark" ? (
+                    document.documentElement.className === 'dark' ? (
                       <DarkMode />
                     ) : (
                       <LightMode />
@@ -189,27 +189,27 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                       id="ToolsThemeSwitch"
                       className="ToolsThemeSwitch"
                       defaultChecked={
-                        document.documentElement.className === "dark"
+                        document.documentElement.className === 'dark'
                       }
                     />
                   }
                   id="ThemeDropdownItem"
                 >
-                  {t("tools.main.mode")}{" "}
+                  {t('tools.main.mode')}{' '}
                 </DropdownItem>
                 <DropdownItem
                   leftIcon={<Logout />}
                   id="logoutDropdownItem"
                   logout={true}
                 >
-                  {t("tools.main.signout")}{" "}
+                  {t('tools.main.signout')}{' '}
                 </DropdownItem>
               </ThemeProvider>
             </div>
           </CSSTransition>
 
           <CSSTransition
-            in={activeMenu === "settings"}
+            in={activeMenu === 'settings'}
             unmountOnExit
             timeout={500}
             classNames="menu-secondary"
@@ -225,35 +225,35 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 leftIcon={<Settings />}
                 id="SettingFiller1DropdownItem"
               >
-                {" "}
-                {t("tools.settings.setting")}{" "}
+                {' '}
+                {t('tools.settings.setting')}{' '}
               </DropdownItem>
               <DropdownItem
                 leftIcon={<Settings />}
                 id="SettingFiller2DropdownItem"
               >
-                {" "}
-                {t("tools.settings.setting")}{" "}
+                {' '}
+                {t('tools.settings.setting')}{' '}
               </DropdownItem>
               <DropdownItem
                 leftIcon={<Settings />}
                 id="SettingFiller3DropdownItem"
               >
-                {" "}
-                {t("tools.settings.setting")}{" "}
+                {' '}
+                {t('tools.settings.setting')}{' '}
               </DropdownItem>
               <DropdownItem
                 leftIcon={<Settings />}
                 id="SettingFiller4DropdownItem"
               >
-                {" "}
-                {t("tools.settings.setting")}{" "}
+                {' '}
+                {t('tools.settings.setting')}{' '}
               </DropdownItem>
             </div>
           </CSSTransition>
 
           <CSSTransition
-            in={activeMenu === "languages"}
+            in={activeMenu === 'languages'}
             unmountOnExit
             timeout={500}
             classNames="menu-secondary"
@@ -271,13 +271,13 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 id="EnglishDropdownItem"
                 language="en"
                 className={
-                  i18next.language === "en"
-                    ? "menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 "
-                    : ""
+                  i18next.language === 'en'
+                    ? 'menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 '
+                    : ''
                 }
               >
-                {" "}
-                English{" "}
+                {' '}
+                English{' '}
               </DropdownItem>
               <DropdownItem
                 leftIcon={<Language />}
@@ -285,20 +285,20 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 id="PolishDropdownItem"
                 language="pl"
                 className={
-                  i18next.language === "pl"
-                    ? "menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 "
-                    : ""
+                  i18next.language === 'pl'
+                    ? 'menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 '
+                    : ''
                 }
               >
-                {" "}
-                Polski{" "}
+                {' '}
+                Polski{' '}
               </DropdownItem>
             </div>
           </CSSTransition>
         </div>
       )}
     </OutsideClickHandler>
-  );
-};
+  )
+}
 
-export default Tools;
+export default Tools
