@@ -18,7 +18,11 @@ import EmployeeRestaurantManagement from '../components/reservant/restaurantMana
 import IngredientTable from '../components/reservant/restaurantManagement/Warehouse/IngredientTable'
 import HistoryTab from '../components/reservant/restaurantManagement/reservations/HistoryTab'
 import MenuList from '../components/reservant/restaurantManagement/menus/MenuList'
-import { EventListType, MenuScreenType } from '../services/enums'
+import {
+  EventListType,
+  MenuScreenType,
+  ReservationListType
+} from '../services/enums'
 import Account from '../components/reservant/profile/Account'
 import Checkout from '../components/reservant/restaurant/Checkout'
 import VisitWrapper from '../components/reservant/restaurant/visits/VisitRoot'
@@ -33,6 +37,7 @@ import CustomerService from '../components/customerService/CustomerService'
 import HomePage from '../components/reservant/HomePage'
 import LandingPage from '../components/guest/LandingPage'
 import ReservationHistoryTab from '../components/reservant/profile/reservations/ReservationHistoryTab'
+import ReservationList from '../components/reservant/profile/reservations/ReservationList'
 
 const router = createBrowserRouter([
   {
@@ -114,10 +119,16 @@ const router = createBrowserRouter([
             element: <ReservationHistoryTab />,
             children: [
               {
-                path: 'incoming'
+                path: 'incoming',
+                element: (
+                  <ReservationList listType={ReservationListType.Incoming} />
+                )
               },
               {
-                path: 'finished'
+                path: 'finished',
+                element: (
+                  <ReservationList listType={ReservationListType.Finished} />
+                )
               }
             ]
           },

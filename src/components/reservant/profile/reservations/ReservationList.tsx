@@ -3,6 +3,7 @@ import { ReservationListType } from '../../../../services/enums'
 import { useLocation } from 'react-router-dom'
 import { PaginationType, VisitType } from '../../../../services/types'
 import { fetchGET } from '../../../../services/APIconn'
+import Reservation from './Reservation'
 
 interface ReservationListProps {
   listType: ReservationListType
@@ -48,7 +49,14 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
           {reservations.length === 0 ? (
             <p className="italic text-center">{noEventsMessage[listType]}</p>
           ) : (
-            reservations.map(reservation => <></>)
+            reservations.map(reservation => (
+              <Reservation
+                reservation={reservation}
+                listType={listType}
+                refreshEvents={fetchReservations}
+                key={reservation.visitId}
+              />
+            ))
           )}
         </div>
       </div>
