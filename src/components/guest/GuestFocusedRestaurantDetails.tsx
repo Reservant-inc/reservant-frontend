@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { fetchGET, getImage } from '../../../../services/APIconn'
 import { IconButton, CircularProgress, ListItemButton } from '@mui/material'
 import EditCalendarIcon from '@mui/icons-material/EditCalendar'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
@@ -9,36 +8,20 @@ import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining'
 import MopedIcon from '@mui/icons-material/Moped'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
-import Carousel from '../../../reusableComponents/ImageCarousel/Carousel'
-import { RestaurantDetailsType, ReviewType } from '../../../../services/types'
-import FocusedRestaurantReviewsList from './FocusedRestaurantReviewsList'
-import FocusedRestaurantEventsList from './FocusedRestaurantEventsList'
-import CustomRating from '../../../reusableComponents/CustomRating'
 import { useTranslation } from 'react-i18next'
-import Dialog from '../../../reusableComponents/Dialog'
-import { MenuScreenType } from '../../../../services/enums'
-import MenuList from '../../restaurantManagement/menus/MenuList'
-import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
-import CartContextProvider from '../../../../contexts/CartContext'
-import EventCreationModal from '../events/EventCreationModal'
-import EventDetailsModal from '../events/EventDetailsModal'
 import { useNavigate } from 'react-router-dom'
+import { fetchGET, getImage } from '../../services/APIconn'
+import { RestaurantDetailsType, ReviewType } from '../../services/types'
+import CustomRating from '../reusableComponents/CustomRating'
+import Carousel from '../reusableComponents/ImageCarousel/Carousel'
+import DefaultImage from '../../assets/images/defaulImage.jpeg'
+import Dialog from '../reusableComponents/Dialog'
+import MenuList from '../reservant/restaurantManagement/menus/MenuList'
+import { MenuScreenType } from '../../services/enums'
 
 interface FocusedRestaurantDetailsProps {
   activeRestaurant: RestaurantDetailsType
   onClose: () => void
-}
-
-enum Options {
-  'ORDER',
-  'MENU',
-  'EVENT'
-}
-
-const optionTitles: Record<Options, string> = {
-  [Options.ORDER]: 'Order',
-  [Options.MENU]: 'Menu',
-  [Options.EVENT]: 'Event'
 }
 
 const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
@@ -48,15 +31,9 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const [restaurant, setRestaurant] =
     useState<RestaurantDetailsType>(activeRestaurant)
   const [reviews, setReviews] = useState<ReviewType[]>([])
-  const [events, setEvents] = useState<any[]>([])
-  const [option, setOption] = useState<Options | null>(null)
-  const [createdEventId, setCreatedEventId] = useState<number | null>(null)
-  const [activeTab, setActiveTab] = useState<'reviews' | 'events'>('reviews')
+  const [showMenu, setShowMenu] = useState<boolean>(false)
 
   const navigate = useNavigate()
-  const data = {
-    restaurant: restaurant
-  }
 
   const [t] = useTranslation('global')
 
@@ -83,19 +60,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       }
     }
 
-    // Funkcja do pobierania wydarzeń
-    const fetchRestaurantEvents = async () => {
-      try {
-        const data = await fetchGET(
-          `/restaurants/${activeRestaurant.restaurantId}/events`
-        )
-        setEvents(data.items || [])
-      } catch (error) {
-        console.error('Error fetching restaurant events:', error)
-      }
-    }
-
-    fetchRestaurantEvents()
     fetchRestaurantDetails()
     fetchRestaurantReviews()
   }, [activeRestaurant])
@@ -103,19 +67,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   const averageRating = reviews.length
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0
-
-  const handleDialogClose = () => {
-    setOption(null)
-  }
-
-  const handleEventCreationSuccess = (eventId: number) => {
-    setCreatedEventId(eventId)
-    setOption(null)
-  }
-
-  const handleTabChange = (tab: 'reviews' | 'events') => {
-    setActiveTab(tab)
-  }
 
   const renderRestaurantDetails = () => {
     return (
@@ -159,23 +110,6 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     )
   }
 
-  const renderDialogContent = {
-    [Options.ORDER]: <></>,
-    [Options.MENU]: (
-      <MenuList
-        activeRestaurantId={activeRestaurant.restaurantId}
-        type={MenuScreenType.Preview}
-      />
-    ),
-    [Options.EVENT]: (
-      <EventCreationModal
-        handleClose={handleDialogClose}
-        restaurantId={restaurant.restaurantId}
-        onSuccess={handleEventCreationSuccess}
-      />
-    )
-  }
-
   return (
     <>
       {!restaurant ? (
@@ -206,9 +140,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                  onClick={() =>
-                    navigate('../restaurant/reservation', { state: data })
-                  }
+                  onClick={() => navigate('login')}
                 >
                   <EditCalendarIcon className="h-6 w-6" />
                 </button>
@@ -221,7 +153,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                  onClick={() => setOption(Options.EVENT)}
+                  onClick={() => navigate('login')}
                 >
                   <EventIcon className="h-6 w-6" />
                 </button>
@@ -234,7 +166,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                  onClick={() => setOption(Options.MENU)}
+                  onClick={() => setShowMenu(true)}
                 >
                   <RestaurantMenuIcon className="h-6 w-6" />
                 </button>
@@ -248,7 +180,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 <div className="flex h-full w-[70px] flex-col items-center gap-1">
                   <button
                     className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                    onClick={() => setOption(Options.ORDER)}
+                    onClick={() => navigate('login')}
                   >
                     <DeliveryDiningIcon className="h-6 w-6" />
                   </button>
@@ -260,110 +192,72 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
                 </div>
               )}
             </div>
-
-            {/* Zakładki Reviews i Events */}
-            <div className="flex justify-around border-t border-grey-1 bg-grey-0 pt-1">
-              <ListItemButton
-                onClick={() => handleTabChange('reviews')}
-                className={`${
-                  activeTab === 'reviews'
-                    ? 'bg-white dark:bg-black text-primary'
-                    : 'bg-grey-0 dark:bg-grey-5'
-                } h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
-              >
-                {t('reviews.reviews')}
-              </ListItemButton>
-              <ListItemButton
-                onClick={() => handleTabChange('events')}
-                className={`${
-                  activeTab === 'events'
-                    ? 'bg-white dark:bg-black text-primary'
-                    : 'bg-grey-0 dark:bg-grey-5'
-                } h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
-              >
-                {t('home-page.events')}
-              </ListItemButton>
-            </div>
-
-            {/* Wybór treści zakładki */}
-            <div className="h-full p-3">
-              {activeTab === 'reviews' ? (
-                <FocusedRestaurantReviewsList
-                  isPreview={false}
-                  reviews={reviews}
-                  activeRestaurantId={restaurant.restaurantId}
-                />
-              ) : (
-                <FocusedRestaurantEventsList events={events} /> // Przekazanie danych wydarzeń do komponentu
-              )}
-            </div>
           </div>
-        </>
-      )}
 
-      {option !== null && (
-        <Dialog
-          open={option !== null}
-          onClose={handleDialogClose}
-          title={optionTitles[option]}
-        >
-          <div className="gap- flex h-[calc(100%-2.25rem)] min-w-[600px] flex-col items-center rounded-lg bg-white p-3 dark:bg-black">
-            <div className="flex h-[15%] w-full items-center gap-4">
-              <img
-                src={getImage(restaurant.logo, DefaultImage)}
-                className="h-[6rem] w-[6rem] rounded-lg"
-              />
-              <div className="flex w-[80%] flex-col justify-between">
-                <h2 className="text-xl font-bold dark:text-white">
-                  {restaurant.name}
-                </h2>
-                <div className="flex items-center gap-2 dark:text-white">
-                  <h1 className="text-[16px]">{averageRating.toFixed(2)}</h1>
-                  <CustomRating
-                    rating={averageRating}
-                    readOnly={true}
-                    className="text-[18px]"
+          {showMenu && (
+            <Dialog
+              open={showMenu !== null}
+              onClose={() => setShowMenu(false)}
+              title={'Menu'}
+            >
+              <div className="gap- flex h-[calc(100%-2.25rem)] min-w-[600px] flex-col items-center rounded-lg bg-white p-3 dark:bg-black">
+                <div className="flex h-[15%] w-full items-center gap-4">
+                  <img
+                    src={getImage(restaurant.logo, DefaultImage)}
+                    className="h-[6rem] w-[6rem] rounded-lg"
                   />
-                  <h1 className="text-[16px]">({reviews.length})</h1>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <h1 className="text-[14px] dark:text-white">
-                    {restaurant.address}, {restaurant.city}
-                  </h1>
-                  <div className="flex items-center gap-3 text-[14px]">
-                    {restaurant.provideDelivery && (
-                      <div className="flex items-center gap-2">
-                        <MopedIcon className="h-4 w-4 dark:text-white" />
-                        <h1 className="text-[14px] dark:text-white">
-                          {t('home-page.delivery-fee')} 5,99 zł
-                        </h1>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-1">
-                      <h1 className="text-[12px] dark:text-white">
-                        {t('home-page.is-delivering')}:
+                  <div className="flex w-[80%] flex-col justify-between">
+                    <h2 className="text-xl font-bold dark:text-white">
+                      {restaurant.name}
+                    </h2>
+                    <div className="flex items-center gap-2 dark:text-white">
+                      <h1 className="text-[16px]">
+                        {averageRating.toFixed(2)}
                       </h1>
-                      {restaurant.provideDelivery ? (
-                        <CheckCircleIcon className="text-green-500 h-4 w-4 dark:text-white" />
-                      ) : (
-                        <CancelIcon className="text-red-500 h-4 w-4 dark:text-white" />
-                      )}
+                      <CustomRating
+                        rating={averageRating}
+                        readOnly={true}
+                        className="text-[18px]"
+                      />
+                      <h1 className="text-[16px]">({reviews.length})</h1>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <h1 className="text-[14px] dark:text-white">
+                        {restaurant.address}, {restaurant.city}
+                      </h1>
+                      <div className="flex items-center gap-3 text-[14px]">
+                        {restaurant.provideDelivery && (
+                          <div className="flex items-center gap-2">
+                            <MopedIcon className="h-4 w-4 dark:text-white" />
+                            <h1 className="text-[14px] dark:text-white">
+                              {t('home-page.delivery-fee')} 5,99 zł
+                            </h1>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1">
+                          <h1 className="text-[12px] dark:text-white">
+                            {t('home-page.is-delivering')}:
+                          </h1>
+                          {restaurant.provideDelivery ? (
+                            <CheckCircleIcon className="text-green-500 h-4 w-4 dark:text-white" />
+                          ) : (
+                            <CancelIcon className="text-red-500 h-4 w-4 dark:text-white" />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div className="h-[85%] w-full">
+                  <MenuList
+                    activeRestaurantId={activeRestaurant.restaurantId}
+                    type={MenuScreenType.Preview}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="h-[85%] w-full">{renderDialogContent[option]}</div>
-          </div>
-        </Dialog>
-      )}
-
-      {createdEventId && (
-        <EventDetailsModal
-          eventId={createdEventId}
-          open={true}
-          onClose={() => setCreatedEventId(null)}
-        />
+            </Dialog>
+          )}
+        </>
       )}
     </>
   )

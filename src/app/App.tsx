@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LandingPage from '../components/LandingPage'
 import UserRegister from '../components/auth/UserRegister'
 import {
   checkAuthLoader,
@@ -33,11 +32,13 @@ import EventList from '../components/reservant/profile/events/EventList'
 import Feed from '../components/reservant/feed/Feed'
 import CustomerService from '../components/customerService/CustomerService'
 import HomePage from '../components/reservant/HomePage'
+import LandingPage from '../components/guest/LandingPage'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />
+    element: <LandingPage />,
+    loader: redirectIfLoggedIn
   },
   {
     path: 'reservant',
