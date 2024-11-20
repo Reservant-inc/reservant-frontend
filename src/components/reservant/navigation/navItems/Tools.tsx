@@ -77,6 +77,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
 
   const ProfileButton = () => (
     <button
+      id="profileDropdownItem"
       className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       onClick={() => {
         const user = JSON.parse(Cookies.get('userInfo') as string)
@@ -90,6 +91,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
 
   const SettingsButton = () => (
     <button
+      id="settingsDropdownItem"
       className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       onClick={() => setActiveMenu('settings')}
     >
@@ -101,6 +103,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
 
   const LanguageButton = () => (
     <button
+      id="languagesDropdownItem"
       className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       onClick={() => setActiveMenu('languages')}
     >
@@ -129,6 +132,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
   const LogoutButton = () => (
     <Form method="post" action="/logout">
       <button
+        id="logoutDropdownItem"
         type="submit"
         className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       >
@@ -179,6 +183,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           >
             <div className="w-full">
               <button
+                id="backFromSettingsDropdownItem"
                 className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
                 onClick={() => setActiveMenu('main')}
               >
@@ -197,6 +202,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
           >
             <div className="w-full">
               <button
+                id="backFromLanguagesDropdownItem"
                 className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
                 onClick={() => setActiveMenu('main')}
               >
