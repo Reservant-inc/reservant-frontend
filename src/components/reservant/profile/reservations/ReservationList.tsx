@@ -52,8 +52,6 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
             reservations.map(reservation => (
               <Reservation
                 reservation={reservation}
-                listType={listType}
-                refreshEvents={fetchReservations}
                 key={reservation.visitId}
               />
             ))

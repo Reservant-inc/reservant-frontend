@@ -12,6 +12,9 @@ import {
 } from '../../../../services/types'
 import { EventListType } from '../../../../services/enums'
 import EventDialog from './EventDialog'
+import DefaultImage from '../../../../assets/images/user.jpg'
+import Cookies from 'js-cookie'
+import { format } from 'date-fns'
 
 interface EventProps {
   event: EventDataType
@@ -28,6 +31,11 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [loadingParticipants, setLoadingParticipants] = useState(false)
   const [interestedUsers, setInterestedUsers] = useState<InterestedUser[]>([])
+
+  const userInfo = JSON.parse(Cookies.get('userInfo') as string)
+
+  const creator = event.creator
+  const restaurant = event.restaurant
 
   const openDialog = (
     type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit'
@@ -111,47 +119,69 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
     }
   }
 
+  const formatDate = (date: string): string => {
+    return format(new Date(date), 'dd.MM.yyyy HH:mm')
+  }
+
   return (
-    <>
-      <div className="flex flex-col gap-2">
+    <div className="py-4">
+      <div className="flex flex-col divide-y-none gap-2">
         {listType === EventListType.History && (
-          <h1 className="text-sm italic">
-            One or more of your friends participated in this event.
+          <h1 className="text-sm text-grey-2 italic">
+            {userInfo.userId !== creator.userId
+              ? 'One or more of your friends participated in this event.'
+              : 'You created an event.'}
           </h1>
         )}
+
+        <div className="flex gap-2 items-center">
+          <img
+            src={getImage(creator.photo, DefaultImage)}
+            className="h-9 w-9 rounded-full"
+          />
+          <div className="flex-col gap-1">
+            <div className="flex gap-1">
+              <h1 className="font-mont-bd text-grey-5">
+                {creator.firstName} {creator.lastName}
+              </h1>
+              <h1 className="text-grey-5">participated in</h1>
+              <h1 className="font-mont-bd">{event.name}</h1>
+              <h1 className="text-grey-5">at</h1>
+              <h1 className="font-mont-bd">{restaurant.name}</h1>
+            </div>
+            <div className="flex gap-1">
+              <h1 className="text-sm text-grey-4">
+                {event.restaurant.city}, {formatDate(event.time)}
+              </h1>
+              {event.participants && (
+                <h1 className="text-sm text-grey-4 underline hover:cursor-pointer">
+                  {event.participants.length} participants
+                </h1>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <p className="text-sm">{event.description}</p>
 
         {event.photo && (
           <img
             src={getImage(event.photo, '')}
             alt={`${event.name} event`}
-            className="w-full h-auto object-cover"
-            style={{ maxHeight: '200px' }}
+            className="w-full h-auto object-cover rounded-sm "
           />
         )}
-        <h2 className="font-bold text-xl">{event.name}</h2>
-        <p className="text-sm">{event.description}</p>
-        <p className="text-sm">
-          <strong>Data wydarzenia:</strong>{' '}
-          {new Date(event.time).toLocaleString()}
-        </p>
-        <p className="text-sm">
-          <strong>Restauracja:</strong> {event.restaurant.name},{' '}
-          {event.restaurant.city}
-        </p>
-        <p className="text-sm">
-          <strong>Liczba zainteresowanych:</strong> {event.numberInterested}
-        </p>
       </div>
 
       <div className="flex gap-2">
-        {listType === EventListType.History && (
+        {/* {listType === EventListType.History && (
           <button
             className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
             onClick={() => openDialog('details')}
           >
             Szczegóły
           </button>
-        )}
+        )} */}
         {listType === EventListType.Interested && (
           <button
             className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105 mt-4"
@@ -207,7 +237,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           onAcceptUser={handleAcceptUser}
         />
       )}
-    </>
+    </div>
   )
 }
 
