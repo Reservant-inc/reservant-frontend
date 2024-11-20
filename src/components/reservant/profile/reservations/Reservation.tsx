@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { OrderType, VisitType } from '../../../../services/types'
-import { ReservationListType } from '../../../../services/enums'
 import { fetchGET, getImage } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import { FetchError } from '../../../../services/Errors'
@@ -8,15 +7,9 @@ import { format } from 'date-fns'
 
 interface ReservationProps {
   reservation: VisitType
-  listType: ReservationListType
-  refreshEvents: Function
 }
 
-const Reservation: React.FC<ReservationProps> = ({
-  reservation,
-  listType,
-  refreshEvents
-}) => {
+const Reservation: React.FC<ReservationProps> = ({ reservation }) => {
   const [orders, setOrders] = useState<OrderType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -79,7 +72,7 @@ const Reservation: React.FC<ReservationProps> = ({
               order.items.map(item => (
                 <div
                   key={item.menuItem.menuItemId}
-                  className="flex gap-3 items-start"
+                  className="flex gap-3 items-center"
                 >
                   <div className="flex items-center justify-center w-6 h-6 border-[1px] border-grey-0">
                     <h1 className="text-sm">{item.amount}</h1>

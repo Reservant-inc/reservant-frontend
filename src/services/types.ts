@@ -331,7 +331,7 @@ export type EventDataType = {
     userId: string
     firstName: string
     lastName: string
-    photo: string | null
+    photo: string
   }
   participants: Array<{
     userId: string

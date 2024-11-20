@@ -348,7 +348,7 @@ const Account: React.FC = () => {
           onClose={() => setIsEditing(false)}
           title={`Editing user information...`} //@TODO translation
         >
-          <div className="w-[650px] h-[300px] p-6 flex  justify-between">
+          <div className="w-[650px] h-fit p-6 flex  justify-between">
             <div
               className="relative min-w-64 min-h-64 flex "
               onMouseEnter={() => setIsHovered(true)}
@@ -392,12 +392,12 @@ const Account: React.FC = () => {
               }}
             >
               {({ isSubmitting, errors, touched }) => (
-                <Form className="flex justify-center h-full">
-                  <div className="flex justify-between flex-col w-full">
-                    <div className="flex-col gap-2 flex w-full">
-                      <div>
+                <Form className="flex justify-center min-h-64">
+                  <div className="flex justify-between flex-col w-full gap-2">
+                    <div className="flex-col gap-2 flex w-[320px]">
+                      <>
                         <div
-                          className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.firstName && touched.firstName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                          className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.firstName && touched.firstName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
                           <label htmlFor="name">Name:</label>
                           <Field
@@ -412,11 +412,11 @@ const Account: React.FC = () => {
                         {errors.firstName && touched.firstName && (
                           <ErrorMes msg={errors.firstName} />
                         )}
-                      </div>
+                      </>
 
-                      <div>
+                      <>
                         <div
-                          className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.lastName && touched.lastName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                          className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.lastName && touched.lastName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
                           <label htmlFor="name">Last name:</label>
                           <Field
@@ -431,10 +431,10 @@ const Account: React.FC = () => {
                         {errors.lastName && touched.lastName && (
                           <ErrorMes msg={errors.lastName} />
                         )}
-                      </div>
-                      <div>
+                      </>
+                      <>
                         <div
-                          className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.phoneNumber && touched.phoneNumber ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                          className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.phoneNumber && touched.phoneNumber ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
                           <label htmlFor="name">Phone number:</label>
                           <Field
@@ -449,7 +449,7 @@ const Account: React.FC = () => {
                         {errors.phoneNumber && touched.phoneNumber && (
                           <ErrorMes msg={errors.phoneNumber} />
                         )}
-                      </div>
+                      </>
                     </div>
                     <button
                       className="border-[1px]  self-center  px-2 h-8 w-[200px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
