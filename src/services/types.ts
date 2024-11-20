@@ -363,3 +363,15 @@ export type InterestedUser = {
   lastName: string
   photo: string
 }
+
+export type FriendData = {
+  dateSent: string
+  dateRead: string | null
+  dateAccepted: string | null
+  otherUser: {
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string
+  }
+}

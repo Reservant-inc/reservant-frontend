@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import UserRegister from '../components/auth/UserRegister'
 import {
   checkAuthLoader,
@@ -18,7 +18,7 @@ import EmployeeRestaurantManagement from '../components/reservant/restaurantMana
 import IngredientTable from '../components/reservant/restaurantManagement/Warehouse/IngredientTable'
 import HistoryTab from '../components/reservant/restaurantManagement/reservations/HistoryTab'
 import MenuList from '../components/reservant/restaurantManagement/menus/MenuList'
-import { EventListType, MenuScreenType } from '../services/enums'
+import { EventListType, FriendListType, MenuScreenType } from '../services/enums'
 import Account from '../components/reservant/profile/Account'
 import Checkout from '../components/reservant/restaurant/Checkout'
 import VisitWrapper from '../components/reservant/restaurant/visits/VisitRoot'
@@ -33,6 +33,8 @@ import CustomerService from '../components/customerService/CustomerService'
 import HomePage from '../components/reservant/HomePage'
 import LandingPage from '../components/guest/LandingPage'
 import ReservationHistoryTab from '../components/reservant/profile/reservations/ReservationHistoryTab'
+import FriendTab from '../components/reservant/profile/friends/FriendTab'
+import FriendList from '../components/reservant/profile/friends/FriendList'
 
 const router = createBrowserRouter([
   {
@@ -141,7 +143,25 @@ const router = createBrowserRouter([
           },
           {
             path: 'friends',
-            element: <FriendsManagement />
+            element: <FriendTab />, // Główna zakładka znajomych
+            children: [
+              {
+                index: true, // Defaultowa ścieżka
+                element: <Navigate to="list" replace />
+              },
+              {
+                path: 'list',
+                element: <FriendList listType={FriendListType.List} /> // Lista znajomych
+              },
+              {
+                path: 'outgoing',
+                element: <FriendList listType={FriendListType.Outgoing} /> // Wysłane zaproszenia
+              },
+              {
+                path: 'incoming',
+                element: <FriendList listType={FriendListType.Incoming} /> // Otrzymane zaproszenia
+              }
+            ]
           }
         ]
       },
