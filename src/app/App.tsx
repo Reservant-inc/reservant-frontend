@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import UserRegister from '../components/auth/UserRegister'
 import {
   checkAuthLoader,
@@ -21,6 +21,7 @@ import HistoryTab from '../components/reservant/restaurantManagement/reservation
 import MenuList from '../components/reservant/restaurantManagement/menus/MenuList'
 import {
   EventListType,
+  FriendListType,
   MenuScreenType,
   ReservationListType
 } from '../services/enums'
@@ -39,6 +40,8 @@ import HomePage from '../components/reservant/HomePage'
 import LandingPage from '../components/guest/LandingPage'
 import ReservationHistoryTab from '../components/reservant/profile/reservations/ReservationHistoryTab'
 import ReservationList from '../components/reservant/profile/reservations/ReservationList'
+import FriendTab from '../components/reservant/profile/friends/FriendTab'
+import FriendList from '../components/reservant/profile/friends/FriendList'
 
 const router = createBrowserRouter([
   {
@@ -153,7 +156,25 @@ const router = createBrowserRouter([
           },
           {
             path: 'friends',
-            element: <FriendsManagement />
+            element: <FriendTab />, // Główna zakładka znajomych
+            children: [
+              {
+                index: true, // Defaultowa ścieżka
+                element: <Navigate to="list" replace />
+              },
+              {
+                path: 'list',
+                element: <FriendList listType={FriendListType.List} /> // Lista znajomych
+              },
+              {
+                path: 'outgoing',
+                element: <FriendList listType={FriendListType.Outgoing} /> // Wysłane zaproszenia
+              },
+              {
+                path: 'incoming',
+                element: <FriendList listType={FriendListType.Incoming} /> // Otrzymane zaproszenia
+              }
+            ]
           }
         ]
       },
