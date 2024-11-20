@@ -74,10 +74,7 @@ const Reservation: React.FC<ReservationProps> = ({
               {format(new Date(reservation.reservationDate), 'dd.MM HH:mm')}
             </h1>
           </div>
-          <div
-            className="flex flex-col gap-2 p-2"
-            onMouseEnter={() => console.log(orders)}
-          >
+          <div className="flex flex-col gap-2 p-2">
             {orders.map(order =>
               order.items.map(item => (
                 <div
