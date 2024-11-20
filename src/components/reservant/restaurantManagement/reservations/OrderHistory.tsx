@@ -16,7 +16,7 @@ import {
   KeyboardArrowUp as KeyboardArrowUpIcon
 } from '@mui/icons-material'
 import {
-  MenuIteminOrderType,
+  MenuItemInOrderType,
   OrderType,
   UserType
 } from '../../../../services/types'
@@ -154,10 +154,10 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
                             </TableHead>
                             <TableBody>
                               {row.items?.map(
-                                (items: MenuIteminOrderType, index: number) => (
+                                (items: MenuItemInOrderType, index: number) => (
                                   <TableRow key={index}>
                                     <TableCell>{items.amount}</TableCell>
-                                    <TableCell>{items.cost}</TableCell>
+                                    <TableCell>{items.oneItemPrice}</TableCell>
                                     <TableCell>{items.status}</TableCell>
                                   </TableRow>
                                 )

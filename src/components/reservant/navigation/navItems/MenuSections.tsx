@@ -11,7 +11,12 @@ const Sections: React.FC<SectionProps> = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const user = JSON.parse(Cookies.get('userInfo') as string)
+  const userInfo = Cookies.get('userInfo')
+  if (!userInfo) {
+    return null
+  }
+
+  const user = JSON.parse(userInfo)
 
   const userRoles = user.roles
 

@@ -5,6 +5,7 @@ import {
   checkAuthLoader,
   checkIfCustomerService,
   checkIfOwner,
+  logoutAction,
   redirectIfLoggedIn
 } from '../components/auth/auth'
 import Root from '../components/ProtectedLayout'
@@ -18,7 +19,12 @@ import EmployeeRestaurantManagement from '../components/reservant/restaurantMana
 import IngredientTable from '../components/reservant/restaurantManagement/Warehouse/IngredientTable'
 import HistoryTab from '../components/reservant/restaurantManagement/reservations/HistoryTab'
 import MenuList from '../components/reservant/restaurantManagement/menus/MenuList'
-import { EventListType, FriendListType, MenuScreenType } from '../services/enums'
+import {
+  EventListType,
+  FriendListType,
+  MenuScreenType,
+  ReservationListType
+} from '../services/enums'
 import Account from '../components/reservant/profile/Account'
 import Checkout from '../components/reservant/restaurant/Checkout'
 import VisitWrapper from '../components/reservant/restaurant/visits/VisitRoot'
@@ -33,6 +39,7 @@ import CustomerService from '../components/customerService/CustomerService'
 import HomePage from '../components/reservant/HomePage'
 import LandingPage from '../components/guest/LandingPage'
 import ReservationHistoryTab from '../components/reservant/profile/reservations/ReservationHistoryTab'
+import ReservationList from '../components/reservant/profile/reservations/ReservationList'
 import FriendTab from '../components/reservant/profile/friends/FriendTab'
 import FriendList from '../components/reservant/profile/friends/FriendList'
 
@@ -116,10 +123,16 @@ const router = createBrowserRouter([
             element: <ReservationHistoryTab />,
             children: [
               {
-                path: 'incoming'
+                path: 'incoming',
+                element: (
+                  <ReservationList listType={ReservationListType.Incoming} />
+                )
               },
               {
-                path: 'finished'
+                path: 'finished',
+                element: (
+                  <ReservationList listType={ReservationListType.Finished} />
+                )
               }
             ]
           },
@@ -195,6 +208,10 @@ const router = createBrowserRouter([
     path: 'register',
     element: <UserRegister />,
     loader: redirectIfLoggedIn
+  },
+  {
+    path: '/logout',
+    action: logoutAction
   },
   {
     path: '*',

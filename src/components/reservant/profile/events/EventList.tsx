@@ -52,10 +52,6 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
     }
   }
 
-  const refreshEvents = () => {
-    fetchEvents()
-  }
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase()
 
@@ -87,7 +83,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
               <Event
                 event={event}
                 listType={listType}
-                refreshEvents={refreshEvents}
+                refreshEvents={fetchEvents}
                 key={event.eventId}
               />
             ))

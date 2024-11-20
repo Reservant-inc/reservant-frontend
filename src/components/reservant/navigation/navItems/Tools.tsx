@@ -16,7 +16,7 @@ import { CSSTransition } from 'react-transition-group'
 import i18next from 'i18next'
 import { ThemeProvider } from '@emotion/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 
 export interface ToolsProps {
@@ -25,15 +25,10 @@ export interface ToolsProps {
 
 const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
   const [t] = useTranslation('global')
-
   const [isPressed, setIsPressed] = useState(false)
-  const [isChanged, setIsChanged] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
-
   const navigate = useNavigate()
-
   const mainHeight = 360
-
   const [menuHeight, setMenuHeight] = useState(mainHeight)
 
   const theme = createTheme({
@@ -58,79 +53,94 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
       }
     }
   })
+
   const toggleTheme = () => {
-    if (!(document.documentElement.className === 'dark')) {
-      localStorage.theme = 'dark'
-      document.documentElement.classList.add('dark')
-
-      setIsDark(true)
-      return
-    }
-    localStorage.theme = 'light'
-    document.documentElement.classList.remove('dark')
-    setIsDark(false)
-  }
-
-  function calcHeight(el: any) {
-    const height = el.offsetHeight
-    setMenuHeight(height)
+    const isDark = document.documentElement.classList.toggle('dark')
+    localStorage.theme = isDark ? 'dark' : 'light'
+    setIsDark(isDark)
   }
 
   const pressHandler = () => {
     setIsPressed(!isPressed)
   }
 
-  const setLanguage = (lang: string) => {
+  const calcHeight = (el: any) => {
+    setMenuHeight(el.offsetHeight)
+  }
+
+  const handleLanguageChange = (lang: string) => {
     i18next.changeLanguage(lang)
     localStorage.setItem('i18nextLng', lang)
-    setIsChanged(!isChanged)
+    setActiveMenu('main')
+    setMenuHeight(mainHeight)
   }
 
-  function DropdownItem(props: any) {
-    const onClicked = () => {
-      if (props.logout === true) {
-        Cookies.remove('token')
-        Cookies.remove('userInfo')
-        navigate('/')
-      }
-
-      if (props.profile) {
+  const ProfileButton = () => (
+    <button
+      className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+      onClick={() => {
         const user = JSON.parse(Cookies.get('userInfo') as string)
         navigate(`profile/${user.userId}/account`)
-      }
+      }}
+    >
+      <AccountCircle />
+      <span className="ml-2">{t('tools.main.profile')}</span>
+    </button>
+  )
 
-      props.goToMenu && setActiveMenu(props.goToMenu)
+  const SettingsButton = () => (
+    <button
+      className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+      onClick={() => setActiveMenu('settings')}
+    >
+      <Settings />
+      <span className="ml-2">{t('tools.main.settings')}</span>
+      <ChevronRight className="ml-auto" />
+    </button>
+  )
 
-      if (props.language) {
-        setLanguage(props.language)
-        setIsPressed(false)
-        setMenuHeight(mainHeight)
-      }
-    }
+  const LanguageButton = () => (
+    <button
+      className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+      onClick={() => setActiveMenu('languages')}
+    >
+      <Language />
+      <span className="ml-2">{t('tools.main.language')}</span>
+      <ChevronRight className="ml-auto" />
+    </button>
+  )
 
-    return (
-      <div className="p-2 hover:cursor-pointer">
-        <a
-          id={props.id}
-          className={
-            props.className
-              ? props.className
-              : 'menu-item flex flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5'
-          }
-          onClick={onClicked}
-        >
-          <span className="icon-button">{props.leftIcon}</span>
-          <div className="p-1">{props.children}</div>
-          <span className="icon-right ml-auto">{props.rightIcon}</span>
-        </a>
-      </div>
-    )
-  }
+  const ThemeToggleButton = () => (
+    <div className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5">
+      {document.documentElement.className === 'dark' ? (
+        <DarkMode />
+      ) : (
+        <LightMode />
+      )}
+      <span className="ml-2">{t('tools.main.mode')}</span>
+      <Switch
+        onClick={toggleTheme}
+        className="ml-auto"
+        defaultChecked={document.documentElement.className === 'dark'}
+      />
+    </div>
+  )
+
+  const LogoutButton = () => (
+    <Form method="post" action="/logout">
+      <button
+        type="submit"
+        className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+      >
+        <Logout />
+        <span className="ml-2">{t('tools.main.signout')}</span>
+      </button>
+    </Form>
+  )
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
       <button
-        //do czego..
         id="ToolsButton"
         className="flex h-10 w-10 items-center justify-center"
         onClick={pressHandler}
@@ -149,61 +159,13 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             classNames="menu-primary"
             onEnter={calcHeight}
           >
-            <div className="w-full">
+            <div className="w-full p-2 flex flex-col gap-4">
               <ThemeProvider theme={theme}>
-                <DropdownItem
-                  leftIcon={<AccountCircle />}
-                  id="profileDropdownItem"
-                  profile={true}
-                >
-                  {t('tools.main.profile')}{' '}
-                </DropdownItem>
-                <DropdownItem
-                  leftIcon={<Settings />}
-                  rightIcon={<ChevronRight />}
-                  id="settingsDropdownItem"
-                  goToMenu="settings"
-                >
-                  {t('tools.main.settings')}{' '}
-                </DropdownItem>
-                <DropdownItem
-                  leftIcon={<Language />}
-                  rightIcon={<ChevronRight />}
-                  goToMenu="languages"
-                  id="languagesDropdownItem"
-                >
-                  {t('tools.main.language')}{' '}
-                </DropdownItem>
-                <DropdownItem
-                  className="menu-item flex flex h-14 cursor-default items-center rounded-lg p-2 text-black  hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
-                  leftIcon={
-                    document.documentElement.className === 'dark' ? (
-                      <DarkMode />
-                    ) : (
-                      <LightMode />
-                    )
-                  }
-                  rightIcon={
-                    <Switch
-                      onClick={toggleTheme}
-                      id="ToolsThemeSwitch"
-                      className="ToolsThemeSwitch"
-                      defaultChecked={
-                        document.documentElement.className === 'dark'
-                      }
-                    />
-                  }
-                  id="ThemeDropdownItem"
-                >
-                  {t('tools.main.mode')}{' '}
-                </DropdownItem>
-                <DropdownItem
-                  leftIcon={<Logout />}
-                  id="logoutDropdownItem"
-                  logout={true}
-                >
-                  {t('tools.main.signout')}{' '}
-                </DropdownItem>
+                <ProfileButton />
+                <SettingsButton />
+                <LanguageButton />
+                <ThemeToggleButton />
+                <LogoutButton />
               </ThemeProvider>
             </div>
           </CSSTransition>
@@ -216,39 +178,13 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             onEnter={calcHeight}
           >
             <div className="w-full">
-              <DropdownItem
-                leftIcon={<ChevronLeft />}
-                id="backFromSettingsDropdownItem"
-                goToMenu="main"
-              />
-              <DropdownItem
-                leftIcon={<Settings />}
-                id="SettingFiller1DropdownItem"
+              <button
+                className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+                onClick={() => setActiveMenu('main')}
               >
-                {' '}
-                {t('tools.settings.setting')}{' '}
-              </DropdownItem>
-              <DropdownItem
-                leftIcon={<Settings />}
-                id="SettingFiller2DropdownItem"
-              >
-                {' '}
-                {t('tools.settings.setting')}{' '}
-              </DropdownItem>
-              <DropdownItem
-                leftIcon={<Settings />}
-                id="SettingFiller3DropdownItem"
-              >
-                {' '}
-                {t('tools.settings.setting')}{' '}
-              </DropdownItem>
-              <DropdownItem
-                leftIcon={<Settings />}
-                id="SettingFiller4DropdownItem"
-              >
-                {' '}
-                {t('tools.settings.setting')}{' '}
-              </DropdownItem>
+                <ChevronLeft />
+              </button>
+              <div className="p-4">{t('tools.settings.setting')}</div>
             </div>
           </CSSTransition>
 
@@ -260,39 +196,30 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             onEnter={calcHeight}
           >
             <div className="w-full">
-              <DropdownItem
-                leftIcon={<ChevronLeft />}
-                id="backFromLanguagesDropdownItem"
-                goToMenu="main"
-              />
-              <DropdownItem
-                leftIcon={<Language />}
-                goToMenu="main"
-                id="EnglishDropdownItem"
-                language="en"
-                className={
-                  i18next.language === 'en'
-                    ? 'menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 '
-                    : ''
-                }
+              <button
+                className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+                onClick={() => setActiveMenu('main')}
               >
-                {' '}
-                English{' '}
-              </DropdownItem>
-              <DropdownItem
-                leftIcon={<Language />}
-                goToMenu="main"
-                id="PolishDropdownItem"
-                language="pl"
-                className={
-                  i18next.language === 'pl'
-                    ? 'menu-item flex flex h-14 cursor-default  items-center rounded-lg bg-grey-1 p-2 text-black dark:bg-grey-5 dark:text-grey-1 '
-                    : ''
-                }
+                <ChevronLeft />
+              </button>
+              <button
+                className={`menu-item flex h-14 items-center rounded-lg p-2 ${
+                  i18next.language === 'en' ? 'bg-grey-1 dark:bg-grey-5' : ''
+                }`}
+                onClick={() => handleLanguageChange('en')}
               >
-                {' '}
-                Polski{' '}
-              </DropdownItem>
+                <Language />
+                <span className="ml-2">English</span>
+              </button>
+              <button
+                className={`menu-item flex h-14 items-center rounded-lg p-2 ${
+                  i18next.language === 'pl' ? 'bg-grey-1 dark:bg-grey-5' : ''
+                }`}
+                onClick={() => handleLanguageChange('pl')}
+              >
+                <Language />
+                <span className="ml-2">Polski</span>
+              </button>
             </div>
           </CSSTransition>
         </div>

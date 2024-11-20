@@ -261,7 +261,7 @@ const Account: React.FC = () => {
                 <h1>Edit account</h1>
               </>
             </button>
-            <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
+            <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
               <DeleteForeverIcon className="w-4 h-4" />
               Delete account
             </button>
@@ -293,7 +293,7 @@ const Account: React.FC = () => {
         <div className="flex justify-between">
           <h1 className="text-lg font-mont-bd">Wallet</h1>
           <button
-            className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
+            className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
             onClick={() => addFunds()}
           >
             <AttachMoneyIcon className="w-4 h-4" />

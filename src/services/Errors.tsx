@@ -1,28 +1,19 @@
 export class FetchError extends Error {
-  status: number;
-  errors: Record<string, string[]> | null;
+  status: number
+  errors: any
 
-  constructor(
-    message: string,
-    status: number,
-    errors: Record<string, string[]> | null
-  ) {
-    super(message);
-    this.status = status;
-    this.errors = errors;
+  constructor(message: string, status: number, errors: any) {
+    super(message)
+    this.name = 'FetchError'
+    this.status = status
+    this.errors = errors
   }
 
-  // Method to format the errors into a readable string
   formatErrors(): string {
-    if (!this.errors) return this.message;
+    const message: string = this.errors['']
+      .map((error: string) => `Error: ${error}`)
+      .join('\n')
 
-    const formattedErrors = Object.entries(this.errors)
-      .map(([field, messages]) => {
-        const errorMessages = messages.join(', ');
-        return `${errorMessages}`;
-      })
-      .join('; ');
-
-    return `${formattedErrors}`;
+    return 'Error code: ' + this.status + ', ' + message
   }
 }
