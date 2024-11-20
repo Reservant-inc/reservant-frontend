@@ -1,11 +1,13 @@
-import React from "react";
+import React from 'react'
 
 const ErrorMes = ({ msg }: { msg: string }) => {
   return (
-    <div id="errorMes-wrap" className="text-error text-ellipsis text-nowrap overflow-hidden text-sm">
-      {msg}
+    <div id="errorMes-wrap">
+      <p className="text-error truncate text-nowrap overflow-hidden text-sm">
+        {msg}
+      </p>
     </div>
-  );
-};
+  )
+}
 
-export default ErrorMes;
+export default ErrorMes

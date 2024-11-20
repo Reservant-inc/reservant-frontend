@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { FetchError } from '../../../services/Errors'
 import {
+  fetchFilesPOST,
   fetchGET,
   fetchPOST,
   fetchPUT,
@@ -11,6 +12,9 @@ import {
   TransactionType,
   UserType
 } from '../../../services/types'
+import { styled } from '@mui/material'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+
 import DefaultImage from '../../../assets/images/user.jpg'
 import { Form, Formik, Field } from 'formik'
 import * as yup from 'yup'
@@ -20,6 +24,22 @@ import { CircularProgress } from '@mui/material'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
+import Dialog from '../../reusableComponents/Dialog'
+import ErrorMes from '../../reusableComponents/ErrorMessage'
+import { Key, Visibility, VisibilityOff } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1
+})
 
 const UserEditSchema = yup.object({
   phoneNumber: yup
@@ -46,12 +66,45 @@ const Account: React.FC = () => {
   const [wallet, setWallet] = useState<number>(0)
   const [transactions, setTransactions] = useState<TransactionType[]>([])
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [isHovered, setIsHovered] = useState<boolean>(false)
+  const [photoFileName, setPhotoFileName] = useState<string>(userInfo.photo)
+  const [photoPath, setPhotoPath] = useState<string>('')
+  const [isChangingPass, setIsChangingPass] = useState<boolean>(false)
+  const [showOldPassword, setShowOldPassword] = useState<boolean>(false)
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
+  const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false)
+
+  const [t] = useTranslation('global')
 
   const initialValues = {
     phoneNumber: userInfo.phoneNumber,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName
   }
+
+  const passValues = {
+    oldPassword: '',
+    newPassWord: '',
+    repeatPassword: ''
+  }
+  const passEditSchema = yup.object({
+    oldPassword: yup.string().required('Phone number is required'),
+    newPassWord: yup
+      .string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        t('errors.user-register.password.matches')
+      )
+      .required(t('errors.user-register.password.required')),
+
+    repeatPassword: yup
+      .string()
+      .oneOf(
+        [yup.ref('newPassWord'), ''],
+        t('errors.user-register.confirmPassword.matches')
+      )
+      .required(t('errors.user-register.confirmPassword.required'))
+  })
 
   useEffect(() => {
     fetchWalletBalance()
@@ -78,6 +131,16 @@ const Account: React.FC = () => {
     } catch (error) {
       if (error instanceof FetchError) console.error(error.formatErrors())
       else console.error(error)
+    }
+  }
+  const uploadPhoto = async (photoFile: File) => {
+    try {
+      const res = await fetchFilesPOST('/uploads', photoFile)
+      setPhotoPath(res.path)
+      setPhotoFileName(res.fileName)
+    } catch (error) {
+      if (error instanceof FetchError) console.log(error.formatErrors())
+      else console.log('Unexpected error')
     }
   }
 
@@ -124,7 +187,7 @@ const Account: React.FC = () => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           birthDate: '1999-12-31',
-          photo: userInfo.photo
+          photo: photoFileName
         })
       )
     } catch (error) {
@@ -134,6 +197,9 @@ const Account: React.FC = () => {
       setIsEditing(false)
       fetchUserData()
     }
+  }
+  const updatePass = async (userData: any) => {
+    alert('Password changed')
   }
 
   const addFunds = async () => {
@@ -179,19 +245,21 @@ const Account: React.FC = () => {
           <div className="flex gap-2">
             <button
               className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+              onClick={() => setIsChangingPass(prev => !prev)}
+            >
+              <>
+                <Key className="w-4 h-4" />
+                <h1>Change password</h1>
+              </>
+            </button>
+            <button
+              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
               onClick={() => setIsEditing(prev => !prev)}
             >
-              {isEditing ? (
-                <>
-                  <CloseSharpIcon className="w-4 h-4" />
-                  <h1>Cancel editing</h1>
-                </>
-              ) : (
-                <>
-                  <EditSharpIcon className="w-4 h-4" />
-                  <h1>Edit account</h1>
-                </>
-              )}
+              <>
+                <EditSharpIcon className="w-4 h-4" />
+                <h1>Edit account</h1>
+              </>
             </button>
             <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
               <DeleteForeverIcon className="w-4 h-4" />
@@ -204,80 +272,21 @@ const Account: React.FC = () => {
             src={getImage(userInfo.photo, DefaultImage)}
             className="h-32 w-32 rounded-full"
           />
-          {isEditing ? (
-            <Formik
-              initialValues={initialValues}
-              validationSchema={UserEditSchema}
-              enableReinitialize
-              onSubmit={(values, { setSubmitting }) => {
-                updateUserData(values)
-                setSubmitting(false)
-              }}
-            >
-              {({ isSubmitting, errors, touched }) => (
-                <Form className="w-full">
-                  <div className="flex justify-between w-full">
-                    <div className="flex-col gap-2 flex w-full">
-                      <div className="flex items-center gap-2">
-                        <label htmlFor="firstName" className="p-0">
-                          Name:
-                        </label>
-                        <Field
-                          name="firstName"
-                          type="text"
-                          className={`w-[150px] rounded-md p-0 italic ${touched.phoneNumber && Boolean(errors.phoneNumber) ? 'border-error' : 'border-grey-2'}`}
-                        />
-                      </div>
 
-                      <div className="flex items-center gap-2">
-                        <label htmlFor="lastName" className="p-0">
-                          Last name:
-                        </label>
-                        <Field
-                          name="lastName"
-                          type="text"
-                          className={`w-[150px] rounded-md p-0 italic ${touched.phoneNumber && Boolean(errors.phoneNumber) ? 'border-error' : 'border-grey-2'}`}
-                        />
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <label htmlFor="phoneNumber" className="p-0">
-                          Phone number:
-                        </label>
-                        <Field
-                          name="phoneNumber"
-                          type="text"
-                          className={`w-[150px] rounded-md p-0 italic ${touched.phoneNumber && Boolean(errors.phoneNumber) ? 'border-error' : 'border-grey-2'}`}
-                        />
-                      </div>
-                    </div>
-                    <button
-                      className="border-[1px] self-end px-2 h-8 w-[200px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                      type="submit"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save Changes'}
-                    </button>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          ) : (
-            <div className="flex flex-col gap-2 w-full">
-              <div className="flex gap-2 items-center">
-                <h1>Name: </h1>
-                <h1 className="text-md">{userInfo.firstName}</h1>
-              </div>
-              <div className="flex gap-2 items-center">
-                <h1>Last name: </h1>
-                <h1 className="text-md">{userInfo.lastName}</h1>
-              </div>
-              <div className="flex gap-2 items-center">
-                <h1>Phone number: </h1>
-                <h1 className="text-md">{userInfo.phoneNumber}</h1>
-              </div>
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex gap-2 items-center">
+              <h1>Name: </h1>
+              <h1 className="text-md">{userInfo.firstName}</h1>
             </div>
-          )}
+            <div className="flex gap-2 items-center">
+              <h1>Last name: </h1>
+              <h1 className="text-md">{userInfo.lastName}</h1>
+            </div>
+            <div className="flex gap-2 items-center">
+              <h1>Phone number: </h1>
+              <h1 className="text-md">{userInfo.phoneNumber}</h1>
+            </div>
+          </div>
         </div>
       </div>
       <div className="bg-white w-full h-fit rounded-lg p-4 shadow-md">
@@ -330,6 +339,257 @@ const Account: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {isEditing && (
+        <Dialog
+          open={isEditing}
+          onClose={() => setIsEditing(false)}
+          title={`Editing user information...`} //@TODO translation
+        >
+          <div className="w-[650px] h-[300px] p-6 flex  justify-between">
+            <div
+              className="relative min-w-64 min-h-64 flex "
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <img
+                className="h-64 w-64 absolute rounded-full"
+                src={getImage(photoPath, DefaultImage)}
+              />
+              {isHovered && (
+                <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-full">
+                  <label
+                    htmlFor="photo"
+                    className={
+                      'shadow hover:cursor-pointer self-center h-12 w-12 justify-center items-center gap-1 flex rounded-full p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:text-secondary  dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary  '
+                    }
+                  >
+                    <CloudUploadIcon />
+                  </label>
+                </div>
+              )}
+              <VisuallyHiddenInput
+                type="file"
+                id="photo"
+                accept="image/*"
+                onChange={e => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    uploadPhoto(e.target.files[0])
+                  }
+                }}
+              />
+            </div>
+
+            <Formik
+              initialValues={initialValues}
+              validationSchema={UserEditSchema}
+              enableReinitialize
+              onSubmit={(values, { setSubmitting }) => {
+                updateUserData(values)
+                setSubmitting(false)
+              }}
+            >
+              {({ isSubmitting, errors, touched }) => (
+                <Form className="flex justify-center h-full">
+                  <div className="flex justify-between flex-col w-full">
+                    <div className="flex-col gap-2 flex w-full">
+                      <div>
+                        <div
+                          className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.firstName && touched.firstName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                        >
+                          <label htmlFor="name">Name:</label>
+                          <Field
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            className="w-full "
+                            //@TODO translation
+                          />
+                          <label>*</label>
+                        </div>
+                        {errors.firstName && touched.firstName && (
+                          <ErrorMes msg={errors.firstName} />
+                        )}
+                      </div>
+
+                      <div>
+                        <div
+                          className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.lastName && touched.lastName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                        >
+                          <label htmlFor="name">Last name:</label>
+                          <Field
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            className="w-full "
+                            //@TODO translation
+                          />
+                          <label>*</label>
+                        </div>
+                        {errors.lastName && touched.lastName && (
+                          <ErrorMes msg={errors.lastName} />
+                        )}
+                      </div>
+                      <div>
+                        <div
+                          className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.phoneNumber && touched.phoneNumber ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                        >
+                          <label htmlFor="name">Phone number:</label>
+                          <Field
+                            type="text"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            className="w-full "
+                            //@TODO translation
+                          />
+                          <label>*</label>
+                        </div>
+                        {errors.phoneNumber && touched.phoneNumber && (
+                          <ErrorMes msg={errors.phoneNumber} />
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      className="border-[1px]  self-center  px-2 h-8 w-[200px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save Changes'}
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </Dialog>
+      )}
+
+      {isChangingPass && (
+        <Dialog
+          open={isChangingPass}
+          onClose={() => setIsChangingPass(false)}
+          title={`Changing password...`} //@TODO translation
+        >
+          <div className="w-[650px] h-[300px] p-6 ">
+            <Formik
+              initialValues={passValues}
+              validationSchema={passEditSchema}
+              enableReinitialize
+              onSubmit={(values, { setSubmitting }) => {
+                updatePass(values)
+                setSubmitting(false)
+              }}
+            >
+              {({ isSubmitting, errors, touched }) => (
+                <Form className="flex justify-center h-full">
+                  <div className="flex justify-between flex-col w-full">
+                    <div className="flex-col gap-2 flex w-full">
+                      <div>
+                        <div
+                          className={` relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.oldPassword && touched.oldPassword ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                        >
+                          <label htmlFor="name">Old password:</label>
+                          <Field
+                            type={showOldPassword ? 'text' : 'password'}
+                            id="oldPassword"
+                            name="oldPassword"
+                            className="w-full "
+                            //@TODO translation
+                          />
+                          <span
+                            id="showPassOld"
+                            className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary "
+                            onClick={() => {
+                              setShowOldPassword(prev => !prev)
+                            }}
+                          >
+                            {showOldPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </span>{' '}
+                        </div>
+                        {errors.oldPassword && touched.oldPassword && (
+                          <ErrorMes msg={errors.oldPassword} />
+                        )}
+                      </div>
+
+                      <div>
+                        <div
+                          className={` relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.newPassWord && touched.newPassWord ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                        >
+                          <label htmlFor="name">New password:</label>
+                          <Field
+                            type={showNewPassword ? 'text' : 'password'}
+                            id="newPassWord"
+                            name="newPassWord"
+                            className="w-full "
+                            //@TODO translation
+                          />
+                          <span
+                            id="showPassNew"
+                            className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary "
+                            onClick={() => {
+                              setShowNewPassword(prev => !prev)
+                            }}
+                          >
+                            {showNewPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </span>{' '}
+                        </div>
+                        {errors.newPassWord && touched.newPassWord && (
+                          <ErrorMes msg={errors.newPassWord} />
+                        )}
+                      </div>
+                      <div>
+                        <div
+                          className={`  relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.repeatPassword && touched.repeatPassword ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                        >
+                          <label htmlFor="name">Repeat password:</label>
+                          <Field
+                            type={showRepeatPassword ? 'text' : 'password'}
+                            id="repeatPassword"
+                            name="repeatPassword"
+                            className="w-full "
+                            //@TODO translation
+                          />
+                          <span
+                            id="showPassRep"
+                            className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary "
+                            onClick={() => {
+                              setShowRepeatPassword(prev => !prev)
+                            }}
+                          >
+                            {showRepeatPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </span>
+                        </div>
+                        {errors.repeatPassword && touched.repeatPassword && (
+                          <ErrorMes msg={errors.repeatPassword} />
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      className="border-[1px]  self-center  px-2 h-8 w-[200px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save Changes'}
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </Dialog>
+      )}
     </div>
   )
 }
