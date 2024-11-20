@@ -23,11 +23,13 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { CircularProgress } from '@mui/material'
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 import Dialog from '../../reusableComponents/Dialog'
 import ErrorMes from '../../reusableComponents/ErrorMessage'
 import { Key, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -73,6 +75,8 @@ const Account: React.FC = () => {
   const [showOldPassword, setShowOldPassword] = useState<boolean>(false)
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false)
+  const [showMoneyDialog, setShowMoneyDialog] = useState<boolean>(false)
+  const [value, setValue] = useState<number>(0)
 
   const [t] = useTranslation('global')
 
@@ -205,8 +209,8 @@ const Account: React.FC = () => {
   const addFunds = async () => {
     try {
       const body = JSON.stringify({
-        title: 'deposit',
-        amount: 100
+        title: 'Funds deposit',
+        amount: value
       })
 
       await fetchPOST('/wallet/add-money', body)
@@ -225,16 +229,7 @@ const Account: React.FC = () => {
   }
 
   const formatDate = (timestamp: string): string => {
-    const date = new Date(timestamp)
-
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0') // Months are 0-based
-    const day = String(date.getDate()).padStart(2, '0')
-
-    const hours = String(date.getHours()).padStart(2, '0')
-    const minutes = String(date.getMinutes()).padStart(2, '0')
-
-    return `${year}-${month}-${day}, ${hours}:${minutes}`
+    return format(new Date(timestamp), 'yyyy-MM-dd, HH:mm')
   }
 
   return (
@@ -258,7 +253,7 @@ const Account: React.FC = () => {
             >
               <>
                 <EditSharpIcon className="w-4 h-4" />
-                <h1>Edit account</h1>
+                <h1>Edit personal data</h1>
               </>
             </button>
             <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
@@ -294,7 +289,7 @@ const Account: React.FC = () => {
           <h1 className="text-lg font-mont-bd">Wallet</h1>
           <button
             className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
-            onClick={() => addFunds()}
+            onClick={() => setShowMoneyDialog(prev => !prev)}
           >
             <AttachMoneyIcon className="w-4 h-4" />
             Add wallet funds
@@ -322,11 +317,18 @@ const Account: React.FC = () => {
                   transactions.map((transaction, index) => (
                     <div
                       key={index}
-                      className="flex w-full p-2 hover:bg-grey-1 dark:hover:bg-grey-5 justify-between"
+                      className="flex w-full p-2 justify-between text-sm"
                     >
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 items-center">
+                        <h1>
+                          {transaction.amount > 0 ? (
+                            <AddIcon className="text-green" />
+                          ) : (
+                            <RemoveIcon className="text-error" />
+                          )}
+                        </h1>
                         <h1 className="">{transaction.title}:</h1>
-                        <h1>{transaction.amount}</h1>
+                        <h1>{transaction.amount} PLN</h1>
                       </div>
                       <h1>{formatDate(transaction.time.toString())}</h1>
                     </div>
@@ -460,6 +462,44 @@ const Account: React.FC = () => {
                 </Form>
               )}
             </Formik>
+          </div>
+        </Dialog>
+      )}
+
+      {showMoneyDialog && (
+        <Dialog
+          onClose={() => {
+            setShowMoneyDialog(false)
+            setValue(0)
+          }}
+          title={`Add funds`}
+        >
+          <div className="p-6 flex flex-col gap-6">
+            <div className="flex gap-2 items-center">
+              <label htmlFor="fundsInput" className="font-mont-md">
+                Add funds to your wallet
+              </label>
+              <input
+                id="fundsInput"
+                type="number"
+                min={5}
+                max={1000}
+                value={value}
+                onChange={e => setValue(parseInt(e.target.value))}
+                className="border-[1px] border-grey-1 px-2 py-1 w-20 rounded-sm"
+              />
+              <h1>PLN</h1>
+            </div>
+            <button
+              className="self-end flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
+              onClick={() => {
+                setShowMoneyDialog(prev => !prev)
+                addFunds()
+                setValue(0)
+              }}
+            >
+              Confirm
+            </button>
           </div>
         </Dialog>
       )}
