@@ -5,6 +5,7 @@ import {
   checkAuthLoader,
   checkIfCustomerService,
   checkIfOwner,
+  logoutAction,
   redirectIfLoggedIn
 } from '../components/auth/auth'
 import Root from '../components/ProtectedLayout'
@@ -186,6 +187,10 @@ const router = createBrowserRouter([
     path: 'register',
     element: <UserRegister />,
     loader: redirectIfLoggedIn
+  },
+  {
+    path: '/logout',
+    action: logoutAction
   },
   {
     path: '*',

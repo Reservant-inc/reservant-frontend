@@ -42,13 +42,13 @@ const GuestNavBar: React.FC = () => {
 
         <div className="flex gap-3">
           <button
-            className="flex items-center justify-center gap-1 shadow-md px-4 text-lg border-[1px] rounded-lg p-1 border-primary text-primary transition bg-primary text-white hover:bg-white hover:text-primary"
+            className="flex items-center justify-center gap-1 shadow-md px-4  border-[1px] rounded-lg p-1 border-primary text-primary transition bg-primary text-white hover:bg-white hover:text-primary"
             onClick={() => navigate('/register')}
           >
             REGISTER
           </button>
           <button
-            className="flex items-center justify-center gap-1 px-4 shadow-md text-lg border-[1px] rounded-lg p-1 border-primary text-primary transition bg-primary text-white hover:bg-white hover:text-primary"
+            className="flex items-center justify-center gap-1 px-4 shadow-md border-[1px] rounded-lg p-1 border-primary text-primary transition bg-primary text-white hover:bg-white hover:text-primary"
             onClick={() => navigate('/login')}
           >
             LOGIN

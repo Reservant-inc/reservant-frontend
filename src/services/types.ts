@@ -146,11 +146,11 @@ export type ItemWithIngredientsType = {
   ingredients: IngredientType[]
 } & MenuItemType
 
-export type MenuIteminOrderType = {
-  menuItemId: number
+export type MenuItemInOrderType = {
+  menuItem: MenuItemType
   amount: number
-  price: number
-  cost: number
+  oneItemPrice: number
+  totalCost: number
   status: string
 }
 
@@ -309,7 +309,7 @@ export type OrderType = {
   visitId: number
   cost: number
   status: string
-  items: MenuIteminOrderType[]
+  items: MenuItemInOrderType[]
   employees: UserType[]
 }
 

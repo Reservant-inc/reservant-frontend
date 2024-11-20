@@ -178,7 +178,7 @@ const Account: React.FC = () => {
           <h1 className="text-lg font-mont-bd">Account</h1>
           <div className="flex gap-2">
             <button
-              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
               onClick={() => setIsEditing(prev => !prev)}
             >
               {isEditing ? (
@@ -193,7 +193,7 @@ const Account: React.FC = () => {
                 </>
               )}
             </button>
-            <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
+            <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
               <DeleteForeverIcon className="w-4 h-4" />
               Delete account
             </button>
@@ -252,7 +252,7 @@ const Account: React.FC = () => {
                       </div>
                     </div>
                     <button
-                      className="border-[1px] self-end px-2 h-8 w-[200px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                      className="border-[1px] self-end px-2 h-8 w-[200px] text-sm rounded-md p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                       type="submit"
                       disabled={isSubmitting}
                     >
@@ -284,7 +284,7 @@ const Account: React.FC = () => {
         <div className="flex justify-between">
           <h1 className="text-lg font-mont-bd">Wallet</h1>
           <button
-            className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
+            className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
             onClick={() => addFunds()}
           >
             <AttachMoneyIcon className="w-4 h-4" />

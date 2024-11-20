@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import { redirect } from 'react-router-dom'
 
 const isLoggedIn = () => {
   const isLoggedIn = Boolean(Cookies.get('token'))
@@ -26,16 +27,13 @@ export function checkAuthLoader() {
   const isLogged = isLoggedIn()
 
   if (!isLogged) {
-    throw new Response('', { status: 302, headers: { Location: '/login' } })
+    return redirect('/login')
   }
 
   const isCS = isCustomerService()
 
   if (isCS) {
-    throw new Response('', {
-      status: 302,
-      headers: { Location: '/customer-service' }
-    })
+    return redirect('/customer-service')
   }
 
   return null
@@ -45,7 +43,7 @@ export function checkIfCustomerService() {
   const isLogged = isLoggedIn()
 
   if (!isLogged) {
-    throw new Response('', { status: 302, headers: { Location: '/login' } })
+    return redirect('/login')
   }
 
   const isCS = isCustomerService()
@@ -54,10 +52,7 @@ export function checkIfCustomerService() {
     const isCust = isCustomer()
 
     if (isCust) {
-      throw new Response('', {
-        status: 302,
-        headers: { Location: '/reservant/home' }
-      })
+      return redirect('/reservant/home')
     }
   }
   return null
@@ -66,10 +61,7 @@ export function checkIfCustomerService() {
 export function redirectIfLoggedIn() {
   const isLogged = isLoggedIn()
   if (isLogged) {
-    throw new Response('', {
-      status: 302,
-      headers: { Location: '/reservant/home' }
-    })
+    return redirect('/reservant/home')
   }
   return null
 }
@@ -81,10 +73,14 @@ export function checkIfOwner() {
     )
   )
   if (isOwner) {
-    throw new Response('', {
-      status: 302,
-      headers: { Location: '/reservant/home' }
-    })
+    return redirect('/reservant/home')
   }
   return null
+}
+
+export function logoutAction() {
+  console.log('Logout action triggered')
+  Cookies.remove('token')
+  Cookies.remove('userInfo')
+  return redirect('/')
 }

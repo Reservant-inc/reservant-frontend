@@ -51,7 +51,7 @@ const Reservation: React.FC<ReservationProps> = ({
   }, [reservation.orders])
 
   return (
-    <div className="w-fill h-fit flex justify-between">
+    <div className="w-full h-fit flex justify-between py-2">
       <div className="flex gap-5">
         <img
           src={getImage(reservation.restaurant.logo, DefaultImage)}
@@ -75,18 +75,37 @@ const Reservation: React.FC<ReservationProps> = ({
             </h1>
           </div>
           <div
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-2 p-2"
             onMouseEnter={() => console.log(orders)}
           >
             {orders.map(order =>
               order.items.map(item => (
-                <h1 key={item.menuItemId}>{item.menuItemId}</h1>
+                <div
+                  key={item.menuItem.menuItemId}
+                  className="flex gap-3 items-start"
+                >
+                  <div className="flex items-center justify-center w-6 h-6 border-[1px] border-grey-0">
+                    <h1 className="text-sm">{item.amount}</h1>
+                  </div>
+                  <div className="flex flex-col">
+                    <h1 className="text-sm">
+                      {item.menuItem.name} {item.totalCost}zł
+                    </h1>
+                    <h1 className="text-[12px]">{`${item.menuItem.alternateName ?? ''}${item.menuItem.alcoholPercentage !== null ? `${item.menuItem.alcoholPercentage}‰` : ''}`}</h1>
+                  </div>
+                </div>
               ))
             )}
           </div>
         </div>
       </div>
-      <div></div>
+      <div className="flex flex-col gap-2">
+        <button
+          className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
+        >
+          Make a complaint
+        </button>
+      </div>
     </div>
   )
 }
