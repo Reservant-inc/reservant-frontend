@@ -14,12 +14,14 @@ import { RestaurantDetailsType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
 import FocusedRestaurantDetails from './restaurant/onMapView/FocusedRestaurantDetails'
+import { useLocation } from 'react-router-dom'
 
 export default function HomePage() {
   const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
   const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
     []
   )
+
   const [activeRestaurant, setActiveRestaurant] =
     useState<RestaurantDetailsType | null>(null)
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
