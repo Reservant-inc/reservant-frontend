@@ -88,12 +88,12 @@ const Account: React.FC = () => {
 
   const passValues = {
     oldPassword: '',
-    newPassWord: '',
+    newPassword: '',
     repeatPassword: ''
   }
   const passEditSchema = yup.object({
     oldPassword: yup.string().required('Phone number is required'),
-    newPassWord: yup
+    newPassword: yup
       .string()
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
@@ -104,7 +104,7 @@ const Account: React.FC = () => {
     repeatPassword: yup
       .string()
       .oneOf(
-        [yup.ref('newPassWord'), ''],
+        [yup.ref('newPassword'), ''],
         t('errors.user-register.confirmPassword.matches')
       )
       .required(t('errors.user-register.confirmPassword.required'))
@@ -211,13 +211,12 @@ const Account: React.FC = () => {
           newPassword: values.newPassword
         })
       )
+      alert('Password changed')
     } catch (error) {
       if (error instanceof FetchError) console.log(error.formatErrors())
       else console.log(error)
     } finally {
-      alert('Password changed')
-      setIsEditing(false)
-      fetchUserData()
+      setIsChangingPass(false)
     }
   }
 
@@ -574,13 +573,13 @@ const Account: React.FC = () => {
 
                       <div>
                         <div
-                          className={` relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.newPassWord && touched.newPassWord ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                          className={` relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.newPassword && touched.newPassword ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
                           <label htmlFor="name">New password:</label>
                           <Field
                             type={showNewPassword ? 'text' : 'password'}
-                            id="newPassWord"
-                            name="newPassWord"
+                            id="newPassword"
+                            name="newPassword"
                             className="w-full "
                             //@TODO translation
                           />
@@ -598,8 +597,8 @@ const Account: React.FC = () => {
                             )}
                           </span>{' '}
                         </div>
-                        {errors.newPassWord && touched.newPassWord && (
-                          <ErrorMes msg={errors.newPassWord} />
+                        {errors.newPassword && touched.newPassword && (
+                          <ErrorMes msg={errors.newPassword} />
                         )}
                       </div>
                       <div>
