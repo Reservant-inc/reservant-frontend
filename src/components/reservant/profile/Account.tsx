@@ -16,7 +16,7 @@ import { styled } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 import DefaultImage from '../../../assets/images/user.jpg'
-import { Form, Formik, Field } from 'formik'
+import { Form, Formik, Field, FormikValues } from 'formik'
 import * as yup from 'yup'
 import EditSharpIcon from '@mui/icons-material/EditSharp'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -202,8 +202,23 @@ const Account: React.FC = () => {
       fetchUserData()
     }
   }
-  const updatePass = async (userData: any) => {
-    alert('Password changed')
+  const updatePass = async (values: FormikValues) => {
+    try {
+      await fetchPOST(
+        '/auth/change-password',
+        JSON.stringify({
+          oldPassword: values.oldPassword,
+          newPassword: values.newPassword
+        })
+      )
+    } catch (error) {
+      if (error instanceof FetchError) console.log(error.formatErrors())
+      else console.log(error)
+    } finally {
+      alert('Password changed')
+      setIsEditing(false)
+      fetchUserData()
+    }
   }
 
   const addFunds = async () => {
