@@ -81,7 +81,7 @@ const Account: React.FC = () => {
   const [t] = useTranslation('global')
 
   const initialValues = {
-    phoneNumber: userInfo.phoneNumber,
+    phoneNumber: userInfo.phoneNumber?.number,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName
   }
@@ -279,7 +279,9 @@ const Account: React.FC = () => {
             </div>
             <div className="flex gap-2 items-center">
               <h1>Phone number: </h1>
-              <h1 className="text-md">{userInfo.phoneNumber}</h1>
+              <h1 className="text-md">
+                {userInfo.phoneNumber?.code} {userInfo.phoneNumber?.number}
+              </h1>
             </div>
           </div>
         </div>
