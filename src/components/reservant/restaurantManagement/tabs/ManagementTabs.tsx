@@ -132,7 +132,7 @@ const ManagementTabs: React.FC = ({}) => {
           </div>
         )}
       </div>
-      <h1 className="text-xl">
+      <h1 className="text-xl dark:text-grey-0">
         {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
       </h1>
     </div>
