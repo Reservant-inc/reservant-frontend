@@ -206,7 +206,10 @@ export type UserType = {
   firstName: string
   lastName: string
   photo: string
-  phoneNumber?: string
+  phoneNumber?: {
+    code: string
+    number: number
+  }
   email?: string
 }
 
