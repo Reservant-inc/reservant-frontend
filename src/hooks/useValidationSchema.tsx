@@ -196,8 +196,8 @@ export const useValidationSchemas = () => {
     maxReservationDurationMinutes: yup
     .number()
     .typeError(t("errors.restaurant-register.maxReservationDurationMinutes.number")) // Komunikat dla nieprawidłowej liczby
-    .min(0, t("errors.restaurant-register.maxReservationDurationMinutes.min"))
-    .max(2000, t("errors.restaurant-register.maxReservationDurationMinutes.max"))
+    .min(30, t("errors.restaurant-register.maxReservationDurationMinutes.min"))
+    .max(1140, t("errors.restaurant-register.maxReservationDurationMinutes.max"))
     .required(t("errors.restaurant-register.maxReservationDurationMinutes.required")),
   });
 

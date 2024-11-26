@@ -185,17 +185,18 @@ const RestaurantListSection: React.FC = () => {
             '& .MuiDialog-paper': {
               width: '35%', 
               maxWidth: 'none',  // Usuwa domyślną maksymalną szerokość
-              height: '80%',    // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
+              height: '92%',    // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
               maxHeight: 'none', // Wyłącza ograniczenia wysokości
               margin: 0,         // Usuwa marginesy, by dialog rozciągał się maksymalnie
               display: 'flex',   // Umożliwia elastyczne układanie zawartości
               flexDirection: 'column', // Ustawia układ kolumnowy (przydatne dla treści)
+
             }
           }}
           
           
         >
-        <DialogTitle className="text-center text-3xl font-bold">
+        <DialogTitle className="text-center text-3xl font-bold dark:bg-black">
           <IconButton
             aria-label="close"
             onClick={() => setIsDialogOpen(false)}
@@ -209,7 +210,7 @@ const RestaurantListSection: React.FC = () => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent >
+        <DialogContent className='dark:bg-black'>
           <Box>
             <RestaurantRegister />
           </Box>

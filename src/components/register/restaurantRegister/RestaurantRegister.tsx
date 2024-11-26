@@ -15,7 +15,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
 import Button from "@mui/material/Button";
-import { Checkbox, FormControlLabel, FormGroup, FormLabel, MenuItem, NativeSelect, Select, TextField } from "@mui/material";
+import { Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputLabel, MenuItem, NativeSelect, Select, TextField } from "@mui/material";
 import { group } from "console";
 import { Close } from "@mui/icons-material";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -40,7 +40,14 @@ const initialValues: RestaurantDataType = {
   description: "",
   groupId: null,
   reservationDeposit: null,
-  openingHours: [],
+  openingHours: [{"from": "00:00",
+    "until": "00:00"}, {"from": "00:00",
+    "until": "00:00"}, {"from": "00:00",
+    "until": "00:00"}, {"from": "00:00",
+    "until": "00:00"}, {"from": "00:00",
+    "until": "00:00"}, {"from": "00:00",
+    "until": "00:00"}, {"from": "00:00",
+    "until": "00:00"}],
   maxReservationDurationMinutes: null
 };
 
@@ -52,6 +59,7 @@ const RestaurantRegister: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  
 
   const { t } = useTranslation("global");
 
@@ -73,16 +81,30 @@ const RestaurantRegister: React.FC = () => {
     fetchTags();
   }, []);
 
+  
+
+
   const handleNextClick = async (formik: any) => {
-    
-    if (formik.isSubmitting || !formik.isValid || !formik.dirty) {
-      return; 
-    }
-    
     setRequestLoading(true); // Ustawienie loading state
-
+  
     try {
+      // Wykonaj walidację formularza
+      const errors = await formik.validateForm();
+  
+      if (Object.keys(errors).length > 0) {
+        // Jeśli są błędy, zaznacz pola jako dotknięte i wyświetl błędy
+        formik.setTouched(
+          Object.keys(errors).reduce((acc: any, key: string) => {
+            acc[key] = true;
+            return acc;
+          }, {})
+        );
+        return; // Zatrzymaj proces przejścia dalej
+      }
+  
+      console.log (formik.values)
 
+      if (activeStep === 1 ) {
       const body = JSON.stringify({
         name: formik.values.name,
         nip: formik.values.nip,
@@ -90,21 +112,23 @@ const RestaurantRegister: React.FC = () => {
         address: formik.values.address,
         postalIndex: formik.values.postalIndex,
         city: formik.values.city,
-        //groupId: 0
       });
-      
+  
       const response = await fetchPOST("/my-restaurants/validate-first-step", body);
-      
-        setServerError(null); 
-        setActiveStep(2); 
-     
+    }
+  
+      setServerError(null); 
+      setActiveStep((prevStep) => prevStep + 1); 
+  
     } catch (error) {
       setServerError(t("restaurant-register.serverError"));
-
     } finally {
-      setRequestLoading(false); 
+      setRequestLoading(false); // Zakończenie loading state
     }
   };
+
+
+  
 
   const handleSubmit = async () => {
    
@@ -129,10 +153,10 @@ const RestaurantRegister: React.FC = () => {
   
 
   return (
-    <div id="restaurantRegister-div-wrapper" >
+    <div id="restaurantRegister-div-wrapper">
       <h1
         id="restaurantRegister-header"
-        className="mb-8 text-center text-3xl font-bold"
+        className="mb-8 text-center text-3xl font-bold dark:text-white"
       >
         {t("restaurant-register.header")}
       </h1>
@@ -156,7 +180,7 @@ const RestaurantRegister: React.FC = () => {
                         }}
                       />
                     </div>
-                    <span className="text-sm text-black font-mont-md">
+                    <span className="text-sm text-black font-mont-md dark:text-grey-2">
                       {`Step ${activeStep} of 3`}
                     </span>
                     {/* Step 1 */}
@@ -174,9 +198,10 @@ const RestaurantRegister: React.FC = () => {
                           label="Restaurant Name *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.name && formik.touched.name && formik.errors.name}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.name && formik.touched.name && formik.errors.name}
                         />
+
                         <Field
                           type="text"
                           id="address"
@@ -184,9 +209,10 @@ const RestaurantRegister: React.FC = () => {
                           label="Address *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.address && formik.touched.address) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.address && formik.touched.address && formik.errors.address}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.address && formik.touched.address) ? "[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.address && formik.touched.address && formik.errors.address}
                         />
+
                         <Field
                           type="text"
                           id="postalIndex"
@@ -194,9 +220,12 @@ const RestaurantRegister: React.FC = () => {
                           label="Postal Code *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.postalIndex && formik.touched.postalIndex) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.postalIndex && formik.touched.postalIndex && formik.errors.postalIndex}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.postalIndex && formik.touched.postalIndex) 
+                            ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white" 
+                            : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.postalIndex && formik.touched.postalIndex && formik.errors.postalIndex}
                         />
+
                         <Field
                           type="text"
                           id="city"
@@ -204,9 +233,10 @@ const RestaurantRegister: React.FC = () => {
                           label="City *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.city && formik.touched.city) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.city && formik.touched.city && formik.errors.city}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.city && formik.touched.city) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.city && formik.touched.city && formik.errors.city}
                         />
+
                         <Field
                           type="text"
                           id="nip"
@@ -214,38 +244,73 @@ const RestaurantRegister: React.FC = () => {
                           label="NIP *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.nip && formik.touched.nip) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.nip && formik.touched.nip && formik.errors.nip}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.nip && formik.touched.nip) 
+                            ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" 
+                            : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.nip && formik.touched.nip && formik.errors.nip}
                         />
-                        <Field
-                          type="text"
-                          id="restaurantType"
-                          name="restaurantType"
-                          label="Restaurant Type *"
+
+                        <FormControl
                           variant="standard"
-                          as={Select}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.restaurantType && formik.touched.restaurantType) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.restaurantType && formik.touched.restaurantType && formik.errors.restaurantType}
+                          className="w-4/5 [&>*]:font-mont-md text-[15px] dark:text-white"
+                          error={Boolean(formik.errors.restaurantType && formik.touched.restaurantType)}
                         >
-                           <MenuItem id="restaurantRegister-opt-restaurant" value={LocalType.Restaurant}>
+                          <InputLabel id="restaurantType-label" className={`[&>*]:label-[20px] ${!(formik.errors.restaurantType && formik.touched.restaurantType) 
+                          ? "dark:text-white text-black " : "text-error dark:text-error"}`}>
+                            Business Type *
+                          </InputLabel>
+                          <Field
+                            as={Select}
+                            id="restaurantType"
+                            name="restaurantType"
+                            labelId="restaurantType-label"
+                            value={formik.values.restaurantType}
+                            onChange={formik.handleChange}
+                            className={`[&>*]:label-[20px]  [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.restaurantType && formik.touched.restaurantType) 
+                              ? "[&>*]:text-black before:border-black dark:before:border-white after:border-secondary" 
+                              : "[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error"}`}
+                            helpertext={formik.errors.restaurantType && formik.touched.restaurantType && formik.errors.restaurantType}
+                          >
+                            <MenuItem
+                              id="restaurantRegister-opt-restaurant"
+                              value={LocalType.Restaurant}
+                              className="dark:text-white"
+                            >
                               {t("restaurant-register.types.restaurant")}
                             </MenuItem>
-                            <MenuItem id="restaurantRegister-opt-bar" value={LocalType.Bar}>
+                            <MenuItem
+                              id="restaurantRegister-opt-bar"
+                              value={LocalType.Bar}
+                              className="dark:text-white"
+                            >
                               {t("restaurant-register.types.bar")}
                             </MenuItem>
-                            <MenuItem id="restaurantRegister-opt-cafe" value={LocalType.Cafe}>
+                            <MenuItem
+                              id="restaurantRegister-opt-cafe"
+                              value={LocalType.Cafe}
+                              className="dark:text-white"
+                            >
                               {t("restaurant-register.types.cafe")}
                             </MenuItem>
-                        </Field>
+                          </Field>
+
+                          {/* Wyświetlanie błędów */}
+                          {formik.errors.restaurantType && formik.touched.restaurantType && (
+                            <FormHelperText className="text-error dark:text-error">{formik.errors.restaurantType}</FormHelperText>
+                          )}
+                        </FormControl>
+
                         <div className="flex flex-col items-center gap-4">
-                          <button
-                            type="button"
-                            onClick={() => handleNextClick(formik)}
-                            disabled={formik.isSubmitting || !formik.isValid || !formik.dirty || requestLoading}
-                            className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty && !requestLoading ? "bg-primary text-white" : "bg-grey-1"}`}
-                          >
-                            Next
-                          </button>
+                        <button
+                          type="button"
+                          onClick={() => handleNextClick(formik)}
+
+                          className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                          }`}
+                        >
+                          Next
+                        </button>
+
                           {serverError && (
                             <div className="text-error p-2">Server Error</div>
                           )}
@@ -262,41 +327,52 @@ const RestaurantRegister: React.FC = () => {
                       unmountOnExit
                     >
                       <div className="flex w-full flex-col items-center gap-4">
-                        <FieldArray name="tags">
-                          {({ push, remove }) => (
-                            <div className="flex flex-col w-4/5">
-                              <FormLabel className="text text-black font-mont-md mb-2">Tags:</FormLabel>
-                              <FormGroup>
-                                {tags.map((tag, index) => (
-                                  <FormControlLabel
-                                    key={index}
-                                    control={
-                                      <Checkbox
-                                        className={
-                                          formik.values.tags.includes(tag)
-                                            ? "text-primary [&.Mui-checked]:text-secondary"
-                                            : "text-grey-1"
+                      <FieldArray name="tags">
+                        {({ push, remove }) => (
+                          <div className="flex flex-col w-4/5">
+                            <FormLabel className="text text-black font-mont-md mb-2 dark:text-white">Tags *</FormLabel>
+                            <FormGroup className="grid grid-cols-2"> {/* Zastosowanie grid layout */}
+                              {tags.map((tag, index) => (
+                                <FormControlLabel
+                                  key={index}
+                                  control={
+                                    <Checkbox
+                                      className={
+                                        formik.values.tags.includes(tag)
+                                          ? "text-primary [&.Mui-checked]:text-secondary"
+                                          : "text-grey-1"
+                                      }
+                                      checked={formik.values.tags.includes(tag)}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          push(tag);
+                                        } else {
+                                          const idx = formik.values.tags.indexOf(tag);
+                                          remove(idx);
                                         }
-                                        checked={formik.values.tags.includes(tag)}
-                                        onChange={(e) => {
-                                          if (e.target.checked) {
-                                            push(tag);
-                                          } else {
-                                            const idx = formik.values.tags.indexOf(tag);
-                                            remove(idx);
-                                          }
-                                        }}
-                                      />
-                                    }
-                                    label={<span className="text-sm text-black font-mont-md">{tag}</span>}
-                                  />
-                                ))}
-                              </FormGroup>
-                            </div>
-                          )}
-                        </FieldArray>
-                        <div className="w-[85%]">
+                                      }}
+                                    />
+                                  }
+                                  label={<span className="text-[15px] text-black dark:text-white font-mont-md">{tag}</span>}
+                                />
+                              ))}
+                            </FormGroup>
+                            {formik.touched.tags && formik.errors.tags && (
+                              <div className="text-error text-sm mt-1 font-mont-md">
+                                {formik.errors.tags} {/* nie wiem co z tym zrobić */}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                      </FieldArray>
+                       <div className="[&>*]:label-[20px] w-[88%] [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white">
                           <FormControlLabel
+                            label={
+                              <span className="text-[15px]">
+                                Provide Delivery
+                              </span>
+                            }
                             control={
                               <Checkbox
                                 id="provideDelivery"
@@ -306,115 +382,108 @@ const RestaurantRegister: React.FC = () => {
                                 className="text-grey-1 [&.Mui-checked]:text-secondary"
                               />
                             }
-                            label="Provide Delivery:"
-                            labelPlacement="start"  // Etykieta na początku (z lewej)
-                            className="flex items-center gap-2 justify-between w-full"  // Dodatkowo użyj 'justify-between'
+                            labelPlacement="start" 
+                            className="flex items-center gap-12 w-full justify-end "  
                           />
                         </div>
+                        
                         <FieldArray name="openingHours">
                           {({ push, remove }) => (
                             <div className="flex flex-col w-4/5 gap-4">
-                              <FormLabel className="text text-black font-mont-md mb-2">Opening Hours:</FormLabel>
-                              {formik.values.openingHours.map((timeSlot, index) => (
+                              <FormLabel className="text  text-[15px] text-black font-mont-md mb-2 dark:text-white">
+                                Opening Hours *
+                              </FormLabel>
+
+                              {/* Wyświetlanie 7 dni tygodnia od razu */}
+                              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, index) => (
                                 <div key={index} className="flex items-center gap-4">
+                                  <span className="text-sm font-bold text-gray-500 w-full dark:text-white ">{day}</span>
+
                                   <Field
                                     as={NativeSelect}
                                     id={`openingHours[${index}].from`}
                                     name={`openingHours[${index}].from`}
-                                    className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary"
+                                    className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white [&>*]:text-black before:border-black before:border-black dark:before:border-white after:border-secondary"
                                   >
-                                    <option value="" disabled>
-                                      From
-                                    </option>
+                                    <option value="" disabled>From</option>
                                     {timeOptions.map((time) => (
                                       <option key={time} value={time}>
                                         {time}
                                       </option>
                                     ))}
                                   </Field>
-                                  <span className="text-sm font-bold text-gray-500">-</span>
+
+                                  <span className="text-sm font-bold text-gray-500 dark:text-white">-</span>
+
                                   <Field
                                     as={NativeSelect}
                                     id={`openingHours[${index}].until`}
                                     name={`openingHours[${index}].until`}
-                                    className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary"
+                                    className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:dark:text-white before:border-black dark:before:border-white after:border-secondary"
                                   >
-                                    <option value="" disabled>
-                                      Until
-                                    </option>
+                                    <option value="" disabled>Until</option>
                                     {timeOptions.map((time) => (
                                       <option key={time} value={time}>
                                         {time}
                                       </option>
                                     ))}
                                   </Field>
-                                  <button
-                                    type="button"
-                                    onClick={() => remove(index)}
-                                    className="text-red-500 font-bold"
-                                  >
-                                    <Close />
-                                  </button>
                                 </div>
                               ))}
-                              <button
-                                type="button"
-                                onClick={() => push({ from: "", until: "" })}
-                                className="text-primary"
-                              >
-                                + Add Time Slot
-                              </button>
                             </div>
                           )}
                         </FieldArray>
+
                         <Field
                           type="text"
                           id="description"
                           name="description"
-                          label="Description"
+                          label="Description *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.description && formik.touched.description) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.description && formik.touched.description && formik.errors.description}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.description && formik.touched.description) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.description && formik.touched.description && formik.errors.description}
                         />
                          <Field
                           type="text"
                           id="reservationDeposit"
                           name="reservationDeposit"
-                          label="Reservation deposit"
+                          label="Reservation deposit *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.reservationDeposit && formik.touched.reservationDeposit) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.reservationDeposit && formik.touched.reservationDeposit && formik.errors.reservationDeposit}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.reservationDeposit && formik.touched.reservationDeposit) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.reservationDeposit && formik.touched.reservationDeposit && formik.errors.reservationDeposit}
                         />
                         <Field
                           type="text"
                           id="maxReservationDurationMinutes"
                           name="maxReservationDurationMinutes"
-                          label="Maximum reservation duration in minutes"
+                          label="Maximum reservation duration (minutes) *"
                           variant="standard"
                           as={TextField}
-                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.reservationDeposit && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
+                          className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          helpertext={formik.errors.reservationDeposit && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
                         />
                         <div className="flex gap-5">
                           <button
                             type="button"
                             onClick={() => setActiveStep(1)}
-                            className="btn-back"
+                            className="dark:text-white"
                           >
                             Back
                           </button>
                           <button
-                            type="button"
-                            onClick={() => setActiveStep(3)}
-                            disabled={formik.isSubmitting || !formik.isValid || !formik.dirty || requestLoading}
-                            className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty && !requestLoading ? "bg-primary text-white" : "bg-grey-1"}`}
-                          >
-                            Next
-                          </button>
+                          type="button"
+                          onClick={() => handleNextClick(formik)}
+
+                          className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                          }`}
+                        >
+                          Next
+                        </button>
+
                           {serverError && (
-                            <div className="text-error mt-2">Server Error</div>
+                            <div className="text-error p-2">Server Error</div>
                           )}
                         </div>
                         
@@ -430,7 +499,7 @@ const RestaurantRegister: React.FC = () => {
                     >
                       <div className="flex w-full flex-col items-center gap-4">
                       <div className="flex items-center w-4/5 gap-4">
-                          <label htmlFor="logo" className="font-mont-md text-black text-sm flex-1">
+                          <label htmlFor="logo" className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white">
                             Logo
                           </label>
                           <button
@@ -456,7 +525,7 @@ const RestaurantRegister: React.FC = () => {
                         </div>
 
                         <div className="flex items-center w-4/5 gap-4">
-                          <label htmlFor="photos" className="font-mont-md text-black text-sm flex-1">
+                          <label htmlFor="photos" className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white">
                             Photos
                           </label>
                           <button
@@ -483,7 +552,7 @@ const RestaurantRegister: React.FC = () => {
                         </div>
 
                         <div className="flex items-center w-4/5 gap-4">
-                          <label htmlFor="idCard" className="font-mont-md text-black text-sm flex-1">
+                          <label htmlFor="idCard" className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white">
                             ID Card
                           </label>
                           <button
@@ -511,7 +580,7 @@ const RestaurantRegister: React.FC = () => {
                         <div className="flex items-center w-4/5 gap-4">
                           <label
                             htmlFor="businessPermission"
-                            className="font-mont-md text-black text-sm flex-1"
+                            className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white"
                           >
                             Business Permission
                           </label>
@@ -544,14 +613,14 @@ const RestaurantRegister: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setActiveStep(2)}
-                            className="btn-back"
+                            className="dark:text-white"
                           >
                             Back
                           </button>
                           <button
                             type="submit"
                             disabled={!formik.isValid || requestLoading}
-                            className="btn-submit"
+                            className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty && !requestLoading ? "bg-primary text-white" : "bg-grey-1"}`}
                           >
                             Submit
                           </button>
