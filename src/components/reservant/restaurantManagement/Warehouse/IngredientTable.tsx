@@ -15,7 +15,6 @@ import {
   DialogTitle
 } from '@mui/material'
 import { fetchGET, fetchPOST } from '../../../../services/APIconn'
-import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import RemoveIcon from '@mui/icons-material/Remove'
@@ -23,9 +22,10 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import EditIcon from '@mui/icons-material/Edit'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
+import { IngredientType, PaginationType } from '../../../../services/types'
 
 const IngredientTable: React.FC = () => {
-  const [ingredients, setIngredients] = useState<any[]>([])
+  const [ingredients, setIngredients] = useState<IngredientType[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isGroceryListOpen, setIsGroceryListOpen] = useState(false)
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
@@ -53,10 +53,11 @@ const IngredientTable: React.FC = () => {
 
   const fetchIngredients = async () => {
     try {
-      const data = await fetchGET(
+      const data: PaginationType = await fetchGET(
         `/restaurants/${activeRestaurantId}/ingredients?page=0&perPage=10`
       )
-      console.log(data)
+      const items: IngredientType[] = data.items as IngredientType[]
+      setIngredients(items)
     } catch (error) {
       console.error('Error fetching ingredients:', error)
     }
@@ -318,7 +319,7 @@ const IngredientTable: React.FC = () => {
           id: index
         }))}
         columns={columns}
-        pageSizeOptions={[5, 10, 25]}
+        pageSizeOptions={[5, 10, 25, 100]}
         disableRowSelectionOnClick
         slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
       />

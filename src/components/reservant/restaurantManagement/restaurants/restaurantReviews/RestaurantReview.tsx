@@ -162,7 +162,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       </div>
 
       <div className="review-content flex flex-col items-start p-1">
-        <p>
+        <h1>
           <h1 className="text-sm">
             {isExpanded || review.contents.length <= 100
               ? review.contents
@@ -184,7 +184,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
               {t('general.read-less')}
             </span>
           )}
-        </p>
+        </h1>
       </div>
 
       <div className="flex items-center">
