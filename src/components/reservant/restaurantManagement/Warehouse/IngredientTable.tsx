@@ -105,16 +105,10 @@ const IngredientTable: React.FC = () => {
         minimalAmount: Number(formValues.minimalAmount),
         amountToOrder: 0,
         amount: formValues.amount ? Number(formValues.amount) : 0,
-        menuItem: {
-          menuItemId: 2,
-          amountUsed: 1
-        }
+        restaurantId: restaurantId
       }
 
-      await fetchPOST(
-        `/restaurants/${activeRestaurantId}/ingredients`,
-        JSON.stringify(payload)
-      )
+      await fetchPOST(`/ingredients`, JSON.stringify(payload))
       handleCloseModal()
       fetchIngredients()
     } catch (error) {

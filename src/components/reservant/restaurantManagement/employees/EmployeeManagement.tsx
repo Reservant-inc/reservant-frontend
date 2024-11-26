@@ -25,6 +25,7 @@ import Dialog from '../../../reusableComponents/Dialog'
 import EmploymentsManagement from './EmploymentsManagement'
 import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
 import { FetchError } from '../../../../services/Errors'
+import { parsePhoneNumber } from 'libphonenumber-js'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -57,7 +58,7 @@ export default function EmployeeManagement() {
           const tmp: EmploymentType[] = []
           for (const j in response[i].employments) {
             tmp.push({
-              id: response[i].employments[j].employmentId,
+              employmentId: response[i].employments[j].employmentId,
               restaurantId: response[i].employments[j].restaurantId,
               isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
               isHallEmployee: response[i].employments[j].isHallEmployee,
@@ -71,7 +72,8 @@ export default function EmployeeManagement() {
             firstName: response[i].firstName,
             lastName: response[i].lastName,
             birthDate: response[i].birthDate,
-            phoneNumber: response[i].phoneNumber,
+            phoneNumber:
+              response[i].phoneNumber.code + response[i].phoneNumber.number,
             employments: tmp.slice()
           })
         }
@@ -156,8 +158,13 @@ export default function EmployeeManagement() {
   const processRowUpdate = (newRow: GridRowModel) => {
     const putEmp = async (updatedRow: GridRowModel) => {
       try {
+        const number = parsePhoneNumber(updatedRow.phoneNumber)
+
         const body = JSON.stringify({
-          phoneNumber: updatedRow.phoneNumber,
+          phoneNumber: {
+            code: '+' + number.countryCallingCode,
+            number: number.nationalNumber
+          },
           firstName: updatedRow.firstName,
           lastName: updatedRow.lastName,
           birthDate: updatedRow.birthDate,

@@ -18,13 +18,23 @@ import {
   GridSlots
 } from '@mui/x-data-grid'
 import { useParams } from 'react-router-dom'
-import { EmployeeEmployedType } from '../../../../services/types'
-import { fetchDELETE, fetchGET, fetchPUT } from '../../../../services/APIconn'
+import { EmployeeEmployedType, EmployeeType } from '../../../../services/types'
+import {
+  fetchDELETE,
+  fetchGET,
+  fetchPOST,
+  fetchPUT
+} from '../../../../services/APIconn'
 import EmployeeRegister from '../register/EmployeeRegister'
 import Dialog from '../../../reusableComponents/Dialog'
 import AddIcon from '@mui/icons-material/Add'
 import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
 import { FetchError } from '../../../../services/Errors'
+import EmploymentsManagement from './EmploymentsManagement'
+import { ErrorMessage, Field, Form, Formik, FormikValues } from 'formik'
+import { useValidationSchemas } from '../../../../hooks/useValidationSchema'
+import ErrorMes from '../../../reusableComponents/ErrorMessage'
+import { useTranslation } from 'react-i18next'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -33,10 +43,19 @@ interface EditToolbarProps {
   ) => void
 }
 
+const initialValues = {
+  selectedEmp: '',
+  isBackdoorEmployee: '',
+  isHallEmployee: ''
+}
+
 export default function EmployeeRestaurantManagement() {
+  const [t] = useTranslation('global')
+
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false)
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
   const [empToDel, setEmpToDel] = useState<string>('')
 
@@ -64,7 +83,8 @@ export default function EmployeeRestaurantManagement() {
             login: response[i].login,
             firstName: response[i].firstName,
             lastName: response[i].lastName,
-            phoneNumber: response[i].phoneNumber,
+            phoneNumber:
+              response[i].phoneNumber.code + response[i].phoneNumber.number,
             isBackdoorEmployee: response[i].isBackdoorEmployee,
             isHallEmployee: response[i].isHallEmployee,
             dateFrom: response[i].dateFrom,
@@ -78,16 +98,40 @@ export default function EmployeeRestaurantManagement() {
       console.error('Error populating table', error)
     }
   }
+  const { RestaurantAddEmployeeSchema2 } = useValidationSchemas()
+  const [employees, setEmployees] = useState<EmployeeType[]>([])
+
+  useEffect(() => {
+    const getEmployees = async () => {
+      try {
+        const res = await fetchGET('/user/employees')
+
+        let tmp: EmployeeType[] = res
+
+        setEmployees(tmp)
+      } catch (error) {
+        console.error('Error fetching restaurants', error)
+      }
+    }
+    getEmployees()
+  }, [])
   const EditToolbar = (props: EditToolbarProps) => {
     return (
       <GridToolbarContainer>
-        <div className="z-1 flex h-[3rem] w-full items-center p-1">
+        <div className="z-1 flex gap-2 h-[3rem] w-full items-center p-1">
           <button
-            id="RestaurantListAddRestaurantButton"
-            onClick={() => setIsModalOpen(true)}
+            id="RestaurantEmpCreate"
+            onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ Add an employee</h1>
+            <h1 className="text-md font-mont-md">+ Create an employee</h1>
+          </button>
+          <button
+            id="RestaurantEmpAdd"
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          >
+            <h1 className="text-md font-mont-md">+ Assign an employee</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -156,6 +200,30 @@ export default function EmployeeRestaurantManagement() {
     ])
     await fetchPUT('/employments', body)
     return updatedRow
+  }
+
+  const handleSubmit = async (values: FormikValues) => {
+    try {
+      const body = JSON.stringify([
+        {
+          employeeId: values.selectedEmp,
+          isHallEmployee:
+            values.isHallEmployee === '' ? false : values.isHallEmployee,
+          isBackdoorEmployee:
+            values.isBackdoorEmployee === '' ? false : values.isBackdoorEmployee
+        }
+      ])
+      await fetchPOST(`/my-restaurants/${restaurantId}/employees`, body)
+
+      populateRows()
+
+      let selector: HTMLSelectElement = document.getElementById(
+        'selectedRestaurant'
+      ) as HTMLSelectElement
+      selector.selectedIndex = 0
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
@@ -308,13 +376,120 @@ export default function EmployeeRestaurantManagement() {
         }}
         className="scroll border-0"
       />
-      {isModalOpen && (
+      {isCreateModalOpen && (
         <Dialog
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          open={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
           title="Creating a new employee..."
         >
-          <EmployeeRegister setIsModalOpen={setIsModalOpen} />
+          <EmployeeRegister setIsModalOpen={setIsCreateModalOpen} />
+        </Dialog>
+      )}
+      {isAddModalOpen && (
+        <Dialog
+          open={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          title="Adding employment..."
+        >
+          <div className="p-2 w-[500px] items-center justify-center flex">
+            <Formik
+              initialValues={initialValues}
+              validationSchema={RestaurantAddEmployeeSchema2}
+              onSubmit={(values, { resetForm }) => {
+                handleSubmit(values)
+                resetForm()
+              }}
+            >
+              {formik => {
+                return (
+                  <Form>
+                    <div className="w-full flex flex-col items-center gap-3 justify-center">
+                      <div className="form-control flex gap-6 w-full justify-start">
+                        <Field
+                          id="selectedEmp"
+                          default="Select an employee"
+                          className="dark:bg-black text-ellipsis overflow-hidden w-1/2 pr-8 dark:text-grey-0 rounded-lg"
+                          name="selectedEmp"
+                          component="select"
+                        >
+                          <option
+                            value=""
+                            disabled={true}
+                            selected={true}
+                            id="addEmp-option-default"
+                          >
+                            Employee
+                          </option>
+                          {employees
+                            .filter(
+                              emp => !rows.find(row => row.empID === emp.userId)
+                            )
+                            .map(emp => (
+                              <option value={emp.userId}>
+                                {' '}
+                                {emp.firstName} {emp.lastName}
+                              </option>
+                            ))}
+                        </Field>
+                        <div className="flex flex-col">
+                          <span className="flex items-center gap-2">
+                            <Field
+                              type="checkbox"
+                              id="isBackdoorEmployee"
+                              name="isBackdoorEmployee"
+                              checked={formik.values.isBackdoorEmployee}
+                              className={` text-nowrap border-[1px] hover:cursor-pointer ${(formik.errors.isHallEmployee || formik.errors.isBackdoorEmployee) && (formik.touched.isHallEmployee || formik.touched.isBackdoorEmployee) ? 'border-error' : 'border-black dark:border-grey-0'}`}
+                            />
+                            <label
+                              htmlFor="isBackdoorEmployee"
+                              className={`${(formik.errors.isHallEmployee || formik.errors.isBackdoorEmployee) && (formik.touched.isHallEmployee || formik.touched.isBackdoorEmployee) ? 'text-error' : 'dark:text-grey-0 text-black'}`}
+                            >
+                              {t('add-employee.isBackdoorEmployee')}
+                            </label>
+                          </span>
+                          <span className="flex items-center gap-2">
+                            <Field
+                              type="checkbox"
+                              id="isHallEmployee"
+                              name="isHallEmployee"
+                              checked={formik.values.isHallEmployee}
+                              className={`  text-nowrap   border-[1px] hover:cursor-pointer ${(formik.errors.isHallEmployee || formik.errors.isBackdoorEmployee) && (formik.touched.isHallEmployee || formik.touched.isBackdoorEmployee) ? 'border-error' : 'border-black dark:border-grey-0'}`}
+                            />
+                            <label
+                              htmlFor="isHallEmployee"
+                              className={`${(formik.errors.isHallEmployee || formik.errors.isBackdoorEmployee) && (formik.touched.isHallEmployee || formik.touched.isBackdoorEmployee) ? 'text-error' : 'dark:text-grey-0 text-black'}`}
+                            >
+                              {t('add-employee.isHallEmployee')}
+                            </label>
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        id="RestaurantAddEmpSubmitButton"
+                        type="submit"
+                        disabled={!formik.dirty || !formik.isValid}
+                        className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                      >
+                        <h1 className="font-mont-md text-md text-nowrap">
+                          {t('add-employee.addEmployee')}
+                        </h1>
+                      </button>
+                      <div className="">
+                        <ErrorMessage name="isBackdoorEmployee">
+                          {msg => <ErrorMes msg={msg} />}
+                        </ErrorMessage>
+                        {!formik.touched.isBackdoorEmployee && (
+                          <ErrorMessage name="isHallEmployee">
+                            {msg => <ErrorMes msg={msg} />}
+                          </ErrorMessage>
+                        )}
+                      </div>
+                    </div>
+                  </Form>
+                )
+              }}
+            </Formik>
+          </div>
         </Dialog>
       )}
       <ConfirmationDialog
