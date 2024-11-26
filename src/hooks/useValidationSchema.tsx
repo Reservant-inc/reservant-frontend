@@ -174,6 +174,36 @@ export const useValidationSchemas = () => {
         ])
       }
     )
+  const RestaurantAddEmployeeSchema2 = yup
+    .object({
+      isBackdoorEmployee: yup.boolean(),
+      isHallEmployee: yup.boolean(),
+      selectedEmp: yup
+        .string()
+        .required('please select one of the available employees')
+    })
+    .test(
+      'at-least-one-checkbox',
+      t('errors.employee-register.employeeRole.required'),
+      obj => {
+        if (obj.isBackdoorEmployee || obj.isHallEmployee) {
+          return true
+        }
+
+        return new yup.ValidationError([
+          new yup.ValidationError(
+            t('errors.add-employee.employeeRole.required'),
+            null,
+            'isBackdoorEmployee'
+          ),
+          new yup.ValidationError(
+            t('errors.add-employee.employeeRole.required'),
+            null,
+            'isHallEmployee'
+          )
+        ])
+      }
+    )
 
   const RestaurantRegisterStep2Schema = yup.object({
     description: yup
@@ -272,6 +302,7 @@ export const useValidationSchemas = () => {
     RestaurantRegisterStep1Schema,
     RestaurantRegisterStep2Schema,
     RestaurantEditSchema,
-    menuItemsSchema
+    menuItemsSchema,
+    RestaurantAddEmployeeSchema2
   }
 }
