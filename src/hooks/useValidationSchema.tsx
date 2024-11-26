@@ -69,7 +69,7 @@ export const useValidationSchemas = () => {
     password: yup
       .string()
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\(\)])(?=.{8,})/,
         t('errors.user-register.password.matches')
       )
       .required(t('errors.user-register.password.required')),
@@ -130,7 +130,7 @@ export const useValidationSchemas = () => {
     password: yup
       .string()
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\(\)])(?=.{8,})/,
         t('errors.user-register.password.matches')
       )
       .required(t('errors.user-register.password.required')),

@@ -71,7 +71,8 @@ export default function EmployeeManagement() {
             firstName: response[i].firstName,
             lastName: response[i].lastName,
             birthDate: response[i].birthDate,
-            phoneNumber: response[i].phoneNumber,
+            phoneNumber:
+              response[i].phoneNumber.code + response[i].phoneNumber.number,
             employments: tmp.slice()
           })
         }

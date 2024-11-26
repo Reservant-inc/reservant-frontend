@@ -64,7 +64,8 @@ export default function EmployeeRestaurantManagement() {
             login: response[i].login,
             firstName: response[i].firstName,
             lastName: response[i].lastName,
-            phoneNumber: response[i].phoneNumber,
+            phoneNumber:
+              response[i].phoneNumber.code + response[i].phoneNumber.number,
             isBackdoorEmployee: response[i].isBackdoorEmployee,
             isHallEmployee: response[i].isHallEmployee,
             dateFrom: response[i].dateFrom,
