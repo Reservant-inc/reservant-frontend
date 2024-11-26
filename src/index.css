@@ -93,6 +93,46 @@ dialog::backdrop {
   transition: height var(--speed) ease, width var(--speed) ease;
 }
 
+
+.menu-secondary-next-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.menu-secondary-next-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 500ms, transform 500ms;
+}
+.menu-secondary-next-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.menu-secondary-next-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 500ms, transform 500ms;
+}
+
+.menu-secondary-back-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.menu-secondary-back-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 500ms, transform 500ms;
+}
+.menu-secondary-back-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+.menu-secondary-back-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 500ms, transform 500ms;
+}
+
+
 .menu-primary-enter{
   transform: translateX(-100%);
   position: absolute;

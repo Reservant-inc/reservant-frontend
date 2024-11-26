@@ -19,6 +19,7 @@ import { Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, For
 import { group } from "console";
 import { Close } from "@mui/icons-material";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { ValidationError } from "yup";
 
 
 
@@ -48,7 +49,12 @@ const initialValues: RestaurantDataType = {
     "until": "00:00"}, {"from": "00:00",
     "until": "00:00"}, {"from": "00:00",
     "until": "00:00"}],
-  maxReservationDurationMinutes: null
+  maxReservationDurationMinutes: null,
+  location: {
+    latitude: 52.396255,  
+    longitude: 20.913649 
+  }
+
 };
 
 const RestaurantRegister: React.FC = () => {
@@ -130,9 +136,81 @@ const RestaurantRegister: React.FC = () => {
 
   
 
-  const handleSubmit = async () => {
-   
+  const handleSubmit = async (values: any, formikHelpers: any) => {
+    setRequestLoading(true);
+  
+    try {
+      
+      values.groupId = 7;
+      const fileUploadPromises: Promise<any>[] = [];
+
+      const fileFieldMapping: { field: string; isArray: boolean }[] = [];
+  
+      // Krok 2: Dodawanie do tablicy plików do przesłania i ich mapowanie
+      if (values.logo) {
+        fileUploadPromises.push(fetchFilesPOST("/uploads", values.logo));
+        fileFieldMapping.push({ field: "logo", isArray: false });
+      }
+      if (values.photos && values.photos.length > 0) {
+        values.photos.forEach((photo: File) => {
+          fileUploadPromises.push(fetchFilesPOST("/uploads", photo));
+          fileFieldMapping.push({ field: "photos", isArray: true });
+        });
+      }
+      if (values.idCard) {
+        fileUploadPromises.push(fetchFilesPOST("/uploads", values.idCard));
+        fileFieldMapping.push({ field: "idCard", isArray: false });
+      }
+      if (values.businessPermission) {
+        fileUploadPromises.push(fetchFilesPOST("/uploads", values.businessPermission));
+        fileFieldMapping.push({ field: "businessPermission", isArray: false });
+      }
+      if (values.rentalContract) {
+        fileUploadPromises.push(fetchFilesPOST("/uploads", values.rentalContract));
+        fileFieldMapping.push({ field: "rentalContract", isArray: false });
+      }
+      if (values.alcoholLicense) {
+        fileUploadPromises.push(fetchFilesPOST("/uploads", values.alcoholLicense));
+        fileFieldMapping.push({ field: "alcoholLicense", isArray: false });
+      }
+  
+      const uploadResults = await Promise.all(fileUploadPromises);
+  
+      const updatedValues = { ...values };
+  
+      uploadResults.forEach((result, index) => {
+        const { field, isArray } = fileFieldMapping[index];
+        if (isArray) {
+          if (!updatedValues[field]) {
+            updatedValues[field] = [];
+          }
+          updatedValues[field].push(result.fileName);
+        } else {
+          updatedValues[field] = result.fileName;
+        }
+      });
+
+      if (updatedValues.photos && Array.isArray(updatedValues.photos)) {
+        updatedValues.photos = updatedValues.photos
+          .map((photo: any) => (typeof photo === 'string' ? photo : photo.fileName)) // Zamiana obiektów na fileName
+          .filter((photo: any) => photo !== undefined); // Usuwanie wartości undefined
+      }
+      
+      
+      console.log("Zaktualizowane wartości formularza:", updatedValues);
+
+      const response = await fetchPOST("/my-restaurants", JSON.stringify(updatedValues));
+  
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error("Nieoczekiwany błąd podczas przesyłania plików lub wysyłania formularza:", error);
+      setServerError("Wystąpił błąd podczas wysyłania.");
+    } finally {
+      setRequestLoading(false); // Wyłączenie stanu ładowania
+    }
   };
+  
+  
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -162,11 +240,14 @@ const RestaurantRegister: React.FC = () => {
       </h1>
       <Formik
               initialValues={initialValues}
-              validationSchema={activeStep === 1 ? RestaurantRegisterStep1Schema : RestaurantRegisterStep2Schema}
-              onSubmit={(values: FormikValues) => {
-                // Logic for form submission (if needed)
-                console.log(values);
-              }}
+              validationSchema={
+                activeStep === 1
+                  ? RestaurantRegisterStep1Schema
+                  : activeStep === 2
+                  ? RestaurantRegisterStep2Schema
+                  : RestaurantRegisterStep3Schema
+              }
+              onSubmit={(values, formikHelpers) => handleSubmit(values, formikHelpers)}
             >
               {(formik) => (
                 <Form className="w-full h-full mt-[10%]">
@@ -199,7 +280,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.name && formik.touched.name) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.name && formik.touched.name && formik.errors.name}
+                          helperText={formik.errors.name && formik.touched.name && formik.errors.name}
                         />
 
                         <Field
@@ -210,7 +291,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.address && formik.touched.address) ? "[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.address && formik.touched.address && formik.errors.address}
+                          helperText={formik.errors.address && formik.touched.address && formik.errors.address}
                         />
 
                         <Field
@@ -223,7 +304,7 @@ const RestaurantRegister: React.FC = () => {
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.postalIndex && formik.touched.postalIndex) 
                             ? "[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white" 
                             : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.postalIndex && formik.touched.postalIndex && formik.errors.postalIndex}
+                          helperText={formik.errors.postalIndex && formik.touched.postalIndex && formik.errors.postalIndex}
                         />
 
                         <Field
@@ -234,7 +315,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.city && formik.touched.city) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.city && formik.touched.city && formik.errors.city}
+                          helperText={formik.errors.city && formik.touched.city && formik.errors.city}
                         />
 
                         <Field
@@ -247,7 +328,7 @@ const RestaurantRegister: React.FC = () => {
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.nip && formik.touched.nip) 
                             ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" 
                             : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.nip && formik.touched.nip && formik.errors.nip}
+                          helperText={formik.errors.nip && formik.touched.nip && formik.errors.nip}
                         />
 
                         <FormControl
@@ -269,7 +350,7 @@ const RestaurantRegister: React.FC = () => {
                             className={`[&>*]:label-[20px]  [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.restaurantType && formik.touched.restaurantType) 
                               ? "[&>*]:text-black before:border-black dark:before:border-white after:border-secondary" 
                               : "[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error"}`}
-                            helpertext={formik.errors.restaurantType && formik.touched.restaurantType && formik.errors.restaurantType}
+                            helperText={formik.errors.restaurantType && formik.touched.restaurantType && formik.errors.restaurantType}
                           >
                             <MenuItem
                               id="restaurantRegister-opt-restaurant"
@@ -296,7 +377,7 @@ const RestaurantRegister: React.FC = () => {
 
                           {/* Wyświetlanie błędów */}
                           {formik.errors.restaurantType && formik.touched.restaurantType && (
-                            <FormHelperText className="text-error dark:text-error">{formik.errors.restaurantType}</FormHelperText>
+                            <FormHelperText className="text-error dark:text-error text-[15px]">{formik.errors.restaurantType}</FormHelperText>
                           )}
                         </FormControl>
 
@@ -358,7 +439,7 @@ const RestaurantRegister: React.FC = () => {
                               ))}
                             </FormGroup>
                             {formik.touched.tags && formik.errors.tags && (
-                              <div className="text-error text-sm mt-1 font-mont-md">
+                              <div className="text-error text-[15px] text-sm mt-1 font-mont-md">
                                 {formik.errors.tags} {/* nie wiem co z tym zrobić */}
                               </div>
                             )}
@@ -442,7 +523,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.description && formik.touched.description) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.description && formik.touched.description && formik.errors.description}
+                          helperText={formik.errors.description && formik.touched.description && formik.errors.description}
                         />
                          <Field
                           type="text"
@@ -452,7 +533,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.reservationDeposit && formik.touched.reservationDeposit) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.reservationDeposit && formik.touched.reservationDeposit && formik.errors.reservationDeposit}
+                          helperText={formik.errors.reservationDeposit && formik.touched.reservationDeposit && formik.errors.reservationDeposit}
                         />
                         <Field
                           type="text"
@@ -462,7 +543,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helpertext={formik.errors.reservationDeposit && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
+                          helperText={formik.errors.reservationDeposit && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
                         />
                         <div className="flex gap-5">
                           <button
@@ -497,16 +578,21 @@ const RestaurantRegister: React.FC = () => {
                       classNames="menu-secondary"
                       unmountOnExit
                     >
+                      
                       <div className="flex w-full flex-col items-center gap-4">
                       <div className="flex items-center w-4/5 gap-4">
-                          <label htmlFor="logo" className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white">
-                            Logo
+                          <label htmlFor="logo" className="font-mont-md text-black text-sm flex-1 dark:text-white">
+                            Logo *
                           </label>
                           <button
                             type="button"
-                            className="flex items-center"
+                            className="flex items-center dark:text-white font-mont-md text-xs"
                             onClick={() => document.getElementById("logo")?.click()}
                           >
+                            {formik.errors.logo && formik.touched.logo && (
+                            <div className="text-error text-xs">{formik.errors.logo}</div>
+                          )}
+                            {formik.values.logo ? 'file attached' : ''}
                             <AttachFileIcon className="text-primary" />
                           </button>
                           <input
@@ -518,21 +604,29 @@ const RestaurantRegister: React.FC = () => {
                               formik.setFieldValue("logo", file);
                             }}
                             className="hidden"
+                            accept="image/png, image/jpeg"
                           />
-                          {formik.errors.logo && formik.touched.logo && (
-                            <div className="text-error text-xs">{formik.errors.logo}</div>
-                          )}
+                          
+                          
                         </div>
 
                         <div className="flex items-center w-4/5 gap-4">
-                          <label htmlFor="photos" className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white">
-                            Photos
+                          <label htmlFor="photos" className="font-mont-md text-black dark:text-white text-sm flex-1 [&>*]:dark:text-white">
+                            Photos *
                           </label>
                           <button
                             type="button"
-                            className="flex items-center"
+                            className="flex items-center font-mont-md dark:text-white text-xs"
                             onClick={() => document.getElementById("photos")?.click()}
                           >
+                            {formik.errors.photos && formik.touched.photos && (
+                            <div className="text-error text-xs">{formik.errors.photos}</div>
+                          )}
+                            {Array.isArray(formik.values.photos) && formik.values.photos.length > 0
+                            ? formik.values.photos.length === 1
+                              ? 'file attached'
+                              : `${formik.values.photos.length} files attached`
+                            : ''}
                             <AttachFileIcon className="text-primary" />
                           </button>
                           <input
@@ -545,21 +639,23 @@ const RestaurantRegister: React.FC = () => {
                               formik.setFieldValue("photos", files);
                             }}
                             className="hidden"
+                            accept="image/png, image/jpeg"
                           />
-                          {formik.errors.photos && formik.touched.photos && (
-                            <div className="text-error text-xs">{formik.errors.photos}</div>
-                          )}
                         </div>
 
                         <div className="flex items-center w-4/5 gap-4">
-                          <label htmlFor="idCard" className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white">
-                            ID Card
+                          <label htmlFor="idCard" className="font-mont-md text-black dark:text-white text-sm flex-1 [&>*]:dark:text-white">
+                            ID Card *
                           </label>
                           <button
                             type="button"
-                            className="flex items-center"
+                            className="flex items-center font-mont-md dark:text-white text-xs"
                             onClick={() => document.getElementById("idCard")?.click()}
                           >
+                             {formik.errors.idCard && formik.touched.idCard && (
+                            <div className="text-error text-xs">{formik.errors.idCard}</div>
+                          )}
+                            {formik.values.idCard ? 'file attached' : ''}
                             <AttachFileIcon className="text-primary" />
                           </button>
                           <input
@@ -571,24 +667,30 @@ const RestaurantRegister: React.FC = () => {
                               formik.setFieldValue("idCard", file);
                             }}
                             className="hidden"
+                            accept="application/pdf"
                           />
-                          {formik.errors.idCard && formik.touched.idCard && (
-                            <div className="text-error text-xs">{formik.errors.idCard}</div>
-                          )}
+                         
                         </div>
 
                         <div className="flex items-center w-4/5 gap-4">
                           <label
                             htmlFor="businessPermission"
-                            className="font-mont-md text-black text-sm flex-1 [&>*]:dark:text-white"
+                            className="font-mont-md text-black text-sm flex-1 dark:text-white [&>*]:dark:text-white"
                           >
-                            Business Permission
+                            Business Permission *
                           </label>
                           <button
                             type="button"
-                            className="flex items-center"
+                            className="flex items-center font-mont-md dark:text-white text-xs"
                             onClick={() => document.getElementById("businessPermission")?.click()}
                           >
+                            {formik.errors.businessPermission &&
+                            formik.touched.businessPermission && (
+                              <div className="text-error text-xs">
+                                {formik.errors.businessPermission}
+                              </div>
+                            )}
+                            {formik.values.businessPermission ? 'file attached' : ''}
                             <AttachFileIcon className="text-primary" />
                           </button>
                           <input
@@ -600,13 +702,66 @@ const RestaurantRegister: React.FC = () => {
                               formik.setFieldValue("businessPermission", file);
                             }}
                             className="hidden"
+                            accept="application/pdf"
                           />
-                          {formik.errors.businessPermission &&
-                            formik.touched.businessPermission && (
-                              <div className="text-error text-xs">
-                                {formik.errors.businessPermission}
-                              </div>
-                            )}
+                        </div>
+
+                        {/* Rental Contract (Optional) */}
+                        <div className="flex items-center w-4/5 gap-4">
+                          <label
+                            htmlFor="rentalContract"
+                            className="font-mont-md text-black text-sm flex-1 dark:text-white [&>*]:dark:text-white"
+                          >
+                            Rental Contract
+                          </label>
+                          <button
+                            type="button"
+                            className="flex items-center font-mont-md dark:text-white text-xs"
+                            onClick={() => document.getElementById("rentalContract")?.click()}
+                          >
+                            {formik.values.rentalContract ? 'file attached' : ''}
+                            <AttachFileIcon className="text-primary" />
+                          </button>
+                          <input
+                            type="file"
+                            id="rentalContract"
+                            name="rentalContract"
+                            onChange={(event) => {
+                              const file = event.currentTarget.files?.[0];
+                              formik.setFieldValue("rentalContract", file);
+                            }}
+                            className="hidden"
+                            accept="application/pdf"
+                          />
+                        </div>
+
+                        {/* Alcohol License (Optional) */}
+                        <div className="flex items-center w-4/5 gap-4">
+                          <label
+                            htmlFor="alcoholLicense"
+                            className="font-mont-md text-black text-sm dark:text-white flex-1 [&>*]:dark:text-white"
+                          >
+                            Alcohol License
+                          </label>
+                          <button
+                            type="button"
+                            className="flex items-center font-mont-md dark:text-white text-xs"
+                            onClick={() => document.getElementById("alcoholLicense")?.click()}
+                          >
+                            {formik.values.alcoholLicense ? 'file attached' : ''}
+                            <AttachFileIcon className="text-primary" />
+                          </button>
+                          <input
+                            type="file"
+                            id="alcoholLicense"
+                            name="alcoholLicense"
+                            onChange={(event) => {
+                              const file = event.currentTarget.files?.[0];
+                              formik.setFieldValue("alcoholLicense", file);
+                            }}
+                            className="hidden"
+                            accept="application/pdf"
+                          />
                         </div>
   
                         <div className="flex gap-5">

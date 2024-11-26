@@ -169,16 +169,18 @@ export const useValidationSchemas = () => {
       },
     );
 
-  const RestaurantRegisterStep3Schema = yup.object({
-    logo: yup.mixed().required(t("errors.restaurant-register.logo.required")),
-    photos: yup
-      .mixed()
-      .required(t("errors.restaurant-register.photos.required")),
-    idCard: yup.mixed().required(t("errors.restaurant-register.id.required")),
-    businessPermission: yup
-      .mixed()
-      .required(t("errors.restaurant-register.businessPermission.required")),
-  });
+    const RestaurantRegisterStep3Schema = yup.object({
+      logo: yup.mixed().required(t("errors.restaurant-register.logo.required")),
+      photos: yup
+        .array()
+        .min(1, t("errors.restaurant-register.photos.required"))
+        .required(t("errors.restaurant-register.photos.required")),
+      idCard: yup.mixed().required(t("errors.restaurant-register.id.required")),
+      businessPermission: yup
+        .mixed()
+        .required(t("errors.restaurant-register.businessPermission.required")),
+    });
+    
 
   const RestaurantRegisterStep2Schema = yup.object({
     description: yup

@@ -94,7 +94,11 @@ export type RestaurantDataType = {
   groupId: number | null
   reservationDeposit: number | null,
   openingHours: OpeningHoursType[];
-  maxReservationDurationMinutes: number | null
+  maxReservationDurationMinutes: number | null, 
+  location: {
+    latitude: number
+    longitude: number
+  }
 }
 
 export type EmployeeType = {
