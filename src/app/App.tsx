@@ -54,7 +54,7 @@ const router = createBrowserRouter([
     loader: checkAuthLoader,
     children: [
       {
-        path: 'home',
+        path: 'home/:restaurantId?',
         element: <HomePage />
       },
       {

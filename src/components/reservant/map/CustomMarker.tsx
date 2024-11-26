@@ -39,7 +39,7 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
       icon={customIcon}
       eventHandlers={{
         click: e => {
-          setActiveRestaurant(restaurant)
+          setActiveRestaurant(activeRestaurant?.restaurantId)
           if (setUserMovedMap != undefined) {
             setUserMovedMap(false)
           }
