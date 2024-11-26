@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { FriendStatus, LocalType } from './enums'
+import { FriendStatus, LocalType, UnitOfMeasurement } from './enums'
 
 export type Routing = {
   path: string
@@ -139,7 +139,10 @@ export type IngredientUsage = {
 export type IngredientType = {
   ingredientId: number
   publicName: string
-  amountUsed: number
+  unitOfMeasurement: UnitOfMeasurement
+  minimalAmount: number
+  amountToOrder: number
+  amount: number
 }
 
 export type ItemWithIngredientsType = {
@@ -199,6 +202,7 @@ export type PaginationType = {
     | TransactionType[]
     | EventDataType[]
     | VisitType[]
+    | IngredientType[]
 }
 
 export type UserType = {

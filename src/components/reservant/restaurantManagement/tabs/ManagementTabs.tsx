@@ -11,7 +11,6 @@ import {
   Warehouse
 } from '@mui/icons-material'
 import RateReviewIcon from '@mui/icons-material/RateReview'
-import ReviewsManagement from '../ReviewsMenagment'
 import Tab from './Tab'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RestaurantDetailsType } from '../../../../services/types'
@@ -20,25 +19,22 @@ import { fetchGET } from '../../../../services/APIconn'
 const ManagementTabs: React.FC = ({}) => {
   const navigate = useNavigate()
 
-  const size = useWindowDimensions()
-
   const { restaurantId } = useParams()
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>()
 
   useEffect(() => {
-    const getRestaurantInfo = async () => {
-      try {
-        const response = await fetchGET(`/my-restaurants/${restaurantId}`)
-
-        setRestaurant(response)
-      } catch (error) {
-        console.error('Error populating table', error)
-      }
-    }
-    getRestaurantInfo()
+    if (restaurantId) getRestaurantInfo()
   }, [restaurantId])
 
-  useEffect(() => {}, [restaurantId])
+  const getRestaurantInfo = async () => {
+    try {
+      const response = await fetchGET(`/my-restaurants/${restaurantId}`)
+
+      setRestaurant(response)
+    } catch (error) {
+      console.error('Error populating table', error)
+    }
+  }
 
   return (
     <div className="flex justify-between">
@@ -111,24 +107,6 @@ const ManagementTabs: React.FC = ({}) => {
               id="management_restaurant_reviews"
               icon={<RateReviewIcon />}
             />
-            {/* <div className="p-0">
-          <ListItemButton
-            id="menu-listItem-restaurant-reviews-button"
-            className={` ${activePage === 8 ? "bg-white dark:bg-black" : "bg-grey-0 dark:bg-grey-5"}  dark:text-grey-1 w-full h-full rounded-t-lg px-4`}
-            onClick={() => {
-              setActivePage(8);
-            }}
-          >
-            <div className="flex items-center gap-4 w-full">
-              <History className='w-6 h-6' />
-              {size.width > 700 &&
-                <h1 className="text-nowrap">
-                  Reviews
-                </h1>
-              }
-            </div>
-          </ListItemButton>
-        </div> */}
           </div>
         )}
       </div>

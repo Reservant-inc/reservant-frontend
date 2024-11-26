@@ -41,3 +41,9 @@ export enum FriendListType {
   Outgoing = 'Outgoing',
   Incoming = 'Incoming'
 }
+
+export enum UnitOfMeasurement {
+  Gram,
+  Liter,
+  Unit
+}
