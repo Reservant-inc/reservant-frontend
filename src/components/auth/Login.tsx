@@ -1,80 +1,80 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Formik, Form, Field, FormikValues } from "formik";
-import { useTranslation } from "react-i18next";
-import { fetchGET, fetchPOST } from "../../services/APIconn";
-import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import LogoPrimary from "../../assets/images/LOGO-PRIMARY.png";
-import CircularProgress from "@mui/material/CircularProgress";
-import { FetchError } from "../../services/Errors";
-import { TextField } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import Cookies from "js-cookie";
-import { LoginResponseType } from "../../services/types";
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Formik, Form, Field, FormikValues } from 'formik'
+import { useTranslation } from 'react-i18next'
+import { fetchGET, fetchPOST } from '../../services/APIconn'
+import { useValidationSchemas } from '../../hooks/useValidationSchema'
+import LogoPrimary from '../../assets/images/LOGO-PRIMARY.png'
+import CircularProgress from '@mui/material/CircularProgress'
+import { FetchError } from '../../services/Errors'
+import { TextField } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Cookies from 'js-cookie'
+import { LoginResponseType } from '../../services/types'
 
 const initialValues = {
-  login: "",
-  password: "",
-};
+  login: '',
+  password: ''
+}
 
 const Login: React.FC = () => {
-  const [t] = useTranslation("global");
-  const { loginSchema } = useValidationSchemas();
-  const [loginError, setLoginError] = useState<string>("");
-  const [requestLoading, setRequestLoading] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const navigate = useNavigate(); // initialize navigate
+  const [t] = useTranslation('global')
+  const { loginSchema } = useValidationSchemas()
+  const [loginError, setLoginError] = useState<string>('')
+  const [requestLoading, setRequestLoading] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const navigate = useNavigate() // initialize navigate
 
   const onSubmit = async (
     values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      setSubmitting(true);
-      setRequestLoading(true);
+      setSubmitting(true)
+      setRequestLoading(true)
 
-      const response = await fetchPOST("/auth/login", JSON.stringify(values));
+      const response = await fetchPOST('/auth/login', JSON.stringify(values))
 
-      login(response);
+      login(response)
     } catch (error) {
       if (error instanceof FetchError) {
-        setLoginError("");
+        setLoginError('')
       } else {
-        console.log("Unexpected error:", error);
+        console.log('Unexpected error:', error)
       }
     } finally {
-      setSubmitting(false);
-      setRequestLoading(false);
+      setSubmitting(false)
+      setRequestLoading(false)
     }
-  };
+  }
 
   const login = async (data: LoginResponseType) => {
-    Cookies.set("token", data.token, { expires: 1 });
+    Cookies.set('token', data.token, { expires: 1 })
 
     try {
-      const userInfo = await fetchGET("/user");
+      const userInfo = await fetchGET('/user')
 
       Cookies.set(
-        "userInfo",
+        'userInfo',
         JSON.stringify({
           userId: userInfo.userId,
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           roles: userInfo.roles,
-          photo: userInfo.photo,
+          photo: userInfo.photo
         }),
-        { expires: 1 },
-      );
+        { expires: 1 }
+      )
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors());
+        console.log(error.formatErrors())
       } else {
-        console.log("unexpected error");
+        console.log('unexpected error')
       }
     }
 
-    navigate("/reservant/home");
-  };
+    navigate('/reservant/home')
+  }
 
   return (
     <div className="h-full w-full bg-[url('/src/assets/images/bg.png')] bg-cover">
@@ -87,7 +87,7 @@ const Login: React.FC = () => {
               validationSchema={loginSchema}
               onSubmit={onSubmit}
             >
-              {(formik) => (
+              {formik => (
                 <Form className="w-full">
                   <div
                     id="login-form-containter"
@@ -109,7 +109,7 @@ const Login: React.FC = () => {
                         }
                         label="LOGIN"
                         variant="standard"
-                        className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.login && formik.touched.login) ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                        className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.login && formik.touched.login) ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
                         color="primary"
                         as={TextField}
                       />
@@ -117,7 +117,7 @@ const Login: React.FC = () => {
                         <Field
                           id="password"
                           name="password"
-                          type={showPassword ? "text" : "password"}
+                          type={showPassword ? 'text' : 'password'}
                           helperText={
                             formik.errors.password &&
                             formik.touched.password &&
@@ -125,7 +125,7 @@ const Login: React.FC = () => {
                           }
                           label="PASSWORD"
                           variant="standard"
-                          className={` [&>*]:text-md w-full [&>*]:font-mont-md ${!(formik.errors.password && formik.touched.password) ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
+                          className={` [&>*]:text-md w-full [&>*]:font-mont-md ${!(formik.errors.password && formik.touched.password) ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
                           color="primary"
                           as={TextField}
                         />
@@ -135,10 +135,10 @@ const Login: React.FC = () => {
                             id="showPassLogin"
                             className="absolute right-[0%] top-[40%] cursor-pointer text-white hover:text-primary "
                             onClick={() => {
-                              setShowPassword(!showPassword);
+                              setShowPassword(!showPassword)
                             }}
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
                           </span>
                         )}
                       </div>
@@ -148,12 +148,12 @@ const Login: React.FC = () => {
                       id="LoginLoginButton"
                       type="submit"
                       disabled={!formik.isValid}
-                      className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? "bg-primary text-white" : "bg-grey-1"}`}
+                      className={`flex h-[50px] w-4/5 cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid ? 'bg-primary text-white' : 'bg-grey-1'}`}
                     >
                       {requestLoading ? (
                         <CircularProgress className="h-8 w-8 text-grey-0" />
                       ) : (
-                        "LOGIN"
+                        'LOGIN'
                       )}
                     </button>
 
@@ -170,20 +170,20 @@ const Login: React.FC = () => {
           <div className="flex h-full w-1/3 flex-col items-center justify-center gap-10 bg-white">
             <img src={LogoPrimary} className="h-40" />
             <h1 className="font-mont-md text-xl text-black ">
-              {t("landing-page.notRegistered")}
+              {t('landing-page.notRegistered')}
             </h1>
             <Link
               id="login-notRegistered-link"
               to="/register"
               className="flex h-12 w-48 items-center justify-center rounded-lg bg-primary p-3 font-mont-md text-white"
             >
-              {t("landing-page.registerButton")}
+              {t('landing-page.registerButton')}
             </Link>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
