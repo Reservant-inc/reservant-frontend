@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   DataGrid,
   GridColDef,
@@ -6,77 +6,104 @@ import {
   GridToolbarContainer,
   GridSlots,
   GridActionsCellItem
-} from '@mui/x-data-grid'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle
-} from '@mui/material'
-import { fetchGET, fetchPOST } from '../../../../services/APIconn'
-import CloseIcon from '@mui/icons-material/Close'
-import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import RemoveIcon from '@mui/icons-material/Remove'
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
-import EditIcon from '@mui/icons-material/Edit'
-import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
-import { IngredientType, PaginationType } from '../../../../services/types'
+} from '@mui/x-data-grid';
+import { fetchGET, fetchPOST } from '../../../../services/APIconn';
+import EditIcon from '@mui/icons-material/Edit';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { IngredientType, PaginationType } from '../../../../services/types';
+import EditIngredientDialog from './EditIngredientDialog';
+import GroceryListDialog from './GroceryListDialog';
+import GroceryInfoDialog from './GroceryInfoDialog';
+import AddIngredientDialog from './AddIngredientDialog';
 
+//Szymon TODO: Wyświetlanie Deliveries (w zakładce i potem Grid?), podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
-  const [ingredients, setIngredients] = useState<IngredientType[]>([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isGroceryListOpen, setIsGroceryListOpen] = useState(false)
-  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
-  const [infoMessage, setInfoMessage] = useState<string>('')
-  const [groceryList, setGroceryList] = useState<any[]>([])
+  const [ingredients, setIngredients] = useState<IngredientType[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGroceryListOpen, setIsGroceryListOpen] = useState(false);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
+  const [infoMessage, setInfoMessage] = useState<string>('');
+  const [groceryList, setGroceryList] = useState<any[]>([]);
+  const [selectedIngredient, setSelectedIngredient] = useState<IngredientType | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [availableIngredients, setAvailableIngredients] = useState<IngredientType[]>([]);
+  const [selectedDropdownIngredient, setSelectedDropdownIngredient] = useState<string>('');
   const [formValues, setFormValues] = useState({
     name: '',
     unitOfMeasurement: 'Gram',
     minimalAmount: '',
     amount: ''
-  })
+  });
 
-  const [t] = useTranslation('global')
+  const [t] = useTranslation('global');
 
-  const { restaurantId } = useParams()
+  const { restaurantId } = useParams();
 
-  const activeRestaurantId =
-    restaurantId === undefined ? -1 : parseInt(restaurantId)
+  const activeRestaurantId = restaurantId === undefined ? -1 : parseInt(restaurantId);
 
   useEffect(() => {
     if (activeRestaurantId) {
-      fetchIngredients()
+      fetchIngredients();
     }
-  }, [activeRestaurantId])
+  }, [activeRestaurantId]);
+
+  useEffect(() => {
+    updateAvailableIngredients();
+  }, [ingredients, groceryList]);
 
   const fetchIngredients = async () => {
     try {
       const data: PaginationType = await fetchGET(
         `/restaurants/${activeRestaurantId}/ingredients?page=0&perPage=10`
-      )
-      const items: IngredientType[] = data.items as IngredientType[]
-      setIngredients(items)
+      );
+      const items: IngredientType[] = data.items as IngredientType[];
+      setIngredients(items);
     } catch (error) {
-      console.error('Error fetching ingredients:', error)
+      console.error('Error fetching ingredients:', error);
     }
-  }
+  };
 
+  const updateAvailableIngredients = () => {
+    const groceryIds = groceryList.map((item) => item.ingredientId);
+    const filteredIngredients = ingredients.filter(
+      (ingredient) => !groceryIds.includes(ingredient.ingredientId)
+    );
+    setAvailableIngredients(filteredIngredients);
+  };
+
+  const handleAddToGroceryList = () => {
+    const ingredientToAdd = availableIngredients.find(
+      (ingredient) => ingredient.publicName === selectedDropdownIngredient
+    );
+  
+    if (ingredientToAdd) {
+      setGroceryList((prevList) => [
+        ...prevList,
+        {
+          ...ingredientToAdd, // kopia składnika do grocery listy
+          id: Date.now(), // unikalne id bo innaczej błedy sypie
+          amountToOrder: ingredientToAdd.minimalAmount
+        }
+      ]);
+      setSelectedDropdownIngredient('');
+    }
+  };
+  
   const handleGenerateGroceryList = () => {
     const restockingItems = ingredients
-      .filter(ingredient => ingredient.amount < ingredient.minimalAmount)
+      .filter((ingredient) => ingredient.amount < ingredient.minimalAmount)
       .map((ingredient, index) => {
-        const neededAmount = ingredient.minimalAmount - ingredient.amount
+        const neededAmount = ingredient.minimalAmount - ingredient.amount;
         return {
           ...ingredient,
           id: index,
           amountToOrder: neededAmount > 0 ? neededAmount : 0
-        }
-      })
-    setGroceryList(restockingItems)
-    setIsGroceryListOpen(true)
-  }
+        };
+      });
+    setGroceryList(restockingItems);
+    setIsGroceryListOpen(true);
+  };
 
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -84,97 +111,116 @@ const IngredientTable: React.FC = () => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value
-    })
-  }
+    });
+  };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false)
+    setIsModalOpen(false);
     setFormValues({
       name: '',
       unitOfMeasurement: 'Gram',
       minimalAmount: '',
       amount: ''
-    })
-  }
+    });
+  };
 
+  // Nie wiem dlaczego to nie działa? Przesyła się poprawnie ale nie wyświetla się składnik
   const handleAddIngredient = async () => {
     try {
+      const restaurantId = activeRestaurantId;
+  
+      if (restaurantId === -1) {
+        console.error('Invalid restaurant ID');
+        return;
+      }
+  
       const payload = {
         publicName: formValues.name,
         unitOfMeasurement: formValues.unitOfMeasurement,
         minimalAmount: Number(formValues.minimalAmount),
         amountToOrder: 0,
         amount: formValues.amount ? Number(formValues.amount) : 0,
-        menuItem: {
-          menuItemId: 2,
-          amountUsed: 1
-        }
+        restaurantId: restaurantId,
+      };
+  
+      console.log('dane:', payload); 
+  
+      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload));
+  
+      if (response) {
+        console.log('Ingredient added successfully:', response.ingredientId);
+      } else {
+        console.warn('New ingredient added but no response returned');
       }
-
-      await fetchPOST(
-        `/restaurants/${activeRestaurantId}/ingredients`,
-        JSON.stringify(payload)
-      )
-      handleCloseModal()
-      fetchIngredients()
+  
+      handleCloseModal();
+      fetchIngredients();
     } catch (error) {
-      console.error('Error adding ingredient:', error)
+      console.error('Error adding ingredient:', error);
     }
-  }
+  };
+  
+  
 
   const handleIncreaseAmount = (id: number) => {
-    setGroceryList(prevList =>
-      prevList.map(item =>
+    setGroceryList((prevList) =>
+      prevList.map((item) =>
         item.id === id
           ? { ...item, amountToOrder: Math.min(item.amountToOrder + 1, 9999) }
           : item
       )
-    )
-  }
+    );
+  };
 
   const handleDecreaseAmount = (id: number) => {
-    setGroceryList(prevList =>
-      prevList.map(item =>
+    setGroceryList((prevList) =>
+      prevList.map((item) =>
         item.id === id
           ? { ...item, amountToOrder: Math.max(item.amountToOrder - 1, 0) }
           : item
       )
-    )
-  }
+    );
+  };
 
   const handleRemoveItem = (id: number) => {
-    setGroceryList(prevList => prevList.filter(item => item.id !== id))
-  }
+    setGroceryList((prevList) => prevList.filter((item) => item.id !== id));
+  };
 
   const handleOrder = async () => {
     try {
       const orderPayload = {
         restaurantId: activeRestaurantId,
-        ingredients: groceryList.map(item => ({
+        ingredients: groceryList.map((item) => ({
           deliveryId: 0,
           ingredientId: ingredients.find(
-            ingredient => ingredient.publicName === item.publicName
+            (ingredient) => ingredient.publicName === item.publicName
           )?.ingredientId,
           amountOrdered: item.amountToOrder,
           amountDelivered: item.amountToOrder,
           expiryDate: null,
-          storeName: item.publicName
-        }))
-      }
-
-      const response = await fetchPOST(
-        `/deliveries`,
-        JSON.stringify(orderPayload)
-      )
-
-      const deliveryId = response.deliveryId
-      setInfoMessage(`${t('warehouse.delivery-confirmation')} ${deliveryId}`)
-      setIsInfoDialogOpen(true)
-      setIsGroceryListOpen(false)
+          storeName: item.publicName,
+        })),
+      };
+  
+      const response = await fetchPOST(`/deliveries`, JSON.stringify(orderPayload));
+      const deliveryId = response.deliveryId;
+      setInfoMessage(`${t('warehouse.delivery-confirmation')} ${deliveryId}`);
+      setIsInfoDialogOpen(true);
+      setIsGroceryListOpen(false);
     } catch (error) {
-      console.error('Error sending order:', error)
+      console.error('Error sending order:', error);
     }
-  }
+  };
+
+  const handleOpenEditDialog = (ingredient: IngredientType) => {
+    setSelectedIngredient(ingredient);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setSelectedIngredient(null);
+    setIsEditDialogOpen(false);
+  };
 
   const columns: GridColDef[] = [
     {
@@ -212,14 +258,6 @@ const IngredientTable: React.FC = () => {
         )
     },
     {
-      field: 'daysTillExpiration',
-      headerName: `${t('warehouse.till-expiration')}`,
-      flex: 1,
-      valueGetter: () => 1, // hardcoded
-      sortable: true,
-      disableColumnMenu: true
-    },
-    {
       field: 'unitOfMeasurement',
       headerName: `${t('warehouse.unit')}`,
       flex: 1,
@@ -231,57 +269,16 @@ const IngredientTable: React.FC = () => {
       flex: 1,
       disableColumnMenu: true,
       sortable: false,
-      renderCell: params => (
+      renderCell: (params: GridRenderCellParams) => (
         <GridActionsCellItem
           icon={<EditIcon />}
           label="Edit"
-          onClick={() => console.log('Edit clicked for id:', params.id)}
+          onClick={() => handleOpenEditDialog(params.row)}
           color="inherit"
         />
       )
     }
-  ]
-
-  const groceryListColumns: GridColDef[] = [
-    {
-      field: 'publicName',
-      headerName: `${t('warehouse.grocery-name')}`,
-      flex: 1
-    },
-    {
-      field: 'amountToOrder',
-      headerName: `${t('warehouse.grocery-amount')}`,
-      flex: 1,
-      editable: true,
-      type: 'number'
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: `${t('warehouse.grocery-actions')}`,
-      width: 150,
-      getActions: params => [
-        <GridActionsCellItem
-          icon={<RemoveIcon />}
-          label="Decrease"
-          onClick={() => handleDecreaseAmount(params.id as number)}
-          color="inherit"
-        />,
-        <GridActionsCellItem
-          icon={<AddCircleOutlineIcon />}
-          label="Increase"
-          onClick={() => handleIncreaseAmount(params.id as number)}
-          color="inherit"
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={() => handleRemoveItem(params.id as number)}
-          color="inherit"
-        />
-      ]
-    }
-  ]
+  ];
 
   const EditToolbar = () => (
     <GridToolbarContainer>
@@ -309,152 +306,77 @@ const IngredientTable: React.FC = () => {
         </div>
       </div>
     </GridToolbarContainer>
-  )
+  );
 
   return (
-    <div className="flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
-      <DataGrid
-        rows={ingredients.map((ingredient, index) => ({
-          ...ingredient,
-          id: index
-        }))}
-        columns={columns}
-        pageSizeOptions={[5, 10, 25, 100]}
-        disableRowSelectionOnClick
-        slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
-      />
-      {/* Formularz dodawania składnika */}
-      <Dialog open={isModalOpen} onClose={handleCloseModal}>
-        <DialogTitle>Add New Ingredient</DialogTitle>
-        <DialogContent>
-          <div className="flex flex-col gap-3">
-            <label className="text-sm">{t('warehouse.new-name')}</label>
-            <input
-              type="text"
-              name="name"
-              value={formValues.name}
-              onChange={handleFormChange}
-              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
-              required
-            />
-
-            <label className="text-sm">{t('warehouse.new-unit')}</label>
-            <select
-              name="unitOfMeasurement"
-              value={formValues.unitOfMeasurement}
-              onChange={handleFormChange}
-              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
-            >
-              <option value="Gram">Gram</option>
-              <option value="Liter">Liter</option>
-              <option value="Unit">Unit</option>
-            </select>
-
-            <label className="text-sm">{t('warehouse.new-minimal')}</label>
-            <input
-              type="number"
-              name="minimalAmount"
-              value={formValues.minimalAmount}
-              onChange={handleFormChange}
-              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
-              required
-            />
-
-            <label className="text-sm">{t('warehouse.new-amount')}</label>
-            <input
-              type="number"
-              name="amount"
-              value={formValues.amount}
-              onChange={handleFormChange}
-              className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
-            />
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            className="text-primary dark:text-secondary"
-            onClick={handleCloseModal}
+    <div className="overflow-y-auto scroll flex h-full w-full flex-col rounded-lg bg-white dark:bg-black ">
+      {ingredients.length > 0 ? (
+        <div className=''>
+        <DataGrid
+          rows={ingredients.map((ingredient, index) => ({
+            ...ingredient,
+            id: index
+          }))}
+          columns={columns}
+          pageSizeOptions={[5, 10, 25, 100]}
+          disableRowSelectionOnClick
+          slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
+        />
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center h-full text-lg text-gray-500 dark:text-gray-400 gap-4">
+          <p className="text-black dark:text-white">{t('Ta restauracja nie ma żadnych składników')}</p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            {t('warehouse.new-cancel')}
-          </Button>
-          <Button
-            className="text-primary dark:text-secondary"
-            onClick={handleAddIngredient}
-          >
-            {t('warehouse.new-add')}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* Wysuwana lista zakupów */}
-      {isGroceryListOpen && (
-        <div
-          className="fixed bottom-0 left-0 mb-4 flex w-[900px] flex-col rounded-lg bg-white p-4 shadow-lg dark:bg-grey-6"
-          style={{ maxHeight: '60vh' }}
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-mont-md text-2xl text-primary dark:text-secondary">
-              {t('warehouse.grocery-list')}
-            </h2>
-            <div className="flex items-center gap-4">
-              <button
-                className="rounded bg-primary px-6 py-3 text-xl text-white hover:bg-primary-2 dark:bg-secondary dark:hover:bg-secondary-2"
-                onClick={handleOrder}
-              >
-                {t('warehouse.grocery-order')}
-              </button>
-              <button
-                className="text-primary dark:text-secondary"
-                onClick={() => setIsGroceryListOpen(false)}
-              >
-                <CloseIcon />
-              </button>
-            </div>
-          </div>
-          <div style={{ overflowY: 'auto' }}>
-            {' '}
-            {/* Przewijanie jeśli sie nie mieści */}
-            <DataGrid
-              rows={groceryList}
-              columns={groceryListColumns}
-              pageSizeOptions={[5, 10]}
-              disableRowSelectionOnClick
-              autoHeight
-              sx={{
-                '& .MuiDataGrid-cell': {
-                  fontSize: '18px'
-                },
-                '& .MuiDataGrid-columnHeaderTitle': {
-                  fontSize: '20px'
-                }
-              }}
-            />
-          </div>
+            + {t('warehouse.add-ingredient')} 
+          </button>
         </div>
       )}
 
-      {/* Dialog o poprawnym zamówieniu */}
-      <Dialog
+        {/* Dialog dodawania składnika nowego */}
+        <AddIngredientDialog
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          formValues={formValues}
+          onFormChange={handleFormChange}
+          onAddIngredient={handleAddIngredient}
+          t={t} 
+        />
+      
+      {/* Dialog z listą zakupów  */}
+      <GroceryListDialog
+        open={isGroceryListOpen}
+        onClose={() => setIsGroceryListOpen(false)}
+        groceryList={groceryList}
+        availableIngredients={availableIngredients}
+        selectedDropdownIngredient={selectedDropdownIngredient}
+        onIngredientSelect={(value) => setSelectedDropdownIngredient(value)}
+        onAddToGroceryList={handleAddToGroceryList}
+        onIncreaseAmount={handleIncreaseAmount}
+        onDecreaseAmount={handleDecreaseAmount}
+        onRemoveItem={handleRemoveItem}
+        onSubmitOrder={handleOrder} // funkcja od zamówienia
+      />;
+
+      {/* Dialog do edycji składnika */}
+      <EditIngredientDialog
+        open={isEditDialogOpen}
+        onClose={handleCloseEditDialog}
+        ingredient={selectedIngredient}
+        onUpdate={fetchIngredients}
+      />
+
+      {/* Dialog z podsumowaniem złożenia delivery */}
+      <GroceryInfoDialog
         open={isInfoDialogOpen}
         onClose={() => setIsInfoDialogOpen(false)}
-      >
-        <DialogTitle>{t('warehouse.confirmation')}</DialogTitle>
-        <DialogContent>
-          <p>{infoMessage}</p>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            className="text-primary dark:text-secondary"
-            onClick={() => {
-              setIsInfoDialogOpen(false)
-              fetchIngredients()
-            }}
-          >
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
+        message={infoMessage}
+        fetchIngredients={fetchIngredients}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default IngredientTable
+export default IngredientTable;
