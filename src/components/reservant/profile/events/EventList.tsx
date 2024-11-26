@@ -63,7 +63,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
   }
 
   return (
-    <div className="flex flex-col bg-white rounded-lg w-full h-full">
+    <div className="flex flex-col w-full h-full">
       <div className="flex flex-col gap-4 h-full">
         <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6">
           <input

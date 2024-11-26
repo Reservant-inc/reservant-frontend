@@ -4,12 +4,14 @@ import ReservationHistoryTabs from './ReservationHistoryTabs'
 
 const ReservationHistoryTab: React.FC = () => {
   return (
-    <div className="flex flex-col bg-white rounded-lg w-full h-full p-4 gap-4 shadow-md">
-      <div className="flex h-[2rem] justify-between items-center">
-        <h1 className="font-mont-bd text-lg">Reservations</h1>
+    <div className="flex flex-col rounded-lg w-full h-full">
+      <div className="flex justify-between items-center">
+        <div className="px-2 py-1">
+          <h1 className="text-lg font-mont-bd">Reservation history</h1>
+        </div>
         <ReservationHistoryTabs />
       </div>
-      <div className="w-full h-[calc(100%-3rem)]">
+      <div className="w-full h-[calc(100%-3rem)] bg-white rounded-lg rounded-tr-none shadow-md p-4">
         <Outlet />
       </div>
     </div>
