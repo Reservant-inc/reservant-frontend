@@ -94,6 +94,48 @@ export default function HomePage() {
     getRestaurants()
   }, [bounds, chosenTags, reviewFilter])
 
+  useEffect(() => {
+    const fetchRestaurantById = async (id: number) => {
+      try {
+        const response = await fetchGET(`/restaurants/${id}`)
+        if (response) {
+          setAllRestaurants(prev => {
+            const exists = prev.some(
+              restaurant => restaurant.restaurantId === response.restaurantId
+            )
+            if (!exists) {
+              return [...prev, response]
+            }
+            return prev
+          })
+          setSelectedRestaurant(response)
+        }
+      } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log('Unexpected error:', error)
+        }
+      }
+    }
+
+    if (restaurantId) {
+      const id = parseInt(restaurantId, 10)
+      const restaurantExists = allRestaurants.some(
+        restaurant => restaurant.restaurantId === id
+      )
+
+      if (!restaurantExists) {
+        fetchRestaurantById(id)
+      } else {
+        const existingRestaurant =
+          allRestaurants.find(restaurant => restaurant.restaurantId === id) ??
+          null
+        setSelectedRestaurant(existingRestaurant)
+      }
+    }
+  }, [restaurantId, allRestaurants])
+
   const handleTagSelection = (tag: string) => {
     setChosenTags(prevTags => {
       const updatedTags = prevTags.includes(tag)
