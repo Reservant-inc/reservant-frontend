@@ -43,7 +43,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
   }
 
   return (
-    <div className="flex flex-col bg-white rounded-lg w-full h-full">
+    <div className="flex flex-col w-full h-full">
       <div className="flex flex-col gap-4 h-full">
         <div className="flex flex-col h-full p-2 pr-3 overflow-y-auto scroll divide-y-[1px] divide-grey-0">
           {reservations.length === 0 ? (

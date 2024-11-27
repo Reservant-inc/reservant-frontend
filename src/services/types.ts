@@ -95,7 +95,7 @@ export type EmployeeType = {
   login: string
   firstName: string
   lastName: string
-  phoneNumber: string
+  phoneNumber: { code: string; number: string }
   birthDate: string
   employments: EmploymentType[]
 }
@@ -115,7 +115,7 @@ export type EmployeeEmployedType = {
 }
 
 export type EmploymentType = {
-  id: string
+  employmentId: string
   restaurantId: string
   isBackdoorEmployee: string
   isHallEmployee: string

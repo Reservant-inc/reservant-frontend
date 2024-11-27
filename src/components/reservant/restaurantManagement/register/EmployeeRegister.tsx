@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage, FormikValues } from 'formik'
 import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import PhoneInput, {
+  getCountryCallingCode,
+  formatPhoneNumber
+} from 'react-phone-number-input'
 import { useTranslation } from 'react-i18next'
 import { useValidationSchemas } from '../../../../hooks/useValidationSchema'
 import { fetchGET, fetchPOST } from '../../../../services/APIconn'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
-import { Save } from '@mui/icons-material'
+import { Save, Visibility, VisibilityOff } from '@mui/icons-material'
+import { parsePhoneNumber } from 'libphonenumber-js'
 
 const initialValues = {
   login: '',
@@ -24,6 +28,8 @@ interface RegisterEmpProps {
 
 const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
   const [t] = useTranslation('global')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false)
   const { employeeRegisterSchema } = useValidationSchemas()
 
   const handleSubmit = async (
@@ -33,11 +39,16 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
     try {
       setSubmitting(true)
 
+      const number = parsePhoneNumber(values.phoneNumber)
+
       const body = JSON.stringify({
         login: values.login,
         firstName: values.firstName,
         lastName: values.lastName,
-        phoneNumber: values.phoneNumber,
+        phoneNumber: {
+          code: '+' + number.countryCallingCode,
+          number: number.nationalNumber
+        },
         password: values.password,
         birthDate: values.birthDate
       })
@@ -123,7 +134,6 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
                   <label htmlFor="phoneNumber">{t('auth.phoneNumber')}:</label>
                   <Field
                     as={PhoneInput}
-                    international
                     defaultCountry="PL"
                     name={'phoneNumber'}
                     value={formik.values.phoneNumber}
@@ -157,16 +167,24 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
               </div>
               <div>
                 <div
-                  className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.password && formik.touched.password ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                  className={` relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.password && formik.touched.password ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
                   <label htmlFor="password">{t('auth.password')}:</label>
                   <Field
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     name="password"
                     className="w-full"
                   />
-                  <label>*</label>
+                  <span
+                    id="showPassNew"
+                    className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary "
+                    onClick={() => {
+                      setShowPassword(prev => !prev)
+                    }}
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </span>
                 </div>
                 <ErrorMessage name="password">
                   {msg => <ErrorMes msg={msg} />}
@@ -174,18 +192,26 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
               </div>
               <div>
                 <div
-                  className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.confirmPassword && formik.touched.confirmPassword ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                  className={` relative flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.confirmPassword && formik.touched.confirmPassword ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
                   <label htmlFor="confirmPassword">
                     {t('auth.confirmPassword')}:
                   </label>
                   <Field
-                    type="password"
+                    type={showRepeatPassword ? 'text' : 'password'}
                     id="confirmPassword"
                     name="confirmPassword"
                     className="w-full"
                   />
-                  <label>*</label>
+                  <span
+                    id="showPassNew"
+                    className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary "
+                    onClick={() => {
+                      setShowRepeatPassword(prev => !prev)
+                    }}
+                  >
+                    {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
+                  </span>
                 </div>
                 <ErrorMessage name="confirmPassword">
                   {msg => <ErrorMes msg={msg} />}

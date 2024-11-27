@@ -3,36 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn'
+import Tab from '../../restaurantManagement/tabs/Tab'
 
 const EventListTabs: React.FC = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="flex gap-1">
-      <button
+    <div className="flex gap-2">
+      <Tab
+        path="created"
+        title="Utworzone"
+        icon={<AssignmentTurnedInIcon className="text-sm" />}
         id="ProfileCreatedEvents"
-        onClick={() => navigate('created')}
-        className={`flex items-center gap-2 bg-white text-primary text-sm px-2 border-[1px] rounded-md p-1 border-primary transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-      >
-        <AssignmentTurnedInIcon className="text-sm" />
-        Utworzone
-      </button>
-      <button
+      />
+      <Tab
+        path="interested"
+        title="Zainteresowane"
+        icon={<FavoriteIcon className="text-sm" />}
         id="ProfileInterestedEvents"
-        onClick={() => navigate('interested')}
-        className={`flex items-center gap-2 bg-white text-primary text-sm px-2 border-[1px] rounded-md p-1 border-primary transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-      >
-        <FavoriteIcon className="text-sm" />
-        Zainteresowane
-      </button>
-      <button
+      />
+      <Tab
+        path="participates"
+        title="Uczestniczysz"
+        icon={<PersonIcon className="text-sm" />}
         id="ProfileParticipatedEvents"
-        onClick={() => navigate('participates')}
-        className={`flex items-center gap-2 bg-white text-primary text-sm px-2 border-[1px] rounded-md p-1 border-primary transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-      >
-        <PersonIcon className="text-sm" />
-        Uczestniczysz
-      </button>
+      />
     </div>
   )
 }

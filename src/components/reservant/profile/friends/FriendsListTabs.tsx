@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import PeopleIcon from '@mui/icons-material/People'
 import CallMadeIcon from '@mui/icons-material/CallMade'
 import CallReceivedIcon from '@mui/icons-material/CallReceived'
+import Tab from '../../restaurantManagement/tabs/Tab'
 
 const FriendsListTabs: React.FC = () => {
   const navigate = useNavigate()
@@ -11,30 +12,24 @@ const FriendsListTabs: React.FC = () => {
 
   return (
     <div className="flex gap-1">
-      <button
+      <Tab
+        path="list"
+        title={t('profile.friends.friends-tab')}
+        icon={<PeopleIcon className="text-sm" />}
         id="ProfileFriendsList"
-        onClick={() => navigate('list')}
-        className={`flex items-center gap-2 dark:bg-grey-6 bg-white text-primary text-sm px-2 border-[1px] rounded-lg p-1 border-primary transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-      >
-        <PeopleIcon className="text-sm" />
-        {t('profile.friends.friends-tab')}
-      </button>
-      <button
+      />
+      <Tab
+        path="outgoing"
+        title={t('profile.friends.outgoing-tab')}
+        icon={<CallMadeIcon className="text-sm" />}
         id="ProfileOutgoingRequests"
-        onClick={() => navigate('outgoing')}
-        className={`flex items-center gap-2 dark:bg-grey-6 bg-white text-primary text-sm px-2 border-[1px] rounded-lg p-1 border-primary transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-      >
-        <CallMadeIcon className="text-sm" />
-        {t('profile.friends.outgoing-tab')}
-      </button>
-      <button
+      />
+      <Tab
+        path="incoming"
+        title={t('profile.friends.incoming-tab')}
+        icon={<CallReceivedIcon className="text-sm" />}
         id="ProfileIncomingRequests"
-        onClick={() => navigate('incoming')}
-        className={`flex items-center gap-2 dark:bg-grey-6 bg-white text-primary text-sm px-2 border-[1px] rounded-lg p-1 border-primary transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-      >
-        <CallReceivedIcon className="text-sm" />
-        {t('profile.friends.incoming-tab')}
-      </button>
+      />
     </div>
   )
 }

@@ -6,7 +6,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 interface TabProps {
   path: string
   title: string
-  icon: ReactElement
+  icon?: ReactElement
   id: string
 }
 
@@ -31,7 +31,7 @@ const Tab: React.FC<TabProps> = ({ path, title, icon, id }) => {
       >
         <div className="flex items-center gap-4">
           {icon}
-          {size.width > 1600 && <h1>{title}</h1>}
+          {size.width < 2000 && <h1>{title}</h1>}
         </div>
       </ListItemButton>
     </div>

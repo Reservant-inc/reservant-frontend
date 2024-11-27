@@ -560,9 +560,9 @@ const Account: React.FC = () => {
                             }}
                           >
                             {showOldPassword ? (
-                              <VisibilityOff />
-                            ) : (
                               <Visibility />
+                            ) : (
+                              <VisibilityOff />
                             )}
                           </span>{' '}
                         </div>

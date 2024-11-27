@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   DataGrid,
   GridColDef,
@@ -6,133 +6,140 @@ import {
   GridToolbarContainer,
   GridSlots,
   GridActionsCellItem
-} from '@mui/x-data-grid';
-import { fetchGET, fetchPOST } from '../../../../services/APIconn';
-import EditIcon from '@mui/icons-material/Edit';
-import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { IngredientType, PaginationType } from '../../../../services/types';
-import EditIngredientDialog from './EditIngredientDialog';
-import GroceryListDialog from './GroceryListDialog';
-import GroceryInfoDialog from './GroceryInfoDialog';
-import AddIngredientDialog from './AddIngredientDialog';
+} from '@mui/x-data-grid'
+import { fetchGET, fetchPOST } from '../../../../services/APIconn'
+import EditIcon from '@mui/icons-material/Edit'
+import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router-dom'
+import { IngredientType, PaginationType } from '../../../../services/types'
+import EditIngredientDialog from './EditIngredientDialog'
+import GroceryListDialog from './GroceryListDialog'
+import GroceryInfoDialog from './GroceryInfoDialog'
+import AddIngredientDialog from './AddIngredientDialog'
 
 //Szymon TODO: Wyświetlanie Deliveries (w zakładce i potem Grid?), podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
-  const [ingredients, setIngredients] = useState<IngredientType[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isGroceryListOpen, setIsGroceryListOpen] = useState(false);
-  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
-  const [infoMessage, setInfoMessage] = useState<string>('');
-  const [groceryList, setGroceryList] = useState<any[]>([]);
-  const [selectedIngredient, setSelectedIngredient] = useState<IngredientType | null>(null);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [availableIngredients, setAvailableIngredients] = useState<IngredientType[]>([]);
-  const [selectedDropdownIngredient, setSelectedDropdownIngredient] = useState<string>('');
+  const [ingredients, setIngredients] = useState<IngredientType[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isGroceryListOpen, setIsGroceryListOpen] = useState(false)
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false)
+  const [infoMessage, setInfoMessage] = useState<string>('')
+  const [groceryList, setGroceryList] = useState<any[]>([])
+  const [selectedIngredient, setSelectedIngredient] =
+    useState<IngredientType | null>(null)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [availableIngredients, setAvailableIngredients] = useState<
+    IngredientType[]
+  >([])
+  const [selectedDropdownIngredient, setSelectedDropdownIngredient] =
+    useState<string>('')
   const [formValues, setFormValues] = useState({
     name: '',
     unitOfMeasurement: 'Gram',
     minimalAmount: '',
     amount: ''
-  });
+  })
 
-  const [t] = useTranslation('global');
+  const [t] = useTranslation('global')
 
-  const { restaurantId } = useParams();
+  const { restaurantId } = useParams()
 
-  const activeRestaurantId = restaurantId === undefined ? -1 : parseInt(restaurantId);
+  const activeRestaurantId =
+    restaurantId === undefined ? -1 : parseInt(restaurantId)
 
   useEffect(() => {
     if (activeRestaurantId) {
-      fetchIngredients();
+      fetchIngredients()
     }
-  }, [activeRestaurantId]);
+  }, [activeRestaurantId])
 
   useEffect(() => {
-    updateAvailableIngredients();
-  }, [ingredients, groceryList]);
+    updateAvailableIngredients()
+  }, [ingredients, groceryList])
 
   const fetchIngredients = async () => {
     try {
       const data: PaginationType = await fetchGET(
         `/restaurants/${activeRestaurantId}/ingredients?page=0&perPage=10`
-      );
-      const items: IngredientType[] = data.items as IngredientType[];
-      setIngredients(items);
+      )
+      const items: IngredientType[] = data.items as IngredientType[]
+      setIngredients(items)
     } catch (error) {
-      console.error('Error fetching ingredients:', error);
+      console.error('Error fetching ingredients:', error)
     }
-  };
+  }
 
   const updateAvailableIngredients = () => {
-    const groceryIds = groceryList.map((item) => item.ingredientId);
+    const groceryIds = groceryList.map(item => item.ingredientId)
     const filteredIngredients = ingredients.filter(
-      (ingredient) => !groceryIds.includes(ingredient.ingredientId)
-    );
-    setAvailableIngredients(filteredIngredients);
-  };
-
+      ingredient => !groceryIds.includes(ingredient.ingredientId)
+    )
+    setAvailableIngredients(filteredIngredients)
+  }
 
   const handleAddToGroceryList = () => {
     const ingredientToAdd = availableIngredients.find(
-      (ingredient) => ingredient.publicName === selectedDropdownIngredient
-    );
-  
+      ingredient => ingredient.publicName === selectedDropdownIngredient
+    )
+
     if (ingredientToAdd) {
-      setGroceryList((prevList) => {
+      setGroceryList(prevList => {
         const exists = prevList.some(
-          (item) => item.ingredientId === ingredientToAdd.ingredientId
-        );
-  
+          item => item.ingredientId === ingredientToAdd.ingredientId
+        )
+
         if (!exists) {
           return [
             ...prevList,
             {
               ...ingredientToAdd,
               id: ingredientToAdd.ingredientId,
-              amountToOrder: ingredientToAdd.minimalAmount,
-            },
-          ];
+              amountToOrder: ingredientToAdd.minimalAmount
+            }
+          ]
         }
-  
-        return prevList; // Jeśli istnieje, po prostu zwróć poprzednią listę bez zmian
-      });
-      setSelectedDropdownIngredient('');
+
+        return prevList // Jeśli istnieje, po prostu zwróć poprzednią listę bez zmian
+      })
+      setSelectedDropdownIngredient('')
     }
-  };
-  
+  }
 
   const handleGenerateGroceryList = () => {
-    setGroceryList((prevList) => {
+    setGroceryList(prevList => {
       const restockingItems = ingredients
-        .filter((ingredient) => ingredient.amount < ingredient.minimalAmount)
-        .map((ingredient) => {
-          const existingItem = prevList.find(item => item.ingredientId === ingredient.ingredientId);
-  
+        .filter(ingredient => ingredient.amount < ingredient.minimalAmount)
+        .map(ingredient => {
+          const existingItem = prevList.find(
+            item => item.ingredientId === ingredient.ingredientId
+          )
+
           if (existingItem) {
-            return existingItem; // jesli składnik już na liście zachowaj istniejące wartości
+            return existingItem // jesli składnik już na liście zachowaj istniejące wartości
           }
-  
-          const neededAmount = ingredient.minimalAmount - ingredient.amount;
+
+          const neededAmount = ingredient.minimalAmount - ingredient.amount
           return {
             ...ingredient,
             id: ingredient.ingredientId,
             amountToOrder: neededAmount > 0 ? neededAmount : 0
-          };
-        });
-  
+          }
+        })
+
       // Filtrujemy składniki, które nie są w `restockingItems`, a następnie dodajemy nowe elementy
       return [
-        ...prevList.filter(item => !restockingItems.some(restocking => restocking.ingredientId === item.ingredientId)),
-        ...restockingItems,
-      ];
-    });
-  
-    setIsGroceryListOpen(true);
-  };
-  
-  
-  
+        ...prevList.filter(
+          item =>
+            !restockingItems.some(
+              restocking => restocking.ingredientId === item.ingredientId
+            )
+        ),
+        ...restockingItems
+      ]
+    })
+
+    setIsGroceryListOpen(true)
+  }
 
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -140,129 +147,130 @@ const IngredientTable: React.FC = () => {
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value
-    });
-  };
+    })
+  }
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen(false)
     setFormValues({
       name: '',
       unitOfMeasurement: 'Gram',
       minimalAmount: '',
       amount: ''
-    });
-  };
+    })
+  }
 
   // Nie wiem dlaczego to nie działa? Przesyła się poprawnie ale nie wyświetla się składnik
   const handleAddIngredient = async () => {
     try {
-      const restaurantId = activeRestaurantId;
-  
+      const restaurantId = activeRestaurantId
+
       if (restaurantId === -1) {
-        console.error('Invalid restaurant ID');
-        return;
+        console.error('Invalid restaurant ID')
+        return
       }
-  
+
       const payload = {
         publicName: formValues.name,
         unitOfMeasurement: formValues.unitOfMeasurement,
         minimalAmount: Number(formValues.minimalAmount),
         amountToOrder: 10,
         amount: formValues.amount ? Number(formValues.amount) : 0,
-        restaurantId: restaurantId,
-      };
-  
-      console.log('dane:', payload); 
-  
-      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload));
-  
-      if (response) {
-        console.log('Ingredient added successfully:', response.ingredientId);
-      } else {
-        console.warn('New ingredient added but no response returned');
+        restaurantId: restaurantId
       }
-  
-      handleCloseModal();
-      fetchIngredients();
+
+      console.log('dane:', payload)
+
+      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload))
+
+      if (response) {
+        console.log('Ingredient added successfully:', response.ingredientId)
+      } else {
+        console.warn('New ingredient added but no response returned')
+      }
+
+      handleCloseModal()
+      fetchIngredients()
     } catch (error) {
-      console.error('Error adding ingredient:', error);
+      console.error('Error adding ingredient:', error)
     }
-  };
-  
+  }
+
   const handleIncreaseAmount = (id: number) => {
-    setGroceryList((prevList) =>
-      prevList.map((item) =>
+    setGroceryList(prevList =>
+      prevList.map(item =>
         item.id === id
           ? { ...item, amountToOrder: Math.min(item.amountToOrder + 1, 9999) }
           : item
       )
-    );
-    console.log('Increased amount:', groceryList);
-  };
-  
+    )
+    console.log('Increased amount:', groceryList)
+  }
+
   const handleDecreaseAmount = (id: number) => {
-    setGroceryList((prevList) =>
-      prevList.map((item) =>
+    setGroceryList(prevList =>
+      prevList.map(item =>
         item.id === id
           ? { ...item, amountToOrder: Math.max(item.amountToOrder - 1, 0) }
           : item
       )
-    );
-    console.log('Decreased amount:', groceryList);
-  };
-  
-  
+    )
+    console.log('Decreased amount:', groceryList)
+  }
+
   const handleRemoveItem = (id: number) => {
-    setGroceryList((prevList) => prevList.filter((item) => item.id !== id));
-  };
-  
+    setGroceryList(prevList => prevList.filter(item => item.id !== id))
+  }
 
   const handleOrder = async () => {
     try {
       // 30 dni od teraz expiry date
-      const expiryDate = new Date();
-      expiryDate.setDate(expiryDate.getDate() + 30);
-      const formattedExpiryDate = expiryDate.toISOString();
-  
+      const expiryDate = new Date()
+      expiryDate.setDate(expiryDate.getDate() + 30)
+      const formattedExpiryDate = expiryDate.toISOString()
+
       const orderPayload = {
         restaurantId: activeRestaurantId,
-        ingredients: groceryList.map((item) => ({
+        ingredients: groceryList.map(item => ({
           ingredientId: item.ingredientId,
           amountOrdered: item.amountToOrder,
           amountDelivered: item.amountToOrder,
           expiryDate: formattedExpiryDate,
-          storeName: item.publicName,
-        })),
-      };
-  
-      console.log('Order payload:', orderPayload);
-  
-      const response = await fetchPOST(`/deliveries`, JSON.stringify(orderPayload));
+          storeName: item.publicName
+        }))
+      }
+
+      console.log('Order payload:', orderPayload)
+
+      const response = await fetchPOST(
+        `/deliveries`,
+        JSON.stringify(orderPayload)
+      )
       if (response && response.deliveryId) {
-        const deliveryId = response.deliveryId;
-        setInfoMessage(`${t('warehouse.delivery-confirmation')} ${deliveryId}`);
-        setIsInfoDialogOpen(true);
-        setIsGroceryListOpen(false);
-        
+        const deliveryId = response.deliveryId
+        setInfoMessage(`${t('warehouse.delivery-confirmation')} ${deliveryId}`)
+        setIsInfoDialogOpen(true)
+        setIsGroceryListOpen(false)
+
         // wyczyść po zamówieniu
-        setGroceryList([]);
+        setGroceryList([])
       } else {
-        console.warn('No deliveryId returned in response');
+        console.warn('No deliveryId returned in response')
       }
     } catch (error) {
-      console.error('Error sending order:', error);
+      console.error('Error sending order:', error)
     }
-  };
-  
+  }
+
   const handleOpenEditDialog = (ingredient: IngredientType) => {
-    setSelectedIngredient(ingredient);
-    setIsEditDialogOpen(true);
-  };
+    setSelectedIngredient(ingredient)
+    setIsEditDialogOpen(true)
+  }
 
   const handleCloseEditDialog = () => {
-    setSelectedIngredient(null);
-    setIsEditDialogOpen(false);
-  };
+    setSelectedIngredient(null)
+    setIsEditDialogOpen(false)
+  }
 
   const columns: GridColDef[] = [
     {
@@ -320,7 +328,7 @@ const IngredientTable: React.FC = () => {
         />
       )
     }
-  ];
+  ]
 
   const EditToolbar = () => (
     <GridToolbarContainer>
@@ -348,45 +356,45 @@ const IngredientTable: React.FC = () => {
         </div>
       </div>
     </GridToolbarContainer>
-  );
+  )
 
   return (
     <div className="overflow-y-auto scroll flex h-full w-full flex-col rounded-lg bg-white dark:bg-black ">
       {ingredients.length > 0 ? (
-        <div className=''>
-        <DataGrid
-          rows={ingredients.map((ingredient, index) => ({
-            ...ingredient,
-            id: index
-          }))}
-          columns={columns}
-          pageSizeOptions={[5, 10, 25, 100]}
-          disableRowSelectionOnClick
-          slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
-        />
+        <div className="">
+          <DataGrid
+            rows={ingredients.map((ingredient, index) => ({
+              ...ingredient,
+              id: index
+            }))}
+            columns={columns}
+            pageSizeOptions={[5, 10, 25, 100]}
+            disableRowSelectionOnClick
+            slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
+          />
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center h-full text-lg text-gray-500 dark:text-gray-400 gap-4">
-          <p className="text-black dark:text-white">{t('Ta restauracja nie ma żadnych składników')}</p>
+          <p className="text-black dark:text-white">
+            {t('Ta restauracja nie ma żadnych składników')}
+          </p>
           <button
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            + {t('warehouse.add-ingredient')} 
+            + {t('warehouse.add-ingredient')}
           </button>
         </div>
       )}
-
-        {/* Dialog dodawania składnika nowego */}
-        <AddIngredientDialog
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          formValues={formValues}
-          onFormChange={handleFormChange}
-          onAddIngredient={handleAddIngredient}
-          t={t} 
-        />
-      
+      {/* Dialog dodawania składnika nowego */}
+      <AddIngredientDialog
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        formValues={formValues}
+        onFormChange={handleFormChange}
+        onAddIngredient={handleAddIngredient}
+        t={t}
+      />
       {/* Dialog z listą zakupów  */}
       <GroceryListDialog
         open={isGroceryListOpen}
@@ -395,22 +403,20 @@ const IngredientTable: React.FC = () => {
         setGroceryList={setGroceryList}
         availableIngredients={availableIngredients}
         selectedDropdownIngredient={selectedDropdownIngredient}
-        onIngredientSelect={(value) => setSelectedDropdownIngredient(value)}
+        onIngredientSelect={value => setSelectedDropdownIngredient(value)}
         onAddToGroceryList={handleAddToGroceryList}
         onIncreaseAmount={handleIncreaseAmount}
         onDecreaseAmount={handleDecreaseAmount}
         onRemoveItem={handleRemoveItem}
         onSubmitOrder={handleOrder} // funkcja od zamówienia
-      />;
-
-      {/* Dialog do edycji składnika */}
+      />
+      ;{/* Dialog do edycji składnika */}
       <EditIngredientDialog
         open={isEditDialogOpen}
         onClose={handleCloseEditDialog}
         ingredient={selectedIngredient}
         onUpdate={fetchIngredients}
       />
-
       {/* Dialog z podsumowaniem złożenia delivery */}
       <GroceryInfoDialog
         open={isInfoDialogOpen}
@@ -419,7 +425,7 @@ const IngredientTable: React.FC = () => {
         fetchIngredients={fetchIngredients}
       />
     </div>
-  );
-};
+  )
+}
 
-export default IngredientTable;
+export default IngredientTable

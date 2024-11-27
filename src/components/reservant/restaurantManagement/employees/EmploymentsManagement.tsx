@@ -52,7 +52,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
           if (response[i].userId === empid)
             for (const j in response[i].employments) {
               tmp.push({
-                id: response[i].employments[j].employmentId,
+                employmentId: response[i].employments[j].employmentId,
                 restaurantName: response[i].employments[j].restaurantName,
                 restaurantId:
                   response[i].employments[j].restaurant.restaurantId,
@@ -213,7 +213,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
             if (response[i].userId === empid)
               for (const j in response[i].employments) {
                 tmp.push({
-                  id: response[i].employments[j].employmentId,
+                  employmentId: response[i].employments[j].employmentId,
                   restaurantName: response[i].employments[j].restaurantName,
                   restaurantId: response[i].employments[j].restaurantId,
                   isBackdoorEmployee:
@@ -359,7 +359,6 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                     disabled={!formik.dirty || !formik.isValid}
                     className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
                   >
-                    <Add />
                     <h1 className="font-mont-md text-md">
                       {t('add-employee.addEmployee')}
                     </h1>
