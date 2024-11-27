@@ -382,3 +382,9 @@ export type FriendData = {
     photo: string
   }
 }
+
+export type ReportType = {
+  description: string
+  visitId: number
+  reportedUserId?: string
+}
