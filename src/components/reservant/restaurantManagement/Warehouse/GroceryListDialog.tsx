@@ -10,6 +10,7 @@ interface GroceryListDialogProps {
   open: boolean;
   onClose: () => void;
   groceryList: any[];
+  setGroceryList: React.Dispatch<React.SetStateAction<any[]>>; // Dodane setGroceryList
   availableIngredients: any[];
   selectedDropdownIngredient: string;
   onIngredientSelect: (value: string) => void;
@@ -24,6 +25,7 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
   open,
   onClose,
   groceryList,
+  setGroceryList,
   availableIngredients,
   selectedDropdownIngredient,
   onIngredientSelect,
@@ -84,6 +86,15 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
     },
   ];
 
+  const handleProcessRowUpdate = (newRow: any, oldRow: any) => {
+    const updatedGroceryList = groceryList.map((item) =>
+      item.id === newRow.id ? { ...item, amountToOrder: newRow.amountToOrder } : item
+    );
+
+    setGroceryList(updatedGroceryList);
+    return newRow;
+  };
+
   if (!open) return null;
 
   return (
@@ -126,6 +137,8 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
               columns={groceryListColumns}
               autoHeight
               disableRowSelectionOnClick
+              processRowUpdate={handleProcessRowUpdate} // aktualizacja wiersza z palca
+              onProcessRowUpdateError={(error) => console.error('Error during row update:', error)} // errory
               slots={{ pagination: () => null }}
             />
             <div className="mt-4 flex justify-end">

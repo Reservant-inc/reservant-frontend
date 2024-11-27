@@ -72,38 +72,67 @@ const IngredientTable: React.FC = () => {
     setAvailableIngredients(filteredIngredients);
   };
 
+
   const handleAddToGroceryList = () => {
     const ingredientToAdd = availableIngredients.find(
       (ingredient) => ingredient.publicName === selectedDropdownIngredient
     );
   
     if (ingredientToAdd) {
-      setGroceryList((prevList) => [
-        ...prevList,
-        {
-          ...ingredientToAdd, // kopia składnika do grocery listy
-          id: Date.now(), // unikalne id bo innaczej błedy sypie
-          amountToOrder: ingredientToAdd.minimalAmount
+      setGroceryList((prevList) => {
+        const exists = prevList.some(
+          (item) => item.ingredientId === ingredientToAdd.ingredientId
+        );
+  
+        if (!exists) {
+          return [
+            ...prevList,
+            {
+              ...ingredientToAdd,
+              id: ingredientToAdd.ingredientId,
+              amountToOrder: ingredientToAdd.minimalAmount,
+            },
+          ];
         }
-      ]);
+  
+        return prevList; // Jeśli istnieje, po prostu zwróć poprzednią listę bez zmian
+      });
       setSelectedDropdownIngredient('');
     }
   };
   
+
   const handleGenerateGroceryList = () => {
-    const restockingItems = ingredients
-      .filter((ingredient) => ingredient.amount < ingredient.minimalAmount)
-      .map((ingredient, index) => {
-        const neededAmount = ingredient.minimalAmount - ingredient.amount;
-        return {
-          ...ingredient,
-          id: index,
-          amountToOrder: neededAmount > 0 ? neededAmount : 0
-        };
-      });
-    setGroceryList(restockingItems);
+    setGroceryList((prevList) => {
+      const restockingItems = ingredients
+        .filter((ingredient) => ingredient.amount < ingredient.minimalAmount)
+        .map((ingredient) => {
+          const existingItem = prevList.find(item => item.ingredientId === ingredient.ingredientId);
+  
+          if (existingItem) {
+            return existingItem; // jesli składnik już na liście zachowaj istniejące wartości
+          }
+  
+          const neededAmount = ingredient.minimalAmount - ingredient.amount;
+          return {
+            ...ingredient,
+            id: ingredient.ingredientId,
+            amountToOrder: neededAmount > 0 ? neededAmount : 0
+          };
+        });
+  
+      // Filtrujemy składniki, które nie są w `restockingItems`, a następnie dodajemy nowe elementy
+      return [
+        ...prevList.filter(item => !restockingItems.some(restocking => restocking.ingredientId === item.ingredientId)),
+        ...restockingItems,
+      ];
+    });
+  
     setIsGroceryListOpen(true);
   };
+  
+  
+  
 
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -138,7 +167,7 @@ const IngredientTable: React.FC = () => {
         publicName: formValues.name,
         unitOfMeasurement: formValues.unitOfMeasurement,
         minimalAmount: Number(formValues.minimalAmount),
-        amountToOrder: 0,
+        amountToOrder: 10,
         amount: formValues.amount ? Number(formValues.amount) : 0,
         restaurantId: restaurantId,
       };
@@ -160,8 +189,6 @@ const IngredientTable: React.FC = () => {
     }
   };
   
-  
-
   const handleIncreaseAmount = (id: number) => {
     setGroceryList((prevList) =>
       prevList.map((item) =>
@@ -170,8 +197,9 @@ const IngredientTable: React.FC = () => {
           : item
       )
     );
+    console.log('Increased amount:', groceryList);
   };
-
+  
   const handleDecreaseAmount = (id: number) => {
     setGroceryList((prevList) =>
       prevList.map((item) =>
@@ -180,38 +208,52 @@ const IngredientTable: React.FC = () => {
           : item
       )
     );
+    console.log('Decreased amount:', groceryList);
   };
-
+  
+  
   const handleRemoveItem = (id: number) => {
     setGroceryList((prevList) => prevList.filter((item) => item.id !== id));
   };
+  
 
   const handleOrder = async () => {
     try {
+      // 30 dni od teraz expiry date
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 30);
+      const formattedExpiryDate = expiryDate.toISOString();
+  
       const orderPayload = {
         restaurantId: activeRestaurantId,
         ingredients: groceryList.map((item) => ({
-          deliveryId: 0,
-          ingredientId: ingredients.find(
-            (ingredient) => ingredient.publicName === item.publicName
-          )?.ingredientId,
+          ingredientId: item.ingredientId,
           amountOrdered: item.amountToOrder,
           amountDelivered: item.amountToOrder,
-          expiryDate: null,
+          expiryDate: formattedExpiryDate,
           storeName: item.publicName,
         })),
       };
   
+      console.log('Order payload:', orderPayload);
+  
       const response = await fetchPOST(`/deliveries`, JSON.stringify(orderPayload));
-      const deliveryId = response.deliveryId;
-      setInfoMessage(`${t('warehouse.delivery-confirmation')} ${deliveryId}`);
-      setIsInfoDialogOpen(true);
-      setIsGroceryListOpen(false);
+      if (response && response.deliveryId) {
+        const deliveryId = response.deliveryId;
+        setInfoMessage(`${t('warehouse.delivery-confirmation')} ${deliveryId}`);
+        setIsInfoDialogOpen(true);
+        setIsGroceryListOpen(false);
+        
+        // wyczyść po zamówieniu
+        setGroceryList([]);
+      } else {
+        console.warn('No deliveryId returned in response');
+      }
     } catch (error) {
       console.error('Error sending order:', error);
     }
   };
-
+  
   const handleOpenEditDialog = (ingredient: IngredientType) => {
     setSelectedIngredient(ingredient);
     setIsEditDialogOpen(true);
@@ -350,6 +392,7 @@ const IngredientTable: React.FC = () => {
         open={isGroceryListOpen}
         onClose={() => setIsGroceryListOpen(false)}
         groceryList={groceryList}
+        setGroceryList={setGroceryList}
         availableIngredients={availableIngredients}
         selectedDropdownIngredient={selectedDropdownIngredient}
         onIngredientSelect={(value) => setSelectedDropdownIngredient(value)}
