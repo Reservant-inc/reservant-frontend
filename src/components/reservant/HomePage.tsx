@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import Map from './map/Map'
 import { Button, List, ListItemButton, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
@@ -14,19 +15,13 @@ import { RestaurantDetailsType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
 import FocusedRestaurantDetails from './restaurant/onMapView/FocusedRestaurantDetails'
-import { useLocation } from 'react-router-dom'
 
 export default function HomePage() {
-  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
-  const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
-    []
-  )
-
-  const [activeRestaurant, setActiveRestaurant] =
-    useState<RestaurantDetailsType | null>(null)
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
     new Set()
   )
+  const [selectedRestaurant, setSelectedRestaurant] =
+    useState<RestaurantDetailsType | null>(null)
   const [userMovedMap, setUserMovedMap] = useState<boolean>(false)
   const [isReviewFilterPressed, setIsReviewFilterPressed] =
     useState<boolean>(false)
@@ -35,10 +30,15 @@ export default function HomePage() {
   const [reviewFilter, setReviewFilter] = useState<number>(0)
   const [tags, setTags] = useState<string[]>([])
   const [chosenTags, setChosenTags] = useState<string[]>([])
+  const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
+    []
+  )
+
+  const { restaurantId } = useParams<{ restaurantId?: string }>()
+  const navigate = useNavigate()
 
   const [t] = useTranslation('global')
 
-  //center of warsaw, cant get users location without https
   const [bounds, setBounds] = useState<any>({
     lat1: 52.25255454924618,
     lat2: 52.20718589303197,
@@ -65,21 +65,15 @@ export default function HomePage() {
   useEffect(() => {
     const getRestaurants = async () => {
       try {
-        const tagsQuery = chosenTags
-          .map(tag => {
-            return `&tags=${tag}`
-          })
-          .join('')
-
+        const tagsQuery = chosenTags.map(tag => `&tags=${tag}`).join('')
         const response = await fetchGET(
-          `/restaurants?origLat=${52.225}&origLon=${21.01}&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}`
+          `/restaurants?origLat=52.225&origLon=21.01&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}`
         )
 
         const newRestaurants = response.items.filter(
           (restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId)
         )
 
-        setRestaurants([...restaurants, ...newRestaurants])
         setAllRestaurants([...allRestaurants, ...newRestaurants])
 
         setLoadedRestaurantIds(prevIds => {
@@ -100,6 +94,60 @@ export default function HomePage() {
     getRestaurants()
   }, [bounds, chosenTags, reviewFilter])
 
+  useEffect(() => {
+    const fetchRestaurantById = async (id: number) => {
+      try {
+        const response = await fetchGET(`/restaurants/${id}`)
+        if (response) {
+          setAllRestaurants(prev => {
+            const exists = prev.some(
+              restaurant => restaurant.restaurantId === response.restaurantId
+            )
+            if (!exists) {
+              return [...prev, response]
+            }
+            return prev
+          })
+          setSelectedRestaurant(response)
+        }
+      } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log('Unexpected error:', error)
+        }
+      }
+    }
+
+    if (restaurantId) {
+      const id = parseInt(restaurantId, 10)
+      const restaurantExists = allRestaurants.some(
+        restaurant => restaurant.restaurantId === id
+      )
+
+      if (!restaurantExists) {
+        fetchRestaurantById(id)
+      } else {
+        const existingRestaurant =
+          allRestaurants.find(restaurant => restaurant.restaurantId === id) ??
+          null
+        setSelectedRestaurant(existingRestaurant)
+      }
+    }
+  }, [restaurantId, allRestaurants])
+
+  const handleTagSelection = (tag: string) => {
+    setChosenTags(prevTags => {
+      const updatedTags = prevTags.includes(tag)
+        ? prevTags.filter(t => t !== tag)
+        : [...prevTags, tag]
+
+      setAllRestaurants([])
+      setLoadedRestaurantIds(new Set())
+      return updatedTags
+    })
+  }
+
   const reviewsPressHandler = () => {
     setIsReviewFilterPressed(!isReviewFilterPressed)
   }
@@ -108,17 +156,12 @@ export default function HomePage() {
     setIsTagFilterPressed(!isTagFilterPressed)
   }
 
-  const handleTagSelection = (tag: string) => {
-    setChosenTags(prevTags => {
-      const updatedTags = prevTags.includes(tag)
-        ? prevTags.filter(t => t !== tag)
-        : [...prevTags, tag]
+  const handleRestaurantClick = (id: number) => {
+    navigate(`../home/${id}`)
+  }
 
-      // Reset restaurants and loaded IDs
-      setRestaurants([])
-      setLoadedRestaurantIds(new Set())
-      return updatedTags
-    })
+  const handleCloseDetails = () => {
+    navigate('../home')
   }
 
   return (
@@ -146,7 +189,7 @@ export default function HomePage() {
                 placeholder={t('home-page.search')}
                 className="w-full placeholder:text-grey-2"
                 onChange={e => {
-                  setRestaurants(
+                  setAllRestaurants(
                     allRestaurants.filter((restaurant: any) => {
                       return restaurant.name
                         .toLowerCase()
@@ -163,16 +206,16 @@ export default function HomePage() {
               id="homePage-restaurantList"
               className="w-full p-0 px-2 font-mont-md dark:bg-black"
             >
-              {restaurants.map(restaurant => (
+              {allRestaurants.map(restaurant => (
                 <ListItemButton
                   id="homePage-listItemButton"
                   onClick={() => {
                     setUserMovedMap(false)
-                    setActiveRestaurant(restaurant)
+                    handleRestaurantClick(restaurant.restaurantId)
                   }}
                   className={`rounded-md p-3 dark:bg-black
                       ${
-                        activeRestaurant === restaurant
+                        selectedRestaurant === restaurant
                           ? ' bg-grey-1 dark:bg-grey-5'
                           : ' bg-white hover:bg-grey-1 dark:hover:bg-grey-5'
                       }
@@ -363,28 +406,30 @@ export default function HomePage() {
           )}
         </OutsideClickHandler>
       </div>
-      {activeRestaurant && (
-        <div>
-          <div
-            className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[450px] overflow-y-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? 'left-[calc(1rem+300px)]' : 'left-[0.5rem]'}`}
-          >
-            <div className="scroll h-full overflow-y-auto dark:bg-black">
-              <FocusedRestaurantDetails
-                activeRestaurant={activeRestaurant}
-                onClose={() => setActiveRestaurant(null)}
-              />
-            </div>
+
+      {/* Restaurant Details */}
+      {selectedRestaurant && (
+        <div
+          className={`absolute top-[3.5rem] z-[1] h-[calc(100%-4rem)] w-[450px] overflow-y-hidden rounded-lg bg-white shadow-md ${isMenuOpen ? 'left-[calc(1rem+300px)]' : 'left-[0.5rem]'}`}
+        >
+          <div className="scroll h-full overflow-y-auto dark:bg-black">
+            <FocusedRestaurantDetails
+              activeRestaurant={selectedRestaurant}
+              onClose={handleCloseDetails}
+            />
           </div>
         </div>
       )}
+
+      {/* Map */}
       <div id="map" className="relative z-[0] h-full w-full">
         <Map
-          activeRestaurant={activeRestaurant}
-          restaurants={restaurants}
-          setActiveRestaurant={setActiveRestaurant}
+          restaurants={allRestaurants}
           setBounds={setBounds}
-          setUserMovedMap={setUserMovedMap}
+          activeRestaurant={selectedRestaurant ?? null}
+          setActiveRestaurant={handleRestaurantClick}
           userMovedMap={userMovedMap}
+          setUserMovedMap={setUserMovedMap}
         />
       </div>
     </div>
