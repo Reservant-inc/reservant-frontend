@@ -272,7 +272,10 @@
         "grocery-actions": "Akcje",
         "grocery-order": "Zamów",
         "delivery-confirmation": "Wysłano żądanie dostawy. Identyfikator dostawy: ",
-        "confirmation": "Potwierdzenie"
+        "confirmation": "Potwierdzenie",
+        "select-ingredient": "Wybierz składnik",
+        "add-to-list": "Dodaj do listy zakupów",
+        "no-ingredients": "Brak składników o statusie 'Wymaga uzupełnienia'."
     },
     "profile": {
         "friends": {

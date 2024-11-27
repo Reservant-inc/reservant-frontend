@@ -279,7 +279,10 @@
         "grocery-actions": "Actions",
         "grocery-order": "Order",
         "delivery-confirmation": "Delivery request sent. Delivery Id: ",
-        "confirmation": "Confirmation"
+        "confirmation": "Confirmation",
+        "select-ingredient": "Pick an ingredient",
+        "add-to-list": "Add to grocery list",
+        "no-ingredients": "There are no ingredients with 'Out of Stock' status."
     },
     "profile": {
         "friends": {

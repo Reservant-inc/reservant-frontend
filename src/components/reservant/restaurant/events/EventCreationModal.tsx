@@ -92,10 +92,11 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
   }
 
   return (
-    <div className="w-full h-full bg-white dark:bg-black shadow-lg p-6 rounded-lg">
+    <div className="w-full h-full bg-white dark:bg-black shadow-lg p-4 rounded-lg flex flex-col max-h-[45vh]">
       <h2 id="modal-title" className="text-xl font-bold mb-4 dark:text-white">
         Create Event
       </h2>
+      <div className="overflow-y-auto scroll justify-between pr-3 pb-2">
       <Formik<EventFormValues>
         initialValues={{
           name: '',
@@ -233,18 +234,18 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
               <p className="mb-4 text-red-500">{errorMessage}</p>
             )}
 
-            <div className="flex justify-end space-x-4 mt-6">
+            <div className="flex justify-end space-x-4">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition"
+                className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               >
                 Create Event
               </button>
               <button
                 type="button"
                 onClick={handleClose}
-                className="w-[180px] dark:bg-grey-6 bg-grey-0 rounded-lg text-primary hover:text-primary-2 dark:text-secondary dark:hover:text-secondary-2 hover:bg-grey-1 dark:hover:bg-grey-6 transition"
+                className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               >
                 Cancel
               </button>
@@ -252,6 +253,7 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
           </Form>
         )}
       </Formik>
+      </div>
     </div>
   )
 }
