@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Dialog, DialogTitle, DialogContent, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { Box, Dialog, DialogTitle, DialogContent, IconButton, FormControl, InputLabel, Select, MenuItem, Snackbar } from '@mui/material'
 import RestaurantRegister from '../../../register/restaurantRegister/RestaurantRegister'
 import {
   GridToolbarContainer,
@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
 import { GridCellParams } from '@mui/x-data-grid';
+import RegisterSuccess from '../../../register/restaurantRegister/RegisterSuccess'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -30,12 +31,14 @@ interface EditToolbarProps {
 
 const RestaurantListSection: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+  const [registerSucces, setRegisterSucces] = useState<boolean>(false)
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
   const [restaurantToDelete, setRestaurantToDelete] = useState<string>('')
   const [groups, setGroups] = useState<GroupType[]>([]) 
 
+  
 
   const navigate = useNavigate()
 
@@ -82,7 +85,6 @@ const RestaurantListSection: React.FC = () => {
         
       }
       setRows(tmp)
-      console.log("aa",rows);
     } catch (error) {
       console.error('Error populating table', error)
     }
@@ -260,6 +262,7 @@ const RestaurantListSection: React.FC = () => {
       editable: true,
       renderEditCell: (params) => {
         const { id, value, api } = params;
+        const selectedGroup = groups.find(group => group.name === value);
         return (
           <FormControl fullWidth>
             <Select
@@ -278,7 +281,7 @@ const RestaurantListSection: React.FC = () => {
                   },
                 '& .MuiSelect-icon': { color: 'gray' }
               }}
-              value={value || ''}
+              value={selectedGroup ? value : ''}
               onChange={(event) => {
                 const newValue = event.target.value;
                 api.setEditCellValue({ id, field: 'groupName', value: newValue });
@@ -357,6 +360,11 @@ const RestaurantListSection: React.FC = () => {
     // const rowData = params.row;
   }
 
+  const handleRegistrationSucces = () => {
+    setRegisterSucces(true)
+    populateRows();
+  }
+
   return (
     <div className="h-full w-full rounded-b-lg rounded-tr-lg bg-white dark:bg-black">
       <DataGrid
@@ -413,11 +421,25 @@ const RestaurantListSection: React.FC = () => {
         </DialogTitle>
         <DialogContent className='dark:bg-black'>
           <Box>
-            <RestaurantRegister />
+            {/* Show the registration form or the success message */}
+            {!registerSucces ? (
+              <RestaurantRegister 
+                onRegisterSucces={() => handleRegistrationSucces()}
+              />
+            ) : (
+              <Box>
+                <RegisterSuccess 
+                  onDialogClose={() => setIsDialogOpen(false)} 
+                  onRegisterSucces={() => setRegisterSucces(false)} 
+                />
+              </Box>
+            )}
+
           </Box>
         </DialogContent>
       </Dialog>
 
+  
       <ConfirmationDialog
         open={isConfirmationOpen}
         onClose={() => setIsConfirmationOpen(false)}

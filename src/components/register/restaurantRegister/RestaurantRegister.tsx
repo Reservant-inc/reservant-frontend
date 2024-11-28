@@ -53,13 +53,15 @@ const initialValues: RestaurantDataType = {
 
 };
 
-const RestaurantRegister: React.FC = () => {
+interface RestaurantRegisterProps {
+  onRegisterSucces: () => void;
+}
+
+const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({ onRegisterSucces }) => {
   const [activeStep, setActiveStep] = useState<number>(1);
   const [requestLoading, setRequestLoading] = useState<boolean>(false);
    
   const [tags, setTags] = useState<string[]>([]);
-  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
-  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [groups, setGroups] = useState<null | GroupType[]>(null);
   
@@ -119,7 +121,6 @@ const RestaurantRegister: React.FC = () => {
         );
         return; // Zatrzymaj proces przejścia dalej
       }
-      console.log (formik.values)
 
       if (activeStep === 1 ) {
       const body = JSON.stringify({
@@ -234,7 +235,7 @@ const RestaurantRegister: React.FC = () => {
       setTimeout(() => {}, 1000)
       const response = await fetchPOST("/my-restaurants", JSON.stringify(updatedValues));
 
-      setSnackbarOpen(true);
+      onRegisterSucces();
     } catch (error) {
       console.error("Nieoczekiwany błąd podczas przesyłania plików lub wysyłania formularza:", error);
       setServerError("Wystąpił błąd podczas wysyłania.");
@@ -243,12 +244,6 @@ const RestaurantRegister: React.FC = () => {
     }
   };
   
-  
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   const generateTimeOptions = () => {
     const times = [];
     for (let h = 0; h < 24; h++) {
@@ -853,15 +848,6 @@ const RestaurantRegister: React.FC = () => {
                 </Form>
               )}
             </Formik>
-     
-
-      <Snackbar
-        id="restaurantRegister-snackBar"
-        open={snackbarOpen}
-        autoHideDuration={5000}
-        onClose={handleSnackbarClose}
-        message={t("restaurant-register.submitSuccessMessage")}
-      />
     </div>
   );
 };
