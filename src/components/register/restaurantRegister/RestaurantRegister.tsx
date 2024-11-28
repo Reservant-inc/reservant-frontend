@@ -3,23 +3,19 @@ import { Formik, Form, Field, FieldArray, ErrorMessage, FormikValues } from "for
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useValidationSchemas } from "../../../hooks/useValidationSchema";
-import { RestaurantDataType } from "../../../services/types";
+import { GroupType, RestaurantDataType } from "../../../services/types";
 import { LocalType } from "../../../services/enums";
 import { fetchFilesPOST, fetchGET, fetchPOST } from "../../../services/APIconn";
 import { CSSTransition } from "react-transition-group";
 
 // Material-UI imports
 import Snackbar from "@mui/material/Snackbar";
-import LinearProgress from "@mui/material/LinearProgress";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Stepper from "@mui/material/Stepper";
-import Button from "@mui/material/Button";
 import { Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel, InputLabel, MenuItem, NativeSelect, Select, TextField } from "@mui/material";
 import { group } from "console";
 import { Close } from "@mui/icons-material";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { ValidationError } from "yup";
+import { FetchError } from "../../../services/Errors";
 
 
 
@@ -65,6 +61,7 @@ const RestaurantRegister: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [groups, setGroups] = useState<null | GroupType[]>(null);
   
 
   const { t } = useTranslation("global");
@@ -87,6 +84,21 @@ const RestaurantRegister: React.FC = () => {
     fetchTags();
   }, []);
 
+  useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const groupsData = await fetchGET("/my-restaurant-groups");
+        setGroups(groupsData);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+      }
+    };
+
+    fetchGroups();
+  }, []);
+
+  
+
   
 
 
@@ -107,7 +119,6 @@ const RestaurantRegister: React.FC = () => {
         );
         return; // Zatrzymaj proces przejścia dalej
       }
-  
       console.log (formik.values)
 
       if (activeStep === 1 ) {
@@ -127,7 +138,9 @@ const RestaurantRegister: React.FC = () => {
       setActiveStep((prevStep) => prevStep + 1); 
   
     } catch (error) {
-      setServerError(t("restaurant-register.serverError"));
+      if (error instanceof FetchError){
+        setServerError(error.formatErrors());
+      }
     } finally {
       setRequestLoading(false); // Zakończenie loading state
     }
@@ -140,10 +153,8 @@ const RestaurantRegister: React.FC = () => {
     setRequestLoading(true);
   
     try {
-      
-      values.groupId = 7;
-      const fileUploadPromises: Promise<any>[] = [];
 
+      const fileUploadPromises: Promise<any>[] = [];
       const fileFieldMapping: { field: string; isArray: boolean }[] = [];
   
       // Krok 2: Dodawanie do tablicy plików do przesłania i ich mapowanie
@@ -199,8 +210,30 @@ const RestaurantRegister: React.FC = () => {
       
       console.log("Zaktualizowane wartości formularza:", updatedValues);
 
+      if (updatedValues.groupId === null) {
+        const restaurantGroupData = {
+          name: `${updatedValues.name} Restaurants Group`,
+          restaurantIds: []  
+        };
+
+
+        // Wysyłamy zapytanie do /my-restaurants-groups
+        const groupResponse = await fetchPOST("/my-restaurant-groups", JSON.stringify(restaurantGroupData));
+        
+        if (!groupResponse || !groupResponse.restaurantGroupId) {
+          console.error("Nie udało się utworzyć grupy restauracji.");
+        }
+
+        // Przypisanie groupId z odpowiedzi
+        updatedValues.groupId = groupResponse.restaurantGroupId;
+      }
+
+      console.log(updatedValues)
+
+      // Krok 3: Wysyłamy zaktualizowane dane restauracji do /my-restaurants
+      setTimeout(() => {}, 1000)
       const response = await fetchPOST("/my-restaurants", JSON.stringify(updatedValues));
-  
+
       setSnackbarOpen(true);
     } catch (error) {
       console.error("Nieoczekiwany błąd podczas przesyłania plików lub wysyłania formularza:", error);
@@ -543,7 +576,7 @@ const RestaurantRegister: React.FC = () => {
                           variant="standard"
                           as={TextField}
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? "[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary" : "[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"}`}
-                          helperText={formik.errors.reservationDeposit && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
+                          helperText={formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
                         />
                         <div className="flex gap-5">
                           <button
@@ -763,6 +796,40 @@ const RestaurantRegister: React.FC = () => {
                             accept="application/pdf"
                           />
                         </div>
+
+                        <FormControl
+                          variant="standard"
+                          className="w-4/5 [&>*]:font-mont-md text-[15px] dark:text-white"
+                          error={Boolean(formik.errors.groupId && formik.touched.groupId)}
+                        >
+                          <InputLabel id="group-label" className={`[&>*]:label-[20px] ${!(formik.errors.groupId && formik.touched.groupId) 
+                            ? "dark:text-white text-black " : "text-error dark:text-error"}`}>
+                            {t("restaurant-register.group")}
+                          </InputLabel>
+                          <Field
+                            as={Select}
+                            id="group"
+                            name="groupId"
+                            labelId="group-label"
+                            value={formik.values.groupId || ''}
+                            onChange={formik.handleChange}
+                            className={`[&>*]:label-[20px]  [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.groupId && formik.touched.groupId) 
+                              ? "[&>*]:text-black before:border-black dark:before:border-white after:border-secondary" 
+                              : "[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error"}`}
+                            helperText={formik.errors.groupId && formik.touched.groupId && formik.errors.groupId}
+                          >
+                            {groups?.map((group) => (
+                              <MenuItem
+                                key={group.restaurantGroupId}
+                                value={group.restaurantGroupId}
+                                className="dark:text-white"
+                              >
+                                {group.name}
+                              </MenuItem>
+                            ))}
+                          </Field>
+
+                        </FormControl>
   
                         <div className="flex gap-5">
                           <button

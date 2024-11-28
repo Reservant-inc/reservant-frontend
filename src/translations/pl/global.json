@@ -63,7 +63,8 @@
         "submitSuccessMessage": "Zgłoszenie zostało wysłane",
         "step1": "Dane lokalu",
         "step2": "Pozostałe informacje",
-        "submit":"Koniec"
+        "submit":"Koniec",
+        "group": "Grupa"
     },
     "errors": {
         "login": {

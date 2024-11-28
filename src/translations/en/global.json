@@ -63,7 +63,8 @@
         "submitSuccessMessage": "The application has been sent",
         "step1": "Local data",
         "step2": "More info",
-        "submit": "Finish"
+        "submit": "Finish",
+        "group": "Group"
     },
     "errors": {
         "add-employee": {
