@@ -10,7 +10,8 @@ import {
   GridSlots,
   GridActionsCellItem,
   GridRowId,
-  GridRowModes
+  GridRowModes,
+  GridToolbarProps
 } from '@mui/x-data-grid'
 import { fetchDELETE, fetchGET, fetchPUT } from '../../../../services/APIconn'
 import { LocalType } from '../../../../services/enums'
@@ -23,10 +24,8 @@ import { GridCellParams } from '@mui/x-data-grid';
 import RegisterSuccess from '../../../register/restaurantRegister/RegisterSuccess'
 
 interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void
+  setRows: React.Dispatch<React.SetStateAction<GridRowsProp>>
+  setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
 }
 
 const RestaurantListSection: React.FC = () => {
@@ -68,17 +67,10 @@ const RestaurantListSection: React.FC = () => {
             isVerified: response2.restaurants[i].isVerified,
             reservationDeposit: response2.restaurants[i].reservationDeposit,
             maxReservationDurationMinutes: response2.restaurants[i].maxReservationDurationMinutes,
-            idCard: response2.restaurants[i].idCard,
-            businessPermission: response2.restaurants[i].businessPermission,
-            rentalContract: response2.restaurants[i].rentalContract,
-            alcoholLicense: response2.restaurants[i].alcoholLicense,
             tags: response2.restaurants[i].tags,
             provideDelivery: response2.restaurants[i].provideDelivery,
             logo: response2.restaurants[i].logo,
-            photos: response2.restaurants[i].photos,
             description: response2.restaurants[i].description,
-            nip: response2.restaurants[i].nip,
-            postalIndex: response2.restaurants[i].postalIndex,
             location: response2.restaurants[i].location
           })
         }
@@ -136,30 +128,29 @@ const RestaurantListSection: React.FC = () => {
       console.error('Error deleting restaurant', error)
     }
   }
-
   const processRowUpdate = async (newRow: any) => {
-  
     try {
-      
-      const updatedRow = { ...newRow, isNew: false }
-      delete updatedRow.isVerified;
-      console.log(updatedRow)
-      await fetchPUT(`/my-restaurants/${newRow.restaurantId}`, JSON.stringify(updatedRow))
-      populateRows() // Refetch the data after update
-      return updatedRow
+      const { id, ...rowToUpdate } = newRow;
+  
+      console.log("Dane wysyłane do API:", rowToUpdate);
+  
+      await fetchPUT(`/my-restaurants/${newRow.restaurantId}`, JSON.stringify(rowToUpdate));
+      populateRows(); 
+      return newRow; 
     } catch (error) {
-      console.error('Error updating restaurant', error)
-      return newRow
+      console.error('Error updating restaurant:', error);
+      throw error; 
     }
-  }
+  };
+  
 
-  const EditToolbar = (props: EditToolbarProps) => {
+  const EditToolbar: React.FC<GridToolbarProps & { onAddClick: () => void }> = ({ onAddClick }) => {
     return (
       <GridToolbarContainer>
         <div className="z-1 flex h-[3rem] w-full items-center p-1">
           <button
             id="RestaurantListAddRestaurantButton"
-            onClick={() => setIsDialogOpen(true)}
+            onClick={onAddClick}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
             <h1 className="text-md font-mont-md">+ Add a restaurant</h1>
@@ -368,25 +359,21 @@ const RestaurantListSection: React.FC = () => {
   return (
     <div className="h-full w-full rounded-b-lg rounded-tr-lg bg-white dark:bg-black">
       <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        disableRowSelectionOnClick
-        processRowUpdate={processRowUpdate}
-        onRowClick={handleRowClick}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5 } }
-        }}
-        pageSizeOptions={[5, 10, 25]}
-        slots={{
-          toolbar: EditToolbar as GridSlots['toolbar']
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel }
-        }}
-        className="border-0"
-      />
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          disableRowSelectionOnClick
+          processRowUpdate={processRowUpdate}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
+          pageSizeOptions={[5, 10, 25]}
+          slots={{
+            toolbar: (props) => <EditToolbar {...props} onAddClick={() => setIsDialogOpen(true)} />,
+          }}
+          className="border-0"
+        />
       <Dialog
           open={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}

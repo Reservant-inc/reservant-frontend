@@ -19,8 +19,8 @@ const RegisterSuccess: React.FC<RegisterSuccessrProps> = ({onDialogClose, onRegi
     <div className="w-full h-full flex flex-col items-center justify-center font-mont-md p-4 ">
       <div className="w-full h-[80%] flex flex-col items-center justify-center">
         {/* Górna sekcja (Ikona) */}
-        <div className="w-full bg-primary flex items-center pt-10 pb-10 justify-center ">
-          <DoneIcon className="text-white text-8xl" />
+        <div className="w-full flex items-center pt-10 pb-10 justify-center ">
+          <DoneIcon className="text-primary text-8xl" />
         </div>
 
         {/* Dolna sekcja (Nagłówek i tekst) */}
@@ -33,7 +33,7 @@ const RegisterSuccess: React.FC<RegisterSuccessrProps> = ({onDialogClose, onRegi
         <div className='p-20'>
             <button
                 onClick={() => handleButton()}
-                className={`flex h-[80px] w-[150px]  cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                className={`flex h-[60px] w-[120px]  cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
                     }`}
             >
                 OK

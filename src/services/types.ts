@@ -69,21 +69,14 @@ export type RestaurantType = {
   city: string
   isVerified: boolean,
   reservationDeposit: number,
-  nip: string,
-  postalIndex: string,
   location: {
     latitude: number
     longitude: number
   },
   maxReservationDurationMinutes: number,
-  idCard: File | null | string
-  businessPermission: File | null | string
-  rentalContract: File | null | string
-  alcoholLicense: File | null | string
   tags: string[]
   provideDelivery: boolean
   logo: File | null | string
-  photos: File[] | null | string[]
   description: string
 }
 
