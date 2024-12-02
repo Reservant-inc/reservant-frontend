@@ -16,9 +16,14 @@ import EditIngredientDialog from './EditIngredientDialog'
 import GroceryListDialog from './GroceryListDialog'
 import GroceryInfoDialog from './GroceryInfoDialog'
 import AddIngredientDialog from './AddIngredientDialog'
+import ListIcon from '@mui/icons-material/List';
+import IngredientHistoryDialog from './IngredientHistoryDialog'
+import CircularProgress from '@mui/material/CircularProgress';
 
-//Szymon TODO: Wyświetlanie Deliveries (w zakładce i potem Grid?), podmienić formularze na formiki
+
+//Szymon TODO: podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [ingredients, setIngredients] = useState<IngredientType[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isGroceryListOpen, setIsGroceryListOpen] = useState(false)
@@ -28,6 +33,7 @@ const IngredientTable: React.FC = () => {
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientType | null>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false)
   const [availableIngredients, setAvailableIngredients] = useState<
     IngredientType[]
   >([])
@@ -58,6 +64,7 @@ const IngredientTable: React.FC = () => {
   }, [ingredients, groceryList])
 
   const fetchIngredients = async () => {
+    setLoading(true);
     try {
       const data: PaginationType = await fetchGET(
         `/restaurants/${activeRestaurantId}/ingredients?page=0&perPage=10`
@@ -66,6 +73,8 @@ const IngredientTable: React.FC = () => {
       setIngredients(items)
     } catch (error) {
       console.error('Error fetching ingredients:', error)
+    } finally {
+      setLoading(false); 
     }
   }
 
@@ -99,7 +108,7 @@ const IngredientTable: React.FC = () => {
           ]
         }
 
-        return prevList // Jeśli istnieje, po prostu zwróć poprzednią listę bez zmian
+        return prevList // Jeśli istnieje to zwróć poprzednią listę bez zmian
       })
       setSelectedDropdownIngredient('')
     }
@@ -126,7 +135,7 @@ const IngredientTable: React.FC = () => {
           }
         })
 
-      // Filtrujemy składniki, które nie są w `restockingItems`, a następnie dodajemy nowe elementy
+      // Filtrujemy składniki których nie ma w `restockingItems` a potem dodajemy nowe elementy
       return [
         ...prevList.filter(
           item =>
@@ -160,7 +169,7 @@ const IngredientTable: React.FC = () => {
     })
   }
 
-  // Nie wiem dlaczego to nie działa? Przesyła się poprawnie ale nie wyświetla się składnik
+  // TODO Nie wiem dlaczego to nie działa? Przesyła się poprawnie ale nie wyświetla się składnik
   const handleAddIngredient = async () => {
     try {
       const restaurantId = activeRestaurantId
@@ -240,8 +249,6 @@ const IngredientTable: React.FC = () => {
         }))
       }
 
-      console.log('Order payload:', orderPayload)
-
       const response = await fetchPOST(
         `/deliveries`,
         JSON.stringify(orderPayload)
@@ -271,6 +278,17 @@ const IngredientTable: React.FC = () => {
     setSelectedIngredient(null)
     setIsEditDialogOpen(false)
   }
+
+  const handleOpenHistoryDialog = (ingredient: IngredientType) => {
+    setSelectedIngredient(ingredient);
+    setIsHistoryDialogOpen(true);
+  };
+  
+  const handleCloseHistoryDialog = () => {
+    setSelectedIngredient(null);
+    setIsHistoryDialogOpen(false);
+  };
+  
 
   const columns: GridColDef[] = [
     {
@@ -327,12 +345,30 @@ const IngredientTable: React.FC = () => {
           color="inherit"
         />
       )
-    }
+    },
+    {
+      field: 'history',
+      headerName: `${t('warehouse.history')}`,
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <GridActionsCellItem
+          icon={<ListIcon />}
+          label="History"
+          onClick={() => handleOpenHistoryDialog(params.row)}
+          color="inherit"
+        />
+      ),
+    },
   ]
 
   const EditToolbar = () => (
     <GridToolbarContainer>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full items-center justify-start gap-5">
+        {/* Nagłówek "Ingredients" */}
+        <h1 className="text-lg font-semibold text-primary dark:text-secondary">
+          {t('warehouse.ingredients')}
+        </h1>
         <div className="z-1 flex h-[3rem] items-center gap-2 p-1">
           <button
             id="RestaurantListAddRestaurantButton"
@@ -343,29 +379,32 @@ const IngredientTable: React.FC = () => {
               + {t('warehouse.add-ingredient')}
             </h1>
           </button>
-
+  
           <button
             id="GenerateGroceryListButton"
             onClick={handleGenerateGroceryList}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">
-              {t('warehouse.generate-list')}
-            </h1>
+            <h1 className="text-md font-mont-md">{t('warehouse.generate-list')}</h1>
           </button>
         </div>
       </div>
     </GridToolbarContainer>
-  )
+  );
+  
 
   return (
-    <div className="overflow-y-auto scroll flex h-full w-full flex-col rounded-lg bg-white dark:bg-black ">
-      {ingredients.length > 0 ? (
+    <div className="overflow-y-auto scroll flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <CircularProgress />
+        </div>
+      ) : ingredients.length > 0 ? (
         <div className="">
           <DataGrid
             rows={ingredients.map((ingredient, index) => ({
               ...ingredient,
-              id: index
+              id: index,
             }))}
             columns={columns}
             pageSizeOptions={[5, 10, 25, 100]}
@@ -374,9 +413,9 @@ const IngredientTable: React.FC = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-center h-full text-lg text-gray-500 dark:text-gray-400 gap-4">
+        <div className="flex flex-col justify-center items-center h-full text-lg gap-4">
           <p className="text-black dark:text-white">
-            {t('Ta restauracja nie ma żadnych składników')}
+            {t('warehouse.restaurant-no-ingredients')}
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
@@ -395,7 +434,7 @@ const IngredientTable: React.FC = () => {
         onAddIngredient={handleAddIngredient}
         t={t}
       />
-      {/* Dialog z listą zakupów  */}
+      {/* Dialog z listą zakupów */}
       <GroceryListDialog
         open={isGroceryListOpen}
         onClose={() => setIsGroceryListOpen(false)}
@@ -403,7 +442,7 @@ const IngredientTable: React.FC = () => {
         setGroceryList={setGroceryList}
         availableIngredients={availableIngredients}
         selectedDropdownIngredient={selectedDropdownIngredient}
-        onIngredientSelect={value => setSelectedDropdownIngredient(value)}
+        onIngredientSelect={(value) => setSelectedDropdownIngredient(value)}
         onAddToGroceryList={handleAddToGroceryList}
         onIncreaseAmount={handleIncreaseAmount}
         onDecreaseAmount={handleDecreaseAmount}
@@ -424,8 +463,15 @@ const IngredientTable: React.FC = () => {
         message={infoMessage}
         fetchIngredients={fetchIngredients}
       />
+      {/* Dialog historii zmian danego składnika */}
+      <IngredientHistoryDialog
+        open={isHistoryDialogOpen}
+        onClose={handleCloseHistoryDialog}
+        ingredient={selectedIngredient}
+      />
     </div>
-  )
+  );
+  
 }
 
 export default IngredientTable

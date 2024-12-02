@@ -388,3 +388,52 @@ export type ReportType = {
   visitId: number
   reportedUserId?: string
 }
+
+export type Correction = {
+  correctionId: number;
+  oldAmount: number;
+  newAmount: number;
+  correctionDate: string;
+  comment: string;
+  user: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    photo: string | null;
+  };
+}
+
+export type IngredientHistoryDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  ingredient: IngredientType | null;
+}
+
+export type GroceryListDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  groceryList: any[];
+  setGroceryList: React.Dispatch<React.SetStateAction<any[]>>;
+  availableIngredients: any[];
+  selectedDropdownIngredient: string;
+  onIngredientSelect: (value: string) => void;
+  onAddToGroceryList: () => void;
+  onIncreaseAmount: (id: number) => void;
+  onDecreaseAmount: (id: number) => void;
+  onRemoveItem: (id: number) => void;
+  onSubmitOrder: () => void;
+}
+
+export type DeliveryActionDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  deliveryId: number;
+  action: 'confirm' | 'cancel';
+  onActionComplete: () => void;
+}
+
+export type DeliveryDetailsDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  deliveryId: number;
+}

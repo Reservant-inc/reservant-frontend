@@ -41,6 +41,7 @@ import ReservationHistoryTab from '../components/reservant/profile/reservations/
 import ReservationList from '../components/reservant/profile/reservations/ReservationList'
 import FriendTab from '../components/reservant/profile/friends/FriendTab'
 import FriendList from '../components/reservant/profile/friends/FriendList'
+import DeliveriesTable from '../components/reservant/restaurantManagement/deliveries/DeliveriesTable'
 
 const router = createBrowserRouter([
   {
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
               {
                 path: 'reviews-management',
                 element: <ReviewsManagement />
+              },
+              {
+                path: 'deliveries-management',
+                element: <DeliveriesTable />
               }
             ]
           }
