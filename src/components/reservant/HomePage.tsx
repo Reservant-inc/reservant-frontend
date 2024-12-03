@@ -162,6 +162,7 @@ export default function HomePage() {
 
   const handleCloseDetails = () => {
     navigate('../home')
+    setSelectedRestaurant(null)
   }
 
   return (
