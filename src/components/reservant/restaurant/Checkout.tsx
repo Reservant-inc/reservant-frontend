@@ -91,9 +91,6 @@ const Checkout: React.FC = () => {
       })
       const visitRes = await fetchPOST('/visits', visitBody)
 
-      if (restaurant.reservationDeposit > 0)
-        await fetchPOST(`/wallet/pay-deposit?visitId=${visitRes.visitId}`)
-
       if (items && items.length > 0) {
         const orderBody = JSON.stringify({
           visitId: visitRes.visitId,
