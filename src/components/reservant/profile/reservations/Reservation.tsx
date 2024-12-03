@@ -84,15 +84,14 @@ const Reservation: React.FC<ReservationProps> = ({
           return
       }
 
-      await fetchPOST(endpoint, reportData)
+      await fetchPOST(endpoint, JSON.stringify(reportData))
       alert('Your report has been submitted successfully.')
       setIsCompaining(false)
       setReportType('')
       setReportNote('')
       setSelectedEmployee('')
     } catch (error) {
-      console.error('Error submitting report:', error)
-      alert('Failed to submit the report. Please try again later.')
+      if (error instanceof FetchError) console.error(error.formatErrors())
     }
   }
 
