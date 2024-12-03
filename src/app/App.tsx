@@ -23,6 +23,7 @@ import {
   EventListType,
   FriendListType,
   MenuScreenType,
+  ReportsListType,
   ReservationListType
 } from '../services/enums'
 import Account from '../components/reservant/profile/Account'
@@ -43,6 +44,9 @@ import FriendTab from '../components/reservant/profile/friends/FriendTab'
 import FriendList from '../components/reservant/profile/friends/FriendList'
 import DeliveriesTable from '../components/reservant/restaurantManagement/deliveries/DeliveriesTable'
 import Reports from '../components/reservant/restaurantManagement/Reports'
+import CreatedReports from '../components/reservant/profile/reports/ReportsList'
+import ReportsTab from '../components/reservant/profile/reports/ReportsTab'
+import ReportsList from '../components/reservant/profile/reports/ReportsList'
 
 const router = createBrowserRouter([
   {
@@ -182,6 +186,20 @@ const router = createBrowserRouter([
               {
                 path: 'incoming',
                 element: <FriendList listType={FriendListType.Incoming} /> // Otrzymane zaproszenia
+              }
+            ]
+          },
+          {
+            path: 'reports',
+            element: <ReportsTab />,
+            children: [
+              {
+                index: true, // Defaultowa ścieżka
+                element: <Navigate to="created" replace />
+              },
+              {
+                path: 'created',
+                element: <ReportsList listType={ReportsListType.Created} />
               }
             ]
           }
