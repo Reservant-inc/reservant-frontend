@@ -42,6 +42,7 @@ import ReservationList from '../components/reservant/profile/reservations/Reserv
 import FriendTab from '../components/reservant/profile/friends/FriendTab'
 import FriendList from '../components/reservant/profile/friends/FriendList'
 import DeliveriesTable from '../components/reservant/restaurantManagement/deliveries/DeliveriesTable'
+import Reports from '../components/reservant/restaurantManagement/Reports'
 
 const router = createBrowserRouter([
   {
@@ -105,6 +106,10 @@ const router = createBrowserRouter([
               {
                 path: 'deliveries-management',
                 element: <DeliveriesTable />
+              },
+              {
+                path: 'reports',
+                element: <Reports />
               }
             ]
           }

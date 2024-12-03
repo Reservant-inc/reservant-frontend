@@ -2,7 +2,7 @@ import { ListItemButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp'
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp'
-import useWindowDimensions from '../../../../hooks/useWindowResize'
+import ReportIcon from '@mui/icons-material/Report'
 import {
   ArrowBack,
   Dashboard,
@@ -38,7 +38,7 @@ const ManagementTabs: React.FC = ({}) => {
   }
 
   return (
-    <div className="flex justify-between">
+    <div className="flex gap-2 justify-between">
       <div id="menu-wrapper" className="text-sm">
         {restaurantId === undefined ? (
           <div className="flex gap-2">
@@ -74,25 +74,25 @@ const ManagementTabs: React.FC = ({}) => {
             </div>
             <Tab
               path={`restaurant/${restaurantId}/restaurant-dashboard`}
-              title="Restaurant dashboard"
+              title="Dashboard"
               icon={<Dashboard />}
               id="management_restaurant_dashboard"
             />
             <Tab
               path={`restaurant/${restaurantId}/restaurant-employee-management`}
-              title="Employments management"
+              title="Employments"
               icon={<PeopleAltSharpIcon />}
               id="management_restaurant_employees"
             />
             <Tab
               path={`restaurant/${restaurantId}/menu-management`}
-              title="Menu management"
+              title="Menus"
               id="management_restaurant_menus"
               icon={<Dining />}
             />
             <Tab
               path={`restaurant/${restaurantId}/warehouse-management`}
-              title="Warehouse management"
+              title="Warehouse"
               icon={<Warehouse />}
               id="management_restaurant_warehouse"
             />
@@ -114,10 +114,16 @@ const ManagementTabs: React.FC = ({}) => {
               id="management_restaurant_deliveries"
               icon={<LocalShipping />}
             />
+            <Tab
+              path={`restaurant/${restaurantId}/reports`}
+              title="Reports"
+              id="management_reports"
+              icon={<ReportIcon />}
+            />
           </div>
         )}
       </div>
-      <h1 className="text-xl dark:text-grey-0">
+      <h1 className="text-xl dark:text-grey-0 text-right text-nowrap">
         {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
       </h1>
     </div>
