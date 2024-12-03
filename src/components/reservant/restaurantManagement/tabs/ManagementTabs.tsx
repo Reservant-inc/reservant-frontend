@@ -8,7 +8,8 @@ import {
   Dashboard,
   Dining,
   History,
-  Warehouse
+  Warehouse,
+  LocalShipping
 } from '@mui/icons-material'
 import RateReviewIcon from '@mui/icons-material/RateReview'
 import Tab from './Tab'
@@ -106,6 +107,12 @@ const ManagementTabs: React.FC = ({}) => {
               title="Reviews"
               id="management_restaurant_reviews"
               icon={<RateReviewIcon />}
+            />
+            <Tab
+              path={`restaurant/${restaurantId}/deliveries-management`}
+              title="Deliveries"
+              id="management_restaurant_deliveries"
+              icon={<LocalShipping />}
             />
           </div>
         )}

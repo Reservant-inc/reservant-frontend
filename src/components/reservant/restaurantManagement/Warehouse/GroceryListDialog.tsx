@@ -5,21 +5,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useTranslation } from 'react-i18next';
 import Dialog from '../../../reusableComponents/Dialog';
-
-interface GroceryListDialogProps {
-  open: boolean;
-  onClose: () => void;
-  groceryList: any[];
-  setGroceryList: React.Dispatch<React.SetStateAction<any[]>>; // Dodane setGroceryList
-  availableIngredients: any[];
-  selectedDropdownIngredient: string;
-  onIngredientSelect: (value: string) => void;
-  onAddToGroceryList: () => void;
-  onIncreaseAmount: (id: number) => void;
-  onDecreaseAmount: (id: number) => void;
-  onRemoveItem: (id: number) => void;
-  onSubmitOrder: () => void;
-}
+import { GroceryListDialogProps } from '../../../../services/types';
 
 const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
   open,
@@ -99,7 +85,7 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} title={t('warehouse.grocery-list')}>
-      <div className="p-4" style={{ maxWidth: '75vw', width: '75vw' }}>
+      <div className='p-4 max-h-[65vh] min-w-[60vh] overflow-y-auto scroll'>
         <div className="mb-4 flex items-center gap-4 overflow-y-auto scroll">
           <select
             id='PickIngredientForGrocery'
@@ -110,7 +96,7 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
           >
             <option
               value=""
-              hidden // ukrycie defaultowego
+              disabled 
             >
               {t('warehouse.select-ingredient')}
             </option>
@@ -138,7 +124,7 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
               autoHeight
               disableRowSelectionOnClick
               processRowUpdate={handleProcessRowUpdate} // aktualizacja wiersza z palca
-              onProcessRowUpdateError={(error) => console.error('Error during row update:', error)} // errory
+              onProcessRowUpdateError={(error) => console.error('Error during row update:', error)}
               slots={{ pagination: () => null }}
             />
             <div className="mt-4 flex justify-end">
@@ -152,7 +138,7 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
             </div>
           </div>
         ) : (
-          <p className="text-center text-gray-500 dark:text-white">
+          <p className="text-center dark:text-white">
             {t('warehouse.no-ingredients')}
           </p>
         )}
