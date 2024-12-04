@@ -1,22 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Formik,
-  Form,
-  Field,
-  FieldArray,
-  ErrorMessage,
-  FormikValues
-} from 'formik'
+import { Formik, Form, Field, FieldArray } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import { useValidationSchemas } from '../../../hooks/useValidationSchema'
-import { GroupType, RestaurantDataType } from '../../../services/types'
-import { LocalType } from '../../../services/enums'
-import { fetchFilesPOST, fetchGET, fetchPOST } from '../../../services/APIconn'
 import { CSSTransition } from 'react-transition-group'
-
 // Material-UI imports
-import Snackbar from '@mui/material/Snackbar'
 import {
   Checkbox,
   FormControl,
@@ -34,7 +20,15 @@ import { group } from 'console'
 import { Close } from '@mui/icons-material'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
 import { ValidationError } from 'yup'
-import { FetchError } from '../../../services/Errors'
+import { useValidationSchemas } from '../../../../../hooks/useValidationSchema'
+import {
+  fetchGET,
+  fetchPOST,
+  fetchFilesPOST
+} from '../../../../../services/APIconn'
+import { LocalType } from '../../../../../services/enums'
+import { FetchError } from '../../../../../services/Errors'
+import { RestaurantDataType, GroupType } from '../../../../../services/types'
 
 const initialValues: RestaurantDataType = {
   name: '',
