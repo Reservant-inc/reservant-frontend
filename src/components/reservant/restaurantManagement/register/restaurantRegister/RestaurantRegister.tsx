@@ -16,10 +16,7 @@ import {
   Select,
   TextField
 } from '@mui/material'
-import { group } from 'console'
-import { Close } from '@mui/icons-material'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
-import { ValidationError } from 'yup'
 import { useValidationSchemas } from '../../../../../hooks/useValidationSchema'
 import {
   fetchGET,
