@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { FriendStatus, LocalType } from './enums'
+import { FriendStatus, LocalType, UnitOfMeasurement } from './enums'
 
 export type Routing = {
   path: string
@@ -117,7 +117,7 @@ export type EmployeeType = {
   login: string
   firstName: string
   lastName: string
-  phoneNumber: string
+  phoneNumber: { code: string; number: string }
   birthDate: string
   employments: EmploymentType[]
 }
@@ -137,7 +137,7 @@ export type EmployeeEmployedType = {
 }
 
 export type EmploymentType = {
-  id: string
+  employmentId: string
   restaurantId: string
   isBackdoorEmployee: string
   isHallEmployee: string
@@ -161,18 +161,21 @@ export type IngredientUsage = {
 export type IngredientType = {
   ingredientId: number
   publicName: string
-  amountUsed: number
+  unitOfMeasurement: UnitOfMeasurement
+  minimalAmount: number
+  amountToOrder: number
+  amount: number
 }
 
 export type ItemWithIngredientsType = {
   ingredients: IngredientType[]
 } & MenuItemType
 
-export type MenuIteminOrderType = {
-  menuItemId: number
+export type MenuItemInOrderType = {
+  menuItem: MenuItemType
   amount: number
-  price: number
-  cost: number
+  oneItemPrice: number
+  totalCost: number
   status: string
 }
 
@@ -213,7 +216,15 @@ export type PaginationType = {
   totalPages: number
   perPage: number
   orderByOptions: string[]
-  items: ThreadType[] | MessageType[] | UserSearchType[] | UserType[] | TransactionType[]
+  items:
+    | ThreadType[]
+    | MessageType[]
+    | UserSearchType[]
+    | UserType[]
+    | TransactionType[]
+    | EventDataType[]
+    | VisitType[]
+    | IngredientType[]
 }
 
 export type UserType = {
@@ -221,7 +232,10 @@ export type UserType = {
   firstName: string
   lastName: string
   photo: string
-  phoneNumber?: string
+  phoneNumber?: {
+    code: string
+    number: number
+  }
   email?: string
 }
 
@@ -239,9 +253,9 @@ export type ActionType = {
 }
 
 export type TransactionType = {
-  transactionId: number,
-  title: string,
-  amount: number,
+  transactionId: number
+  title: string
+  amount: number
   time: Date
 }
 
@@ -324,7 +338,7 @@ export type OrderType = {
   visitId: number
   cost: number
   status: string
-  items: MenuIteminOrderType[]
+  items: MenuItemInOrderType[]
   employees: UserType[]
 }
 
@@ -333,4 +347,115 @@ export type ReservationType = {
   selectedTimeslot: string
   guests: number
   date: string
+}
+
+export type EventDataType = {
+  eventId: number
+  name: string
+  description: string
+  time: string
+  maxPeople: number
+  mustJoinUntil: string
+  creator: {
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string
+  }
+  participants: Array<{
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string
+  }>
+  restaurant: {
+    restaurantId: number
+    name: string
+    address: string
+    city: string
+    logo: string
+    rating: number
+    numberReviews: number
+  }
+  numberInterested: number
+  photo: string | null
+}
+
+export type EventDialogState = {
+  isOpen: boolean
+  type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit' | null
+}
+
+export type InterestedUser = {
+  userId: string
+  firstName: string
+  lastName: string
+  photo: string
+}
+
+export type FriendData = {
+  dateSent: string
+  dateRead: string | null
+  dateAccepted: string | null
+  otherUser: {
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string
+  }
+}
+
+export type ReportType = {
+  description: string
+  visitId: number
+  reportedUserId?: string
+}
+
+export type Correction = {
+  correctionId: number;
+  oldAmount: number;
+  newAmount: number;
+  correctionDate: string;
+  comment: string;
+  user: {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    photo: string | null;
+  };
+}
+
+export type IngredientHistoryDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  ingredient: IngredientType | null;
+}
+
+export type GroceryListDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  groceryList: any[];
+  setGroceryList: React.Dispatch<React.SetStateAction<any[]>>;
+  availableIngredients: any[];
+  selectedDropdownIngredient: string;
+  onIngredientSelect: (value: string) => void;
+  onAddToGroceryList: () => void;
+  onIncreaseAmount: (id: number) => void;
+  onDecreaseAmount: (id: number) => void;
+  onRemoveItem: (id: number) => void;
+  onSubmitOrder: () => void;
+}
+
+export type DeliveryActionDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  deliveryId: number;
+  action: 'confirm' | 'cancel';
+  onActionComplete: () => void;
+}
+
+export type DeliveryDetailsDialogProps = {
+  open: boolean;
+  onClose: () => void;
+  deliveryId: number;
 }

@@ -274,7 +274,6 @@ dialog::backdrop {
 
 
 @tailwind base;
-
 @layer base{
 
   input[type], input:focus, select {
@@ -290,7 +289,7 @@ dialog::backdrop {
   }
 
   .css-1rtad1, .scroll::-webkit-scrollbar-track {
-    @apply bg-grey-0 dark:bg-grey-5
+    @apply bg-white dark:bg-grey-5
   }
   
   .css-1rtad1, .scroll::-webkit-scrollbar-thumb:hover {

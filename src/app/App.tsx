@@ -1,39 +1,53 @@
 import React, { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import LandingPage from '../components/LandingPage'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import UserRegister from '../components/auth/UserRegister'
-import HomePage from '../components/HomePage'
 import {
   checkAuthLoader,
+  checkIfCustomerService,
   checkIfOwner,
+  logoutAction,
   redirectIfLoggedIn
 } from '../components/auth/auth'
 import Root from '../components/ProtectedLayout'
 import Login from '../components/auth/Login'
-import RestaurantManager from '../components/restaurantManagement/RestaurantManager'
-import Profile from '../components/profile/Profile'
-import Dashboard from '../components/restaurantManagement/dashboard/Dashboard'
-import EmployeeManagement from '../components/restaurantManagement/employees/EmployeeManagement'
-import RestaurantListSection from '../components/restaurantManagement/restaurants/restaurantsList/RestaurantListSection'
-import EmployeeRestaurantManagement from '../components/restaurantManagement/employees/EmployeeRestaurantManagement'
-import IngredientTable from '../components/restaurantManagement/Warehouse/IngredientTable'
-import HistoryTab from '../components/restaurantManagement/reservations/HistoryTab'
-import MenuList from '../components/restaurantManagement/menus/MenuList'
-import { MenuScreenType } from '../services/enums'
-import Account from '../components/profile/Account'
-import ReservationHistory from '../components/profile/ReservationHistory'
-import EventHistory from '../components/profile/EventHistory'
-import Checkout from '../components/restaurant/Checkout'
-import VisitWrapper from '../components/restaurant/visits/VisitRoot'
-import Visit from '../components/restaurant/visits/Visit'
-import ReviewsManagement from '../components/restaurantManagement/ReviewsMenagment'
+import RestaurantManager from '../components/reservant/restaurantManagement/RestaurantManager'
+import Profile from '../components/reservant/profile/Profile'
+import Dashboard from '../components/reservant/restaurantManagement/dashboard/Dashboard'
+import EmployeeManagement from '../components/reservant/restaurantManagement/employees/EmployeeManagement'
+import RestaurantListSection from '../components/reservant/restaurantManagement/restaurants/restaurantsList/RestaurantListSection'
+import EmployeeRestaurantManagement from '../components/reservant/restaurantManagement/employees/EmployeeRestaurantManagement'
+import IngredientTable from '../components/reservant/restaurantManagement/Warehouse/IngredientTable'
+import HistoryTab from '../components/reservant/restaurantManagement/reservations/HistoryTab'
+import MenuList from '../components/reservant/restaurantManagement/menus/MenuList'
+import {
+  EventListType,
+  FriendListType,
+  MenuScreenType,
+  ReservationListType
+} from '../services/enums'
+import Account from '../components/reservant/profile/Account'
+import Checkout from '../components/reservant/restaurant/Checkout'
+import VisitWrapper from '../components/reservant/restaurant/visits/VisitRoot'
+import Visit from '../components/reservant/restaurant/visits/Visit'
+import ReviewsManagement from '../components/reservant/restaurantManagement/ReviewsMenagment'
 import NotFound from '../components/NotFound'
-import FriendsManagement from '../components/profile/FriendsManagement'
+import EventTab from '../components/reservant/profile/events/EventTab'
+import EventList from '../components/reservant/profile/events/EventList'
+import Feed from '../components/reservant/feed/Feed'
+import CustomerService from '../components/customerService/CustomerService'
+import HomePage from '../components/reservant/HomePage'
+import LandingPage from '../components/guest/LandingPage'
+import ReservationHistoryTab from '../components/reservant/profile/reservations/ReservationHistoryTab'
+import ReservationList from '../components/reservant/profile/reservations/ReservationList'
+import FriendTab from '../components/reservant/profile/friends/FriendTab'
+import FriendList from '../components/reservant/profile/friends/FriendList'
+import DeliveriesTable from '../components/reservant/restaurantManagement/deliveries/DeliveriesTable'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />
+    element: <LandingPage />,
+    loader: redirectIfLoggedIn
   },
   {
     path: 'reservant',
@@ -41,7 +55,7 @@ const router = createBrowserRouter([
     loader: checkAuthLoader,
     children: [
       {
-        path: 'home',
+        path: 'home/:restaurantId?',
         element: <HomePage />
       },
       {
@@ -87,6 +101,10 @@ const router = createBrowserRouter([
               {
                 path: 'reviews-management',
                 element: <ReviewsManagement />
+              },
+              {
+                path: 'deliveries-management',
+                element: <DeliveriesTable />
               }
             ]
           }
@@ -94,7 +112,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'events',
-        element: <EventHistory />
+        element: <Feed />
       },
       {
         path: 'profile/:userId',
@@ -106,15 +124,61 @@ const router = createBrowserRouter([
           },
           {
             path: 'reservation-history',
-            element: <ReservationHistory />
+            element: <ReservationHistoryTab />,
+            children: [
+              {
+                path: 'incoming',
+                element: (
+                  <ReservationList listType={ReservationListType.Incoming} />
+                )
+              },
+              {
+                path: 'finished',
+                element: (
+                  <ReservationList listType={ReservationListType.Finished} />
+                )
+              }
+            ]
           },
           {
             path: 'event-history',
-            element: <EventHistory />
+            element: <EventTab />,
+            children: [
+              {
+                path: 'created',
+                element: <EventList listType={EventListType.Created} />
+              },
+              {
+                path: 'interested',
+                element: <EventList listType={EventListType.Interested} />
+              },
+              {
+                path: 'participates',
+                element: <EventList listType={EventListType.Participates} />
+              }
+            ]
           },
           {
             path: 'friends',
-            element: <FriendsManagement />
+            element: <FriendTab />, // Główna zakładka znajomych
+            children: [
+              {
+                index: true, // Defaultowa ścieżka
+                element: <Navigate to="list" replace />
+              },
+              {
+                path: 'list',
+                element: <FriendList listType={FriendListType.List} /> // Lista znajomych
+              },
+              {
+                path: 'outgoing',
+                element: <FriendList listType={FriendListType.Outgoing} /> // Wysłane zaproszenia
+              },
+              {
+                path: 'incoming',
+                element: <FriendList listType={FriendListType.Incoming} /> // Otrzymane zaproszenia
+              }
+            ]
           }
         ]
       },
@@ -135,6 +199,11 @@ const router = createBrowserRouter([
     ]
   },
   {
+    path: 'customer-service',
+    element: <CustomerService />,
+    loader: checkIfCustomerService
+  },
+  {
     path: 'login',
     element: <Login />,
     loader: redirectIfLoggedIn
@@ -143,6 +212,10 @@ const router = createBrowserRouter([
     path: 'register',
     element: <UserRegister />,
     loader: redirectIfLoggedIn
+  },
+  {
+    path: '/logout',
+    action: logoutAction
   },
   {
     path: '*',

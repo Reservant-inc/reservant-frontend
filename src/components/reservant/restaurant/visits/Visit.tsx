@@ -1,0 +1,249 @@
+import React, { useContext, useEffect, useState } from 'react'
+import MenuList from '../../restaurantManagement/menus/MenuList'
+import { MenuScreenType } from '../../../../services/enums'
+import Cart from '../Cart'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { CartContext } from '../../../../contexts/CartContext'
+import SellIcon from '@mui/icons-material/Sell'
+import FriendSelector from '../../../reusableComponents/FriendSelector'
+import { ArrowForward } from '@mui/icons-material'
+import { ReservationContext } from '../../../../contexts/ReservationContext'
+import { UserType } from '../../../../services/types'
+import { fetchGET } from '../../../../services/APIconn'
+import { FetchError } from '../../../../services/Errors'
+
+interface VisitProps {}
+
+const getParsedDate = (): string => {
+  const today = new Date()
+  return (
+    today.getFullYear() +
+    '-' +
+    String(today.getMonth() + 1).padStart(2, '0') +
+    '-' +
+    String(today.getDate()).padStart(2, '0')
+  )
+}
+
+const Visit: React.FC<VisitProps> = () => {
+  const navigate = useNavigate()
+
+  const today = getParsedDate()
+
+  const { setReservationData, reservationData } = useContext(ReservationContext)
+
+  const [guests, setGuests] = useState<number>(reservationData?.guests ?? 0)
+  const [date, setDate] = useState<string>(
+    reservationData ? reservationData.date : today
+  )
+  const [selectedTimeslot, setSelectedTimeslot] = useState<string>(
+    reservationData ? reservationData.selectedTimeslot : ''
+  )
+  const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>(
+    reservationData ? reservationData.friendsToAdd : []
+  )
+
+  const [availableHours, setAvailableHours] = useState<
+    { from: string; until: string }[]
+  >([])
+
+  const [timeSlots, setTimeSlots] = useState<string[]>([])
+
+  const { totalPrice, clearCart } = useContext(CartContext)
+
+  const { state } = useLocation()
+
+  const { restaurant } = state
+
+  const data = {
+    restaurant: restaurant
+  }
+
+  useEffect(() => {
+    if (friendsToAdd.length >= guests) {
+      setGuests(prevState => prevState + 1)
+    }
+  }, [guests, friendsToAdd])
+
+  useEffect(() => {
+    if (date && guests) {
+      fetchAvailableHours()
+    }
+  }, [date, guests])
+
+  useEffect(() => {
+    if (availableHours.length > 0) {
+      generateTimeSlots()
+    } else {
+      setTimeSlots([])
+    }
+  }, [availableHours])
+
+  useEffect(() => {
+    if (timeSlots.length > 0) {
+      const index = timeSlots.findIndex(
+        ts =>
+          ts === selectedTimeslot || ts === reservationData?.selectedTimeslot
+      )
+      setSelectedTimeslot(timeSlots[index >= 0 ? index : 0])
+    } else {
+      setSelectedTimeslot('')
+    }
+  }, [timeSlots])
+
+  const fetchAvailableHours = async () => {
+    try {
+      const visitHours = await fetchGET(
+        `/restaurants/${restaurant.restaurantId}/available-hours?date=${date}&numberOfGuests=${guests}`
+      )
+
+      setAvailableHours(visitHours)
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log('unexpected error', error)
+      }
+    }
+  }
+
+  const generateTimeSlots = () => {
+    const slots: string[] = []
+    const now = new Date()
+    const isToday = date === getParsedDate()
+
+    availableHours.forEach(({ from, until }) => {
+      let currentTime = parseTime(from)
+      const endTime = parseTime(until)
+
+      while (currentTime <= endTime) {
+        if (!isToday || currentTime >= now) {
+          slots.push(formatTime(currentTime))
+        }
+        currentTime = new Date(currentTime.getTime() + 30 * 60000)
+      }
+    })
+
+    setTimeSlots(slots)
+  }
+
+  const parseTime = (timeString: string) => {
+    const [hours, minutes] = timeString.split(':').map(Number)
+    const date = new Date()
+    date.setHours(hours, minutes, 0, 0)
+    return date
+  }
+
+  const formatTime = (date: Date): string => {
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    const formattedHours = hours % 12 || 12
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
+    return `${formattedHours}:${formattedMinutes} ${ampm}`
+  }
+
+  return (
+    <div className="relative flex h-full w-full gap-4 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
+      <div className="h-full w-3/4 items-center shadow-md flex flex-col items-center bg-white rounded-lg p-3">
+        <h1 className="font-mont-bd text-lg">Menu</h1>
+        <MenuList
+          activeRestaurantId={restaurant.restaurantId}
+          type={MenuScreenType.Order}
+        />
+      </div>
+      <div className=" flex h-full overflow-y-auto scroll rounded-lg shadow-md w-1/4 min-w-[360px] flex-col justify-between bg-white items-center gap-5 p-3">
+        <h1 className="text-lg font-mont-bd">Reservation</h1>
+        <div className="flex w-full flex-col gap-5">
+          <div className="flex flex w-full flex-col justify-between gap-4">
+            <div className="flex w-full justify-between">
+              <label className="text-md  font-mont-md ">Guests in total:</label>
+              <input
+                type="number"
+                value={guests}
+                min={1 + friendsToAdd.length}
+                onChange={e => {
+                  setGuests(parseInt(e.target.value))
+                }}
+                className={`flex h-7 w-36 items-center rounded-md  border-[1px] border-grey-2 px-2 py-0 text-center dark:text-grey-0 text-black`}
+              />
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
+            <FriendSelector
+              friendsToAdd={friendsToAdd}
+              setFriendsToAdd={setFriendsToAdd}
+              placeholder="Some of your guests have an account? Tag them!"
+            />
+          </div>
+          <div className="flex w-full items-center justify-between gap-2">
+            <label className="text-md font-mont-md">Date:</label>
+            <input
+              type="date"
+              value={date}
+              min={today}
+              onChange={e => setDate(e.target.value)}
+              className=" flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-2 py-0 text-sm"
+            />
+          </div>
+          <div className="flex h-full w-full items-center  justify-between gap-3 text-nowrap">
+            <label className="font-mont-md">Time: </label>
+            <select
+              id="timeselect"
+              onChange={e => setSelectedTimeslot(e.target.value)}
+              value={selectedTimeslot}
+              className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
+            >
+              {timeSlots.length <= 0 && <option>Not avaliable</option>}
+              {timeSlots.map((slot, index) => (
+                <option key={index} value={slot} className="hover:bg-grey-1">
+                  {slot}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <Cart />
+
+        <div className="flex h-8 w-full  flex-row-reverse gap-3">
+          <button
+            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
+            onClick={() => {
+              clearCart()
+              setReservationData({
+                friendsToAdd: friendsToAdd,
+                selectedTimeslot: selectedTimeslot,
+                guests: guests,
+                date: date
+              })
+              navigate('../checkout', { state: data })
+            }}
+            disabled={selectedTimeslot === ''}
+          >
+            {`SKIP ORDER`}
+            <ArrowForward />
+          </button>
+          <button
+            className="flex items-center justify-center gap-2 rounded-md border-[1px] border-primary px-3 py-1 text-sm text-primary enabled:hover:bg-primary enabled:hover:text-white disabled:border-grey-4 disabled:text-grey-4 dark:border-secondary dark:text-secondary enabled:dark:border-secondary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:dark:hover:text-black dark:disabled:border-grey-4 dark:disabled:text-grey-4"
+            onClick={() => {
+              setReservationData({
+                friendsToAdd: friendsToAdd,
+                selectedTimeslot: selectedTimeslot,
+                guests: guests,
+                date: date
+              })
+              navigate('../checkout', { state: data })
+            }}
+            disabled={selectedTimeslot === ''}
+          >
+            {`CHECKOUT ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
+            <SellIcon />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Visit

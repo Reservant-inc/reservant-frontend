@@ -1,26 +1,86 @@
-import Cookies from "js-cookie";
-import { UserInfo } from "../../services/types";
+import Cookies from 'js-cookie'
+import { redirect } from 'react-router-dom'
 
-  export function checkAuthLoader() {
-    const isLoggedIn = Boolean(Cookies.get("token"));
-    if (!isLoggedIn) {
-      throw new Response("", { status: 302, headers: { Location: "/login" } });
-    }
-    return null;
+const isLoggedIn = () => {
+  const isLoggedIn = Boolean(Cookies.get('token'))
+  return isLoggedIn
+}
+
+const isCustomerService = () => {
+  const isCustomerServiceEmployee = Boolean(
+    JSON.parse(Cookies.get('userInfo') as string).roles.some(
+      (role: string) =>
+        role === 'CustomerSupportAgent' || role === 'CustomerSupportManager'
+    )
+  )
+  return isCustomerServiceEmployee
+}
+
+const isCustomer = () => {
+  const isCust = Boolean(
+    JSON.parse(Cookies.get('userInfo') as string).roles.includes('Customer')
+  )
+  return isCust
+}
+
+export function checkAuthLoader() {
+  const isLogged = isLoggedIn()
+
+  if (!isLogged) {
+    return redirect('/login')
   }
+
+  const isCS = isCustomerService()
+
+  if (isCS) {
+    return redirect('/customer-service')
+  }
+
+  return null
+}
+
+export function checkIfCustomerService() {
+  const isLogged = isLoggedIn()
+
+  if (!isLogged) {
+    return redirect('/login')
+  }
+
+  const isCS = isCustomerService()
+
+  if (!isCS) {
+    const isCust = isCustomer()
+
+    if (isCust) {
+      return redirect('/reservant/home')
+    }
+  }
+  return null
+}
 
 export function redirectIfLoggedIn() {
-    const isLoggedIn = Boolean(Cookies.get("token"));
-    if (isLoggedIn) {
-      throw new Response("", { status: 302, headers: { Location: "/reservant" } });
-    }
-    return null;
+  const isLogged = isLoggedIn()
+  if (isLogged) {
+    return redirect('/reservant/home')
   }
+  return null
+}
 
-  export function checkIfOwner() {
-    const isOwner = Boolean((JSON.parse(Cookies.get("userInfo") as string)).roles.includes("Restaurant Owner"))
-    if (isOwner) {
-      throw new Response("", { status: 302, headers: { Location: "/reservant" } });
-    }
-    return null;
-  } 
+export function checkIfOwner() {
+  const isOwner = Boolean(
+    JSON.parse(Cookies.get('userInfo') as string).roles.includes(
+      'Restaurant Owner'
+    )
+  )
+  if (isOwner) {
+    return redirect('/reservant/home')
+  }
+  return null
+}
+
+export function logoutAction() {
+  console.log('Logout action triggered')
+  Cookies.remove('token')
+  Cookies.remove('userInfo')
+  return redirect('/')
+}
