@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { JSXElementConstructor, useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import SaveIcon from '@mui/icons-material/Save'
@@ -15,7 +15,9 @@ import {
   GridRowId,
   GridRowModel,
   GridRowEditStopReasons,
-  GridSlots
+  GridSlots,
+  GridToolbarProps,
+  ToolbarPropsOverrides
 } from '@mui/x-data-grid'
 import { EmployeeType, EmploymentType } from '../../../../services/types'
 import { fetchDELETE, fetchGET, fetchPUT } from '../../../../services/APIconn'
@@ -325,7 +327,9 @@ export default function EmployeeManagement() {
           }}
           pageSizeOptions={[5, 10, 25]}
           slots={{
-            toolbar: EditToolbar as GridSlots['toolbar']
+            toolbar: EditToolbar as unknown as JSXElementConstructor<
+              GridToolbarProps & ToolbarPropsOverrides
+            >
           }}
           slotProps={{
             toolbar: { setRows, setRowModesModel }

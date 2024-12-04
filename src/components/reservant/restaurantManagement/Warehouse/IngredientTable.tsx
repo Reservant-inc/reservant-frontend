@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { JSXElementConstructor, useEffect, useState } from 'react'
 import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridToolbarContainer,
   GridSlots,
-  GridActionsCellItem
+  GridActionsCellItem,
+  GridToolbarProps,
+  ToolbarPropsOverrides
 } from '@mui/x-data-grid'
 import { fetchGET, fetchPOST } from '../../../../services/APIconn'
 import EditIcon from '@mui/icons-material/Edit'
@@ -16,14 +18,13 @@ import EditIngredientDialog from './EditIngredientDialog'
 import GroceryListDialog from './GroceryListDialog'
 import GroceryInfoDialog from './GroceryInfoDialog'
 import AddIngredientDialog from './AddIngredientDialog'
-import ListIcon from '@mui/icons-material/List';
+import ListIcon from '@mui/icons-material/List'
 import IngredientHistoryDialog from './IngredientHistoryDialog'
-import CircularProgress from '@mui/material/CircularProgress';
-
+import CircularProgress from '@mui/material/CircularProgress'
 
 //Szymon TODO: podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true)
   const [ingredients, setIngredients] = useState<IngredientType[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isGroceryListOpen, setIsGroceryListOpen] = useState(false)
@@ -64,7 +65,7 @@ const IngredientTable: React.FC = () => {
   }, [ingredients, groceryList])
 
   const fetchIngredients = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       const data: PaginationType = await fetchGET(
         `/restaurants/${activeRestaurantId}/ingredients?page=0&perPage=10`
@@ -74,7 +75,7 @@ const IngredientTable: React.FC = () => {
     } catch (error) {
       console.error('Error fetching ingredients:', error)
     } finally {
-      setLoading(false); 
+      setLoading(false)
     }
   }
 
@@ -280,15 +281,14 @@ const IngredientTable: React.FC = () => {
   }
 
   const handleOpenHistoryDialog = (ingredient: IngredientType) => {
-    setSelectedIngredient(ingredient);
-    setIsHistoryDialogOpen(true);
-  };
-  
+    setSelectedIngredient(ingredient)
+    setIsHistoryDialogOpen(true)
+  }
+
   const handleCloseHistoryDialog = () => {
-    setSelectedIngredient(null);
-    setIsHistoryDialogOpen(false);
-  };
-  
+    setSelectedIngredient(null)
+    setIsHistoryDialogOpen(false)
+  }
 
   const columns: GridColDef[] = [
     {
@@ -358,8 +358,8 @@ const IngredientTable: React.FC = () => {
           onClick={() => handleOpenHistoryDialog(params.row)}
           color="inherit"
         />
-      ),
-    },
+      )
+    }
   ]
 
   const EditToolbar = () => (
@@ -379,19 +379,20 @@ const IngredientTable: React.FC = () => {
               + {t('warehouse.add-ingredient')}
             </h1>
           </button>
-  
+
           <button
             id="GenerateGroceryListButton"
             onClick={handleGenerateGroceryList}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">{t('warehouse.generate-list')}</h1>
+            <h1 className="text-md font-mont-md">
+              {t('warehouse.generate-list')}
+            </h1>
           </button>
         </div>
       </div>
     </GridToolbarContainer>
-  );
-  
+  )
 
   return (
     <div className="overflow-y-auto scroll flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
@@ -404,12 +405,16 @@ const IngredientTable: React.FC = () => {
           <DataGrid
             rows={ingredients.map((ingredient, index) => ({
               ...ingredient,
-              id: index,
+              id: index
             }))}
             columns={columns}
             pageSizeOptions={[5, 10, 25, 100]}
             disableRowSelectionOnClick
-            slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
+            slots={{
+              toolbar: EditToolbar as unknown as JSXElementConstructor<
+                GridToolbarProps & ToolbarPropsOverrides
+              >
+            }}
           />
         </div>
       ) : (
@@ -442,7 +447,7 @@ const IngredientTable: React.FC = () => {
         setGroceryList={setGroceryList}
         availableIngredients={availableIngredients}
         selectedDropdownIngredient={selectedDropdownIngredient}
-        onIngredientSelect={(value) => setSelectedDropdownIngredient(value)}
+        onIngredientSelect={value => setSelectedDropdownIngredient(value)}
         onAddToGroceryList={handleAddToGroceryList}
         onIncreaseAmount={handleIncreaseAmount}
         onDecreaseAmount={handleDecreaseAmount}
@@ -470,8 +475,7 @@ const IngredientTable: React.FC = () => {
         ingredient={selectedIngredient}
       />
     </div>
-  );
-  
+  )
 }
 
 export default IngredientTable
