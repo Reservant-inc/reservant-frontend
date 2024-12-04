@@ -408,7 +408,7 @@ const IngredientTable: React.FC = () => {
             columns={columns}
             pageSizeOptions={[5, 10, 25, 100]}
             disableRowSelectionOnClick
-            slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
+            slots={{ toolbar: EditToolbar }}
           />
         </div>
       ) : (
