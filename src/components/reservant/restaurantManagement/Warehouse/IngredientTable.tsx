@@ -1,13 +1,11 @@
-import React, { JSXElementConstructor, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
   GridToolbarContainer,
   GridSlots,
-  GridActionsCellItem,
-  GridToolbarProps,
-  ToolbarPropsOverrides
+  GridActionsCellItem
 } from '@mui/x-data-grid'
 import { fetchGET, fetchPOST } from '../../../../services/APIconn'
 import EditIcon from '@mui/icons-material/Edit'
@@ -410,11 +408,7 @@ const IngredientTable: React.FC = () => {
             columns={columns}
             pageSizeOptions={[5, 10, 25, 100]}
             disableRowSelectionOnClick
-            slots={{
-              toolbar: EditToolbar as unknown as JSXElementConstructor<
-                GridToolbarProps & ToolbarPropsOverrides
-              >
-            }}
+            slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
           />
         </div>
       ) : (
