@@ -146,7 +146,7 @@ const Reservation: React.FC<ReservationProps> = ({ reservation }) => {
       </div>
       <div className="flex flex-col gap-2">
         <button
-          className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
+          className={`border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
           onClick={() => setIsCompaining(true)}
         >
           Report a problem

@@ -127,7 +127,7 @@ const Friend: React.FC<FriendProps> = ({
               <button
                 id={`${friend.otherUser.firstName}${friend.otherUser.lastName}RemoveFriend`}
                 onClick={handleOpenDialog}
-                className="flex gap-2 items-center text-error hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-eror text-error transition hover:scale-105 hover:bg-error hover:text-white"
+                className="flex gap-2 items-center text-error dark:bg-grey-5 hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-eror text-error transition hover:scale-105 hover:bg-error hover:text-white"
                 disabled={loading}
               >
                 <PersonRemoveIcon className="text-sm" />
@@ -135,7 +135,7 @@ const Friend: React.FC<FriendProps> = ({
               </button>
               <button
                 id={`${friend.otherUser.firstName}${friend.otherUser.lastName}MessageFriend`}
-                className="flex gap-2 items-center text-primary hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                className="flex gap-2 items-center text-primary dark:bg-grey-5 hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
               >
                 <MessageIcon className="text-sm" />
                 {t('profile.friends.message-friend-button')}

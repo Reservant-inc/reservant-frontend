@@ -248,12 +248,12 @@ const Account: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full gap-2">
-      <div className="flex h-fit flex-col w-full bg-white rounded-lg p-4 gap-4 shadow-md">
+      <div className="flex h-fit flex-col w-full bg-white dark:bg-black dark:text-grey-1 rounded-lg p-4 gap-4 shadow-md">
         <div className="flex justify-between w-full">
           <h1 className="text-lg font-mont-bd">Account</h1>
           <div className="flex gap-2">
             <button
-              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => setIsChangingPass(prev => !prev)}
             >
               <>
@@ -262,7 +262,7 @@ const Account: React.FC = () => {
               </>
             </button>
             <button
-              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => setIsEditing(prev => !prev)}
             >
               <>
@@ -300,7 +300,7 @@ const Account: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white w-full h-fit rounded-lg p-4 shadow-md">
+      <div className="bg-white dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
         <div className="flex justify-between">
           <h1 className="text-lg font-mont-bd">Wallet</h1>
           <button
@@ -316,7 +316,7 @@ const Account: React.FC = () => {
           <h1 className="text-sm">Transaction history:</h1>
           <div
             id="scrollableDiv"
-            className="w-full h-[300px] rounded-lg overflow-y-auto scroll bg-grey-0"
+            className="w-full h-[300px] rounded-lg overflow-y-auto scroll bg-grey-0 dark:bg-grey-6"
           >
             <InfiniteScroll
               dataLength={transactions.length}

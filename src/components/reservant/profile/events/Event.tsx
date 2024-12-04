@@ -141,12 +141,12 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           />
           <div className="flex-col gap-1">
             <div className="flex gap-1">
-              <h1 className="font-mont-bd text-grey-5">
+              <h1 className="font-mont-bd grey-5">
                 {creator.firstName} {creator.lastName}
               </h1>
-              <h1 className="text-grey-5">participated in</h1>
+              <h1 className="text-grey-5 dark:text-grey-2">participated in</h1>
               <h1 className="font-mont-bd">{event.name}</h1>
-              <h1 className="text-grey-5">at</h1>
+              <h1 className="text-grey-5 dark:text-grey-2">at</h1>
               <h1 className="font-mont-bd">{restaurant.name}</h1>
             </div>
             <div className="flex gap-1">
@@ -201,19 +201,19 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
         {listType === EventListType.Created && (
           <>
             <button
-              className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => openDialog('manageParticipants')}
             >
               Zarządzaj uczestnikami
             </button>
             <button
-              className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => openDialog('edit')}
             >
               Edytuj
             </button>
             <button
-              className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => openDialog('delete')}
             >
               Usuń
