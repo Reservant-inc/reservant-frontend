@@ -63,7 +63,8 @@
         "submitSuccessMessage": "The application has been sent",
         "step1": "Local data",
         "step2": "More info",
-        "submit": "Finish"
+        "submit": "Finish",
+        "group": "Group"
     },
     "errors": {
         "add-employee": {
@@ -150,6 +151,18 @@
             },
             "photos": {
                 "required": "Photos are required"
+            },
+            "reservationDeposit": {
+                "required": "Reservation deposit is required",
+                "max": "Reservation deposit cannot exceed 300",
+                "min": "Reservation deposit cannot be less than 0",
+                "number": "You must enter a number"
+            },
+            "maxReservationDurationMinutes": {
+                "required": "Maximum reservation duration is required",
+                "max": "Maximum reservation duration cannot exceed 1440 minutes",
+                "min": "Maximum reservation duration cannot be less than 30 minutes",
+                "number": "You must enter a number"
             }
         }
     },

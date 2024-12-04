@@ -67,8 +67,23 @@ export type RestaurantType = {
   restaurantType: LocalType
   address: string
   city: string
-  isVerified: boolean
+  isVerified: boolean,
+  reservationDeposit: number,
+  location: {
+    latitude: number
+    longitude: number
+  },
+  maxReservationDurationMinutes: number,
+  tags: string[]
+  provideDelivery: boolean
+  logo: File | null | string
+  description: string
 }
+
+export type OpeningHoursType = {
+  from: string;
+  until: string;
+};
 
 export type RestaurantDataType = {
   name: string
@@ -87,6 +102,13 @@ export type RestaurantDataType = {
   photos: File[] | null | string[]
   description: string
   groupId: number | null
+  reservationDeposit: number | null,
+  openingHours: OpeningHoursType[];
+  maxReservationDurationMinutes: number | null, 
+  location: {
+    latitude: number
+    longitude: number
+  }
 }
 
 export type EmployeeType = {
