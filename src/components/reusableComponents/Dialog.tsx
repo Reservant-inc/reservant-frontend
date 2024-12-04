@@ -50,7 +50,7 @@ const Dialog: React.FC<PopupProps> = ({ open, children, onClose, title }) => {
         >
           <div
             ref={div}
-            className="min-h-[100px] max-h-[90vh] min-w-[100px] dark:bg-black bg-white rounded-lg"
+            className="min-h-[100px] max-h-[95vh] min-w-[100px] dark:bg-black bg-white rounded-lg"
           >
             {title && (
               <div className="h-[2.25rem] py-1 px-4 flex justify-between items-center dark:bg-black bg-white rounded-t-lg border-b-[1px] border-grey-1 dark:border-grey-4">

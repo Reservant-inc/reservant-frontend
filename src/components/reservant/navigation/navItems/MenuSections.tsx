@@ -23,7 +23,7 @@ const Sections: React.FC<SectionProps> = () => {
   const isClickedRestaurants = location.pathname.startsWith(
     `/reservant/${user.firstName}-${user.lastName}/management`
   )
-  const isClickedHome = location.pathname === '/reservant/home'
+  const isClickedHome = location.pathname.startsWith('/reservant/home')
   const isClickedEvents = location.pathname === '/reservant/events'
 
   return (

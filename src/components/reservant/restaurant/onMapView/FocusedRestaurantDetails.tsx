@@ -307,53 +307,57 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           onClose={handleDialogClose}
           title={optionTitles[option]}
         >
-          <div className="gap- flex h-[calc(100%-2.25rem)] min-w-[600px] flex-col items-center rounded-lg bg-white p-3 dark:bg-black">
-            <div className="flex h-[15%] w-full items-center gap-4">
-              <img
-                src={getImage(restaurant.logo, DefaultImage)}
-                className="h-[6rem] w-[6rem] rounded-lg"
-              />
-              <div className="flex w-[80%] flex-col justify-between">
-                <h2 className="text-xl font-bold dark:text-white">
-                  {restaurant.name}
-                </h2>
-                <div className="flex items-center gap-2 dark:text-white">
-                  <h1 className="text-[16px]">{averageRating.toFixed(2)}</h1>
-                  <CustomRating
-                    rating={averageRating}
-                    readOnly={true}
-                    className="text-[18px]"
-                  />
-                  <h1 className="text-[16px]">({reviews.length})</h1>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <h1 className="text-[14px] dark:text-white">
-                    {restaurant.address}, {restaurant.city}
-                  </h1>
-                  <div className="flex items-center gap-3 text-[14px]">
-                    {restaurant.provideDelivery && (
-                      <div className="flex items-center gap-2">
-                        <MopedIcon className="h-4 w-4 dark:text-white" />
-                        <h1 className="text-[14px] dark:text-white">
-                          {t('home-page.delivery-fee')} 5,99 zł
-                        </h1>
-                      </div>
-                    )}
-                    <div className="flex items-center gap-1">
-                      <h1 className="text-[12px] dark:text-white">
-                        {t('home-page.is-delivering')}:
-                      </h1>
-                      {restaurant.provideDelivery ? (
-                        <CheckCircleIcon className="text-green-500 h-4 w-4 dark:text-white" />
-                      ) : (
-                        <CancelIcon className="text-red-500 h-4 w-4 dark:text-white" />
+          <div className="h-[95vh]">
+            <div className="flex h-[calc(100%-2.25rem)] min-w-[600px] flex-col items-center rounded-lg bg-white p-3 dark:bg-black">
+              <div className="flex h-[15%] w-full items-center gap-4">
+                <img
+                  src={getImage(restaurant.logo, DefaultImage)}
+                  className="h-[6rem] w-[6rem] rounded-lg"
+                />
+                <div className="flex w-[80%] flex-col justify-between">
+                  <h2 className="text-xl font-bold dark:text-white">
+                    {restaurant.name}
+                  </h2>
+                  <div className="flex items-center gap-2 dark:text-white">
+                    <h1 className="text-[16px]">{averageRating.toFixed(2)}</h1>
+                    <CustomRating
+                      rating={averageRating}
+                      readOnly={true}
+                      className="text-[18px]"
+                    />
+                    <h1 className="text-[16px]">({reviews.length})</h1>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <h1 className="text-[14px] dark:text-white">
+                      {restaurant.address}, {restaurant.city}
+                    </h1>
+                    <div className="flex items-center gap-3 text-[14px]">
+                      {restaurant.provideDelivery && (
+                        <div className="flex items-center gap-2">
+                          <MopedIcon className="h-4 w-4 dark:text-white" />
+                          <h1 className="text-[14px] dark:text-white">
+                            {t('home-page.delivery-fee')} 5,99 zł
+                          </h1>
+                        </div>
                       )}
+                      <div className="flex items-center gap-1">
+                        <h1 className="text-[12px] dark:text-white">
+                          {t('home-page.is-delivering')}:
+                        </h1>
+                        {restaurant.provideDelivery ? (
+                          <CheckCircleIcon className="text-green-500 h-4 w-4 dark:text-white" />
+                        ) : (
+                          <CancelIcon className="text-red-500 h-4 w-4 dark:text-white" />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="h-[85%] w-full">
+                {renderDialogContent[option]}
+              </div>
             </div>
-            <div className="h-[85%] w-full">{renderDialogContent[option]}</div>
           </div>
         </Dialog>
       )}
