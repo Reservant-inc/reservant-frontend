@@ -199,6 +199,13 @@ export default function EmployeeManagement() {
 
   const columns: GridColDef[] = [
     {
+      field: 'userId',
+      headerName: 'userId',
+      type: 'string',
+      width: 150,
+      editable: false
+    },
+    {
       field: 'firstName',
       headerName: 'First name',
       type: 'string',

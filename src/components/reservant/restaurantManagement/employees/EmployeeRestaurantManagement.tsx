@@ -232,12 +232,20 @@ export default function EmployeeRestaurantManagement() {
 
   const columns: GridColDef[] = [
     {
+      field: 'empID',
+      headerName: 'Employee ID',
+      type: 'string',
+      width: 180,
+      editable: false
+    },
+    {
       field: 'firstName',
       headerName: 'First name',
       type: 'string',
       width: 180,
       editable: false
     },
+
     {
       field: 'lastName',
       headerName: 'Last Name',

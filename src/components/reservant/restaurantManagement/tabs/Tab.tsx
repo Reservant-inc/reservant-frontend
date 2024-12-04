@@ -29,9 +29,9 @@ const Tab: React.FC<TabProps> = ({ path, title, icon, id }) => {
         className={` ${isSelected ? 'bg-white dark:bg-black' : 'bg-grey-0 dark:bg-grey-5'}  h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
         onClick={handleClick}
       >
-        <div className="flex items-center gap-4">
+        <div className="flex text-nowrap items-center gap-2">
           {icon}
-          {size.width < 2000 && <h1>{title}</h1>}
+          {size.width > 1500 && <h1>{title}</h1>}
         </div>
       </ListItemButton>
     </div>
