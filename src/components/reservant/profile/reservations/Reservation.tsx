@@ -17,7 +17,7 @@ const Reservation: React.FC<ReservationProps> = ({
   reservationType
 }) => {
   const [orders, setOrders] = useState<OrderType[]>([])
-  const [isComplaining, setIsCompaining] = useState<boolean>(false)
+  const [isComplaining, setIsComplaining] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [reportType, setReportType] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
@@ -84,14 +84,17 @@ const Reservation: React.FC<ReservationProps> = ({
           return
       }
 
+      console.log(reportData)
+
       await fetchPOST(endpoint, JSON.stringify(reportData))
       alert('Your report has been submitted successfully.')
-      setIsCompaining(false)
+    } catch (error) {
+      if (error instanceof FetchError) console.error(error.formatErrors())
+    } finally {
+      setIsComplaining(false)
       setReportType('')
       setReportNote('')
       setSelectedEmployee('')
-    } catch (error) {
-      if (error instanceof FetchError) console.error(error.formatErrors())
     }
   }
 
@@ -158,14 +161,14 @@ const Reservation: React.FC<ReservationProps> = ({
           <div className="flex flex-col gap-2">
             <button
               className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-              onClick={() => setIsCompaining(true)}
+              onClick={() => setIsComplaining(true)}
             >
               Report a problem
             </button>
           </div>
           <Dialog
             open={isComplaining}
-            onClose={() => setIsCompaining(false)}
+            onClose={() => setIsComplaining(false)}
             title="Make a complaint"
           >
             <div className="flex flex-col gap-4 p-4 w-[400px]">
