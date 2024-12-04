@@ -196,40 +196,47 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
             </div>
 
             {/* Podgląd zdjęcia i przycisk przesyłania */}
-            <div
-              className="relative min-w-64 min-h-64 flex items-center justify-center mb-4"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <img
-                className="w-64 h-64 absolute rounded-lg"
-                src={getImage(photoPath, DefaultImage)}
-                alt="Event preview"
-              />
-              {isHovered && (
-                <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
-                  <label
-                    htmlFor="photo"
-                    className="shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary"
-                  >
-                    <CloudUploadIcon />
-                    Upload photo
-                  </label>
+              <div className="mb-4">
+                <label
+                  htmlFor="photo"
+                  className="block text-sm font-medium dark:text-grey-2 mb-2"
+                >
+                  Event preview picture
+                </label>
+                <div
+                  className="relative min-w-64 min-h-64 flex items-center justify-center"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
+                  <img
+                    className="w-64 h-64 absolute rounded-lg"
+                    src={photoPath === DefaultImage ? DefaultImage : getImage(photoPath, photoPath)}
+                    alt="Event preview"
+                  />
+                  {isHovered && (
+                    <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
+                      <label
+                        htmlFor="photo"
+                        className="shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary"
+                      >
+                        <CloudUploadIcon />
+                        Upload photo
+                      </label>
+                    </div>
+                  )}
+                  <VisuallyHiddenInput
+                    type="file"
+                    id="photo"
+                    accept="image/*"
+                    onChange={async e => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        const fileName = await uploadPhoto(e.target.files[0])
+                        setFieldValue('photoFileName', fileName)
+                      }
+                    }}
+                  />
                 </div>
-              )}
-              <VisuallyHiddenInput
-                type="file"
-                id="photo"
-                accept="image/*"
-                onChange={async e => {
-                  if (e.target.files && e.target.files.length > 0) {
-                    const fileName = await uploadPhoto(e.target.files[0])
-                    setFieldValue('photoFileName', fileName)
-                  }
-                }}
-              />
-            </div>
-
+              </div>
             {errorMessage && (
               <p className="mb-4 text-red-500">{errorMessage}</p>
             )}
