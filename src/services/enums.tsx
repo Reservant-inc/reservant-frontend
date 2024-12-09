@@ -30,6 +30,9 @@ export enum EventListType {
   Participates = 'Participates',
   History = 'History'
 }
+export enum ReportsListType {
+  Created = 'Created'
+}
 
 export enum ReservationListType {
   Incoming = 'Incoming',

@@ -81,7 +81,7 @@ const CartContextProvider: React.FC<CartContextProps> = ({ children }) => {
     addToCart: addToCart,
     incrementQuantity: incrementQuantity,
     decrementQuantity: decrementQuantity,
-    totalPrice,
+    totalPrice: Math.floor(totalPrice * Math.pow(10, 2)) / Math.pow(10, 2),
     clearCart: clearCart
   }
 
