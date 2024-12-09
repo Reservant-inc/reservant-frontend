@@ -140,15 +140,17 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
             className="h-9 w-9 rounded-full"
           />
           <div className="flex-col gap-1">
-            <div className="flex gap-1">
-              <h1 className="font-mont-bd grey-5">
+            <h1 className="flex flex-wrap gap-x-1">
+              <p className="font-mont-bd text-grey-5">
                 {creator.firstName} {creator.lastName}
-              </h1>
-              <h1 className="text-grey-5 dark:text-grey-2">participated in</h1>
-              <h1 className="font-mont-bd">{event.name}</h1>
-              <h1 className="text-grey-5 dark:text-grey-2">at</h1>
-              <h1 className="font-mont-bd">{restaurant.name}</h1>
-            </div>
+              </p>
+              <p className="text-grey-5">participated in</p>
+              <p className="font-mont-bd">{event.name}</p>
+              <p className="text-grey-5">at</p>
+              <a href={`/reservant/home/${restaurant.restaurantId}`}>
+                <p className="font-mont-bd">{restaurant.name}</p>
+              </a>
+            </h1>
             <div className="flex gap-1">
               <h1 className="text-sm text-grey-4">
                 {event.restaurant.city}, {formatDate(event.time)}
@@ -174,14 +176,6 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       </div>
 
       <div className="flex gap-2">
-        {/* {listType === EventListType.History && (
-          <button
-            className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
-            onClick={() => openDialog('details')}
-          >
-            Szczegóły
-          </button>
-        )} */}
         {listType === EventListType.Interested && (
           <button
             className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105 mt-4"

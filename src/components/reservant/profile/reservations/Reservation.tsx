@@ -1,29 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import {
-  OrderType,
-  VisitType,
-  UserType,
-  ReportType
-} from '../../../../services/types'
+import { OrderType, VisitType, ReportType } from '../../../../services/types'
 import { fetchGET, getImage, fetchPOST } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
+import { ReservationListType } from '../../../../services/enums'
 
 interface ReservationProps {
   reservation: VisitType
+  reservationType: ReservationListType
 }
 
-const Reservation: React.FC<ReservationProps> = ({ reservation }) => {
+const Reservation: React.FC<ReservationProps> = ({
+  reservation,
+  reservationType
+}) => {
   const [orders, setOrders] = useState<OrderType[]>([])
-  const [isComplaining, setIsCompaining] = useState<boolean>(false)
+  const [isComplaining, setIsComplaining] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [reportType, setReportType] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
   const [selectedEmployee, setSelectedEmployee] = useState<string>('')
-
-  console.log(reservation)
 
   const fetchOrders = async () => {
     try {
@@ -86,17 +84,21 @@ const Reservation: React.FC<ReservationProps> = ({ reservation }) => {
           return
       }
 
-      await fetchPOST(endpoint, reportData)
+      console.log(reportData)
+
+      await fetchPOST(endpoint, JSON.stringify(reportData))
       alert('Your report has been submitted successfully.')
-      setIsCompaining(false)
+    } catch (error) {
+      if (error instanceof FetchError) console.error(error.formatErrors())
+    } finally {
+      setIsComplaining(false)
       setReportType('')
       setReportNote('')
       setSelectedEmployee('')
-    } catch (error) {
-      console.error('Error submitting report:', error)
-      alert('Failed to submit the report. Please try again later.')
     }
   }
+
+  const handleCancelReservation = () => {}
 
   return (
     <div className="w-full h-fit flex justify-between py-2">
@@ -144,76 +146,93 @@ const Reservation: React.FC<ReservationProps> = ({ reservation }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <button
-          className={`border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-          onClick={() => setIsCompaining(true)}
-        >
-          Report a problem
-        </button>
-      </div>
-      <Dialog
-        open={isComplaining}
-        onClose={() => setIsCompaining(false)}
-        title="Make a complaint"
-      >
-        <div className="flex flex-col gap-4 p-4 w-[400px]">
-          <label htmlFor="report-type" className="text-sm font-bold">
-            What is your report about?
-          </label>
-          <select
-            id="report-type"
-            value={reportType}
-            onChange={e => setReportType(e.target.value)}
-            className="border-[1px] rounded-md p-2"
+      {reservationType === ReservationListType.Incoming && (
+        <div className="flex flex-col gap-2">
+          <button
+            className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
+            onClick={() => handleCancelReservation()}
           >
-            <option value="" disabled>
-              Select a report type
-            </option>
-            <option value="lost-item">Lost item</option>
-            <option value="complain-order">Complain about an order</option>
-            <option value="complain-employee">
-              Complain about an employee
-            </option>
-          </select>
-
-          {reportType === 'complain-employee' && (
-            <>
-              <label htmlFor="employee-select" className="text-sm font-bold">
-                Select an employee
+            Cancel a reservation
+          </button>
+        </div>
+      )}
+      {reservationType === ReservationListType.Finished && (
+        <>
+          <div className="flex flex-col gap-2">
+            <button
+              className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
+              onClick={() => setIsComplaining(true)}
+            >
+              Report a problem
+            </button>
+          </div>
+          <Dialog
+            open={isComplaining}
+            onClose={() => setIsComplaining(false)}
+            title="Make a complaint"
+          >
+            <div className="flex flex-col gap-4 p-4 w-[400px]">
+              <label htmlFor="report-type" className="text-sm font-bold">
+                What is your report about?
               </label>
               <select
-                id="employee-select"
-                value={selectedEmployee}
-                onChange={e => setSelectedEmployee(e.target.value)}
+                id="report-type"
+                value={reportType}
+                onChange={e => setReportType(e.target.value)}
                 className="border-[1px] rounded-md p-2"
               >
                 <option value="" disabled>
-                  Select an employee
+                  Select a report type
+                </option>
+                <option value="lost-item">Lost item</option>
+                <option value="complain-order">Complain about an order</option>
+                <option value="complain-employee">
+                  Complain about an employee
                 </option>
               </select>
-            </>
-          )}
 
-          <label htmlFor="report-note" className="text-sm font-bold">
-            Additional details
-          </label>
-          <textarea
-            id="report-note"
-            value={reportNote}
-            onChange={e => setReportNote(e.target.value)}
-            placeholder="Describe your issue in detail..."
-            className="border-[1px] rounded-md p-2 h-20 scroll"
-          />
+              {reportType === 'complain-employee' && (
+                <>
+                  <label
+                    htmlFor="employee-select"
+                    className="text-sm font-bold"
+                  >
+                    Select an employee
+                  </label>
+                  <select
+                    id="employee-select"
+                    value={selectedEmployee}
+                    onChange={e => setSelectedEmployee(e.target.value)}
+                    className="border-[1px] rounded-md p-2"
+                  >
+                    <option value="" disabled>
+                      Select an employee
+                    </option>
+                  </select>
+                </>
+              )}
 
-          <button
-            onClick={handleReportSubmit}
-            className="bg-primary text-white rounded-md p-2 transition hover:bg-secondary"
-          >
-            Submit Report
-          </button>
-        </div>
-      </Dialog>
+              <label htmlFor="report-note" className="text-sm font-bold">
+                Additional details
+              </label>
+              <textarea
+                id="report-note"
+                value={reportNote}
+                onChange={e => setReportNote(e.target.value)}
+                placeholder="Describe your issue in detail..."
+                className="border-[1px] rounded-md p-2 h-20 scroll"
+              />
+
+              <button
+                onClick={handleReportSubmit}
+                className="bg-primary text-white rounded-md p-2 transition hover:bg-secondary"
+              >
+                Submit Report
+              </button>
+            </div>
+          </Dialog>
+        </>
+      )}
     </div>
   )
 }

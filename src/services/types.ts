@@ -67,8 +67,23 @@ export type RestaurantType = {
   restaurantType: LocalType
   address: string
   city: string
-  isVerified: boolean
+  isVerified: boolean,
+  reservationDeposit: number,
+  location: {
+    latitude: number
+    longitude: number
+  },
+  maxReservationDurationMinutes: number,
+  tags: string[]
+  provideDelivery: boolean
+  logo: File | null | string
+  description: string
 }
+
+export type OpeningHoursType = {
+  from: string;
+  until: string;
+};
 
 export type RestaurantDataType = {
   name: string
@@ -87,6 +102,13 @@ export type RestaurantDataType = {
   photos: File[] | null | string[]
   description: string
   groupId: number | null
+  reservationDeposit: number | null,
+  openingHours: OpeningHoursType[];
+  maxReservationDurationMinutes: number | null, 
+  location: {
+    latitude: number
+    longitude: number
+  }
 }
 
 export type EmployeeType = {
@@ -298,7 +320,7 @@ export type VisitType = {
   date: string
   deposit: number
   endTime: string
-  numberOfGuests: 1
+  numberOfGuests: number
   orders: OrderType[]
   participants: UserType[]
   paymentTime: string
@@ -384,56 +406,61 @@ export type FriendData = {
 }
 
 export type ReportType = {
+  reportId?: number
   description: string
   visitId: number
   reportedUserId?: string
+  reportDate?: string
+  category?: string
+  createdBy?: UserType
+  reportedUser?: UserType
 }
 
 export type Correction = {
-  correctionId: number;
-  oldAmount: number;
-  newAmount: number;
-  correctionDate: string;
-  comment: string;
+  correctionId: number
+  oldAmount: number
+  newAmount: number
+  correctionDate: string
+  comment: string
   user: {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    photo: string | null;
-  };
+    userId: string
+    firstName: string
+    lastName: string
+    photo: string | null
+  }
 }
 
 export type IngredientHistoryDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  ingredient: IngredientType | null;
+  open: boolean
+  onClose: () => void
+  ingredient: IngredientType | null
 }
 
 export type GroceryListDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  groceryList: any[];
-  setGroceryList: React.Dispatch<React.SetStateAction<any[]>>;
-  availableIngredients: any[];
-  selectedDropdownIngredient: string;
-  onIngredientSelect: (value: string) => void;
-  onAddToGroceryList: () => void;
-  onIncreaseAmount: (id: number) => void;
-  onDecreaseAmount: (id: number) => void;
-  onRemoveItem: (id: number) => void;
-  onSubmitOrder: () => void;
+  open: boolean
+  onClose: () => void
+  groceryList: any[]
+  setGroceryList: React.Dispatch<React.SetStateAction<any[]>>
+  availableIngredients: any[]
+  selectedDropdownIngredient: string
+  onIngredientSelect: (value: string) => void
+  onAddToGroceryList: () => void
+  onIncreaseAmount: (id: number) => void
+  onDecreaseAmount: (id: number) => void
+  onRemoveItem: (id: number) => void
+  onSubmitOrder: () => void
 }
 
 export type DeliveryActionDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  deliveryId: number;
-  action: 'confirm' | 'cancel';
-  onActionComplete: () => void;
+  open: boolean
+  onClose: () => void
+  deliveryId: number
+  action: 'confirm' | 'cancel'
+  onActionComplete: () => void
 }
 
 export type DeliveryDetailsDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  deliveryId: number;
+  open: boolean
+  onClose: () => void
+  deliveryId: number
 }
