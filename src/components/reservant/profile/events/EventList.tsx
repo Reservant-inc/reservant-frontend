@@ -28,7 +28,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
     [EventListType.Created]: 'Brak utworzonych wydarzeń.',
     [EventListType.Interested]: 'Nie jesteś zainteresowany żadnym wydarzeniem.',
     [EventListType.Participates]: 'Nie jesteś uczestnikiem żadnego wydarzenia.',
-    [EventListType.History]: 'Brak wydarzen do wyswietlenia.'
+    [EventListType.History]: 'Brak wydarzeń do wyświetlenia.'
   }
 
   const apiRoute = apiRoutes[listType]

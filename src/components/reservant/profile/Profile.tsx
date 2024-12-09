@@ -33,8 +33,8 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="z-[0] flex h-full w-full items-center justify-center gap-5 bg-grey-1 p-4">
-      <div className="flex flex-col gap-3 self-start p-4 bg-white rounded-lg shadow-md">
+    <div className="z-[0] flex h-full w-full items-center justify-center gap-5 bg-grey-1 p-4 dark:bg-grey-6">
+      <div className="flex flex-col gap-3 self-start p-4 bg-white rounded-lg shadow-md dark:bg-black dark:text-white">
         <div className="mb-5 flex items-center gap-4 w-[200px]">
           {loading ? (
             <CircularProgress className="text-grey-1" />
@@ -54,28 +54,28 @@ const Profile: React.FC = () => {
         </div>
         <button
           id="profileAccountSection"
-          className="border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('account')}
         >
           <h1 className="text-sm">Account</h1>
         </button>
         <button
           id="profileReservationSection"
-          className="border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('reservation-history/incoming')}
         >
           <h1 className="text-sm">Reservations</h1>
         </button>
         <button
           id="profileEventsSection"
-          className="border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('event-history/created')}
         >
           <h1 className="text-sm">Events</h1>
         </button>
         <button
           id="profileFriendsSection"
-          className="border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('friends')}
         >
           <h1 className="text-sm">Friends</h1>
@@ -88,7 +88,7 @@ const Profile: React.FC = () => {
           <h1 className="text-sm">Reports</h1>
         </button>
       </div>
-      <div className="flex justify-center h-full w-[800px] rounded-lg">
+      <div className="flex justify-center h-full w-[800px] rounded-lg dark:bg-grey-6">
         <Outlet />
       </div>
     </div>
