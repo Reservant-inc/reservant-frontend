@@ -320,7 +320,7 @@ export type VisitType = {
   date: string
   deposit: number
   endTime: string
-  numberOfGuests: 1
+  numberOfGuests: number
   orders: OrderType[]
   participants: UserType[]
   paymentTime: string

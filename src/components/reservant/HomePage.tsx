@@ -148,6 +148,12 @@ export default function HomePage() {
     })
   }
 
+  const handleReviewSelection = (value: number) => {
+    setReviewFilter(value)
+    setAllRestaurants([])
+    setLoadedRestaurantIds(new Set())
+  }
+
   const reviewsPressHandler = () => {
     setIsReviewFilterPressed(!isReviewFilterPressed)
   }
@@ -162,6 +168,7 @@ export default function HomePage() {
 
   const handleCloseDetails = () => {
     navigate('../home')
+    setSelectedRestaurant(null)
   }
 
   return (
@@ -320,7 +327,7 @@ export default function HomePage() {
                   id="homePage-listItemButton"
                   className="flex items-center justify-center gap-2"
                   onClick={() => {
-                    setReviewFilter(0)
+                    handleReviewSelection(0)
                     setIsReviewFilterPressed(false)
                   }}
                 >
@@ -333,7 +340,7 @@ export default function HomePage() {
                     id="homePage-listItemButton"
                     className="flex items-center justify-center gap-2"
                     onClick={() => {
-                      setReviewFilter(value)
+                      handleReviewSelection(value)
                       setIsReviewFilterPressed(false)
                     }}
                     key={index}
