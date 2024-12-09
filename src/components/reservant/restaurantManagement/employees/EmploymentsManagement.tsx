@@ -45,13 +45,14 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   const populateRows = async () => {
     try {
       const response = await fetchGET('/user/employees')
-      const tmp: EmploymentType[] = []
+      const tmp: (EmploymentType & { id: number })[] = []
 
       if (response.length)
         for (const i in response) {
           if (response[i].userId === empid)
             for (const j in response[i].employments) {
               tmp.push({
+                id: Number(j),
                 employmentId: response[i].employments[j].employmentId,
                 restaurantName: response[i].employments[j].restaurantName,
                 restaurantId:

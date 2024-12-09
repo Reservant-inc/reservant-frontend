@@ -63,7 +63,8 @@
         "submitSuccessMessage": "Zgłoszenie zostało wysłane",
         "step1": "Dane lokalu",
         "step2": "Pozostałe informacje",
-        "submit":"Koniec"
+        "submit":"Koniec",
+        "group": "Grupa"
     },
     "errors": {
         "login": {
@@ -146,6 +147,18 @@
             "photos": {
                 "required": "Zdjęcia są wymagane"
 
+            },
+            "reservationDeposit": {
+                "required": "Depozyt za rezerwacje jest wymagany",
+                "max": "Depozyt za rezerwacje nie moze przekroczyć 300",
+                "min": "Depozyt za rezerwacje nie moze być mniejszy niz 0",
+                "number": "Nalezy wprowadzić liczbę"
+            },
+            "maxReservationDurationMinutes": {
+                "required": "Maxymalny czas rezerwacji jest wymagany",
+                "max": "Maxymalny czas rezerwacji nie moze przekroczyć 1440 minut",
+                "min": "Maxymalny czas rezerwacji nie moze być nizszy niz 30 minut",
+                "number": "Nalezy wprowadzić liczbę"
             }
         }
     },
