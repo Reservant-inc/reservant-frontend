@@ -149,7 +149,7 @@ const Reservation: React.FC<ReservationProps> = ({
       {reservationType === ReservationListType.Incoming && (
         <div className="flex flex-col gap-2">
           <button
-            className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
+            className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
             onClick={() => handleCancelReservation()}
           >
             Cancel a reservation

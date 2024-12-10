@@ -82,7 +82,7 @@ const Profile: React.FC = () => {
         </button>
         <button
           id="profileReportsSection"
-          className="border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           onClick={() => navigate('reports')}
         >
           <h1 className="text-sm">Reports</h1>
