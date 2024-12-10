@@ -1,75 +1,79 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Formik, Form, Field, FormikValues } from "formik";
-import { useTranslation } from "react-i18next";
-import { useValidationSchemas } from "../../hooks/useValidationSchema";
-import { fetchPOST } from "../../services/APIconn";
-import { TextField } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import { CSSTransition } from "react-transition-group";
-import MuiPhoneNumber from "mui-phone-number";
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Formik, Form, Field, FormikValues } from 'formik'
+import { useTranslation } from 'react-i18next'
+import { useValidationSchemas } from '../../hooks/useValidationSchema'
+import { fetchPOST } from '../../services/APIconn'
+import { TextField } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { CSSTransition } from 'react-transition-group'
+import MuiPhoneNumber from 'mui-phone-number'
+import { parsePhoneNumber } from 'libphonenumber-js'
 
 const initialValues = {
-  firstName: "",
-  lastName: "",
-  login: "",
-  email: "",
-  phoneNumber: "",
-  birthDate: "",
-  password: "",
-  confirmPassword: "",
-};
+  firstName: '',
+  lastName: '',
+  login: '',
+  email: '',
+  phoneNumber: '',
+  birthDate: '',
+  password: '',
+  confirmPassword: ''
+}
 
 const UserRegister: React.FC = () => {
-  const navigate = useNavigate();
-  const [t] = useTranslation("global");
-  const { userRegisterSchema } = useValidationSchemas();
-  const [requestLoading, setRequestLoading] = useState<boolean>(false);
-  const [registerError, setRegisterError] = useState<string>("");
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const navigate = useNavigate()
+  const [t] = useTranslation('global')
+  const { userRegisterSchema } = useValidationSchemas()
+  const [requestLoading, setRequestLoading] = useState<boolean>(false)
+  const [registerError, setRegisterError] = useState<string>('')
+  const [activeStep, setActiveStep] = useState<number>(1)
 
   const handleSubmit = async (
     values: FormikValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      setSubmitting(true);
-      setRequestLoading(true);
+      setSubmitting(true)
+      setRequestLoading(true)
 
-      const formattedPhoneNumber = values.phoneNumber.replace(/\s|-/g, "");
+      const number = parsePhoneNumber(values.phoneNumber)
 
       const body = JSON.stringify({
         firstName: values.firstName,
         lastName: values.lastName,
         login: values.login,
         email: values.email,
-        phoneNumber: formattedPhoneNumber,
+        phoneNumber: {
+          code: '+' + number.countryCallingCode,
+          number: number.nationalNumber
+        },
         birthDate: values.birthDate,
-        password: values.password,
-      });
+        password: values.password
+      })
 
-      console.log(body);
-      await fetchPOST("/auth/register-customer", body);
+      console.log(body)
+      await fetchPOST('/auth/register-customer', body)
 
-      navigate("/login");
+      navigate('/login')
     } catch (error) {
-      console.log(error);
-      setRegisterError("Registration failed. Please try again.");
+      console.log(error)
+      setRegisterError('Registration failed. Please try again.')
     } finally {
-      setSubmitting(false);
-      setRequestLoading(false);
+      setSubmitting(false)
+      setRequestLoading(false)
     }
-  };
+  }
 
   const test = () => {
-    console.log("step2");
-    console.log(initialValues);
-  };
+    console.log('step2')
+    console.log(initialValues)
+  }
 
   return (
     <div className="h-full w-full bg-[url('/src/assets/images/bg.png')] bg-cover">
       <div className="login-gradient flex h-full w-full items-center justify-center bg-opacity-20">
-        <div className="flex h-[500px] w-[600px] items-center rounded-lg border-2 border-white bg-black bg-opacity-60 shadow-2xl backdrop-blur-md">
+        <div className="flex pb-12 w-[600px] items-center rounded-lg border-2 border-white bg-black bg-opacity-60 shadow-2xl backdrop-blur-md">
           <div className="transition-wrapper flex h-full w-full flex-col items-center justify-center gap-8 rounded-r-lg">
             <Formik
               id="userRegister-formik"
@@ -77,7 +81,7 @@ const UserRegister: React.FC = () => {
               validationSchema={userRegisterSchema}
               onSubmit={handleSubmit}
             >
-              {(formik) => (
+              {formik => (
                 <Form className="w-full h-full mt-[10%]">
                   <div className="form-container h-full flex flex-col items-center gap-4">
                     <CSSTransition
@@ -104,8 +108,8 @@ const UserRegister: React.FC = () => {
                             }
                             className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${
                               !(formik.errors.login && formik.touched.login)
-                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                                ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                                : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                             }`}
                             color="primary"
                             as={TextField}
@@ -123,8 +127,8 @@ const UserRegister: React.FC = () => {
                             }
                             className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${
                               !(formik.errors.email && formik.touched.email)
-                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                                ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                                : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                             }`}
                             color="primary"
                             as={TextField}
@@ -145,8 +149,8 @@ const UserRegister: React.FC = () => {
                                 formik.errors.password &&
                                 formik.touched.password
                               )
-                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                                ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                                : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                             }`}
                             color="primary"
                             as={TextField}
@@ -167,8 +171,8 @@ const UserRegister: React.FC = () => {
                                 formik.errors.confirmPassword &&
                                 formik.touched.confirmPassword
                               )
-                                ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                                : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                                ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                                : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                             }`}
                             color="primary"
                             as={TextField}
@@ -207,8 +211,8 @@ const UserRegister: React.FC = () => {
                                   !formik.errors.confirmPassword &&
                                   formik.touched.confirmPassword
                                 )
-                                  ? "bg-grey-1 text-grey-2"
-                                  : "bg-primary text-white"
+                                  ? 'bg-grey-1 text-grey-2'
+                                  : 'bg-primary text-white'
                               }`}
                             >
                               NEXT
@@ -244,8 +248,8 @@ const UserRegister: React.FC = () => {
                               formik.errors.firstName &&
                               formik.touched.firstName
                             )
-                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                              ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                              : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                           }`}
                           color="primary"
                           as={TextField}
@@ -263,40 +267,37 @@ const UserRegister: React.FC = () => {
                           }
                           className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] ${
                             !(formik.errors.lastName && formik.touched.lastName)
-                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                              ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                              : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                           }`}
                           color="primary"
                           as={TextField}
                         />
 
-
-                          <Field
+                        <Field
                           as={MuiPhoneNumber}
                           className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.phoneNumber &&
                               formik.touched.phoneNumber
                             )
-                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                              ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                              : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                           }`}
-                          
                           label="PHONE NUMBER"
-
-                          helperText={(formik.errors.phoneNumber && formik.touched.phoneNumber) && formik.errors.phoneNumber} 
-
+                          helperText={
+                            formik.errors.phoneNumber &&
+                            formik.touched.phoneNumber &&
+                            formik.errors.phoneNumber
+                          }
                           defaultCountry="pl"
                           id="userRegister-phoneNumber-field"
-                          name={"phoneNumber"}
+                          name={'phoneNumber'}
                           value={formik.values.phoneNumber}
                           onChange={(value: string) =>
-                            formik.setFieldValue("phoneNumber", value)
+                            formik.setFieldValue('phoneNumber', value)
                           }
-                        
-                          
-                          />
-         
+                        />
 
                         <Field
                           type="date"
@@ -304,25 +305,33 @@ const UserRegister: React.FC = () => {
                           name="birthDate"
                           label="BIRTH DATE"
                           variant="standard"
-                          helperText={(formik.errors.birthDate && formik.touched.birthDate) && formik.errors.birthDate}
+                          helperText={
+                            formik.errors.birthDate &&
+                            formik.touched.birthDate &&
+                            formik.errors.birthDate
+                          }
                           className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.birthDate &&
                               formik.touched.birthDate
                             )
-                              ? "[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary"
-                              : "[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error"
+                              ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
+                              : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                           }`}
                           InputLabelProps={{
                             shrink: true,
                             style: {
-                              color: formik.errors.birthDate && formik.touched.birthDate ? "#f44336" : "#fff",
-                            },
+                              color:
+                                formik.errors.birthDate &&
+                                formik.touched.birthDate
+                                  ? '#f44336'
+                                  : '#fff'
+                            }
                           }}
                           InputProps={{
                             style: {
-                              color: "#fff",
-                            },
+                              color: '#fff'
+                            }
                           }}
                           color="primary"
                           as={TextField}
@@ -341,14 +350,14 @@ const UserRegister: React.FC = () => {
                             disabled={!formik.isValid || requestLoading}
                             className={`pointer flex h-[50px] w-4/5 items-center justify-center rounded-lg shadow-md ${
                               formik.isValid
-                                ? "bg-primary text-white"
-                                : "bg-grey-1 text-grey-2"
+                                ? 'bg-primary text-white'
+                                : 'bg-grey-1 text-grey-2'
                             }`}
                           >
                             {requestLoading ? (
                               <CircularProgress color="secondary" />
                             ) : (
-                              "SUBMIT"
+                              'SUBMIT'
                             )}
                           </button>
                         </div>
@@ -368,7 +377,7 @@ const UserRegister: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserRegister;
+export default UserRegister

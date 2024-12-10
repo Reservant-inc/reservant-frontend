@@ -8,7 +8,7 @@ import { RestaurantDetailsType } from '../../../services/types'
 interface MapProps {
   activeRestaurant: RestaurantDetailsType | null
   restaurants: RestaurantDetailsType[]
-  setActiveRestaurant: Function
+  selectRestaurant: Function
   setBounds: Function
   setUserMovedMap: Function
   userMovedMap: Boolean
@@ -17,7 +17,7 @@ interface MapProps {
 const Map: React.FC<MapProps> = ({
   restaurants,
   activeRestaurant,
-  setActiveRestaurant,
+  selectRestaurant,
   setBounds,
   setUserMovedMap,
   userMovedMap
@@ -108,10 +108,12 @@ const Map: React.FC<MapProps> = ({
                 restaurant.location.latitude,
                 restaurant.location.longitude
               ]}
+              isActive={
+                restaurant.restaurantId === activeRestaurant?.restaurantId
+              }
+              selectRestaurant={selectRestaurant}
               key={index}
               restaurant={restaurant}
-              activeRestaurant={activeRestaurant}
-              setActiveRestaurant={setActiveRestaurant}
               setUserMovedMap={setUserMovedMap}
             />
           ))}

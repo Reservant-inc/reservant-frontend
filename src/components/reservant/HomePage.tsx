@@ -434,7 +434,7 @@ export default function HomePage() {
           restaurants={allRestaurants}
           setBounds={setBounds}
           activeRestaurant={selectedRestaurant ?? null}
-          setActiveRestaurant={handleRestaurantClick}
+          selectRestaurant={handleRestaurantClick}
           userMovedMap={userMovedMap}
           setUserMovedMap={setUserMovedMap}
         />
