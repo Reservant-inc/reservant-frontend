@@ -134,7 +134,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
       <button
         id="logoutDropdownItem"
         type="submit"
-        className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+        className="menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       >
         <Logout />
         <span className="ml-2">{t('tools.main.signout')}</span>
@@ -181,7 +181,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             classNames="menu-secondary"
             onEnter={calcHeight}
           >
-            <div className="w-full">
+            <div className="w-full p-2 flex flex-col gap-4">
               <button
                 id="backFromSettingsDropdownItem"
                 className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
@@ -189,7 +189,10 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
               >
                 <ChevronLeft />
               </button>
-              <div className="p-4">{t('tools.settings.setting')}</div>
+              <button className="menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5">
+                <Settings />
+                <span className="ml-2">{t('tools.settings.setting')} </span>
+              </button>
             </div>
           </CSSTransition>
 
@@ -200,7 +203,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             classNames="menu-secondary"
             onEnter={calcHeight}
           >
-            <div className="w-full">
+            <div className="w-full p-2 flex flex-col gap-4">
               <button
                 id="backFromLanguagesDropdownItem"
                 className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
@@ -209,7 +212,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 <ChevronLeft />
               </button>
               <button
-                className={`menu-item flex h-14 items-center rounded-lg p-2 ${
+                className={`menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5 ${
                   i18next.language === 'en' ? 'bg-grey-1 dark:bg-grey-5' : ''
                 }`}
                 onClick={() => handleLanguageChange('en')}
@@ -218,7 +221,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
                 <span className="ml-2">English</span>
               </button>
               <button
-                className={`menu-item flex h-14 items-center rounded-lg p-2 ${
+                className={`menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5 ${
                   i18next.language === 'pl' ? 'bg-grey-1 dark:bg-grey-5' : ''
                 }`}
                 onClick={() => handleLanguageChange('pl')}
