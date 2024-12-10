@@ -45,7 +45,7 @@ const NavBar: React.FC = () => {
   const [t] = useTranslation('global')
   const [isPressed, setIsPressed] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
-  const mainHeight = 240
+  const mainHeight = 200
   const [menuHeight, setMenuHeight] = useState(mainHeight)
   const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
 
