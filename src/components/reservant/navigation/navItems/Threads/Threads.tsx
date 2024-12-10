@@ -354,33 +354,29 @@ const Threads: React.FC = () => {
         )}
       </OutsideClickHandler>
       <div
-        className={`absolute bottom-0 right-[0.5rem] z-[0] z-[1] flex max-h-[400px] max-w-[675px] gap-2 ${activeThreads.length === 0 && inactiveThreads.length === 0 && 'invisible'}`}
+        className={`absolute bottom-0 right-[0.5rem] max-w-[620px] ${inactiveThreads.length > 0 && 'right-[4rem]'} z-[0] z-[1] flex h-[400px]  flex-row-reverse gap-[15px] ${activeThreads.length === 0 ? 'invisible' : activeThreads.length >= 2 ? 'w-[620]' : 'W-[310]'}`}
       >
-        <div
-          className={`flex h-[400px] w-full flex-row-reverse gap-[15px] ${activeThreads.length === 0 ? 'invisible' : activeThreads.length >= 2 ? 'w-[620]' : 'W-[310]'}`}
-        >
-          {activeThreads.map(activeThread => (
-            <Thread
-              key={activeThread.threadId}
-              thread={activeThread}
-              handleThreadClose={handleThreadClose}
-              handleThreadMinimize={handleThreadMinimize}
-            />
-          ))}
-        </div>
-        <div
-          className={`flex w-14 flex-col-reverse gap-2 py-4 ${inactiveThreads.length === 0 && 'hidden'}`}
-        >
-          {inactiveThreads.map(inactiveThread => (
-            <InactiveThread
-              key={inactiveThread.threadId}
-              thread={inactiveThread}
-              handleThreadMaximize={handleThreadMaximize}
-              renderUserPhotos={renderUserPhotos}
-              handleThreadClose={handleThreadClose}
-            />
-          ))}
-        </div>
+        {activeThreads.map(activeThread => (
+          <Thread
+            key={activeThread.threadId}
+            thread={activeThread}
+            handleThreadClose={handleThreadClose}
+            handleThreadMinimize={handleThreadMinimize}
+          />
+        ))}
+      </div>
+      <div
+        className={`absolute bottom-0 right-[0.5rem] z-[0] z-[1] flex w-14 flex-col-reverse gap-2 py-4 ${inactiveThreads.length === 0 && 'hidden'}`}
+      >
+        {inactiveThreads.map(inactiveThread => (
+          <InactiveThread
+            key={inactiveThread.threadId}
+            thread={inactiveThread}
+            handleThreadMaximize={handleThreadMaximize}
+            renderUserPhotos={renderUserPhotos}
+            handleThreadClose={handleThreadClose}
+          />
+        ))}
       </div>
     </div>
   )
