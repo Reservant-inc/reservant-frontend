@@ -380,7 +380,7 @@ export default function GuestHomePage() {
         <Map
           activeRestaurant={activeRestaurant}
           restaurants={restaurants}
-          setActiveRestaurant={setActiveRestaurant}
+          selectRestaurant={setActiveRestaurant}
           setBounds={setBounds}
           setUserMovedMap={setUserMovedMap}
           userMovedMap={userMovedMap}

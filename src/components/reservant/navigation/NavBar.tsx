@@ -17,19 +17,11 @@ const NavBar: React.FC = () => {
     <div className="flex h-full w-full items-center shadow-md dark:bg-black">
       <div className="mx-1 flex h-full w-full items-center p-1">
         <div className="flex h-full flex-1 items-center gap-2">
-          {isDark ? (
-            <img
-              src={LogoSecondary}
-              alt="logo"
-              className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
-            />
-          ) : (
-            <img
-              src={LogoPrimary}
-              alt="logo"
-              className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
-            />
-          )}
+          <img
+            src={isDark ? LogoSecondary : LogoPrimary}
+            alt="logo"
+            className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
+          />
           {size.width > 880 && (
             <h1
               className={

@@ -28,7 +28,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
   const [isPressed, setIsPressed] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
   const navigate = useNavigate()
-  const mainHeight = 360
+  const mainHeight = 328
   const [menuHeight, setMenuHeight] = useState(mainHeight)
 
   const theme = createTheme({
@@ -163,7 +163,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             classNames="menu-primary"
             onEnter={calcHeight}
           >
-            <div className="w-full p-2 flex flex-col gap-4">
+            <div className="w-full p-2 flex flex-col gap-2">
               <ThemeProvider theme={theme}>
                 <ProfileButton />
                 <SettingsButton />
@@ -200,7 +200,7 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
             classNames="menu-secondary"
             onEnter={calcHeight}
           >
-            <div className="w-full">
+            <div className="w-full p-2 flex flex-col gap-2">
               <button
                 id="backFromLanguagesDropdownItem"
                 className="menu-item flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
@@ -210,21 +210,21 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
               </button>
               <button
                 className={`menu-item flex h-14 items-center rounded-lg p-2 ${
-                  i18next.language === 'en' ? 'bg-grey-1 dark:bg-grey-5' : ''
+                  i18next.language === 'en' && 'bg-grey-1 dark:bg-grey-5'
                 }`}
                 onClick={() => handleLanguageChange('en')}
               >
-                <Language />
-                <span className="ml-2">English</span>
+                <Language className="dark:text-white" />
+                <span className="ml-2 dark:text-white">English</span>
               </button>
               <button
-                className={`menu-item flex h-14 items-center rounded-lg p-2 ${
-                  i18next.language === 'pl' ? 'bg-grey-1 dark:bg-grey-5' : ''
+                className={`menu-item flex h-14 items-center rounded-lg p-2 hover:bg-grey-1 dark:hover:bg-grey-5 ${
+                  i18next.language === 'pl' && 'bg-grey-1 dark:bg-grey-5'
                 }`}
                 onClick={() => handleLanguageChange('pl')}
               >
-                <Language />
-                <span className="ml-2">Polski</span>
+                <Language className="dark:text-white" />
+                <span className="ml-2 dark:text-white">Polski</span>
               </button>
             </div>
           </CSSTransition>
