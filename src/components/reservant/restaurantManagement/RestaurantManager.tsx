@@ -1,6 +1,6 @@
-import React from "react";
-import Menu from "./tabs/ManagementTabs";
-import { Outlet } from "react-router-dom";
+import React from 'react'
+import Menu from './tabs/ManagementTabs'
+import { Outlet } from 'react-router-dom'
 
 const RestaurantManager = () => {
   return (
@@ -20,7 +20,7 @@ const RestaurantManager = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default RestaurantManager;
+export default RestaurantManager
