@@ -69,7 +69,7 @@ const ManagementTabs: React.FC = ({}) => {
               id="management_employees"
             />
           </div>
-        ) : size.width > 1500 ? (
+        ) : size.width > 1000 ? (
           <div className="flex gap-2">
             <div className="flex items-center justify-center pl-2">
               <ListItemButton

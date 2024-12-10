@@ -22,7 +22,7 @@ const Tab: React.FC<TabProps> = ({ path, title, icon, id, full, onClose }) => {
 
   const handleClick = () => {
     navigate(path)
-    onClose
+    if (onClose) onClose()
   }
 
   return (
