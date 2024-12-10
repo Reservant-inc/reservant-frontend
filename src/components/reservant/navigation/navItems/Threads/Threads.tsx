@@ -354,7 +354,7 @@ const Threads: React.FC = () => {
         )}
       </OutsideClickHandler>
       <div
-        className={`absolute bottom-0 right-[0.5rem] max-w-[620px] ${inactiveThreads.length > 0 && 'right-[4rem]'} z-[0] z-[1] flex h-[400px]  flex-row-reverse gap-[15px] ${activeThreads.length === 0 ? 'invisible' : activeThreads.length >= 2 ? 'w-[620]' : 'W-[310]'}`}
+        className={`absolute bottom-0 right-[0.5rem] max-w-[620px] ${inactiveThreads.length > 0 && 'right-[4rem]'} z-[0] z-[1] flex h-[400px] flex-row-reverse gap-[15px] ${activeThreads.length === 0 ? 'invisible' : activeThreads.length >= 2 ? 'w-[620]' : 'W-[310]'}`}
       >
         {activeThreads.map(activeThread => (
           <Thread
