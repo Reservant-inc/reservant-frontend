@@ -305,6 +305,7 @@
         "comment": "Komentarz",
         "user": "Użytkownik",
         "loading-history": "Ładowanie historii...",
+        "actions": "Działania",
         "restaurant-no-ingredients": "Ta restauracja nie ma żadnych składników."
     },
     "delivery": {
@@ -332,7 +333,8 @@
         "cancel-delivery-message": "Czy na pewno chcesz anulować tę dostawę?",
         "filter-all": "Wszystkie dostawy",
         "filter-delivered": "Tylko dostarczone",
-        "filter-not-delivered": "Tylko niedostarczone"
+        "filter-not-delivered": "Tylko niedostarczone",
+        "actions": "Działania"
     },
     "profile": {
         "friends": {
