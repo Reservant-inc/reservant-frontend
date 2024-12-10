@@ -22,8 +22,7 @@ const DeliveriesTable: React.FC = () => {
   const { restaurantId } = useParams();
   const [t] = useTranslation('global');
 
-  const activeRestaurantId =
-    restaurantId === undefined ? -1 : parseInt(restaurantId);
+  const activeRestaurantId = restaurantId ? parseInt(restaurantId) : -1;
 
   useEffect(() => {
     if (activeRestaurantId !== -1) {
@@ -114,62 +113,41 @@ const DeliveriesTable: React.FC = () => {
       sortable: true,
     },
     {
-      field: 'confirm',
-      headerName: `${t('delivery.confirm')}`,
-      flex: 0.5,
+      field: 'actions',
+      headerName: `${t('delivery.actions')}`,
+      flex: 1.5,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => {
         const isDelivered = params.row.deliveredTime !== null;
         return (
-          <button
-            disabled={isDelivered}
-            onClick={() => handleOpenActionDialog(params.row.deliveryId, 'confirm')}
-            className={`flex items-center justify-center rounded-md p-1 ${
-              isDelivered
-                ? 'text-black dark:text-white'
-                : 'text-green dark:text-green'
-            }`}
-          >
-            {isDelivered ? "-": <CheckSharpIcon />}
-          </button>
+          <div className="flex gap-2">
+            <button
+              disabled={isDelivered}
+              onClick={() => handleOpenActionDialog(params.row.deliveryId, 'confirm')}
+              className={`flex items-center justify-center rounded-md p-1 ${
+                isDelivered ? 'text-black dark:text-white' : 'text-green dark:text-green'
+              }`}
+            >
+              <CheckSharpIcon />
+            </button>
+            <button
+              disabled={isDelivered}
+              onClick={() => handleOpenActionDialog(params.row.deliveryId, 'cancel')}
+              className={`flex items-center justify-center rounded-md p-1 ${
+                isDelivered ? 'text-black dark:text-white' : 'text-red dark:text-red'
+              }`}
+            >
+              <CloseSharpIcon />
+            </button>
+            <button
+              onClick={() => handleOpenDetailsDialog(params.row.deliveryId)}
+              className="flex items-center justify-center rounded-md p-1 text-primary dark:text-secondary"
+            >
+              <ManageSearchIcon />
+            </button>
+          </div>
         );
       },
-    },
-    {
-      field: 'cancel',
-      headerName: `${t('delivery.cancel')}`,
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => {
-        const isDelivered = params.row.deliveredTime !== null;
-        return (
-          <button
-            disabled={isDelivered}
-            onClick={() => handleOpenActionDialog(params.row.deliveryId, 'cancel')}
-            className={`flex items-center justify-center rounded-md p-1 ${
-              isDelivered
-                ? 'text-black dark:text-white'
-                : 'text-red dark:text-red'
-            }`}
-          >
-            {isDelivered ? "-" : <CloseSharpIcon />}
-          </button>
-        );
-      },
-    },
-    {
-      field: 'details',
-      headerName: `${t('delivery.details')}`,
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <button
-          onClick={() => handleOpenDetailsDialog(params.row.deliveryId)}
-          className="flex items-center justify-center rounded-md p-1 text-primary dark:text-secondary"
-        >
-          <ManageSearchIcon />
-        </button>
-      ),
     },
   ];
 
@@ -196,17 +174,15 @@ const DeliveriesTable: React.FC = () => {
             <CircularProgress />
           </div>
         ) : filteredDeliveries.length > 0 ? (
-          <div>
-            <DataGrid
-              rows={filteredDeliveries.map((delivery, index) => ({
-                ...delivery,
-                id: delivery.deliveryId || index,
-              }))}
-              columns={columns}
-              pageSizeOptions={[5, 10, 25, 100]}
-              disableRowSelectionOnClick
-            />
-          </div>
+          <DataGrid
+            rows={filteredDeliveries.map((delivery, index) => ({
+              ...delivery,
+              id: delivery.deliveryId || index,
+            }))}
+            columns={columns}
+            pageSizeOptions={[5, 10, 25, 100]}
+            disableRowSelectionOnClick
+          />
         ) : (
           <div className="flex flex-col justify-center items-center h-full text-lg gap-4">
             <p className="text-black dark:text-white">

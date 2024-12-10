@@ -312,6 +312,7 @@
         "comment": "Comment",
         "user": "User",
         "loading-history": "Loading history...",
+        "actions": "Actions",
         "restaurant-no-ingredients": "This restaurant does not have any ingredients."
     },
     "delivery": {
@@ -339,6 +340,7 @@
         "cancel-delivery-message": "Do you want to cancel this delivery?",
         "filter-all": "All deliveries",
         "filter-delivered": "Delivered only",
+        "actions": "Actions",
         "filter-not-delivered": "Not delivered only"
     },
     "profile": {
