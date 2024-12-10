@@ -354,9 +354,11 @@ const Threads: React.FC = () => {
         )}
       </OutsideClickHandler>
       <div
-        className={`absolute bottom-0 right-[0.5rem] z-[0] z-[1] flex h-[400px] w-[675px] gap-2 ${activeThreads.length === 0 && inactiveThreads.length === 0 && 'invisible'}`}
+        className={`absolute bottom-0 right-[0.5rem] z-[0] z-[1] flex max-h-[400px] max-w-[675px] gap-2 ${activeThreads.length === 0 && inactiveThreads.length === 0 && 'invisible'}`}
       >
-        <div className={`flex h-full w-full flex-row-reverse gap-[15px]`}>
+        <div
+          className={`flex h-[400px] w-full flex-row-reverse gap-[15px] ${activeThreads.length === 0 ? 'invisible' : activeThreads.length >= 2 ? 'w-[620]' : 'W-[310]'}`}
+        >
           {activeThreads.map(activeThread => (
             <Thread
               key={activeThread.threadId}
@@ -366,7 +368,9 @@ const Threads: React.FC = () => {
             />
           ))}
         </div>
-        <div className={`flex h-full w-14 flex-col-reverse gap-2 py-4`}>
+        <div
+          className={`flex w-14 flex-col-reverse gap-2 py-4 ${inactiveThreads.length === 0 && 'hidden'}`}
+        >
           {inactiveThreads.map(inactiveThread => (
             <InactiveThread
               key={inactiveThread.threadId}
