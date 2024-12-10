@@ -17,6 +17,8 @@ import { createTheme, Switch, ThemeProvider } from '@mui/material'
 import { CSSTransition } from 'react-transition-group'
 import { Form } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import Cookies from 'js-cookie'
+import { UserInfo } from '../../../services/types'
 
 const theme = createTheme({
   components: {
@@ -48,6 +50,8 @@ const NavBar: React.FC = () => {
   const mainHeight = 200
   const [menuHeight, setMenuHeight] = useState(mainHeight)
   const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
+
+  const user = JSON.parse(Cookies.get('userInfo') as string) as UserInfo
 
   const size = useWindowDimensions()
 
@@ -135,6 +139,10 @@ const NavBar: React.FC = () => {
         </div>
 
         <div className="flex h-full items-center justify-end gap-3">
+          <h1 className="dark:text-white">
+            {user.firstName} {user.lastName}
+          </h1>
+
           <OutsideClickHandler
             onOutsideClick={pressHandler}
             isPressed={isPressed}
