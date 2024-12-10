@@ -8,22 +8,21 @@ import { RestaurantDetailsType } from '../../../services/types'
 
 interface CustomMarkerProps {
   position: L.LatLngExpression
-  restaurant: { name: string }
-  activeRestaurant: RestaurantDetailsType | null
-  setActiveRestaurant: Function
+  restaurant: RestaurantDetailsType
   setUserMovedMap?: Function
+  isActive: boolean
+  selectRestaurant: Function
 }
 
 const CustomMarker: React.FC<CustomMarkerProps> = ({
   position,
   restaurant,
-  activeRestaurant,
-  setActiveRestaurant,
-  setUserMovedMap
+  setUserMovedMap,
+  isActive,
+  selectRestaurant
 }) => {
   let isCurrentRestaurant
-  if (activeRestaurant != null)
-    isCurrentRestaurant = restaurant.name === activeRestaurant.name
+  if (isActive) isCurrentRestaurant = restaurant.name
 
   let marker = isCurrentRestaurant ? MarkerPrimary : MarkerBlack
 
@@ -39,7 +38,7 @@ const CustomMarker: React.FC<CustomMarkerProps> = ({
       icon={customIcon}
       eventHandlers={{
         click: e => {
-          setActiveRestaurant(activeRestaurant?.restaurantId)
+          selectRestaurant(restaurant?.restaurantId)
           if (setUserMovedMap != undefined) {
             setUserMovedMap(false)
           }

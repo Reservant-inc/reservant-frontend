@@ -15,19 +15,11 @@ const GuestNavBar: React.FC = () => {
     <div className="flex h-full w-full items-center shadow-md dark:bg-black">
       <div className="mx-1 flex h-full w-full items-between p-1">
         <div className="flex h-full flex-1 items-center gap-2">
-          {isDark ? (
-            <img
-              src={LogoSecondary}
-              alt="logo"
-              className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
-            />
-          ) : (
-            <img
-              src={LogoPrimary}
-              alt="logo"
-              className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
-            />
-          )}
+          <img
+            src={isDark ? LogoSecondary : LogoPrimary}
+            alt="logo"
+            className="h-[45px] max-h-[45px] min-w-[45px] max-w-[45px]"
+          />
           {size.width > 880 && (
             <h1
               className={
@@ -42,13 +34,13 @@ const GuestNavBar: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <button
-            className="h-fit flex items-center justify-center gap-1 shadow-md px-4  border-[1px] rounded-lg p-1 border-primary text-primary transition bg-primary text-white hover:bg-white hover:text-primary"
+            className="h-fit flex items-center justify-center gap-1  px-4 border-[1px] rounded-lg p-1 border-primary dark:border-secondary text-white dark:text-dark bg-primary dark:bg-secondary"
             onClick={() => navigate('/register')}
           >
             REGISTER
           </button>
           <button
-            className="h-fit flex items-center justify-center gap-1 px-4 shadow-md border-[1px] rounded-lg p-1 border-primary text-primary transition bg-primary text-white hover:bg-white hover:text-primary"
+            className="h-fit flex items-center justify-center gap-1  px-4 border-[1px] rounded-lg p-1 border-primary dark:border-secondary text-white dark:text-dark bg-primary dark:bg-secondary"
             onClick={() => navigate('/login')}
           >
             LOGIN
