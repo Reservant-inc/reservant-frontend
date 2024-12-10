@@ -393,6 +393,10 @@ export type InterestedUser = {
   photo: string
 }
 
+export type Participants = {
+  userId: string; firstName: string; lastName: string; photo: string;
+}
+
 export type FriendData = {
   dateSent: string
   dateRead: string | null
