@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ReportType } from '../../../../services/types'
 import { Message } from '@mui/icons-material'
-import { format, parse } from 'date-fns'
+import i18next from 'i18next'
 interface ReportProps {
   report: ReportType
 }
@@ -9,7 +9,7 @@ interface ReportProps {
 const Report: React.FC<ReportProps> = ({ report }) => {
   const formatTimestamp = (timestamp: string): string => {
     const date = new Date(timestamp)
-    return date.toLocaleString('en-GB', {
+    return date.toLocaleString(i18next.language === 'en' ? 'en-GB' : 'pl-PL', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
