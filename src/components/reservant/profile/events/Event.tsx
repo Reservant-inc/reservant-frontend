@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   fetchDELETE,
   fetchGET,
@@ -11,10 +11,12 @@ import {
   InterestedUser
 } from '../../../../services/types'
 import { EventListType } from '../../../../services/enums'
-import EventDialog from './EventDialog'
 import DefaultImage from '../../../../assets/images/user.jpg'
 import Cookies from 'js-cookie'
 import { format } from 'date-fns'
+import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
+import ParticipantMenageDialog from './ParticipantMenageDialog';
+import EventEditDialog from './EventEditDialog'
 
 interface EventProps {
   event: EventDataType
@@ -31,24 +33,33 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [loadingParticipants, setLoadingParticipants] = useState(false)
   const [interestedUsers, setInterestedUsers] = useState<InterestedUser[]>([])
+  const [participants, setParticipants] =  useState<InterestedUser[]>([])
 
   const userInfo = JSON.parse(Cookies.get('userInfo') as string)
 
   const creator = event.creator
   const restaurant = event.restaurant
 
-  const openDialog = (
+
+  const openDialog = async (
     type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit'
   ) => {
-    setDialogState({ isOpen: true, type })
+    setDialogState({ isOpen: true, type });
+  
     if (type === 'details') {
-      fetchEventDetails()
+      await fetchEventDetails();
     }
+
+    if (type === 'edit') {
+      await fetchEventDetails();
+    }
+    
     if (type === 'manageParticipants') {
-      fetchEventDetails()
-      fetchInterestedUsers()
+      await fetchEventDetails(); 
+      await fetchInterestedUsers();
     }
-  }
+  };
+  
 
   const closeDialog = () => {
     setDialogState({ isOpen: false, type: null })
@@ -79,8 +90,9 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const fetchEventDetails = async () => {
     setLoadingDetails(true)
     try {
-      const response = await fetchGET(`/events/${event.eventId}`)
+      const response = await fetchGET(`/events/${event.eventId}`) 
       setEventDetails(response)
+      setParticipants(response.participants || []) 
     } catch (error) {
       console.error('Error fetching event details:', error)
     } finally {
@@ -121,6 +133,11 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
 
   const formatDate = (date: string): string => {
     return format(new Date(date), 'dd.MM.yyyy HH:mm')
+  }
+
+  const handleSucces = () => {
+    closeDialog();
+    refreshEvents()
   }
 
   return (
@@ -175,10 +192,10 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 py-3">
         {listType === EventListType.Interested && (
           <button
-            className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105 mt-4"
+            className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             onClick={() => openDialog('leave')}
           >
             Usuń zainteresowanie
@@ -186,51 +203,81 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
         )}
         {listType === EventListType.Participates && (
           <button
-            className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105 mt-4"
+            className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             onClick={() => openDialog('leave')}
           >
             Opuść
           </button>
         )}
+        <div className='flex space-x-4'>
         {listType === EventListType.Created && (
           <>
             <button
-              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => openDialog('manageParticipants')}
             >
               Zarządzaj uczestnikami
             </button>
             <button
-              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => openDialog('edit')}
             >
               Edytuj
             </button>
             <button
-              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
               onClick={() => openDialog('delete')}
             >
               Usuń
             </button>
           </>
         )}
+        </div>
       </div>
 
-      {dialogState.isOpen && (
-        <EventDialog
-          dialogState={dialogState}
-          event={event}
-          eventDetails={eventDetails}
-          interestedUsers={interestedUsers}
-          loadingDetails={loadingDetails}
-          loadingParticipants={loadingParticipants}
+      {dialogState.isOpen && dialogState.type === 'manageParticipants' && (
+        <ParticipantMenageDialog
+          open={dialogState.isOpen}
           onClose={closeDialog}
-          onDelete={handleDeleteEvent}
-          onLeave={handleLeaveEvent}
-          onRejectUser={handleRejectUser}
+          participants={participants}
+          interestedUsers={interestedUsers}
           onAcceptUser={handleAcceptUser}
+          onRejectUser={handleRejectUser}
+          mustJoinUntil={eventDetails?.mustJoinUntil}
+          maxPeople={eventDetails?.maxPeople}
         />
       )}
+
+      {dialogState.isOpen && dialogState.type === 'edit' && eventDetails !== null && (
+        <EventEditDialog
+          open={dialogState.isOpen}
+          onClose={closeDialog}
+          event={eventDetails}
+          onSuccess={handleSucces}
+        />
+      )}
+
+      
+
+
+      {dialogState.isOpen && dialogState.type === 'leave' && (
+        <ConfirmationDialog
+          open={dialogState.isOpen}
+          onClose={closeDialog}
+          onConfirm={handleLeaveEvent}
+          confirmationText="Are you sure you want to leave this event?"
+        />
+      )}
+
+      {dialogState.isOpen && dialogState.type === 'delete' && (
+        <ConfirmationDialog
+          open={dialogState.isOpen}
+          onClose={closeDialog}
+          onConfirm={handleDeleteEvent}
+          confirmationText="Are you sure you want to delete this event?"
+        />
+      )}
+
     </div>
   )
 }

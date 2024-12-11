@@ -369,7 +369,7 @@ export type EventDataType = {
     photo: string
   }>
   restaurant: {
-    restaurantId: number
+    restaurantId: number | null
     name: string
     address: string
     city: string
@@ -391,6 +391,10 @@ export type InterestedUser = {
   firstName: string
   lastName: string
   photo: string
+}
+
+export type Participants = {
+  userId: string; firstName: string; lastName: string; photo: string;
 }
 
 export type FriendData = {
