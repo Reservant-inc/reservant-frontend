@@ -75,7 +75,7 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
           <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
         </div>
 
-        <div className="flex flex-col h-full pr-2 overflow-y-auto scroll divide-y-[1px] divide-grey-1">
+        <div className="flex flex-col h-full pr-2 overflow-y-auto scroll gap-2">
           {filteredReports.length === 0 ? (
             <p className="italic text-center">{noEventsMessage[listType]}</p>
           ) : (
