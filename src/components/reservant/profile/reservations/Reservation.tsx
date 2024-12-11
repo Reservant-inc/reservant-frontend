@@ -160,7 +160,7 @@ const Reservation: React.FC<ReservationProps> = ({
         <>
           <div className="flex flex-col gap-2">
             <button
-              className={`text-sm px-4 border-[1px] rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
+              className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
               onClick={() => setIsComplaining(true)}
             >
               Report a problem
@@ -171,7 +171,7 @@ const Reservation: React.FC<ReservationProps> = ({
             onClose={() => setIsComplaining(false)}
             title="Make a complaint"
           >
-            <div className="flex flex-col gap-4 p-4 w-[400px]">
+            <div className="flex flex-col gap-4 dark:text-grey-1 p-4 w-[400px]">
               <label htmlFor="report-type" className="text-sm font-bold">
                 What is your report about?
               </label>
@@ -179,14 +179,31 @@ const Reservation: React.FC<ReservationProps> = ({
                 id="report-type"
                 value={reportType}
                 onChange={e => setReportType(e.target.value)}
-                className="border-[1px] rounded-md p-2"
+                className="border-[1px] rounded-md p-2 dark:bg-black"
               >
-                <option value="" disabled>
+                <option
+                  value=""
+                  disabled
+                  className="dark:text-grey-1 dark:bg-black"
+                >
                   Select a report type
                 </option>
-                <option value="lost-item">Lost item</option>
-                <option value="complain-order">Complain about an order</option>
-                <option value="complain-employee">
+                <option
+                  value="lost-item"
+                  className="dark:text-grey-1 dark:bg-black"
+                >
+                  Lost item
+                </option>
+                <option
+                  value="complain-order"
+                  className="dark:text-grey-1 dark:bg-black"
+                >
+                  Complain about an order
+                </option>
+                <option
+                  value="complain-employee"
+                  className="dark:text-grey-1 dark:bg-black"
+                >
                   Complain about an employee
                 </option>
               </select>
@@ -220,7 +237,7 @@ const Reservation: React.FC<ReservationProps> = ({
                 value={reportNote}
                 onChange={e => setReportNote(e.target.value)}
                 placeholder="Describe your issue in detail..."
-                className="border-[1px] rounded-md p-2 h-20 scroll"
+                className="border-[1px] rounded-md p-2 h-20 scroll dark:text-grey-1 dark:bg-black"
               />
 
               <button
