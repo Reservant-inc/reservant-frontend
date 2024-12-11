@@ -19,6 +19,7 @@ import { Form } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Cookies from 'js-cookie'
 import { UserInfo } from '../../../services/types'
+import Threads from '../../reservant/navigation/navItems/Threads/Threads'
 
 const theme = createTheme({
   components: {
@@ -142,6 +143,8 @@ const NavBar: React.FC = () => {
           <h1 className="dark:text-white">
             {user.firstName} {user.lastName}
           </h1>
+
+          <Threads />
 
           <OutsideClickHandler
             onOutsideClick={pressHandler}
