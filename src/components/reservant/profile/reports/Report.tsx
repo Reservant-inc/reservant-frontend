@@ -20,21 +20,25 @@ const Report: React.FC<ReportProps> = ({ report }) => {
   }
 
   return (
-    <div className="flex flex-col w-full h-fit p-3 gap-2 bg-grey-5 rounded-lg">
-      <div className="justify-between flex">
-        <div className="flex flex-col gap-[1px]">
-          <h1 className="text-lg">{report.category}</h1>
-          {report.reportDate && (
-            <p className="text-xs">{formatTimestamp(report.reportDate)}</p>
-          )}
-          <p className="text-xs">Report ID: {report.reportId}</p>
+    <div className="p-3 pl-0">
+      <div className="flex flex-col w-full h-fit border-l-[1px] pl-3 dark:border-grey-0 border-grey-2 gap-2 ">
+        <div className="justify-between flex">
+          <div className="flex flex-col gap-[1px]">
+            <h1 className="text-lg">{report.category}</h1>
+            {report.reportDate && (
+              <p className="text-xs">{formatTimestamp(report.reportDate)}</p>
+            )}
+            <p className="text-xs">Report ID: {report.reportId}</p>
+          </div>
+          <button>
+            <Message />
+          </button>
         </div>
-        <button>
-          <Message />
-        </button>
+        <hr className="dark:text-grey-0 text-grey-2" />
+        <p className="text-sm text-wrap overflow-hidden">
+          {report.description}
+        </p>
       </div>
-      <hr />
-      <p className="text-sm text-wrap overflow-hidden">{report.description}</p>
     </div>
   )
 }
