@@ -52,7 +52,11 @@ const NavBar: React.FC = () => {
   const [menuHeight, setMenuHeight] = useState(mainHeight)
   const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
 
-  const user = JSON.parse(Cookies.get('userInfo') as string) as UserInfo
+  const data = Cookies.get('userInfo') as string
+
+  let user = { firstName: '', lastName: '' }
+
+  if (data) user = JSON.parse(Cookies.get('userInfo') as string) as UserInfo
 
   const size = useWindowDimensions()
 
