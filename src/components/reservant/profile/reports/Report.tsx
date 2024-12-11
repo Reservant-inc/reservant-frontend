@@ -9,7 +9,7 @@ interface ReportProps {
 const Report: React.FC<ReportProps> = ({ report }) => {
   const formatTimestamp = (timestamp: string): string => {
     const date = new Date(timestamp)
-    return date.toLocaleString(undefined, {
+    return date.toLocaleString('en-GB', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
