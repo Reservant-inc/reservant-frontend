@@ -16,6 +16,7 @@ import Cookies from 'js-cookie'
 import { format } from 'date-fns'
 import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
 import ParticipantMenageDialog from './ParticipantMenageDialog';
+import EventEditDialog from './EventEditDialog'
 
 interface EventProps {
   event: EventDataType
@@ -46,6 +47,10 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
     setDialogState({ isOpen: true, type });
   
     if (type === 'details') {
+      await fetchEventDetails();
+    }
+
+    if (type === 'edit') {
       await fetchEventDetails();
     }
     
@@ -85,7 +90,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const fetchEventDetails = async () => {
     setLoadingDetails(true)
     try {
-      const response = await fetchGET(`/events/${event.eventId}`)
+      const response = await fetchGET(`/events/${event.eventId}`) 
       setEventDetails(response)
       setParticipants(response.participants || []) 
     } catch (error) {
@@ -128,6 +133,11 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
 
   const formatDate = (date: string): string => {
     return format(new Date(date), 'dd.MM.yyyy HH:mm')
+  }
+
+  const handleSucces = () => {
+    closeDialog();
+    refreshEvents()
   }
 
   return (
@@ -234,8 +244,20 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           onAcceptUser={handleAcceptUser}
           onRejectUser={handleRejectUser}
           mustJoinUntil={eventDetails?.mustJoinUntil}
+          maxPeople={eventDetails?.maxPeople}
         />
       )}
+
+      {dialogState.isOpen && dialogState.type === 'edit' && eventDetails !== null && (
+        <EventEditDialog
+          open={dialogState.isOpen}
+          onClose={closeDialog}
+          event={eventDetails}
+          onSuccess={handleSucces}
+        />
+      )}
+
+      
 
 
       {dialogState.isOpen && dialogState.type === 'leave' && (

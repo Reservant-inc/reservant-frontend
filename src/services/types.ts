@@ -369,7 +369,7 @@ export type EventDataType = {
     photo: string
   }>
   restaurant: {
-    restaurantId: number
+    restaurantId: number | null
     name: string
     address: string
     city: string

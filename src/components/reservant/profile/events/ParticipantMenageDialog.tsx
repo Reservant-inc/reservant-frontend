@@ -16,6 +16,7 @@ interface ParticipantMenageDialogProps {
   onAcceptUser: (userId: string) => void;
   onRejectUser: (userId: string) => void;
   mustJoinUntil?: string | null;
+  maxPeople?: number; // Dodano pole `maxPeople`
 }
 
 const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
@@ -25,12 +26,16 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
   interestedUsers,
   onAcceptUser,
   onRejectUser,
-  mustJoinUntil
+  mustJoinUntil,
+  maxPeople
 }) => {
   // Check if the current date is past mustJoinUntil
   const isPastDeadline = mustJoinUntil
     ? new Date() > new Date(mustJoinUntil)
     : false;
+
+  // Check if the maxPeople limit has been reached
+  const isLimitReached = maxPeople !== undefined && participants.length >= maxPeople;
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md"
@@ -50,7 +55,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
             <h2 className="text-lg font-bold mb-1 dark:text-white">
               Uczestnicy <span className="text-grey-3">({participants.length})</span>
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-4 dark:text-white">
               {participants.map((user) => (
                 <div key={user.userId} className="flex items-center space-x-4">
                   <img
@@ -89,15 +94,17 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
                         title={
                           isPastDeadline
                             ? 'Czas na akceptację minął'
+                            : isLimitReached
+                            ? 'Osiągnięto limit uczestników'
                             : 'Zaakceptuj użytkownika'
                         }
                       >
                         <button
                           className={` ${
-                            isPastDeadline ? 'text-grey-3' : 'text-primary'
+                            isPastDeadline || isLimitReached ? 'text-grey-3' : 'text-primary'
                           }`}
-                          onClick={() => !isPastDeadline && onAcceptUser(user.userId)}
-                          disabled={isPastDeadline}
+                          onClick={() => !isPastDeadline && !isLimitReached && onAcceptUser(user.userId)}
+                          disabled={isPastDeadline || isLimitReached}
                         >
                           <CheckSharpIcon />
                         </button>
