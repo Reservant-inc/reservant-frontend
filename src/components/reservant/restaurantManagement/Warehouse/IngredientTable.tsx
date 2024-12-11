@@ -330,34 +330,28 @@ const IngredientTable: React.FC = () => {
       sortable: true
     },
     {
-      field: 'edit',
-      headerName: `${t('warehouse.edit')}`,
-      flex: 1,
+      field: 'actions',
+      headerName: `${t('warehouse.actions')}`,
+      flex: 1.5,
       disableColumnMenu: true,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          onClick={() => handleOpenEditDialog(params.row)}
-          color="inherit"
-        />
-      )
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleOpenEditDialog(params.row)}
+            
+          >
+            <EditIcon color="action"/>
+          </button>
+          <button
+            onClick={() => handleOpenHistoryDialog(params.row)}
+            
+          >
+            <ListIcon color="action"/>
+          </button>
+        </div>
+      ),
     },
-    {
-      field: 'history',
-      headerName: `${t('warehouse.history')}`,
-      flex: 1,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <GridActionsCellItem
-          icon={<ListIcon />}
-          label="History"
-          onClick={() => handleOpenHistoryDialog(params.row)}
-          color="inherit"
-        />
-      )
-    }
   ]
 
   const EditToolbar = () => (
