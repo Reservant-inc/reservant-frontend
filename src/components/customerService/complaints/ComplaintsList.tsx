@@ -10,8 +10,6 @@ import ComplaintDetails from './ComplaintDetails'
 
 const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<any[]>([])
-  const [filteredReports, setFilteredReports] = useState<any[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>('All')
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
   const { reportId } = useParams<{ reportId: string }>()
@@ -24,7 +22,7 @@ const ComplaintsList: React.FC = () => {
     if (reportId) {
       navigate('/customer-service/reports')
     }
-  }, [selectedCategory, reports])
+  }, [reports])
 
   const fetchReports = async () => {
     setLoading(true)
@@ -149,9 +147,9 @@ const ComplaintsList: React.FC = () => {
               <div className="flex justify-center items-center h-full">
                 <CircularProgress />
               </div>
-            ) : filteredReports.length > 0 ? (
+            ) : reports.length > 0 ? (
               <DataGrid
-                rows={filteredReports.map(report => ({
+                rows={reports.map(report => ({
                   id: report.reportId,
                   reportDate: new Date(report.reportDate).toLocaleDateString(),
                   category: report.category,
