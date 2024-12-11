@@ -1,6 +1,5 @@
 import React, { createContext, ReactNode, useState, useMemo } from 'react'
 import { CartItemType } from '../services/types'
-import { clear } from 'console'
 
 interface CartContextProps {
   children: ReactNode
