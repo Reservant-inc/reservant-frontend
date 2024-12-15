@@ -305,7 +305,10 @@ const Account: React.FC = () => {
           <h1 className="text-lg font-mont-bd">Wallet</h1>
           <button
             className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
-            onClick={() => setShowMoneyDialog(prev => !prev)}
+            onClick={() => {
+              setShowMoneyDialog(true)
+              console.log(showMoneyDialog)
+            }}
           >
             <AttachMoneyIcon className="w-4 h-4" />
             Add wallet funds
@@ -489,6 +492,7 @@ const Account: React.FC = () => {
             setValue(0)
           }}
           title={`Add funds`}
+          open={showMoneyDialog}
         >
           <div className="p-6 flex flex-col gap-6">
             <div className="flex gap-2 items-center">
@@ -509,7 +513,7 @@ const Account: React.FC = () => {
             <button
               className="self-end flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
               onClick={() => {
-                setShowMoneyDialog(prev => !prev)
+                setShowMoneyDialog(false)
                 addFunds()
                 setValue(0)
               }}

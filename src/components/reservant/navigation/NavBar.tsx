@@ -14,7 +14,7 @@ const NavBar: React.FC = () => {
   const size = useWindowDimensions()
 
   return (
-    <div className="flex h-full w-full items-center shadow-md dark:bg-black">
+    <div className="flex h-full w-full items-center dark:bg-black">
       <div className="mx-1 flex h-full w-full items-center p-1">
         <div className="flex h-full flex-1 items-center gap-2">
           <img
