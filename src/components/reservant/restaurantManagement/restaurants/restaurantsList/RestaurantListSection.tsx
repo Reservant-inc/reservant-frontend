@@ -75,24 +75,35 @@ const RestaurantListSection: React.FC = () => {
         )
 
         for (const i in response2.restaurants) {
+      
+          const response3 = await fetchGET(`/my-restaurants/${response2.restaurants[i].restaurantId}`)
+
           tmp.push({
             id: Number(indx++),
+            groupId: group.restaurantGroupId,
             groupName: group.name,
-            restaurantId: response2.restaurants[i].restaurantId,
-            name: response2.restaurants[i].name,
-            restaurantType: response2.restaurants[i]
-              .restaurantType as LocalType,
-            address: response2.restaurants[i].address,
-            city: response2.restaurants[i].city,
-            isVerified: response2.restaurants[i].isVerified,
-            reservationDeposit: response2.restaurants[i].reservationDeposit,
-            maxReservationDurationMinutes:
-              response2.restaurants[i].maxReservationDurationMinutes,
-            tags: response2.restaurants[i].tags,
-            provideDelivery: response2.restaurants[i].provideDelivery,
-            logo: response2.restaurants[i].logo,
-            description: response2.restaurants[i].description,
-            location: response2.restaurants[i].location
+            restaurantId: response3.restaurantId,
+            name: response3.name,
+            restaurantType: response3.restaurantType as LocalType,
+            address: response3.address,
+            city: response3.city,
+            isVerified: response3.isVerified,
+            reservationDeposit: response3.reservationDeposit,
+            maxReservationDurationMinutes: response3.maxReservationDurationMinutes,
+            tags: response3.tags,
+            provideDelivery: response3.provideDelivery,
+            logo: response3.logo,
+            description: response3.description,
+            location: response3.location,
+            openingHours: response3.openingHours,
+            nip: response3.nip,
+            idCard: response3.idCard,
+            photos: response3.photos,
+            postalIndex: response3.postalIndex,
+            businessPermission: response3.businessPermission,
+            rentalContract: response3.rentalContract,
+            alcoholLicense: response3.alcoholLicense,
+            tables: response3.tables
           })
         }
       }
@@ -148,21 +159,37 @@ const RestaurantListSection: React.FC = () => {
   }
   const processRowUpdate = async (newRow: any) => {
     try {
-      const { id, ...rowToUpdate } = newRow
+        const { id, ...rowToUpdate } = newRow;
 
-      console.log('Dane wysyłane do API:', rowToUpdate)
+        // Usuwanie przedrostka '/uploads/' z wybranych pól, jeśli istnieją
+        const fieldsToClean = ['businessPermission', 'rentalContract', 'alcoholLicense', 'logo','idCard'];
+        fieldsToClean.forEach((field) => {
+            if (rowToUpdate[field]?.startsWith('/uploads/')) {
+                rowToUpdate[field] = rowToUpdate[field].replace('/uploads/', '');
+            }
+        });
 
-      await fetchPUT(
-        `/my-restaurants/${newRow.restaurantId}`,
-        JSON.stringify(rowToUpdate)
-      )
-      populateRows()
-      return newRow
+        // Usuwanie przedrostka '/uploads/' z elementów tablicy photos, jeśli istnieją
+        if (Array.isArray(rowToUpdate.photos)) {
+          rowToUpdate.photos = rowToUpdate.photos.map((photo: string) =>
+              photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
+          );
+      }
+
+        console.log('Dane wysyłane do API:', rowToUpdate);
+
+        await fetchPUT(
+            `/my-restaurants/${newRow.restaurantId}`,
+            JSON.stringify(rowToUpdate)
+        );
+        populateRows();
+        return newRow;
     } catch (error) {
-      console.error('Error updating restaurant:', error)
-      throw error
+        console.error('Error updating restaurant:', error);
+        throw error;
     }
-  }
+};
+
 
   const EditToolbar: React.FC<
     GridToolbarProps & { onAddClick: () => void }

@@ -61,6 +61,7 @@ export type RestaurantShortType = {
 
 export type RestaurantType = {
   id: number
+  groupId: number
   groupName: string
   restaurantId: number
   name: string
@@ -76,8 +77,20 @@ export type RestaurantType = {
   maxReservationDurationMinutes: number
   tags: string[]
   provideDelivery: boolean
-  logo: File | null | string
+  logo: string
   description: string
+  openingHours: OpeningHoursType[]
+  nip: string
+  idCard: string
+  photos: string[]
+  postalIndex: string
+  businessPermission: string
+  rentalContract: string
+  alcoholLicense: string
+  tables: {
+    tableId: number
+    capacity: number
+  }[]
 }
 
 export type OpeningHoursType = {
