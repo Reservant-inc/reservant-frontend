@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import LogoSecondary from '../../../assets/images/LOGO-SECONDARY.png'
 import LogoPrimary from '../../../assets/images/LOGO-PRIMARY.png'
 import Sections from './navItems/MenuSections'
@@ -7,9 +7,10 @@ import Notifications from './navItems/Notifications/Notifications'
 import FriendSearchBar from './navItems/Friends/FriendSearchBar'
 import Threads from './navItems/Threads/Threads'
 import useWindowDimensions from '../../../hooks/useWindowResize'
+import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const NavBar: React.FC = () => {
-  const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
+  const { isDark } = useContext(ThemeContext)
 
   const size = useWindowDimensions()
 
@@ -39,8 +40,8 @@ const NavBar: React.FC = () => {
         <div className="flex h-full flex-1 items-center justify-end gap-3">
           <FriendSearchBar />
           <Threads />
-          <Notifications isDark={isDark} />
-          <Tools setIsDark={setIsDark} />
+          <Notifications />
+          <Tools />
         </div>
       </div>
     </div>

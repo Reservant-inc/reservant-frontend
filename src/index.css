@@ -208,7 +208,7 @@ dialog::backdrop {
   border-bottom-color: transparent !important
 }
 
-/* Mui DataGrid style */
+/* Mui DataGrid style 
 
 .MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within {
   outline: none !important
@@ -271,7 +271,8 @@ dialog::backdrop {
 .dark .css-zylse7-MuiButtonBase-root-MuiIconButton-root{
   color: var(--tw-color-grey-2) !important
 }
-
+  
+*/
 
 @tailwind base;
 @layer base{
