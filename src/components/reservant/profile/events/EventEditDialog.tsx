@@ -1,67 +1,86 @@
-import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, TextField, Button } from '@mui/material';
-import { Formik, Field, Form } from 'formik';
-import { FormikHelpers } from 'formik';
-import * as Yup from 'yup';
-import { fetchFilesPOST, fetchPUT } from '../../../../services/APIconn';  // Assuming fetchPUT is implemented in your API service
-import { EventDataType } from '../../../../services/types';
-import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { getImage } from '../../../../services/APIconn';
-import DefaultImage from '../../../../assets/images/user.jpg';
+import React, { useState } from 'react'
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  Button
+} from '@mui/material'
+import { Formik, Field, Form } from 'formik'
+import { FormikHelpers } from 'formik'
+import * as Yup from 'yup'
+import { fetchFilesPOST, fetchPUT } from '../../../../services/APIconn' // Assuming fetchPUT is implemented in your API service
+import { EventDataType } from '../../../../services/types'
+import CloseSharpIcon from '@mui/icons-material/CloseSharp'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { getImage } from '../../../../services/APIconn'
+import DefaultImage from '../../../../assets/images/user.jpg'
 
 interface EventEditDialogProps {
-  open: boolean;
-  onClose: () => void;
-  event: EventDataType;
-  onSuccess: () => void;
+  open: boolean
+  onClose: () => void
+  event: EventDataType
+  onSuccess: () => void
 }
 
-const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event, onSuccess }) => {
-  const [photoPath, setPhotoPath] = useState<string>(event.photo || DefaultImage);
-  const [isHovered, setIsHovered] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+const EventEditDialog: React.FC<EventEditDialogProps> = ({
+  open,
+  onClose,
+  event,
+  onSuccess
+}) => {
+  const [photoPath, setPhotoPath] = useState<string>(
+    event.photo || DefaultImage
+  )
+  const [isHovered, setIsHovered] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  console.log(event)
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Event Name is required'),
     description: Yup.string().required('Description is required'),
     time: Yup.string()
       .required('Event Time is required')
-      .test('is-future', 'Event Time must be in the future', (value) => {
-        return new Date(value) > new Date(); // Sprawdza, czy data jest późniejsza niż dzisiaj
+      .test('is-future', 'Event Time must be in the future', value => {
+        return new Date(value) > new Date() // Sprawdza, czy data jest późniejsza niż dzisiaj
       }),
     mustJoinUntil: Yup.string()
       .required('Must Join Until is required')
-      .test('is-future', 'Must Join Until must be in the future', (value) => {
-        return new Date(value) > new Date(); // Sprawdza, czy data jest późniejsza niż dzisiaj
+      .test('is-future', 'Must Join Until must be in the future', value => {
+        return new Date(value) > new Date() // Sprawdza, czy data jest późniejsza niż dzisiaj
       })
-      .test('is-after-time', 'Must Join Until must be after Event Time', function (value) {
-        const { time } = this.parent;
-        return new Date(value) < new Date(time); // Sprawdza, czy `mustJoinUntil` jest po `time`
-      }),
-    maxPeople: Yup.number().min(1, 'Must be at least 1').required('Max People is required'),
-  });
-  
+      .test(
+        'is-after-time',
+        'Must Join Until must be after Event Time',
+        function (value) {
+          const { time } = this.parent
+          return new Date(value) < new Date(time) // Sprawdza, czy `mustJoinUntil` jest po `time`
+        }
+      ),
+    maxPeople: Yup.number()
+      .min(1, 'Must be at least 1')
+      .required('Max People is required')
+  })
 
   const uploadPhoto = async (photoFile: File) => {
     try {
-      const res = await fetchFilesPOST('/uploads', photoFile);
-      setPhotoPath(res.path);
-      return res.fileName;
+      const res = await fetchFilesPOST('/uploads', photoFile)
+      setPhotoPath(res.path)
+      return res.fileName
     } catch (error) {
-      console.error('Error uploading photo:', error);
-      setErrorMessage('Failed to upload photo. Please try again.');
-      return null;
+      console.error('Error uploading photo:', error)
+      setErrorMessage('Failed to upload photo. Please try again.')
+      return null
     }
-  };
+  }
 
   const handleSubmit = async (
     values: any,
     { setSubmitting, resetForm }: FormikHelpers<any>
   ) => {
-    setSubmitting(true);
+    setSubmitting(true)
 
-    console.log(values)
     const body = JSON.stringify({
       restaurantId: values.restaurantId,
       name: values.name,
@@ -69,22 +88,27 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
       time: values.time,
       mustJoinUntil: values.mustJoinUntil,
       maxPeople: values.maxPeople,
-      photo: values.photo ? values.photo.replace(/^\/uploads\//, '') : '',
-    });
-    console.log(body)
+      photo: values.photo ? values.photo.replace(/^\/uploads\//, '') : ''
+    })
     try {
-      const response = await fetchPUT(`/events/${values.eventId}`, body);
-      resetForm();
-      onSuccess();
+      const response = await fetchPUT(`/events/${values.eventId}`, body)
+      resetForm()
+      onSuccess()
     } catch (error: any) {
-      setErrorMessage(error.message || 'An unknown error occurred.');
+      setErrorMessage(error.message || 'An unknown error occurred.')
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" PaperProps={{ className: 'bg-white dark:bg-black' }}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
+      PaperProps={{ className: 'bg-white dark:bg-black' }}
+    >
       <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
         <span>Edit Event</span>
         <button onClick={onClose} className="text-grey-2">
@@ -92,17 +116,22 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
         </button>
       </DialogTitle>
       <DialogContent>
-        {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>} {/* Display error message */}
+        {errorMessage && (
+          <div className="text-red-500 mb-4">{errorMessage}</div>
+        )}{' '}
+        {/* Display error message */}
         <Formik
           initialValues={{
             name: event.name,
             description: event.description,
             time: new Date(event.time).toISOString().slice(0, 16),
-            mustJoinUntil: new Date(event.mustJoinUntil).toISOString().slice(0, 16),
+            mustJoinUntil: new Date(event.mustJoinUntil)
+              .toISOString()
+              .slice(0, 16),
             maxPeople: event.maxPeople,
             photo: event?.photo,
             restaurantId: event.restaurant.restaurantId,
-            eventId: event.eventId,
+            eventId: event.eventId
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -110,7 +139,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
           {({ setFieldValue, isSubmitting, values, errors, touched }) => (
             <Form>
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium dark:text-grey-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
                   Event Name
                 </label>
                 <Field
@@ -123,7 +155,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium dark:text-grey-2">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
                   Description
                 </label>
                 <Field
@@ -136,7 +171,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="time" className="block text-sm font-medium dark:text-grey-2">
+                <label
+                  htmlFor="time"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
                   Event Time
                 </label>
                 <Field
@@ -150,7 +188,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="mustJoinUntil" className="block text-sm font-medium dark:text-grey-2">
+                <label
+                  htmlFor="mustJoinUntil"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
                   Must Join Until
                 </label>
                 <Field
@@ -164,7 +205,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="maxPeople" className="block text-sm font-medium dark:text-grey-2">
+                <label
+                  htmlFor="maxPeople"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
                   Max People
                 </label>
                 <Field
@@ -180,7 +224,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
 
               {/* Photo Preview and Upload Button */}
               <div className="mb-4">
-                <label htmlFor="photo" className="block text-sm font-medium dark:text-grey-2 mb-2">
+                <label
+                  htmlFor="photo"
+                  className="block text-sm font-medium dark:text-grey-2 mb-2"
+                >
                   Event Preview Picture
                 </label>
                 <div
@@ -190,7 +237,11 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
                 >
                   <img
                     className="w-64 h-64 absolute rounded-lg"
-                    src={photoPath === DefaultImage ? DefaultImage : getImage(photoPath, photoPath)}
+                    src={
+                      photoPath === DefaultImage
+                        ? DefaultImage
+                        : getImage(photoPath, photoPath)
+                    }
                     alt="Event preview"
                   />
                   {isHovered && (
@@ -209,10 +260,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
                     id="photo"
                     accept="image/*"
                     className="hidden"
-                    onChange={async (e) => {
+                    onChange={async e => {
                       if (e.target.files && e.target.files.length > 0) {
-                        const fileName = await uploadPhoto(e.target.files[0]);
-                        setFieldValue('photo', fileName);
+                        const fileName = await uploadPhoto(e.target.files[0])
+                        setFieldValue('photo', fileName)
                       }
                     }}
                   />
@@ -240,7 +291,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({ open, onClose, event,
         </Formik>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default EventEditDialog;
+export default EventEditDialog
