@@ -36,7 +36,9 @@ export type RestaurantDetailsType = {
   logo: string
   photos: string[]
   description: string
-  reservationDeposit: null
+  reservationDeposit: number
+  distanceFrom: number | null
+  openingHours: OpeningHoursType[]
   tags: string[]
   rating: number
   numberReviews: number
@@ -394,7 +396,10 @@ export type InterestedUser = {
 }
 
 export type Participants = {
-  userId: string; firstName: string; lastName: string; photo: string;
+  userId: string
+  firstName: string
+  lastName: string
+  photo: string
 }
 
 export type FriendData = {

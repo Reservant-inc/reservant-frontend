@@ -7,9 +7,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import PendingRestaurantDetails from './PendingRestaurantDetails'
+import { RestaurantDetailsType } from '../../../services/types'
 
 const PendingRestaurantsList: React.FC = () => {
-  const [restaurants, setRestaurants] = useState<any[]>([])
+  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
   const { restaurantId } = useParams<{ restaurantId: string }>()
@@ -40,12 +41,49 @@ const PendingRestaurantsList: React.FC = () => {
     navigate('/customer-service/restaurants')
   }
 
+  const selectedRestaurant = restaurants.find(
+    restaurant => restaurant.restaurantId === parseInt(restaurantId || '', 10)
+  )
+
   const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: 'ID',
       flex: 0.5,
       sortable: true
+    },
+    {
+      field: 'name',
+      headerName: 'Name',
+      flex: 1,
+      sortable: true
+    },
+    {
+      field: 'restaurantType',
+      headerName: 'Type',
+      flex: 1,
+      sortable: true
+    },
+    {
+      field: 'city',
+      headerName: 'City',
+      flex: 1,
+      sortable: true
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      flex: 0.5,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <Tooltip title={params.row.description || 'No description'}>
+          <span>
+            {params.row.description?.length > 50
+              ? `${params.row.description.substring(0, 50)}...`
+              : params.row.description || 'No description'}
+          </span>
+        </Tooltip>
+      )
     },
     {
       field: 'actions',
@@ -67,12 +105,6 @@ const PendingRestaurantsList: React.FC = () => {
                   ? closeSidePanel()
                   : navigate(`/customer-service/restaurants/${params.row.id}`)
               }
-              style={{
-                visibility:
-                  restaurantId && restaurantId !== params.row.id.toString()
-                    ? 'hidden'
-                    : 'visible'
-              }}
             >
               {restaurantId === params.row.id.toString() ? (
                 <ChevronLeftIcon color="action" />
@@ -88,7 +120,7 @@ const PendingRestaurantsList: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col">
-      <h1 className="text-lg font-semibold p-2">Complaints</h1>
+      <h1 className="text-lg font-semibold p-2">Pending restaurants</h1>
       <div className="flex gap-2 h-full">
         <div
           className={`h-full ${
@@ -103,7 +135,11 @@ const PendingRestaurantsList: React.FC = () => {
             ) : restaurants.length > 0 ? (
               <DataGrid
                 rows={restaurants.map(restaurant => ({
-                  id: restaurant.restaurantId
+                  id: restaurant.restaurantId,
+                  name: restaurant.name,
+                  restaurantType: restaurant.restaurantType,
+                  city: restaurant.city,
+                  description: restaurant.description
                 }))}
                 columns={columns}
                 pageSizeOptions={[5, 10, 25, 50]}
@@ -119,10 +155,10 @@ const PendingRestaurantsList: React.FC = () => {
         </div>
         {restaurantId && (
           <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
-            {/* <PendingRestaurantDetails
+            <PendingRestaurantDetails
               restaurant={selectedRestaurant}
               onClose={closeSidePanel}
-            /> */}
+            />
           </div>
         )}
       </div>

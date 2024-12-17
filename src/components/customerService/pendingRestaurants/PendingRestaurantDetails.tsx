@@ -1,5 +1,5 @@
 import React from 'react'
-import { IconButton, Button } from '@mui/material'
+import { IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 interface ComplaintDetailsProps {
@@ -20,60 +20,78 @@ const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
   }
 
   return (
-    <div className="w-full h-full p-4 bg-white dark:bg-black rounded-lg relative">
+    <div className="w-full h-full p-4 flex flex-col gap-4 bg-white dark:bg-black rounded-lg relative ">
       <IconButton className="absolute top-2 right-2" onClick={onClose}>
         <CloseIcon className="dark:text-white" />
       </IconButton>
-      <h2 className="text-lg font-semibold mb-4">Complaint Details</h2>
-      <div className="space-y-4">
+      <h2 className="text-lg font-semibold ">Restaurant Details</h2>
+      <div className="flex flex-col gap-2">
         <p>
           <strong>ID:</strong> {restaurant.restaurantId}
         </p>
         <p>
-          <strong>Date:</strong>{' '}
-          {new Date(restaurant.restaurantDate).toLocaleString()}
+          <strong>Group ID:</strong> {restaurant.groupId}
         </p>
         <p>
-          <strong>Category:</strong> {restaurant.category}
+          <strong>Name:</strong> {restaurant.name}
         </p>
         <p>
-          <strong>Description:</strong>{' '}
-          {restaurant.description || 'No description provided'}
+          <strong>Type:</strong> {restaurant.restaurantType}
         </p>
         <p>
-          <strong>Submitted By:</strong>{' '}
-          {restaurant.createdBy
-            ? `${restaurant.createdBy.firstName} ${restaurant.createdBy.lastName}`
-            : 'Unknown'}
+          <strong>City:</strong> {restaurant.city}
         </p>
         <p>
-          <strong>restauranted User:</strong>{' '}
-          {restaurant.restaurantedUser
-            ? `${restaurant.restaurantedUser.firstName} ${restaurant.restaurantedUser.lastName}`
-            : 'Unknown'}
+          <strong>Postal Index:</strong> {restaurant.postalIndex}
+        </p>
+        <p>
+          <strong>Address:</strong> {restaurant.address}
+        </p>
+        <p>
+          <strong>Latitude:</strong> {restaurant.location.latitude}
+        </p>
+        <p>
+          <strong>Longitude:</strong> {restaurant.location.longitude}
+        </p>
+        <p>
+          <strong>Provides delivery:</strong>{' '}
+          {restaurant.provideDelivery ? 'Yes' : 'No'}
+        </p>
+        <p>
+          <strong>Description:</strong> {restaurant.description}
+        </p>
+        <p>
+          <strong>Reservation deposit amount:</strong>{' '}
+          {restaurant.reservationDeposit}
+        </p>
+        <p>
+          <strong>NIP:</strong> {restaurant.nip}
         </p>
       </div>
-      <div className="mt-4 space-y-2">
+      <div className=" flex flex-col gap-3">
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           See restauranter profile
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          See restauranted user profile
+          See rental contract
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          Forward complaint
+          See alcohol license
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          Respond to complaint
+          See business permission
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          View restaurant
+          See ID card
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          Grant promo code
+          See Logo
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          View related order
+          Forward issue
+        </button>
+        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+          Accept restaurant
         </button>
       </div>
     </div>
