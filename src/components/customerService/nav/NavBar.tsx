@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import LogoSecondary from '../../../assets/images/LOGO-SECONDARY.png'
 import LogoPrimary from '../../../assets/images/LOGO-PRIMARY.png'
 import useWindowDimensions from '../../../hooks/useWindowResize'
@@ -21,6 +21,7 @@ import Cookies from 'js-cookie'
 import { UserInfo } from '../../../services/types'
 import Threads from '../../reservant/navigation/navItems/Threads/Threads'
 import UserSearchBar from '../../reservant/navigation/navItems/Friends/UserSearchBar'
+import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const theme = createTheme({
   components: {
@@ -51,7 +52,7 @@ const NavBar: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState('main')
   const mainHeight = 200
   const [menuHeight, setMenuHeight] = useState(mainHeight)
-  const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
+  const { isDark, toggleTheme } = useContext(ThemeContext)
 
   const data = Cookies.get('userInfo') as string
 
@@ -74,12 +75,6 @@ const NavBar: React.FC = () => {
     localStorage.setItem('i18nextLng', lang)
     setActiveMenu('main')
     setMenuHeight(mainHeight)
-  }
-
-  const toggleTheme = () => {
-    const isDark = document.documentElement.classList.toggle('dark')
-    localStorage.theme = isDark ? 'dark' : 'light'
-    setIsDark(isDark)
   }
 
   const LanguageButton = () => (

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import CircularProgress from '@mui/material/CircularProgress'
-import { Tooltip, IconButton } from '@mui/material'
+import { Tooltip, IconButton, ThemeProvider } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import ComplaintDetails from './ComplaintDetails'
-
+import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
-  const { reportId } = useParams<{ reportId?: string }>();
-
+  const { reportId } = useParams<{ reportId?: string }>()
+  const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
 
   useEffect(() => {
     fetchReports()
@@ -89,7 +89,9 @@ const ComplaintsList: React.FC = () => {
         const createdBy = params.row.createdBy
         return createdBy ? (
           <Tooltip title={`${createdBy.userId}`}>
-            <span>{createdBy.firstName} {createdBy.lastName}</span>
+            <span>
+              {createdBy.firstName} {createdBy.lastName}
+            </span>
           </Tooltip>
         ) : (
           <span>Unknown</span>
@@ -105,7 +107,9 @@ const ComplaintsList: React.FC = () => {
         const escalatedBy = params.row.escalatedBy
         return escalatedBy ? (
           <Tooltip title={`${escalatedBy.userId}`}>
-          <span>{escalatedBy.firstName} {escalatedBy.lastName}</span>
+            <span>
+              {escalatedBy.firstName} {escalatedBy.lastName}
+            </span>
           </Tooltip>
         ) : (
           <span></span>
@@ -118,7 +122,11 @@ const ComplaintsList: React.FC = () => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
-        <span>{params.row.escalationDate ? new Date(params.row.escalationDate).toLocaleDateString() : ''}</span>
+        <span>
+          {params.row.escalationDate
+            ? new Date(params.row.escalationDate).toLocaleDateString()
+            : ''}
+        </span>
       )
     },
     {
@@ -130,7 +138,9 @@ const ComplaintsList: React.FC = () => {
         const resolvedBy = params.row.resolvedBy
         return resolvedBy ? (
           <Tooltip title={`${resolvedBy.userId}`}>
-          <span>{resolvedBy.firstName} {resolvedBy.lastName}</span>
+            <span>
+              {resolvedBy.firstName} {resolvedBy.lastName}
+            </span>
           </Tooltip>
         ) : (
           <span></span>
@@ -143,7 +153,11 @@ const ComplaintsList: React.FC = () => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
-        <span>{params.row.resolutionDate ? new Date(params.row.resolutionDate).toLocaleDateString() : ''}</span>
+        <span>
+          {params.row.resolutionDate
+            ? new Date(params.row.resolutionDate).toLocaleDateString()
+            : ''}
+        </span>
       )
     },
     {
@@ -194,28 +208,29 @@ const ComplaintsList: React.FC = () => {
             reportId ? 'w-[75%]' : 'w-full'
           } transition-all flex flex-col`}
         >
-          <div className="flex-grow overflow-hidden bg-white rounded-lg shadow-md">
+          <div className="flex-grow overflow-hidden bg-white dark:bg-black rounded-lg shadow-md">
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <CircularProgress />
               </div>
             ) : reports.length > 0 ? (
-              <DataGrid
-                rows={reports.map(report => ({
-                  id: report.reportId,
-                  reportDate: new Date(report.reportDate).toLocaleDateString(),
-                  category: report.category,
-                  description: report.description,
-                  createdBy: report.createdBy,
-                  escalatedBy: report.escalatedBy,
-                  resolvedBy: report.resolvedBy,
-                  resolutionDate: report.resolutionDate
-                }))}
-                columns={columns}
-                pageSizeOptions={[5, 10, 25, 50]}
-                disableRowSelectionOnClick
-                className="h-full"
-              />
+              <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                <DataGrid
+                  rows={reports.map(report => ({
+                    id: report.reportId,
+                    reportDate: new Date(
+                      report.reportDate
+                    ).toLocaleDateString(),
+                    category: report.category,
+                    description: report.description,
+                    createdBy: report.createdBy
+                  }))}
+                  columns={columns}
+                  pageSizeOptions={[5, 10, 25, 50]}
+                  disableRowSelectionOnClick
+                  className="h-full"
+                />
+              </ThemeProvider>
             ) : (
               <div className="flex justify-center items-center h-full text-lg">
                 No complaints found.
@@ -225,16 +240,14 @@ const ComplaintsList: React.FC = () => {
         </div>
 
         {reportId && selectedReport && (
-  <div className="h-full w-[25%] overflow-y-auto scroll">
-    <ComplaintDetails
-      report={selectedReport}
-      onClose={closeSidePanel}
-      refreshReports={fetchReports}
-    />
-  </div>
-)}
-
-
+          <div className="h-full w-[25%] overflow-y-auto scroll">
+            <ComplaintDetails
+              report={selectedReport}
+              onClose={closeSidePanel}
+              refreshReports={fetchReports}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

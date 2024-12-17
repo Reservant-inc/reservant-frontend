@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import OutsideClickHandler from '../../../reusableComponents/OutsideClickHandler'
 import User from '../../../../assets/images/user.jpg'
 import { Switch, createTheme } from '@mui/material'
@@ -18,18 +18,16 @@ import { ThemeProvider } from '@emotion/react'
 import { useTranslation } from 'react-i18next'
 import { Form, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { ThemeContext } from '../../../../contexts/ThemeContext'
 
-export interface ToolsProps {
-  setIsDark: Function
-}
-
-const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
+const Tools: React.FC = () => {
   const [t] = useTranslation('global')
   const [isPressed, setIsPressed] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
   const navigate = useNavigate()
   const mainHeight = 328
   const [menuHeight, setMenuHeight] = useState(mainHeight)
+  const { toggleTheme } = useContext(ThemeContext)
 
   const theme = createTheme({
     components: {
@@ -53,12 +51,6 @@ const Tools: React.FC<ToolsProps> = ({ setIsDark }) => {
       }
     }
   })
-
-  const toggleTheme = () => {
-    const isDark = document.documentElement.classList.toggle('dark')
-    localStorage.theme = isDark ? 'dark' : 'light'
-    setIsDark(isDark)
-  }
 
   const pressHandler = () => {
     setIsPressed(!isPressed)
