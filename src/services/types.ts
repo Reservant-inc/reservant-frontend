@@ -37,6 +37,7 @@ export type RestaurantDetailsType = {
   photos: string[]
   description: string
   reservationDeposit: null
+  maxReservationDurationMinutes: number
   tags: string[]
   rating: number
   numberReviews: number
@@ -467,4 +468,18 @@ export type DeliveryDetailsDialogProps = {
   open: boolean
   onClose: () => void
   deliveryId: number
+}
+
+export type ComplaintUserInfo = {
+  userId: string
+  firstName: string
+  login: string
+  lastName: string
+  birthDate: string
+  roles: string[]
+  photo: string | null
+  phoneNumber: {
+    code: string
+    number: string
+  }
 }

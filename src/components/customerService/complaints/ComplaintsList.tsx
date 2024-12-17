@@ -223,15 +223,17 @@ const ComplaintsList: React.FC = () => {
             )}
           </div>
         </div>
-        {reportId && (
-          <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
-            <ComplaintDetails
-              report={selectedReport}
-              onClose={closeSidePanel}
-              refreshReports={fetchReports}
-            />
-          </div>
-        )}
+
+        {reportId && selectedReport && (
+  <div className="h-full w-[25%] overflow-y-auto scroll">
+    <ComplaintDetails
+      report={selectedReport}
+      onClose={closeSidePanel}
+      refreshReports={fetchReports}
+    />
+  </div>
+)}
+
 
       </div>
     </div>
