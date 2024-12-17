@@ -363,6 +363,27 @@
             "friend-removal-dialog-2": " from your friends list?",
             "removal-accept": "Yes",
             "removal-decline": "No"
+        },
+        "events" : {
+            "newest" : "Newest first",
+            "oldest" : "Oldest first",
+            "interested" : "Interested in",
+            "participating" : "Participating",
+            "created":"Created by you",
+            "search":"Search events",
+            "participatedIn":"participated in",
+            "manage":"Manage participants",
+            "edit":"Edit",
+            "delete":"Delete",
+            "revoke":"Revoke interest",
+            "leave":"Leave",
+            "at":"at",
+            "participated": "participated"
+        },
+        "reports" : {
+            "id":"Report ID",
+            "created":"Created",
+            "search":"Search reports"
         }
     }
     
