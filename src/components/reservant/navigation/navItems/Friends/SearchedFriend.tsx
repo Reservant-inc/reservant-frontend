@@ -10,11 +10,11 @@ import { FetchError } from '../../../../../services/Errors'
 import DefaultPhoto from '../../../../../assets/images/user.jpg'
 import { useTranslation } from 'react-i18next'
 
-interface SearchedUserProps {
+interface SearchedFriendProps {
   user: UserSearchType
 }
 
-const SearchedUser: React.FC<SearchedUserProps> = ({ user }) => {
+const SearchedFriend: React.FC<SearchedFriendProps> = ({ user }) => {
   const [refresh, forceRefresh] = useState<boolean>(true)
 
   const [t] = useTranslation('global')
@@ -115,4 +115,4 @@ const SearchedUser: React.FC<SearchedUserProps> = ({ user }) => {
   )
 }
 
-export default SearchedUser
+export default SearchedFriend

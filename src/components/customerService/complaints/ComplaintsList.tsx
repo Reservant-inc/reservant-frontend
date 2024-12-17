@@ -13,7 +13,7 @@ const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
-  const { reportId } = useParams<{ reportId: string }>()
+  const { reportId } = useParams<{ reportId?: string }>()
   const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
 
   useEffect(() => {
@@ -88,13 +88,77 @@ const ComplaintsList: React.FC = () => {
       renderCell: (params: GridRenderCellParams) => {
         const createdBy = params.row.createdBy
         return createdBy ? (
-          <Tooltip title={`${createdBy.firstName} ${createdBy.lastName}`}>
-            <span>{createdBy.userId}</span>
+          <Tooltip title={`${createdBy.userId}`}>
+            <span>
+              {createdBy.firstName} {createdBy.lastName}
+            </span>
           </Tooltip>
         ) : (
           <span>Unknown</span>
         )
       }
+    },
+    {
+      field: 'escalatedBy',
+      headerName: 'Escalated By',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const escalatedBy = params.row.escalatedBy
+        return escalatedBy ? (
+          <Tooltip title={`${escalatedBy.userId}`}>
+            <span>
+              {escalatedBy.firstName} {escalatedBy.lastName}
+            </span>
+          </Tooltip>
+        ) : (
+          <span></span>
+        )
+      }
+    },
+    {
+      field: 'escalationDate',
+      headerName: 'Escalation Date',
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams) => (
+        <span>
+          {params.row.escalationDate
+            ? new Date(params.row.escalationDate).toLocaleDateString()
+            : ''}
+        </span>
+      )
+    },
+    {
+      field: 'resolvedBy',
+      headerName: 'Resolved By',
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => {
+        const resolvedBy = params.row.resolvedBy
+        return resolvedBy ? (
+          <Tooltip title={`${resolvedBy.userId}`}>
+            <span>
+              {resolvedBy.firstName} {resolvedBy.lastName}
+            </span>
+          </Tooltip>
+        ) : (
+          <span></span>
+        )
+      }
+    },
+    {
+      field: 'resolutionDate',
+      headerName: 'Resolution Date',
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams) => (
+        <span>
+          {params.row.resolutionDate
+            ? new Date(params.row.resolutionDate).toLocaleDateString()
+            : ''}
+        </span>
+      )
     },
     {
       field: 'actions',
@@ -174,11 +238,13 @@ const ComplaintsList: React.FC = () => {
             )}
           </div>
         </div>
-        {reportId && (
-          <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
+
+        {reportId && selectedReport && (
+          <div className="h-full w-[25%] overflow-y-auto scroll">
             <ComplaintDetails
               report={selectedReport}
               onClose={closeSidePanel}
+              refreshReports={fetchReports}
             />
           </div>
         )}

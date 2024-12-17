@@ -47,6 +47,9 @@ import Reports from '../components/reservant/restaurantManagement/Reports'
 import ReportsTab from '../components/reservant/profile/reports/ReportsTab'
 import ReportsList from '../components/reservant/profile/reports/ReportsList'
 import ComplaintsList from '../components/customerService/complaints/ComplaintsList'
+import User from '../components/customerService/users/User'
+import VisitDetails from '../components/customerService/visits/VisitDetails'
+import RestaurantDetails from '../components/customerService/restaurants/RestaurantDetails'
 
 const router = createBrowserRouter([
   {
@@ -237,6 +240,18 @@ const router = createBrowserRouter([
       {
         path: 'reports/:reportId?',
         element: <ComplaintsList />
+      },
+      {
+        path: 'users/:userId?',
+        element: <User />
+      },
+      {
+        path: 'visits/:visitId?',
+        element: <VisitDetails />
+      },
+      {
+        path: 'restaurants/:restaurantId?',
+        element: <RestaurantDetails />
       }
     ]
   },

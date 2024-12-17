@@ -67,7 +67,7 @@ export default function HomePage() {
       try {
         const tagsQuery = chosenTags.map(tag => `&tags=${tag}`).join('')
         const response = await fetchGET(
-          `/restaurants?origLat=52.225&origLon=21.01&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}`
+          `/restaurants?origLat=52.225&origLon=21.01&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&perPage=10`
         )
 
         const newRestaurants = response.items.filter(
