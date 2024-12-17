@@ -2,6 +2,7 @@ import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavBar from './nav/NavBar'
 import ReportIcon from '@mui/icons-material/Report'
+import GroupIcon from '@mui/icons-material/Group'
 
 const CustomerService: React.FC = () => {
   const navigate = useNavigate()

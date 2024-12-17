@@ -4,12 +4,17 @@ import SearchIcon from '@mui/icons-material/Search'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import { CircularProgress } from '@mui/material'
 import { PaginationType, UserSearchType } from '../../../../../services/types'
-import SearchedUser from './SearchedUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { FetchError } from '../../../../../services/Errors'
 import { useTranslation } from 'react-i18next'
+import SearchedFriend from './SearchedFriend'
+import SearchedUser from '../../../../customerService/users/SearchedUser'
 
-const FriendSearchBar: React.FC = () => {
+interface UserSearchBarProps {
+  isCustomerService: boolean
+}
+
+const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [users, setUsers] = useState<UserSearchType[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
@@ -67,7 +72,6 @@ const FriendSearchBar: React.FC = () => {
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      {}
       <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
         <input
           type="text"
@@ -107,7 +111,11 @@ const FriendSearchBar: React.FC = () => {
                       key={index}
                       className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
                     >
-                      <SearchedUser user={user} />
+                      {isCustomerService ? (
+                        <SearchedUser user={user} />
+                      ) : (
+                        <SearchedFriend user={user} />
+                      )}
                     </div>
                   ))}
                 </InfiniteScroll>
@@ -140,4 +148,4 @@ const FriendSearchBar: React.FC = () => {
   )
 }
 
-export default FriendSearchBar
+export default UserSearchBar
