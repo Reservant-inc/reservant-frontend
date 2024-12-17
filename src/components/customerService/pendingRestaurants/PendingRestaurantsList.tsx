@@ -9,39 +9,35 @@ import { useNavigate, useParams } from 'react-router-dom'
 import PendingRestaurantDetails from './PendingRestaurantDetails'
 
 const PendingRestaurantsList: React.FC = () => {
-  const [reports, setReports] = useState<any[]>([])
+  const [restaurants, setRestaurants] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
-  const { reportId } = useParams<{ reportId: string }>()
+  const { restaurantId } = useParams<{ restaurantId: string }>()
 
   useEffect(() => {
-    fetchReports()
+    fetchrestaurants()
   }, [])
 
   useEffect(() => {
-    if (reportId) {
-      navigate('/customer-service/reports')
+    if (restaurantId) {
+      navigate('/customer-service/restaurants')
     }
-  }, [reports])
+  }, [restaurants])
 
-  const fetchReports = async () => {
+  const fetchrestaurants = async () => {
     setLoading(true)
     try {
-      const response = await fetchGET('/reports')
-      setReports(response)
+      const response = await fetchGET('/restaurants/unverified')
+      setRestaurants(response.items)
     } catch (error) {
-      console.error('Error fetching reports:', error)
+      console.error('Error fetching restaurants:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const selectedReport = reports.find(
-    report => report.reportId === parseInt(reportId || '', 10)
-  )
-
   const closeSidePanel = () => {
-    navigate('/customer-service/reports')
+    navigate('/customer-service/restaurants')
   }
 
   const columns: GridColDef[] = [
@@ -52,49 +48,6 @@ const PendingRestaurantsList: React.FC = () => {
       sortable: true
     },
     {
-      field: 'reportDate',
-      headerName: 'Report Date',
-      flex: 1,
-      sortable: true
-    },
-    {
-      field: 'category',
-      headerName: 'Category',
-      flex: 1,
-      sortable: true
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <Tooltip title={params.row.description || 'No description'}>
-          <span>
-            {params.row.description?.length > 50
-              ? `${params.row.description.substring(0, 50)}...`
-              : params.row.description || 'No description'}
-          </span>
-        </Tooltip>
-      )
-    },
-    {
-      field: 'createdBy',
-      headerName: 'Submitted By',
-      flex: 1,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => {
-        const createdBy = params.row.createdBy
-        return createdBy ? (
-          <Tooltip title={`${createdBy.firstName} ${createdBy.lastName}`}>
-            <span>{createdBy.userId}</span>
-          </Tooltip>
-        ) : (
-          <span>Unknown</span>
-        )
-      }
-    },
-    {
       field: 'actions',
       headerName: 'Actions',
       flex: 0.5,
@@ -102,7 +55,7 @@ const PendingRestaurantsList: React.FC = () => {
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip
           title={
-            reportId === params.row.id.toString()
+            restaurantId === params.row.id.toString()
               ? 'Close Details'
               : 'View Details'
           }
@@ -110,18 +63,18 @@ const PendingRestaurantsList: React.FC = () => {
           <span>
             <IconButton
               onClick={() =>
-                reportId === params.row.id.toString()
+                restaurantId === params.row.id.toString()
                   ? closeSidePanel()
-                  : navigate(`/customer-service/reports/${params.row.id}`)
+                  : navigate(`/customer-service/restaurants/${params.row.id}`)
               }
               style={{
                 visibility:
-                  reportId && reportId !== params.row.id.toString()
+                  restaurantId && restaurantId !== params.row.id.toString()
                     ? 'hidden'
                     : 'visible'
               }}
             >
-              {reportId === params.row.id.toString() ? (
+              {restaurantId === params.row.id.toString() ? (
                 <ChevronLeftIcon color="action" />
               ) : (
                 <ChevronRightIcon color="action" />
@@ -139,7 +92,7 @@ const PendingRestaurantsList: React.FC = () => {
       <div className="flex gap-2 h-full">
         <div
           className={`h-full ${
-            reportId ? 'w-[75%]' : 'w-full'
+            restaurantId ? 'w-[75%]' : 'w-full'
           } transition-all flex flex-col`}
         >
           <div className="flex-grow overflow-hidden bg-white rounded-lg shadow-md">
@@ -147,14 +100,10 @@ const PendingRestaurantsList: React.FC = () => {
               <div className="flex justify-center items-center h-full">
                 <CircularProgress />
               </div>
-            ) : reports.length > 0 ? (
+            ) : restaurants.length > 0 ? (
               <DataGrid
-                rows={reports.map(report => ({
-                  id: report.reportId,
-                  reportDate: new Date(report.reportDate).toLocaleDateString(),
-                  category: report.category,
-                  description: report.description,
-                  createdBy: report.createdBy
+                rows={restaurants.map(restaurant => ({
+                  id: restaurant.restaurantId
                 }))}
                 columns={columns}
                 pageSizeOptions={[5, 10, 25, 50]}
@@ -168,12 +117,12 @@ const PendingRestaurantsList: React.FC = () => {
             )}
           </div>
         </div>
-        {reportId && (
+        {restaurantId && (
           <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
-            <PendingRestaurantDetails
-              report={selectedReport}
+            {/* <PendingRestaurantDetails
+              restaurant={selectedRestaurant}
               onClose={closeSidePanel}
-            />
+            /> */}
           </div>
         )}
       </div>

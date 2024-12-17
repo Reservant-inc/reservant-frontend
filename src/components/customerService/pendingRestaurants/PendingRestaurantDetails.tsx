@@ -3,15 +3,15 @@ import { IconButton, Button } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 interface ComplaintDetailsProps {
-  report: any
+  restaurant: any
   onClose: () => void
 }
 
 const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
-  report,
+  restaurant,
   onClose
 }) => {
-  if (!report) {
+  if (!restaurant) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <p>No details found for this complaint.</p>
@@ -27,37 +27,38 @@ const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
       <h2 className="text-lg font-semibold mb-4">Complaint Details</h2>
       <div className="space-y-4">
         <p>
-          <strong>ID:</strong> {report.reportId}
+          <strong>ID:</strong> {restaurant.restaurantId}
         </p>
         <p>
-          <strong>Date:</strong> {new Date(report.reportDate).toLocaleString()}
+          <strong>Date:</strong>{' '}
+          {new Date(restaurant.restaurantDate).toLocaleString()}
         </p>
         <p>
-          <strong>Category:</strong> {report.category}
+          <strong>Category:</strong> {restaurant.category}
         </p>
         <p>
           <strong>Description:</strong>{' '}
-          {report.description || 'No description provided'}
+          {restaurant.description || 'No description provided'}
         </p>
         <p>
           <strong>Submitted By:</strong>{' '}
-          {report.createdBy
-            ? `${report.createdBy.firstName} ${report.createdBy.lastName}`
+          {restaurant.createdBy
+            ? `${restaurant.createdBy.firstName} ${restaurant.createdBy.lastName}`
             : 'Unknown'}
         </p>
         <p>
-          <strong>Reported User:</strong>{' '}
-          {report.reportedUser
-            ? `${report.reportedUser.firstName} ${report.reportedUser.lastName}`
+          <strong>restauranted User:</strong>{' '}
+          {restaurant.restaurantedUser
+            ? `${restaurant.restaurantedUser.firstName} ${restaurant.restaurantedUser.lastName}`
             : 'Unknown'}
         </p>
       </div>
       <div className="mt-4 space-y-2">
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          See reporter profile
+          See restauranter profile
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          See reported user profile
+          See restauranted user profile
         </button>
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           Forward complaint
