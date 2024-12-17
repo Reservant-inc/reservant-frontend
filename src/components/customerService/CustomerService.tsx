@@ -24,6 +24,13 @@ const CustomerService: React.FC = () => {
               <ReportIcon />
               <h1>Complaints</h1>
             </button>
+            <button
+              onClick={() => navigate('restaurants')}
+              className="w-full p-3 flex gap-4 text-left dark:text-white rounded-md hover:bg-grey-0 hover:dark:bg-grey-5 transition"
+            >
+              <ReportIcon />
+              <h1>Pending restaurants</h1>
+            </button>
           </div>
         </div>
         <div className="h-full w-[calc(100%-16rem)] rounded-lg">

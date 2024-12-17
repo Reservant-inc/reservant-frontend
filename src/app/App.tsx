@@ -47,6 +47,7 @@ import Reports from '../components/reservant/restaurantManagement/Reports'
 import ReportsTab from '../components/reservant/profile/reports/ReportsTab'
 import ReportsList from '../components/reservant/profile/reports/ReportsList'
 import ComplaintsList from '../components/customerService/complaints/ComplaintsList'
+import PendingRestaurantsList from '../components/customerService/pendingRestaurants/PendingRestaurantsList'
 
 const router = createBrowserRouter([
   {
@@ -238,6 +239,10 @@ const router = createBrowserRouter([
         path: 'reports/:reportId?',
         element: <ComplaintsList />
       },
+      {
+        path: 'restaurants/:restaurantId?',
+        element: <PendingRestaurantsList />
+      }
     ]
   },
   {
