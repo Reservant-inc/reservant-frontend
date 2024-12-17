@@ -37,13 +37,15 @@ import { GridCellParams } from '@mui/x-data-grid'
 import {
   fetchGET,
   fetchDELETE,
-  fetchPUT
+  fetchPUT,
+  fetchPOST
 } from '../../../../../services/APIconn'
 import { LocalType } from '../../../../../services/enums'
 import { GroupType, RestaurantType } from '../../../../../services/types'
 import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialog'
 import RegisterSuccess from '../../register/restaurantRegister/RegisterSuccess'
 import RestaurantRegister from '../../register/restaurantRegister/RestaurantRegister'
+import RestaurantDetails from '../RestaurantDetails'
 
 interface EditToolbarProps {
   setRows: React.Dispatch<React.SetStateAction<GridRowsProp>>
@@ -58,6 +60,8 @@ const RestaurantListSection: React.FC = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
   const [restaurantToDelete, setRestaurantToDelete] = useState<string>('')
   const [groups, setGroups] = useState<GroupType[]>([])
+  const [selectedRestaurant, setSelectedRestaurant] = useState<RestaurantType | null>(null)
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
@@ -157,9 +161,18 @@ const RestaurantListSection: React.FC = () => {
       console.error('Error deleting restaurant', error)
     }
   }
+  
   const processRowUpdate = async (newRow: any) => {
     try {
-        const { id, ...rowToUpdate } = newRow;
+      const { id, groupId, groupName, ...rowToUpdate } = newRow;
+
+      // Find the group associated with the current groupName
+      const newGroup = groups.find(group => group.name === groupName);
+
+      if (newGroup && newGroup.restaurantGroupId !== groupId) {
+          // If groupId has changed, move the restaurant
+          await fetchPOST(`/my-restaurants/${rowToUpdate.restaurantId}/move-to-group`, JSON.stringify({groupId: newGroup.restaurantGroupId}));
+      }
 
         // Usuwanie przedrostka '/uploads/' z wybranych pól, jeśli istnieją
         const fieldsToClean = ['businessPermission', 'rentalContract', 'alcoholLicense', 'logo','idCard'];
@@ -175,7 +188,7 @@ const RestaurantListSection: React.FC = () => {
               photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
           );
       }
-
+        
         console.log('Dane wysyłane do API:', rowToUpdate);
 
         await fetchPUT(
@@ -403,13 +416,27 @@ const RestaurantListSection: React.FC = () => {
     }
   ]
 
-  const handleRowClick = (params: any) => {
-    // const rowData = params.row;
-  }
-
   const handleRegistrationSucces = () => {
     setRegisterSucces(true)
     populateRows()
+  }
+
+  const handleRowClick = (params: any) => {
+    const rowData = rows.find(row => row.id === params.id);
+    if (rowData) {
+      setSelectedRestaurant(rowData as RestaurantType); // Use type assertion here
+      setIsDetailsDialogOpen(true);
+    }
+  };
+
+  const closeDetailsDialog = () => {
+    setSelectedRestaurant(null)
+    setIsDetailsDialogOpen(false)
+  }
+
+  const handleSucces = () => {
+    setIsDetailsDialogOpen(false);
+    populateRows();
   }
 
   return (
@@ -419,6 +446,7 @@ const RestaurantListSection: React.FC = () => {
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
+        onRowClick={handleRowClick} 
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         initialState={{
@@ -479,6 +507,16 @@ const RestaurantListSection: React.FC = () => {
           </Box>
         </DialogContent>
       </Dialog>
+
+      {selectedRestaurant && isDetailsDialogOpen && (
+            <RestaurantDetails 
+              restaurant={selectedRestaurant} 
+              open={isDetailsDialogOpen}
+              onClose={closeDetailsDialog}
+              onSuccess={handleSucces}
+              groups={groups}
+            />
+          )}
 
       <ConfirmationDialog
         open={isConfirmationOpen}
