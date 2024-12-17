@@ -1,12 +1,16 @@
 import React from 'react'
 import { ReportType } from '../../../../services/types'
 import { Message } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
+
 interface ReportProps {
   report: ReportType
 }
 
 const Report: React.FC<ReportProps> = ({ report }) => {
+  const [t] = useTranslation('global')
+
   const formatTimestamp = (timestamp: string): string => {
     const date = new Date(timestamp)
     return date.toLocaleString(i18next.language === 'en' ? 'en-GB' : 'pl-PL', {
@@ -28,7 +32,9 @@ const Report: React.FC<ReportProps> = ({ report }) => {
             {report.reportDate && (
               <p className="text-xs">{formatTimestamp(report.reportDate)}</p>
             )}
-            <p className="text-xs">Report ID: {report.reportId}</p>
+            <p className="text-xs">
+              {t('profile.reports.id')}: {report.reportId}
+            </p>
           </div>
           <button>
             <Message />

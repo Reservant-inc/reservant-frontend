@@ -22,8 +22,6 @@ interface EditToolbarProps {
 export default function Reports() {
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [selectedId, setSelectedId] = useState<string>('')
   const { restaurantId } = useParams()
 
   useEffect(() => {

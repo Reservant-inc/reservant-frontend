@@ -10,6 +10,8 @@ import {
 import { EventListType, ReportsListType } from '../../../../services/enums'
 
 import Report from './Report'
+import Search from '../../../reusableComponents/Search'
+import { useTranslation } from 'react-i18next'
 interface ReportsListProps {
   listType: ReportsListType
 }
@@ -18,6 +20,7 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [reports, setReports] = useState<ReportType[]>([])
   const [filteredReports, setFilteredReports] = useState<ReportType[]>([])
+  const [t] = useTranslation('global')
 
   const location = useLocation()
 
@@ -50,9 +53,7 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
     }
   }
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.toLowerCase()
-
+  const handleSearchChange = (query: string) => {
     setFilteredReports(
       query.length >= 3
         ? reports.filter(report =>
@@ -65,14 +66,11 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex flex-col gap-4 h-full">
-        <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6">
-          <input
-            type="text"
-            placeholder="Search reports"
-            className="w-full placeholder:text-grey-2"
-            onChange={handleSearchChange}
+        <div className="w-1/3 ">
+          <Search
+            filter={handleSearchChange}
+            placeholder={t('profile.reports.search')}
           />
-          <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
         </div>
 
         <div className="flex flex-col h-full pr-2 overflow-y-auto scroll gap-2">

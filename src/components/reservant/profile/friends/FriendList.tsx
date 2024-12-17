@@ -6,6 +6,7 @@ import { PaginationType, FriendData } from '../../../../services/types'
 import { FriendListType } from '../../../../services/enums'
 import Friend from './Friend'
 import { useTranslation } from 'react-i18next'
+import Search from '../../../reusableComponents/Search'
 
 interface FriendListProps {
   listType: FriendListType
@@ -54,8 +55,7 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
     fetchFriends()
   }
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.toLowerCase()
+  const handleSearchChange = (query: string) => {
     setFilteredFriends(
       query.length >= 3
         ? friends.filter(friend =>
@@ -70,20 +70,17 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
   return (
     <div className="flex flex-col bg-white rounded-lg w-full h-full dark:bg-black">
       <div className="flex flex-col gap-4 h-full">
-        <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 px-1 font-mont-md dark:border-grey-6">
-          <input
-            id='profileFriendsFilterInput'
-            type="text"
-            placeholder={`${t('profile.friends.friend-search-input')}`}
-            className="w-full placeholder:text-grey-2 dark:text-grey-0"
-            onChange={handleSearchChange}
+        <div className="w-1/3 ">
+          <Search
+            filter={handleSearchChange}
+            placeholder={t('profile.friends.friend-search-input')}
           />
-          <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
         </div>
-
         <div className="flex flex-col h-full gap-2 pr-2 overflow-y-auto scroll">
           {filteredFriends.length === 0 ? (
-            <p className="italic text-center dark:text-white">{noFriendsMessage[listType]}</p>
+            <p className="italic text-center dark:text-white">
+              {noFriendsMessage[listType]}
+            </p>
           ) : (
             filteredFriends.map(friend => (
               <Friend
