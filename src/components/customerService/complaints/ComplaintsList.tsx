@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import CircularProgress from '@mui/material/CircularProgress'
-import { Tooltip, IconButton } from '@mui/material'
+import { Tooltip, IconButton, ThemeProvider } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import ComplaintDetails from './ComplaintDetails'
+import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
   const { reportId } = useParams<{ reportId: string }>()
+  const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
 
   useEffect(() => {
     fetchReports()
@@ -142,25 +144,29 @@ const ComplaintsList: React.FC = () => {
             reportId ? 'w-[75%]' : 'w-full'
           } transition-all flex flex-col`}
         >
-          <div className="flex-grow overflow-hidden bg-white rounded-lg shadow-md">
+          <div className="flex-grow overflow-hidden bg-white dark:bg-black rounded-lg shadow-md">
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <CircularProgress />
               </div>
             ) : reports.length > 0 ? (
-              <DataGrid
-                rows={reports.map(report => ({
-                  id: report.reportId,
-                  reportDate: new Date(report.reportDate).toLocaleDateString(),
-                  category: report.category,
-                  description: report.description,
-                  createdBy: report.createdBy
-                }))}
-                columns={columns}
-                pageSizeOptions={[5, 10, 25, 50]}
-                disableRowSelectionOnClick
-                className="h-full"
-              />
+              <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                <DataGrid
+                  rows={reports.map(report => ({
+                    id: report.reportId,
+                    reportDate: new Date(
+                      report.reportDate
+                    ).toLocaleDateString(),
+                    category: report.category,
+                    description: report.description,
+                    createdBy: report.createdBy
+                  }))}
+                  columns={columns}
+                  pageSizeOptions={[5, 10, 25, 50]}
+                  disableRowSelectionOnClick
+                  className="h-full"
+                />
+              </ThemeProvider>
             ) : (
               <div className="flex justify-center items-center h-full text-lg">
                 No complaints found.

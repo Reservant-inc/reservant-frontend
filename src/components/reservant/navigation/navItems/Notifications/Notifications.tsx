@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import { Notifications as NotificationsIcon } from '@mui/icons-material'
 import NotificationList from './NotificationList'
 import { fetchGET } from '../../../../../services/APIconn'
 import { Button } from '@mui/material'
+import { ThemeContext } from '../../../../../contexts/ThemeContext'
 
-interface NotificationsButtonProps {
-  isDark: boolean
-}
-
-const NotificationsButton: React.FC<NotificationsButtonProps> = ({
-  isDark
-}) => {
+const NotificationsButton: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false)
   const [unreadNotificationCount, setUnreadNotificationCount] =
     useState<number>(0)
   const [loading, setLoading] = useState<boolean>(true)
   const [showAll, setShowAll] = useState<boolean>(false)
+
+  const { isDark } = useContext(ThemeContext)
 
   const pressHandler = () => {
     setIsPressed(!isPressed)
@@ -72,7 +69,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
           {/* Jeśli wyświetlamy tylko 3 najnowsze to dodatkowo guzik do pokazania reszty */}
           {!showAll && (
             <button
-              id='showMoreNotificationsButton'
+              id="showMoreNotificationsButton"
               onClick={() => setShowAll(true)}
               className="dark:bg-grey-5 dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black bg-white border-[1px] border-primary text-primary hover:text-white hover:bg-primary my-2 py-1 px-3 rounded transition hover:scale-105"
             >
