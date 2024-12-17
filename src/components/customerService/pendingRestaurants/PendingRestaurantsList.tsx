@@ -6,7 +6,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
-import PandingRestaurantDetails from './PendingRestaurantDetails'
+import PendingRestaurantDetails from './PendingRestaurantDetails'
 
 const PendingRestaurantsList: React.FC = () => {
   const [reports, setReports] = useState<any[]>([])
@@ -27,7 +27,7 @@ const PendingRestaurantsList: React.FC = () => {
   const fetchReports = async () => {
     setLoading(true)
     try {
-      const response = await fetchGET('/restaurants/unverified')
+      const response = await fetchGET('/reports')
       setReports(response)
     } catch (error) {
       console.error('Error fetching reports:', error)
@@ -170,7 +170,7 @@ const PendingRestaurantsList: React.FC = () => {
         </div>
         {reportId && (
           <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
-            <PandingRestaurantDetails
+            <PendingRestaurantDetails
               report={selectedReport}
               onClose={closeSidePanel}
             />

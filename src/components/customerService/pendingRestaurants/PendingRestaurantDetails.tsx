@@ -7,7 +7,7 @@ interface ComplaintDetailsProps {
   onClose: () => void
 }
 
-const PandingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
+const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
   report,
   onClose
 }) => {
@@ -79,4 +79,4 @@ const PandingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
   )
 }
 
-export default PandingRestaurantDetails
+export default PendingRestaurantDetails
