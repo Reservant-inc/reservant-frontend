@@ -8,6 +8,7 @@ import SearchedUser from './SearchedUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { FetchError } from '../../../../../services/Errors'
 import { useTranslation } from 'react-i18next'
+import Search from '../../../../reusableComponents/Search'
 
 const FriendSearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -18,10 +19,6 @@ const FriendSearchBar: React.FC = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
 
   const [t] = useTranslation('global')
-
-  const pressHandler = async () => {
-    setIsPressed(!isPressed)
-  }
 
   const fetchUsers = async (name: string, page: number) => {
     try {
@@ -58,29 +55,28 @@ const FriendSearchBar: React.FC = () => {
     }
   }, [searchTerm, page])
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value
-    setSearchTerm(name)
+  const handleSearch = (query: string) => {
+    setSearchTerm(query)
     setPage(0)
     setHasMore(true)
   }
 
+  const pressHandler = async () => {
+    setIsPressed(!isPressed)
+  }
+
+  const onFocus = () => {
+    if (!isPressed) setIsPressed(true)
+  }
+
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      {}
-      <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
-        <input
-          type="text"
-          placeholder={t('friends.search')}
-          value={searchTerm}
-          onChange={handleSearch}
-          onFocus={() => {
-            if (!isPressed) setIsPressed(!isPressed)
-          }}
-          className="clean-input h-8 w-[250px] p-2 placeholder:text-grey-2 dark:text-grey-1"
-        />
-        <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
-      </div>
+      <Search
+        filter={handleSearch}
+        onFocus={onFocus}
+        placeholder={t('friends.search')}
+      />
+
       {isPressed && (
         <div className="absolute z-[2] right-0 top-0 w-[460px]">
           {users.length > 0 ? (

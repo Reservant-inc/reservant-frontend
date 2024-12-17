@@ -6,9 +6,10 @@ import React, { useRef, useState } from 'react'
 interface SearchProps {
   filter: (query: string) => void
   placeholder: string
+  onFocus?: () => void
 }
 
-const Search: React.FC<SearchProps> = ({ filter, placeholder }) => {
+const Search: React.FC<SearchProps> = ({ filter, placeholder, onFocus }) => {
   const [query, setQuery] = useState<string>('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -33,6 +34,7 @@ const Search: React.FC<SearchProps> = ({ filter, placeholder }) => {
         type="text"
         ref={inputRef}
         placeholder={placeholder}
+        onFocus={onFocus}
         value={query}
         id="searchBarIn"
         className=" w-full  border-[1px] border-grey-2  dark:border-grey-4 rounded-full  px-3 focus:border-primary dark:focus:border-secondary  placeholder:text-grey-4 dark:placeholder:text-grey-2 text-black dark:text-grey-1"
