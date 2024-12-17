@@ -4,13 +4,17 @@ import SearchIcon from '@mui/icons-material/Search'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import { CircularProgress } from '@mui/material'
 import { PaginationType, UserSearchType } from '../../../../../services/types'
-import SearchedUser from './SearchedUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { FetchError } from '../../../../../services/Errors'
 import { useTranslation } from 'react-i18next'
-import Search from '../../../../reusableComponents/Search'
+import SearchedFriend from './SearchedFriend'
+import SearchedUser from '../../../../customerService/users/SearchedUser'
 
-const FriendSearchBar: React.FC = () => {
+interface UserSearchBarProps {
+  isCustomerService: boolean
+}
+
+const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [users, setUsers] = useState<UserSearchType[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
@@ -19,6 +23,10 @@ const FriendSearchBar: React.FC = () => {
   const [hasMore, setHasMore] = useState<boolean>(true)
 
   const [t] = useTranslation('global')
+
+  const pressHandler = async () => {
+    setIsPressed(!isPressed)
+  }
 
   const fetchUsers = async (name: string, page: number) => {
     try {
@@ -55,28 +63,28 @@ const FriendSearchBar: React.FC = () => {
     }
   }, [searchTerm, page])
 
-  const handleSearch = (query: string) => {
-    setSearchTerm(query)
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const name = event.target.value
+    setSearchTerm(name)
     setPage(0)
     setHasMore(true)
   }
 
-  const pressHandler = async () => {
-    setIsPressed(!isPressed)
-  }
-
-  const onFocus = () => {
-    if (!isPressed) setIsPressed(true)
-  }
-
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      <Search
-        filter={handleSearch}
-        onFocus={onFocus}
-        placeholder={t('friends.search')}
-      />
-
+      <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
+        <input
+          type="text"
+          placeholder={t('friends.search')}
+          value={searchTerm}
+          onChange={handleSearch}
+          onFocus={() => {
+            if (!isPressed) setIsPressed(!isPressed)
+          }}
+          className="clean-input h-8 w-[250px] p-2 placeholder:text-grey-2 dark:text-grey-1"
+        />
+        <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+      </div>
       {isPressed && (
         <div className="absolute z-[2] right-0 top-0 w-[460px]">
           {users.length > 0 ? (
@@ -103,7 +111,11 @@ const FriendSearchBar: React.FC = () => {
                       key={index}
                       className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
                     >
-                      <SearchedUser user={user} />
+                      {isCustomerService ? (
+                        <SearchedUser user={user} />
+                      ) : (
+                        <SearchedFriend user={user} />
+                      )}
                     </div>
                   ))}
                 </InfiniteScroll>
@@ -136,4 +148,4 @@ const FriendSearchBar: React.FC = () => {
   )
 }
 
-export default FriendSearchBar
+export default UserSearchBar

@@ -225,7 +225,7 @@
         "loading": "Threads are loading"
     },
     "friends": {
-        "search": "Search for friends",
+        "search": "Search for a user",
         "friends": "Friends",
         "undo": "Undo request",
         "send": "Send request"

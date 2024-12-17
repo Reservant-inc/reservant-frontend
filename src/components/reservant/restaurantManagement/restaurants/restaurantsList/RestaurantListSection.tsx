@@ -6,10 +6,10 @@ import {
   DialogContent,
   IconButton,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  Snackbar
+  createTheme,
+  ThemeProvider
 } from '@mui/material'
 import {
   GridToolbarContainer,
@@ -17,7 +17,6 @@ import {
   GridColDef,
   GridRowsProp,
   DataGrid,
-  GridSlots,
   GridActionsCellItem,
   GridRowId,
   GridRowModes,
@@ -33,7 +32,7 @@ import {
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { GridCellParams } from '@mui/x-data-grid'
+
 import {
   fetchGET,
   fetchDELETE,
@@ -45,11 +44,6 @@ import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialo
 import RegisterSuccess from '../../register/restaurantRegister/RegisterSuccess'
 import RestaurantRegister from '../../register/restaurantRegister/RestaurantRegister'
 
-interface EditToolbarProps {
-  setRows: React.Dispatch<React.SetStateAction<GridRowsProp>>
-  setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
-}
-
 const RestaurantListSection: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const [registerSucces, setRegisterSucces] = useState<boolean>(false)
@@ -60,9 +54,6 @@ const RestaurantListSection: React.FC = () => {
   const [groups, setGroups] = useState<GroupType[]>([])
 
   const navigate = useNavigate()
-
-  const { t } = useTranslation('global')
-
   const populateRows = async () => {
     try {
       const response = await fetchGET('/my-restaurant-groups')
@@ -376,17 +367,13 @@ const RestaurantListSection: React.FC = () => {
     }
   ]
 
-  const handleRowClick = (params: any) => {
-    // const rowData = params.row;
-  }
-
   const handleRegistrationSucces = () => {
     setRegisterSucces(true)
     populateRows()
   }
 
   return (
-    <div className="h-full w-full rounded-b-lg rounded-tr-lg bg-white dark:bg-black">
+    <div className="h-full w-full rounded-b-lg rounded-tr-lg ">
       <DataGrid
         rows={rows}
         columns={columns}
@@ -405,6 +392,7 @@ const RestaurantListSection: React.FC = () => {
         }}
         className="border-0"
       />
+
       <Dialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
