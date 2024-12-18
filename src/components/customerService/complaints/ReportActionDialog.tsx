@@ -62,7 +62,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
       >
         {({ errors, touched, isValid, dirty }) => (
           <Form>
-            <div className="w-[400px] h-[270px] p-6 flex flex-col justify-between">
+            <div className="w-[400px] h-[220px] p-6 flex flex-col justify-between">
               <p className="font-bold text-xl">
                 {actionType === 'escalate'
                   ? 'Report escalation comment'
@@ -118,5 +118,3 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
 }
 
 export default ReportActionDialog
-
-// border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition

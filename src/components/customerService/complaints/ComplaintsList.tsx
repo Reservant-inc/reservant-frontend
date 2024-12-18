@@ -197,7 +197,10 @@ const ComplaintsList: React.FC = () => {
                     ).toLocaleDateString(),
                     category: report.category,
                     description: report.description,
-                    createdBy: report.createdBy
+                    createdBy: report.createdBy,
+                    resolutionDate: report.resolutionDate,
+                    resolvedBy: report.resolvedBy,
+                    isResolved: report.resolutionDate,
                   }))}
                   columns={columns}
                   pageSizeOptions={[5, 10, 25, 50]}
