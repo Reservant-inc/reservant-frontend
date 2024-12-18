@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { fetchPOST } from '../../../services/APIconn'
+import { fetchPOST, getImage } from '../../../services/APIconn'
+import Dialog from '../../reusableComponents/Dialog'
+import DefaultImage from '../../../assets/images/defaulImage.jpeg'
 
 interface ComplaintDetailsProps {
   restaurant: any
@@ -14,6 +16,8 @@ const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
   onClose,
   fetchrestaurants
 }) => {
+  const [logoOpen, setLogoOpen] = useState<boolean>(false)
+
   if (!restaurant) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -93,9 +97,26 @@ const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           See ID card
         </button>
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+        <button
+          onClick={() => setLogoOpen(true)}
+          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+        >
           See Logo
         </button>
+        {logoOpen && (
+          <Dialog
+            open={logoOpen}
+            title="Logo preview"
+            onClose={() => setLogoOpen(false)}
+          >
+            <div className="w-[500px] flex items-center justify-center p-1 h-[500px]">
+              <img
+                src={getImage(restaurant.logo, DefaultImage)}
+                className="h-fit w-fit rounded-lg"
+              />
+            </div>
+          </Dialog>
+        )}
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           Forward issue
         </button>
