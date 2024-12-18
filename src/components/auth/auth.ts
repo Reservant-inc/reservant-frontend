@@ -15,6 +15,14 @@ const isCustomerService = () => {
   )
   return isCustomerServiceEmployee
 }
+const isCustomerServiceManager = () => {
+  const isCustomerServiceManager = Boolean(
+    JSON.parse(Cookies.get('userInfo') as string).roles.includes(
+      'CustomerSupportManager'
+    )
+  )
+  return isCustomerServiceManager
+}
 
 const isCustomer = () => {
   const isCust = Boolean(
@@ -49,6 +57,28 @@ export function checkIfCustomerService() {
   const isCS = isCustomerService()
 
   if (!isCS) {
+    const isCust = isCustomer()
+
+    if (isCust) {
+      return redirect('/reservant/home')
+    }
+  }
+  return null
+}
+export function checkIfCustomerServiceManager() {
+  const isLogged = isLoggedIn()
+
+  if (!isLogged) {
+    return redirect('/login')
+  }
+
+  const isCSM = isCustomerServiceManager()
+
+  if (!isCSM) {
+    const isCS = isCustomerService()
+
+    if (isCS) return redirect('/customer-service')
+
     const isCust = isCustomer()
 
     if (isCust) {

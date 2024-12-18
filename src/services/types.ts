@@ -36,8 +36,9 @@ export type RestaurantDetailsType = {
   logo: string
   photos: string[]
   description: string
-  reservationDeposit: null
-  maxReservationDurationMinutes: number
+  reservationDeposit: number
+  distanceFrom: number | null
+  openingHours: OpeningHoursType[]
   tags: string[]
   rating: number
   numberReviews: number
