@@ -408,7 +408,10 @@ export type InterestedUser = {
 }
 
 export type Participants = {
-  userId: string; firstName: string; lastName: string; photo: string;
+  userId: string
+  firstName: string
+  lastName: string
+  photo: string
 }
 
 export type FriendData = {
@@ -421,17 +424,6 @@ export type FriendData = {
     lastName: string
     photo: string
   }
-}
-
-export type ReportType = {
-  reportId?: number
-  description: string
-  visitId: number
-  reportedUserId?: string
-  reportDate?: string
-  category?: string
-  createdBy?: UserType
-  reportedUser?: UserType
 }
 
 export type Correction = {
@@ -495,4 +487,19 @@ export type ComplaintUserInfo = {
     code: string
     number: string
   }
+}
+
+export type ReportType = {
+  reportId: number
+  description: string
+  reportDate: string
+  category: string
+  createdBy: UserType
+  reportedUser: UserType
+  escalatedBy: UserType
+  escalationComment: string
+  visit: VisitType
+  resolutionComment: string
+  resolvedBy: UserType
+  resolutionDate: string
 }

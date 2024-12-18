@@ -1,159 +1,257 @@
-import React, { useState } from 'react';
-import { Avatar, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
-import ReportActionDialog from './ReportActionDialog';
+import React, { useState } from 'react'
+import { IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { Link, useNavigate } from 'react-router-dom'
+import ReportActionDialog from './ReportActionDialog'
+import { ReportType, UserType } from '../../../services/types'
+import { getImage } from '../../../services/APIconn'
+import DefaultImage from '../../../assets/images/user.jpg'
 
 interface ComplaintDetailsProps {
-  report: any;
-  onClose: () => void;
-  refreshReports: () => void;
+  report: ReportType
+  onClose: () => void
+  refreshReports: () => void
 }
 
-const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({ report, onClose, refreshReports }) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState<'escalate' | 'resolve'>();
-  const navigate = useNavigate();
+const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
+  report,
+  onClose,
+  refreshReports
+}) => {
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [actionType, setActionType] = useState<'escalate' | 'resolve'>()
+  const navigate = useNavigate()
 
   const openDialog = (type: 'escalate' | 'resolve') => {
-    setActionType(type);
-    setDialogOpen(true);
-  };
+    setActionType(type)
+    setDialogOpen(true)
+  }
 
   const navigateToUserProfile = (userId: string) => {
-    navigate(`/customer-service/users/${userId}`);
-  };
+    navigate(`/customer-service/users/${userId}`)
+  }
 
   const navigateToVisitDetails = (visitId: string) => {
-    navigate(`/customer-service/visits/${visitId}`);
-  };
+    navigate(`/customer-service/visits/${visitId}`)
+  }
 
   const navigateToRestaurantDetails = (restaurantId: string) => {
-    navigate(`/customer-service/restaurants/${restaurantId}`);
-  };
+    navigate(`/customer-service/restaurants/${restaurantId}`)
+  }
 
   const renderVisitDetails = (visit: any) => (
-    <div className="space-y-1 ml-4 text-sm">
-      <p><strong>Visit ID:</strong> {visit.visitId}</p>
-      <p><strong>Date:</strong> {new Date(visit.date).toLocaleDateString()}</p>
-      <p><strong>End Time:</strong> {visit.endTime}</p>
-      <p><strong>Actual Start Time:</strong> {visit.actualStartTime || 'N/A'}</p>
-      <p><strong>Actual End Time:</strong> {visit.actualEndTime || 'N/A'}</p>
-      <p><strong>Number of People:</strong> {visit.numberOfPeople}</p>
-      <p><strong>Deposit:</strong> {visit.deposit ? `${visit.deposit} USD` : 'None'}</p>
-      <p><strong>Takeaway:</strong> {visit.takeaway ? 'Yes' : 'No'}</p>
-      <p><strong>Client ID:</strong> {visit.clientId}</p>
-      {visit.restaurant ? (
-        <>
-          <p><strong>Related Restaurant ID:</strong> {visit.restaurant.restaurantId}</p>
-          <button
-            onClick={() => navigateToRestaurantDetails(visit.restaurant.restaurantId)}
-            className="border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition"
-          >
-            See related Restaurant
-          </button>
-        </>
-      ) : (
-        <p><strong>Related Restaurant:</strong> None</p>
-      )}
-      <button
-        onClick={() => navigateToVisitDetails(visit.visitId)}
-        className="border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition mt-2"
-      >
-        See related Visit
-      </button>
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1 px-4 pt-2">
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Visit ID:</p>
+          <p>{visit.visitId}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Date:</p>
+          <p>{new Date(visit.date).toLocaleDateString()}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Start Time:</p>
+          <p>{visit.actualStartTime}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">End Time:</p>
+          <p>{visit.actualEndTime}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Number of People:</p>
+          <p>{visit.numberOfPeople}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Deposit:</p>
+          <p>{visit.deposit ? `${visit.deposit} USD` : 'None'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Takeaway:</p>
+          <p>{visit.takeaway ? 'Yes' : 'No'}</p>
+        </h1>
+        {visit.restaurant ? (
+          <>
+            <h1 className="flex gap-3 text-sm">
+              <p className="font-mont-bd">Related Restaurant ID:</p>
+              <p>{visit.restaurant.restaurantId}</p>
+            </h1>
+            <button
+              onClick={() =>
+                navigateToRestaurantDetails(visit.restaurant.restaurantId)
+              }
+              className="border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition"
+            >
+              See related Restaurant
+            </button>
+          </>
+        ) : (
+          <h1 className="flex gap-3 text-sm">
+            <p className="font-mont-bd">Related Restaurant:</p>
+            <p>None</p>
+          </h1>
+        )}
+      </div>
     </div>
-  );
+  )
 
-  const renderUserDetails = (label: string, user: any, comment?: string, date?: string, showProfileButton?: boolean) => (
-    <div className="space-y-1">
-      <p className="font-semibold">{label}</p>
-      <div className="flex items-center gap-2 ml-4">
-        <Avatar alt={user.firstName} src={user.photo || undefined} />
+  const renderUserDetails = (
+    label: string,
+    user: UserType,
+    comment?: string,
+    date?: string,
+    showProfileButton?: boolean
+  ) => (
+    <div>
+      <div className="flex justify-between items-center">
+        <h1 className="font-mont-bd text-md">{label}</h1>
+        {showProfileButton && (
+          <Link to={`/customer-service/users/${user.userId}`}>
+            <h1 className="underline text-sm text-grey-4">Go to profile</h1>
+          </Link>
+        )}
+      </div>
+      <div className="flex items-center gap-2 px-4 pt-2">
+        <img
+          src={getImage(user.photo, DefaultImage)}
+          alt="user image"
+          className="w-8 h-8 rounded-full self-start"
+        />
         <div>
-          <p className="font-bold">
+          <p className="font-mont-bd text-sm">
             {user.firstName} {user.lastName}
           </p>
-          <p className="text-sm text-gray-500">{user.userId}</p>
+          <p className="text-sm text-grey-3">{user.userId}</p>
+          {comment && (
+            <h1 className="flex gap-2 text-sm">
+              <p className="font-mont-bd">Comment:</p>
+              <p>{comment}</p>
+            </h1>
+          )}
+          {date && (
+            <p className="text-sm">
+              <strong>Date:</strong> {new Date(date).toLocaleString()}
+            </p>
+          )}
         </div>
       </div>
-      {showProfileButton && (
-        <button
-          className="ml-4 text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition"
-          onClick={() => navigateToUserProfile(user.userId)}
-        >
-          {label === 'Submitted By' ? "See reporting User's profile" : "See Reported User's profile"}
-        </button>
-      )}
-      {comment && <p className="text-sm ml-4"><strong>Comment:</strong> {comment}</p>}
-      {date && <p className="text-sm ml-4"><strong>Date:</strong> {new Date(date).toLocaleString()}</p>}
     </div>
-  );
+  )
 
   return (
-    <div className="w-full h-full p-4 bg-white dark:bg-black rounded-lg relative">
+    <div className="w-full h-full p-4 bg-white dark:bg-black rounded-lg flex flex-col gap-3 relative overflow-y-auto scroll">
       <IconButton className="absolute top-2 right-2" onClick={onClose}>
         <CloseIcon className="dark:text-white" />
       </IconButton>
-      <h2 className="text-lg font-semibold mb-4">Complaint Details</h2>
-      <div className="space-y-4">
-        <p><strong>ID:</strong> {report.reportId}</p>
-        <p><strong>Date:</strong> {new Date(report.reportDate).toLocaleString()}</p>
-        <p><strong>Category:</strong> {report.category}</p>
-        <p><strong>Description:</strong> {report.description || 'No description provided'}</p>
-
-        {/* Related Visit */}
-        <div>
-          <p className="font-semibold">Related Visit:</p>
-          {report.visit ? (
-            renderVisitDetails(report.visit)
-          ) : (
-            <p className="text-sm ml-4">No visit related to this complaint.</p>
-          )}
-        </div>
-
-        {/* User Details */}
-        {report.createdBy && renderUserDetails('Submitted By', report.createdBy, undefined, undefined, true)}
-        {report.reportedUser && renderUserDetails('Reported User', report.reportedUser, undefined, undefined, true)}
-        {report.escalatedBy && renderUserDetails('Escalated By', report.escalatedBy, report.escalationComment, report.reportDate)}
-        {report.resolvedBy && renderUserDetails('Resolved By', report.resolvedBy, report.resolutionComment, report.resolutionDate)}
+      <div className="flex flex-col">
+        <h1 className="text-lg font-mont-bd">Complaint details</h1>
+        <h1 className="text-sm text-grey-2 dark:text-grey-4">
+          complaint id: {report.reportId}
+        </h1>
       </div>
+
+      <div className="flex flex-col gap-1">
+        <div className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Date:</p>
+          <p>{new Date(report.reportDate).toLocaleString()}</p>
+        </div>
+        <div className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Category:</p>
+          <p>{report.category}</p>
+        </div>
+        <div className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Description:</p>
+          <p className="break-words w-[270px]">
+            {report.description || 'No description provided'}
+          </p>
+        </div>
+      </div>
+
+      {/* Related Visit */}
+      <div>
+        <div className="flex justify-between">
+          <p className="font-mont-bd text-md">Related Visit:</p>
+          <Link to={`/customer-service/visits/${report.visit.visitId}`}>
+            <h1 className="underline text-sm text-grey-4">Go to visit</h1>
+          </Link>
+        </div>
+        {report.visit ? (
+          renderVisitDetails(report.visit)
+        ) : (
+          <p className="text-sm ml-4">No visit related to this complaint.</p>
+        )}
+      </div>
+
+      {/* user details */}
+      {report.createdBy &&
+        renderUserDetails(
+          'Submitted By',
+          report.createdBy,
+          undefined,
+          undefined,
+          true
+        )}
+      {report.reportedUser &&
+        renderUserDetails(
+          'Reported User',
+          report.reportedUser,
+          undefined,
+          undefined,
+          true
+        )}
+      {report.escalatedBy &&
+        renderUserDetails(
+          'Escalated By',
+          report.escalatedBy,
+          report.escalationComment,
+          report.reportDate
+        )}
+      {report.resolvedBy &&
+        renderUserDetails(
+          'Resolved By',
+          report.resolvedBy,
+          report.resolutionComment,
+          report.resolutionDate
+        )}
 
       <div className="mt-4 flex gap-4">
-        <button
-          onClick={() => openDialog('escalate')}
-          disabled={!!report.escalatedBy || !!report.resolvedBy}
-          className={`w-1/2 dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition ${
-            report.escalatedBy || report.resolvedBy
-              ? 'opacity-50 cursor-not-allowed'
-              : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
-          }`}
-        >
-          {report.resolvedBy ? 'Already Resolved' : report.escalatedBy ? 'Already Escalated' : 'Escalate complaint to management'}
-        </button>
+        {!report.resolvedBy && (
+          <>
+            <button
+              onClick={() => openDialog('escalate')}
+              disabled={!!report.escalatedBy || !!report.resolvedBy}
+              className={`w-1/2 dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition ${
+                report.escalatedBy || report.resolvedBy
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
+              }`}
+            >
+              Pass complaint
+            </button>
+            <button
+              onClick={() => openDialog('resolve')}
+              disabled={!!report.resolvedBy}
+              className={`w-1/2 dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition ${
+                report.resolvedBy
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
+              }`}
+            >
+              {report.resolvedBy ? 'Already Resolved' : 'Resolve complaint'}
+            </button>
+          </>
+        )}
 
-        <button
-          onClick={() => openDialog('resolve')}
-          disabled={!!report.resolvedBy}
-          className={`w-1/2 dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition ${
-            report.resolvedBy
-              ? 'opacity-50 cursor-not-allowed'
-              : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
-          }`}
-        >
-          {report.resolvedBy ? 'Already Resolved' : 'Resolve complaint'}
-        </button>
+        <ReportActionDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          actionType={actionType}
+          reportId={report.reportId}
+          refreshReports={refreshReports}
+        />
       </div>
-
-      <ReportActionDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        actionType={actionType}
-        reportId={report.reportId}
-        refreshReports={refreshReports}
-      />
     </div>
-  );
-};
+  )
+}
 
-export default ComplaintDetails;
+export default ComplaintDetails

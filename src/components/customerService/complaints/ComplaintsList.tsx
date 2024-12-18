@@ -8,9 +8,10 @@ import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import ComplaintDetails from './ComplaintDetails'
 import { ThemeContext } from '../../../contexts/ThemeContext'
+import { ReportType } from '../../../services/types'
 
 const ComplaintsList: React.FC = () => {
-  const [reports, setReports] = useState<any[]>([])
+  const [reports, setReports] = useState<ReportType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
   const { reportId } = useParams<{ reportId?: string }>()
@@ -48,37 +49,19 @@ const ComplaintsList: React.FC = () => {
 
   const columns: GridColDef[] = [
     {
-      field: 'id',
-      headerName: 'ID',
-      flex: 0.5,
-      sortable: true
+      field: 'isResolved',
+      headerName: 'Is resolved?',
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams) => (
+        <span>{params.row.resolutionDate ? 'Yes' : 'No'}</span>
+      )
     },
     {
       field: 'reportDate',
       headerName: 'Report Date',
       flex: 1,
       sortable: true
-    },
-    {
-      field: 'category',
-      headerName: 'Category',
-      flex: 1,
-      sortable: true
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <Tooltip title={params.row.description || 'No description'}>
-          <span>
-            {params.row.description?.length > 50
-              ? `${params.row.description.substring(0, 50)}...`
-              : params.row.description || 'No description'}
-          </span>
-        </Tooltip>
-      )
     },
     {
       field: 'createdBy',
@@ -99,34 +82,24 @@ const ComplaintsList: React.FC = () => {
       }
     },
     {
-      field: 'escalatedBy',
-      headerName: 'Escalated By',
+      field: 'category',
+      headerName: 'Category',
       flex: 1,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => {
-        const escalatedBy = params.row.escalatedBy
-        return escalatedBy ? (
-          <Tooltip title={`${escalatedBy.userId}`}>
-            <span>
-              {escalatedBy.firstName} {escalatedBy.lastName}
-            </span>
-          </Tooltip>
-        ) : (
-          <span></span>
-        )
-      }
+      sortable: true
     },
     {
-      field: 'escalationDate',
-      headerName: 'Escalation Date',
+      field: 'description',
+      headerName: 'Description',
       flex: 1,
-      sortable: true,
+      sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <span>
-          {params.row.escalationDate
-            ? new Date(params.row.escalationDate).toLocaleDateString()
-            : ''}
-        </span>
+        <Tooltip title={params.row.description || 'No description'}>
+          <span>
+            {params.row.description?.length > 50
+              ? `${params.row.description.substring(0, 50)}...`
+              : params.row.description || 'No description'}
+          </span>
+        </Tooltip>
       )
     },
     {
@@ -139,11 +112,12 @@ const ComplaintsList: React.FC = () => {
         return resolvedBy ? (
           <Tooltip title={`${resolvedBy.userId}`}>
             <span>
+              {/* tu osoba ktora zamknęła zgłoszenie, w tooltip lista osób przez które przeszło zgłoszenie */}
               {resolvedBy.firstName} {resolvedBy.lastName}
             </span>
           </Tooltip>
         ) : (
-          <span></span>
+          <span>-</span>
         )
       }
     },
@@ -156,14 +130,14 @@ const ComplaintsList: React.FC = () => {
         <span>
           {params.row.resolutionDate
             ? new Date(params.row.resolutionDate).toLocaleDateString()
-            : ''}
+            : '-'}
         </span>
       )
     },
     {
       field: 'actions',
       headerName: 'Actions',
-      flex: 0.5,
+      flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip
@@ -202,7 +176,7 @@ const ComplaintsList: React.FC = () => {
   return (
     <div className="h-full w-full flex flex-col">
       <h1 className="text-lg font-semibold p-2">Complaints</h1>
-      <div className="flex gap-2 h-full">
+      <div className="flex gap-2 h-[calc(100%-44px)]">
         <div
           className={`h-full ${
             reportId ? 'w-[75%]' : 'w-full'
@@ -228,7 +202,7 @@ const ComplaintsList: React.FC = () => {
                   columns={columns}
                   pageSizeOptions={[5, 10, 25, 50]}
                   disableRowSelectionOnClick
-                  className="h-full"
+                  autosizeOnMount={true}
                 />
               </ThemeProvider>
             ) : (
@@ -240,7 +214,7 @@ const ComplaintsList: React.FC = () => {
         </div>
 
         {reportId && selectedReport && (
-          <div className="h-full w-[25%] overflow-y-auto scroll">
+          <div className="h-full w-[400px]">
             <ComplaintDetails
               report={selectedReport}
               onClose={closeSidePanel}

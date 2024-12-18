@@ -56,7 +56,11 @@ const Reservation: React.FC<ReservationProps> = ({
   const handleReportSubmit = async () => {
     try {
       let endpoint = ''
-      let reportData: ReportType = {
+      let reportData: {
+        description: string
+        visitId: number
+        reportedUserId?: string
+      } = {
         description: reportNote,
         visitId: reservation.visitId
       }
