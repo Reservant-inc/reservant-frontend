@@ -54,7 +54,8 @@ const RestaurantListSection: React.FC = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false)
   const [restaurantToDelete, setRestaurantToDelete] = useState<string>('')
   const [groups, setGroups] = useState<GroupType[]>([])
-  const [selectedRestaurant, setSelectedRestaurant] = useState<RestaurantType | null>(null)
+  const [selectedRestaurant, setSelectedRestaurant] =
+    useState<RestaurantType | null>(null)
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
@@ -70,8 +71,9 @@ const RestaurantListSection: React.FC = () => {
         )
 
         for (const i in response2.restaurants) {
-      
-          const response3 = await fetchGET(`/my-restaurants/${response2.restaurants[i].restaurantId}`)
+          const response3 = await fetchGET(
+            `/my-restaurants/${response2.restaurants[i].restaurantId}`
+          )
 
           tmp.push({
             id: Number(indx++),
@@ -84,7 +86,8 @@ const RestaurantListSection: React.FC = () => {
             city: response3.city,
             isVerified: response3.isVerified,
             reservationDeposit: response3.reservationDeposit,
-            maxReservationDurationMinutes: response3.maxReservationDurationMinutes,
+            maxReservationDurationMinutes:
+              response3.maxReservationDurationMinutes,
             tags: response3.tags,
             provideDelivery: response3.provideDelivery,
             logo: response3.logo,
@@ -152,48 +155,56 @@ const RestaurantListSection: React.FC = () => {
       console.error('Error deleting restaurant', error)
     }
   }
-  
+
   const processRowUpdate = async (newRow: any) => {
     try {
-      const { id, groupId, groupName, ...rowToUpdate } = newRow;
+      const { id, groupId, groupName, ...rowToUpdate } = newRow
 
       // Find the group associated with the current groupName
-      const newGroup = groups.find(group => group.name === groupName);
+      const newGroup = groups.find(group => group.name === groupName)
 
       if (newGroup && newGroup.restaurantGroupId !== groupId) {
-          // If groupId has changed, move the restaurant
-          await fetchPOST(`/my-restaurants/${rowToUpdate.restaurantId}/move-to-group`, JSON.stringify({groupId: newGroup.restaurantGroupId}));
+        // If groupId has changed, move the restaurant
+        await fetchPOST(
+          `/my-restaurants/${rowToUpdate.restaurantId}/move-to-group`,
+          JSON.stringify({ groupId: newGroup.restaurantGroupId })
+        )
       }
 
-        // Usuwanie przedrostka '/uploads/' z wybranych pól, jeśli istnieją
-        const fieldsToClean = ['businessPermission', 'rentalContract', 'alcoholLicense', 'logo','idCard'];
-        fieldsToClean.forEach((field) => {
-            if (rowToUpdate[field]?.startsWith('/uploads/')) {
-                rowToUpdate[field] = rowToUpdate[field].replace('/uploads/', '');
-            }
-        });
+      // Usuwanie przedrostka '/uploads/' z wybranych pól, jeśli istnieją
+      const fieldsToClean = [
+        'businessPermission',
+        'rentalContract',
+        'alcoholLicense',
+        'logo',
+        'idCard'
+      ]
+      fieldsToClean.forEach(field => {
+        if (rowToUpdate[field]?.startsWith('/uploads/')) {
+          rowToUpdate[field] = rowToUpdate[field].replace('/uploads/', '')
+        }
+      })
 
-        // Usuwanie przedrostka '/uploads/' z elementów tablicy photos, jeśli istnieją
-        if (Array.isArray(rowToUpdate.photos)) {
-          rowToUpdate.photos = rowToUpdate.photos.map((photo: string) =>
-              photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
-          );
+      // Usuwanie przedrostka '/uploads/' z elementów tablicy photos, jeśli istnieją
+      if (Array.isArray(rowToUpdate.photos)) {
+        rowToUpdate.photos = rowToUpdate.photos.map((photo: string) =>
+          photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
+        )
       }
-        
-        console.log('Dane wysyłane do API:', rowToUpdate);
 
-        await fetchPUT(
-            `/my-restaurants/${newRow.restaurantId}`,
-            JSON.stringify(rowToUpdate)
-        );
-        populateRows();
-        return newRow;
+      console.log('Dane wysyłane do API:', rowToUpdate)
+
+      await fetchPUT(
+        `/my-restaurants/${newRow.restaurantId}`,
+        JSON.stringify(rowToUpdate)
+      )
+      populateRows()
+      return newRow
     } catch (error) {
-        console.error('Error updating restaurant:', error);
-        throw error;
+      console.error('Error updating restaurant:', error)
+      throw error
     }
-};
-
+  }
 
   const EditToolbar: React.FC<
     GridToolbarProps & { onAddClick: () => void }
@@ -413,12 +424,12 @@ const RestaurantListSection: React.FC = () => {
   }
 
   const handleRowClick = (params: any) => {
-    const rowData = rows.find(row => row.id === params.id);
+    const rowData = rows.find(row => row.id === params.id)
     if (rowData) {
-      setSelectedRestaurant(rowData as RestaurantType); // Use type assertion here
-      setIsDetailsDialogOpen(true);
+      setSelectedRestaurant(rowData as RestaurantType) // Use type assertion here
+      setIsDetailsDialogOpen(true)
     }
-  };
+  }
 
   const closeDetailsDialog = () => {
     setSelectedRestaurant(null)
@@ -426,8 +437,8 @@ const RestaurantListSection: React.FC = () => {
   }
 
   const handleSucces = () => {
-    setIsDetailsDialogOpen(false);
-    populateRows();
+    setIsDetailsDialogOpen(false)
+    populateRows()
   }
 
   return (
@@ -437,7 +448,7 @@ const RestaurantListSection: React.FC = () => {
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
-        onRowClick={handleRowClick} 
+        onRowClick={handleRowClick}
         disableRowSelectionOnClick
         processRowUpdate={processRowUpdate}
         initialState={{
@@ -501,14 +512,14 @@ const RestaurantListSection: React.FC = () => {
       </Dialog>
 
       {selectedRestaurant && isDetailsDialogOpen && (
-            <RestaurantDetails 
-              restaurant={selectedRestaurant} 
-              open={isDetailsDialogOpen}
-              onClose={closeDetailsDialog}
-              onSuccess={handleSucces}
-              groups={groups}
-            />
-          )}
+        <RestaurantDetails
+          restaurant={selectedRestaurant}
+          open={isDetailsDialogOpen}
+          onClose={closeDetailsDialog}
+          onSuccess={handleSucces}
+          groups={groups}
+        />
+      )}
 
       <ConfirmationDialog
         open={isConfirmationOpen}

@@ -34,6 +34,9 @@ const ThemeContextProvider: React.FC<ThemeContextProps> = ({ children }) => {
       },
       text: {
         primary: '#222222'
+      },
+      primary: {
+        main: '#a94c79'
       }
     }
   })
@@ -47,6 +50,9 @@ const ThemeContextProvider: React.FC<ThemeContextProps> = ({ children }) => {
       },
       text: {
         primary: '#fefefe'
+      },
+      primary: {
+        main: '#64c3a6'
       }
     }
   })
