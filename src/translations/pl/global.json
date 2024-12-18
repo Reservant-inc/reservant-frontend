@@ -218,7 +218,7 @@
         "loading": "Wątki się ładują"
     },
     "friends": {
-        "search": "Szukaj znajomych",
+        "search": "Wyszukaj użytkowników",
         "friends": "Znajomi",
         "undo": "Cofnij zaproszenie",
         "send": "Wyślij zaproszenie"
@@ -345,7 +345,7 @@
             "remove-friend-button": "Usuń znajomego",
             "message-friend-button": "Wyślij wiadomość",
             "revoke-outgoing-request": "Cofnij zaproszenie",
-            "accept-incoming-request": "Zaapcektuj",
+            "accept-incoming-request": "Zaakceptuj",
             "decline-incoming-request": "Odrzuć",
             "no-friends-message": "Nie znaleziono znajomych",
             "no-outgoing-message": "Nie znaleziono wysłanych zaproszeń",
@@ -356,6 +356,28 @@
             "friend-removal-dialog-2": " z Twoich znajomych?",
             "removal-accept": "Tak",
             "removal-decline": "Nie"
+        },
+        "events" : {
+            "newest" : "Od najnowszych",
+            "interested" : "Zainteresowane",
+            "participating" : "Bierzesz udział",
+            "created":"Utworzone przez ciebie",
+            "oldest" : "Od najstarszych",
+            "search":"Przeszukaj wydarzenia",
+            "participatedIn":"Uczestniczył/a",
+            "manage":"Zarządzaj uczestnikami",
+            "edit":"Edytuj wydarzenie",
+            "delete":"Usuń wydarzenie",
+            "revoke":"Wycofaj zainteresowanie",
+            "leave":"Opuść wydarzenie",
+            "at":"w",
+            "participated": "wzięło udział"
+
+        },
+        "reports" : {
+            "id":"Identyfikator zgłoszenia",
+            "created":"Utworzone",
+            "search":"Przeszukaj zgłoszenia"
         }
     }
 }

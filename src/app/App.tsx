@@ -49,6 +49,9 @@ import ReportsTab from '../components/reservant/profile/reports/ReportsTab'
 import ReportsList from '../components/reservant/profile/reports/ReportsList'
 import ComplaintsList from '../components/customerService/complaints/ComplaintsList'
 import PendingRestaurantsList from '../components/customerService/pendingRestaurants/PendingRestaurantsList'
+import User from '../components/customerService/users/User'
+import VisitDetails from '../components/customerService/visits/VisitDetails'
+import RestaurantDetails from '../components/customerService/restaurants/RestaurantDetails'
 
 const router = createBrowserRouter([
   {
@@ -244,6 +247,18 @@ const router = createBrowserRouter([
         path: 'restaurants/:restaurantId?',
         element: <PendingRestaurantsList />,
         loader: checkIfCustomerServiceManager
+      },
+      {
+        path: 'users/:userId?',
+        element: <User />
+      },
+      {
+        path: 'visits/:visitId?',
+        element: <VisitDetails />
+      },
+      {
+        path: 'restaurants/:restaurantId?',
+        element: <RestaurantDetails />
       }
     ]
   },
@@ -268,18 +283,6 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
-  useEffect(() => {
-    if (
-      localStorage.theme === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  })
-
   return (
     <div id="AppWrapper" className="App font-mont-md">
       <div id="AppMainSection" className="h-screen">

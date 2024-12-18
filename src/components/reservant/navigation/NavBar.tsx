@@ -1,20 +1,21 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import LogoSecondary from '../../../assets/images/LOGO-SECONDARY.png'
 import LogoPrimary from '../../../assets/images/LOGO-PRIMARY.png'
 import Sections from './navItems/MenuSections'
 import Tools from './navItems/Tools'
 import Notifications from './navItems/Notifications/Notifications'
-import FriendSearchBar from './navItems/Friends/FriendSearchBar'
 import Threads from './navItems/Threads/Threads'
 import useWindowDimensions from '../../../hooks/useWindowResize'
+import UserSearchBar from './navItems/Friends/UserSearchBar'
+import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const NavBar: React.FC = () => {
-  const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
+  const { isDark } = useContext(ThemeContext)
 
   const size = useWindowDimensions()
 
   return (
-    <div className="flex h-full w-full items-center shadow-md dark:bg-black">
+    <div className="flex h-full w-full items-center dark:bg-black">
       <div className="mx-1 flex h-full w-full items-center p-1">
         <div className="flex h-full flex-1 items-center gap-2">
           <img
@@ -37,10 +38,10 @@ const NavBar: React.FC = () => {
         <Sections />
 
         <div className="flex h-full flex-1 items-center justify-end gap-3">
-          <FriendSearchBar />
+          <UserSearchBar isCustomerService={false} />
           <Threads />
-          <Notifications isDark={isDark} />
-          <Tools setIsDark={setIsDark} />
+          <Notifications />
+          <Tools />
         </div>
       </div>
     </div>

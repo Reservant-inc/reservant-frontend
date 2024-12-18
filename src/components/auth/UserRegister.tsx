@@ -180,7 +180,7 @@ const UserRegister: React.FC = () => {
                           <div className="flex w-4/5 gap-5">
                             <Link
                               id="login-registered-link"
-                              to="/user/login"
+                              to="/login"
                               className="pointer flex h-[50px] w-4/5 items-center justify-center rounded-lg bg-primary font-mont-md text-white shadow-md"
                             >
                               Back to login

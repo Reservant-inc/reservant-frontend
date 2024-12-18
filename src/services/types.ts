@@ -63,6 +63,7 @@ export type RestaurantShortType = {
 
 export type RestaurantType = {
   id: number
+  groupId: number
   groupName: string
   restaurantId: number
   name: string
@@ -78,8 +79,20 @@ export type RestaurantType = {
   maxReservationDurationMinutes: number
   tags: string[]
   provideDelivery: boolean
-  logo: File | null | string
+  logo: string
   description: string
+  openingHours: OpeningHoursType[]
+  nip: string
+  idCard: string
+  photos: string[]
+  postalIndex: string
+  businessPermission: string
+  rentalContract: string
+  alcoholLicense: string
+  tables: {
+    tableId: number
+    capacity: number
+  }[]
 }
 
 export type OpeningHoursType = {
@@ -414,17 +427,6 @@ export type FriendData = {
   }
 }
 
-export type ReportType = {
-  reportId?: number
-  description: string
-  visitId: number
-  reportedUserId?: string
-  reportDate?: string
-  category?: string
-  createdBy?: UserType
-  reportedUser?: UserType
-}
-
 export type Correction = {
   correctionId: number
   oldAmount: number
@@ -472,4 +474,33 @@ export type DeliveryDetailsDialogProps = {
   open: boolean
   onClose: () => void
   deliveryId: number
+}
+
+export type ComplaintUserInfo = {
+  userId: string
+  firstName: string
+  login: string
+  lastName: string
+  birthDate: string
+  roles: string[]
+  photo: string | null
+  phoneNumber: {
+    code: string
+    number: string
+  }
+}
+
+export type ReportType = {
+  reportId: number
+  description: string
+  reportDate: string
+  category: string
+  createdBy: UserType
+  reportedUser: UserType
+  escalatedBy: UserType
+  escalationComment: string
+  visit: VisitType
+  resolutionComment: string
+  resolvedBy: UserType
+  resolutionDate: string
 }

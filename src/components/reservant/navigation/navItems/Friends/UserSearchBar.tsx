@@ -1,21 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { fetchGET } from '../../../../../services/APIconn'
 import SearchIcon from '@mui/icons-material/Search'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import { CircularProgress } from '@mui/material'
 import { PaginationType, UserSearchType } from '../../../../../services/types'
-import SearchedUser from './SearchedUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { FetchError } from '../../../../../services/Errors'
 import { useTranslation } from 'react-i18next'
+import SearchedFriend from './SearchedFriend'
+import SearchedUser from '../../../../customerService/users/SearchedUser'
 
-const FriendSearchBar: React.FC = () => {
+interface UserSearchBarProps {
+  isCustomerService: boolean
+}
+
+const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [users, setUsers] = useState<UserSearchType[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [isPressed, setIsPressed] = useState<boolean>(false)
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const [t] = useTranslation('global')
 
@@ -50,6 +56,12 @@ const FriendSearchBar: React.FC = () => {
     }
   }
 
+  const handleInputFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }
+
   useEffect(() => {
     if (searchTerm.length >= 1) {
       fetchUsers(searchTerm, page)
@@ -67,10 +79,10 @@ const FriendSearchBar: React.FC = () => {
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
-      {}
       <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
         <input
           type="text"
+          ref={inputRef}
           placeholder={t('friends.search')}
           value={searchTerm}
           onChange={handleSearch}
@@ -79,7 +91,9 @@ const FriendSearchBar: React.FC = () => {
           }}
           className="clean-input h-8 w-[250px] p-2 placeholder:text-grey-2 dark:text-grey-1"
         />
-        <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+        <span onClick={handleInputFocus}>
+          <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+        </span>
       </div>
       {isPressed && (
         <div className="absolute z-[2] right-0 top-0 w-[460px]">
@@ -107,7 +121,11 @@ const FriendSearchBar: React.FC = () => {
                       key={index}
                       className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
                     >
-                      <SearchedUser user={user} />
+                      {isCustomerService ? (
+                        <SearchedUser user={user} />
+                      ) : (
+                        <SearchedFriend user={user} />
+                      )}
                     </div>
                   ))}
                 </InfiniteScroll>
@@ -140,4 +158,4 @@ const FriendSearchBar: React.FC = () => {
   )
 }
 
-export default FriendSearchBar
+export default UserSearchBar

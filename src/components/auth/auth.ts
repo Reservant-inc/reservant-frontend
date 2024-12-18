@@ -41,7 +41,7 @@ export function checkAuthLoader() {
   const isCS = isCustomerService()
 
   if (isCS) {
-    return redirect('/customer-service')
+    return redirect('/customer-service/reports')
   }
 
   return null
