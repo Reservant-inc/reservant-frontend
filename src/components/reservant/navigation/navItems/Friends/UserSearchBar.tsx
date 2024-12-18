@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { fetchGET } from '../../../../../services/APIconn'
 import SearchIcon from '@mui/icons-material/Search'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
@@ -21,6 +21,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
   const [isPressed, setIsPressed] = useState<boolean>(false)
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const [t] = useTranslation('global')
 
@@ -55,6 +56,12 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
     }
   }
 
+  const handleInputFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }
+
   useEffect(() => {
     if (searchTerm.length >= 1) {
       fetchUsers(searchTerm, page)
@@ -75,6 +82,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
       <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 px-2 font-mont-md">
         <input
           type="text"
+          ref={inputRef}
           placeholder={t('friends.search')}
           value={searchTerm}
           onChange={handleSearch}
@@ -83,7 +91,9 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
           }}
           className="clean-input h-8 w-[250px] p-2 placeholder:text-grey-2 dark:text-grey-1"
         />
-        <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+        <span onClick={handleInputFocus}>
+          <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+        </span>
       </div>
       {isPressed && (
         <div className="absolute z-[2] right-0 top-0 w-[460px]">
