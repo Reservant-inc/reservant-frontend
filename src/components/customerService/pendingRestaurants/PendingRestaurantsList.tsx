@@ -148,7 +148,7 @@ const PendingRestaurantsList: React.FC = () => {
               />
             ) : (
               <div className="flex justify-center items-center h-full text-lg">
-                No complaints found.
+                No pending restaurants found.
               </div>
             )}
           </div>
@@ -158,6 +158,7 @@ const PendingRestaurantsList: React.FC = () => {
             <PendingRestaurantDetails
               restaurant={selectedRestaurant}
               onClose={closeSidePanel}
+              fetchrestaurants={fetchrestaurants}
             />
           </div>
         )}

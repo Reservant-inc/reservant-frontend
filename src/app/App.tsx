@@ -4,6 +4,7 @@ import UserRegister from '../components/auth/UserRegister'
 import {
   checkAuthLoader,
   checkIfCustomerService,
+  checkIfCustomerServiceManager,
   checkIfOwner,
   logoutAction,
   redirectIfLoggedIn
@@ -241,7 +242,8 @@ const router = createBrowserRouter([
       },
       {
         path: 'restaurants/:restaurantId?',
-        element: <PendingRestaurantsList />
+        element: <PendingRestaurantsList />,
+        loader: checkIfCustomerServiceManager
       }
     ]
   },

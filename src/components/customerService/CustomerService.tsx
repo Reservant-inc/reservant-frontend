@@ -2,10 +2,20 @@ import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavBar from './nav/NavBar'
 import ReportIcon from '@mui/icons-material/Report'
+import Cookies from 'js-cookie'
 
 const CustomerService: React.FC = () => {
   const navigate = useNavigate()
 
+  const isCustomerSupportManager = () => {
+    if (Cookies.get('userInfo'))
+      return Boolean(
+        JSON.parse(Cookies.get('userInfo') as string).roles.includes(
+          'CustomerSupportManager'
+        )
+      )
+    return false
+  }
   return (
     <div className="w-full h-full bg-grey-1 dark:bg-grey-5 flex flex-col dark:text-white">
       <div className="w-full h-[3.5rem] bg-white">
@@ -24,13 +34,15 @@ const CustomerService: React.FC = () => {
               <ReportIcon />
               <h1>Complaints</h1>
             </button>
-            <button
-              onClick={() => navigate('restaurants')}
-              className="w-full p-3 flex gap-4 text-left dark:text-white rounded-md hover:bg-grey-0 hover:dark:bg-grey-5 transition"
-            >
-              <ReportIcon />
-              <h1>Pending restaurants</h1>
-            </button>
+            {isCustomerSupportManager() && (
+              <button
+                onClick={() => navigate('restaurants')}
+                className="w-full p-3 flex gap-4 text-left dark:text-white rounded-md hover:bg-grey-0 hover:dark:bg-grey-5 transition"
+              >
+                <ReportIcon />
+                <h1>Pending restaurants</h1>
+              </button>
+            )}
           </div>
         </div>
         <div className="h-full w-[calc(100%-16rem)] rounded-lg">

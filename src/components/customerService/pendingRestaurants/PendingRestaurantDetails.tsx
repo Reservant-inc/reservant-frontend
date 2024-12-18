@@ -1,15 +1,18 @@
 import React from 'react'
 import { IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { fetchPOST } from '../../../services/APIconn'
 
 interface ComplaintDetailsProps {
   restaurant: any
   onClose: () => void
+  fetchrestaurants: () => void
 }
 
 const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
   restaurant,
-  onClose
+  onClose,
+  fetchrestaurants
 }) => {
   if (!restaurant) {
     return (
@@ -17,6 +20,12 @@ const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
         <p>No details found for this complaint.</p>
       </div>
     )
+  }
+
+  const handleAccept = async () => {
+    fetchPOST(`/restaurants/${restaurant.restaurantId}/verify`)
+    fetchrestaurants()
+    alert('restaurant accepted')
   }
 
   return (
@@ -90,9 +99,18 @@ const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
         <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           Forward issue
         </button>
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+        <button
+          onClick={handleAccept}
+          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+        >
           Accept restaurant
         </button>
+        {/* <button
+          onClick={() => console.log(restaurant)}
+          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+        >
+          debug
+        </button> */}
       </div>
     </div>
   )
