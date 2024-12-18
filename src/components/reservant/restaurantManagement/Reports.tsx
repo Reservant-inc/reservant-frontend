@@ -33,7 +33,7 @@ export default function Reports() {
       const response = await fetchGET(`/my-restaurants/${restaurantId}/reports`)
 
       console.log(response)
-      let reports: (ReportType & { id: number })[] = []
+      let reports: any[] = []
 
       if (response.length)
         for (const i in response) {
