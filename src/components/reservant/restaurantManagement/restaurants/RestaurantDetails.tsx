@@ -83,15 +83,19 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
 
   const uploadPhoto = async (photoFile: File) => {
     try {
-      const res = await fetchFilesPOST('/uploads', photoFile); // zakładamy, że jest to funkcja do przesyłania pliku
-      setPhotos(prev => [...prev, res.path]); // Dodajemy nowe zdjęcie do stanu
-      return res.fileName;
+      const res = await fetchFilesPOST('/uploads', photoFile);
+      if (res && res.fileName) {
+        setPhotos(prev => [...prev, res.path]); // Dodajemy zdjęcie do stanu
+        return res.fileName;
+      }
+      throw new Error("Upload failed");
     } catch (error) {
       console.error('Error uploading photo:', error);
       setErrorMessage('Failed to upload photo. Please try again.');
-      return null;
+      return null; // Upewnij się, że zwracamy null przy błędzie
     }
   };
+  
 
   
   const handleSubmit = async (values: any, { setSubmitting, resetForm }: any) => {
@@ -637,13 +641,21 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                           {photos.map((photo, index) => (
                             <div key={index} className="relative">
                               <img
-                                className="w-32 h-32 object-cover rounded-lg" // Wyświetlanie zdjęć w jednym rzędzie
+                                className="w-32 h-32 object-cover rounded-lg"
                                 src={photo ? getImage(photo, photo) : DefaultImage}
                                 alt={`Uploaded photo ${index + 1}`}
                               />
                               <button
                                 type="button"
-                                onClick={() => remove(index)}
+                                onClick={() => {
+                                  // Usuwanie zdjęcia z formularza Formika
+                                  formik.setFieldValue(
+                                    'photos',
+                                    formik.values.photos.filter((_, i) => i !== index)
+                                  );
+                                  // Usuwanie zdjęcia z lokalnego stanu
+                                  setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
+                                }}
                                 className="absolute top-0 right-0 p-1 bg-black text-white rounded-full"
                               >
                                 X
@@ -669,6 +681,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                                   }
                                 }
                               }}
+                              
                             />
                           </div>
                         </div>
@@ -676,7 +689,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                     </FieldArray>
                   </div>
                 </div>
-
 
               <div className="flex justify-end space-x-4">
                 <button

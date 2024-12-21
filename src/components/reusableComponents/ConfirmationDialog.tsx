@@ -40,10 +40,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             {altText}
           </Button>
         )}
-        <Button onClick={onClose} color="primary" id="ConfirmationCancel">
+        <Button onClick={onClose} color="error" id="ConfirmationCancel">
           {t('general.cancel')}
         </Button>
-        <Button onClick={handleConfirm} color="error" id="ConfirmationConfirm">
+        <Button onClick={handleConfirm} color="primary" id="ConfirmationConfirm">
           {t('general.yes')}
         </Button>
       </DialogActions>
