@@ -38,7 +38,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
   const [logoPath, setLogoPath] = useState<string>(restaurant.logo|| DefaultImage);
   const [photos, setPhotos] = useState<string[]>(restaurant.photos || []);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
 
 
   const generateTimeOptions = () => {
@@ -135,10 +134,20 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
         cleanBusinessPermission = cleanBusinessPermission.replace('/uploads/', '');
       }
 
+      
+  
+      // Sprawdzanie zmiany grupy
+      const newGroup = groups.find(group => group.restaurantGroupId === groupId);
+      console.log(newGroup?.restaurantGroupId)
+      if (newGroup && newGroup.restaurantGroupId !== restaurant.groupId) {
+        // Jeśli groupId się zmienia, przenosimy restaurację do nowej grupy
+        await fetchPOST(`/my-restaurants/${restaurant.restaurantId}/move-to-group`, JSON.stringify({ groupId: newGroup.restaurantGroupId }));
+      }
+
       const data = {
         restaurantId: restaurant.restaurantId,
         groupId,
-        groupName,
+        groupName: newGroup?.name,
         name,
         restaurantType,
         address,
@@ -157,13 +166,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
         businessPermission: cleanBusinessPermission,
         idCard: cleanIdCard,
       };
-  
-      // Sprawdzanie zmiany grupy
-      const newGroup = groups.find(group => group.name === groupName);
-      if (newGroup && newGroup.restaurantGroupId !== groupId) {
-        // Jeśli groupId się zmienia, przenosimy restaurację do nowej grupy
-        await fetchPOST(`/my-restaurants/${restaurant.restaurantId}/move-to-group`, JSON.stringify({ groupId: newGroup.restaurantGroupId }));
-      }
   
       console.log('Dane wysyłane do API:', data);
 
