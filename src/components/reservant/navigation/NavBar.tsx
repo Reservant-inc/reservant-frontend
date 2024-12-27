@@ -6,7 +6,7 @@ import Tools from './navItems/Tools'
 import Notifications from './navItems/Notifications/Notifications'
 import Threads from './navItems/Threads/Threads'
 import useWindowDimensions from '../../../hooks/useWindowResize'
-import UserSearchBar from './navItems/Friends/UserSearchBar'
+import UserSearchBar from './navItems/Friends/SearchBar'
 import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const NavBar: React.FC = () => {

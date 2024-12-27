@@ -286,6 +286,8 @@ export type UserSearchType = {
   friendStatus: FriendStatus
 } & UserType
 
+
+
 export type User = {
   userId: string
   login: string

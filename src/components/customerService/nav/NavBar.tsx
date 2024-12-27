@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import Cookies from 'js-cookie'
 import { UserInfo } from '../../../services/types'
 import Threads from '../../reservant/navigation/navItems/Threads/Threads'
-import UserSearchBar from '../../reservant/navigation/navItems/Friends/UserSearchBar'
+import UserSearchBar from '../../reservant/navigation/navItems/Friends/SearchBar'
 import { ThemeContext } from '../../../contexts/ThemeContext'
 
 const theme = createTheme({

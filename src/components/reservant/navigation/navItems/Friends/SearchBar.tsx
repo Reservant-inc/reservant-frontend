@@ -3,20 +3,22 @@ import { fetchGET } from '../../../../../services/APIconn'
 import SearchIcon from '@mui/icons-material/Search'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import { CircularProgress } from '@mui/material'
-import { PaginationType, UserSearchType } from '../../../../../services/types'
+import { PaginationType, UserSearchType, RestaurantType } from '../../../../../services/types'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { FetchError } from '../../../../../services/Errors'
 import { useTranslation } from 'react-i18next'
 import SearchedFriend from './SearchedFriend'
 import SearchedUser from '../../../../customerService/users/SearchedUser'
+import SearchedRestaurant from '../../../../customerService/restaurants/SearchedRestaurant' // Import a new component to render restaurant results
 
-interface UserSearchBarProps {
+interface SearchBarProps {
   isCustomerService: boolean
 }
 
-const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [users, setUsers] = useState<UserSearchType[]>([])
+  const [restaurants, setRestaurants] = useState<RestaurantType[]>([])
   const [isLoadingUsers, setIsLoadingUsers] = useState<boolean>(false)
   const [isPressed, setIsPressed] = useState<boolean>(false)
   const [page, setPage] = useState<number>(0)
@@ -29,21 +31,33 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
     setIsPressed(!isPressed)
   }
 
-  const fetchUsers = async (name: string, page: number) => {
+  const fetchUsersAndRestaurants = async (name: string, page: number) => {
     try {
       if (page === 0) setIsLoadingUsers(true)
 
-      const result: PaginationType = await fetchGET(
+      // Fetch users
+      const userResult: PaginationType = await fetchGET(
         `/users?name=${name}&page=${page}&perPage=10`
       )
-      const newUsers = result.items as UserSearchType[]
+      const newUsers = userResult.items as UserSearchType[]
 
-      if (newUsers.length < 10) setHasMore(false)
+      // Fetch restaurants
+      const restaurantResult: PaginationType = await fetchGET(
+        `/restaurants?name=${name}&page=${page}&perPage=10`
+      )
+      const newRestaurants = (restaurantResult.items as unknown) as RestaurantType[]
+
+
+      if (newUsers.length < 10 && newRestaurants.length < 10) {
+        setHasMore(false)
+      }
 
       if (page > 0) {
         setUsers(prevUsers => [...prevUsers, ...newUsers])
+        setRestaurants(prevRestaurants => [...prevRestaurants, ...newRestaurants])
       } else {
         setUsers(newUsers)
+        setRestaurants(newRestaurants)
       }
     } catch (error) {
       if (error instanceof FetchError) {
@@ -64,9 +78,10 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
 
   useEffect(() => {
     if (searchTerm.length >= 1) {
-      fetchUsers(searchTerm, page)
+      fetchUsersAndRestaurants(searchTerm, page)
     } else {
       setUsers([])
+      setRestaurants([])
     }
   }, [searchTerm, page])
 
@@ -97,7 +112,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
       </div>
       {isPressed && (
         <div className="absolute z-[2] right-0 top-0 w-[460px]">
-          {users.length > 0 ? (
+          {users.length > 0 || restaurants.length > 0 ? (
             <div className="nav-dropdown scroll left-0 flex h-[15rem] w-[450px] items-center overflow-y-hidden dark:bg-black">
               <div className="custom-transition flex h-14 w-full items-center justify-between px-3 py-4">
                 <h1 className="font-mont-bd text-xl dark:text-white">
@@ -109,7 +124,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
                 className="scroll h-full w-full overflow-y-auto"
               >
                 <InfiniteScroll
-                  dataLength={users.length}
+                  dataLength={users.length + restaurants.length}
                   next={() => setPage(prevPage => prevPage + 1)}
                   hasMore={hasMore}
                   loader={<CircularProgress />}
@@ -118,7 +133,7 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
                 >
                   {users.map((user, index) => (
                     <div
-                      key={index}
+                      key={`user-${index}`}
                       className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
                     >
                       {isCustomerService ? (
@@ -126,6 +141,14 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
                       ) : (
                         <SearchedFriend user={user} />
                       )}
+                    </div>
+                  ))}
+                  {isCustomerService && restaurants.map((restaurant, index) => (
+                    <div
+                      key={`restaurant-${index}`}
+                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
+                    >
+                      <SearchedRestaurant restaurant={restaurant} />
                     </div>
                   ))}
                 </InfiniteScroll>
@@ -158,4 +181,4 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({ isCustomerService }) => {
   )
 }
 
-export default UserSearchBar
+export default SearchBar
