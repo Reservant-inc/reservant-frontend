@@ -117,96 +117,103 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
       </span>
     </div>
     {isPressed && (
-      <div className="absolute z-[2] right-0 top-0 w-[580px]">
-        {users.length > 0 || restaurants.length > 0 ? (
-          <div className="nav-dropdown flex left-0 h-[15rem] w-[580px] items-start overflow-y-hidden dark:bg-black">
-            {/* Nagłówki */}
-            <div className="custom-transition flex w-full px-3 py-4">
-              <h1 className="font-mont-bd text-xl dark:text-white">
-                {t('general.results')}
-              </h1>
-            </div>
+  <div className="absolute z-[2] right-0 top-0 w-[580px]">
+    {users.length > 0 || restaurants.length > 0 ? (
+      <div className="nav-dropdown flex flex-col w-[580px] items-start overflow-y-hidden dark:bg-black">
+        {/* Nagłówki */}
+        <div className="custom-transition flex w-full px-3 py-4">
+          <h1 className="font-mont-bd text-xl dark:text-white">
+            {t('general.results')}
+          </h1>
+        </div>
 
-            <div
-              id="scrollableDiv"
-              className="scroll flex h-full w-full overflow-y-auto"
+        {/* Wyświetlanie wyników */}
+        <div
+          id="scrollableDiv"
+          className="scroll flex h-full w-full overflow-y-auto"
+        >
+          {/* Sekcja użytkowników */}
+          <div className={isCustomerService ? "w-1/2 px-2" : "w-full px-2"}> {/* Zmieniamy szerokość w zależności od trybu */}
+            <h2 className="font-mont-md text-lg dark:text-white px-2">
+              {isCustomerService ? t('general.users') : ''}
+            </h2>
+            <InfiniteScroll
+              dataLength={users.length}
+              next={() => setPage(prevPage => prevPage + 1)}
+              hasMore={hasMore}
+              loader={<CircularProgress />}
+              scrollableTarget="scrollableDiv"
+              className="hidescroll"
             >
-              {/* Sekcja użytkowników */}
-              <div className="w-1/2 px-2">
-                <h2 className="font-mont-md text-lg dark:text-white px-2">
-                  {t('general.users')}
-                </h2>
-                <InfiniteScroll
-                  dataLength={users.length}
-                  next={() => setPage(prevPage => prevPage + 1)}
-                  hasMore={hasMore}
-                  loader={<CircularProgress />}
-                  scrollableTarget="scrollableDiv"
-                  className="hidescroll"
+              {users.map((user, index) => (
+                <div
+                  key={`user-${index}`}
+                  className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
                 >
-                  {users.map((user, index) => (
-                    <div
-                      key={`user-${index}`}
-                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
-                    >
-                      {isCustomerService ? (
-                        <SearchedUser user={user} />
-                      ) : (
-                        <SearchedFriend user={user} />
-                      )}
-                    </div>
-                  ))}
-                </InfiniteScroll>
-              </div>
+                  {isCustomerService ? (
+                    <SearchedUser user={user} />
+                  ) : (
+                    <SearchedFriend user={user} />
+                  )}
+                </div>
+              ))}
+            </InfiniteScroll>
+          </div>
 
-              {/* Sekcja restauracji */}
-              <div className="w-1/2 px-2">
-                <h2 className="font-mont-md text-lg dark:text-white">
-                  {t('general.restaurants')}
-                </h2>
-                <InfiniteScroll
-                  dataLength={restaurants.length}
-                  next={() => setPage(prevPage => prevPage + 1)}
-                  hasMore={hasMore}
-                  loader={<CircularProgress />}
-                  scrollableTarget="scrollableDiv"
-                  className="hidescroll"
-                >
-                  {restaurants.map((restaurant, index) => (
-                    <div
-                      key={`restaurant-${index}`}
-                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
-                    >
-                      <SearchedRestaurant restaurant={restaurant} />
-                    </div>
-                  ))}
-                </InfiniteScroll>
-              </div>
+          {/* Sekcja restauracji - tylko dla Customer Service */}
+          {isCustomerService && (
+            <div className="w-1/2 px-2">
+              <h2 className="font-mont-md text-lg dark:text-white">
+                {t('general.restaurants')}
+              </h2>
+              <InfiniteScroll
+                dataLength={restaurants.length}
+                next={() => setPage(prevPage => prevPage + 1)}
+                hasMore={hasMore}
+                loader={<CircularProgress />}
+                scrollableTarget="scrollableDiv"
+                className="hidescroll"
+              >
+                {restaurants.map((restaurant, index) => (
+                  <div
+                    key={`restaurant-${index}`}
+                    className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
+                  >
+                    <SearchedRestaurant restaurant={restaurant} />
+                  </div>
+                ))}
+              </InfiniteScroll>
+            </div>
+          )}
+        </div>
+      </div>
+    ) : (
+      <>
+        {isLoading ? (
+          <div className="nav-dropdown flex h-[3rem] w-[290px] items-center justify-center dark:bg-black">
+            <div className="flex flex-col items-center gap-2">
+              <CircularProgress className="h-8 w-8 text-grey-2" />
             </div>
           </div>
         ) : (
-          <>
-            {isLoading ? (
-              <div className="nav-dropdown left-0 flex h-[3rem] w-[290px] items-center justify-center dark:bg-black">
-                <div className="flex flex-col items-center gap-2">
-                  <CircularProgress className="h-8 w-8 text-grey-2" />
-                </div>
+          isResutNotExist && (
+            <div className="nav-dropdown flex flex-col items-center justify-center h-[3rem] w-[290px] dark:bg-black">
+              <div className="flex flex-col items-center justify-center gap-3">
+                <h1 className="text-center text-sm italic text-grey-3">
+                  {t('general.no-results')}
+                </h1>
               </div>
-            ) : (
-              isResutNotExist && (
-                <div className="nav-dropdown left-0 flex h-[3rem] w-[290px] items-center justify-center dark:bg-black">
-                  <div className="flex flex-col items-center justify-center gap-3">
-                    <h1 className="text-center text-sm italic text-grey-3">
-                      {t('general.no-results')}
-                    </h1>
-                  </div>
-                </div>
-              )
-            )}
-          </>
+            </div>
+          )
         )}
-      </div>
+      </>
     )}
+  </div>
+)}
+
+
+
+
   </OutsideClickHandler>
 )
 
