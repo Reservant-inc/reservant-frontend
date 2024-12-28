@@ -12,7 +12,9 @@
         "yes": "Yes",
         "confirmation": "Confirmation",
         "delete": "Delete",
-        "edit": "Edit"
+        "edit": "Edit",
+        "users": "Users",
+        "restaurants": "Restaurants"
     },
     "landing-page": {
         "loginButton": "Sign in",

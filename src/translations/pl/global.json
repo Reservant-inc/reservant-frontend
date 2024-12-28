@@ -12,7 +12,9 @@
         "yes": "Tak",
         "confirmation": "Potwierdzenie",
         "delete": "Usuń",
-        "edit": "Edytuj"
+        "edit": "Edytuj",
+        "users": "Uzytkownicy",
+        "restaurants": "Restauracje"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",

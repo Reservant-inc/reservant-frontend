@@ -13,7 +13,7 @@ const SearchedFriend: React.FC<SearchedFriendProps> = ({ user }) => {
 
   return (
     <button
-      className="flex w-[60%] items-center gap-[5px] overflow-x-hidden text-sm p-2"
+      className="flex w-[90%] items-center gap-[5px] overflow-x-hidden text-sm p-2"
       onClick={() => navigate(`users/${user.userId}`)}
     >
       <img

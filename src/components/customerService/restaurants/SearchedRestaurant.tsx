@@ -13,12 +13,12 @@ const SearchedRestaurant: React.FC<SearchedRestaurantProps> = ({ restaurant }) =
 
   return (
     <button
-      className="flex w-[60%] items-center gap-[5px] overflow-x-hidden text-sm p-2"
+      className="flex w-[90%] items-center gap-[5px] overflow-x-hidden text-sm p-2"
       onClick={() => navigate(`restaurants/${restaurant.restaurantId}`)}
     >
       <img
         src={getImage(restaurant.logo, DefaultPhoto)}
-        alt="restaurant photo"
+        alt="restaurant logo"
         className="h-8 w-8 rounded-full"
       />
       <h1 className="dark:text-white">{restaurant.name}</h1>
