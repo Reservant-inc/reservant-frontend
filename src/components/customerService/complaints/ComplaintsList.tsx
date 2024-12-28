@@ -179,7 +179,7 @@ const ComplaintsList: React.FC = () => {
       <div className="flex gap-2 h-[calc(100%-44px)]">
         <div
           className={`h-full ${
-            reportId ? 'w-[75%]' : 'w-full'
+            reportId ? 'w-[calc(100%-400px)]' : 'w-full'
           } transition-all flex flex-col`}
         >
           <div className="flex-grow overflow-hidden bg-white dark:bg-black rounded-lg shadow-md">
@@ -200,7 +200,7 @@ const ComplaintsList: React.FC = () => {
                     createdBy: report.createdBy,
                     resolutionDate: report.resolutionDate,
                     resolvedBy: report.resolvedBy,
-                    isResolved: report.resolutionDate,
+                    isResolved: report.resolutionDate
                   }))}
                   columns={columns}
                   pageSizeOptions={[5, 10, 25, 50]}
