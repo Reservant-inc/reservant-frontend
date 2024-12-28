@@ -1,21 +1,21 @@
 export enum LocalType {
-  Restaurant = 'Restaurant',
-  Bar = 'Bar',
-  Cafe = 'Cafe'
+  Restaurant,
+  Bar,
+  Cafe
 }
 
 export enum FriendStatus {
-  Stranger = 'Stranger',
-  OutgoingRequest = 'OutgoingRequest',
-  IncomingRequest = 'IncomingRequest',
-  Friend = 'Friend'
+  Stranger,
+  OutgoingRequest,
+  IncomingRequest,
+  Friend
 }
 
 export enum FriendActionStatus {
-  Sent = 'Sent',
-  Undone = 'Undone',
-  Accepted = 'Accepted',
-  Deleted = 'Deleted'
+  Sent,
+  Undone,
+  Accepted,
+  Deleted
 }
 
 export enum MenuScreenType {
@@ -25,24 +25,29 @@ export enum MenuScreenType {
 }
 
 export enum EventListType {
-  Created = 'Created',
-  Interested = 'Interested',
-  Participates = 'Participates',
-  History = 'History'
+  Created,
+  Interested,
+  Participates,
+  History
 }
 export enum ReportsListType {
-  Created = 'Created'
+  Created
 }
 
 export enum ReservationListType {
-  Incoming = 'Incoming',
-  Finished = 'Finished'
+  Incoming,
+  Finished
 }
 
 export enum FriendListType {
-  List = 'List',
-  Outgoing = 'Outgoing',
-  Incoming = 'Incoming'
+  List,
+  Outgoing,
+  Incoming
+}
+
+export enum TransactionListType {
+  CustomerService,
+  Client
 }
 
 export enum UnitOfMeasurement {

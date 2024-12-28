@@ -10,6 +10,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { Formik, Form, Field } from 'formik'
 import Dialog from '../../reusableComponents/Dialog'
 import * as Yup from 'yup'
+import TransactionHistory from '../../reservant/profile/TransactionHisotry'
+import { TransactionListType } from '../../../services/enums'
 
 const getImage = (photo: string | null, defaultImage: string) =>
   photo || defaultImage
@@ -144,6 +146,7 @@ const User: React.FC = () => {
 
         <div className="h-full w-full bg-white rounded-lg shadow-md p-4">
           <h1 className="font-mont-bd text-lg">Transaction history</h1>
+          <TransactionHistory listType={TransactionListType.CustomerService} />
         </div>
       </div>
 
@@ -158,165 +161,172 @@ const User: React.FC = () => {
 
       {/* Ban User Dialog */}
       <Dialog
-  open={isDialogOpen}
-  onClose={() => {
-    setIsDialogOpen(false);
-    setBanMessage(null);
-  }}
-  title={`Ban User ${userInfo?.firstName || ''} ${userInfo?.lastName || ''}`}
->
-  {banMessage ? (
-    <div className="p-4 flex flex-col justify-between gap-4 min-h-[150px]">
-      <p className="font-mont-bd">{banMessage}</p>
-      <div className="flex justify-end">
-        <button
-          className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-          onClick={() => {
-            setIsDialogOpen(false);
-            setBanMessage(null); 
-          }}
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  ) : (
-    <Formik
-      initialValues={{ days: 0, hours: 0, minutes: 0 }}
-      validationSchema={Yup.object({
-        days: Yup.number()
-          .min(0, 'Days must be 0 or more')
-          .required('Days are required'),
-        hours: Yup.number()
-          .min(0, 'Hours must be between 0 and 23')
-          .max(23, 'Hours must be between 0 and 23')
-          .required('Hours are required'),
-        minutes: Yup.number()
-          .min(0, 'Minutes must be between 0 and 59')
-          .max(59, 'Minutes must be between 0 and 59')
-          .required('Minutes are required'),
-      })}
-      onSubmit={(values, { resetForm }) => {
-        handleBanUser(values); 
-        resetForm(); 
-      }}
-    >
-      {formik => {
-        const isBanDisabled =
-          (formik.values.days === 0 &&
-            formik.values.hours === 0 &&
-            formik.values.minutes === 0) ||
-          Object.keys(formik.errors).length > 0;
-
-        return (
-          <Form>
-            <div className="flex flex-col gap-4 p-3 min-h-[330px] min-w-[300px]">
-              {/* Days */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="days" className="text-sm font-medium">
-                  Days
-                </label>
-                <Field
-                  as={TextField}
-                  name="days"
-                  id="days"
-                  type="number"
-                  fullWidth
-                  sx={{ height: 40 }}
-                  error={formik.touched.days && Boolean(formik.errors.days)}
-                  helperText={formik.touched.days && formik.errors.days}
-                  className={`${
-                    !(formik.touched.days && formik.errors.days)
-                      ? 'border-black dark:border-white'
-                      : 'border-red dark:border-red'
-                  }`}
-                />
-              </div>
-
-              {/* Hours */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="hours" className="text-sm font-medium">
-                  Hours
-                </label>
-                <Field
-                  as={TextField}
-                  name="hours"
-                  id="hours"
-                  type="number"
-                  fullWidth
-                  sx={{ height: 40 }}
-                  error={formik.touched.hours && Boolean(formik.errors.hours)}
-                  helperText={formik.touched.hours && formik.errors.hours}
-                  className={`${
-                    !(formik.touched.hours && formik.errors.hours)
-                      ? 'border-black dark:border-white'
-                      : 'border-red dark:border-red'
-                  }`}
-                />
-              </div>
-
-              {/* Minutes */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="minutes" className="text-sm font-medium">
-                  Minutes
-                </label>
-                <Field
-                  as={TextField}
-                  name="minutes"
-                  id="minutes"
-                  type="number"
-                  fullWidth
-                  sx={{ height: 40 }}
-                  error={formik.touched.minutes && Boolean(formik.errors.minutes)}
-                  helperText={formik.touched.minutes && formik.errors.minutes}
-                  className={`${
-                    !(formik.touched.minutes && formik.errors.minutes)
-                      ? 'border-black dark:border-white'
-                      : 'border-red dark:border-red'
-                  }`}
-                />
-              </div>
-
-              {isBanDisabled &&
-                formik.values.days === 0 &&
-                formik.values.hours === 0 &&
-                formik.values.minutes === 0 && (
-                  <p className="text-red text-sm">
-                    Ban must last at least 1 minute.
-                  </p>
-                )}
-            </div>
-
-            <div className="flex justify-end gap-4 p-1">
+        open={isDialogOpen}
+        onClose={() => {
+          setIsDialogOpen(false)
+          setBanMessage(null)
+        }}
+        title={`Ban User ${userInfo?.firstName || ''} ${userInfo?.lastName || ''}`}
+      >
+        {banMessage ? (
+          <div className="p-4 flex flex-col justify-between gap-4 min-h-[150px]">
+            <p className="font-mont-bd">{banMessage}</p>
+            <div className="flex justify-end">
               <button
-                type="button"
-                onClick={() => {
-                  setIsDialogOpen(false);
-                  setBanMessage(null);
-                  formik.resetForm();
-                }}
                 className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+                onClick={() => {
+                  setIsDialogOpen(false)
+                  setBanMessage(null)
+                }}
               >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={formik.isSubmitting || isBanDisabled}
-                className={`text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
-                  isBanDisabled ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-              >
-                Ban
+                Close
               </button>
             </div>
-          </Form>
-        );
-      }}
-    </Formik>
-  )}
-</Dialog>
+          </div>
+        ) : (
+          <Formik
+            initialValues={{ days: 0, hours: 0, minutes: 0 }}
+            validationSchema={Yup.object({
+              days: Yup.number()
+                .min(0, 'Days must be 0 or more')
+                .required('Days are required'),
+              hours: Yup.number()
+                .min(0, 'Hours must be between 0 and 23')
+                .max(23, 'Hours must be between 0 and 23')
+                .required('Hours are required'),
+              minutes: Yup.number()
+                .min(0, 'Minutes must be between 0 and 59')
+                .max(59, 'Minutes must be between 0 and 59')
+                .required('Minutes are required')
+            })}
+            onSubmit={(values, { resetForm }) => {
+              handleBanUser(values)
+              resetForm()
+            }}
+          >
+            {formik => {
+              const isBanDisabled =
+                (formik.values.days === 0 &&
+                  formik.values.hours === 0 &&
+                  formik.values.minutes === 0) ||
+                Object.keys(formik.errors).length > 0
 
+              return (
+                <Form>
+                  <div className="flex flex-col gap-4 p-3 min-h-[330px] min-w-[300px]">
+                    {/* Days */}
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="days" className="text-sm font-medium">
+                        Days
+                      </label>
+                      <Field
+                        as={TextField}
+                        name="days"
+                        id="days"
+                        type="number"
+                        fullWidth
+                        sx={{ height: 40 }}
+                        error={
+                          formik.touched.days && Boolean(formik.errors.days)
+                        }
+                        helperText={formik.touched.days && formik.errors.days}
+                        className={`${
+                          !(formik.touched.days && formik.errors.days)
+                            ? 'border-black dark:border-white'
+                            : 'border-red dark:border-red'
+                        }`}
+                      />
+                    </div>
 
+                    {/* Hours */}
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="hours" className="text-sm font-medium">
+                        Hours
+                      </label>
+                      <Field
+                        as={TextField}
+                        name="hours"
+                        id="hours"
+                        type="number"
+                        fullWidth
+                        sx={{ height: 40 }}
+                        error={
+                          formik.touched.hours && Boolean(formik.errors.hours)
+                        }
+                        helperText={formik.touched.hours && formik.errors.hours}
+                        className={`${
+                          !(formik.touched.hours && formik.errors.hours)
+                            ? 'border-black dark:border-white'
+                            : 'border-red dark:border-red'
+                        }`}
+                      />
+                    </div>
+
+                    {/* Minutes */}
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="minutes" className="text-sm font-medium">
+                        Minutes
+                      </label>
+                      <Field
+                        as={TextField}
+                        name="minutes"
+                        id="minutes"
+                        type="number"
+                        fullWidth
+                        sx={{ height: 40 }}
+                        error={
+                          formik.touched.minutes &&
+                          Boolean(formik.errors.minutes)
+                        }
+                        helperText={
+                          formik.touched.minutes && formik.errors.minutes
+                        }
+                        className={`${
+                          !(formik.touched.minutes && formik.errors.minutes)
+                            ? 'border-black dark:border-white'
+                            : 'border-red dark:border-red'
+                        }`}
+                      />
+                    </div>
+
+                    {isBanDisabled &&
+                      formik.values.days === 0 &&
+                      formik.values.hours === 0 &&
+                      formik.values.minutes === 0 && (
+                        <p className="text-red text-sm">
+                          Ban must last at least 1 minute.
+                        </p>
+                      )}
+                  </div>
+
+                  <div className="flex justify-end gap-4 p-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsDialogOpen(false)
+                        setBanMessage(null)
+                        formik.resetForm()
+                      }}
+                      className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={formik.isSubmitting || isBanDisabled}
+                      className={`text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
+                        isBanDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      Ban
+                    </button>
+                  </div>
+                </Form>
+              )
+            }}
+          </Formik>
+        )}
+      </Dialog>
 
       {/* Unban User Dialog */}
       <Dialog
@@ -325,15 +335,15 @@ const User: React.FC = () => {
         title="Unban User"
       >
         <div className="p-4 flex flex-col justify-between min-h-[150px]">
-        <p className="font-mont-bd">{unbanMessage}</p>
-        <div className="flex justify-end">
-             <button
-               className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-               onClick={() => setUnbanMessage(null)}
-             >
-               Close
-             </button>
-           </div>
+          <p className="font-mont-bd">{unbanMessage}</p>
+          <div className="flex justify-end">
+            <button
+              className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+              onClick={() => setUnbanMessage(null)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       </Dialog>
     </div>
