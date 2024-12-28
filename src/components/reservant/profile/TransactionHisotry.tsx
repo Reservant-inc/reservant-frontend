@@ -10,6 +10,7 @@ import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import Dialog from '../../reusableComponents/Dialog'
 import { TransactionListType } from '../../../services/enums'
+import { useParams } from 'react-router-dom'
 
 interface TranstacionHistoryProps {
   listType: TransactionListType
@@ -25,6 +26,13 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
   const [showMoneyDialog, setShowMoneyDialog] = useState<boolean>(false)
   const [value, setValue] = useState<number>(0)
 
+  const { userId } = useParams<{ userId: string }>()
+
+  const apiRoutes: Record<TransactionListType, string> = {
+    [TransactionListType.Client]: '/wallet/history',
+    [TransactionListType.CustomerService]: `/users/${userId}/payment-history`
+  }
+
   useEffect(() => {
     fetchWalletBalance()
   }, [])
@@ -32,7 +40,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
   const fetchTransactions = async () => {
     try {
       const result: PaginationType = await fetchGET(
-        `/wallet/history?page=${page}`
+        `${apiRoutes[listType]}?page=${page}`
       )
       const newTransactions = result.items as TransactionType[]
 
