@@ -14,7 +14,8 @@
         "delete": "Delete",
         "edit": "Edit",
         "users": "Users",
-        "restaurants": "Restaurants"
+        "restaurants": "Restaurants",
+        "submitSuccessMessage": "The application has been sent"
     },
     "landing-page": {
         "loginButton": "Sign in",
