@@ -130,10 +130,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
             {/* Wyświetlanie wyników */}
             <div
               id="scrollableDiv"
-              className="scroll flex h-full w-full overflow-y-auto"
+              className={`scroll flex h-[300px] w-full overflow-y-auto ${
+                isCustomerService ? '' : 'flex-col' // Flexbox: kolumny dla customer service, jedna kolumna dla znajomych
+              }`}
             >
               {/* Sekcja użytkowników */}
-              <div className={isCustomerService ? "w-1/2 px-2" : "w-full px-2"}> {/* Zmieniamy szerokość w zależności od trybu */}
+              <div className={isCustomerService ? 'w-1/2 px-2' : 'w-full px-2'}>
                 <h2 className="font-mont-md text-lg dark:text-white px-2">
                   {isCustomerService ? t('general.users') : ''}
                 </h2>
@@ -148,7 +150,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
                   {users.map((user, index) => (
                     <div
                       key={`user-${index}`}
-                      className="w-full rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5"
+                      className={`rounded-lg px-2 py-1 hover:bg-grey-0 dark:hover:bg-grey-5 ${
+                        isCustomerService ? 'w-full' : 'w-full'
+                      }`}
                     >
                       {isCustomerService ? (
                         <SearchedUser user={user} />
@@ -160,7 +164,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
                 </InfiniteScroll>
               </div>
 
-              {/* Sekcja restauracji - tylko dla Customer Service */}
+              {/* Sekcja restauracji */}
               {isCustomerService && (
                 <div className="w-1/2 px-2">
                   <h2 className="font-mont-md text-lg dark:text-white">
