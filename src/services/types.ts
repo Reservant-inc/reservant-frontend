@@ -92,7 +92,8 @@ export type RestaurantType = {
   tables: {
     tableId: number
     capacity: number
-  }[]
+  }[],
+  isArchived?: boolean
 }
 
 export type OpeningHoursType = {

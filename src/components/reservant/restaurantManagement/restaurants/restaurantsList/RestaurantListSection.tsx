@@ -75,6 +75,9 @@ const RestaurantListSection: React.FC = () => {
             `/my-restaurants/${response2.restaurants[i].restaurantId}`
           )
 
+          if (response3.isArchived) {
+            continue;
+          }
           tmp.push({
             id: Number(indx++),
             groupId: group.restaurantGroupId,
@@ -101,7 +104,7 @@ const RestaurantListSection: React.FC = () => {
             businessPermission: response3.businessPermission,
             rentalContract: response3.rentalContract,
             alcoholLicense: response3.alcoholLicense,
-            tables: response3.tables
+            tables: response3.tables,
           })
         }
       }
