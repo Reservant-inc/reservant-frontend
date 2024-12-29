@@ -6,8 +6,8 @@ import Tools from './navItems/Tools'
 import Notifications from './navItems/Notifications/Notifications'
 import Threads from './navItems/Threads/Threads'
 import useWindowDimensions from '../../../hooks/useWindowResize'
-import UserSearchBar from './navItems/Friends/SearchBar'
 import { ThemeContext } from '../../../contexts/ThemeContext'
+import SearchBar from './navItems/Friends/SearchBar'
 
 const NavBar: React.FC = () => {
   const { isDark } = useContext(ThemeContext)
@@ -38,7 +38,7 @@ const NavBar: React.FC = () => {
         <Sections />
 
         <div className="flex h-full flex-1 items-center justify-end gap-3">
-          <UserSearchBar isCustomerService={false} />
+          <SearchBar isCustomerService={false} />
           <Threads />
           <Notifications />
           <Tools />
