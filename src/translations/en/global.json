@@ -12,7 +12,10 @@
         "yes": "Yes",
         "confirmation": "Confirmation",
         "delete": "Delete",
-        "edit": "Edit"
+        "edit": "Edit",
+        "users": "Users",
+        "restaurants": "Restaurants",
+        "submitSuccessMessage": "The application has been sent"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -225,7 +228,7 @@
         "loading": "Threads are loading"
     },
     "friends": {
-        "search": "Search for a user",
+        "search": "Search",
         "friends": "Friends",
         "undo": "Undo request",
         "send": "Send request"

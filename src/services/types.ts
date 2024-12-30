@@ -92,7 +92,8 @@ export type RestaurantType = {
   tables: {
     tableId: number
     capacity: number
-  }[]
+  }[],
+  isArchived?: boolean
 }
 
 export type OpeningHoursType = {
@@ -285,6 +286,8 @@ export type CartItemType = {
 export type UserSearchType = {
   friendStatus: FriendStatus
 } & UserType
+
+
 
 export type User = {
   userId: string

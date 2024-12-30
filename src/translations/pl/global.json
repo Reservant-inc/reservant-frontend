@@ -12,7 +12,9 @@
         "yes": "Tak",
         "confirmation": "Potwierdzenie",
         "delete": "Usuń",
-        "edit": "Edytuj"
+        "edit": "Edytuj",
+        "users": "Uzytkownicy",
+        "restaurants": "Restauracje"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -218,7 +220,7 @@
         "loading": "Wątki się ładują"
     },
     "friends": {
-        "search": "Wyszukaj użytkowników",
+        "search": "Wyszukaj",
         "friends": "Znajomi",
         "undo": "Cofnij zaproszenie",
         "send": "Wyślij zaproszenie"

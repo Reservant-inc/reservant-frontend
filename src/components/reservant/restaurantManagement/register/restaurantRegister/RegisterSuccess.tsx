@@ -1,6 +1,6 @@
 import React from 'react';
 import DoneIcon from '@mui/icons-material/Done';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 interface RegisterSuccessrProps {
     onDialogClose: () => void;
@@ -9,7 +9,7 @@ interface RegisterSuccessrProps {
   
 
 const RegisterSuccess: React.FC<RegisterSuccessrProps> = ({onDialogClose, onRegisterSucces}) => {
-  const { t } = useTranslation();
+  const [t] = useTranslation('global');
 
   const handleButton = () => {
     onDialogClose()
@@ -27,8 +27,8 @@ const RegisterSuccess: React.FC<RegisterSuccessrProps> = ({onDialogClose, onRegi
         <div className="w-full flex flex-col items-center justify-center p-8">
           <h2 className="text-4xl mb-4">Registration complete</h2>
           <p className="text-lg text-black dark:text-grey-2 text-center">
-            {t("restaurant-register.submitSuccessMessage")}
-          </p>
+            {t('restaurant-register.submitSuccessMessage')}
+          </p> 
         </div>
         <div className='p-20'>
             <button

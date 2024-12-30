@@ -5,6 +5,7 @@ import { CSSTransition } from 'react-transition-group'
 // Material-UI imports
 import {
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -134,7 +135,8 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           restaurantType: formik.values.restaurantType,
           address: formik.values.address,
           postalIndex: formik.values.postalIndex,
-          city: formik.values.city
+          city: formik.values.city,
+          location: formik.values.location, 
         })
 
         const response = await fetchPOST(
@@ -153,6 +155,32 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
       setRequestLoading(false) // Zakończenie loading state
     }
   }
+  
+  const fetchCoordinates = async (address: string) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          address
+        )}&format=json&addressdetails=1`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch coordinates');
+      }
+      const data = await response.json();
+      if (data.length > 0) {
+        return {
+          latitude: parseFloat(data[0].lat),
+          longitude: parseFloat(data[0].lon),
+        };
+      } else {
+        throw new Error('No coordinates found for the given address');
+      }
+    } catch (error) {
+      console.error('Error fetching coordinates:', error);
+      throw error;
+    }
+  };
+  
 
   const handleSubmit = async (values: any, formikHelpers: any) => {
     setRequestLoading(true)
@@ -275,6 +303,22 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   }
   const timeOptions = generateTimeOptions()
 
+  const formatAddress = (address: string): string => {
+    // Usuń prefiksy kończące się kropką (np. "ul.")
+    const cleanedAddress = address.replace(/\b\w+\.\s*/g, '').trim();
+  
+    // Dopasuj numer budynku (ciąg cyfr na końcu lub w środku)
+    const match = cleanedAddress.match(/(\d+)(.*)/);
+    if (match) {
+      const [, number, rest] = match;
+      return `${number} ${rest.trim()}`;
+    }
+  
+    // Jeśli brak numeru, zwróć adres bez zmian
+    return cleanedAddress;
+  };
+  
+
   return (
     <div id="restaurantRegister-div-wrapper">
       <h1
@@ -341,6 +385,20 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     label="Address *"
                     variant="standard"
                     as={TextField}
+                    onBlur={async () => {
+                      let { address, postalIndex, city } = formik.values;
+                      if (address && postalIndex && city) {
+                        address = formatAddress(address);
+                        const fullAddress = `${address}, ${postalIndex}, ${city}`;
+                        try {
+                          const coordinates = await fetchCoordinates(fullAddress);
+                          formik.setFieldValue('location', coordinates);
+                          console.log('Coordinates set in form:', coordinates);
+                        } catch (error) {
+                          console.error('Error fetching coordinates:', error);
+                        }
+                      }
+                    }}
                     className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.address && formik.touched.address) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
                     helperText={
                       formik.errors.address &&
@@ -964,13 +1022,17 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className="dark:text-white"
                     >
                       Back
-                    </button>
+                    </button> 
                     <button
                       type="submit"
-                      disabled={!formik.isValid || requestLoading}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty && !requestLoading ? 'bg-primary text-white' : 'bg-grey-1'}`}
+                      disabled={!formik.isValid}
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty ? 'bg-primary text-white' : 'bg-grey-1'}`}
                     >
-                      Submit
+                      {requestLoading ? (
+                        <CircularProgress size={24} className="text-white" />
+                      ) : (
+                        'Submit'
+                      )}
                     </button>
                   </div>
                 </div>
