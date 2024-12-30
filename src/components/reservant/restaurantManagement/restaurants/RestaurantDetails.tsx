@@ -16,9 +16,10 @@ interface RestaurantDetailsProps {
   onClose: () => void;
   onSuccess: () => void;
   groups: GroupType[];
+  isReadOnly: boolean;
 }
 
-const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open, onClose, onSuccess, groups }) => {
+const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open, onClose, onSuccess, groups, isReadOnly }) => {
   const validationSchema = Yup.object({
     groupName: Yup.string().required('Group Name is required'),
     name: Yup.string().required('Restaurant Name is required'),
@@ -223,6 +224,18 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                 <label htmlFor="groupName" className="block text-sm font-medium dark:text-grey-2">
                   Group Name
                 </label>
+                {isReadOnly ? (
+                  <Field
+                  as={TextField}
+                  id="groupName"
+                  name="groupName"
+                  value={
+                    groups?.find(group => group.restaurantGroupId === formik.values.groupId)?.name || ''
+                  }
+                  InputProps={{ readOnly: true }}
+                  className="w-full font-mont-md text-[15px] font-medium dark:text-white"
+                />
+                ) : (
                 <FormControl
                   className="w-full [&>*]:font-mont-md text-[15px] dark:text-white"
                   error={Boolean(
@@ -260,228 +273,330 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                       </MenuItem>
                     ))}
                   </Field>
-                </FormControl>                 
+                </FormControl> 
+                )}                
               </div>
-                
-
 
               <div className="mb-4">
                 <label htmlFor="name" className="block text-sm font-medium dark:text-grey-2">
                   Restaurant Name
                 </label>
-                <Field
-                  as={TextField}
-                  name="name"
-                  id="name"
-                  fullWidth
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="name"
+                    id="name"
+                    fullWidth
+                    value={formik.values.name || ''}
+                    InputProps={{ readOnly: true }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="name"
+                    id="name"
+                    fullWidth
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                  />
+                )}
               </div>
 
               <div className="mb-4">
-                <label htmlFor="name" className="block text-sm font-medium dark:text-grey-2">
-                    Business Type
-                  </label>
-                <FormControl
-                      className="w-full [&>*]:font-mont-md text-[15px] dark:text-white"
-                      error={Boolean(
-                        formik.errors.restaurantType &&
-                          formik.touched.restaurantType
-                      )}
+                <label htmlFor="restaurantType" className="block text-sm font-medium dark:text-grey-2">
+                  Business Type
+                </label>
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    id="restaurantType"
+                    name="restaurantType"
+                    fullWidth
+                    value={t(`restaurant-register.types.${formik.values.restaurantType.toLowerCase()}`) || ''}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <FormControl
+                    className="w-full [&>*]:font-mont-md text-[15px] dark:text-white"
+                    error={Boolean(formik.errors.restaurantType && formik.touched.restaurantType)}
+                  >
+                    <Field
+                      as={Select}
+                      id="restaurantType"
+                      fullWidth
+                      sx={{
+                        height: 40,
+                      }}
+                      name="restaurantType"
+                      labelId="restaurantType-label"
+                      value={formik.values.restaurantType}
+                      onChange={formik.handleChange}
+                      className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                        !(formik.errors.restaurantType && formik.touched.restaurantType)
+                          ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                          : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                      }`}
                     >
-                      <Field
-                        as={Select}
-                        id="restaurantType"
-                        fullWidth
-                        sx={{
-                          height: 40,
-                        }}
-                        name="restaurantType"
-                        labelId="restaurantType-label"
-                        value={formik.values.restaurantType}
-                        onChange={formik.handleChange}
-                        className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                          !(
-                            formik.errors.restaurantType &&
-                            formik.touched.restaurantType
-                          )
-                            ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                            : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
-                        }`}
-                        helperText={
-                          formik.errors.restaurantType &&
-                          formik.touched.restaurantType &&
-                          formik.errors.restaurantType
-                        }
+                      <MenuItem
+                        id="restaurantRegister-opt-restaurant"
+                        value={LocalType.Restaurant}
+                        className="dark:text-white"
                       >
-                        <MenuItem
-                          id="restaurantRegister-opt-restaurant"
-                          value={LocalType.Restaurant}
-                          className="dark:text-white"
-                        >
-                          {t('restaurant-register.types.restaurant')}
-                        </MenuItem>
-                        <MenuItem
-                          id="restaurantRegister-opt-bar"
-                          value={LocalType.Bar}
-                          className="dark:text-white"
-                        >
-                          {t('restaurant-register.types.bar')}
-                        </MenuItem>
-                        <MenuItem
-                          id="restaurantRegister-opt-cafe"
-                          value={LocalType.Cafe}
-                          className="dark:text-white"
-                        >
-                          {t('restaurant-register.types.cafe')}
-                        </MenuItem>
-                      </Field>
-
-                      {/* Wyświetlanie błędów */}
-                      {formik.errors.restaurantType &&
-                        formik.touched.restaurantType && (
-                          <FormHelperText className="text-error dark:text-error text-[15px]">
-                            {formik.errors.restaurantType}
-                          </FormHelperText>
-                        )}
-                    </FormControl>
+                        {t('restaurant-register.types.restaurant')}
+                      </MenuItem>
+                      <MenuItem
+                        id="restaurantRegister-opt-bar"
+                        value={LocalType.Bar}
+                        className="dark:text-white"
+                      >
+                        {t('restaurant-register.types.bar')}
+                      </MenuItem>
+                      <MenuItem
+                        id="restaurantRegister-opt-cafe"
+                        value={LocalType.Cafe}
+                        className="dark:text-white"
+                      >
+                        {t('restaurant-register.types.cafe')}
+                      </MenuItem>
+                    </Field>
+                    {/* Wyświetlanie błędów */}
+                    {formik.errors.restaurantType && formik.touched.restaurantType && (
+                      <FormHelperText className="text-error dark:text-error text-[15px]">
+                        {formik.errors.restaurantType}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                )}
               </div>
 
               <div className="mb-4">
                 <label htmlFor="address" className="block text-sm font-medium dark:text-grey-2">
                   Address
                 </label>
-                <Field
-                  as={TextField}
-                  name="address"
-                  id="address"
-                  fullWidth
-                  error={formik.touched.address && Boolean(formik.errors.address)}
-                  helperText={formik.touched.address && formik.errors.address}
-                />
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="address"
+                    id="address"
+                    fullWidth
+                    value={formik.values.address || ''}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="address"
+                    id="address"
+                    fullWidth
+                    error={formik.touched.address && Boolean(formik.errors.address)}
+                    helperText={formik.touched.address && formik.errors.address}
+                    className="font-mont-md text-[15px] dark:text-white"
+                  />
+                )}
               </div>
 
               <div className="mb-4">
                 <label htmlFor="city" className="block text-sm font-medium dark:text-grey-2">
                   City
                 </label>
-                <Field
-                  as={TextField}
-                  name="city"
-                  id="city"
-                  fullWidth
-                  error={formik.touched.city && Boolean(formik.errors.city)}
-                  helperText={formik.touched.city && formik.errors.city}
-                />
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="city"
+                    id="city"
+                    fullWidth
+                    value={formik.values.city || ''}
+                    InputProps={{
+                      readOnly: true,  // Ustawienie pola na tylko do odczytu
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="city"
+                    id="city"
+                    fullWidth
+                    error={formik.touched.city && Boolean(formik.errors.city)}
+                    helperText={formik.touched.city && formik.errors.city}
+                    className="font-mont-md text-[15px] dark:text-white"
+                  />
+                )}
               </div>
 
               <div className="mb-4">
                 <label htmlFor="reservationDeposit" className="block text-sm font-medium dark:text-grey-2">
                   Reservation Deposit
                 </label>
-                <Field
-                  as={TextField}
-                  name="reservationDeposit"
-                  id="reservationDeposit"
-                  type="number"
-                  fullWidth
-                  error={formik.touched.reservationDeposit && Boolean(formik.errors.reservationDeposit)}
-                  helperText={formik.touched.reservationDeposit && formik.errors.reservationDeposit}
-                />
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="reservationDeposit"
+                    id="reservationDeposit"
+                    type="text"
+                    fullWidth
+                    value={formik.values.reservationDeposit || ''}
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="reservationDeposit"
+                    id="reservationDeposit"
+                    type="number"
+                    fullWidth
+                    error={formik.touched.reservationDeposit && Boolean(formik.errors.reservationDeposit)}
+                    helperText={formik.touched.reservationDeposit && formik.errors.reservationDeposit}
+                    className="font-mont-md text-[15px] dark:text-white"
+                  />
+                )}
               </div>
 
               <div className="mb-4">
                 <label htmlFor="reservationDeposit" className="block text-sm font-medium dark:text-grey-2">
                   Max Reservation Duration in minutes
                 </label>
-                <Field
-                  as={TextField}
-                  name="maxReservationDurationMinutes"
-                  id="maxReservationDurationMinutes"
-                  type="number"
-                  fullWidth
-                  error={formik.touched.maxReservationDurationMinutes && Boolean(formik.errors.maxReservationDurationMinutes)}
-                  helperText={formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
-                />
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="maxReservationDurationMinutes"
+                    id="maxReservationDurationMinutes"
+                    type="text"
+                    fullWidth
+                    value={formik.values.maxReservationDurationMinutes || ''}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="maxReservationDurationMinutes"
+                    id="maxReservationDurationMinutes"
+                    type="number"
+                    fullWidth
+                    error={formik.touched.maxReservationDurationMinutes && Boolean(formik.errors.maxReservationDurationMinutes)}
+                    helperText={formik.touched.maxReservationDurationMinutes && formik.errors.maxReservationDurationMinutes}
+                    className="font-mont-md text-[15px] dark:text-white"
+                  />
+                )}
               </div>
 
               <div className="mb-4">
                 <label htmlFor="provideDelivery" className="block text-sm font-medium dark:text-grey-2">
                   Provide Delivery
                 </label>
-                <FormControl
-                  className="w-full [&>*]:font-mont-md text-[15px] dark:text-white"
-                  error={Boolean(formik.errors.provideDelivery && formik.touched.provideDelivery)}
-                >
+                {isReadOnly ? (
                   <Field
-                    as={Select}
-                    id="provideDelivery"
-                    fullWidth
-                    sx={{
-                      height: 40,
-                    }}
+                    as={TextField}
                     name="provideDelivery"
-                    labelId="provideDelivery-label"
-                    value={formik.values.provideDelivery ? "true" : "false"} // Konwertujemy boolean na string
-                    onChange={(e: React.ChangeEvent<{ value: unknown }>) => { // Dodajemy typ dla e
-                      formik.setFieldValue("provideDelivery", e.target.value === "true"); // Konwertujemy z powrotem na boolean
+                    id="provideDelivery"
+                    value={formik.values.provideDelivery ? "Yes" : "No"}
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,  // Ustawienie pola na tylko do odczytu
                     }}
-                    className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                      !(formik.errors.provideDelivery && formik.touched.provideDelivery)
-                        ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                        : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
-                    }`}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <FormControl
+                    className="w-full [&>*]:font-mont-md text-[15px] dark:text-white"
+                    error={Boolean(formik.errors.provideDelivery && formik.touched.provideDelivery)}
                   >
-                    <MenuItem
-                      id="provideDelivery-yes"
-                      value="true" // Teraz używamy stringa
-                      className="dark:text-white"
+                    <Field
+                      as={Select}
+                      id="provideDelivery"
+                      fullWidth
+                      sx={{
+                        height: 40,
+                      }}
+                      name="provideDelivery"
+                      labelId="provideDelivery-label"
+                      value={formik.values.provideDelivery ? "true" : "false"} // Konwertujemy boolean na string
+                      onChange={(e: React.ChangeEvent<{ value: unknown }>) => { // Dodajemy typ dla e
+                        formik.setFieldValue("provideDelivery", e.target.value === "true"); // Konwertujemy z powrotem na boolean
+                      }}
+                      className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                        !(formik.errors.provideDelivery && formik.touched.provideDelivery)
+                          ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                          : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                      }`}
                     >
-                      Yes
-                    </MenuItem>
-                    <MenuItem
-                      id="provideDelivery-no"
-                      value="false" // Teraz używamy stringa
-                      className="dark:text-white"
-                    >
-                      No
-                    </MenuItem>
-                  </Field>
+                      <MenuItem
+                        id="provideDelivery-yes"
+                        value="true" // Teraz używamy stringa
+                        className="dark:text-white"
+                      >
+                        Yes
+                      </MenuItem>
+                      <MenuItem
+                        id="provideDelivery-no"
+                        value="false" // Teraz używamy stringa
+                        className="dark:text-white"
+                      >
+                        No
+                      </MenuItem>
+                    </Field>
 
-                  {/* Wyświetlanie błędów */}
-                  {formik.errors.provideDelivery && formik.touched.provideDelivery && (
-                    <FormHelperText className="text-error dark:text-error text-[15px]">
-                      {formik.errors.provideDelivery}
-                    </FormHelperText>
-                  )}
-                </FormControl>
+                    {/* Wyświetlanie błędów */}
+                    {formik.errors.provideDelivery && formik.touched.provideDelivery && (
+                      <FormHelperText className="text-error dark:text-error text-[15px]">
+                        {formik.errors.provideDelivery}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                )}
               </div>
 
               <div className="mb-4">
                 <label htmlFor="description" className="block text-sm font-medium dark:text-grey-2">
                   Description
                 </label>
-                <Field
-                  as={TextField}
-                  name="description"
-                  id="description"
-                  fullWidth
-                  error={formik.touched.description && Boolean(formik.errors.description)}
-                  helperText={formik.touched.description && formik.errors.description}
-                />
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="description"
+                    id="description"
+                    value={formik.values.description}
+                    fullWidth
+                    InputProps={{
+                      readOnly: true, // Ustawienie pola na tylko do odczytu
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="description"
+                    id="description"
+                    fullWidth
+                    error={formik.touched.description && Boolean(formik.errors.description)}
+                    helperText={formik.touched.description && formik.errors.description}
+                  />
+                )}
               </div>
 
+
               <div className="mb-4">
-              <label htmlFor="description" className="block text-sm font-medium dark:text-grey-2">
-                  Tags
-                </label>
-                <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
-                <FieldArray name="tags">
+                  <label htmlFor="description" className="block text-sm font-medium dark:text-grey-2">
+                    Tags
+                  </label>
+                  <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
+                    <FieldArray name="tags">
                       {({ push, remove }) => (
                         <div className="flex flex-col w-full">
                           <FormGroup className="grid grid-cols-2">
-                            {' '}
                             {/* Zastosowanie grid layout */}
                             {tags.map((tag, index) => (
                               <FormControlLabel
@@ -495,14 +610,16 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                                     }
                                     checked={formik.values.tags.includes(tag)}
                                     onChange={e => {
-                                      if (e.target.checked) {
-                                        push(tag)
-                                      } else {
-                                        const idx =
-                                          formik.values.tags.indexOf(tag)
-                                        remove(idx)
+                                      if (!isReadOnly) { // Jeśli nie jest tryb tylko do odczytu
+                                        if (e.target.checked) {
+                                          push(tag)
+                                        } else {
+                                          const idx = formik.values.tags.indexOf(tag)
+                                          remove(idx)
+                                        }
                                       }
                                     }}
+                                    disabled={isReadOnly} // Jeśli tryb tylko do odczytu, checkbox będzie zablokowany
                                   />
                                 }
                                 label={
@@ -515,8 +632,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                           </FormGroup>
                           {formik.touched.tags && formik.errors.tags && (
                             <div className="text-error text-[15px] text-sm mt-1 font-mont-md">
-                              {formik.errors.tags}{' '}
-                              {/* nie wiem co z tym zrobić */}
+                              {formik.errors.tags}
                             </div>
                           )}
                         </div>
@@ -530,68 +646,70 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                     Opening Hours
                   </label>
                   <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
-                  <FieldArray name="openingHours">
-                    {({ push, remove }) => (
-                      <div className="flex flex-col w-2/3 gap-4">
-                        {/* Wyświetlanie 7 dni tygodnia od razu */}
-                        {[
-                          'Monday',
-                          'Tuesday',
-                          'Wednesday',
-                          'Thursday',
-                          'Friday',
-                          'Saturday',
-                          'Sunday'
-                        ].map((day, index) => (
-                          <div key={index} className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-gray-500 w-full dark:text-white ">
-                              {day}
-                            </span>
+                    <FieldArray name="openingHours">
+                      {({ push, remove }) => (
+                        <div className="flex flex-col w-2/3 gap-4">
+                          {/* Wyświetlanie 7 dni tygodnia od razu */}
+                          {[
+                            'Monday',
+                            'Tuesday',
+                            'Wednesday',
+                            'Thursday',
+                            'Friday',
+                            'Saturday',
+                            'Sunday'
+                          ].map((day, index) => (
+                            <div key={index} className="flex items-center gap-4">
+                              <span className="text-sm font-bold text-gray-500 w-full dark:text-white">
+                                {day}
+                              </span>
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].from`}
-                              name={`openingHours[${index}].from`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white [&>*]:text-black before:border-black before:border-black dark:before:border-white after:border-secondary"
-                            >
-                              <option value="" disabled>
-                                From
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
+                              <Field
+                                as={NativeSelect}
+                                id={`openingHours[${index}].from`}
+                                name={`openingHours[${index}].from`}
+                                className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white [&>*]:text-black before:border-black before:border-black dark:before:border-white after:border-secondary"
+                                disabled={isReadOnly} // Jeśli tryb tylko do odczytu, zablokuj pole
+                              >
+                                <option value="" disabled>
+                                  From
                                 </option>
-                              ))}
-                            </Field>
+                                {timeOptions.map(time => (
+                                  <option key={time} value={time}>
+                                    {time}
+                                  </option>
+                                ))}
+                              </Field>
 
-                            <span className="text-sm font-bold text-gray-500 dark:text-white">
-                              -
-                            </span>
+                              <span className="text-sm font-bold text-gray-500 dark:text-white">
+                                -
+                              </span>
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].until`}
-                              name={`openingHours[${index}].until`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:dark:text-white before:border-black dark:before:border-white after:border-secondary"
-                            >
-                              <option value="" disabled>
-                                Until
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
+                              <Field
+                                as={NativeSelect}
+                                id={`openingHours[${index}].until`}
+                                name={`openingHours[${index}].until`}
+                                className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:dark:text-white before:border-black dark:before:border-white after:border-secondary"
+                                disabled={isReadOnly} // Jeśli tryb tylko do odczytu, zablokuj pole
+                              >
+                                <option value="" disabled>
+                                  Until
                                 </option>
-                              ))}
-                            </Field>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </FieldArray>
+                                {timeOptions.map(time => (
+                                  <option key={time} value={time}>
+                                    {time}
+                                  </option>
+                                ))}
+                              </Field>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </FieldArray>
                   </div>
                 </div>
 
-              {/* Logo Preview and Upload Button */}
+             {/* Logo Preview and Upload Button */}
                 <div className="mb-4">
                   <label htmlFor="logo" className="block text-sm font-medium dark:text-grey-2">
                     Logo
@@ -607,23 +725,25 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                     </div>
 
                     {/* Upload button */}
-                    <div className="mt-4 flex justify-start">
-                      <label htmlFor={`logo-upload`} className="cursor-pointer text-primary dark:text-secondary">
+                    {!isReadOnly && (
+                      <div className="mt-4 flex justify-start">
+                        <label htmlFor={`logo-upload`} className="cursor-pointer text-primary dark:text-secondary">
                           <CloudUploadIcon /> Upload Logo
                         </label>
-                      <input
-                        type="file"
-                        id="logo-upload"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={async (e) => {
-                          if (e.target.files && e.target.files.length > 0) {
-                            const fileName = await uploadLogo(e.target.files[0]);
-                            formik.setFieldValue('logo', fileName);
-                          }
-                        }}
-                      />
-                    </div>
+                        <input
+                          type="file"
+                          id="logo-upload"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async (e) => {
+                            if (e.target.files && e.target.files.length > 0) {
+                              const fileName = await uploadLogo(e.target.files[0]);
+                              formik.setFieldValue('logo', fileName);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -645,66 +765,74 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, open,
                                 src={photo ? getImage(photo, photo) : DefaultImage}
                                 alt={`Uploaded photo ${index + 1}`}
                               />
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  // Usuwanie zdjęcia z formularza Formika
-                                  formik.setFieldValue(
-                                    'photos',
-                                    formik.values.photos.filter((_, i) => i !== index)
-                                  );
-                                  // Usuwanie zdjęcia z lokalnego stanu
-                                  setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
-                                }}
-                                className="absolute top-0 right-0 p-1 bg-black text-white rounded-full"
-                              >
-                                X
-                              </button>
+                              {/* Usuwanie zdjęcia, tylko jeśli nie jest w trybie readonly */}
+                              {!isReadOnly && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    // Usuwanie zdjęcia z formularza Formika
+                                    formik.setFieldValue(
+                                      'photos',
+                                      formik.values.photos.filter((_, i) => i !== index)
+                                    );
+                                    // Usuwanie zdjęcia z lokalnego stanu
+                                    setPhotos(prevPhotos => prevPhotos.filter((_, i) => i !== index));
+                                  }}
+                                  className="absolute top-0 right-0 p-1 bg-black text-white rounded-full"
+                                >
+                                  X
+                                </button>
+                              )}
                             </div>
                           ))}
-                          {/* Input to upload new photos */}
-                          <div className='w-full'>
-                            <label htmlFor={`photos-upload`} className="cursor-pointer text-primary dark:text-secondary">
-                              <CloudUploadIcon /> Upload More Photos
-                            </label>
-                            <input
-                              type="file"
-                              id="photos-upload"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={async (e) => {
-                                if (e.target.files && e.target.files.length > 0) {
-                                  const file = e.target.files[0];
-                                  const fileName = await uploadPhoto(file);
-                                  if (fileName) {
-                                    push(fileName); // Dodajemy zdjęcie do formularza
+                          {/* Input to upload new photos, tylko jeśli nie jest w trybie readonly */}
+                          {!isReadOnly && (
+                            <div className='w-full'>
+                              <label htmlFor={`photos-upload`} className="cursor-pointer text-primary dark:text-secondary">
+                                <CloudUploadIcon /> Upload More Photos
+                              </label>
+                              <input
+                                type="file"
+                                id="photos-upload"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  if (e.target.files && e.target.files.length > 0) {
+                                    const file = e.target.files[0];
+                                    const fileName = await uploadPhoto(file);
+                                    if (fileName) {
+                                      push(fileName); // Dodajemy zdjęcie do formularza
+                                    }
                                   }
-                                }
-                              }}
-                              
-                            />
-                          </div>
+                                }}
+                              />
+                            </div>
+                          )}
                         </div>
                       )}
                     </FieldArray>
                   </div>
                 </div>
 
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="submit"
-                  disabled={formik.isSubmitting}
-                  className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                >
-                  Save Changes
-                </button>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                >
-                  Cancel
-                </button>
+                <div className="flex justify-end space-x-4">
+                {!isReadOnly && (
+                  <>
+                    <button
+                      type="submit"
+                      disabled={formik.isSubmitting}
+                      className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                    >
+                      Save Changes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onClose}
+                      className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
               </div>
             </Form>
           )}

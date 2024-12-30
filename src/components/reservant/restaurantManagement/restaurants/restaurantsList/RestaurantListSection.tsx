@@ -57,6 +57,8 @@ const RestaurantListSection: React.FC = () => {
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<RestaurantType | null>(null)
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
+  const [isReadOnly, setIsReadOnly] = useState<boolean>(true);
+
 
   const navigate = useNavigate()
   const populateRows = async () => {
@@ -369,6 +371,7 @@ const RestaurantListSection: React.FC = () => {
       width: 180,
       cellClassName: 'actions',
       getActions: ({ id }) => {
+        const currentRestaurant = rows.find(row => row.id === id);
         const isInEditMode = rowModesModel[id]?.mode === 'edit'
         if (isInEditMode) {
           return [
@@ -397,7 +400,13 @@ const RestaurantListSection: React.FC = () => {
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edytuj"
-            onClick={() => handleEditClick(id)}
+            onClick={() => {
+              if (currentRestaurant) {
+                setSelectedRestaurant(currentRestaurant as RestaurantType);
+                setIsDetailsDialogOpen(true); 
+                setIsReadOnly(false);
+              }
+            }}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -427,12 +436,14 @@ const RestaurantListSection: React.FC = () => {
   }
 
   const handleRowClick = (params: any) => {
-    const rowData = rows.find(row => row.id === params.id)
+    const rowData = rows.find(row => row.id === params.id);
     if (rowData) {
-      setSelectedRestaurant(rowData as RestaurantType) // Use type assertion here
-      setIsDetailsDialogOpen(true)
+      setSelectedRestaurant(rowData as RestaurantType);
+      setIsReadOnly(true); 
+      setIsDetailsDialogOpen(true); 
     }
-  }
+  };
+  
 
   const closeDetailsDialog = () => {
     setSelectedRestaurant(null)
@@ -521,6 +532,7 @@ const RestaurantListSection: React.FC = () => {
           onClose={closeDetailsDialog}
           onSuccess={handleSucces}
           groups={groups}
+          isReadOnly={isReadOnly}
         />
       )}
 
