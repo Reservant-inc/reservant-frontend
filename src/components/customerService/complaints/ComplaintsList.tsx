@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import ComplaintDetails from './ComplaintDetails'
 import { ThemeContext } from '../../../contexts/ThemeContext'
 import { ReportType } from '../../../services/types'
+import { useTranslation } from 'react-i18next'
 
 const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<ReportType[]>([])
@@ -16,6 +17,8 @@ const ComplaintsList: React.FC = () => {
   const navigate = useNavigate()
   const { reportId } = useParams<{ reportId?: string }>()
   const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
+
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     fetchReports()
@@ -50,7 +53,7 @@ const ComplaintsList: React.FC = () => {
   const columns: GridColDef[] = [
     {
       field: 'isResolved',
-      headerName: 'Is resolved?',
+      headerName: t('customer-service.reports.resolved'),
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
@@ -59,13 +62,13 @@ const ComplaintsList: React.FC = () => {
     },
     {
       field: 'reportDate',
-      headerName: 'Report Date',
+      headerName: t('customer-service.reports.report-date'),
       flex: 1,
       sortable: true
     },
     {
       field: 'createdBy',
-      headerName: 'Submitted By',
+      headerName: t('customer-service.reports.submitted-by'),
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => {
@@ -83,13 +86,13 @@ const ComplaintsList: React.FC = () => {
     },
     {
       field: 'category',
-      headerName: 'Category',
+      headerName: t('customer-service.reports.category'),
       flex: 1,
       sortable: true
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('customer-service.reports.description'),
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
@@ -104,7 +107,7 @@ const ComplaintsList: React.FC = () => {
     },
     {
       field: 'resolvedBy',
-      headerName: 'Resolved By',
+      headerName: t('customer-service.reports.resolved-by'),
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => {
@@ -123,7 +126,7 @@ const ComplaintsList: React.FC = () => {
     },
     {
       field: 'resolutionDate',
-      headerName: 'Resolution Date',
+      headerName: t('customer-service.reports.resolution-date'),
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
@@ -136,7 +139,7 @@ const ComplaintsList: React.FC = () => {
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: t('customer-service.reports.actions'),
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
@@ -175,7 +178,9 @@ const ComplaintsList: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col">
-      <h1 className="text-lg font-semibold p-2">Complaints</h1>
+      <h1 className="text-lg font-semibold p-2">
+        {t('customer-service.reports.reports')}
+      </h1>
       <div className="flex gap-2 h-[calc(100%-44px)]">
         <div
           className={`h-full ${

@@ -381,5 +381,43 @@
             "created":"Utworzone",
             "search":"Przeszukaj zgłoszenia"
         }
+    },
+    "customer-service": {
+        "reports": {
+            "resolved": "Czy rozwiązane?",
+            "report-date": "Data zgłoszenia",
+            "submitted-by": "Zgłoszone przez",
+            "category": "Kategoria",
+            "description": "Opis",
+            "resolved-by": "Rozwiązane przez",
+            "resolution-date": "Data rozwiązania",
+            "actions": "Akcje",
+            "reports": "Zgłoszenia",
+            "pending-restaurants": "Oczekujące restauracje"
+        },
+        "report-details": {
+            "report-details": "Detale zgłoszenia",
+            "complaint-id": "ID zgłoszenia",
+            "date": "Data",
+            "related-visit": "Powiązana wizyta",
+            "no-related-visit": "Nie ma wizyt powiązanych z tym zgłoszeniem",
+            "visit-id": "ID wizyty",
+            "start-time": "Data rozpoczęcia",
+            "end-time": "Data zakończenia",
+            "number-of-people": "Ilość osób",
+            "deposit": "Kaucja",
+            "takeaway": "Na wynos",
+            "related-restaurant": "Powiązana restauracja",
+            "go-to-visit": "Przejdź do wizyty",
+            "go-to-restaurant": "Przejdź do restauracji",
+            "go-to-profile": "Przejdź do profilu",
+            "pass-complaint": "Przekaż zgłoszenie",
+            "resolve-complaint": "Rozwiąż zgłoszenie",
+            "already-resolved": "Zgłoszenie rozwiązane",
+            "reported-user": "Zgłoszony użytkownik",
+            "escalated-by": "Przekazane przez",
+            "resolved-by": "Rozwiązane przez",
+            "comment": "Komentarz"
+        }
     }
 }
