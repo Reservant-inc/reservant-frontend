@@ -391,7 +391,9 @@
             "description": "Opis",
             "resolved-by": "Rozwiązane przez",
             "resolution-date": "Data rozwiązania",
-            "actions": "Akcje"
+            "actions": "Akcje",
+            "reports": "Zgłoszenia",
+            "pending-restaurants": "Oczekujące restauracje"
         },
         "report-details": {
             "report-details": "Detale zgłoszenia",

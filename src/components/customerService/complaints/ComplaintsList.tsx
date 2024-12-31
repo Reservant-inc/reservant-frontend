@@ -178,7 +178,9 @@ const ComplaintsList: React.FC = () => {
 
   return (
     <div className="h-full w-full flex flex-col">
-      <h1 className="text-lg font-semibold p-2">Complaints</h1>
+      <h1 className="text-lg font-semibold p-2">
+        {t('customer-service.reports.reports')}
+      </h1>
       <div className="flex gap-2 h-[calc(100%-44px)]">
         <div
           className={`h-full ${

@@ -398,10 +398,12 @@
             "description": "Description",
             "resolved-by": "Resolved by",
             "resolution-date": "Resolution date",
-            "actions": "Actions"
+            "actions": "Actions",
+            "reports": "Reports",
+            "pending-restaurants": "Pending restaurants"
         },
         "report-details": {
-            "report-details": "Complaint details",
+            "report-details": "Report details",
             "complaint-id": "complaint id",
             "date": "Date",
             "related-visit": "Related visit",
