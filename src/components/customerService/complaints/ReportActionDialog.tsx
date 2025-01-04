@@ -4,6 +4,7 @@ import Dialog from '../../reusableComponents/Dialog'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { fetchPOST, fetchPUT } from '../../../services/APIconn'
+import { useTranslation } from 'react-i18next'
 
 interface ReportActionDialogProps {
   open: boolean
@@ -25,6 +26,8 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
       .required('Comment is required')
       .min(5, 'Comment must be at least 5 characters')
   })
+
+  const [t] = useTranslation('global')
 
   const initialValues = { comment: '' }
 
@@ -53,7 +56,11 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
     <Dialog
       open={open}
       onClose={onClose}
-      title={actionType === 'escalate' ? 'Escalate Complaint' : 'Resolve Complaint'}
+      title={
+        actionType === 'escalate'
+          ? t('customer-service.report-details.pass-complaint')
+          : t('customer-service.report-details.resolve-complaint')
+      }
     >
       <Formik
         initialValues={initialValues}
@@ -62,8 +69,8 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
       >
         {({ errors, touched, isValid, dirty }) => (
           <Form>
-            <div className="w-[400px] h-[220px] p-6 flex flex-col justify-between">
-              <p className="font-bold text-xl">
+            <div className="w-[400px] p-4 gap-3 flex flex-col">
+              <p className="font-mont-bd text-xl">
                 {actionType === 'escalate'
                   ? 'Report escalation comment'
                   : 'Report resolution comment'}
@@ -77,9 +84,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                   variant="standard"
                   fullWidth
                   helperText={
-                    touched.comment && errors.comment
-                      ? errors.comment
-                      : ''
+                    touched.comment && errors.comment ? errors.comment : ''
                   }
                   error={touched.comment && Boolean(errors.comment)}
                   className={`[&>*]:label-[20px] [&>*]:font-mont-md [&>*]:text-[15px] ${
@@ -93,7 +98,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition"
+                  className="px-3 py-1 border-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary"
                 >
                   Cancel
                 </button>

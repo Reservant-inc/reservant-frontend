@@ -3,11 +3,13 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import NavBar from './nav/NavBar'
 import ReportIcon from '@mui/icons-material/Report'
 import Cookies from 'js-cookie'
-import GroupIcon from '@mui/icons-material/Group'
 import ThemeContextProvider from '../../contexts/ThemeContext'
+import { useTranslation } from 'react-i18next'
 
 const CustomerService: React.FC = () => {
   const navigate = useNavigate()
+
+  const [t] = useTranslation('global')
 
   const isCustomerSupportManager = () => {
     if (Cookies.get('userInfo'))
@@ -35,7 +37,7 @@ const CustomerService: React.FC = () => {
                 className="w-full p-3 flex gap-4 text-left dark:text-white rounded-md hover:bg-grey-0 hover:dark:bg-grey-5 transition"
               >
                 <ReportIcon />
-                <h1>Complaints</h1>
+                <h1>{t('customer-service.reports.reports')}</h1>
               </button>
               {isCustomerSupportManager() && (
                 <button
@@ -43,7 +45,7 @@ const CustomerService: React.FC = () => {
                   className="w-full p-3 flex gap-4 text-left dark:text-white rounded-md hover:bg-grey-0 hover:dark:bg-grey-5 transition"
                 >
                   <ReportIcon />
-                  <h1>Pending restaurants</h1>
+                  <h1>{t('customer-service.reports.pending-restaurants')}</h1>
                 </button>
               )}
             </div>

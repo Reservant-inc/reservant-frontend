@@ -388,6 +388,43 @@
             "created":"Created",
             "search":"Search reports"
         }
+    },
+    "customer-service": {
+        "reports": {
+            "resolved": "Is resolved?",
+            "report-date": "Report date",
+            "submitted-by": "Submitted by",
+            "category": "Category",
+            "description": "Description",
+            "resolved-by": "Resolved by",
+            "resolution-date": "Resolution date",
+            "actions": "Actions",
+            "reports": "Reports",
+            "pending-restaurants": "Pending restaurants"
+        },
+        "report-details": {
+            "report-details": "Report details",
+            "complaint-id": "complaint id",
+            "date": "Date",
+            "related-visit": "Related visit",
+            "no-related-visit": "No visit related to this complaint.",
+            "visit-id": "Visit ID",
+            "start-time": "Start time",
+            "end-time": "End time",
+            "number-of-people": "Number of people",
+            "deposit": "Deposit",
+            "takeaway": "Takeaway",
+            "related-restaurant": "Related restaurant",
+            "go-to-visit": "Go to visit",
+            "go-to-restaurant": "See related restaurant",
+            "go-to-profile": "Go to profile",
+            "pass-complaint": "Pass complaint",
+            "resolve-complaint": "Resolve complaint",
+            "already-resolved": "Already resolved",
+            "reported-user": "Reported user",
+            "escalated-by": "Escalated by",
+            "resolved-by": "Resolved by",
+            "comment": "Comment"
+        }
     }
-    
 }

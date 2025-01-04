@@ -6,6 +6,7 @@ import ReportActionDialog from './ReportActionDialog'
 import { ReportType, UserType } from '../../../services/types'
 import { getImage } from '../../../services/APIconn'
 import DefaultImage from '../../../assets/images/user.jpg'
+import { useTranslation } from 'react-i18next'
 
 interface ComplaintDetailsProps {
   report: ReportType
@@ -22,17 +23,11 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
   const [actionType, setActionType] = useState<'escalate' | 'resolve'>()
   const navigate = useNavigate()
 
+  const [t] = useTranslation('global')
+
   const openDialog = (type: 'escalate' | 'resolve') => {
     setActionType(type)
     setDialogOpen(true)
-  }
-
-  const navigateToUserProfile = (userId: string) => {
-    navigate(`/customer-service/users/${userId}`)
-  }
-
-  const navigateToVisitDetails = (visitId: string) => {
-    navigate(`/customer-service/visits/${visitId}`)
   }
 
   const navigateToRestaurantDetails = (restaurantId: string) => {
@@ -43,52 +38,74 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-1 px-4 pt-2">
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Visit ID:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.visit-id')}:{' '}
+          </p>
           <p>{visit.visitId}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Date:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.date')}:{' '}
+          </p>
           <p>{new Date(visit.date).toLocaleDateString()}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Start Time:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.start-time')}:{' '}
+          </p>
           <p>{visit.actualStartTime}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">End Time:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.end-time')}:{' '}
+          </p>
           <p>{visit.actualEndTime}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Number of People:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.number-of-people')}:{' '}
+          </p>
           <p>{visit.numberOfPeople}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Deposit:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.deposit')}:{' '}
+          </p>
           <p>{visit.deposit ? `${visit.deposit} USD` : 'None'}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Takeaway:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.takeaway')}:{' '}
+          </p>
           <p>{visit.takeaway ? 'Yes' : 'No'}</p>
         </h1>
         {visit.restaurant ? (
           <>
             <h1 className="flex gap-3 text-sm">
-              <p className="font-mont-bd">Related Restaurant ID:</p>
+              <p className="font-mont-bd">
+                {t('customer-service.report-details.related-restaurant')}:{' '}
+              </p>
               <p>{visit.restaurant.restaurantId}</p>
             </h1>
-            <button
-              onClick={() =>
-                navigateToRestaurantDetails(visit.restaurant.restaurantId)
-              }
-              className="border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition"
+            <Link
+              to={`/customer-service/restaurants/${report.visit.restaurant.restaurantId}`}
             >
-              See related Restaurant
-            </button>
+              <h1
+                onClick={() =>
+                  navigateToRestaurantDetails(visit.restaurant.restaurantId)
+                }
+                className="border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition"
+              >
+                {t('customer-service.report-details.go-to-restaurant')}
+              </h1>
+            </Link>
           </>
         ) : (
           <h1 className="flex gap-3 text-sm">
-            <p className="font-mont-bd">Related Restaurant:</p>
-            <p>None</p>
+            <p className="font-mont-bd">
+              {t('customer-service.report-details.related-restaurant')}
+            </p>
+            <p>/* do dodania */</p>
           </h1>
         )}
       </div>
@@ -107,7 +124,9 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         <h1 className="font-mont-bd text-md">{label}</h1>
         {showProfileButton && (
           <Link to={`/customer-service/users/${user.userId}`}>
-            <h1 className="underline text-sm text-grey-4">Go to profile</h1>
+            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+              {t('customer-service.report-details.go-to-profile')}
+            </h1>
           </Link>
         )}
       </div>
@@ -124,13 +143,16 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           <p className="text-sm text-grey-3">{user.userId}</p>
           {comment && (
             <h1 className="flex gap-2 text-sm">
-              <p className="font-mont-bd">Comment:</p>
+              <p className="font-mont-bd">
+                {t('customer-service.report-details.comment')}:{' '}
+              </p>
               <p>{comment}</p>
             </h1>
           )}
           {date && (
             <p className="text-sm">
-              <strong>Date:</strong> {new Date(date).toLocaleString()}
+              <strong>{t('customer-service.report-details.date')}:</strong>{' '}
+              {new Date(date).toLocaleString()}
             </p>
           )}
         </div>
@@ -144,23 +166,31 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         <CloseIcon className="dark:text-white" />
       </IconButton>
       <div className="flex flex-col">
-        <h1 className="text-lg font-mont-bd">Complaint details</h1>
-        <h1 className="text-sm text-grey-2 dark:text-grey-4">
-          complaint id: {report.reportId}
+        <h1 className="text-lg font-mont-bd">
+          {t('customer-service.report-details.report-details')}
+        </h1>
+        <h1 className="text-sm text-grey-4 dark:text-grey-2">
+          {t('customer-service.report-details.complaint-id')}: {report.reportId}
         </h1>
       </div>
 
       <div className="flex flex-col gap-1">
         <div className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Date:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.report-details.date')}:{' '}
+          </p>
           <p>{new Date(report.reportDate).toLocaleString()}</p>
         </div>
         <div className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Category:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.reports.category')}:{' '}
+          </p>
           <p>{report.category}</p>
         </div>
         <div className="flex gap-3 text-sm">
-          <p className="font-mont-bd">Description:</p>
+          <p className="font-mont-bd">
+            {t('customer-service.reports.description')}:{' '}
+          </p>
           <p className="break-words w-[270px]">
             {report.description || 'No description provided'}
           </p>
@@ -170,22 +200,28 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
       {/* Related Visit */}
       <div>
         <div className="flex justify-between">
-          <p className="font-mont-bd text-md">Related Visit:</p>
+          <p className="font-mont-bd text-md">
+            {t('customer-service.report-details.related-visit')}:{' '}
+          </p>
           <Link to={`/customer-service/visits/${report.visit.visitId}`}>
-            <h1 className="underline text-sm text-grey-4">Go to visit</h1>
+            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+              {t('customer-service.report-details.go-to-visit')}
+            </h1>
           </Link>
         </div>
         {report.visit ? (
           renderVisitDetails(report.visit)
         ) : (
-          <p className="text-sm ml-4">No visit related to this complaint.</p>
+          <p className="text-sm ml-4">
+            {t('customer-service.report-details.no-related-visit')}
+          </p>
         )}
       </div>
 
       {/* user details */}
       {report.createdBy &&
         renderUserDetails(
-          'Submitted By',
+          t('customer-service.reports.submitted-by'),
           report.createdBy,
           undefined,
           undefined,
@@ -193,7 +229,7 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         )}
       {report.reportedUser &&
         renderUserDetails(
-          'Reported User',
+          t('customer-service.report-details.reported-user'),
           report.reportedUser,
           undefined,
           undefined,
@@ -201,14 +237,14 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         )}
       {report.escalatedBy &&
         renderUserDetails(
-          'Escalated By',
+          t('customer-service.report-details.escalated-by'),
           report.escalatedBy,
           report.escalationComment,
           report.reportDate
         )}
       {report.resolvedBy &&
         renderUserDetails(
-          'Resolved By',
+          t('customer-service.report-details.resolved-by'),
           report.resolvedBy,
           report.resolutionComment,
           report.resolutionDate
@@ -226,7 +262,7 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
                   : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
               }`}
             >
-              Pass complaint
+              {t('customer-service.report-details.pass-complaint')}
             </button>
             <button
               onClick={() => openDialog('resolve')}
@@ -237,7 +273,9 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
                   : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
               }`}
             >
-              {report.resolvedBy ? 'Already Resolved' : 'Resolve complaint'}
+              {report.resolvedBy
+                ? t('customer-service.report-details.alreadt-resolved')
+                : t('customer-service.report-details.resolve-complaint')}
             </button>
           </>
         )}
