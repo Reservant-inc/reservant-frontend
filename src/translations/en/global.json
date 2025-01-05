@@ -15,7 +15,10 @@
         "edit": "Edit",
         "users": "Users",
         "restaurants": "Restaurants",
-        "submitSuccessMessage": "The application has been sent"
+        "submitSuccessMessage": "The application has been sent",
+        "ascending": "Ascending",
+        "descending": "Descending",
+        "Sort": "Sort"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -198,13 +201,10 @@
             "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
             "selectedFile": "Selected file",
             "sort": "Sort by"
-
         }
-
     },
     "tools": {
         "main":{
-
             "profile":"Profile",
             "settings":"Settings",
             "language":"Language",
@@ -391,7 +391,18 @@
         "reports" : {
             "id":"Report ID",
             "created":"Created",
-            "search":"Search reports"
+            "search":"Search reports",
+            "no-reports-created": "No created reports",
+            "no-reports-customer-service": "No reports related to user",
+            "created-by-user": "Created by user",
+            "reported-user": "Report regarding user"
+        },
+        "transaction-history": {
+            "wallet": "Wallet",
+            "account-balance": "Account balance",
+            "no-transactions": "No transactions yet",
+            "add-funds": "Add funds to your wallet",
+            "confirm": "Confirm"
         }
     },
     "customer-service": {
@@ -430,6 +441,37 @@
             "escalated-by": "Escalated by",
             "resolved-by": "Resolved by",
             "comment": "Comment"
+        },
+        "user": {
+            "account": "Account",
+            "ban_user": "Ban User",
+            "unban_user": "Unban User",
+            "name": "Name",
+            "last_name": "Last name",
+            "phone_number": "Phone number",
+            "birth_date": "Birth date",
+            "login": "Login",
+            "transaction_history": "Transaction history",
+            "related_complaints": "Related complaints",
+            "ban_user_dialog_title": "Ban User",
+            "ban_user_message_prefix": "User",
+            "ban_user_message_suffix": "was banned for",
+            "ban_duration": {
+                "days": "Days",
+                "hours": "Hours",
+                "minutes": "Minutes"
+            },
+            "ban_duration_error": {
+                "min_duration": "Ban must be at least 1 minute long",
+                "days_min": "Days must be 0 or more",
+                "hours_range": "Hours must be between 0 and 23",
+                "minutes_range": "Minutes must be between 0 and 59"
+            },
+            "ban_at_least_one_minute": "Ban must last at least 1 minute.",
+            "unban_user_dialog_title": "Unban User",
+            "unban_user_message": "was unbanned.",
+            "close": "Close",
+            "cancel": "Cancel"
         }
     }
 }

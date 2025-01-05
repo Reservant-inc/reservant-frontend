@@ -20,7 +20,7 @@ import ErrorMes from '../../reusableComponents/ErrorMessage'
 import { Key, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
-import TransactionHistory from './TransactionHisotry'
+import TransactionHistory from './TransactionHistory'
 import { TransactionListType } from '../../../services/enums'
 
 const VisuallyHiddenInput = styled('input')({
