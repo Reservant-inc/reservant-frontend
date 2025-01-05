@@ -7,6 +7,7 @@ import {
 } from '../../../../services/APIconn'
 import Cookies from 'js-cookie'
 import Dialog from '../../../reusableComponents/Dialog'
+import { useTranslation } from 'react-i18next'
 
 interface Participant {
   userId: string
@@ -49,6 +50,8 @@ const FocusedRestaurantEventDetails: React.FC<
     participant => participant.userId === userId
   )
   const isInterested = interestedEventsIds.includes(event.eventId)
+
+  const [t] = useTranslation('global')
 
   const fetchParticipants = async () => {
     try {
@@ -113,19 +116,19 @@ const FocusedRestaurantEventDetails: React.FC<
           <div className="flex flex-col gap-2">
             <p>
               <strong className="text-primary dark:text-secondary">
-                Kiedy?{' '}
+                {t('profile.events.date')}:
               </strong>{' '}
               {new Date(event.time).toLocaleString()}
             </p>
             <p>
               <strong className="text-primary dark:text-secondary">
-                Zgłoszenia do:{' '}
+                {t('profile.events.applications-by')}:{' '}
               </strong>{' '}
               {new Date(event.mustJoinUntil).toLocaleString()}
             </p>
             <p>
               <strong className="text-primary dark:text-secondary">
-                Kto? :
+                {t('profile.events.creator')}:
               </strong>{' '}
               {event.creator.firstName} {event.creator.lastName}
             </p>
@@ -133,13 +136,13 @@ const FocusedRestaurantEventDetails: React.FC<
           <div className="flex flex-col gap-2">
             <p>
               <strong className="text-primary dark:text-secondary">
-                Uczestnicy:{' '}
+                {t('profile.events.participants')}:{' '}
               </strong>{' '}
               {event.numberInterested}
             </p>
             <p>
               <strong className="text-primary dark:text-secondary">
-                Maks. uczestników:
+                {t('profile.events.max-participants')}:
               </strong>{' '}
               {event.maxPeople}
             </p>
