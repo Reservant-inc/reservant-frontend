@@ -57,8 +57,7 @@ const RestaurantListSection: React.FC = () => {
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<RestaurantType | null>(null)
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
-  const [isReadOnly, setIsReadOnly] = useState<boolean>(true);
-
+  const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
 
   const navigate = useNavigate()
   const populateRows = async () => {
@@ -78,7 +77,7 @@ const RestaurantListSection: React.FC = () => {
           )
 
           if (response3.isArchived) {
-            continue;
+            continue
           }
           tmp.push({
             id: Number(indx++),
@@ -106,7 +105,7 @@ const RestaurantListSection: React.FC = () => {
             businessPermission: response3.businessPermission,
             rentalContract: response3.rentalContract,
             alcoholLicense: response3.alcoholLicense,
-            tables: response3.tables,
+            tables: response3.tables
           })
         }
       }
@@ -371,7 +370,7 @@ const RestaurantListSection: React.FC = () => {
       width: 180,
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        const currentRestaurant = rows.find(row => row.id === id);
+        const currentRestaurant = rows.find(row => row.id === id)
         const isInEditMode = rowModesModel[id]?.mode === 'edit'
         if (isInEditMode) {
           return [
@@ -402,9 +401,9 @@ const RestaurantListSection: React.FC = () => {
             label="Edytuj"
             onClick={() => {
               if (currentRestaurant) {
-                setSelectedRestaurant(currentRestaurant as RestaurantType);
-                setIsDetailsDialogOpen(true); 
-                setIsReadOnly(false);
+                setSelectedRestaurant(currentRestaurant as RestaurantType)
+                setIsDetailsDialogOpen(true)
+                setIsReadOnly(false)
               }
             }}
             color="inherit"
@@ -436,14 +435,13 @@ const RestaurantListSection: React.FC = () => {
   }
 
   const handleRowClick = (params: any) => {
-    const rowData = rows.find(row => row.id === params.id);
+    const rowData = rows.find(row => row.id === params.id)
     if (rowData) {
-      setSelectedRestaurant(rowData as RestaurantType);
-      setIsReadOnly(true); 
-      setIsDetailsDialogOpen(true); 
+      setSelectedRestaurant(rowData as RestaurantType)
+      setIsReadOnly(true)
+      setIsDetailsDialogOpen(true)
     }
-  };
-  
+  }
 
   const closeDetailsDialog = () => {
     setSelectedRestaurant(null)
@@ -482,7 +480,7 @@ const RestaurantListSection: React.FC = () => {
         onClose={() => setIsDialogOpen(false)}
         sx={{
           '& .MuiDialog-paper': {
-            width: '35%',
+            width: '700px',
             maxWidth: 'none', // Usuwa domyślną maksymalną szerokość
             height: '92%', // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
             maxHeight: 'none', // Wyłącza ograniczenia wysokości
@@ -506,7 +504,7 @@ const RestaurantListSection: React.FC = () => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent className="dark:bg-black">
+        <DialogContent className="dark:bg-black scroll">
           <Box>
             {/* Show the registration form or the success message */}
             {!registerSucces ? (

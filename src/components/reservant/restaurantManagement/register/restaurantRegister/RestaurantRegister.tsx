@@ -73,7 +73,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   const [requestLoading, setRequestLoading] = useState<boolean>(false)
 
   const [tags, setTags] = useState<string[]>([])
+
   const [serverError, setServerError] = useState<string | null>(null)
+  const [locationError, setLocationError] = useState<string>()
+
   const [groups, setGroups] = useState<null | GroupType[]>(null)
 
   const { t } = useTranslation('global')
@@ -136,13 +139,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           address: formik.values.address,
           postalIndex: formik.values.postalIndex,
           city: formik.values.city,
-          location: formik.values.location, 
+          location: formik.values.location
         })
 
-        const response = await fetchPOST(
-          '/my-restaurants/validate-first-step',
-          body
-        )
+        await fetchPOST('/my-restaurants/validate-first-step', body)
       }
 
       setServerError(null)
@@ -155,32 +155,35 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
       setRequestLoading(false) // Zakończenie loading state
     }
   }
-  
+
   const fetchCoordinates = async (address: string) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
           address
         )}&format=json&addressdetails=1`
-      );
+      )
       if (!response.ok) {
-        throw new Error('Failed to fetch coordinates');
+        throw new Error('Failed to fetch coordinates')
       }
-      const data = await response.json();
-      if (data.length > 0) {
-        return {
-          latitude: parseFloat(data[0].lat),
-          longitude: parseFloat(data[0].lon),
-        };
-      } else {
-        throw new Error('No coordinates found for the given address');
+      const data = await response.json()
+
+      if (data.length <= 0) {
+        setLocationError('a')
+        throw new Error('No coordinates found for the given address')
+      }
+
+      locationError && setLocationError(undefined)
+
+      return {
+        latitude: parseFloat(data[0].lat),
+        longitude: parseFloat(data[0].lon)
       }
     } catch (error) {
-      console.error('Error fetching coordinates:', error);
-      throw error;
+      console.error('Error fetching coordinates:', error)
+      return null
     }
-  };
-  
+  }
 
   const handleSubmit = async (values: any, formikHelpers: any) => {
     setRequestLoading(true)
@@ -305,19 +308,18 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
 
   const formatAddress = (address: string): string => {
     // Usuń prefiksy kończące się kropką (np. "ul.")
-    const cleanedAddress = address.replace(/\b\w+\.\s*/g, '').trim();
-  
+    const cleanedAddress = address.replace(/\b\w+\.\s*/g, '').trim()
+
     // Dopasuj numer budynku (ciąg cyfr na końcu lub w środku)
-    const match = cleanedAddress.match(/(\d+)(.*)/);
+    const match = cleanedAddress.match(/(\d+)(.*)/)
     if (match) {
-      const [, number, rest] = match;
-      return `${number} ${rest.trim()}`;
+      const [, number, rest] = match
+      return `${number} ${rest.trim()}`
     }
-  
+
     // Jeśli brak numeru, zwróć adres bez zmian
-    return cleanedAddress;
-  };
-  
+    return cleanedAddress
+  }
 
   return (
     <div id="restaurantRegister-div-wrapper">
@@ -386,24 +388,27 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     variant="standard"
                     as={TextField}
                     onBlur={async () => {
-                      let { address, postalIndex, city } = formik.values;
+                      let { address, postalIndex, city } = formik.values
                       if (address && postalIndex && city) {
-                        address = formatAddress(address);
-                        const fullAddress = `${address}, ${postalIndex}, ${city}`;
+                        address = formatAddress(address)
+                        const fullAddress = `${address}, ${postalIndex}, ${city}`
                         try {
-                          const coordinates = await fetchCoordinates(fullAddress);
-                          formik.setFieldValue('location', coordinates);
-                          console.log('Coordinates set in form:', coordinates);
+                          formik.setFieldValue(
+                            'location',
+                            await fetchCoordinates(fullAddress)
+                          )
                         } catch (error) {
-                          console.error('Error fetching coordinates:', error);
+                          console.error('Error fetching coordinates:', error)
                         }
                       }
                     }}
-                    className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.address && formik.touched.address) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(locationError || (formik.errors.address && formik.touched.address)) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
                     helperText={
-                      formik.errors.address &&
-                      formik.touched.address &&
-                      formik.errors.address
+                      locationError
+                        ? locationError
+                        : formik.errors.address &&
+                          formik.touched.address &&
+                          formik.errors.address
                     }
                   />
 
@@ -1022,7 +1027,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className="dark:text-white"
                     >
                       Back
-                    </button> 
+                    </button>
                     <button
                       type="submit"
                       disabled={!formik.isValid}
