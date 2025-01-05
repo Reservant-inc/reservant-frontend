@@ -346,9 +346,9 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           <Form className="w-full h-full mt-[10%]">
             <div className="form-container h-full flex flex-col items-center gap-4">
               {/* Pasek postępu */}
-              <div className="relative w-4/5 h-4 bg-grey-0 rounded-full overflow-hidden">
+              <div className="relative w-4/5 h-4 bg-grey-0 dark:bg-grey-5 rounded-full overflow-hidden">
                 <div
-                  className="absolute h-full bg-primary rounded-full transition-all"
+                  className="absolute h-full bg-primary dark:bg-secondary rounded-full transition-all"
                   style={{
                     width: `${(activeStep / 3) * 100}%`
                   }}
@@ -543,7 +543,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     <button
                       type="button"
                       onClick={() => handleNextClick(formik)}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
                       Next
@@ -747,7 +747,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     <button
                       type="button"
                       onClick={() => handleNextClick(formik)}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
                       Next
@@ -786,7 +786,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         </div>
                       )}
                       {formik.values.logo ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -824,7 +824,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           ? 'file attached'
                           : `${formik.values.photos.length} files attached`
                         : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -860,7 +860,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         </div>
                       )}
                       {formik.values.idCard ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -896,7 +896,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           </div>
                         )}
                       {formik.values.businessPermission ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -927,7 +927,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       }
                     >
                       {formik.values.rentalContract ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -958,7 +958,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       }
                     >
                       {formik.values.alcoholLicense ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -1031,7 +1031,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     <button
                       type="submit"
                       disabled={!formik.isValid}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty ? 'bg-primary text-white' : 'bg-grey-1'}`}
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty ? 'bg-primary text-white dark:bg-secondary dark:text-black' : 'bg-grey-1'}`}
                     >
                       {requestLoading ? (
                         <CircularProgress size={24} className="text-white" />
