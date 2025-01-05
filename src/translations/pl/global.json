@@ -367,6 +367,8 @@
         "actions": "Działania"
     },
     "profile": {
+        "account": "Konto",
+        "reservations": "Rezerwacje",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
@@ -388,6 +390,7 @@
             "removal-decline": "Nie"
         },
         "events" : {
+            "events": "Wydarzenia",
             "newest" : "Od najnowszych",
             "interested" : "Zainteresowane",
             "participating" : "Bierzesz udział",
@@ -410,6 +413,7 @@
             "events-feed": "Przegląd wydarzeń"
         },
         "reports" : {
+            "reports": "Zgłoszenia",
             "id":"Identyfikator zgłoszenia",
             "created":"Utworzone",
             "search":"Przeszukaj zgłoszenia"
