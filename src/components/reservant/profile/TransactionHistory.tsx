@@ -11,6 +11,7 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import Dialog from '../../reusableComponents/Dialog'
 import { TransactionListType } from '../../../services/enums'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface TranstacionHistoryProps {
   listType: TransactionListType
@@ -27,6 +28,8 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
   const [value, setValue] = useState<number>(0)
 
   const { userId } = useParams<{ userId: string }>()
+
+  const [t] = useTranslation('global')
 
   const apiRoutes: Record<TransactionListType, string> = {
     [TransactionListType.Client]: '/wallet/history',
@@ -113,26 +116,29 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
   return (
     <>
       <div className="flex justify-between">
-        <h1 className="text-lg font-mont-bd">Wallet</h1>
+        <h1 className="text-md font-mont-bd">
+          {t('profile.transaction-history.wallet')}
+        </h1>
         {listType === TransactionListType.Client && (
           <button
             className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
             onClick={() => {
               setShowMoneyDialog(true)
-              console.log(showMoneyDialog)
             }}
           >
             <AttachMoneyIcon className="w-4 h-4" />
-            Add wallet funds
+            {t('profile.transaction-history.add-funds')}
           </button>
         )}
       </div>
-      <div className="flex flex-col gap-2 justify-center pt-2">
-        <h1 className="text-sm font-mont-bd">{`Account balance: ${wallet} zł`}</h1>
-        <h1 className="text-sm">Transaction history:</h1>
+      <div className="flex flex-col gap-2 justify-center">
+        <h1 className="text-sm font-mont-bd">{`${t('profile.transaction-history.account-balance')}: ${wallet} zł`}</h1>
+        <h1 className="text-sm">
+          {t('customer-service.user.transaction_history')}
+        </h1>
         <div
           id="scrollableDiv"
-          className="w-full h-[300px] rounded-lg overflow-y-auto scroll bg-grey-0 dark:bg-grey-6"
+          className="w-full h-[400px] rounded-lg overflow-y-auto scroll bg-grey-0 dark:bg-grey-6"
         >
           <InfiniteScroll
             dataLength={transactions.length}
@@ -166,7 +172,9 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
                   </div>
                 ))
               ) : (
-                <h1 className="text-grey-2 text-sm">No transactions yet</h1>
+                <h1 className="text-grey-2 text-sm">
+                  {t('profile.transaction-history.no-transactions')}
+                </h1>
               )}
             </div>
           </InfiniteScroll>
@@ -178,13 +186,13 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
             setShowMoneyDialog(false)
             setValue(0)
           }}
-          title={`Add funds`}
+          title={t('profile.transaction-history.add-funds')}
           open={showMoneyDialog}
         >
           <div className="p-6 flex flex-col gap-6">
             <div className="flex gap-2 items-center">
               <label htmlFor="fundsInput" className="font-mont-md">
-                Add funds to your wallet
+                {t('profile.transaction-history.add-funds')}
               </label>
               <input
                 id="fundsInput"
@@ -205,7 +213,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
                 setValue(0)
               }}
             >
-              Confirm
+              {t('profile.transaction-history.confirm')}
             </button>
           </div>
         </Dialog>

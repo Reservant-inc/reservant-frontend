@@ -31,7 +31,8 @@ export enum EventListType {
   History
 }
 export enum ReportsListType {
-  Created
+  Created,
+  CustomerService
 }
 
 export enum ReservationListType {
