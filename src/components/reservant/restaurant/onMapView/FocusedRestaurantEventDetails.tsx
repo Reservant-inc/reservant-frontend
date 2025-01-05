@@ -105,32 +105,42 @@ const FocusedRestaurantEventDetails: React.FC<
           style={{ maxHeight: '200px' }}
         />
       )}
-      <div className="p-3">
+      <div className="p-3 dark:bg-black">
         <h2 className="font-bold text-xl text-left">{event.name}</h2>
         <p className="text-left mb-4">{event.description}</p>
 
         <div className="flex justify-between text-sm text-left">
           <div className="flex flex-col gap-2">
             <p>
-              <strong className="text-primary">Kiedy? </strong>{' '}
+              <strong className="text-primary dark:text-secondary">
+                Kiedy?{' '}
+              </strong>{' '}
               {new Date(event.time).toLocaleString()}
             </p>
             <p>
-              <strong className="text-primary">Zgłoszenia do: </strong>{' '}
+              <strong className="text-primary dark:text-secondary">
+                Zgłoszenia do:{' '}
+              </strong>{' '}
               {new Date(event.mustJoinUntil).toLocaleString()}
             </p>
             <p>
-              <strong className="text-primary">Kto? :</strong>{' '}
+              <strong className="text-primary dark:text-secondary">
+                Kto? :
+              </strong>{' '}
               {event.creator.firstName} {event.creator.lastName}
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <p>
-              <strong className="text-primary">Uczestnicy: </strong>{' '}
+              <strong className="text-primary dark:text-secondary">
+                Uczestnicy:{' '}
+              </strong>{' '}
               {event.numberInterested}
             </p>
             <p>
-              <strong className="text-primary">Maks. uczestników:</strong>{' '}
+              <strong className="text-primary dark:text-secondary">
+                Maks. uczestników:
+              </strong>{' '}
               {event.maxPeople}
             </p>
           </div>
@@ -146,10 +156,10 @@ const FocusedRestaurantEventDetails: React.FC<
                     ? handleRemoveInterest
                     : handleInterestClick
               }
-              className={`w-3/4 py-2 rounded-lg transition hover:scale-105 ${
+              className={`w-3/4 py-2 rounded-lg transition hover:scale-105 dark:text-black ${
                 isParticipant || isInterested
-                  ? 'bg-primary text-white hover:bg-primary-2'
-                  : 'bg-primary text-white hover:bg-primary-2'
+                  ? 'bg-primary text-white dark:bg-secondary'
+                  : 'bg-primary text-white dark:bg-secondary'
               }`}
             >
               {isParticipant
