@@ -373,8 +373,12 @@
             "revoke":"Wycofaj zainteresowanie",
             "leave":"Opuść wydarzenie",
             "at":"w",
-            "participated": "wzięło udział"
-
+            "participated": "wzięło udział",
+            "date": "Data",
+            "participants": "Uczestnicy",
+            "applications-by": "Zgłoszenia do",
+            "max-participants": "Maks. liczba uczestników",
+            "creator": "Organizauje"
         },
         "reports" : {
             "id":"Identyfikator zgłoszenia",

@@ -381,7 +381,12 @@
             "revoke":"Revoke interest",
             "leave":"Leave",
             "at":"at",
-            "participated": "participated"
+            "participated": "participated",
+            "date": "Date",
+            "participants": "Participants",
+            "applications-by": "Application by",
+            "max-participants": "Max no. participants",
+            "creator": "Creator"
         },
         "reports" : {
             "id":"Report ID",

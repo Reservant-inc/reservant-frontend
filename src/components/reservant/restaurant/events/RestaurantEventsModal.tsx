@@ -45,7 +45,7 @@ const RestaurantEventsModal: React.FC<RestaurantEventsModalProps> = ({
 
         {loading ? (
           <div className="flex justify-center items-center">
-            <CircularProgress className="text-primary" />
+            <CircularProgress className="text-grey-2" />
           </div>
         ) : events.length === 0 ? (
           <p className="dark:text-grey-2">

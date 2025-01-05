@@ -262,7 +262,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             </div>
 
             {/* Zakładki Reviews i Events */}
-            <div className="flex justify-around border-t border-grey-1 bg-grey-0 pt-1">
+            <div className="flex justify-around border-t border-grey-1 dark:border-grey-4 bg-grey-0 dark:bg-black pt-1">
               <ListItemButton
                 onClick={() => handleTabChange('reviews')}
                 className={`${

@@ -73,7 +73,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   const [requestLoading, setRequestLoading] = useState<boolean>(false)
 
   const [tags, setTags] = useState<string[]>([])
+
   const [serverError, setServerError] = useState<string | null>(null)
+  const [locationError, setLocationError] = useState<string>()
+
   const [groups, setGroups] = useState<null | GroupType[]>(null)
 
   const { t } = useTranslation('global')
@@ -136,13 +139,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           address: formik.values.address,
           postalIndex: formik.values.postalIndex,
           city: formik.values.city,
-          location: formik.values.location, 
+          location: formik.values.location
         })
 
-        const response = await fetchPOST(
-          '/my-restaurants/validate-first-step',
-          body
-        )
+        await fetchPOST('/my-restaurants/validate-first-step', body)
       }
 
       setServerError(null)
@@ -155,32 +155,35 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
       setRequestLoading(false) // Zakończenie loading state
     }
   }
-  
+
   const fetchCoordinates = async (address: string) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
           address
         )}&format=json&addressdetails=1`
-      );
+      )
       if (!response.ok) {
-        throw new Error('Failed to fetch coordinates');
+        throw new Error('Failed to fetch coordinates')
       }
-      const data = await response.json();
-      if (data.length > 0) {
-        return {
-          latitude: parseFloat(data[0].lat),
-          longitude: parseFloat(data[0].lon),
-        };
-      } else {
-        throw new Error('No coordinates found for the given address');
+      const data = await response.json()
+
+      if (data.length <= 0) {
+        setLocationError('a')
+        throw new Error('No coordinates found for the given address')
+      }
+
+      locationError && setLocationError(undefined)
+
+      return {
+        latitude: parseFloat(data[0].lat),
+        longitude: parseFloat(data[0].lon)
       }
     } catch (error) {
-      console.error('Error fetching coordinates:', error);
-      throw error;
+      console.error('Error fetching coordinates:', error)
+      return null
     }
-  };
-  
+  }
 
   const handleSubmit = async (values: any, formikHelpers: any) => {
     setRequestLoading(true)
@@ -305,19 +308,18 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
 
   const formatAddress = (address: string): string => {
     // Usuń prefiksy kończące się kropką (np. "ul.")
-    const cleanedAddress = address.replace(/\b\w+\.\s*/g, '').trim();
-  
+    const cleanedAddress = address.replace(/\b\w+\.\s*/g, '').trim()
+
     // Dopasuj numer budynku (ciąg cyfr na końcu lub w środku)
-    const match = cleanedAddress.match(/(\d+)(.*)/);
+    const match = cleanedAddress.match(/(\d+)(.*)/)
     if (match) {
-      const [, number, rest] = match;
-      return `${number} ${rest.trim()}`;
+      const [, number, rest] = match
+      return `${number} ${rest.trim()}`
     }
-  
+
     // Jeśli brak numeru, zwróć adres bez zmian
-    return cleanedAddress;
-  };
-  
+    return cleanedAddress
+  }
 
   return (
     <div id="restaurantRegister-div-wrapper">
@@ -344,9 +346,9 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           <Form className="w-full h-full mt-[10%]">
             <div className="form-container h-full flex flex-col items-center gap-4">
               {/* Pasek postępu */}
-              <div className="relative w-4/5 h-4 bg-grey-0 rounded-full overflow-hidden">
+              <div className="relative w-4/5 h-4 bg-grey-0 dark:bg-grey-5 rounded-full overflow-hidden">
                 <div
-                  className="absolute h-full bg-primary rounded-full transition-all"
+                  className="absolute h-full bg-primary dark:bg-secondary rounded-full transition-all"
                   style={{
                     width: `${(activeStep / 3) * 100}%`
                   }}
@@ -386,24 +388,27 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     variant="standard"
                     as={TextField}
                     onBlur={async () => {
-                      let { address, postalIndex, city } = formik.values;
+                      let { address, postalIndex, city } = formik.values
                       if (address && postalIndex && city) {
-                        address = formatAddress(address);
-                        const fullAddress = `${address}, ${postalIndex}, ${city}`;
+                        address = formatAddress(address)
+                        const fullAddress = `${address}, ${postalIndex}, ${city}`
                         try {
-                          const coordinates = await fetchCoordinates(fullAddress);
-                          formik.setFieldValue('location', coordinates);
-                          console.log('Coordinates set in form:', coordinates);
+                          formik.setFieldValue(
+                            'location',
+                            await fetchCoordinates(fullAddress)
+                          )
                         } catch (error) {
-                          console.error('Error fetching coordinates:', error);
+                          console.error('Error fetching coordinates:', error)
                         }
                       }
                     }}
-                    className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.address && formik.touched.address) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(locationError || (formik.errors.address && formik.touched.address)) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
                     helperText={
-                      formik.errors.address &&
-                      formik.touched.address &&
-                      formik.errors.address
+                      locationError
+                        ? locationError
+                        : formik.errors.address &&
+                          formik.touched.address &&
+                          formik.errors.address
                     }
                   />
 
@@ -538,7 +543,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     <button
                       type="button"
                       onClick={() => handleNextClick(formik)}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
                       Next
@@ -742,7 +747,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     <button
                       type="button"
                       onClick={() => handleNextClick(formik)}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
                       Next
@@ -781,7 +786,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         </div>
                       )}
                       {formik.values.logo ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -819,7 +824,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           ? 'file attached'
                           : `${formik.values.photos.length} files attached`
                         : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -855,7 +860,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         </div>
                       )}
                       {formik.values.idCard ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -891,7 +896,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           </div>
                         )}
                       {formik.values.businessPermission ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -922,7 +927,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       }
                     >
                       {formik.values.rentalContract ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -953,7 +958,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       }
                     >
                       {formik.values.alcoholLicense ? 'file attached' : ''}
-                      <AttachFileIcon className="text-primary" />
+                      <AttachFileIcon className="text-primary dark:text-secondary" />
                     </button>
                     <input
                       type="file"
@@ -1022,11 +1027,11 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className="dark:text-white"
                     >
                       Back
-                    </button> 
+                    </button>
                     <button
                       type="submit"
                       disabled={!formik.isValid}
-                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty ? 'bg-primary text-white' : 'bg-grey-1'}`}
+                      className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md ${formik.isValid && formik.dirty ? 'bg-primary text-white dark:bg-secondary dark:text-black' : 'bg-grey-1'}`}
                     >
                       {requestLoading ? (
                         <CircularProgress size={24} className="text-white" />
