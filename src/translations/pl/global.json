@@ -378,7 +378,8 @@
             "participants": "Uczestnicy",
             "applications-by": "Zgłoszenia do",
             "max-participants": "Maks. liczba uczestników",
-            "creator": "Organizauje"
+            "creator": "Organizauje",
+            "events-feed": "Przegląd wydarzeń"
         },
         "reports" : {
             "id":"Identyfikator zgłoszenia",

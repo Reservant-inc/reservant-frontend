@@ -386,7 +386,8 @@
             "participants": "Participants",
             "applications-by": "Application by",
             "max-participants": "Max no. participants",
-            "creator": "Creator"
+            "creator": "Creator",
+            "events-feed": "Events feed"
         },
         "reports" : {
             "id":"Report ID",
