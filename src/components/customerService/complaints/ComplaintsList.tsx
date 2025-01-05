@@ -8,7 +8,7 @@ import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import ComplaintDetails from './ComplaintDetails'
 import { ThemeContext } from '../../../contexts/ThemeContext'
-import { ReportType } from '../../../services/types'
+import { PaginationType, ReportType } from '../../../services/types'
 import { useTranslation } from 'react-i18next'
 
 const ComplaintsList: React.FC = () => {
@@ -33,8 +33,8 @@ const ComplaintsList: React.FC = () => {
   const fetchReports = async () => {
     setLoading(true)
     try {
-      const response = await fetchGET('/reports')
-      setReports(response)
+      const response: PaginationType = await fetchGET('/reports?perPage=-1')
+      setReports(response.items as ReportType[])
     } catch (error) {
       console.error('Error fetching reports:', error)
     } finally {

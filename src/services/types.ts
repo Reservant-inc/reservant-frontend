@@ -92,7 +92,7 @@ export type RestaurantType = {
   tables: {
     tableId: number
     capacity: number
-  }[],
+  }[]
   isArchived?: boolean
 }
 
@@ -241,6 +241,7 @@ export type PaginationType = {
     | EventDataType[]
     | VisitType[]
     | IngredientType[]
+    | ReportType[]
 }
 
 export type UserType = {
@@ -286,8 +287,6 @@ export type CartItemType = {
 export type UserSearchType = {
   friendStatus: FriendStatus
 } & UserType
-
-
 
 export type User = {
   userId: string
