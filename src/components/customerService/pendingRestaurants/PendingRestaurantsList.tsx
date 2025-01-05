@@ -103,7 +103,9 @@ const PendingRestaurantsList: React.FC = () => {
               onClick={() =>
                 restaurantId === params.row.id.toString()
                   ? closeSidePanel()
-                  : navigate(`/customer-service/restaurants/${params.row.id}`)
+                  : navigate(
+                      `/customer-service/pending-restaurants/${params.row.id}`
+                    )
               }
             >
               {restaurantId === params.row.id.toString() ? (
