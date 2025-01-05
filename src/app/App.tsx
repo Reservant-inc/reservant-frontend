@@ -244,7 +244,7 @@ const router = createBrowserRouter([
         element: <ComplaintsList />
       },
       {
-        path: 'restaurants/:restaurantId?',
+        path: 'pending-restaurants/:restaurantId?',
         element: <PendingRestaurantsList />,
         loader: checkIfCustomerServiceManager
       },

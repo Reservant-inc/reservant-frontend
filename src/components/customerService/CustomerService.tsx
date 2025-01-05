@@ -41,7 +41,7 @@ const CustomerService: React.FC = () => {
               </button>
               {isCustomerSupportManager() && (
                 <button
-                  onClick={() => navigate('restaurants')}
+                  onClick={() => navigate('pending-restaurants')}
                   className="w-full p-3 flex gap-4 text-left dark:text-white rounded-md hover:bg-grey-0 hover:dark:bg-grey-5 transition"
                 >
                   <ReportIcon />

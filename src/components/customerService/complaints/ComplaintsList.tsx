@@ -211,6 +211,7 @@ const ComplaintsList: React.FC = () => {
                   pageSizeOptions={[5, 10, 25, 50]}
                   disableRowSelectionOnClick
                   autosizeOnMount={true}
+                  className="scroll"
                 />
               </ThemeProvider>
             ) : (
