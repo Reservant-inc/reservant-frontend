@@ -4,8 +4,8 @@ import EventList from '../profile/events/EventList'
 import { useTranslation } from 'react-i18next';
 
 const Feed: React.FC = () => {
-
   const [t] = useTranslation('global');
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-grey-1 p-2 dark:bg-grey-6">
       <div className="flex flex-col items-center w-full">
