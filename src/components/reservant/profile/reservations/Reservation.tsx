@@ -6,6 +6,7 @@ import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
 import { ReservationListType } from '../../../../services/enums'
+import { useTranslation } from 'react-i18next'
 
 interface ReservationProps {
   reservation: VisitType
@@ -22,6 +23,8 @@ const Reservation: React.FC<ReservationProps> = ({
   const [reportType, setReportType] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
   const [selectedEmployee, setSelectedEmployee] = useState<string>('')
+
+  const [t] = useTranslation('global');
 
   const fetchOrders = async () => {
     try {
@@ -120,8 +123,8 @@ const Reservation: React.FC<ReservationProps> = ({
           <div className="flex gap-2">
             <h1 className="text-sm">
               {reservation.orders.length > 0
-                ? `Pozycje: ${reservation.orders.length} za ${totalCost}zł`
-                : 'Brak zamówień'}
+                ? `${t('reservation.items')}: ${reservation.orders.length} ${t('reservation.for')} ${totalCost}zł`
+                : t('reservation.no-orders')}
               ,
             </h1>
             <h1 className="text-sm">
@@ -156,7 +159,7 @@ const Reservation: React.FC<ReservationProps> = ({
             className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
             onClick={() => handleCancelReservation()}
           >
-            Cancel a reservation
+            {t('reservation.cancle')}
           </button>
         </div>
       )}
@@ -167,17 +170,17 @@ const Reservation: React.FC<ReservationProps> = ({
               className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
               onClick={() => setIsComplaining(true)}
             >
-              Report a problem
+              {t('reservation.report')}
             </button>
           </div>
           <Dialog
             open={isComplaining}
             onClose={() => setIsComplaining(false)}
-            title="Make a complaint"
+            title={t('reservation.report-title')}
           >
             <div className="flex flex-col gap-4 dark:text-grey-1 p-4 w-[400px]">
               <label htmlFor="report-type" className="text-sm font-bold">
-                What is your report about?
+                {t('reservation.complain-topic')}?
               </label>
               <select
                 id="report-type"
@@ -190,25 +193,25 @@ const Reservation: React.FC<ReservationProps> = ({
                   disabled
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Select a report type
+                  {t('reservation.select')}
                 </option>
                 <option
                   value="lost-item"
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Lost item
+                  {t('reservation.lost-item')}
                 </option>
                 <option
                   value="complain-order"
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Complain about an order
+                  {t('reservation.order')}
                 </option>
                 <option
                   value="complain-employee"
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Complain about an employee
+                  {t('reservation.employee')}
                 </option>
               </select>
 
@@ -218,7 +221,7 @@ const Reservation: React.FC<ReservationProps> = ({
                     htmlFor="employee-select"
                     className="text-sm font-bold"
                   >
-                    Select an employee
+                    {t('reservation.employee-select')}
                   </label>
                   <select
                     id="employee-select"
@@ -227,20 +230,20 @@ const Reservation: React.FC<ReservationProps> = ({
                     className="border-[1px] rounded-md p-2"
                   >
                     <option value="" disabled>
-                      Select an employee
+                      {t('reservation.employee-select')}
                     </option>
                   </select>
                 </>
               )}
 
               <label htmlFor="report-note" className="text-sm font-bold">
-                Additional details
+                {t('reservation.details')}
               </label>
               <textarea
                 id="report-note"
                 value={reportNote}
                 onChange={e => setReportNote(e.target.value)}
-                placeholder="Describe your issue in detail..."
+                placeholder={t('reservation.describe-details')}
                 className="border-[1px] rounded-md p-2 h-20 scroll dark:text-grey-1 dark:bg-black"
               />
 
@@ -248,7 +251,7 @@ const Reservation: React.FC<ReservationProps> = ({
                 onClick={handleReportSubmit}
                 className="bg-primary text-white rounded-md p-2 transition hover:bg-secondary"
               >
-                Submit Report
+                {t('reservation.submit')}
               </button>
             </div>
           </Dialog>
