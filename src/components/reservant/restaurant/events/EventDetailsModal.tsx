@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Modal } from '@mui/material'
-import { fetchGET } from '../../../../services/APIconn'
-import MyEventsModal from './MyEventsModal'
+import { fetchGET, getImage } from '../../../../services/APIconn'
+import { useNavigate } from 'react-router-dom'
+import NoImage from '../../../../assets/images/no-image.png'
+import Dialog from '../../../reusableComponents/Dialog'
 
 interface EventDetailsModalProps {
   eventId: number
@@ -17,7 +18,8 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
   const [eventDetails, setEventDetails] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-  const [showMyEventsModal, setShowMyEventsModal] = useState<boolean>(false)
+  const [userId, setUserId] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   const fetchEventDetails = async () => {
     try {
@@ -30,21 +32,21 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     }
   }
 
-  const handleGoToMyEvents = () => {
-    setShowMyEventsModal(true) // Otwiera modal MyEvents
-  }
-
-  const handleMyEventsModalClose = () => {
-    setShowMyEventsModal(false)
+  const fetchUserDetails = async () => {
+    try {
+      const userData = await fetchGET('/user')
+      setUserId(userData.userId)
+    } catch (err) {
+      console.error('Failed to fetch user details:', err)
+    }
   }
 
   useEffect(() => {
     if (open) {
       fetchEventDetails()
+      fetchUserDetails()
     }
   }, [eventId, open])
-
-  if (!open) return null
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -57,79 +59,61 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
     })
   }
 
-  const calculateParticipants = () => {
-    const participantsCount = eventDetails.participants?.length || 0
-    return eventDetails.creatorId ? participantsCount + 1 : participantsCount
-  }
-
   return (
-    <>
-      <Modal open={open} onClose={onClose}>
-        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 w-96 bg-grey-0 dark:bg-grey-5 shadow-lg p-6 rounded-lg">
-          <h2 className="text-xl font-bold mb-4 text-primary dark:text-white">
-            Event Details
-          </h2>
+    <Dialog open={open} onClose={onClose} title="Event Details">
+      <div className="flex flex-col">
+        <h1 className="text-primary text-start font-bold p-2">
+          Utworzyłeś nowy event
+        </h1>
 
-          {loading && (
-            <p className="dark:text-white">Loading event details...</p>
-          )}
-          {error && <p className="text-error">{error}</p>}
+        <img
+          src={getImage(eventDetails?.photo, NoImage)}
+          alt="Event"
+          className="w-full h-auto object-cover rounded-sm"
+        />
+
+        <div className="p-6">
+          {loading && <p className="dark:text-white">Loading event details...</p>}
+          {error && <p className="text-red">{error}</p>}
 
           {eventDetails && (
-            <div className="dark:text-white">
-              <p>
-                <strong>Event Name:</strong> {eventDetails.name}
+            <div className="pb-2">
+              <h2 className="text-lg font-bold text-primary">
+                {eventDetails.name}
+              </h2>
+
+              <p className="text-black dark:text-white">
+                {formatDate(eventDetails.time)}
               </p>
-              <p>
-                <strong>Created At:</strong>{' '}
-                {formatDate(eventDetails.createdAt)}
-              </p>
-              <p>
-                <strong>Description:</strong> {eventDetails.description}
-              </p>
-              <p>
-                <strong>Event Time:</strong> {formatDate(eventDetails.time)}
-              </p>
-              <p>
-                <strong>Must Join Until:</strong>{' '}
-                {formatDate(eventDetails.mustJoinUntil)}
-              </p>
-              <p>
-                <strong>Creator:</strong> {eventDetails.creatorFullName}
-              </p>
-              <p>
-                <strong>Restaurant:</strong> {eventDetails.restaurantName}
-              </p>
-              <p>
-                <strong>Participants:</strong> {calculateParticipants()} /{' '}
-                {eventDetails.maxPeople}
+
+              <p className="text-grey-4 italic text-start">
+                {eventDetails.description}
               </p>
             </div>
           )}
 
-          <div className="flex justify-end mt-6 space-x-4">
+          <div className="flex justify-end w-full space-x-4">
             <button
-              onClick={handleGoToMyEvents}
-              className="w-[180px] bg-grey-0 dark:bg-grey-5 rounded-lg text-primary dark:text-white hover:bg-grey-1 dark:hover:bg-grey-6 transition"
+              onClick={() =>
+                navigate(
+                  `/reservant/profile/${userId}/event-history/created`
+                )
+              }
+              disabled={!userId} 
+              className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Go to My Events
             </button>
             <button
               onClick={onClose}
-              className="w-[180px] bg-grey-0 dark:bg-grey-5 rounded-lg text-primary dark:text-white hover:bg-grey-1 dark:hover:bg-grey-6 transition"
+              className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
               Close
             </button>
           </div>
         </div>
-      </Modal>
-
-      {/* MyEvents Modal */}
-      <MyEventsModal
-        open={showMyEventsModal}
-        onClose={handleMyEventsModalClose}
-      />
-    </>
+      </div>
+    </Dialog>
   )
 }
 

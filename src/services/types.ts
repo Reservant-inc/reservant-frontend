@@ -492,6 +492,7 @@ export type ComplaintUserInfo = {
     code: string
     number: string
   }
+  bannedUntil: string
 }
 
 export type ReportType = {

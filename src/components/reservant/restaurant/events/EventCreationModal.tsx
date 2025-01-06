@@ -92,7 +92,7 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
   }
 
   return (
-    <div className="w-full h-full bg-white dark:bg-black shadow-lg p-4 rounded-lg flex flex-col max-h-[45vh]">
+    <div className="w-full h-full bg-white dark:bg-black shadow-lg p-4 rounded-lg flex flex-col">
       <h2 id="modal-title" className="text-xl font-bold mb-4 dark:text-white">
         Create Event
       </h2>
