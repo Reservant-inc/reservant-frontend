@@ -18,6 +18,24 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
+  /*
+
+  issues:
+
+  1. w zwracanych zgłoszeniach nie ma powiązanego threada
+  2. w threadach nie ma rozróżnienia na bok/znajomy
+  3. zgłoszenia nadal nie zwracają statusu
+  4. zaseedowane zgłoszenia nie mają powiązanej osoby przypisanej do zgłoszenia. czy resolvedBy to osoba obsługująca zgłoszenie czy zamykająca zgłoszenie?
+
+  rozwiązania:
+  
+  1. trzeba poprawić get /user/reports tak aby zwracało powiązany thread
+  2. trzeba dodać takie rozróżnienie - narazie z issue się wstrzymuję
+  3. issue na backend jest już od dawna
+  4. trzeba zagadać do Olka
+
+  */
+
   const openChat = async () => {
     try {
       const body = JSON.stringify({
