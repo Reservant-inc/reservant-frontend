@@ -74,11 +74,11 @@ const Reservation: React.FC<ReservationProps> = ({
     if (!reportType) {
       setErrorMessage('Please select a valid report type.')
       return false
-    } else if (!reportNote) {
-      setErrorMessage('Please tell us what happened.')
-      return false
     } else if (reportType === 'complain-employee') {
       setErrorMessage('Please select an employee to report.')
+      return false
+    } else if (!reportNote) {
+      setErrorMessage('Please tell us what happened.')
       return false
     }
     return true
