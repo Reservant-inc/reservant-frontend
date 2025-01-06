@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { ReportType } from '../../../../services/types'
 import { Message } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { ReportsListType } from '../../../../services/enums'
+import { fetchPOST } from '../../../../services/APIconn'
+import { FetchError } from '../../../../services/Errors'
+import { ThreadContext } from '../../../../contexts/ThreadContext'
 
 interface ReportProps {
   report: ReportType & { userRole?: string }
@@ -12,6 +15,22 @@ interface ReportProps {
 
 const Report: React.FC<ReportProps> = ({ report, listType }) => {
   const [t] = useTranslation('global')
+
+  const { handleThreadOpen } = useContext(ThreadContext)
+
+  const openChat = async () => {
+    try {
+      const body = JSON.stringify({
+        title: report.reportId,
+        participantIds: [report.resolvedBy.userId]
+      })
+      const response = await fetchPOST(`/threads`, body)
+      handleThreadOpen(response)
+    } catch (error) {
+      if (error instanceof FetchError) console.log(error.formatErrors())
+      else console.log('Unexpected error')
+    }
+  }
 
   return (
     <div className="p-2 pl-0 w-full">
@@ -44,7 +63,7 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
             {report.description}
           </p>
         </div>
-        <button>
+        <button onClick={openChat}>
           <Message />
         </button>
       </div>
