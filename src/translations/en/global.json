@@ -17,7 +17,9 @@
         "restaurants": "Restaurants",
         "submitSuccessMessage": "The application has been sent",
         "reservation": "Reservation",
-        "not-available": "Not available"
+        "not-available": "Not available",
+        "oldest": "Oldest",
+        "newest": "Newest"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -377,6 +379,7 @@
     "profile": {
         "account": "Account",
         "reservations": "Reservations",
+        "search": "Search by name...",
         "friends": {
             "friends-tab": "Friends",
             "outgoing-tab": "Outgoing friend requests",

@@ -16,7 +16,9 @@
         "users": "Uzytkownicy",
         "restaurants": "Restauracje",
         "reservation": "Rezerwacja",
-        "not-available": "Niedostępne"
+        "not-available": "Niedostępne",
+        "oldest": "Najstarsze",
+        "newest": "Najnowsze"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -369,6 +371,7 @@
     "profile": {
         "account": "Konto",
         "reservations": "Rezerwacje",
+        "search": "Szukaj po nazwie...",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
