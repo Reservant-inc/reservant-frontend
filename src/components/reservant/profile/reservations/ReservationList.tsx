@@ -41,7 +41,6 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
 
   const fetchReservations = async () => {
     try {
-      console.log('huh?')
 
       const response: PaginationType = await fetchGET(
         apiRoute + `?page=${page}`

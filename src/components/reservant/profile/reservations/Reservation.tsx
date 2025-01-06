@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { OrderType, VisitType, ReportType } from '../../../../services/types'
+import {
+  OrderType,
+  VisitType,
+  ReportType,
+  UserType
+} from '../../../../services/types'
 import { fetchGET, getImage, fetchPOST } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import { FetchError } from '../../../../services/Errors'
@@ -35,7 +40,11 @@ const Reservation: React.FC<ReservationProps> = ({
       setOrders(fetchedOrders)
       setLoading(false)
     } catch (error) {
-      if (error instanceof FetchError) console.error(error.formatErrors())
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log('Unexpected error')
+      }
       setLoading(false)
     }
   }
@@ -103,6 +112,18 @@ const Reservation: React.FC<ReservationProps> = ({
   }
 
   const handleCancelReservation = () => {}
+
+  const allReservationEmployees = () => {
+    let res: UserType[] = []
+    for (let index = 0; index < orders.length; index++) {
+      const employees: UserType[] = orders[index].employees
+      for (let index = 0; index < employees.length; index++) {
+        const emp = employees[index]
+        if (!res.find(e => e.userId === emp.userId)) res.push(emp)
+      }
+    }
+    return res
+  }
 
   return (
     <div className="w-full h-fit flex justify-between py-2">
@@ -198,12 +219,12 @@ const Reservation: React.FC<ReservationProps> = ({
                 >
                   Lost item
                 </option>
-                <option
+                {/* <option
                   value="complain-order"
                   className="dark:text-grey-1 dark:bg-black"
                 >
                   Complain about an order
-                </option>
+                </option> */}
                 <option
                   value="complain-employee"
                   className="dark:text-grey-1 dark:bg-black"
@@ -229,6 +250,11 @@ const Reservation: React.FC<ReservationProps> = ({
                     <option value="" disabled>
                       Select an employee
                     </option>
+                    {allReservationEmployees().map((emp: UserType) => (
+                      <option key={emp.userId} value={emp.userId}>
+                        {emp.firstName + ' ' + emp.lastName}
+                      </option>
+                    ))}
                   </select>
                 </>
               )}
