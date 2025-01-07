@@ -196,6 +196,12 @@
             "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
             "selectedFile": "Wybrano plik",
             "sort": "Sortuj"
+        },
+        "statistics": {
+            "statistics": "Statystyki",
+            "all-restaurants" : "Wszystkie restauracje",
+            "restaurant-group" : "Grupa restauracji",
+            "restaurant" : "Restauracja"
         }
     },
     "tools": {
