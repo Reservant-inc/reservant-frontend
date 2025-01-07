@@ -1,53 +1,92 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import SearchIcon from '@mui/icons-material/Search'
 import { fetchGET } from '../../../../services/APIconn'
-import {
-  EventDataType,
-  PaginationType,
-  ReportType
-} from '../../../../services/types'
-import { EventListType, ReportsListType } from '../../../../services/enums'
+import { PaginationType, ReportType } from '../../../../services/types'
+import { ReportsListType } from '../../../../services/enums'
 
 import Report from './Report'
 import Search from '../../../reusableComponents/Search'
 import { useTranslation } from 'react-i18next'
+import { Button, CircularProgress } from '@mui/material'
 interface ReportsListProps {
   listType: ReportsListType
 }
 
 const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
   const [loading, setLoading] = useState<boolean>(true)
-  const [reports, setReports] = useState<ReportType[]>([])
-  const [filteredReports, setFilteredReports] = useState<ReportType[]>([])
+  const [reports, setReports] = useState<
+    (ReportType & { userRole?: string })[]
+  >([])
+  const [isAscending, setIsAscending] = useState<boolean>(false)
+  const [filteredReports, setFilteredReports] = useState<
+    (ReportType & { userRole?: string })[]
+  >([])
   const [t] = useTranslation('global')
 
   const location = useLocation()
 
-  const apiRoutes: Record<ReportsListType, string> = {
-    [EventListType.Created]: '/user/reports'
-  }
+  const { userId } = useParams<{ userId: string }>()
 
-  const noEventsMessage: Record<ReportsListType, string> = {
-    [EventListType.Created]: 'Brak utworzonych zgłoszeń.'
+  const noReportsMessage: Record<ReportsListType, string> = {
+    [ReportsListType.Created]: t('profile.reports.no-reports-created'),
+    [ReportsListType.CustomerService]: t(
+      'profile.reports.no-reports-customer-service'
+    )
   }
-
-  const apiRoute = apiRoutes[listType]
 
   useEffect(() => {
-    fetchEvents()
+    fetchReports()
   }, [location])
 
-  const fetchEvents = async () => {
+  const fetchReports = async () => {
     try {
-      const response: ReportType[] = await fetchGET(apiRoute)
+      setLoading(true)
 
-      const data: ReportType[] = response as ReportType[]
+      var data: (ReportType & { userRole?: string })[]
+
+      if (listType === ReportsListType.Created) {
+        const response: PaginationType = await fetchGET('/user/reports')
+        data = response.items as ReportType[]
+      } else {
+        const createdReportsResponse: PaginationType = await fetchGET(
+          `/reports?createdById=${userId}`
+        )
+        const relatedReportsResponse: PaginationType = await fetchGET(
+          `/reports?reportedUserId=${userId}`
+        )
+
+        const createdReports = (
+          createdReportsResponse.items as ReportType[]
+        ).map(report => ({
+          ...report,
+          userRole: 'creator'
+        }))
+
+        const relatedReports = (
+          relatedReportsResponse.items as ReportType[]
+        ).map(report => ({
+          ...report,
+          userRole: 'reported'
+        }))
+
+        const mergedReports: (ReportType & { userRole: string })[] = [
+          ...createdReports,
+          ...relatedReports
+        ]
+
+        mergedReports.sort(
+          (a, b) =>
+            new Date(b.reportDate).getTime() - new Date(a.reportDate).getTime()
+        )
+
+        data = mergedReports
+      }
 
       setReports(data)
       setFilteredReports(data)
     } catch (error) {
-      console.error('Error fetching events:', error)
+      console.error('Error fetching reports:', error)
     } finally {
       setLoading(false)
     }
@@ -65,7 +104,7 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex flex-col gap-4 h-full">
+      <div className="flex flex-col gap-2 h-full">
         <div className="w-1/3 ">
           <Search
             filter={handleSearchChange}
@@ -73,11 +112,17 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
           />
         </div>
 
-        <div className="flex flex-col h-full pr-2 overflow-y-auto scroll gap-2">
-          {filteredReports.length === 0 ? (
-            <p className="italic text-center">{noEventsMessage[listType]}</p>
+        <div className="flex flex-col h-full pr-2 overflow-y-auto scroll gap-2 jusitfy-center items-center">
+          {!loading ? (
+            filteredReports.length === 0 ? (
+              <p className="italic text-center">{noReportsMessage[listType]}</p>
+            ) : (
+              filteredReports.map(report => (
+                <Report report={report} listType={listType} />
+              ))
+            )
           ) : (
-            filteredReports.map(report => <Report report={report} />)
+            <CircularProgress className="text-grey-2" />
           )}
         </div>
       </div>

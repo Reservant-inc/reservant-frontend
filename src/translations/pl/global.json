@@ -18,7 +18,10 @@
         "reservation": "Rezerwacja",
         "not-available": "Niedostępne",
         "oldest": "Najstarsze",
-        "newest": "Najnowsze"
+        "newest": "Najnowsze",
+        "ascending": "Rosnąco",
+        "descending": "Malejąco",
+        "Sort": "Sortuj"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -419,7 +422,18 @@
             "reports": "Zgłoszenia",
             "id":"Identyfikator zgłoszenia",
             "created":"Utworzone",
-            "search":"Przeszukaj zgłoszenia"
+            "search":"Przeszukaj zgłoszenia",
+            "no-reports-created": "Brak utworzonych zgłoszeń",
+            "no-reports-customer-service": "Brak zgłoszeń powiązanych z tym użytkownikiem" ,
+            "created-by-user": "Utworzone przez użytkownika",
+            "reported-user": "Zgłoszenie dotyczące użytkownika"
+        },
+        "transaction-history": {
+            "wallet": "Portfel",
+            "account-balance": "Stan konta",
+            "no-transactions": "Brak transakcji",
+            "add-funds": "Dodaj środki do swojego konta",
+            "confirm": "Zatwierdź"
         }
     },
     "customer-service": {
@@ -458,6 +472,37 @@
             "escalated-by": "Przekazane przez",
             "resolved-by": "Rozwiązane przez",
             "comment": "Komentarz"
+        },
+        "user": {
+            "account": "Konto",
+            "ban_user": "Zablokuj użytkownika",
+            "unban_user": "Odblokuj użytkownika",
+            "name": "Imię",
+            "last_name": "Nazwisko",
+            "phone_number": "Numer telefonu",
+            "birth_date": "Data urodzenia",
+            "login": "Login",
+            "transaction_history": "Historia transakcji",
+            "related_complaints": "Powiązane skargi",
+            "ban_user_dialog_title": "Zablokuj użytkownika",
+            "ban_user_message_prefix": "Użytkownik",
+            "ban_user_message_suffix": "został zablokowany na",
+            "ban_duration": {
+                "days": "Dni",
+                "hours": "Godziny",
+                "minutes": "Minuty"
+            },
+            "ban_duration_error": {
+                "min_duration": "Ban musi trwać conajmniej minutę",
+                "days_min": "Liczba dni musi być większa lub równa 0",
+                "hours_range": "Liczba godzin musi zawierać się w przedziale od 0 do 23",
+                "minutes_range": "Liczba minut musi zawierać się w przedziale od 0 do 59"
+            },
+            "ban_at_least_one_minute": "Blokada musi trwać co najmniej 1 minutę.",
+            "unban_user_dialog_title": "Odblokuj użytkownika",
+            "unban_user_message": "został odblokowany.",
+            "close": "Zamknij",
+            "cancel": "Anuluj"
         }
     }
 }
