@@ -2,8 +2,25 @@ html {
   height: 100%;
 }
 
+.hex {
+  display: inline-block;
+  filter: url('#goo');
+  color: red;
+  width: 15%;
+  position: absolute;
+}
+
+.hex::before {
+  content: "";
+  display: block;
+  background: currentColor;
+  padding-top: 86.6%;
+  /* 100%*cos(30) */
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
 .sekude{
-  animation: spin .000001s linear infinite;
+  animation: spin 1s linear infinite;
 
   @keyframes spin {
     from {
