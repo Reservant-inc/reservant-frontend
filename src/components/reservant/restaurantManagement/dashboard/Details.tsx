@@ -101,7 +101,11 @@ const Details: React.FC = () => {
               {' '}
               {t('restaurant-management.details.delivery')}:{' '}
             </p>
-            <p>{restaurant.provideDelivery ? 'Yes' : 'No'}</p>
+            <p>
+              {restaurant.provideDelivery
+                ? t('restaurant-management.details.yes')
+                : t('restaurant-management.details.no')}
+            </p>
           </div>
           <div className="flex gap-3 text-sm">
             <p className="font-mont-bd">
