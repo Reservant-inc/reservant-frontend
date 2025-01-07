@@ -62,7 +62,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
             cost: response.cost,
             status: response.status,
             items: response.items,
-            employees: response.employees
+            assignedEmployee: response.assignedEmployee
           })
         }
         setRows(tmp)
@@ -129,14 +129,14 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {row.employees?.map(
-                                (employees: UserType, index: number) => (
-                                  <TableRow key={index}>
-                                    <TableCell>{employees.firstName}</TableCell>
-                                    <TableCell>{employees.lastName}</TableCell>
-                                  </TableRow>
-                                )
-                              )}
+                              <TableRow>
+                                <TableCell>
+                                  {row.assignedEmployee.firstName}
+                                </TableCell>
+                                <TableCell>
+                                  {row.assignedEmployee.lastName}
+                                </TableCell>
+                              </TableRow>
                             </TableBody>
                           </Table>
                         </Box>

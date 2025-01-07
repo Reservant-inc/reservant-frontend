@@ -68,13 +68,11 @@ const Reservation: React.FC<ReservationProps> = ({
     }
   }, [reservation.orders])
 
-  //@todo split into validation and submit; change alert into errorMes
-
   const validate = () => {
     if (!reportType) {
       setErrorMessage('Please select a valid report type.')
       return false
-    } else if (reportType === 'complain-employee') {
+    } else if (reportType === 'complain-employee' && !selectedEmployee) {
       setErrorMessage('Please select an employee to report.')
       return false
     } else if (!reportNote) {
@@ -132,14 +130,13 @@ const Reservation: React.FC<ReservationProps> = ({
 
   const allReservationEmployees = () => {
     let res: UserType[] = []
-    console.log(reservation)
+    console.log(orders)
     for (let index = 0; index < orders.length; index++) {
-      const employees: UserType[] = orders[index].employees
-      for (let index = 0; index < employees?.length; index++) {
-        const emp = employees[index]
-        if (!res.find(e => e.userId === emp.userId)) res.push(emp)
-      }
+      const emp: UserType = orders[index].assignedEmployee
+      console.log(emp)
+      if (!res.find(e => e.userId === emp.userId)) res.push(emp)
     }
+    console.log(res)
     return res
   }
 
@@ -266,13 +263,21 @@ const Reservation: React.FC<ReservationProps> = ({
                     id="employee-select"
                     value={selectedEmployee}
                     onChange={e => setSelectedEmployee(e.target.value)}
-                    className="border-[1px] rounded-md p-2"
+                    className="border-[1px] rounded-md p-2 dark:bg-black"
                   >
-                    <option value="" disabled>
+                    <option
+                      value=""
+                      className="dark:text-grey-1 dark:bg-black"
+                      disabled
+                    >
                       Select an employee
                     </option>
                     {allReservationEmployees().map((emp: UserType) => (
-                      <option key={emp.userId} value={emp.userId}>
+                      <option
+                        key={emp.userId}
+                        value={emp.userId}
+                        className="dark:text-grey-1 dark:bg-black"
+                      >
                         {emp.firstName + ' ' + emp.lastName}
                       </option>
                     ))}
