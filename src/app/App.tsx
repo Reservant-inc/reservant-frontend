@@ -13,7 +13,6 @@ import Root from '../components/ProtectedLayout'
 import Login from '../components/auth/Login'
 import RestaurantManager from '../components/reservant/restaurantManagement/RestaurantManager'
 import Profile from '../components/reservant/profile/Profile'
-import Dashboard from '../components/reservant/restaurantManagement/dashboard/Dashboard'
 import EmployeeManagement from '../components/reservant/restaurantManagement/employees/EmployeeManagement'
 import RestaurantListSection from '../components/reservant/restaurantManagement/restaurants/restaurantsList/RestaurantListSection'
 import EmployeeRestaurantManagement from '../components/reservant/restaurantManagement/employees/EmployeeRestaurantManagement'
@@ -25,7 +24,8 @@ import {
   FriendListType,
   MenuScreenType,
   ReportsListType,
-  ReservationListType
+  ReservationListType,
+  StatisticsScope
 } from '../services/enums'
 import Account from '../components/reservant/profile/Account'
 import Checkout from '../components/reservant/restaurant/Checkout'
@@ -52,6 +52,8 @@ import PendingRestaurantsList from '../components/customerService/pendingRestaur
 import User from '../components/customerService/users/User'
 import VisitDetails from '../components/customerService/visits/VisitDetails'
 import RestaurantDetails from '../components/customerService/restaurants/RestaurantDetails'
+import Statistics from '../components/reservant/restaurantManagement/dashboard/Statistics'
+import Details from '../components/reservant/restaurantManagement/dashboard/Details'
 
 const router = createBrowserRouter([
   {
@@ -74,8 +76,8 @@ const router = createBrowserRouter([
         loader: checkIfOwner,
         children: [
           {
-            path: 'dashboard',
-            element: <Dashboard />
+            path: 'statistics',
+            element: <Statistics scope={StatisticsScope.All} />
           },
           {
             path: 'employee-management',
@@ -90,7 +92,11 @@ const router = createBrowserRouter([
             children: [
               {
                 path: 'restaurant-dashboard',
-                element: <Dashboard />
+                element: <Details />
+              },
+              {
+                path: 'restaurant-statistics',
+                element: <Statistics scope={StatisticsScope.Single} />
               },
               {
                 path: 'restaurant-employee-management',

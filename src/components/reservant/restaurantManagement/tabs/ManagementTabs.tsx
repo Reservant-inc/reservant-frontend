@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp'
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp'
 import ReportIcon from '@mui/icons-material/Report'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import {
   ArrowBack,
   Dashboard,
@@ -51,9 +52,9 @@ const ManagementTabs: React.FC = ({}) => {
         {restaurantId === undefined ? (
           <div className="flex gap-2">
             <Tab
-              path="dashboard"
-              title="Dashboard"
-              icon={<Dashboard />}
+              path="statistics"
+              title="Statistics"
+              icon={<BarChartIcon />}
               id="management_dashboard"
             />
             <Tab
@@ -82,9 +83,15 @@ const ManagementTabs: React.FC = ({}) => {
             </div>
             <Tab
               path={`restaurant/${restaurantId}/restaurant-dashboard`}
-              title="Dashboard"
+              title="Statistics"
               icon={<Dashboard />}
               id="management_restaurant_dashboard"
+            />
+            <Tab
+              path={`restaurant/${restaurantId}/restaurant-statistics`}
+              title="Statistics"
+              icon={<BarChartIcon />}
+              id="management_restaurant_statistics"
             />
             <Tab
               path={`restaurant/${restaurantId}/restaurant-employee-management`}
