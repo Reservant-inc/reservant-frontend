@@ -2,18 +2,21 @@ import React, { useEffect, useState } from 'react'
 import { StatisticsScope } from '../../../../services/enums'
 import { StatisticsProps } from './Dashboard'
 import { useTranslation } from 'react-i18next'
-import {
-  PaginationType,
-  RestaurantDetailsType,
-  StatisticsType
-} from '../../../../services/types'
+import { StatisticsType } from '../../../../services/types'
 import { FetchError } from '../../../../services/Errors'
 import { fetchGET } from '../../../../services/APIconn'
+import { format, subMonths, subWeeks } from 'date-fns'
 
 enum Option {
   All = 'All',
   Group = 'Group',
   Single = 'Single'
+}
+
+enum TimePeriod {
+  PastMonth = 'pastMonth',
+  Past6Months = 'past6Months',
+  PastYear = 'pastYear'
 }
 
 const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
@@ -29,6 +32,21 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   //selected object assigned based on optional select.
   const [object, setObject] = useState<{ name: string; id: number }>()
 
+  const [popularItemsStats, setPopularItemsStats] = useState<
+    { date: string; statistic: StatisticsType['popularItems'] }[]
+  >([])
+  const [customerCountStats, setCustomerCountStats] = useState<
+    { date: string; statistic: StatisticsType['customerCount'] }[]
+  >([])
+  const [revenueStats, setRevenueStats] = useState<
+    { date: string; statistic: StatisticsType['revenue'] }[]
+  >([])
+  const [reviewsStats, setReviewsStats] = useState<
+    { date: string; statistic: StatisticsType['reviews'] }[]
+  >([])
+
+  const [timePeriod, setTimePeriod] = useState<TimePeriod>(TimePeriod.PastMonth)
+
   //assigns api route based on selected option. Empty strig if the object is not selected to avoid undefined value.
   const apiRoutes: Record<Option, string> = {
     [Option.All]: '',
@@ -37,8 +55,6 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
       : '',
     [Option.Single]: object ? `/my-restaurants/${object.id}/statistics` : ''
   }
-
-  const [statistics, setStatistics] = useState<StatisticsType[]>()
 
   useEffect(() => {
     switch (option) {
@@ -53,17 +69,17 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
     }
 
     setObject(undefined)
+    setTimePeriod(TimePeriod.PastMonth)
   }, [option])
 
   //checks whether object is undefined so as to not call the method on initial page load
   useEffect(() => {
     object != undefined && fetchStatistics()
-  }, [object])
+  }, [object, timePeriod])
 
   const fetchGroups = async () => {
     try {
       const response = await fetchGET('/my-restaurant-groups')
-
       const mappedGroups: { name: string; id: number }[] = response.map(
         (group: { restaurantGroupId: number; name: string }) => ({
           id: group.restaurantGroupId,
@@ -84,7 +100,6 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   const fetchRestaurants = async () => {
     try {
       const response = await fetchGET('/my-restaurants?perPage=-1')
-
       const mappedRestaurants: { name: string; id: number }[] = response.map(
         (restaurant: { restaurantId: number; name: string }) => ({
           id: restaurant.restaurantId,
@@ -102,20 +117,133 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
     }
   }
 
+  const fetchDataForTimePeriod = async (startDate: Date, endDate: Date) => {
+    const response = await fetchGET(
+      `${apiRoutes[option]}?dateFrom=${format(startDate, 'yyyy-MM-dd')}&dateUntil=${format(endDate, 'yyyy-MM-dd')}`
+    )
+    return response
+  }
+
+  const formatTimePeriod = (startDate: Date, endDate: Date): string => {
+    const formattedStartDate = format(startDate, 'MMMM dd, yyyy')
+    const formattedEndDate = format(endDate, 'MMMM dd, yyyy')
+
+    return `${formattedStartDate} - ${formattedEndDate}`
+  }
+
   const fetchStatistics = async () => {
-    try {
-      const response = await fetchGET(apiRoutes[option])
+    let currentDate = new Date()
 
-      console.log(response)
+    let popularItems: {
+      date: string
+      statistic: StatisticsType['popularItems']
+    }[] = []
+    let customerCount: {
+      date: string
+      statistic: StatisticsType['customerCount']
+    }[] = []
+    let revenue: { date: string; statistic: StatisticsType['revenue'] }[] = []
+    let reviews: { date: string; statistic: StatisticsType['reviews'] }[] = []
 
-      setStatistics(response)
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.error(error.formatErrors())
-      } else {
-        console.error('Unexpected error occurred', error)
-      }
+    switch (timePeriod) {
+      case TimePeriod.PastMonth:
+        for (let i = 0; i < 4; i++) {
+          const startOfWeek = subWeeks(currentDate, i)
+          const endOfWeek = subWeeks(currentDate, i - 1)
+          const statistics = await fetchDataForTimePeriod(
+            startOfWeek,
+            endOfWeek
+          )
+
+          const date = formatTimePeriod(startOfWeek, endOfWeek)
+
+          popularItems.push({
+            date: date,
+            statistic: statistics.popularItems
+          })
+          customerCount.push({
+            date: date,
+            statistic: statistics.customerCount
+          })
+          revenue.push({
+            date: date,
+            statistic: statistics.revenue
+          })
+          reviews.push({
+            date: date,
+            statistic: statistics.reviews
+          })
+        }
+        break
+
+      case TimePeriod.Past6Months:
+        for (let i = 0; i < 6; i++) {
+          const startOfMonth = subMonths(currentDate, i)
+          const endOfMonth = subMonths(currentDate, i - 1)
+          const statistics = await fetchDataForTimePeriod(
+            startOfMonth,
+            endOfMonth
+          )
+
+          const date = formatTimePeriod(startOfMonth, endOfMonth)
+
+          popularItems.push({
+            date: date,
+            statistic: statistics.popularItems
+          })
+          customerCount.push({
+            date: date,
+            statistic: statistics.customerCount
+          })
+          revenue.push({
+            date: date,
+            statistic: statistics.revenue
+          })
+          reviews.push({
+            date: date,
+            statistic: statistics.reviews
+          })
+        }
+
+        break
+
+      case TimePeriod.PastYear:
+        for (let i = 0; i < 12; i++) {
+          const startOfYearMonth = subMonths(currentDate, i)
+          const endOfYearMonth = subMonths(currentDate, i - 1)
+          const statistics = await fetchDataForTimePeriod(
+            startOfYearMonth,
+            endOfYearMonth
+          )
+
+          const date = formatTimePeriod(startOfYearMonth, endOfYearMonth)
+
+          popularItems.push({
+            date: date,
+            statistic: statistics.popularItems
+          })
+          customerCount.push({
+            date: date,
+            statistic: statistics.customerCount
+          })
+          revenue.push({
+            date: date,
+            statistic: statistics.revenue
+          })
+          reviews.push({
+            date: date,
+            statistic: statistics.reviews
+          })
+        }
+        break
+
+      default:
+        break
     }
+    setPopularItemsStats(popularItems)
+    setCustomerCountStats(customerCount)
+    setRevenueStats(revenue)
+    setReviewsStats(reviews)
   }
 
   return (
@@ -137,6 +265,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             <option value={Option.Group}>Restaurant group</option>
             <option value={Option.Single}>Restaurant</option>
           </select>
+
           {option === Option.Group && (
             <div>
               <label htmlFor="groupSelect">Group:</label>
@@ -190,6 +319,28 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
           )}
         </>
       )}
+      {object && (
+        <div>
+          <label htmlFor="timePeriodSelect">Select Time Period:</label>
+          <select
+            id="timePeriodSelect"
+            value={timePeriod}
+            onChange={e => setTimePeriod(e.target.value as TimePeriod)}
+          >
+            <option value={TimePeriod.PastMonth}>Past Month</option>
+            <option value={TimePeriod.Past6Months}>Past 6 Months</option>
+            <option value={TimePeriod.PastYear}>Past Year</option>
+          </select>
+        </div>
+      )}
+      <div>
+        {popularItemsStats.map(obj => (
+          <div>
+            <h1>{obj.date}</h1>
+            <h1>{obj.statistic.toString()}</h1>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
