@@ -1,140 +1,149 @@
-import React, { useState } from 'react'
-import { IconButton } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import { fetchPOST, getImage } from '../../../services/APIconn'
-import Dialog from '../../reusableComponents/Dialog'
-import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import React, { useState } from 'react';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { fetchPOST, getImage } from '../../../services/APIconn';
+import DefaultImage from '../../../assets/images/defaulImage.jpeg';
 
-interface ComplaintDetailsProps {
-  restaurant: any
-  onClose: () => void
-  fetchrestaurants: () => void
+interface PendingRestaurantDetailsProps {
+  restaurant: any;
+  onClose: () => void;
+  fetchrestaurants: () => void;
 }
 
-const PendingRestaurantDetails: React.FC<ComplaintDetailsProps> = ({
+const PendingRestaurantDetails: React.FC<PendingRestaurantDetailsProps> = ({
   restaurant,
   onClose,
-  fetchrestaurants
+  fetchrestaurants,
 }) => {
-  const [logoOpen, setLogoOpen] = useState<boolean>(false)
+  const [logoOpen, setLogoOpen] = useState<boolean>(false);
+
+  const handleAccept = async () => {
+    await fetchPOST(`/restaurants/${restaurant.restaurantId}/verify`);
+    fetchrestaurants();
+    alert('Restaurant accepted');
+  };
 
   if (!restaurant) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <p>No details found for this complaint.</p>
+        <p>No details found for this restaurant.</p>
       </div>
-    )
-  }
-
-  const handleAccept = async () => {
-    fetchPOST(`/restaurants/${restaurant.restaurantId}/verify`)
-    fetchrestaurants()
-    alert('restaurant accepted')
+    );
   }
 
   return (
-    <div className="w-full h-full p-4 flex flex-col gap-4 bg-white dark:bg-black rounded-lg relative ">
+    <div className="w-full h-full p-4 bg-white dark:bg-black rounded-lg flex flex-col gap-3 relative overflow-y-auto scroll">
       <IconButton className="absolute top-2 right-2" onClick={onClose}>
         <CloseIcon className="dark:text-white" />
       </IconButton>
-      <h2 className="text-lg font-semibold ">Restaurant Details</h2>
-      <div className="flex flex-col gap-2">
-        <p>
-          <strong>ID:</strong> {restaurant.restaurantId}
-        </p>
-        <p>
-          <strong>Group ID:</strong> {restaurant.groupId}
-        </p>
-        <p>
-          <strong>Name:</strong> {restaurant.name}
-        </p>
-        <p>
-          <strong>Type:</strong> {restaurant.restaurantType}
-        </p>
-        <p>
-          <strong>City:</strong> {restaurant.city}
-        </p>
-        <p>
-          <strong>Postal Index:</strong> {restaurant.postalIndex}
-        </p>
-        <p>
-          <strong>Address:</strong> {restaurant.address}
-        </p>
-        <p>
-          <strong>Latitude:</strong> {restaurant.location.latitude}
-        </p>
-        <p>
-          <strong>Longitude:</strong> {restaurant.location.longitude}
-        </p>
-        <p>
-          <strong>Provides delivery:</strong>{' '}
-          {restaurant.provideDelivery ? 'Yes' : 'No'}
-        </p>
-        <p>
-          <strong>Description:</strong> {restaurant.description}
-        </p>
-        <p>
-          <strong>Reservation deposit amount:</strong>{' '}
-          {restaurant.reservationDeposit}
-        </p>
-        <p>
-          <strong>NIP:</strong> {restaurant.nip}
-        </p>
+
+      <div className="flex flex-col">
+        <h1 className="text-lg font-mont-bd">Restaurant Details</h1>
+        <h1 className="text-sm text-grey-4 dark:text-grey-2">
+          ID: {restaurant.restaurantId}
+        </h1>
       </div>
-      <div className=" flex flex-col gap-3">
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          See restauranter profile
+
+      <div className="flex flex-col gap-2 px-4">
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Group ID:</p>
+          <p>{restaurant.groupId || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Name:</p>
+          <p>{restaurant.name || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Type:</p>
+          <p>{restaurant.restaurantType || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">City:</p>
+          <p>{restaurant.city || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Postal Index:</p>
+          <p>{restaurant.postalIndex || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Address:</p>
+          <p>{restaurant.address || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Latitude:</p>
+          <p>{restaurant.location?.latitude || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Longitude:</p>
+          <p>{restaurant.location?.longitude || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Provides Delivery:</p>
+          <p>{restaurant.provideDelivery ? 'Yes' : 'No'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Description:</p>
+          <p>{restaurant.description || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">Reservation Deposit Amount:</p>
+          <p>{restaurant.reservationDeposit || 'N/A'}</p>
+        </h1>
+        <h1 className="flex gap-3 text-sm">
+          <p className="font-mont-bd">NIP:</p>
+          <p>{restaurant.nip || 'N/A'}</p>
+        </h1>
+      </div>
+
+      <div className="flex flex-col gap-4 px-4">
+        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+          See owner's profile
         </button>
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           See rental contract
         </button>
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           See alcohol license
         </button>
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           See business permission
         </button>
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
+        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
           See ID card
         </button>
         <button
           onClick={() => setLogoOpen(true)}
-          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
         >
           See Logo
         </button>
-        {logoOpen && (
-          <Dialog
-            open={logoOpen}
-            title="Logo preview"
-            onClose={() => setLogoOpen(false)}
-          >
-            <div className="w-[500px] flex items-center justify-center p-1 h-[500px]">
-              <img
-                src={getImage(restaurant.logo, DefaultImage)}
-                className="h-fit w-fit rounded-lg"
-              />
-            </div>
-          </Dialog>
-        )}
-        <button className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black">
-          Forward issue
-        </button>
         <button
           onClick={handleAccept}
-          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
         >
-          Accept restaurant
+          Accept Restaurant
         </button>
-        {/* <button
-          onClick={() => console.log(restaurant)}
-          className="w-full dark:bg-black border-[1px] rounded-md p-1 bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-        >
-          debug
-        </button> */}
       </div>
-    </div>
-  )
-}
 
-export default PendingRestaurantDetails
+      {logoOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-[500px] p-4 bg-white rounded-lg">
+            <img
+              src={getImage(restaurant.logo, DefaultImage)}
+              alt="Restaurant Logo"
+              className="w-full h-auto rounded-lg"
+            />
+            <button
+              onClick={() => setLogoOpen(false)}
+              className="mt-4 w-full bg-red-500 text-white p-2 rounded-md"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PendingRestaurantDetails;

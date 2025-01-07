@@ -1,74 +1,68 @@
-import React, { useEffect, useState } from 'react'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import CircularProgress from '@mui/material/CircularProgress'
-import { Tooltip, IconButton } from '@mui/material'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import { fetchGET } from '../../../services/APIconn'
-import { useNavigate, useParams } from 'react-router-dom'
-import PendingRestaurantDetails from './PendingRestaurantDetails'
-import { RestaurantDetailsType } from '../../../services/types'
+import React, { useEffect, useState } from 'react';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Tooltip, IconButton } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { fetchGET } from '../../../services/APIconn';
+import { useNavigate, useParams } from 'react-router-dom';
+import PendingRestaurantDetails from './PendingRestaurantDetails';
+import { RestaurantDetailsType } from '../../../services/types';
 
 const PendingRestaurantsList: React.FC = () => {
-  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const navigate = useNavigate()
-  const { restaurantId } = useParams<{ restaurantId: string }>()
+  const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
+  const { restaurantId } = useParams<{ restaurantId: string }>();
 
   useEffect(() => {
-    fetchrestaurants()
-  }, [])
+    fetchRestaurants();
+  }, []);
 
-  useEffect(() => {
-    if (restaurantId) {
-      navigate('/customer-service/restaurants')
-    }
-  }, [restaurants])
-
-  const fetchrestaurants = async () => {
-    setLoading(true)
+  const fetchRestaurants = async () => {
+    setLoading(true);
     try {
-      const response = await fetchGET('/restaurants/unverified')
-      setRestaurants(response.items)
+      const response = await fetchGET('/restaurants/unverified');
+      setRestaurants(response.items);
     } catch (error) {
-      console.error('Error fetching restaurants:', error)
+      console.error('Error fetching restaurants:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const closeSidePanel = () => {
-    navigate('/customer-service/restaurants')
-  }
+    navigate('/customer-service/pending-restaurants');
+  };
 
   const selectedRestaurant = restaurants.find(
-    restaurant => restaurant.restaurantId === parseInt(restaurantId || '', 10)
-  )
+    (restaurant) => restaurant.restaurantId === parseInt(restaurantId || '', 10)
+  );
 
   const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: 'ID',
       flex: 0.5,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'name',
       headerName: 'Name',
       flex: 1,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'restaurantType',
       headerName: 'Type',
       flex: 1,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'city',
       headerName: 'City',
       flex: 1,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'description',
@@ -83,7 +77,7 @@ const PendingRestaurantsList: React.FC = () => {
               : params.row.description || 'No description'}
           </span>
         </Tooltip>
-      )
+      ),
     },
     {
       field: 'actions',
@@ -116,17 +110,18 @@ const PendingRestaurantsList: React.FC = () => {
             </IconButton>
           </span>
         </Tooltip>
-      )
-    }
-  ]
+      ),
+    },
+  ];
 
   return (
     <div className="h-full w-full flex flex-col">
-      <h1 className="text-lg font-semibold p-2">Pending restaurants</h1>
-      <div className="flex gap-2 h-full">
+      <h1 className="text-lg font-semibold p-2">Pending Restaurants</h1>
+      <div className="flex gap-2 h-[calc(100%-44px)]">
+        {/* Restaurants List */}
         <div
           className={`h-full ${
-            restaurantId ? 'w-[75%]' : 'w-full'
+            restaurantId ? 'w-[calc(100%-400px)]' : 'w-full'
           } transition-all flex flex-col`}
         >
           <div className="flex-grow overflow-hidden bg-white rounded-lg shadow-md">
@@ -136,12 +131,12 @@ const PendingRestaurantsList: React.FC = () => {
               </div>
             ) : restaurants.length > 0 ? (
               <DataGrid
-                rows={restaurants.map(restaurant => ({
+                rows={restaurants.map((restaurant) => ({
                   id: restaurant.restaurantId,
                   name: restaurant.name,
                   restaurantType: restaurant.restaurantType,
                   city: restaurant.city,
-                  description: restaurant.description
+                  description: restaurant.description,
                 }))}
                 columns={columns}
                 pageSizeOptions={[5, 10, 25, 50]}
@@ -155,18 +150,20 @@ const PendingRestaurantsList: React.FC = () => {
             )}
           </div>
         </div>
-        {restaurantId && (
-          <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
+
+        {/* Restaurant Details */}
+        {restaurantId && selectedRestaurant && (
+          <div className="h-full w-[400px] overflow-y-auto">
             <PendingRestaurantDetails
               restaurant={selectedRestaurant}
               onClose={closeSidePanel}
-              fetchrestaurants={fetchrestaurants}
+              fetchrestaurants={fetchRestaurants}
             />
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PendingRestaurantsList
+export default PendingRestaurantsList;

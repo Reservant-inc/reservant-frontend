@@ -460,7 +460,8 @@
             "ban_duration": {
                 "days": "Days",
                 "hours": "Hours",
-                "minutes": "Minutes"
+                "minutes": "Minutes",
+                "required": "Ban duration is required."
             },
             "ban_duration_error": {
                 "min_duration": "Ban must be at least 1 minute long",

@@ -208,10 +208,15 @@ const ComplaintsList: React.FC = () => {
                     isResolved: report.resolutionDate
                   }))}
                   columns={columns}
-                  pageSizeOptions={[5, 10, 25, 50]}
                   disableRowSelectionOnClick
                   autosizeOnMount={true}
                   className="scroll"
+                  autoPageSize={true}
+            sx={{
+              '& .MuiDataGrid-footerContainer': {
+                borderTop: 'none',
+              },}}
+                  
                 />
               </ThemeProvider>
             ) : (

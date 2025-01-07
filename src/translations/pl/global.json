@@ -455,7 +455,8 @@
             "ban_duration": {
                 "days": "Dni",
                 "hours": "Godziny",
-                "minutes": "Minuty"
+                "minutes": "Minuty",
+                "required": "Czas bana jest wymagany."
             },
             "ban_duration_error": {
                 "min_duration": "Ban musi trwać conajmniej minutę",
