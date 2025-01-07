@@ -358,7 +358,7 @@ export type OrderType = {
   cost: number
   status: string
   items: MenuItemInOrderType[]
-  employees: UserType[]
+  assignedEmployee: UserType
 }
 
 export type ReservationType = {

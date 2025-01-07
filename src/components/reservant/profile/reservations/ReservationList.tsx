@@ -1,73 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { ReservationListType } from '../../../../services/enums';
-import { useLocation } from 'react-router-dom';
-import { PaginationType, VisitType } from '../../../../services/types';
-import { fetchGET } from '../../../../services/APIconn';
-import Reservation from './Reservation';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { CircularProgress } from '@mui/material';
-import { FetchError } from '../../../../services/Errors';
-import Filters from '../../../reusableComponents/Filters';
+import React, { useEffect, useState } from 'react'
+import { ReservationListType } from '../../../../services/enums'
+import { useLocation } from 'react-router-dom'
+import { PaginationType, VisitType } from '../../../../services/types'
+import { fetchGET } from '../../../../services/APIconn'
+import Reservation from './Reservation'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { CircularProgress } from '@mui/material'
+import { FetchError } from '../../../../services/Errors'
+import Filters from '../../../reusableComponents/Filters'
 
 interface ReservationListProps {
-  listType: ReservationListType;
+  listType: ReservationListType
 }
 
 const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
-  const [page, setPage] = useState<number>(0);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [reservations, setReservations] = useState<VisitType[]>([]);
-  const [filteredReservations, setFilteredReservations] = useState<VisitType[]>([]);
+  const [page, setPage] = useState<number>(0)
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [reservations, setReservations] = useState<VisitType[]>([])
+  const [filteredReservations, setFilteredReservations] = useState<VisitType[]>(
+    []
+  )
 
-  const location = useLocation();
+  const location = useLocation()
 
   const apiRoutes: Record<ReservationListType, string> = {
     [ReservationListType.Incoming]: '/user/visits',
-    [ReservationListType.Finished]: '/user/visit-history',
-  };
+    [ReservationListType.Finished]: '/user/visit-history'
+  }
 
   const noEventsMessage: Record<ReservationListType, string> = {
     [ReservationListType.Incoming]: 'Brak nadchodzących rezerwacji.',
-    [ReservationListType.Finished]: 'Brak historii rezerwacji',
-  };
+    [ReservationListType.Finished]: 'Brak historii rezerwacji'
+  }
 
-  const apiRoute = apiRoutes[listType];
+  const apiRoute = apiRoutes[listType]
 
   useEffect(() => {
-    fetchReservations();
-  }, [location, page]);
+    fetchReservations()
+  }, [location, page])
 
   const fetchReservations = async () => {
     try {
-      const response: PaginationType = await fetchGET(apiRoute + `?page=${page}`);
-      const newReservations: VisitType[] = response.items as VisitType[];
+      const response: PaginationType = await fetchGET(
+        apiRoute + `?page=${page}`
+      )
+      const newReservations: VisitType[] = response.items as VisitType[]
 
       if (newReservations.length < 10) {
-        setHasMore(false);
+        setHasMore(false)
       } else {
-        if (!hasMore) setHasMore(true);
+        if (!hasMore) setHasMore(true)
       }
 
       const updatedReservations =
-        page > 0
-          ? [...reservations, ...newReservations]
-          : newReservations;
+        page > 0 ? [...reservations, ...newReservations] : newReservations
 
-      setReservations(updatedReservations);
-      setFilteredReservations(updatedReservations);
+      setReservations(updatedReservations)
+      setFilteredReservations(updatedReservations)
       console.log(reservations)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.error(error.formatErrors());
+        console.error(error.formatErrors())
       } else {
-        console.error('Unexpected error occurred');
+        console.error('Unexpected error occurred')
       }
     }
-  };
+  }
 
   const handleFilterChange = (filteredData: VisitType[]) => {
-    setFilteredReservations(filteredData);
-  };
+    setFilteredReservations(filteredData)
+  }
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -76,7 +78,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
           data={reservations}
           onFilterChange={handleFilterChange}
           sortBy="date"
-          filterByName="restaurant" 
+          filterByName="restaurant"
         />
       </div>
       <div className="flex flex-col gap-4 h-full">
@@ -109,7 +111,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReservationList;
+export default ReservationList
