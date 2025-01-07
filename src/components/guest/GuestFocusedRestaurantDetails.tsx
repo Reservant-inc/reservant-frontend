@@ -139,6 +139,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             <div className="flex w-full justify-around gap-2 rounded-lg p-3">
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
+                  id='reservation-guest'
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => navigate('login')}
                 >
@@ -152,6 +153,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               </div>
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
+                  id='events-guest'
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => navigate('login')}
                 >
@@ -165,6 +167,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               </div>
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
+                  id='menu-guest'
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setShowMenu(true)}
                 >
