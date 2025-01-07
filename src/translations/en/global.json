@@ -231,6 +231,27 @@
             "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
             "selectedFile": "Selected file",
             "sort": "Sort by"
+        },
+        "details": {
+            "details": "Restaurant details",
+            "id":"Restaurant ID",
+            "name":"Name",
+            "type":"Business type",
+            "nodata":"No restaurant data available.",
+            "accept":"Accept as verified",
+            "idcard": "ID card",
+            "permission": "Business permission",
+            "alcohol": "Alcohol license",
+            "rental": "Rental contract",
+            "tags": "Tags",
+            "reviews": "reviews",
+            "rating": "Rating",
+            "description": "Description",
+            "delivery": "Delivery",
+            "yes": "yes",
+            "no": "no",
+            "location": "Location",
+            "address": "Address"
         }
     },
     "tools": {

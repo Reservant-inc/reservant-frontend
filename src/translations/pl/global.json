@@ -226,6 +226,27 @@
             "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
             "selectedFile": "Wybrano plik",
             "sort": "Sortuj"
+        },
+        "details":{
+            "details": "Szczegóły restauracji",
+            "id": "ID restauracji",
+            "name": "Nazwa",
+            "type": "Rodzaj działalności",
+            "nodata": "Brak danych o restauracji.",
+            "accept": "Zaakceptuj jako zweryfikowaną",
+            "idcard": "Dowód tożsamości",
+            "permission": "Zezwolenie na działalność",
+            "alcohol": "Licencja na alkohol",
+            "rental": "Umowa najmu",
+            "tags": "Tagi",
+            "reviews": "Recenzje",
+            "rating": "Ocena",
+            "description": "Opis",
+            "delivery": "Dostawa",
+            "yes": "tak",
+            "no": "nie",
+            "location": "Lokalizacja",
+            "address": "Adres"
         }
     },
     "tools": {

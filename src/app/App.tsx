@@ -51,7 +51,7 @@ import ComplaintsList from '../components/customerService/complaints/ComplaintsL
 import PendingRestaurantsList from '../components/customerService/pendingRestaurants/PendingRestaurantsList'
 import User from '../components/customerService/users/User'
 import VisitDetails from '../components/customerService/visits/VisitDetails'
-import RestaurantDetails from '../components/customerService/restaurants/RestaurantDetails'
+import Details from '../components/reservant/restaurantManagement/dashboard/Details'
 
 const router = createBrowserRouter([
   {
@@ -258,7 +258,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'restaurants/:restaurantId?',
-        element: <RestaurantDetails />
+        element: <Details />
       }
     ]
   },
