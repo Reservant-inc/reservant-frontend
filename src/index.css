@@ -2,6 +2,19 @@ html {
   height: 100%;
 }
 
+.sekude{
+  animation: spin .000001s linear infinite;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
 body {
   margin: 0;
   height: 100%;
