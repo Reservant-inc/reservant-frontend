@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Alert, CircularProgress } from '@mui/material'
+import { Alert, CircularProgress, IconButton } from '@mui/material'
 import { fetchGET, fetchPOST, getImage } from '../../../../services/APIconn'
 import { RestaurantDetailsType } from '../../../../services/types'
 import Dialog from '../../../reusableComponents/Dialog'
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import Cookies from 'js-cookie'
 import { useTranslation } from 'react-i18next'
+import CloseIcon from '@mui/icons-material/Close'
 
 const Details: React.FC = () => {
   const { restaurantId } = useParams<{ restaurantId: string }>()
@@ -187,7 +188,28 @@ const Details: React.FC = () => {
           {t('restaurant-management.details.nodata')}
         </p>
       )}
-      {alertMessage && <Alert>{alertMessage}</Alert>}
+      {alertMessage && (
+        <div className="fixed bottom-2 left-2">
+          <Alert
+            variant="filled"
+            severity="success"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlertMessage('')
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {alertMessage}
+          </Alert>
+        </div>
+      )}{' '}
     </div>
   )
 }
