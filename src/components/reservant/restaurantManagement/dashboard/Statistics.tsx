@@ -18,7 +18,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
 
   useEffect(() => {}, [])
 
-  return <div>{}</div>
+  return <div>a</div>
 }
 
 export default Statistics
