@@ -154,11 +154,7 @@ const DeliveriesTable: React.FC = () => {
   return (
     <>
       <div className="overflow-y-auto flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
-        {/* Nagłówek i Dropdown do filtrowania */}
         <div className="flex items-center gap-4 p-4">
-          <h1 className="text-lg font-semibold text-primary dark:text-secondary">
-            {t('delivery.deliveries')}
-          </h1>
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value as 'all' | 'delivered' | 'notDelivered')}

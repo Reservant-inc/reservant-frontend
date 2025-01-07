@@ -508,6 +508,7 @@
             "ban_user_dialog_title": "Zablokuj użytkownika",
             "ban_user_message_prefix": "Użytkownik",
             "ban_user_message_suffix": "został zablokowany na",
+            "banned_until": "Zbanowany do:",
             "ban_duration": {
                 "days": "Dni",
                 "hours": "Godziny",

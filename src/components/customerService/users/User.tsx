@@ -78,6 +78,8 @@ const User: React.FC = () => {
       setBanMessage(message)
     } catch (error) {
       console.error('Error banning user:', error)
+    } finally {
+      fetchUserData()
     }
   }
 
@@ -92,6 +94,8 @@ const User: React.FC = () => {
     } catch (error) {
       console.error('Error unbanning user:', error)
       setUnbanMessage(null)
+    } finally {
+      fetchUserData()
     }
   }
 
@@ -99,27 +103,38 @@ const User: React.FC = () => {
     <div className="z-[0] flex h-full w-full items-center justify-center gap-2 bg-grey-1 dark:bg-grey-6">
       <div className="flex flex-col gap-2 h-full w-1/2">
         <div className="flex h-FIT w-full self-start flex-col bg-white rounded-lg p-4 gap-4 shadow-md">
-          <div className="flex justify-between w-full">
-            <h1 className="text-lg font-mont-bd">
-              {t('customer-service.user.account')}
-            </h1>
-            <div className="flex gap-2">
-              <button
-                className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                <GavelIcon className="w-4 h-4" />
-                <span>{t('customer-service.user.ban_user')}</span>
-              </button>
-              <button
-                className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
-                onClick={handleUnbanUser}
-              >
-                <DeleteForeverIcon className="w-4 h-4" />
-                <span>{t('customer-service.user.unban_user')}</span>
-              </button>
-            </div>
-          </div>
+        <div className="flex justify-between w-full">
+  <h1 className="text-lg font-mont-bd">
+    {t('customer-service.user.account')}
+  </h1>
+  <div className="flex gap-2">
+    {userInfo?.bannedUntil ? (
+      <>
+        <div className="flex items-center gap-2 text-red">
+          <span className="font-bold">
+            {t('customer-service.user.banned_until')}
+          </span>
+          <span>{new Date(userInfo.bannedUntil).toLocaleString()}</span>
+        </div>
+        <button
+          className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+          onClick={handleUnbanUser}
+        >
+          <DeleteForeverIcon className="w-4 h-4" />
+          <span>{t('customer-service.user.unban_user')}</span>
+        </button>
+      </>
+    ) : (
+      <button
+        className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+        onClick={() => setIsDialogOpen(true)}
+      >
+        <GavelIcon className="w-4 h-4" />
+        <span>{t('customer-service.user.ban_user')}</span>
+      </button>
+    )}
+  </div>
+</div>
 
           <div className="flex items-center gap-4 w-full">
             {userInfo ? (

@@ -513,6 +513,7 @@
             "ban_user_dialog_title": "Ban User",
             "ban_user_message_prefix": "User",
             "ban_user_message_suffix": "was banned for",
+            "banned_until": "Banned until:",
             "ban_duration": {
                 "days": "Days",
                 "hours": "Hours",
