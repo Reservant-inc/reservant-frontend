@@ -56,3 +56,8 @@ export enum UnitOfMeasurement {
   Liter,
   Unit
 }
+
+export enum StatisticsScope {
+  All,
+  Single
+}

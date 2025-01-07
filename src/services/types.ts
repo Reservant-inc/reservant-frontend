@@ -508,3 +508,23 @@ export type ReportType = {
   resolvedBy: UserType
   resolutionDate: string
 }
+
+export type StatisticsType = {
+  popularItems: {
+    menuItem: MenuItemType
+    amountOrdered: number
+  }[]
+  customerCount: {
+    date: string
+    customers: number
+  }[]
+  revenue: {
+    date: string
+    revenue: number
+  }[]
+  reviews: {
+    date: string
+    count: number
+    average: number
+  }[]
+}
