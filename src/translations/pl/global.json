@@ -15,9 +15,39 @@
         "edit": "Edytuj",
         "users": "Uzytkownicy",
         "restaurants": "Restauracje",
+        "reservation": "Rezerwacja",
+        "not-available": "Niedostępne",
+        "oldest": "Najstarsze",
+        "newest": "Najnowsze",
         "ascending": "Rosnąco",
         "descending": "Malejąco",
         "Sort": "Sortuj"
+    },
+    "reservation": {
+        "history": "Historia rezerwacji",
+        "incoming": "Nadchodzące",
+        "past": "Przeszłe",
+        "guests-in-total": "Liczba gości",
+        "registered-guests": "Twoi goście mają konto? Oznacz ich!",
+        "date": "Data",
+        "time": "Godzina",
+        "checkout": "OPŁAĆ",
+        "skip-order": "POMIŃ ZAMÓWIENIE",
+        "items": "Pozycje",
+        "no-orders": "Brak zamówień",
+        "for": "za",
+        "cancle": "Odwołaj rezerwację",
+        "report": "Zgłoś problem",
+        "complain-topic": "Czego dotyczy zgłoszenie",
+        "report-title": "Stwórz zgłoszenie",
+        "select": "Wybierz typ zgłoszenia",
+        "lost-item": "Zgubiony przemiot",
+        "order": "Zgłoszenie dotyczące zamówienia",
+        "employee": "Zgłoszenie dotyczące pracownika",
+        "employee-select": "Wyierz pracownika",
+        "details": "Dodatkowe informacje",
+        "describe-details": "Opisz szczegółowo problem...",
+        "submit": "Wyślij Zgłoszenie"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -342,6 +372,9 @@
         "actions": "Działania"
     },
     "profile": {
+        "account": "Konto",
+        "reservations": "Rezerwacje",
+        "search": "Szukaj po nazwie...",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
@@ -363,6 +396,7 @@
             "removal-decline": "Nie"
         },
         "events" : {
+            "events": "Wydarzenia",
             "newest" : "Od najnowszych",
             "interested" : "Zainteresowane",
             "participating" : "Bierzesz udział",
@@ -381,9 +415,11 @@
             "participants": "Uczestnicy",
             "applications-by": "Zgłoszenia do",
             "max-participants": "Maks. liczba uczestników",
-            "creator": "Organizauje"
+            "creator": "Organizauje",
+            "events-feed": "Przegląd wydarzeń"
         },
         "reports" : {
+            "reports": "Zgłoszenia",
             "id":"Identyfikator zgłoszenia",
             "created":"Utworzone",
             "search":"Przeszukaj zgłoszenia",

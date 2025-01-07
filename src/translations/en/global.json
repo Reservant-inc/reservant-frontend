@@ -16,6 +16,10 @@
         "users": "Users",
         "restaurants": "Restaurants",
         "submitSuccessMessage": "The application has been sent",
+        "reservation": "Reservation",
+        "not-available": "Not available",
+        "oldest": "Oldest",
+        "newest": "Newest",
         "ascending": "Ascending",
         "descending": "Descending",
         "Sort": "Sort"
@@ -34,6 +38,32 @@
         "password": "Password",
         "confirmPassword": "Confirm password",
         "registerButton": "Register"
+    },
+    "reservation": {
+        "history": "Reservation history",
+        "incoming": "Upcoming",
+        "past": "Finished",
+        "guests-in-total": "Guest in total",
+        "registered-guests": "Some of your guests have an account? Tag them!",
+        "date": "Date",
+        "time": "Time",
+        "checkout": "CHECKOUT",
+        "skip-order": "SKIP ORDER",
+        "items": "Items",
+        "no-orders": "No orders",
+        "for": "for",
+        "cancle": "Cancel a reservation",
+        "report": "Report a problem",
+        "complain-topic": "What is your report about?",
+        "report-title": "Make a complaint",
+        "select": "Select a report type",
+        "lost-item": "Lost item",
+        "order": "Complain about an order",
+        "employee": "Complain about an employee",
+        "employee-select": "Select an employee",
+        "details": "Additional details",
+        "describe-details": "Describe your issue in detail...",
+        "submit": "Submit Report"
     },
     "add-employee": {
         "isBackdoorEmployee": "Backdoor employee",
@@ -347,6 +377,9 @@
         "filter-not-delivered": "Not delivered only"
     },
     "profile": {
+        "account": "Account",
+        "reservations": "Reservations",
+        "search": "Search by name...",
         "friends": {
             "friends-tab": "Friends",
             "outgoing-tab": "Outgoing friend requests",
@@ -368,6 +401,7 @@
             "removal-decline": "No"
         },
         "events" : {
+            "events": "Events",
             "newest" : "Newest first",
             "oldest" : "Oldest first",
             "interested" : "Interested in",
@@ -386,9 +420,11 @@
             "participants": "Participants",
             "applications-by": "Application by",
             "max-participants": "Max no. participants",
-            "creator": "Creator"
+            "creator": "Creator",
+            "events-feed": "Events feed"
         },
         "reports" : {
+            "reports": "Reports",
             "id":"Report ID",
             "created":"Created",
             "search":"Search reports",

@@ -11,6 +11,7 @@ import { ReservationContext } from '../../../../contexts/ReservationContext'
 import { UserType } from '../../../../services/types'
 import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
+import { useTranslation } from 'react-i18next'
 
 interface VisitProps {}
 
@@ -27,6 +28,8 @@ const getParsedDate = (): string => {
 
 const Visit: React.FC<VisitProps> = () => {
   const navigate = useNavigate()
+
+  const [t] = useTranslation('global');
 
   const today = getParsedDate()
 
@@ -157,11 +160,11 @@ const Visit: React.FC<VisitProps> = () => {
         </div>
       </div>
       <div className=" flex h-full overflow-y-auto scroll rounded-lg shadow-md w-1/4 min-w-[360px] flex-col justify-between bg-white items-center gap-5 p-3">
-        <h1 className="text-lg font-mont-bd">Reservation</h1>
+        <h1 className="text-lg font-mont-bd">{t('general.reservation')}</h1>
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
-              <label className="text-md  font-mont-md ">Guests in total:</label>
+              <label className="text-md  font-mont-md ">{t('reservation.guests-in-total')}:</label>
               <input
                 type="number"
                 value={guests}
@@ -177,11 +180,11 @@ const Visit: React.FC<VisitProps> = () => {
             <FriendSelector
               friendsToAdd={friendsToAdd}
               setFriendsToAdd={setFriendsToAdd}
-              placeholder="Some of your guests have an account? Tag them!"
+              placeholder={t('reservation.registered-guests')}
             />
           </div>
           <div className="flex w-full items-center justify-between gap-2">
-            <label className="text-md font-mont-md">Date:</label>
+            <label className="text-md font-mont-md">{t('reservation.date')}:</label>
             <input
               type="date"
               value={date}
@@ -191,14 +194,14 @@ const Visit: React.FC<VisitProps> = () => {
             />
           </div>
           <div className="flex h-full w-full items-center  justify-between gap-3 text-nowrap">
-            <label className="font-mont-md">Time: </label>
+            <label className="font-mont-md">{t('reservation.time')}: </label>
             <select
               id="timeselect"
               onChange={e => setSelectedTimeslot(e.target.value)}
               value={selectedTimeslot}
               className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
             >
-              {timeSlots.length <= 0 && <option>Not avaliable</option>}
+              {timeSlots.length <= 0 && <option>{t('general.not-available')}</option>}
               {timeSlots.map((slot, index) => (
                 <option key={index} value={slot} className="hover:bg-grey-1">
                   {slot}
@@ -225,7 +228,7 @@ const Visit: React.FC<VisitProps> = () => {
             }}
             disabled={selectedTimeslot === ''}
           >
-            {`SKIP ORDER`}
+            {t('reservation.skip-order')}
             <ArrowForward />
           </button>
           <button
@@ -241,7 +244,7 @@ const Visit: React.FC<VisitProps> = () => {
             }}
             disabled={selectedTimeslot === ''}
           >
-            {`CHECKOUT ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
+            {`${t('reservation.checkout')} ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
             <SellIcon />
           </button>
         </div>
