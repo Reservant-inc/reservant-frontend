@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { StatisticsScope } from '../../../../services/enums'
 import { StatisticsProps } from './Dashboard'
 import { useTranslation } from 'react-i18next'
-import { StatisticsType } from '../../../../services/types'
+import { MenuItemType, StatisticsType } from '../../../../services/types'
 import { FetchError } from '../../../../services/Errors'
 import { fetchGET } from '../../../../services/APIconn'
 import { format, subMonths, subWeeks } from 'date-fns'
+import { BarChart } from '@mui/x-charts/BarChart'
 
 enum Option {
   All = 'All',
@@ -19,11 +20,20 @@ enum TimePeriod {
   PastYear = 'pastYear'
 }
 
+type datasetType = {
+  date: string
+  statistic:
+    | StatisticsType['popularItems']
+    | StatisticsType['customerCount']
+    | StatisticsType['revenue']
+    | StatisticsType['reviews']
+}
+
 const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   const [t] = useTranslation('global')
 
   const [option, setOption] = useState<Option>(
-    scope === StatisticsScope.All ? Option.All : Option.Single
+    scope === StatisticsScope.All ? Option.Group : Option.Single
   )
 
   //these can be restaurants or groups, depending on selected option.
@@ -32,24 +42,18 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   //selected object assigned based on optional select.
   const [object, setObject] = useState<{ name: string; id: number }>()
 
-  const [popularItemsStats, setPopularItemsStats] = useState<
-    { date: string; statistic: StatisticsType['popularItems'] }[]
-  >([])
-  const [customerCountStats, setCustomerCountStats] = useState<
-    { date: string; statistic: StatisticsType['customerCount'] }[]
-  >([])
-  const [revenueStats, setRevenueStats] = useState<
-    { date: string; statistic: StatisticsType['revenue'] }[]
-  >([])
-  const [reviewsStats, setReviewsStats] = useState<
-    { date: string; statistic: StatisticsType['reviews'] }[]
-  >([])
+  const [popularItemsStats, setPopularItemsStats] = useState<datasetType[]>([])
+  const [customerCountStats, setCustomerCountStats] = useState<datasetType[]>(
+    []
+  )
+  const [revenueStats, setRevenueStats] = useState<datasetType[]>([])
+  const [reviewsStats, setReviewsStats] = useState<datasetType[]>([])
 
   const [timePeriod, setTimePeriod] = useState<TimePeriod>(TimePeriod.PastMonth)
 
   //assigns api route based on selected option. Empty strig if the object is not selected to avoid undefined value.
   const apiRoutes: Record<Option, string> = {
-    [Option.All]: '',
+    [Option.All]: object ? '/my-restaurants/statistics' : '',
     [Option.Group]: object
       ? `/my-restaurant-groups/${object.id}/statistics`
       : '',
@@ -57,8 +61,10 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   }
 
   useEffect(() => {
+    console.log(1)
     switch (option) {
       case Option.All:
+        fetchStatistics()
         break
       case Option.Group:
         fetchGroups()
@@ -74,6 +80,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
 
   //checks whether object is undefined so as to not call the method on initial page load
   useEffect(() => {
+    console.log(1)
     object != undefined && fetchStatistics()
   }, [object, timePeriod])
 
@@ -121,6 +128,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
     const response = await fetchGET(
       `${apiRoutes[option]}?dateFrom=${format(startDate, 'yyyy-MM-dd')}&dateUntil=${format(endDate, 'yyyy-MM-dd')}`
     )
+
     return response
   }
 
@@ -246,6 +254,9 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
     setReviewsStats(reviews)
   }
 
+  console.log(customerCountStats.map(stat => stat.date).reverse())
+  console.log(customerCountStats.map(stat => stat.date))
+
   return (
     <div className="p-4">
       <div className="flex w-full">
@@ -333,13 +344,99 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
           </select>
         </div>
       )}
-      <div>
-        {popularItemsStats.map(obj => (
+      <div className="flex">
+        {customerCountStats.length > 0 && (
           <div>
-            <h1>{obj.date}</h1>
-            <h1>{obj.statistic.toString()}</h1>
+            <h1>Customer count:</h1>
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: 'band',
+                  data: customerCountStats.map(stat => stat.date).reverse(),
+                  tickLabelStyle: {
+                    angle: -90,
+                    textAnchor: 'end',
+                    fontSize: 12
+                  }
+                }
+              ]}
+              yAxis={[
+                {
+                  label: 'Customer count',
+                  tickLabelStyle: {
+                    textAnchor: 'end',
+                    fontSize: 12
+                  }
+                }
+              ]}
+              series={[
+                {
+                  type: 'bar',
+                  data: customerCountStats
+                    .map(stat => {
+                      const customerCount = stat.statistic as {
+                        date: string
+                        customers: number
+                      }[]
+
+                      const result = customerCount.reduce(
+                        (sum, item) => sum + item.customers,
+                        0
+                      )
+
+                      return result
+                    })
+                    .reverse()
+                }
+              ]}
+              grid={{ horizontal: true }}
+              barLabel="value"
+              width={400}
+              height={250}
+            />
           </div>
-        ))}
+        )}
+        {revenueStats.length > 0 && (
+          <div>
+            <h1>Revenue:</h1>
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: 'band',
+                  data: revenueStats.reverse().map(stat => stat.date),
+                  tickLabelStyle: {
+                    angle: -90,
+                    textAnchor: 'end',
+                    fontSize: 12
+                  }
+                }
+              ]}
+              yAxis={[{ label: 'Revenue' }]}
+              series={[
+                {
+                  type: 'bar',
+                  data: revenueStats.map(stat => {
+                    const revenueCount = stat.statistic as {
+                      date: string
+                      revenue: number
+                    }[]
+
+                    const result = revenueCount.reduce(
+                      (sum, item) => sum + item.revenue,
+                      0
+                    )
+
+                    return result
+                  })
+                }
+              ]}
+              grid={{ horizontal: true }}
+              barLabel="value"
+              width={400}
+              height={250}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
