@@ -48,6 +48,7 @@ export type RestaurantDetailsType = {
   idCard: string
   nip: string
   groupId: number
+  maxReservationDurationMinutes: number
 }
 
 export type GroupType = {

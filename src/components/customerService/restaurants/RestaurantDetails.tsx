@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { fetchGET, getImage } from '../../../services/APIconn';
 import DefaultImage from '../../../assets/images/defaulImage.jpeg';
+import Details from '../../reservant/restaurantManagement/dashboard/Details';
 
 const RestaurantDetails: React.FC = () => {
   const { restaurantId } = useParams<{ restaurantId: string }>();
@@ -62,59 +63,7 @@ const RestaurantDetails: React.FC = () => {
       </div>
 
       {/* prawa kol */}
-<div className="flex flex-col bg-white rounded-lg p-8 shadow-md h-full w-1/2">
-  <h1 className="text-lg font-mont-bd">Restaurant Details</h1>
-  <div className="flex flex-col gap-4 mt-4">
-    <p>
-      <span className="font-mont-bd">Name:</span> {restaurant.name}
-    </p>
-    <p>
-      <span className="font-mont-bd">Type:</span> {restaurant.restaurantType}
-    </p>
-    <p>
-      <span className="font-mont-bd">Address:</span> {restaurant.address},{' '}
-      {restaurant.postalIndex}, {restaurant.city}
-    </p>
-    <p>
-      <span className="font-mont-bd">Location:</span> Lat {restaurant.location.latitude}, Lng{' '}
-      {restaurant.location.longitude}
-    </p>
-    <p>
-      <span className="font-mont-bd">Delivery:</span>{' '}
-      {restaurant.provideDelivery ? 'Yes' : 'No'}
-    </p>
-    <p>
-      <span className="font-mont-bd">Description:</span> {restaurant.description}
-    </p>
-    <p>
-      <span className="font-mont-bd">Rating:</span> {restaurant.rating} / 5 (
-      {restaurant.numberReviews} reviews)
-    </p>
-    <p>
-      <span className="font-mont-bd">Tags:</span> {restaurant.tags.join(', ')}
-    </p>
-    <p>
-      <span className="font-mont-bd">Max Reservation Duration:</span>{' '}
-      {restaurant.maxReservationDurationMinutes} minutes
-    </p>
-    <p>
-      <span className="font-mont-bd">Tables:</span> {restaurant.tables.length} (Total capacity: {restaurant.tables.reduce((acc: number, table: { capacity: number }) => acc + table.capacity, 0)}
-)
-    </p>
-    <div>
-      <span className="font-mont-bd">Opening Hours:</span>
-      <ul className="text-sm text-grey-4 dark:text-grey-2 mt-2">
-      {restaurant.openingHours.map((hours: { from: string; until: string }, index: number) => (
-
-          <li key={index}>
-            {hours.from} - {hours.until}
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-</div>
-
+      <Details/>
     </div>
   );
 };

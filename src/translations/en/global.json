@@ -251,7 +251,12 @@
             "yes": "yes",
             "no": "no",
             "location": "Location",
-            "address": "Address"
+            "address": "Address",
+            "max-reservation-duration": "Max reservation duration",
+            "minutes": "Minutes",
+            "tables": "Tables",
+            "total-capacity": "Total capacity",
+            "opening-hours": "Opening hours"
         }
     },
     "tools": {

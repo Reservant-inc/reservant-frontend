@@ -133,6 +133,36 @@ const Details: React.FC = () => {
             </p>
             <p>{restaurant.tags.join(', ')} </p>
           </div>
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {t('restaurant-management.details.max-reservation-duration')}:{' '}
+            </p>
+            <p>
+              {restaurant.maxReservationDurationMinutes} {t('restaurant-management.details.minutes')}
+            </p>
+          </div>
+
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {t('restaurant-management.details.tables')}:{' '}
+            </p>
+            <p>
+              {restaurant.tables.length} {t('restaurant-management.details.tables')} ({t('restaurant-management.details.total-capacity')}: {restaurant.tables.reduce((acc: number, table: { capacity: number }) => acc + table.capacity, 0)})
+            </p>
+          </div>
+
+          <div>
+            <p className="font-mont-bd">
+              {t('restaurant-management.details.opening-hours')}:{' '}
+            </p>
+            <ul className="text-sm text-grey-4 dark:text-grey-2 mt-2">
+              {restaurant.openingHours.map((hours: { from: string; until: string }, index: number) => (
+                <li key={index}>
+                  {hours.from} - {hours.until}
+                </li>
+              ))}
+            </ul>
+          </div>
           <h1>Files:</h1>
           <Link to={``}>
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">

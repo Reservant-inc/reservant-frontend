@@ -96,7 +96,7 @@ const PendingRestaurantsList: React.FC = () => {
           <span>
             <IconButton
               onClick={() => {
-                navigate(`/customer-service/restaurants/${params.row.id}`)
+                navigate(`/customer-service/pending-restaurants/${params.row.id}`)
               }}
             >
               <ChevronRightIcon color="action" />
@@ -147,8 +147,17 @@ const PendingRestaurantsList: React.FC = () => {
         </div>
 
         {/* Restaurant Details */}
-        {restaurantId && selectedRestaurant && (
+        {/* {restaurantId && selectedRestaurant && (
           <div className="h-full w-[400px] overflow-y-auto">
+            <PendingRestaurantDetails
+              restaurant={selectedRestaurant}
+              onClose={closeSidePanel}
+              fetchrestaurants={fetchRestaurants}
+            />
+          </div>
+        )} */}
+        {restaurantId && (
+          <div className="h-full w-[25%] bg-gray-100 dark:bg-gray-800 overflow-y-auto scroll">
             <PendingRestaurantDetails
               restaurant={selectedRestaurant}
               onClose={closeSidePanel}
