@@ -144,7 +144,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
     <div className="py-4">
       <div className="flex flex-col divide-y-none gap-2">
         {listType === EventListType.History && (
-          <h1 className="text-sm text-grey-2 italic">
+          <h1 className="text-sm text-grey-2 dark:text-grey-3 italic">
             {userInfo.userId !== creator.userId
               ? 'One or more of your friends participated in this event.'
               : 'You created an event.'}
@@ -158,24 +158,26 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           />
           <div className="flex-col gap-1">
             <h1 className="flex flex-wrap gap-x-1">
-              <p className="font-mont-bd text-grey-5">
+              <p className="font-mont-bd text-grey-5 dark:text-grey-0">
                 {creator.firstName} {creator.lastName}
               </p>
-              <p className="text-grey-5">
+              <p className="text-grey-5 dark:text-grey-0">
                 {t('profile.events.participatedIn')}
               </p>
               <p className="font-mont-bd">{event.name}</p>
-              <p className="text-grey-5">{t('profile.events.at')}</p>
+              <p className="text-grey-5 dark:text-grey-0">
+                {t('profile.events.at')}
+              </p>
               <a href={`/reservant/home/${restaurant.restaurantId}`}>
                 <p className="font-mont-bd">{restaurant.name}</p>
               </a>
             </h1>
             <div className="flex gap-1">
-              <h1 className="text-sm text-grey-4">
+              <h1 className="text-sm text-grey-4 dark:text-grey-2">
                 {event.restaurant.city}, {formatDate(event.time)}
               </h1>
               {event.participants && (
-                <h1 className="text-sm text-grey-4 underline hover:cursor-pointer">
+                <h1 className="text-sm text-grey-4 dark:text-grey-2 underline hover:cursor-pointer">
                   {event.participants.length} {t('profile.events.participated')}
                 </h1>
               )}

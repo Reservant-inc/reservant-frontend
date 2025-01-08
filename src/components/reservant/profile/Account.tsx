@@ -176,7 +176,7 @@ const Account: React.FC = () => {
             >
               <>
                 <Key className="w-4 h-4" />
-                <h1>Change password</h1>
+                <h1 className="text-nowrap">Change password</h1>
               </>
             </button>
             <button
@@ -185,12 +185,12 @@ const Account: React.FC = () => {
             >
               <>
                 <EditSharpIcon className="w-4 h-4" />
-                <h1>Edit personal data</h1>
+                <h1 className="text-nowrap">Edit personal data</h1>
               </>
             </button>
             <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
               <DeleteForeverIcon className="w-4 h-4" />
-              Delete account
+              <h1 className="text-nowrap">Delete account</h1>
             </button>
           </div>
         </div>
