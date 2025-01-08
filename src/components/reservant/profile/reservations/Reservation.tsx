@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { OrderType, VisitType, ReportType } from '../../../../services/types'
+import {
+  OrderType,
+  VisitType,
+  ReportType,
+  UserType
+} from '../../../../services/types'
 import { fetchGET, getImage, fetchPOST } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
 import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
 import { ReservationListType } from '../../../../services/enums'
+import { Alert, IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import ErrorMes from '../../../reusableComponents/ErrorMessage'
+import { report } from 'node:process'
+import { useTranslation } from 'react-i18next'
 
 interface ReservationProps {
   reservation: VisitType
@@ -22,6 +32,10 @@ const Reservation: React.FC<ReservationProps> = ({
   const [reportType, setReportType] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
   const [selectedEmployee, setSelectedEmployee] = useState<string>('')
+  const [alertMessage, setAlertMessage] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
+
+  const [t] = useTranslation('global')
 
   const fetchOrders = async () => {
     try {
@@ -35,7 +49,11 @@ const Reservation: React.FC<ReservationProps> = ({
       setOrders(fetchedOrders)
       setLoading(false)
     } catch (error) {
-      if (error instanceof FetchError) console.error(error.formatErrors())
+      if (error instanceof FetchError) {
+        console.log(error.formatErrors())
+      } else {
+        console.log('Unexpected error')
+      }
       setLoading(false)
     }
   }
@@ -52,6 +70,20 @@ const Reservation: React.FC<ReservationProps> = ({
       setLoading(false)
     }
   }, [reservation.orders])
+
+  const validate = () => {
+    if (!reportType) {
+      setErrorMessage('Please select a valid report type.')
+      return false
+    } else if (reportType === 'complain-employee' && !selectedEmployee) {
+      setErrorMessage('Please select an employee to report.')
+      return false
+    } else if (!reportNote) {
+      setErrorMessage('Please tell us what happened.')
+      return false
+    }
+    return true
+  }
 
   const handleReportSubmit = async () => {
     try {
@@ -73,10 +105,6 @@ const Reservation: React.FC<ReservationProps> = ({
           endpoint = '/reports/report-order'
           break
         case 'complain-employee':
-          if (!selectedEmployee) {
-            alert('Please select an employee to report.')
-            return
-          }
           endpoint = '/reports/report-employee'
           reportData = {
             ...reportData,
@@ -84,14 +112,13 @@ const Reservation: React.FC<ReservationProps> = ({
           }
           break
         default:
-          alert('Please select a valid report type.')
           return
       }
 
       console.log(reportData)
 
       await fetchPOST(endpoint, JSON.stringify(reportData))
-      alert('Your report has been submitted successfully.')
+      setAlertMessage('Your report has been submitted successfully.')
     } catch (error) {
       if (error instanceof FetchError) console.error(error.formatErrors())
     } finally {
@@ -103,6 +130,18 @@ const Reservation: React.FC<ReservationProps> = ({
   }
 
   const handleCancelReservation = () => {}
+
+  const allReservationEmployees = () => {
+    let res: UserType[] = []
+    console.log(orders)
+    for (let index = 0; index < orders.length; index++) {
+      const emp: UserType = orders[index].assignedEmployee
+      console.log(emp)
+      if (!res.find(e => e.userId === emp.userId)) res.push(emp)
+    }
+    console.log(res)
+    return res
+  }
 
   return (
     <div className="w-full h-fit flex justify-between py-2">
@@ -120,8 +159,8 @@ const Reservation: React.FC<ReservationProps> = ({
           <div className="flex gap-2">
             <h1 className="text-sm">
               {reservation.orders.length > 0
-                ? `Pozycje: ${reservation.orders.length} za ${totalCost}zł`
-                : 'Brak zamówień'}
+                ? `${t('reservation.items')}: ${reservation.orders.length} ${t('reservation.for')} ${totalCost}zł`
+                : t('reservation.no-orders')}
               ,
             </h1>
             <h1 className="text-sm">
@@ -156,7 +195,7 @@ const Reservation: React.FC<ReservationProps> = ({
             className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
             onClick={() => handleCancelReservation()}
           >
-            Cancel a reservation
+            {t('reservation.cancle')}
           </button>
         </div>
       )}
@@ -167,17 +206,20 @@ const Reservation: React.FC<ReservationProps> = ({
               className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
               onClick={() => setIsComplaining(true)}
             >
-              Report a problem
+              {t('reservation.report')}
             </button>
           </div>
           <Dialog
             open={isComplaining}
-            onClose={() => setIsComplaining(false)}
-            title="Make a complaint"
+            onClose={() => {
+              setIsComplaining(false)
+              setErrorMessage('')
+            }}
+            title={t('reservation.report-title')}
           >
             <div className="flex flex-col gap-4 dark:text-grey-1 p-4 w-[400px]">
               <label htmlFor="report-type" className="text-sm font-bold">
-                What is your report about?
+                {t('reservation.complain-topic')}?
               </label>
               <select
                 id="report-type"
@@ -190,25 +232,25 @@ const Reservation: React.FC<ReservationProps> = ({
                   disabled
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Select a report type
+                  {t('reservation.select')}
                 </option>
                 <option
                   value="lost-item"
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Lost item
+                  {t('reservation.lost-item')}
                 </option>
-                <option
+                {/* <option
                   value="complain-order"
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Complain about an order
-                </option>
+                  {t('reservation.order')}
+                </option> */}
                 <option
                   value="complain-employee"
                   className="dark:text-grey-1 dark:bg-black"
                 >
-                  Complain about an employee
+                  {t('reservation.employee')}
                 </option>
               </select>
 
@@ -218,41 +260,79 @@ const Reservation: React.FC<ReservationProps> = ({
                     htmlFor="employee-select"
                     className="text-sm font-bold"
                   >
-                    Select an employee
+                    {t('reservation.employee-select')}
                   </label>
                   <select
                     id="employee-select"
                     value={selectedEmployee}
                     onChange={e => setSelectedEmployee(e.target.value)}
-                    className="border-[1px] rounded-md p-2"
+                    className="border-[1px] rounded-md p-2 dark:bg-black"
                   >
-                    <option value="" disabled>
-                      Select an employee
+                    <option
+                      value=""
+                      className="dark:text-grey-1 dark:bg-black"
+                      disabled
+                    >
+                      {t('reservation.employee-select')}
                     </option>
+                    {allReservationEmployees().map((emp: UserType) => (
+                      <option
+                        key={emp.userId}
+                        value={emp.userId}
+                        className="dark:text-grey-1 dark:bg-black"
+                      >
+                        {emp.firstName + ' ' + emp.lastName}
+                      </option>
+                    ))}
                   </select>
                 </>
               )}
 
               <label htmlFor="report-note" className="text-sm font-bold">
-                Additional details
+                {t('reservation.details')}
               </label>
               <textarea
                 id="report-note"
                 value={reportNote}
                 onChange={e => setReportNote(e.target.value)}
-                placeholder="Describe your issue in detail..."
+                placeholder={t('reservation.describe-details')}
                 className="border-[1px] rounded-md p-2 h-20 scroll dark:text-grey-1 dark:bg-black"
               />
-
+              {errorMessage && <ErrorMes msg={errorMessage} />}
               <button
-                onClick={handleReportSubmit}
+                type="submit"
+                onClick={() => {
+                  if (validate()) handleReportSubmit()
+                }}
                 className="bg-primary text-white rounded-md p-2 transition hover:bg-secondary"
               >
-                Submit Report
+                {t('reservation.submit')}
               </button>
             </div>
           </Dialog>
         </>
+      )}
+      {alertMessage && (
+        <div className="fixed bottom-2 left-2">
+          <Alert
+            variant="filled"
+            severity="success"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlertMessage('')
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {alertMessage}
+          </Alert>
+        </div>
       )}
     </div>
   )

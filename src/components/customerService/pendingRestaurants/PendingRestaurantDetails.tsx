@@ -147,3 +147,4 @@ const PendingRestaurantDetails: React.FC<PendingRestaurantDetailsProps> = ({
 };
 
 export default PendingRestaurantDetails;
+

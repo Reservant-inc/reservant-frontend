@@ -358,7 +358,7 @@ export type OrderType = {
   cost: number
   status: string
   items: MenuItemInOrderType[]
-  employees: UserType[]
+  assignedEmployee: UserType
 }
 
 export type ReservationType = {
@@ -513,3 +513,23 @@ export type ReportType = {
   }[];
 };
 
+
+export type StatisticsType = {
+  popularItems: {
+    menuItem: MenuItemType
+    amountOrdered: number
+  }[]
+  customerCount: {
+    date: string
+    customers: number
+  }[]
+  revenue: {
+    date: string
+    revenue: number
+  }[]
+  reviews: {
+    date: string
+    count: number
+    average: number
+  }[]
+}

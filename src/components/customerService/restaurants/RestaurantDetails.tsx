@@ -120,3 +120,4 @@ const RestaurantDetails: React.FC = () => {
 };
 
 export default RestaurantDetails;
+
