@@ -496,19 +496,23 @@ export type ComplaintUserInfo = {
 }
 
 export type ReportType = {
-  reportId: number
-  description: string
-  reportDate: string
-  category: string
-  createdBy: UserType
-  reportedUser: UserType
-  escalatedBy: UserType
-  escalationComment: string
-  visit: VisitType
-  resolutionComment: string
-  resolvedBy: UserType
-  resolutionDate: string
-}
+  reportId: number;
+  description: string;
+  reportDate: string;
+  category: string;
+  createdBy: UserType;
+  reportedUser: UserType | null;
+  visit: VisitType | null;
+  resolutionComment: string;
+  resolvedBy: UserType;
+  resolutionDate: string;
+  assignedAgents: {
+    agent: UserType;
+    from: string;
+    until: string | null;
+  }[];
+};
+
 
 export type StatisticsType = {
   popularItems: {

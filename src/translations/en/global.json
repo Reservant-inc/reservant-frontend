@@ -478,6 +478,16 @@
         "report-details": {
             "report-details": "Report details",
             "complaint-id": "complaint id",
+            "assign-agent": "Assign another agent",
+            "assigned-agents": "Assigned agents",
+            "assigned-from": "Assigned from",
+            "assigned-until": "Assigned until",
+            "assign-success": "The agent has been successfully assigned to the complaint.",
+            "select-agent": "Select an agent",
+            "no-agent-selected": "No agent selected",
+            "comment-required": "A comment is required.",
+            "comment-min": "Comment must be at least 5 characters long.",
+            "resolve-comment": "Add a comment to resolve the complaint",
             "date": "Date",
             "related-visit": "Related visit",
             "no-related-visit": "No visit related to this complaint.",
@@ -497,7 +507,11 @@
             "reported-user": "Reported user",
             "escalated-by": "Escalated by",
             "resolved-by": "Resolved by",
-            "comment": "Comment"
+            "comment": "Comment",
+            "cancel": "Cancel",
+            "assign": "Assign",
+            "ok": "Ok",
+            "resolve": "Resolve"
         },
         "user": {
             "account": "Account",
@@ -517,7 +531,8 @@
             "ban_duration": {
                 "days": "Days",
                 "hours": "Hours",
-                "minutes": "Minutes"
+                "minutes": "Minutes",
+                "required": "Ban duration is required."
             },
             "ban_duration_error": {
                 "min_duration": "Ban must be at least 1 minute long",

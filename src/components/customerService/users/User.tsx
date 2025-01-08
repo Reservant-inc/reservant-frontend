@@ -194,190 +194,129 @@ const User: React.FC = () => {
         </div>
       </div>
 
-      {/* Ban User Dialog */}
       <Dialog
-        open={isDialogOpen}
-        onClose={() => {
-          setIsDialogOpen(false)
-          setBanMessage(null)
-        }}
-        title={`${t('customer-service.user.ban_user_dialog_title')} ${
-          userInfo?.firstName || ''
-        } ${userInfo?.lastName || ''}`}
-      >
-        {banMessage ? (
-          <div className="p-4 flex flex-col justify-between gap-4 min-h-[150px]">
-            <p className="font-mont-bd">{banMessage}</p>
-            <div className="flex justify-end">
-              <button
-                className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-                onClick={() => {
-                  setIsDialogOpen(false)
-                  setBanMessage(null)
-                }}
+  open={isDialogOpen}
+  onClose={() => {
+    setIsDialogOpen(false);
+    setBanMessage(null);
+  }}
+  title={`${t('customer-service.user.ban_user_dialog_title')} ${
+    userInfo?.firstName || ''
+  } ${userInfo?.lastName || ''}`}
+>
+  {banMessage ? (
+    <div className="p-4 flex flex-col justify-between gap-4 h-[200px] w-[300px]">
+      <div className="p-4 flex items-center justify-center h-full w-full">
+        <p className="font-mont-bd">{banMessage}</p>
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+          onClick={() => {
+            setIsDialogOpen(false);
+            setBanMessage(null);
+          }}
+        >
+          {t('customer-service.user.close')}
+        </button>
+      </div>
+    </div>
+  ) : (
+    <Formik
+      initialValues={{ timeValue: 1, timeUnit: 'Hours' }}
+      validationSchema={Yup.object({
+        timeValue: Yup.number()
+          .min(1, t('customer-service.user.ban_duration_error.min_duration'))
+          .required(t('customer-service.user.ban_duration.required')),
+      })}
+      onSubmit={(values, { resetForm }) => {
+        const timeSpan =
+          values.timeUnit === 'Days'
+            ? `${values.timeValue}.0:0:0.0`
+            : values.timeUnit === 'Hours'
+            ? `0.${values.timeValue}:0:0.0`
+            : `0.0:${values.timeValue}:0.0`;
+
+        handleBanUser({
+          days: values.timeUnit === 'Days' ? values.timeValue : 0,
+          hours: values.timeUnit === 'Hours' ? values.timeValue : 0,
+          minutes: values.timeUnit === 'Minutes' ? values.timeValue : 0,
+        });
+
+        setBanMessage(
+          `${t('customer-service.user.ban_user_message_prefix')} ${
+            userInfo?.firstName
+          } ${userInfo?.lastName} ${t(
+            'customer-service.user.ban_user_message_suffix'
+          )}`
+        );
+
+        resetForm();
+      }}
+    >
+      {(formik) => (
+        <Form className="h-[200px] w-[300px] flex flex-col justify-between p-4">
+          <div className="flex flex-col gap-4">
+            <div
+              className={`flex items-center gap-4 p-2 border-2 rounded-md ${
+                formik.touched.timeValue && formik.errors.timeValue
+                  ? 'border-red'
+                  : 'border-primary'
+              }`}
+            >
+              <Field
+                as="select"
+                name="timeUnit"
+                className="text-sm rounded-md p-2 bg-white dark:bg-black dark:text-white w-1/3"
               >
-                {t('customer-service.user.close')}
-              </button>
+                <option value="Minutes">{t('customer-service.user.ban_duration.minutes')}</option>
+                <option value="Hours">{t('customer-service.user.ban_duration.hours')}</option>
+                <option value="Days">{t('customer-service.user.ban_duration.days')}</option>
+              </Field>
+
+              <Field
+                name="timeValue"
+                type="number"
+                className="text-sm rounded-md p-2 bg-white dark:bg-black dark:text-white w-2/3"
+              />
             </div>
+
+            {formik.touched.timeValue && formik.errors.timeValue && (
+              <p className="text-red text-sm mt-2">{formik.errors.timeValue}</p>
+            )}
           </div>
-        ) : (
-          <Formik
-            initialValues={{ days: 0, hours: 0, minutes: 0 }}
-            validationSchema={Yup.object({
-              days: Yup.number()
-                .min(0, t('customer-service.user.ban_duration_error.days_min'))
-                .required(t('customer-service.user.ban_duration.days')),
-              hours: Yup.number()
-                .min(
-                  0,
-                  t('customer-service.user.ban_duration_error.hours_range')
-                )
-                .max(
-                  23,
-                  t('customer-service.user.ban_duration_error.hours_range')
-                )
-                .required(t('customer-service.user.ban_duration.hours')),
-              minutes: Yup.number()
-                .min(
-                  1,
-                  t('customer-service.user.ban_duration_error.minutes_range')
-                )
-                .max(
-                  59,
-                  t('customer-service.user.ban_duration_error.minutes_range')
-                )
-                .required(t('customer-service.user.ban_duration.minutes'))
-            })}
-            onSubmit={(values, { resetForm }) => {
-              handleBanUser(values)
-              resetForm()
-            }}
-          >
-            {formik => {
-              const isBanDisabled =
-                (formik.values.days === 0 &&
-                  formik.values.hours === 0 &&
-                  formik.values.minutes === 0) ||
-                Object.keys(formik.errors).length > 0
 
-              return (
-                <Form>
-                  <div className="flex flex-col gap-4 p-3 min-h-[330px] min-w-[300px]">
-                    {/* Days */}
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="days" className="text-sm font-medium">
-                        {t('customer-service.user.ban_duration.days')}
-                      </label>
-                      <Field
-                        as={TextField}
-                        name="days"
-                        id="days"
-                        type="number"
-                        fullWidth
-                        sx={{ height: 40 }}
-                        error={
-                          formik.touched.days && Boolean(formik.errors.days)
-                        }
-                        helperText={formik.touched.days && formik.errors.days}
-                        className={`${
-                          !(formik.touched.days && formik.errors.days)
-                            ? 'border-black dark:border-white'
-                            : 'border-red dark:border-red'
-                        }`}
-                      />
-                    </div>
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                setIsDialogOpen(false);
+                setBanMessage(null);
+              }}
+              className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+            >
+              {t('customer-service.user.cancel')}
+            </button>
+            <button
+              type="submit"
+              disabled={formik.isSubmitting || !!formik.errors.timeValue}
+              className={`text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
+                formik.errors.timeValue ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {t('customer-service.user.ban_user')}
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
+  )}
+</Dialog>
 
-                    {/* Hours */}
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="hours" className="text-sm font-medium">
-                        {t('customer-service.user.ban_duration.hours')}
-                      </label>
-                      <Field
-                        as={TextField}
-                        name="hours"
-                        id="hours"
-                        type="number"
-                        fullWidth
-                        sx={{ height: 40 }}
-                        error={
-                          formik.touched.hours && Boolean(formik.errors.hours)
-                        }
-                        helperText={formik.touched.hours && formik.errors.hours}
-                        className={`${
-                          !(formik.touched.hours && formik.errors.hours)
-                            ? 'border-black dark:border-white'
-                            : 'border-red dark:border-red'
-                        }`}
-                      />
-                    </div>
 
-                    {/* Minutes */}
-                    <div className="flex flex-col gap-2">
-                      <label htmlFor="minutes" className="text-sm font-medium">
-                        {t('customer-service.user.ban_duration.minutes')}
-                      </label>
-                      <Field
-                        as={TextField}
-                        name="minutes"
-                        id="minutes"
-                        type="number"
-                        fullWidth
-                        sx={{ height: 40 }}
-                        error={
-                          formik.touched.minutes &&
-                          Boolean(formik.errors.minutes)
-                        }
-                        helperText={
-                          formik.touched.minutes && formik.errors.minutes
-                        }
-                        className={`${
-                          !(formik.touched.minutes && formik.errors.minutes)
-                            ? 'border-black dark:border-white'
-                            : 'border-red dark:border-red'
-                        }`}
-                      />
-                    </div>
 
-                    {isBanDisabled &&
-                      formik.values.days === 0 &&
-                      formik.values.hours === 0 &&
-                      formik.values.minutes === 0 && (
-                        <p className="text-red text-sm">
-                          {t(
-                            'customer-service.user.ban_duration_error.min_duration'
-                          )}
-                        </p>
-                      )}
-                  </div>
 
-                  <div className="flex justify-end gap-4 p-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsDialogOpen(false)
-                        setBanMessage(null)
-                        formik.resetForm()
-                      }}
-                      className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-                    >
-                      {t('customer-service.user.cancel')}
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={formik.isSubmitting || isBanDisabled}
-                      className={`text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
-                        isBanDisabled ? 'opacity-50 cursor-not-allowed' : ''
-                      }`}
-                    >
-                      {t('customer-service.user.ban_user')}
-                    </button>
-                  </div>
-                </Form>
-              )
-            }}
-          </Formik>
-        )}
-      </Dialog>
       {/* Unban User Dialog */}
       <Dialog
         open={!!unbanMessage}
