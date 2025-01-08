@@ -133,8 +133,8 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   }
 
   const formatTimePeriod = (startDate: Date, endDate: Date): string => {
-    const formattedStartDate = format(startDate, 'MMMM dd, yyyy')
-    const formattedEndDate = format(endDate, 'MMMM dd, yyyy')
+    const formattedStartDate = format(startDate, 'dd.MM.yy')
+    const formattedEndDate = format(endDate, 'dd.MM.yy')
 
     return `${formattedStartDate} - ${formattedEndDate}`
   }
@@ -354,19 +354,15 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                   scaleType: 'band',
                   data: customerCountStats.map(stat => stat.date).reverse(),
                   tickLabelStyle: {
-                    angle: -90,
+                    angle: -45,
                     textAnchor: 'end',
-                    fontSize: 12
+                    fontSize: 10
                   }
                 }
               ]}
               yAxis={[
                 {
-                  label: 'Customer count',
-                  tickLabelStyle: {
-                    textAnchor: 'end',
-                    fontSize: 12
-                  }
+                  label: 'Customer count'
                 }
               ]}
               series={[
@@ -391,8 +387,9 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               ]}
               grid={{ horizontal: true }}
               barLabel="value"
+              margin={{ bottom: 100 }}
               width={400}
-              height={250}
+              height={400}
             />
           </div>
         )}
@@ -403,11 +400,11 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               xAxis={[
                 {
                   scaleType: 'band',
-                  data: revenueStats.reverse().map(stat => stat.date),
+                  data: revenueStats.map(stat => stat.date).reverse(),
                   tickLabelStyle: {
-                    angle: -90,
+                    angle: -45,
                     textAnchor: 'end',
-                    fontSize: 12
+                    fontSize: 10
                   }
                 }
               ]}
@@ -415,25 +412,28 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               series={[
                 {
                   type: 'bar',
-                  data: revenueStats.map(stat => {
-                    const revenueCount = stat.statistic as {
-                      date: string
-                      revenue: number
-                    }[]
+                  data: revenueStats
+                    .map(stat => {
+                      const revenueCount = stat.statistic as {
+                        date: string
+                        revenue: number
+                      }[]
 
-                    const result = revenueCount.reduce(
-                      (sum, item) => sum + item.revenue,
-                      0
-                    )
+                      const result = revenueCount.reduce(
+                        (sum, item) => sum + item.revenue,
+                        0
+                      )
 
-                    return result
-                  })
+                      return result
+                    })
+                    .reverse()
                 }
               ]}
               grid={{ horizontal: true }}
+              margin={{ bottom: 100 }}
               barLabel="value"
               width={400}
-              height={250}
+              height={400}
             />
           </div>
         )}
