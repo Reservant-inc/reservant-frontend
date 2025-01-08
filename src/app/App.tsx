@@ -52,6 +52,7 @@ import PendingRestaurantsList from '../components/customerService/pendingRestaur
 import User from '../components/customerService/users/User'
 import VisitDetails from '../components/customerService/visits/VisitDetails'
 import Details from '../components/reservant/restaurantManagement/dashboard/Details'
+import RestaurantDetails from '../components/customerService/restaurants/RestaurantDetails'
 
 const router = createBrowserRouter([
   {
@@ -258,7 +259,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'restaurants/:restaurantId?',
-        element: <Details />
+        element: <RestaurantDetails />
       }
     ]
   },
