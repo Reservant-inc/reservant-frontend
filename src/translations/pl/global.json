@@ -246,7 +246,12 @@
             "yes": "tak",
             "no": "nie",
             "location": "Lokalizacja",
-            "address": "Adres"
+            "address": "Adres",
+            "max-reservation-duration": "Maksymalny czas rezerwacji",
+            "minutes": "Minut",
+            "tables": "Stoliki",
+            "total-capacity": "Całkowita ilość miejsc",
+            "opening-hours": "Godziny otwarcia"
         }
     },
     "tools": {
