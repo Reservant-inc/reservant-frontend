@@ -53,6 +53,19 @@ const Notification: React.FC<NotificationProps> = ({
   };
 
   const handleNavigation = async () => {
+    if (!isRead) {
+      try {
+        await fetchPOST(
+          '/notifications/mark-read',
+          JSON.stringify({ notificationIds: [notificationId] })
+        );
+        setIsRead(true);
+        markAsRead();
+      } catch (error) {
+        console.error('Error marking notification as read:', error);
+      }
+    }
+  
     if (notificationType === 'NotificationFriendRequestAccepted' && user.userId) {
       navigate(`/reservant/profile/${user.userId}/friends/list`);
     } else if (
@@ -78,26 +91,15 @@ const Notification: React.FC<NotificationProps> = ({
       navigate(
         `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/restaurant-dashboard`
       );
-    } else if (notificationType === 'NotificationReportEscalated' && user.userId) {
+    } else if (notificationType === 'NotificationReportAssigned' && details.reportId) {
       navigate(`/customer-service/reports/${details.reportId}`);
-      
-      if (!isRead) {
-        try {
-          await fetchPOST(
-            '/notifications/mark-read',
-            JSON.stringify({ notificationIds: [notificationId] })
-          );
-          setIsRead(true);
-          markAsRead();
-        } catch (error) {
-          console.error('Error marking notification as read:', error);
-        }
-      }
     }
+  
     closeNotifications();
   };
   
   
+
 
   const handleAcceptParticipation = async () => {
     setLoading(true);
@@ -163,6 +165,8 @@ const Notification: React.FC<NotificationProps> = ({
         return `Nowa wiadomość od ${details.authorName} w wątku ${details.threadTitle}.`;
       case 'NotificationReportEscalated':
         return `Nowa skarga eskalowana.`;
+      case 'NotificationReportAssigned':
+        return 'Zostałeś przypisany do nowej skargi.';
       case 'NotificationNewReservation':
         return `Nowa rezerwacja w ${details.restaurantName}.
 ${format(new Date(details.date), 'HH:mm', { locale: pl })} - ${format(new Date(details.endTime), 'HH:mm', { locale: pl })}
@@ -178,7 +182,8 @@ Liczba osób: ${details.numberOfPeople}`;
     'NotificationFriendRequestAccepted',
     'NotificationParticipationRequestResponse',
     'NotificationReportEscalated',
-    'NotificationNewReservation'
+    'NotificationNewReservation',
+    'NotificationReportAssigned'
   ];
 
   return (

@@ -416,6 +416,16 @@
         "report-details": {
             "report-details": "Detale zgłoszenia",
             "complaint-id": "ID zgłoszenia",
+            "assign-agent": "Przypisz innego pracownika",
+            "assigned-agents": "Przypisani pracownicy",
+            "assigned-from": "Przypisany od",
+            "assigned-until": "Przypisany do",
+            "assign-success": "Pracownik został poprawnie przypisany do zgłoszenia.",
+            "select-agent": "Wybierz pracownika",
+            "no-agent-selected": "Nie wybrano pracownika",
+            "comment-required": "Komentarz jest wymagany.",
+            "comment-min": "Komentarz musi mieć co najmniej 5 znaków.",
+            "resolve-comment": "Dodaj komentarz aby rozwiązać zgłoszenie.",
             "date": "Data",
             "related-visit": "Powiązana wizyta",
             "no-related-visit": "Nie ma wizyt powiązanych z tym zgłoszeniem",
@@ -435,7 +445,12 @@
             "reported-user": "Zgłoszony użytkownik",
             "escalated-by": "Przekazane przez",
             "resolved-by": "Rozwiązane przez",
-            "comment": "Komentarz"
+            "comment": "Komentarz",
+            "cancel": "Anuluj",
+            "assign": "Przypisz",
+            "ok": "Ok",
+            "resolve": "Rozwiąż"
+            
         },
         "user": {
             "account": "Konto",
