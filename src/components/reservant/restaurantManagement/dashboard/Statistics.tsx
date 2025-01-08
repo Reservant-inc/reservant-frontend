@@ -339,7 +339,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             )}
           </>
         )}
-        {object && (
+        {(object || option === Option.All) && (
           <div className="flex gap-2 items-center">
             <h1 className="text-sm font-mont-bd">Time period:</h1>
             <select
@@ -355,94 +355,154 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
           </div>
         )}
       </div>
-      <div className="flex gap-4 p-4 bg-grey-0 rounded-lg">
-        <div>
+      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 rounded-lg">
+        <div className="h-full w-1/4 min-w-[300px]">
           <h1>Customer count:</h1>
-          <BarChart
-            xAxis={[
-              {
-                scaleType: 'band',
-                data: customerCountStats.map(stat => stat.date).reverse(),
-                tickLabelStyle: {
-                  angle: -45,
-                  textAnchor: 'end',
-                  fontSize: 10
+          {customerCountStats.length > 0 ? (
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: 'band',
+                  data: customerCountStats.map(stat => stat.date).reverse(),
+                  tickLabelStyle: {
+                    angle: -45,
+                    textAnchor: 'end',
+                    fontSize: 10
+                  }
                 }
-              }
-            ]}
-            yAxis={[
-              {
-                label: 'Customer count'
-              }
-            ]}
-            series={[
-              {
-                type: 'bar',
-                data: customerCountStats
-                  .map(stat => {
-                    const customerCount = stat.statistic as {
-                      date: string
-                      customers: number
-                    }[]
+              ]}
+              yAxis={[
+                {
+                  label: 'Customer count'
+                }
+              ]}
+              series={[
+                {
+                  type: 'bar',
+                  data: customerCountStats
+                    .map(stat => {
+                      const customerCount = stat.statistic as {
+                        date: string
+                        customers: number
+                      }[]
 
-                    const result = customerCount.reduce(
-                      (sum, item) => sum + item.customers,
-                      0
-                    )
+                      const result = customerCount.reduce(
+                        (sum, item) => sum + item.customers,
+                        0
+                      )
 
-                    return result
-                  })
-                  .reverse()
-              }
-            ]}
-            grid={{ horizontal: true }}
-            barLabel="value"
-            margin={{ bottom: 100 }}
-            width={350}
-            height={350}
-          />
+                      return result
+                    })
+                    .reverse()
+                }
+              ]}
+              grid={{ horizontal: true }}
+              barLabel="value"
+              margin={{ bottom: 100 }}
+              width={350}
+              height={350}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <h1 className="text-sm text-grey-2">No data available</h1>
+            </div>
+          )}
         </div>
-        <div>
+        <div className="h-full w-1/4 min-w-[300px]">
           <h1>Revenue:</h1>
-          <BarChart
-            xAxis={[
-              {
-                scaleType: 'band',
-                data: revenueStats.map(stat => stat.date).reverse(),
-                tickLabelStyle: {
-                  angle: -45,
-                  textAnchor: 'end',
-                  fontSize: 10
+          {revenueStats.length > 0 ? (
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: 'band',
+                  data: revenueStats.map(stat => stat.date).reverse(),
+                  tickLabelStyle: {
+                    angle: -45,
+                    textAnchor: 'end',
+                    fontSize: 10
+                  }
                 }
-              }
-            ]}
-            yAxis={[{ label: 'Revenue' }]}
-            series={[
-              {
-                type: 'bar',
-                data: revenueStats
-                  .map(stat => {
-                    const revenueCount = stat.statistic as {
-                      date: string
-                      revenue: number
-                    }[]
+              ]}
+              yAxis={[{ label: 'Revenue' }]}
+              series={[
+                {
+                  type: 'bar',
+                  data: revenueStats
+                    .map(stat => {
+                      const revenueCount = stat.statistic as {
+                        date: string
+                        revenue: number
+                      }[]
 
-                    const result = revenueCount.reduce(
-                      (sum, item) => sum + item.revenue,
-                      0
-                    )
+                      const result = revenueCount.reduce(
+                        (sum, item) => sum + item.revenue,
+                        0
+                      )
 
-                    return result
-                  })
-                  .reverse()
-              }
-            ]}
-            grid={{ horizontal: true }}
-            margin={{ bottom: 100 }}
-            barLabel="value"
-            width={350}
-            height={350}
-          />
+                      return result
+                    })
+                    .reverse()
+                }
+              ]}
+              grid={{ horizontal: true }}
+              margin={{ bottom: 100 }}
+              barLabel="value"
+              width={350}
+              height={350}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <h1 className="text-sm text-grey-2">No data available</h1>
+            </div>
+          )}
+        </div>
+        <div className="h-full w-1/4 min-w-[300px]">
+          <h1>Review:</h1>
+          {reviewsStats.length > 0 ? (
+            <BarChart
+              xAxis={[
+                {
+                  scaleType: 'band',
+                  data: reviewsStats.map(stat => stat.date).reverse(),
+                  tickLabelStyle: {
+                    angle: -45,
+                    textAnchor: 'end',
+                    fontSize: 10
+                  }
+                }
+              ]}
+              yAxis={[{ label: 'Reviews' }]}
+              series={[
+                {
+                  type: 'bar',
+                  data: reviewsStats
+                    .map(stat => {
+                      const reviewsCount = stat.statistic as {
+                        date: string
+                        count: number
+                      }[]
+
+                      const result = reviewsCount.reduce(
+                        (sum, item) => sum + item.count,
+                        0
+                      )
+
+                      return result
+                    })
+                    .reverse()
+                }
+              ]}
+              grid={{ horizontal: true }}
+              margin={{ bottom: 100 }}
+              barLabel="value"
+              width={350}
+              height={350}
+            />
+          ) : (
+            <div className="h-full w-full flex items-center justify-center">
+              <h1 className="text-sm text-grey-2">No data available</h1>
+            </div>
+          )}
         </div>
       </div>
     </div>

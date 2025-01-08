@@ -216,7 +216,7 @@ const Account: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white h-[60%] dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
+      <div className="bg-white h-[50%] dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
         <TransactionHistory listType={TransactionListType.Client} />
       </div>
 
