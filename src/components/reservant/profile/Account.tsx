@@ -63,8 +63,6 @@ const Account: React.FC = () => {
   const [showOldPassword, setShowOldPassword] = useState<boolean>(false)
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false)
-  const [showMoneyDialog, setShowMoneyDialog] = useState<boolean>(false)
-  const [value, setValue] = useState<number>(0)
 
   const [t] = useTranslation('global')
 
@@ -166,7 +164,7 @@ const Account: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full gap-2">
-      <div className="flex h-fit flex-col w-full bg-white dark:bg-black dark:text-grey-1 rounded-lg p-4 gap-4 shadow-md">
+      <div className="flex h-[40%] flex-col w-full bg-white dark:bg-black dark:text-grey-1 rounded-lg p-4 gap-4 shadow-md">
         <div className="flex justify-between w-full">
           <h1 className="text-lg font-mont-bd">Account</h1>
           <div className="flex gap-2">
@@ -218,7 +216,7 @@ const Account: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
+      <div className="bg-white h-[60%] dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
         <TransactionHistory listType={TransactionListType.Client} />
       </div>
 

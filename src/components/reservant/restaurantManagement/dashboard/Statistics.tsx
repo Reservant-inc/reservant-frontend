@@ -53,7 +53,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
 
   //assigns api route based on selected option. Empty strig if the object is not selected to avoid undefined value.
   const apiRoutes: Record<Option, string> = {
-    [Option.All]: object ? '/my-restaurants/statistics' : '',
+    [Option.All]: '/my-restaurants/statistics',
     [Option.Group]: object
       ? `/my-restaurant-groups/${object.id}/statistics`
       : '',
@@ -61,7 +61,6 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   }
 
   useEffect(() => {
-    console.log(1)
     switch (option) {
       case Option.All:
         fetchStatistics()
@@ -76,11 +75,14 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
 
     setObject(undefined)
     setTimePeriod(TimePeriod.PastMonth)
+    setPopularItemsStats([])
+    setCustomerCountStats([])
+    setRevenueStats([])
+    setReviewsStats([])
   }, [option])
 
   //checks whether object is undefined so as to not call the method on initial page load
   useEffect(() => {
-    console.log(1)
     object != undefined && fetchStatistics()
   }, [object, timePeriod])
 
@@ -258,185 +260,190 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   console.log(customerCountStats.map(stat => stat.date))
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-full w-full flex flex-col gap-4">
       <div className="flex w-full">
         <h1 className="text-lg font-mont-bd">
           {t('restaurant-management.statistics.statistics')}
         </h1>
       </div>
-      {scope === StatisticsScope.All && (
-        <>
-          <select
-            value={option}
-            onChange={e => {
-              setOption(e.target.value as Option)
-            }}
-          >
-            <option value={Option.All}>All restaurants</option>
-            <option value={Option.Group}>Restaurant group</option>
-            <option value={Option.Single}>Restaurant</option>
-          </select>
-
-          {option === Option.Group && (
-            <div>
-              <label htmlFor="groupSelect">Group:</label>
+      <div className="flex gap-4">
+        {scope === StatisticsScope.All && (
+          <>
+            <div className="flex gap-2 items-center">
+              <h1 className="text-sm font-mont-bd">Group:</h1>
               <select
-                id="groupSelect"
-                value={object?.id ?? ''}
+                value={option}
                 onChange={e => {
-                  const selectedId = Number(e.target.value)
-                  const selectedObject = objects?.find(
-                    obj => obj.id === selectedId
-                  )
-                  setObject(selectedObject)
+                  setOption(e.target.value as Option)
                 }}
+                className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
               >
-                <option value="" disabled>
-                  Select a group
-                </option>
-                {objects?.map(group => (
-                  <option key={group.id} value={group.id}>
-                    {group.name}
-                  </option>
-                ))}
+                <option value={Option.All}>All restaurants</option>
+                <option value={Option.Group}>Restaurant group</option>
+                <option value={Option.Single}>Restaurant</option>
               </select>
             </div>
-          )}
 
-          {option === Option.Single && (
-            <div>
-              <label htmlFor="restaurantSelect">Restaurant:</label>
-              <select
-                id="restaurantSelect"
-                value={object?.id ?? ''}
-                onChange={e => {
-                  const selectedId = Number(e.target.value)
-                  const selectedObject = objects?.find(
-                    obj => obj.id === selectedId
-                  )
-                  setObject(selectedObject)
-                }}
-              >
-                <option value="" disabled>
-                  Select a restaurant
-                </option>
-                {objects?.map(restaurant => (
-                  <option key={restaurant.id} value={restaurant.id}>
-                    {restaurant.name}
+            {option === Option.Group && (
+              <div className="flex gap-2 items-center">
+                <h1 className="text-sm font-mont-bd">Group:</h1>
+                <select
+                  id="groupSelect"
+                  value={object?.id ?? ''}
+                  onChange={e => {
+                    const selectedId = Number(e.target.value)
+                    const selectedObject = objects?.find(
+                      obj => obj.id === selectedId
+                    )
+                    setObject(selectedObject)
+                  }}
+                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+                >
+                  <option value="" disabled>
+                    Select a group
                   </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </>
-      )}
-      {object && (
+                  {objects?.map(group => (
+                    <option key={group.id} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {option === Option.Single && (
+              <div className="flex gap-2 items-center">
+                <h1 className="text-sm font-mont-bd">Restaurant:</h1>
+                <select
+                  id="restaurantSelect"
+                  value={object?.id ?? ''}
+                  onChange={e => {
+                    const selectedId = Number(e.target.value)
+                    const selectedObject = objects?.find(
+                      obj => obj.id === selectedId
+                    )
+                    setObject(selectedObject)
+                  }}
+                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+                >
+                  <option value="" disabled>
+                    Select a restaurant
+                  </option>
+                  {objects?.map(restaurant => (
+                    <option key={restaurant.id} value={restaurant.id}>
+                      {restaurant.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </>
+        )}
+        {object && (
+          <div className="flex gap-2 items-center">
+            <h1 className="text-sm font-mont-bd">Time period:</h1>
+            <select
+              id="timePeriodSelect"
+              value={timePeriod}
+              onChange={e => setTimePeriod(e.target.value as TimePeriod)}
+              className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+            >
+              <option value={TimePeriod.PastMonth}>Past Month</option>
+              <option value={TimePeriod.Past6Months}>Past 6 Months</option>
+              <option value={TimePeriod.PastYear}>Past Year</option>
+            </select>
+          </div>
+        )}
+      </div>
+      <div className="flex gap-4 p-4 bg-grey-0 rounded-lg">
         <div>
-          <label htmlFor="timePeriodSelect">Select Time Period:</label>
-          <select
-            id="timePeriodSelect"
-            value={timePeriod}
-            onChange={e => setTimePeriod(e.target.value as TimePeriod)}
-          >
-            <option value={TimePeriod.PastMonth}>Past Month</option>
-            <option value={TimePeriod.Past6Months}>Past 6 Months</option>
-            <option value={TimePeriod.PastYear}>Past Year</option>
-          </select>
+          <h1>Customer count:</h1>
+          <BarChart
+            xAxis={[
+              {
+                scaleType: 'band',
+                data: customerCountStats.map(stat => stat.date).reverse(),
+                tickLabelStyle: {
+                  angle: -45,
+                  textAnchor: 'end',
+                  fontSize: 10
+                }
+              }
+            ]}
+            yAxis={[
+              {
+                label: 'Customer count'
+              }
+            ]}
+            series={[
+              {
+                type: 'bar',
+                data: customerCountStats
+                  .map(stat => {
+                    const customerCount = stat.statistic as {
+                      date: string
+                      customers: number
+                    }[]
+
+                    const result = customerCount.reduce(
+                      (sum, item) => sum + item.customers,
+                      0
+                    )
+
+                    return result
+                  })
+                  .reverse()
+              }
+            ]}
+            grid={{ horizontal: true }}
+            barLabel="value"
+            margin={{ bottom: 100 }}
+            width={350}
+            height={350}
+          />
         </div>
-      )}
-      <div className="flex">
-        {customerCountStats.length > 0 && (
-          <div>
-            <h1>Customer count:</h1>
-            <BarChart
-              xAxis={[
-                {
-                  scaleType: 'band',
-                  data: customerCountStats.map(stat => stat.date).reverse(),
-                  tickLabelStyle: {
-                    angle: -45,
-                    textAnchor: 'end',
-                    fontSize: 10
-                  }
+        <div>
+          <h1>Revenue:</h1>
+          <BarChart
+            xAxis={[
+              {
+                scaleType: 'band',
+                data: revenueStats.map(stat => stat.date).reverse(),
+                tickLabelStyle: {
+                  angle: -45,
+                  textAnchor: 'end',
+                  fontSize: 10
                 }
-              ]}
-              yAxis={[
-                {
-                  label: 'Customer count'
-                }
-              ]}
-              series={[
-                {
-                  type: 'bar',
-                  data: customerCountStats
-                    .map(stat => {
-                      const customerCount = stat.statistic as {
-                        date: string
-                        customers: number
-                      }[]
+              }
+            ]}
+            yAxis={[{ label: 'Revenue' }]}
+            series={[
+              {
+                type: 'bar',
+                data: revenueStats
+                  .map(stat => {
+                    const revenueCount = stat.statistic as {
+                      date: string
+                      revenue: number
+                    }[]
 
-                      const result = customerCount.reduce(
-                        (sum, item) => sum + item.customers,
-                        0
-                      )
+                    const result = revenueCount.reduce(
+                      (sum, item) => sum + item.revenue,
+                      0
+                    )
 
-                      return result
-                    })
-                    .reverse()
-                }
-              ]}
-              grid={{ horizontal: true }}
-              barLabel="value"
-              margin={{ bottom: 100 }}
-              width={400}
-              height={400}
-            />
-          </div>
-        )}
-        {revenueStats.length > 0 && (
-          <div>
-            <h1>Revenue:</h1>
-            <BarChart
-              xAxis={[
-                {
-                  scaleType: 'band',
-                  data: revenueStats.map(stat => stat.date).reverse(),
-                  tickLabelStyle: {
-                    angle: -45,
-                    textAnchor: 'end',
-                    fontSize: 10
-                  }
-                }
-              ]}
-              yAxis={[{ label: 'Revenue' }]}
-              series={[
-                {
-                  type: 'bar',
-                  data: revenueStats
-                    .map(stat => {
-                      const revenueCount = stat.statistic as {
-                        date: string
-                        revenue: number
-                      }[]
-
-                      const result = revenueCount.reduce(
-                        (sum, item) => sum + item.revenue,
-                        0
-                      )
-
-                      return result
-                    })
-                    .reverse()
-                }
-              ]}
-              grid={{ horizontal: true }}
-              margin={{ bottom: 100 }}
-              barLabel="value"
-              width={400}
-              height={400}
-            />
-          </div>
-        )}
+                    return result
+                  })
+                  .reverse()
+              }
+            ]}
+            grid={{ horizontal: true }}
+            margin={{ bottom: 100 }}
+            barLabel="value"
+            width={350}
+            height={350}
+          />
+        </div>
       </div>
     </div>
   )
