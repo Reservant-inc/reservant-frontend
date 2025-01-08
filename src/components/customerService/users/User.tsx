@@ -265,10 +265,11 @@ const User: React.FC = () => {
                   : 'border-primary'
               }`}
             >
+              
               <Field
                 as="select"
                 name="timeUnit"
-                className="text-sm rounded-md p-2 bg-white dark:bg-black dark:text-white w-1/3"
+                className="text-sm cursor-pointer rounded-md p-2 bg-white dark:bg-black dark:text-white w-1/2"
               >
                 <option value="Minutes">{t('customer-service.user.ban_duration.minutes')}</option>
                 <option value="Hours">{t('customer-service.user.ban_duration.hours')}</option>

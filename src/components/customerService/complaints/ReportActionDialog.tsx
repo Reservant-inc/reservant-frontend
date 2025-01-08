@@ -46,7 +46,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
   const resolveValidationSchema = Yup.object({
     comment: Yup.string()
       .required(t('customer-service.report-details.comment-required'))
-      .min(5, t('customer-service.report-details.comment-min')),
+      .min(3, t('customer-service.report-details.comment-min')),
   });
 
   const handleAssignSubmit = async (values: { agentId: string }) => {
@@ -103,7 +103,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
           onSubmit={handleAssignSubmit}
         >
           {({ errors, touched, isValid, dirty }) => (
-            <Form className="p-4 flex flex-col gap-4">
+            <Form className="p-4 flex flex-col gap-4 w-[400px]">
               <label htmlFor="agentId" className="font-mont-md text-sm">
                 {t('customer-service.report-details.select-agent')}
               </label>
@@ -111,7 +111,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                 as="select"
                 name="agentId"
                 id="agentId"
-                className={`w-full p-2 border ${
+                className={`w-full cursor-pointer border ${
                   errors.agentId && touched.agentId ? 'border-red' : 'border-primary'
                 } rounded-md`}
               >
@@ -153,7 +153,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
         >
           {({ errors, touched, isValid, dirty }) => (
             <Form>
-              <div className="w-[400px] p-4 gap-3 flex flex-col">
+              <div className="w-[470px] h-[270px] p-4 gap-3 flex flex-col">
                 <p className="font-mont-bd text-xl">
                   {t('customer-service.report-details.resolve-comment')}
                 </p>
@@ -163,6 +163,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                     name="comment"
                     label="Comment"
                     as="textarea"
+                    placeholder="Min. 3 characters "
                     rows="4"
                     className={`w-full p-2 border ${
                       errors.comment && touched.comment

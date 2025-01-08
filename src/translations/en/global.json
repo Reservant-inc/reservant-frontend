@@ -486,7 +486,7 @@
             "select-agent": "Select an agent",
             "no-agent-selected": "No agent selected",
             "comment-required": "A comment is required.",
-            "comment-min": "Comment must be at least 5 characters long.",
+            "comment-min": "Comment must be at least 3 characters long.",
             "resolve-comment": "Add a comment to resolve the complaint",
             "date": "Date",
             "related-visit": "Related visit",

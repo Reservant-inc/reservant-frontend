@@ -481,7 +481,7 @@
             "select-agent": "Wybierz pracownika",
             "no-agent-selected": "Nie wybrano pracownika",
             "comment-required": "Komentarz jest wymagany.",
-            "comment-min": "Komentarz musi mieć co najmniej 5 znaków.",
+            "comment-min": "Komentarz musi mieć co najmniej 3 znaki.",
             "resolve-comment": "Dodaj komentarz aby rozwiązać zgłoszenie.",
             "date": "Data",
             "related-visit": "Powiązana wizyta",
