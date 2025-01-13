@@ -168,13 +168,13 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
               <p className="text-grey-5 dark:text-grey-0">
                 {t('profile.events.at')}
               </p>
-              <a href={`/reservant/home/${restaurant.restaurantId}`}>
-                <p className="font-mont-bd">{restaurant.name}</p>
+              <a href={`/reservant/home/${restaurant?.restaurantId}`}>
+                <p className="font-mont-bd">{restaurant?.name}</p>
               </a>
             </h1>
             <div className="flex gap-1">
               <h1 className="text-sm text-grey-4 dark:text-grey-2">
-                {event.restaurant.city}, {formatDate(event.time)}
+                {event.restaurant?.city}, {formatDate(event.time)}
               </h1>
               {event.participants && (
                 <h1 className="text-sm text-grey-4 dark:text-grey-2 underline hover:cursor-pointer">
