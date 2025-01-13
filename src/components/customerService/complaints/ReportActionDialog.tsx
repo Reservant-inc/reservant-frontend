@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Dialog from '../../reusableComponents/Dialog';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { fetchPOST, fetchPUT, fetchGET } from '../../../services/APIconn';
+import { fetchPOST, fetchPUT, fetchGET, getImage } from '../../../services/APIconn';
 import { useTranslation } from 'react-i18next';
+import DefaultImage from '../../../assets/images/user.jpg'
 
 interface ReportActionDialogProps {
   open: boolean;
@@ -11,6 +12,7 @@ interface ReportActionDialogProps {
   actionType?: 'assign' | 'resolve';
   reportId: number;
   refreshReports: () => void;
+  assignedAgents: any[];
 }
 
 const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
@@ -19,16 +21,17 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
   actionType,
   reportId,
   refreshReports,
+  assignedAgents
 }) => {
-  const [agents, setAgents] = useState<any[]>([]); // Placeholder 
+  const [agents, setAgents] = useState<any[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [t] = useTranslation('global');
+  const { t } = useTranslation('global');
 
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const response = await fetchGET('/users/fced96c1-dad9-49ff-a598-05e1c5e433aa');
-        setAgents([response]); 
+        const response = await fetchGET('/users/customer-support');
+        setAgents(response.items || []);
       } catch (error) {
         console.error('Error fetching agents:', error);
       }
@@ -54,7 +57,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
       const body = JSON.stringify({ agentId: values.agentId });
       await fetchPOST(`/reports/${reportId}/assign-to`, body);
       setSuccessMessage(t('customer-service.report-details.assign-success'));
-      refreshReports();
+      // refreshReports();
     } catch (error) {
       console.error('Error assigning agent:', error);
     }
@@ -71,6 +74,12 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
     }
   };
 
+  const isAgentAssigned = (agentId: string): boolean => {
+    return assignedAgents.some(
+      (assigned) => assigned.agent.userId === agentId
+    );
+  };
+
   return (
     <Dialog
       open={open}
@@ -83,68 +92,78 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
     >
       {successMessage ? (
         <div className="p-4">
-        <p className="font-mont-bd text-lg">{successMessage}</p>
-        <div className="flex justify-end mt-4">
-          <button
-            className="px-4 py-2 border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md"
-            onClick={() => {
-              setSuccessMessage(null); 
-              onClose();
-            }}
-          >
-            {t('customer-service.report-details.ok')}
-          </button>
+          <p className="font-mont-bd text-lg">{successMessage}</p>
+          <div className="flex justify-end mt-4">
+            <button
+              className="px-4 py-2 border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md"
+              onClick={() => {
+                setSuccessMessage(null);
+                onClose();
+              }}
+            >
+              {t('customer-service.report-details.ok')}
+            </button>
+          </div>
         </div>
-      </div>
       ) : actionType === 'assign' ? (
         <Formik
-          initialValues={{ agentId: '' }}
-          validationSchema={assignValidationSchema}
-          onSubmit={handleAssignSubmit}
+  initialValues={{ agentId: '' }}
+  validationSchema={assignValidationSchema}
+  onSubmit={handleAssignSubmit}
+>
+  {({ values, errors, touched, isValid, dirty }) => (
+    <Form className="p-4 flex flex-col gap-4 w-[400px]">
+      <label htmlFor="agentId" className="font-mont-md text-sm">
+        {t('customer-service.report-details.select-agent')}
+      </label>
+      <Field
+        as="select"
+        name="agentId"
+        id="agentId"
+        className={`w-full cursor-pointer border ${
+          errors.agentId && touched.agentId ? 'border-red' : 'border-primary'
+        } rounded-md`}
+      >
+        {!values.agentId && (
+          <option value="" disabled hidden className="italic">
+            {t('customer-service.report-details.no-agent-selected')}
+          </option>
+        )}
+        {agents.map((agent) => {
+          const assigned = isAgentAssigned(agent.userId);
+          return (
+            <option
+              key={agent.userId}
+              value={agent.userId}
+              disabled={assigned}
+            >
+              {agent.firstName} {agent.lastName} {assigned && `(${t('customer-service.report-details.already-assigned')})`}
+            </option>
+          );
+        })}
+      </Field>
+      <div className="flex justify-end gap-4">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 text-primary border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md"
         >
-          {({ errors, touched, isValid, dirty }) => (
-            <Form className="p-4 flex flex-col gap-4 w-[400px]">
-              <label htmlFor="agentId" className="font-mont-md text-sm">
-                {t('customer-service.report-details.select-agent')}
-              </label>
-              <Field
-                as="select"
-                name="agentId"
-                id="agentId"
-                className={`w-full cursor-pointer border ${
-                  errors.agentId && touched.agentId ? 'border-red' : 'border-primary'
-                } rounded-md`}
-              >
-                <option value="">
-                  {t('customer-service.report-details.no-agent-selected')}
-                </option>
-                {agents.map((agent) => (
-                  <option key={agent.userId} value={agent.userId}>
-                    {agent.firstName} {agent.lastName}
-                  </option>
-                ))}
-              </Field>
-              <div className="flex justify-end gap-4">
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="px-4 py-2 text-primary border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md"
-                >
-                  {t('customer-service.report-details.cancel')}
-                </button>
-                <button
-                  type="submit"
-                  disabled={!isValid || !dirty}
-                  className={`px-4 py-2 text-primary border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md ${
-                    !isValid || !dirty ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                >
-                  {t('customer-service.report-details.assign')}
-                </button>
-              </div>
-            </Form>
-          )}
-        </Formik>
+          {t('customer-service.report-details.cancel')}
+        </button>
+        <button
+          type="submit"
+          disabled={!isValid || !dirty}
+          className={`px-4 py-2 text-primary border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md ${
+            !isValid || !dirty ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+        >
+          {t('customer-service.report-details.assign')}
+        </button>
+      </div>
+    </Form>
+  )}
+</Formik>
+
       ) : (
         <Formik
           initialValues={{ comment: '' }}

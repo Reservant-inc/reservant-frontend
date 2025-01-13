@@ -296,6 +296,7 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           actionType={actionType}
           reportId={report.reportId}
           refreshReports={refreshReports}
+          assignedAgents={report.assignedAgents}
         />
       </div>
     </div>
