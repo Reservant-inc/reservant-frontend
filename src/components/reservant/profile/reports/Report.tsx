@@ -49,7 +49,7 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
           {report.reportStatus && (
             <p className="text-xs flex items-center gap-1">
               <Circle
-                className={`${report.reportStatus === 'ResolvedNegatively' ? 'text-red' : report.reportStatus === 'NotResolved' ? 'text-yellow' : 'text-green'} text-xs`}
+                className={`${report.reportStatus === 'ResolvedNegatively' ? 'text-red' : report.reportStatus === 'NotResolved' ? 'text-warning' : 'text-green'} text-xs`}
               />
               {report.reportStatus}
             </p>
