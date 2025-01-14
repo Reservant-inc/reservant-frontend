@@ -529,6 +529,13 @@
             "ban_user_message_prefix": "Użytkownik",
             "ban_user_message_suffix": "został zablokowany na",
             "banned_until": "Zbanowany do:",
+            "delete_account_confirmation": "Czy na pewno chcesz usunąć swoje konto?",
+            "delete": "Usuń",
+            "delete_user_dialog_title": "Usuwanie konta użytkownika",
+            "delete_user_confirmation": "Czy na pewno chcesz usunąć konto tego użytkownika?",
+            "delete_account_dialog_title": "Usuń swoje konto",
+            "delete_user": "Usuń konto",
+            "account_deleted": "Konto tego użytkownika zostało usunięte.",
             "ban_duration": {
                 "days": "Dni",
                 "hours": "Godziny",

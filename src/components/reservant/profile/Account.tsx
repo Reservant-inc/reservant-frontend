@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FetchError } from '../../../services/Errors'
 import {
+  fetchDELETE,
   fetchFilesPOST,
   fetchGET,
   fetchPOST,
@@ -21,7 +22,10 @@ import { Key, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import TransactionHistory from './TransactionHistory'
+import { useNavigate } from 'react-router-dom';
 import { TransactionListType } from '../../../services/enums'
+
+
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -65,7 +69,13 @@ const Account: React.FC = () => {
   const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false)
   const [showMoneyDialog, setShowMoneyDialog] = useState<boolean>(false)
   const [value, setValue] = useState<number>(0)
+  const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
+    useState<boolean>(false);
+  const [deleteAccountCountdown, setDeleteAccountCountdown] = useState<number>(10);
+  const [isDeleteAccountDisabled, setIsDeleteAccountDisabled] = useState<boolean>(true);
 
+
+  const navigate = useNavigate();
   const [t] = useTranslation('global')
 
   const initialValues = {
@@ -101,6 +111,39 @@ const Account: React.FC = () => {
   useEffect(() => {
     fetchUserData()
   }, [])
+
+  useEffect(() => {
+    if (isDeleteAccountDialogOpen) {
+      setDeleteAccountCountdown(10);
+      setIsDeleteAccountDisabled(true);
+
+      const timer = setInterval(() => {
+        setDeleteAccountCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setIsDeleteAccountDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    } else {
+      return undefined
+    }
+  }, [isDeleteAccountDialogOpen]);
+
+  const handleDeleteAccount = async () => {
+    try {
+      await fetchDELETE(`/user`);
+      navigate('/'); 
+    } catch (error) {
+      console.error('Error deleting account:', error);
+    } finally {
+      setIsDeleteAccountDialogOpen(false);
+    }
+  };
 
   const fetchUserData = async () => {
     try {
@@ -188,10 +231,14 @@ const Account: React.FC = () => {
                 <h1 className="text-nowrap">Edit personal data</h1>
               </>
             </button>
-            <button className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-error text-error transition hover:scale-105 hover:bg-error hover:text-white">
+            <button
+        className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-red text-red transition hover:scale-105 hover:bg-red hover:text-white dark:border-red dark:text-red dark:hover:bg-red dark:hover:text-white"
+        onClick={() => setIsDeleteAccountDialogOpen(true)}
+      >
               <DeleteForeverIcon className="w-4 h-4" />
               <h1 className="text-nowrap">Delete account</h1>
             </button>
+            
           </div>
         </div>
         <div className="flex items-center gap-4 w-full">
@@ -221,6 +268,36 @@ const Account: React.FC = () => {
       <div className="bg-white dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
         <TransactionHistory listType={TransactionListType.Client} />
       </div>
+
+       {/* Delete Account Dialog */}
+       <Dialog
+        open={isDeleteAccountDialogOpen}
+        onClose={() => setIsDeleteAccountDialogOpen(false)}
+        title={t('customer-service.user.delete_account_dialog_title')}
+      >
+        <div className="p-4 flex flex-col justify-between min-h-[150px]">
+          <p className="font-mont-bd">
+            {t('customer-service.user.delete_account_confirmation')}
+          </p>
+          <div className="flex justify-end gap-4">
+            <button
+              className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+              onClick={() => setIsDeleteAccountDialogOpen(false)}
+            >
+              {t('customer-service.user.cancel')}
+            </button>
+            <button
+              className={`text-sm border-red hover:scale-105 hover:bg-red hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-red transition ${
+                isDeleteAccountDisabled ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              onClick={handleDeleteAccount}
+              disabled={isDeleteAccountDisabled}
+            >
+              {t('customer-service.user.delete')} {isDeleteAccountDisabled && `(${deleteAccountCountdown})`}
+            </button>
+          </div>
+        </div>
+      </Dialog>
 
       {isEditing && (
         <Dialog

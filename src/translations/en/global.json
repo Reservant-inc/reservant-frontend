@@ -533,6 +533,13 @@
             "ban_user_message_prefix": "User",
             "ban_user_message_suffix": "was banned for",
             "banned_until": "Banned until:",
+            "delete_account_confirmation": "Are you sure you want to delete your account?",
+            "delete": "Delete",
+            "delete_user_dialog_title": "Delete account of",
+            "delete_user_confirmation": "Are you sure you want to remove this user's account?",
+            "delete_account_dialog_title": "Delete your account",
+            "delete_user": "Delete user",
+            "account_deleted": "This user's account is deleted.",
             "ban_duration": {
                 "days": "Days",
                 "hours": "Hours",
