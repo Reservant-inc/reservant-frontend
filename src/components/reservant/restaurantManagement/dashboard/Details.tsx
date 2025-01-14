@@ -47,11 +47,6 @@ const Details: React.FC = () => {
     }
   }
 
-  const handleAccept = async () => {
-    fetchPOST(`/restaurants/${restaurantId}/verify`)
-    setAlertMessage('restaurant accepted')
-  }
-
   return (
     <div className="flex h-full self-start overflow-y-auto flex-col w-full dark:bg-black bg-white rounded-lg p-4 ">
       <h1 className="text-lg font-mont-bd">
@@ -244,9 +239,17 @@ const Details: React.FC = () => {
               </div>
             </Dialog>
           )}
-          {isCustomerSupportManager() && (
+          {isCustomerSupportManager() && !restaurant.isVerified && (
             <button
-              onClick={handleAccept}
+              onClick={async () => {
+                try {
+                  fetchPOST(`/restaurants/${restaurantId}/verify`)
+                  restaurant.isVerified = true
+                  setAlertMessage('restaurant accepted')
+                } catch (error) {
+                  console.error('Error occured during verification:', error)
+                }
+              }}
               className="w-fit px-4 py-1 justify-self-right dark:bg-black border-[1px] rounded-md bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
               {t('restaurant-management.details.accept')}{' '}
@@ -255,7 +258,6 @@ const Details: React.FC = () => {
         </div>
       ) : (
         <p className="text-center text-grey-5">
-          {' '}
           {t('restaurant-management.details.nodata')}
         </p>
       )}

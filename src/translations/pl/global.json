@@ -513,7 +513,8 @@
             "cancel": "Anuluj",
             "assign": "Przypisz",
             "ok": "Ok",
-            "resolve": "Rozwiąż"
+            "resolve-positive": "Rozpatrz",
+            "resolve-negative": "Odrzuć"
             
         },
         "user": {

@@ -518,7 +518,8 @@
             "cancel": "Cancel",
             "assign": "Assign",
             "ok": "Ok",
-            "resolve": "Resolve"
+            "resolve-positive": "Resolve",
+            "resolve-negative": "Reject"
         },
         "user": {
             "account": "Account",
