@@ -226,6 +226,7 @@ export type ThreadType = {
   threadId: number
   title: string
   participants: UserType[]
+  type: string
 }
 
 export type PaginationType = {
@@ -497,23 +498,23 @@ export type ComplaintUserInfo = {
 }
 
 export type ReportType = {
-  reportId: number;
-  description: string;
-  reportDate: string;
-  category: string;
-  createdBy: UserType;
-  reportedUser: UserType | null;
-  visit: VisitType | null;
-  resolutionComment: string;
-  resolvedBy: UserType;
-  resolutionDate: string;
+  reportId: number
+  description: string
+  reportDate: string
+  category: string
+  createdBy: UserType
+  reportedUser: UserType | null
+  visit: VisitType | null
+  resolutionComment: string
+  resolvedBy: UserType
+  resolutionDate: string
   assignedAgents: {
-    agent: UserType;
-    from: string;
-    until: string | null;
-  }[];
-};
-
+    agent: UserType
+    from: string
+    until: string | null
+  }[]
+  threadId: number
+}
 
 export type StatisticsType = {
   popularItems: {

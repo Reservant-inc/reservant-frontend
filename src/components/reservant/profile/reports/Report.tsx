@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
-import { ReportType } from '../../../../services/types'
+import { ReportType, ThreadType } from '../../../../services/types'
 import { Message } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { ReportsListType } from '../../../../services/enums'
-import { fetchPOST } from '../../../../services/APIconn'
+import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
 
@@ -18,31 +18,9 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
-  /*
-
-  issues:
-
-  1. w zwracanych zgłoszeniach nie ma powiązanego threada
-  2. w threadach nie ma rozróżnienia na bok/znajomy
-  3. zgłoszenia nadal nie zwracają statusu
-  4. zaseedowane zgłoszenia nie mają powiązanej osoby przypisanej do zgłoszenia. czy resolvedBy to osoba obsługująca zgłoszenie czy zamykająca zgłoszenie?
-
-  rozwiązania:
-  
-  1. trzeba poprawić get /user/reports tak aby zwracało powiązany thread
-  2. trzeba dodać takie rozróżnienie - narazie z issue się wstrzymuję
-  3. issue na backend jest już od dawna
-  4. trzeba zagadać do Olka
-
-  */
-
   const openChat = async () => {
     try {
-      const body = JSON.stringify({
-        title: report.reportId,
-        participantIds: [report.resolvedBy.userId]
-      })
-      const response = await fetchPOST(`/threads`, body)
+      const response: ThreadType = await fetchGET(`/threads/${report.threadId}`)
       handleThreadOpen(response)
     } catch (error) {
       if (error instanceof FetchError) console.log(error.formatErrors())
