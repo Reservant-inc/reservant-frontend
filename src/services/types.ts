@@ -507,6 +507,7 @@ export type ReportType = {
   resolutionComment: string;
   resolvedBy: UserType;
   resolutionDate: string;
+  reportStatus: string;
   assignedAgents: {
     agent: UserType;
     from: string;
@@ -533,4 +534,9 @@ export type StatisticsType = {
     count: number
     average: number
   }[]
+}
+
+export type ResolveFormValues = {
+  comment: string;
+  isResolutionPositive: boolean | null;
 }

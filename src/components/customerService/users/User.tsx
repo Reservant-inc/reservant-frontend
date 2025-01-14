@@ -100,13 +100,13 @@ const User: React.FC = () => {
   }
 
   return (
-    <div className="z-[0] flex h-full w-full items-center justify-center gap-2 bg-grey-1 dark:bg-grey-6">
+    <div className="z-[0] flex h-full w-full items-center justify-center gap-2 bg-grey-1 dark:bg-grey-5">
       <div className="flex flex-col gap-2 h-full w-1/2">
-        <div className="flex h-FIT w-full self-start flex-col bg-white rounded-lg p-4 gap-4 shadow-md">
+        <div className="flex h-FIT w-full self-start flex-col bg-white dark:bg-black rounded-lg p-4 gap-4 shadow-md">
         <div className="flex justify-between w-full">
-  <h1 className="text-lg font-mont-bd">
-    {t('customer-service.user.account')}
-  </h1>
+          <h1 className="text-lg font-mont-bd">
+            {t('customer-service.user.account')}
+          </h1>
   <div className="flex gap-2">
     {userInfo?.bannedUntil ? (
       <>
@@ -117,7 +117,7 @@ const User: React.FC = () => {
           <span>{new Date(userInfo.bannedUntil).toLocaleString()}</span>
         </div>
         <button
-          className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+          className="px-4 text-sm py-2 dark:bg-black border-[1px] rounded-md bg-white text-primary border-primary dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-white hover:scale-105 hover:bg-primary hover:text-white transition"
           onClick={handleUnbanUser}
         >
           <DeleteForeverIcon className="w-4 h-4" />
@@ -126,7 +126,7 @@ const User: React.FC = () => {
       </>
     ) : (
       <button
-        className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+        className="px-4 text-sm py-2 dark:bg-black border-[1px] rounded-md bg-white text-primary border-primary dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-white hover:scale-105 hover:bg-primary hover:text-white transition"
         onClick={() => setIsDialogOpen(true)}
       >
         <GavelIcon className="w-4 h-4" />
@@ -173,7 +173,7 @@ const User: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-full w-full bg-white rounded-lg shadow-md p-4">
+        <div className="h-full w-full bg-white dark:bg-black rounded-lg shadow-md p-4">
           <h1 className="font-mont-bd text-lg">
             {t('customer-service.user.transaction_history')}
           </h1>
@@ -182,7 +182,7 @@ const User: React.FC = () => {
       </div>
 
       <div className="flex flex-col gap-2 h-full w-1/2">
-        <div className="h-full w-full bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <div className="h-full w-full bg-white dark:bg-black rounded-lg shadow-md p-4 flex flex-col gap-2">
           <div className="h-[2rem]">
             <h1 className="font-mont-bd text-lg">
               {t('customer-service.user.related_complaints')}

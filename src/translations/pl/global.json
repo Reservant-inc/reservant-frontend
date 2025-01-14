@@ -473,7 +473,13 @@
             "resolution-date": "Data rozwiązania",
             "actions": "Akcje",
             "reports": "Zgłoszenia",
-            "pending-restaurants": "Oczekujące restauracje"
+            "pending-restaurants": "Oczekujące restauracje",
+            "status": {
+                "status": "Status zgłoszenia",
+                "resolvednegatively": "Rozwiązane pozytywnie",
+                "resolvedpositively": "Rozwiązane negatywnie",
+                "notresolved": "Nierozwiązane"
+            }
         },
         "report-details": {
             "report-details": "Detale zgłoszenia",
@@ -511,7 +517,12 @@
             "cancel": "Anuluj",
             "assign": "Przypisz",
             "ok": "Ok",
-            "resolve": "Rozwiąż"
+            "resolve": "Rozwiąż",
+            "status": "Status",
+            "resolve-success": "Czy zgłoszenie rozwiązano pozytywnie?",
+            "yes": "Tak",
+            "no": "Nie",
+            "comment-placeholder": "Dodaj komentarz. Co najmniej 3 znaki."
             
         },
         "user": {

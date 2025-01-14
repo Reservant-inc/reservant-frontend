@@ -478,7 +478,13 @@
             "resolution-date": "Resolution date",
             "actions": "Actions",
             "reports": "Reports",
-            "pending-restaurants": "Pending restaurants"
+            "pending-restaurants": "Pending restaurants",
+            "status": {
+                "status": "Resolution status",
+                "resolvednegatively": "Negatively",
+                "resolvedpositively": "Positively",
+                "notresolved": "Not resolved"
+            }
         },
         "report-details": {
             "report-details": "Report details",
@@ -516,7 +522,12 @@
             "cancel": "Cancel",
             "assign": "Assign",
             "ok": "Ok",
-            "resolve": "Resolve"
+            "resolve": "Resolve",
+            "status": "Status",
+            "resolve-success": "Was the report resolved successfully?",
+            "yes": "Yes",
+            "no": "No",
+            "comment-placeholder": "Add a comment. At least 3 characters long."
         },
         "user": {
             "account": "Account",

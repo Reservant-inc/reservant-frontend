@@ -58,13 +58,13 @@ const ComplaintsList: React.FC = () => {
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
         <span>{params.row.resolutionDate ? 'Yes' : 'No'}</span>
-      )
+      ),
     },
     {
       field: 'reportDate',
       headerName: t('customer-service.reports.report-date'),
       flex: 1,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'createdBy',
@@ -72,7 +72,7 @@ const ComplaintsList: React.FC = () => {
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => {
-        const createdBy = params.row.createdBy
+        const createdBy = params.row.createdBy;
         return createdBy ? (
           <Tooltip title={`${createdBy.userId}`}>
             <span>
@@ -81,14 +81,25 @@ const ComplaintsList: React.FC = () => {
           </Tooltip>
         ) : (
           <span>Unknown</span>
-        )
-      }
+        );
+      },
     },
     {
       field: 'category',
       headerName: t('customer-service.reports.category'),
       flex: 1,
-      sortable: true
+      sortable: true,
+    },
+    {
+      field: 'reportStatus',
+      headerName: t('customer-service.reports.status.status'),
+      flex: 1,
+      sortable: true,
+      renderCell: (params: GridRenderCellParams) => (
+        <span>
+          {t(`customer-service.reports.status.${params.row.reportStatus.toLowerCase()}`)}
+        </span>
+      ),
     },
     {
       field: 'description',
@@ -103,7 +114,7 @@ const ComplaintsList: React.FC = () => {
               : params.row.description || 'No description'}
           </span>
         </Tooltip>
-      )
+      ),
     },
     {
       field: 'resolvedBy',
@@ -111,18 +122,17 @@ const ComplaintsList: React.FC = () => {
       flex: 1,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => {
-        const resolvedBy = params.row.resolvedBy
+        const resolvedBy = params.row.resolvedBy;
         return resolvedBy ? (
           <Tooltip title={`${resolvedBy.userId}`}>
             <span>
-              {/* tu osoba ktora zamknęła zgłoszenie, w tooltip lista osób przez które przeszło zgłoszenie */}
               {resolvedBy.firstName} {resolvedBy.lastName}
             </span>
           </Tooltip>
         ) : (
           <span>-</span>
-        )
-      }
+        );
+      },
     },
     {
       field: 'resolutionDate',
@@ -135,7 +145,7 @@ const ComplaintsList: React.FC = () => {
             ? new Date(params.row.resolutionDate).toLocaleDateString()
             : '-'}
         </span>
-      )
+      ),
     },
     {
       field: 'actions',
@@ -145,9 +155,7 @@ const ComplaintsList: React.FC = () => {
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip
           title={
-            reportId === params.row.id.toString()
-              ? 'Close Details'
-              : 'View Details'
+            reportId === params.row.id.toString() ? 'Close Details' : 'View Details'
           }
         >
           <span>
@@ -161,7 +169,7 @@ const ComplaintsList: React.FC = () => {
                 visibility:
                   reportId && reportId !== params.row.id.toString()
                     ? 'hidden'
-                    : 'visible'
+                    : 'visible',
               }}
             >
               {reportId === params.row.id.toString() ? (
@@ -172,9 +180,10 @@ const ComplaintsList: React.FC = () => {
             </IconButton>
           </span>
         </Tooltip>
-      )
-    }
-  ]
+      ),
+    },
+  ];
+  
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -202,6 +211,7 @@ const ComplaintsList: React.FC = () => {
                     ).toLocaleDateString(),
                     category: report.category,
                     description: report.description,
+                    reportStatus: report.reportStatus,
                     createdBy: report.createdBy,
                     resolutionDate: report.resolutionDate,
                     resolvedBy: report.resolvedBy,

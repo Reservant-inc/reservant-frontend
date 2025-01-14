@@ -45,7 +45,7 @@ const RestaurantDetails: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-6">
+    <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-5">
       {/* lewa kol */}
       <div className="flex flex-col gap-4 h-full w-1/2">
         {/* Logo */}
@@ -57,7 +57,7 @@ const RestaurantDetails: React.FC = () => {
           />
         </div>
 
-        <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-[70%]">
+        <div className="flex flex-col bg-white dark:bg-black rounded-lg p-4 shadow-md h-[70%]">
           <h1 className="text-lg font-mont-bd">mapka moze?</h1>
         </div>
       </div>

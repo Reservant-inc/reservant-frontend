@@ -43,12 +43,12 @@ const VisitDetails: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-6 p-4">
+    <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-5 dark:text-white">
       <div className="flex flex-col gap-4 h-full w-1/2">
         {/* Visit Details */}
-        <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-1/2">
+        <div className="flex flex-col bg-white dark:bg-black rounded-lg p-4 shadow-md h-1/2">
           <h1 className="text-lg font-mont-bd">Visit Details</h1>
-          <div className="flex flex-col gap-2 mt-4">
+          <div className="flex flex-col gap-2 mt-4 px-4">
             <p>
               <span className="font-mont-bd">Date:</span>{' '}
               {new Date(visitDetails.date).toLocaleDateString()}
@@ -72,9 +72,9 @@ const VisitDetails: React.FC = () => {
         </div>
 
         {/* Participants */}
-<div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-1/2">
+<div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-1/2 dark:bg-black " >
   <h1 className="text-lg font-mont-bd">Participants</h1>
-  <div className="flex flex-col gap-4 mt-4">
+  <div className="flex flex-col gap-4 mt-4 px-4">
     {visitDetails.participants.length > 0 ? (
       visitDetails.participants.map((participant: any) => (
         <div key={participant.userId} className="flex items-center justify-between">
@@ -105,9 +105,9 @@ const VisitDetails: React.FC = () => {
 </div>
       </div>
 
-      <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-full w-1/2">
+      <div className="flex flex-col bg-white dark:bg-black rounded-lg p-4 shadow-md h-full w-1/2">
         <h1 className="text-lg font-mont-bd">Orders</h1>
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-4 mt-4 px-4">
           {visitDetails.orders.length > 0 ? (
             visitDetails.orders.map((order: any) => (
               <div key={order.orderId} className="flex flex-col border-b pb-2">

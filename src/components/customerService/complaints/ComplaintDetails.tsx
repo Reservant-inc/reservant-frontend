@@ -202,6 +202,12 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         </div>
         <div className="flex gap-3 text-sm">
           <p className="font-mont-bd">
+            {t('customer-service.report-details.status')}:{' '}
+          </p>
+          <p>{report.reportStatus}</p>
+        </div>
+        <div className="flex gap-3 text-sm">
+          <p className="font-mont-bd">
             {t('customer-service.reports.category')}:{' '}
           </p>
           <p>{report.category}</p>
@@ -273,13 +279,13 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           <>
           <button
             onClick={() => openDialog('assign')}
-            className="px-4 text-sm py-2 dark:bg-black border-[1px] rounded-md bg-white text-primary border-primary hover:scale-105 hover:bg-primary hover:text-white transition"
+            className="px-4 text-sm py-2 dark:bg-black border-[1px] rounded-md bg-white text-primary border-primary dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-white hover:scale-105 hover:bg-primary hover:text-white transition"
           >
             {t('customer-service.report-details.assign-agent')}
           </button>
           <button
             onClick={() => openDialog('resolve')}
-            className={`px-4 py-2 text-sm dark:bg-black border-[1px] rounded-md bg-white text-primary transition ${
+            className={`px-4 py-2 text-sm dark:bg-black dark:text-secondary dark:border-secondary dark:hover:bg-secondary dark:hover:text-white border-[1px] rounded-md bg-white text-primary transition ${
               report.resolvedBy
                 ? 'opacity-50 cursor-not-allowed'
                 : 'border-primary hover:scale-105 hover:bg-primary hover:text-white'
