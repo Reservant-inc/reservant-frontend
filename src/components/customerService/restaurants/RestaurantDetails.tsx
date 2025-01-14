@@ -1,39 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
-import { fetchGET, getImage } from '../../../services/APIconn';
-import DefaultImage from '../../../assets/images/defaulImage.jpeg';
-import Details from '../../reservant/restaurantManagement/dashboard/Details';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { CircularProgress } from '@mui/material'
+import { fetchGET, getImage } from '../../../services/APIconn'
+import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import Details from '../../reservant/restaurantManagement/dashboard/Details'
 
 const RestaurantDetails: React.FC = () => {
-  const { restaurantId } = useParams<{ restaurantId: string }>();
-  const [restaurant, setRestaurant] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { restaurantId } = useParams<{ restaurantId: string }>()
+  const [restaurant, setRestaurant] = useState<any>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     if (restaurantId) {
       const fetchRestaurantDetails = async () => {
         try {
-          setIsLoading(true);
-          const response = await fetchGET(`/restaurants/${restaurantId}`);
-          setRestaurant(response);
+          setIsLoading(true)
+          const response = await fetchGET(
+            `/restaurants/${restaurantId}/full-details`
+          )
+          console.log(response)
+          setRestaurant(response)
         } catch (error) {
-          console.error('Error fetching restaurant details:', error);
+          console.error('Error fetching restaurant details:', error)
         } finally {
-          setIsLoading(false);
+          setIsLoading(false)
         }
-      };
+      }
 
-      fetchRestaurantDetails();
+      fetchRestaurantDetails()
     }
-  }, [restaurantId]);
+  }, [restaurantId])
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full">
         <CircularProgress />
       </div>
-    );
+    )
   }
 
   if (!restaurant) {
@@ -41,7 +44,7 @@ const RestaurantDetails: React.FC = () => {
       <div className="text-center">
         <p className="text-grey-5">No restaurant details available.</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -63,10 +66,9 @@ const RestaurantDetails: React.FC = () => {
       </div>
 
       {/* prawa kol */}
-      <Details/>
+      <Details />
     </div>
-  );
-};
+  )
+}
 
-export default RestaurantDetails;
-
+export default RestaurantDetails

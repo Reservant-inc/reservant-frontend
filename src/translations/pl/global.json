@@ -251,7 +251,9 @@
             "minutes": "Minut",
             "tables": "Stoliki",
             "total-capacity": "Całkowita ilość miejsc",
-            "opening-hours": "Godziny otwarcia"
+            "opening-hours": "Godziny otwarcia",
+            "verified": "Czy zweryfikowana",
+            "archived": "Czy zarchiwizowana"
         }
     },
     "tools": {

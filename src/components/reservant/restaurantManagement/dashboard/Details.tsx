@@ -36,7 +36,9 @@ const Details: React.FC = () => {
   const fetchRestaurantDetails = async () => {
     try {
       setIsLoading(true)
-      const response = await fetchGET(`/restaurants/${restaurantId}`)
+      const response = await fetchGET(
+        `/restaurants/${restaurantId}/full-details`
+      )
       setRestaurant(response)
     } catch (error) {
       console.error('Error fetching restaurant details:', error)
@@ -70,6 +72,28 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.name')}:{' '}
             </p>
             <p>{restaurant.name}</p>
+          </div>
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {' '}
+              {t('restaurant-management.details.verified')}:{' '}
+            </p>
+            <p>
+              {restaurant.isVerified
+                ? t('restaurant-management.details.yes')
+                : t('restaurant-management.details.no')}
+            </p>
+          </div>
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {' '}
+              {t('restaurant-management.details.archived')}:{' '}
+            </p>
+            <p>
+              {restaurant.isArchived
+                ? t('restaurant-management.details.yes')
+                : t('restaurant-management.details.no')}
+            </p>
           </div>
           <div className="flex gap-3 text-sm">
             <p className="font-mont-bd">
@@ -122,7 +146,7 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.rating')}:{' '}
             </p>
             <p>
-              {restaurant.rating} / 5 ({restaurant.numberReviews}{' '}
+              {restaurant.rating ?? 0} / 5 ({restaurant.numberReviews ?? 0}{' '}
               {t('restaurant-management.details.reviews')})
             </p>
           </div>
@@ -138,7 +162,8 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.max-reservation-duration')}:{' '}
             </p>
             <p>
-              {restaurant.maxReservationDurationMinutes} {t('restaurant-management.details.minutes')}
+              {restaurant.maxReservationDurationMinutes}{' '}
+              {t('restaurant-management.details.minutes')}
             </p>
           </div>
 
@@ -147,7 +172,15 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.tables')}:{' '}
             </p>
             <p>
-              {restaurant.tables.length} {t('restaurant-management.details.tables')} ({t('restaurant-management.details.total-capacity')}: {restaurant.tables.reduce((acc: number, table: { capacity: number }) => acc + table.capacity, 0)})
+              {restaurant.tables.length}{' '}
+              {t('restaurant-management.details.tables')} (
+              {t('restaurant-management.details.total-capacity')}:{' '}
+              {restaurant.tables.reduce(
+                (acc: number, table: { capacity: number }) =>
+                  acc + table.capacity,
+                0
+              )}
+              )
             </p>
           </div>
 
@@ -156,30 +189,38 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.opening-hours')}:{' '}
             </p>
             <ul className="text-sm text-grey-4 dark:text-grey-2 mt-2">
-              {restaurant.openingHours.map((hours: { from: string; until: string }, index: number) => (
-                <li key={index}>
-                  {hours.from} - {hours.until}
-                </li>
-              ))}
+              {restaurant.openingHours.map(
+                (hours: { from: string; until: string }, index: number) => (
+                  <li key={index}>
+                    {hours.from} - {hours.until}
+                  </li>
+                )
+              )}
             </ul>
           </div>
           <h1>Files:</h1>
-          <Link to={``}>
+          <Link
+            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.rentalContract}`}
+          >
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.rental')}{' '}
             </h1>
           </Link>
-          <Link to={``}>
+          <Link
+            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.alcoholLicense}`}
+          >
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.alcohol')}{' '}
             </h1>
           </Link>
-          <Link to={``}>
+          <Link
+            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.businessPermission}`}
+          >
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.permission')}{' '}
             </h1>
           </Link>
-          <Link to={``}>
+          <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.idCard}`}>
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.idcard')}{' '}
             </h1>
