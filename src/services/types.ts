@@ -513,6 +513,8 @@ export type ReportType = {
     from: string
     until: string | null
   }[]
+  reportStatus: string
+
   threadId: number
 }
 

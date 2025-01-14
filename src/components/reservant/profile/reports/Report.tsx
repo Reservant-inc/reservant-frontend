@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { ReportType, ThreadType } from '../../../../services/types'
-import { Message } from '@mui/icons-material'
+import { Circle, Message } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { ReportsListType } from '../../../../services/enums'
@@ -45,6 +45,15 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
                 </h1>
               ))}
           </div>
+
+          {report.reportStatus && (
+            <p className="text-xs flex items-center gap-1">
+              <Circle
+                className={`${report.reportStatus === 'ResolvedNegatively' ? 'text-red' : report.reportStatus === 'NotResolved' ? 'text-yellow' : 'text-green'} text-xs`}
+              />
+              {report.reportStatus}
+            </p>
+          )}
           <div className="flex flex-col gap-1">
             {report.reportDate && (
               <p className="text-xs">
