@@ -520,7 +520,8 @@
             "cancel": "Cancel",
             "assign": "Assign",
             "ok": "Ok",
-            "resolve": "Resolve"
+            "resolve": "Resolve",
+            "already-assigned": "Already assigned"
         },
         "user": {
             "account": "Account",

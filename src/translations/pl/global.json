@@ -515,7 +515,8 @@
             "cancel": "Anuluj",
             "assign": "Przypisz",
             "ok": "Ok",
-            "resolve": "Rozwiąż"
+            "resolve": "Rozwiąż",
+            "already-assigned": "Już przypisany"
             
         },
         "user": {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-import { fetchGET } from '../../../services/APIconn';
+import { fetchGET, getImage } from '../../../services/APIconn';
 import DefaultImage from '../../../assets/images/user.jpg';
 
 const VisitDetails: React.FC = () => {
@@ -48,7 +48,7 @@ const VisitDetails: React.FC = () => {
         {/* Visit Details */}
         <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-1/2">
           <h1 className="text-lg font-mont-bd">Visit Details</h1>
-          <div className="flex flex-col gap-2 mt-4">
+          <div className="flex flex-col gap-2 mt-4 px-4">
             <p>
               <span className="font-mont-bd">Date:</span>{' '}
               {new Date(visitDetails.date).toLocaleDateString()}
@@ -107,7 +107,7 @@ const VisitDetails: React.FC = () => {
 
       <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-full w-1/2">
         <h1 className="text-lg font-mont-bd">Orders</h1>
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-4 mt-4 px-4">
           {visitDetails.orders.length > 0 ? (
             visitDetails.orders.map((order: any) => (
               <div key={order.orderId} className="flex flex-col border-b pb-2">
@@ -129,7 +129,7 @@ const VisitDetails: React.FC = () => {
                 {order.assignedEmployee && (
                   <div className="flex items-center gap-2 mt-2">
                     <img
-                      src={order.assignedEmployee.photo || DefaultImage}
+                      src={getImage(order.assignedEmployee.photo, DefaultImage)}
                       alt={`${order.assignedEmployee.firstName} ${order.assignedEmployee.lastName}`}
                       className="w-8 h-8 rounded-full"
                     />
