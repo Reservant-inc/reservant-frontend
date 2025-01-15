@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
-import { ReportType } from '../../../../services/types'
-import { Message } from '@mui/icons-material'
+import { ReportType, ThreadType } from '../../../../services/types'
+import { Circle, Message } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import { ReportsListType } from '../../../../services/enums'
-import { fetchPOST } from '../../../../services/APIconn'
+import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
 
@@ -20,11 +20,7 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
 
   const openChat = async () => {
     try {
-      const body = JSON.stringify({
-        title: report.reportId,
-        participantIds: [report.resolvedBy.userId]
-      })
-      const response = await fetchPOST(`/threads`, body)
+      const response: ThreadType = await fetchGET(`/threads/${report.threadId}`)
       handleThreadOpen(response)
     } catch (error) {
       if (error instanceof FetchError) console.log(error.formatErrors())
@@ -49,6 +45,15 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
                 </h1>
               ))}
           </div>
+
+          {report.reportStatus && (
+            <p className="text-xs flex items-center gap-1">
+              <Circle
+                className={`${report.reportStatus === 'ResolvedNegatively' ? 'text-red' : report.reportStatus === 'NotResolved' ? 'text-warning' : 'text-green'} text-xs`}
+              />
+              {report.reportStatus}
+            </p>
+          )}
           <div className="flex flex-col gap-1">
             {report.reportDate && (
               <p className="text-xs">

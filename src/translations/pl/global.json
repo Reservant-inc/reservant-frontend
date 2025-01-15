@@ -280,7 +280,11 @@
         "send-message": "Wyślij wiadomość",
         "minimize": "Minimalizuj",
         "no-threads": "Nie masz jeszcze żadnych aktywnych wątków",
-        "loading": "Wątki się ładują"
+        "loading": "Wątki się ładują",
+        "type":"Typ wątków",
+        "all":"Wszystkie",
+        "events":"Wydarzenia",
+        "reports":"Zgłoszenia"
     },
     "friends": {
         "search": "Wyszukaj",

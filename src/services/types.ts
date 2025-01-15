@@ -228,6 +228,7 @@ export type ThreadType = {
   threadId: number
   title: string
   participants: UserType[]
+  type: string
 }
 
 export type PaginationType = {
@@ -514,6 +515,8 @@ export type ReportType = {
     from: string
     until: string | null
   }[]
+  reportStatus: string
+  threadId: number
 }
 
 export type StatisticsType = {

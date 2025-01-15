@@ -169,9 +169,11 @@ const Thread: React.FC<ThreadProps> = ({
               </div>
             </div>
           )}
-          <h1 className="text-md font-mont-bd dark:text-white">
-            {thread.title}
-          </h1>
+          <Tooltip title={thread.title} placement="top" arrow>
+            <h1 className="text-md font-mont-bd w-44 truncate text-nowrap dark:text-white">
+              {thread.title}
+            </h1>
+          </Tooltip>
         </div>
         <div className="flex gap-1 items-center">
           <Tooltip title={t('threads.minimize')} placement="top" arrow>

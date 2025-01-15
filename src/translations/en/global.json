@@ -284,7 +284,11 @@
         "send-message": "Send a message",
         "minimize": "Minimize",
         "no-threads": "You do not have any active threads yet",
-        "loading": "Threads are loading"
+        "loading": "Threads are loading",
+        "type":"Threads type",
+        "all":"All",
+        "events":"Event",
+        "reports":"Report"
     },
     "friends": {
         "search": "Search",

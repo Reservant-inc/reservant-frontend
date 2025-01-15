@@ -34,7 +34,8 @@ module.exports = {
       'l-red': '#ff7979',
       green: '#54de46',
       'l-green': '#71df66',
-      error: '#ff4747'
+      error: '#ff4747',
+      warning: '#FFDD02'
     }
   },
   plugins: [
