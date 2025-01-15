@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FetchError } from '../../../services/Errors'
-import { fetchGET, fetchPOST } from '../../../services/APIconn'
-import { useParams } from 'react-router-dom'
+import { fetchDELETE, fetchGET, fetchPOST } from '../../../services/APIconn'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ComplaintUserInfo } from '../../../services/types'
 import { CircularProgress, TextField } from '@mui/material'
 import DefaultImage from '../../../assets/images/user.jpg'
@@ -25,13 +25,39 @@ const User: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const [banMessage, setBanMessage] = useState<string | null>(null)
   const [unbanMessage, setUnbanMessage] = useState<string | null>(null)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false)
+  const [deleteCountdown, setDeleteCountdown] = useState<number>(5)
+  const [isDeleteDisabled, setIsDeleteDisabled] = useState<boolean>(true)
 
   const { userId } = useParams<{ userId: string }>()
   const { t } = useTranslation('global')
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (userId) fetchUserData()
   }, [userId])
+
+  useEffect(() => {
+    if (isDeleteDialogOpen) {
+      setDeleteCountdown(5)
+      setIsDeleteDisabled(true)
+
+      const timer = setInterval(() => {
+        setDeleteCountdown(prev => {
+          if (prev <= 1) {
+            clearInterval(timer)
+            setIsDeleteDisabled(false)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+
+      return () => clearInterval(timer)
+    } else {
+      return undefined
+    }
+  }, [isDeleteDialogOpen])
 
   const fetchUserData = async () => {
     try {
@@ -44,6 +70,18 @@ const User: React.FC = () => {
       }
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleDeleteUser = async () => {
+    try {
+      console.log('Deleting user...')
+      await fetchDELETE(`/users/${userId}`)
+      fetchUserData()
+    } catch (error) {
+      console.error('Error deleting user:', error)
+    } finally {
+      setIsDeleteDialogOpen(false)
     }
   }
 
@@ -109,32 +147,37 @@ const User: React.FC = () => {
               {t('customer-service.user.account')}
             </h1>
             <div className="flex gap-2">
-              {userInfo?.bannedUntil ? (
+              {userInfo?.birthDate === '0001-01-01' ? (
+                <p className="text-sm text-grey-4 italic">
+                  {t('customer-service.user.account_deleted')}
+                </p>
+              ) : (
                 <>
-                  <div className="flex items-center gap-2 text-red">
-                    <span className="font-bold">
-                      {t('customer-service.user.banned_until')}
-                    </span>
-                    <span>
-                      {new Date(userInfo.bannedUntil).toLocaleString()}
-                    </span>
-                  </div>
+                  {userInfo?.bannedUntil ? (
+                    <button
+                      className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+                      onClick={handleUnbanUser}
+                    >
+                      <DeleteForeverIcon className="w-4 h-4" />
+                      <span>{t('customer-service.user.unban_user')}</span>
+                    </button>
+                  ) : (
+                    <button
+                      className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+                      onClick={() => setIsDialogOpen(true)}
+                    >
+                      <GavelIcon className="w-4 h-4" />
+                      <span>{t('customer-service.user.ban_user')}</span>
+                    </button>
+                  )}
                   <button
-                    className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
-                    onClick={handleUnbanUser}
+                    className="border-[1px] rounded-lg p-1 text-red hover:bg-red hover:text-white"
+                    onClick={() => setIsDeleteDialogOpen(true)}
                   >
                     <DeleteForeverIcon className="w-4 h-4" />
-                    <span>{t('customer-service.user.unban_user')}</span>
+                    <span>{t('customer-service.user.delete_user')}</span>
                   </button>
                 </>
-              ) : (
-                <button
-                  className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
-                  onClick={() => setIsDialogOpen(true)}
-                >
-                  <GavelIcon className="w-4 h-4" />
-                  <span>{t('customer-service.user.ban_user')}</span>
-                </button>
               )}
             </div>
           </div>
@@ -339,6 +382,42 @@ const User: React.FC = () => {
             )}
           </Formik>
         )}
+      </Dialog>
+
+      {/* Delete User Dialog */}
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        title={`${t('customer-service.user.delete_user_dialog_title')} ${
+          userInfo?.firstName || ''
+        } ${userInfo?.lastName || ''}`}
+      >
+        <div className="p-4 flex flex-col justify-between min-h-[150px]">
+          <p className="font-mont-bd">
+            {t('customer-service.user.delete_user_confirmation', {
+              firstName: userInfo?.firstName,
+              lastName: userInfo?.lastName
+            })}
+          </p>
+          <div className="flex justify-end gap-4">
+            <button
+              className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              {t('customer-service.user.cancel')}
+            </button>
+            <button
+              className={`text-sm border-red hover:scale-105 hover:bg-red hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-red transition ${
+                isDeleteDisabled ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              onClick={handleDeleteUser}
+              disabled={isDeleteDisabled}
+            >
+              {t('customer-service.user.delete')}{' '}
+              {isDeleteDisabled && `(${deleteCountdown})`}
+            </button>
+          </div>
+        </div>
       </Dialog>
 
       {/* Unban User Dialog */}
