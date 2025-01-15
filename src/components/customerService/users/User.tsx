@@ -141,7 +141,7 @@ const User: React.FC = () => {
   return (
     <div className="z-[0] flex h-full w-full items-center overflow-y-auto scroll justify-center gap-2 bg-grey-1 dark:bg-grey-6">
       <div className="flex flex-col gap-2 h-full w-1/2">
-        <div className="flex h-FIT w-full self-start flex-col bg-white rounded-lg p-4 gap-4 shadow-md">
+        <div className="flex h-[40%] w-full self-start flex-col bg-white rounded-lg p-4 gap-4 shadow-md">
           <div className="flex justify-between w-full">
             <h1 className="text-lg font-mont-bd">
               {t('customer-service.user.account')}
@@ -219,10 +219,7 @@ const User: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-full w-full bg-white rounded-lg shadow-md p-4">
-          <h1 className="font-mont-bd text-lg">
-            {t('customer-service.user.transaction_history')}
-          </h1>
+        <div className="h-[60%] w-full bg-white rounded-lg shadow-md p-4">
           <TransactionHistory listType={TransactionListType.CustomerService} />
         </div>
       </div>

@@ -74,7 +74,7 @@ const Sections: React.FC<SectionProps> = () => {
             }
             onClick={() =>
               navigate(
-                `${user.firstName + '-' + user.lastName}/management/dashboard`
+                `${user.firstName + '-' + user.lastName}/management/statistics`
               )
             }
           >

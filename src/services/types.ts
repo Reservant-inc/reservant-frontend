@@ -236,16 +236,7 @@ export type PaginationType = {
   totalPages: number
   perPage: number
   orderByOptions: string[]
-  items:
-    | ThreadType[]
-    | MessageType[]
-    | UserSearchType[]
-    | UserType[]
-    | TransactionType[]
-    | EventDataType[]
-    | VisitType[]
-    | IngredientType[]
-    | ReportType[]
+  items: any[]
 }
 
 export type UserType = {

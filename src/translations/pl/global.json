@@ -227,6 +227,12 @@
             "selectedFile": "Wybrano plik",
             "sort": "Sortuj"
         },
+        "statistics": {
+            "statistics": "Statystyki",
+            "all-restaurants" : "Wszystkie restauracje",
+            "restaurant-group" : "Grupa restauracji",
+            "restaurant" : "Restauracja"
+        },
         "details":{
             "details": "Szczegóły restauracji",
             "id": "ID restauracji",

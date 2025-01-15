@@ -228,9 +228,15 @@
             "menuItemNameRequired": "Name is required",
             "menuItemPriceRequired": "Price is required",
             "menuItemPriceMustBeNumber": "Price must be number",
-            "menuItemAlcoholMustBeNumber": "Alocohol percentae must be number",
+            "menuItemAlcoholMustBeNumber": "Alocohol percentage must be number",
             "selectedFile": "Selected file",
             "sort": "Sort by"
+        },
+        "statistics": {
+            "statistics": "Statistics",
+            "all-restaurants" : "All restaurants",
+            "restaurant-group" : "Restaurant group",
+            "restaurant" : "Restaurant"
         },
         "details": {
             "details": "Restaurant details",
