@@ -49,8 +49,8 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "start": "react-app-rewired start",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "clean": "npx prettier --write \"**/*.tsx\""

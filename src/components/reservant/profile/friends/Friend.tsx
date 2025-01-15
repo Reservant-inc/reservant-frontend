@@ -89,7 +89,7 @@ const Friend: React.FC<FriendProps> = ({
   }
 
   return (
-    <li className="flex flex-col gap-2 p-2 rounded-lg min-h-fit dark:text-grey-2 dark:bg-grey-5">
+    <li className="flex flex-col gap-2 p-2 rounded-lg min-h-fit dark:text-grey-2 dark:bg-grey-6">
       <div className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <img

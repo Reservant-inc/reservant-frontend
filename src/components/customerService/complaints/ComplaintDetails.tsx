@@ -1,37 +1,35 @@
 import React, { useState } from 'react'
 import { IconButton } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ReportActionDialog from './ReportActionDialog'
 import { ReportType, UserType, VisitType } from '../../../services/types'
 import { getImage } from '../../../services/APIconn'
 import DefaultImage from '../../../assets/images/user.jpg'
+import CloseIcon from '@mui/icons-material/Close'
+
 import { useTranslation } from 'react-i18next'
 
 interface ComplaintDetailsProps {
   report: ReportType
   onClose: () => void
   refreshReports: () => void
+  setAlertMessage: Function
 }
 
 const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
   report,
   onClose,
+  setAlertMessage,
   refreshReports
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [actionType, setActionType] = useState<'escalate' | 'resolve'>()
-  const navigate = useNavigate()
+  const [actionType, setActionType] = useState<'assign' | 'resolve'>()
 
   const [t] = useTranslation('global')
 
-  const openDialog = (type: 'escalate' | 'resolve') => {
+  const openDialog = (type: 'assign' | 'resolve') => {
     setActionType(type)
     setDialogOpen(true)
-  }
-
-  const navigateToRestaurantDetails = (restaurantId: string) => {
-    navigate(`/customer-service/restaurants/${restaurantId}`)
   }
 
   const renderVisitDetails = (visit: VisitType) => (
@@ -86,13 +84,56 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           <p>{visit.restaurant.name}</p>
         </h1>
         <Link
-          to={`/customer-service/restaurants/${report.visit.restaurant.restaurantId}`}
+          to={`/customer-service/restaurants/${report.visit?.restaurant.restaurantId}`}
         >
           <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
             {t('customer-service.report-details.go-to-restaurant')}
           </h1>
         </Link>
       </div>
+    </div>
+  )
+
+  const renderAssignedAgents = () => (
+    <div>
+      <h1 className="font-mont-bd text-md">
+        {t('customer-service.report-details.assigned-agents')}
+      </h1>
+      {report.assignedAgents.length > 0 ? (
+        report.assignedAgents.map(agent => (
+          <div
+            key={agent.agent.userId}
+            className="flex items-center gap-2 px-4 pt-2"
+          >
+            <img
+              src={getImage(agent.agent.photo, DefaultImage)}
+              alt={`${agent.agent.firstName} ${agent.agent.lastName}`}
+              className="w-8 h-8 rounded-full"
+            />
+            <div>
+              <p className="font-mont-bd text-sm">
+                {agent.agent.firstName} {agent.agent.lastName}
+              </p>
+              <p className="text-sm text-grey-3">{agent.agent.userId}</p>
+              <p className="text-sm">
+                {t('customer-service.report-details.assigned-from')}:{' '}
+                {new Date(agent.from).toLocaleString()}
+                {agent.until && (
+                  <>
+                    {' '}
+                    {t('customer-service.report-details.assigned-until')}:{' '}
+                    {new Date(agent.until).toLocaleString()}
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-sm text-grey-3">
+          {t('customer-service.report-details.no-assigned-agents')}
+        </p>
+      )}
     </div>
   )
 
@@ -187,7 +228,7 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           <p className="font-mont-bd text-md">
             {t('customer-service.report-details.related-visit')}:{' '}
           </p>
-          <Link to={`/customer-service/visits/${report.visit.visitId}`}>
+          <Link to={`/customer-service/visits/${report.visit?.visitId}`}>
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('customer-service.report-details.go-to-visit')}
             </h1>
@@ -202,7 +243,7 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         )}
       </div>
 
-      {/* user details */}
+      {/* User Details */}
       {report.createdBy &&
         renderUserDetails(
           t('customer-service.reports.submitted-by'),
@@ -219,47 +260,33 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           undefined,
           true
         )}
-      {report.escalatedBy &&
-        renderUserDetails(
-          t('customer-service.report-details.escalated-by'),
-          report.escalatedBy,
-          report.escalationComment,
-          report.reportDate
-        )}
+
+      {/* Assigned BOKs */}
+      {renderAssignedAgents()}
+
       {report.resolvedBy &&
         renderUserDetails(
           t('customer-service.report-details.resolved-by'),
           report.resolvedBy,
           report.resolutionComment,
-          report.resolutionDate
+          report.resolutionDate,
+          true
         )}
 
-      <div className="mt-4 flex gap-4">
+      <div className=" flex gap-4">
         {!report.resolvedBy && (
           <>
             <button
-              onClick={() => openDialog('escalate')}
-              disabled={!!report.escalatedBy || !!report.resolvedBy}
-              className={`w-1/2 dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition ${
-                report.escalatedBy || report.resolvedBy
-                  ? 'opacity-50 cursor-not-allowed'
-                  : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
-              }`}
+              onClick={() => openDialog('assign')}
+              className="px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
             >
-              {t('customer-service.report-details.pass-complaint')}
+              {t('customer-service.report-details.assign-agent')}
             </button>
             <button
               onClick={() => openDialog('resolve')}
-              disabled={!!report.resolvedBy}
-              className={`w-1/2 dark:bg-black border-[1px] rounded-md p-1 bg-white text-primary transition ${
-                report.resolvedBy
-                  ? 'opacity-50 cursor-not-allowed'
-                  : 'border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black'
-              }`}
+              className={`px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md`}
             >
-              {report.resolvedBy
-                ? t('customer-service.report-details.already-resolved')
-                : t('customer-service.report-details.resolve-complaint')}
+              {t('customer-service.report-details.resolve-complaint')}
             </button>
           </>
         )}
@@ -268,8 +295,10 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
           actionType={actionType}
+          setAlertMessage={setAlertMessage}
           reportId={report.reportId}
           refreshReports={refreshReports}
+          assignedAgents={report.assignedAgents}
         />
       </div>
     </div>

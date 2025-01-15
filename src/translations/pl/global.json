@@ -15,9 +15,39 @@
         "edit": "Edytuj",
         "users": "Uzytkownicy",
         "restaurants": "Restauracje",
+        "reservation": "Rezerwacja",
+        "not-available": "Niedostępne",
+        "oldest": "Najstarsze",
+        "newest": "Najnowsze",
         "ascending": "Rosnąco",
         "descending": "Malejąco",
         "Sort": "Sortuj"
+    },
+    "reservation": {
+        "history": "Historia rezerwacji",
+        "incoming": "Nadchodzące",
+        "past": "Przeszłe",
+        "guests-in-total": "Liczba gości",
+        "registered-guests": "Twoi goście mają konto? Oznacz ich!",
+        "date": "Data",
+        "time": "Godzina",
+        "checkout": "OPŁAĆ",
+        "skip-order": "POMIŃ ZAMÓWIENIE",
+        "items": "Pozycje",
+        "no-orders": "Brak zamówień",
+        "for": "za",
+        "cancle": "Odwołaj rezerwację",
+        "report": "Zgłoś problem",
+        "complain-topic": "Czego dotyczy zgłoszenie",
+        "report-title": "Stwórz zgłoszenie",
+        "select": "Wybierz typ zgłoszenia",
+        "lost-item": "Zgubiony przemiot",
+        "order": "Zgłoszenie dotyczące zamówienia",
+        "employee": "Zgłoszenie dotyczące pracownika",
+        "employee-select": "Wyierz pracownika",
+        "details": "Dodatkowe informacje",
+        "describe-details": "Opisz szczegółowo problem...",
+        "submit": "Wyślij Zgłoszenie"
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -202,6 +232,34 @@
             "all-restaurants" : "Wszystkie restauracje",
             "restaurant-group" : "Grupa restauracji",
             "restaurant" : "Restauracja"
+        },
+        "details":{
+            "details": "Szczegóły restauracji",
+            "id": "ID restauracji",
+            "name": "Nazwa",
+            "type": "Rodzaj działalności",
+            "nodata": "Brak danych o restauracji.",
+            "accept": "Zaakceptuj jako zweryfikowaną",
+            "idcard": "Dowód tożsamości",
+            "permission": "Zezwolenie na działalność",
+            "alcohol": "Licencja na alkohol",
+            "rental": "Umowa najmu",
+            "tags": "Tagi",
+            "reviews": "Recenzje",
+            "rating": "Ocena",
+            "description": "Opis",
+            "delivery": "Dostawa",
+            "yes": "tak",
+            "no": "nie",
+            "location": "Lokalizacja",
+            "address": "Adres",
+            "max-reservation-duration": "Maksymalny czas rezerwacji",
+            "minutes": "Minut",
+            "tables": "Stoliki",
+            "total-capacity": "Całkowita ilość miejsc",
+            "opening-hours": "Godziny otwarcia",
+            "verified": "Czy zweryfikowana",
+            "archived": "Czy zarchiwizowana"
         }
     },
     "tools": {
@@ -210,7 +268,9 @@
             "settings":"Ustawienia",
             "language":"Język",
             "mode":"Tryb ciemny",
-            "signout":"Wylogowanie"
+            "signout":"Wylogowanie",
+            "report":"Zgłoś problem techniczny"
+
         },
         "settings":{
             "setting":"SettingFiller"
@@ -226,7 +286,11 @@
         "send-message": "Wyślij wiadomość",
         "minimize": "Minimalizuj",
         "no-threads": "Nie masz jeszcze żadnych aktywnych wątków",
-        "loading": "Wątki się ładują"
+        "loading": "Wątki się ładują",
+        "type":"Typ wątków",
+        "all":"Wszystkie",
+        "events":"Wydarzenia",
+        "reports":"Zgłoszenia"
     },
     "friends": {
         "search": "Wyszukaj",
@@ -348,6 +412,9 @@
         "actions": "Działania"
     },
     "profile": {
+        "account": "Konto",
+        "reservations": "Rezerwacje",
+        "search": "Szukaj po nazwie...",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
@@ -369,6 +436,7 @@
             "removal-decline": "Nie"
         },
         "events" : {
+            "events": "Wydarzenia",
             "newest" : "Od najnowszych",
             "interested" : "Zainteresowane",
             "participating" : "Bierzesz udział",
@@ -387,9 +455,11 @@
             "participants": "Uczestnicy",
             "applications-by": "Zgłoszenia do",
             "max-participants": "Maks. liczba uczestników",
-            "creator": "Organizauje"
+            "creator": "Organizauje",
+            "events-feed": "Przegląd wydarzeń"
         },
         "reports" : {
+            "reports": "Zgłoszenia",
             "id":"Identyfikator zgłoszenia",
             "created":"Utworzone",
             "search":"Przeszukaj zgłoszenia",
@@ -397,6 +467,10 @@
             "no-reports-customer-service": "Brak zgłoszeń powiązanych z tym użytkownikiem" ,
             "created-by-user": "Utworzone przez użytkownika",
             "reported-user": "Zgłoszenie dotyczące użytkownika"
+        },
+        "reviews": {
+            "no-reviews": "Brak opinii",
+            "search": "Szukaj opinii"
         },
         "transaction-history": {
             "wallet": "Portfel",
@@ -422,6 +496,16 @@
         "report-details": {
             "report-details": "Detale zgłoszenia",
             "complaint-id": "ID zgłoszenia",
+            "assign-agent": "Przypisz innego pracownika",
+            "assigned-agents": "Przypisani pracownicy",
+            "assigned-from": "Przypisany od",
+            "assigned-until": "Przypisany do",
+            "assign-success": "Pracownik został poprawnie przypisany do zgłoszenia.",
+            "select-agent": "Wybierz pracownika",
+            "no-agent-selected": "Nie wybrano pracownika",
+            "comment-required": "Komentarz jest wymagany.",
+            "comment-min": "Komentarz musi mieć co najmniej 3 znaki.",
+            "resolve-comment": "Dodaj komentarz aby rozwiązać zgłoszenie.",
             "date": "Data",
             "related-visit": "Powiązana wizyta",
             "no-related-visit": "Nie ma wizyt powiązanych z tym zgłoszeniem",
@@ -441,7 +525,12 @@
             "reported-user": "Zgłoszony użytkownik",
             "escalated-by": "Przekazane przez",
             "resolved-by": "Rozwiązane przez",
-            "comment": "Komentarz"
+            "comment": "Komentarz",
+            "cancel": "Anuluj",
+            "assign": "Przypisz",
+            "ok": "Ok",
+            "resolve-positive": "Rozpatrz",
+            "resolve-negative": "Odrzuć"
         },
         "user": {
             "account": "Konto",
@@ -457,10 +546,19 @@
             "ban_user_dialog_title": "Zablokuj użytkownika",
             "ban_user_message_prefix": "Użytkownik",
             "ban_user_message_suffix": "został zablokowany na",
+            "banned_until": "Zbanowany do:",
+            "delete_account_confirmation": "Czy na pewno chcesz usunąć swoje konto?",
+            "delete": "Usuń",
+            "delete_user_dialog_title": "Usuwanie konta użytkownika",
+            "delete_user_confirmation": "Czy na pewno chcesz usunąć konto tego użytkownika?",
+            "delete_account_dialog_title": "Usuń swoje konto",
+            "delete_user": "Usuń konto",
+            "account_deleted": "Konto tego użytkownika zostało usunięte.",
             "ban_duration": {
                 "days": "Dni",
                 "hours": "Godziny",
-                "minutes": "Minuty"
+                "minutes": "Minuty",
+                "required": "Czas bana jest wymagany."
             },
             "ban_duration_error": {
                 "min_duration": "Ban musi trwać conajmniej minutę",
@@ -472,7 +570,9 @@
             "unban_user_dialog_title": "Odblokuj użytkownika",
             "unban_user_message": "został odblokowany.",
             "close": "Zamknij",
-            "cancel": "Anuluj"
+            "cancel": "Anuluj",
+            "related-opinions": "Opinie"
+        
         }
     }
 }

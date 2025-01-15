@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import CircularProgress from '@mui/material/CircularProgress'
-import { Tooltip, IconButton, ThemeProvider } from '@mui/material'
+import { Tooltip, IconButton, ThemeProvider, Alert } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import ComplaintDetails from './ComplaintDetails'
+import CloseIcon from '@mui/icons-material/Close'
+
 import { ThemeContext } from '../../../contexts/ThemeContext'
 import { PaginationType, ReportType } from '../../../services/types'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +17,8 @@ const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<ReportType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate()
+  const [alertMessage, setAlertMessage] = useState<string>('')
+
   const { reportId } = useParams<{ reportId?: string }>()
   const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
 
@@ -177,62 +181,92 @@ const ComplaintsList: React.FC = () => {
   ]
 
   return (
-    <div className="h-full w-full flex flex-col">
-      <h1 className="text-lg font-semibold p-2">
-        {t('customer-service.reports.reports')}
-      </h1>
-      <div className="flex gap-2 h-[calc(100%-44px)]">
-        <div
-          className={`h-full ${
-            reportId ? 'w-[calc(100%-400px)]' : 'w-full'
-          } transition-all flex flex-col`}
-        >
-          <div className="flex-grow overflow-hidden bg-white dark:bg-black rounded-lg shadow-md">
-            {loading ? (
-              <div className="flex justify-center items-center h-full">
-                <CircularProgress />
-              </div>
-            ) : reports.length > 0 ? (
-              <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-                <DataGrid
-                  rows={reports.map(report => ({
-                    id: report.reportId,
-                    reportDate: new Date(
-                      report.reportDate
-                    ).toLocaleDateString(),
-                    category: report.category,
-                    description: report.description,
-                    createdBy: report.createdBy,
-                    resolutionDate: report.resolutionDate,
-                    resolvedBy: report.resolvedBy,
-                    isResolved: report.resolutionDate
-                  }))}
-                  columns={columns}
-                  pageSizeOptions={[5, 10, 25, 50]}
-                  disableRowSelectionOnClick
-                  autosizeOnMount={true}
-                  className="scroll"
-                />
-              </ThemeProvider>
-            ) : (
-              <div className="flex justify-center items-center h-full text-lg">
-                No complaints found.
-              </div>
-            )}
+    <>
+      <div className="h-full w-full flex flex-col">
+        <h1 className="text-lg font-semibold p-2">
+          {t('customer-service.reports.reports')}
+        </h1>
+        <div className="flex gap-2 h-[calc(100%-44px)]">
+          <div
+            className={`h-full ${
+              reportId ? 'w-[calc(100%-400px)]' : 'w-full'
+            } transition-all flex flex-col`}
+          >
+            <div className="flex-grow overflow-hidden bg-white dark:bg-black rounded-lg shadow-md">
+              {loading ? (
+                <div className="flex justify-center items-center h-full">
+                  <CircularProgress />
+                </div>
+              ) : reports.length > 0 ? (
+                <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+                  <DataGrid
+                    rows={reports.map(report => ({
+                      id: report.reportId,
+                      reportDate: new Date(
+                        report.reportDate
+                      ).toLocaleDateString(),
+                      category: report.category,
+                      description: report.description,
+                      createdBy: report.createdBy,
+                      resolutionDate: report.resolutionDate,
+                      resolvedBy: report.resolvedBy,
+                      isResolved: report.resolutionDate
+                    }))}
+                    columns={columns}
+                    disableRowSelectionOnClick
+                    autosizeOnMount={true}
+                    className="scroll"
+                    autoPageSize={true}
+                    sx={{
+                      '& .MuiDataGrid-footerContainer': {
+                        borderTop: 'none'
+                      }
+                    }}
+                  />
+                </ThemeProvider>
+              ) : (
+                <div className="flex justify-center items-center h-full text-lg">
+                  No complaints found.
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        {reportId && selectedReport && (
-          <div className="h-full w-[400px]">
-            <ComplaintDetails
-              report={selectedReport}
-              onClose={closeSidePanel}
-              refreshReports={fetchReports}
-            />
-          </div>
-        )}
+          {reportId && selectedReport && (
+            <div className="h-full w-[400px]">
+              <ComplaintDetails
+                report={selectedReport}
+                onClose={closeSidePanel}
+                refreshReports={fetchReports}
+                setAlertMessage={setAlertMessage}
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      {alertMessage && (
+        <div className="fixed bottom-2 left-2">
+          <Alert
+            variant="filled"
+            severity="success"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlertMessage('')
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {alertMessage}
+          </Alert>
+        </div>
+      )}
+    </>
   )
 }
 

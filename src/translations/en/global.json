@@ -16,6 +16,10 @@
         "users": "Users",
         "restaurants": "Restaurants",
         "submitSuccessMessage": "The application has been sent",
+        "reservation": "Reservation",
+        "not-available": "Not available",
+        "oldest": "Oldest",
+        "newest": "Newest",
         "ascending": "Ascending",
         "descending": "Descending",
         "Sort": "Sort"
@@ -34,6 +38,32 @@
         "password": "Password",
         "confirmPassword": "Confirm password",
         "registerButton": "Register"
+    },
+    "reservation": {
+        "history": "Reservation history",
+        "incoming": "Upcoming",
+        "past": "Finished",
+        "guests-in-total": "Guest in total",
+        "registered-guests": "Some of your guests have an account? Tag them!",
+        "date": "Date",
+        "time": "Time",
+        "checkout": "CHECKOUT",
+        "skip-order": "SKIP ORDER",
+        "items": "Items",
+        "no-orders": "No orders",
+        "for": "for",
+        "cancle": "Cancel a reservation",
+        "report": "Report a problem",
+        "complain-topic": "What is your report about?",
+        "report-title": "Make a complaint",
+        "select": "Select a report type",
+        "lost-item": "Lost item",
+        "order": "Complain about an order",
+        "employee": "Complain about an employee",
+        "employee-select": "Select an employee",
+        "details": "Additional details",
+        "describe-details": "Describe your issue in detail...",
+        "submit": "Submit Report"
     },
     "add-employee": {
         "isBackdoorEmployee": "Backdoor employee",
@@ -207,6 +237,34 @@
             "all-restaurants" : "All restaurants",
             "restaurant-group" : "Restaurant group",
             "restaurant" : "Restaurant"
+        },
+        "details": {
+            "details": "Restaurant details",
+            "id":"Restaurant ID",
+            "name":"Name",
+            "type":"Business type",
+            "nodata":"No restaurant data available.",
+            "accept":"Accept as verified",
+            "idcard": "ID card",
+            "permission": "Business permission",
+            "alcohol": "Alcohol license",
+            "rental": "Rental contract",
+            "tags": "Tags",
+            "reviews": "reviews",
+            "rating": "Rating",
+            "description": "Description",
+            "delivery": "Delivery",
+            "yes": "yes",
+            "no": "no",
+            "location": "Location",
+            "address": "Address",
+            "max-reservation-duration": "Max reservation duration",
+            "minutes": "Minutes",
+            "tables": "Tables",
+            "total-capacity": "Total capacity",
+            "opening-hours": "Opening hours",
+             "verified": "Is verified",
+            "archived": "Is archived"
         }
     },
     "tools": {
@@ -215,7 +273,8 @@
             "settings":"Settings",
             "language":"Language",
             "mode":"Dark mode",
-            "signout":"Sign out"
+            "signout":"Sign out",
+            "report":"Report a bug"
         },
         "settings":{
             "setting":"SettingFiller"
@@ -231,7 +290,11 @@
         "send-message": "Send a message",
         "minimize": "Minimize",
         "no-threads": "You do not have any active threads yet",
-        "loading": "Threads are loading"
+        "loading": "Threads are loading",
+        "type":"Threads type",
+        "all":"All",
+        "events":"Event",
+        "reports":"Report"
     },
     "friends": {
         "search": "Search",
@@ -353,6 +416,9 @@
         "filter-not-delivered": "Not delivered only"
     },
     "profile": {
+        "account": "Account",
+        "reservations": "Reservations",
+        "search": "Search by name...",
         "friends": {
             "friends-tab": "Friends",
             "outgoing-tab": "Outgoing friend requests",
@@ -374,6 +440,7 @@
             "removal-decline": "No"
         },
         "events" : {
+            "events": "Events",
             "newest" : "Newest first",
             "oldest" : "Oldest first",
             "interested" : "Interested in",
@@ -392,9 +459,11 @@
             "participants": "Participants",
             "applications-by": "Application by",
             "max-participants": "Max no. participants",
-            "creator": "Creator"
+            "creator": "Creator",
+            "events-feed": "Events feed"
         },
         "reports" : {
+            "reports": "Reports",
             "id":"Report ID",
             "created":"Created",
             "search":"Search reports",
@@ -402,6 +471,10 @@
             "no-reports-customer-service": "No reports related to user",
             "created-by-user": "Created by user",
             "reported-user": "Report regarding user"
+        },
+        "reviews": {
+            "no-reviews": "No reviews yet",
+            "search": "Search reviews"
         },
         "transaction-history": {
             "wallet": "Wallet",
@@ -427,6 +500,16 @@
         "report-details": {
             "report-details": "Report details",
             "complaint-id": "complaint id",
+            "assign-agent": "Assign another agent",
+            "assigned-agents": "Assigned agents",
+            "assigned-from": "Assigned from",
+            "assigned-until": "Assigned until",
+            "assign-success": "The agent has been successfully assigned to the complaint.",
+            "select-agent": "Select an agent",
+            "no-agent-selected": "No agent selected",
+            "comment-required": "A comment is required.",
+            "comment-min": "Comment must be at least 3 characters long.",
+            "resolve-comment": "Add a comment to resolve the complaint",
             "date": "Date",
             "related-visit": "Related visit",
             "no-related-visit": "No visit related to this complaint.",
@@ -446,7 +529,12 @@
             "reported-user": "Reported user",
             "escalated-by": "Escalated by",
             "resolved-by": "Resolved by",
-            "comment": "Comment"
+            "comment": "Comment",
+            "cancel": "Cancel",
+            "assign": "Assign",
+            "ok": "Ok",
+            "resolve-positive": "Resolve",
+            "resolve-negative": "Reject"
         },
         "user": {
             "account": "Account",
@@ -462,10 +550,19 @@
             "ban_user_dialog_title": "Ban User",
             "ban_user_message_prefix": "User",
             "ban_user_message_suffix": "was banned for",
+            "banned_until": "Banned until:",
+            "delete_account_confirmation": "Are you sure you want to delete your account?",
+            "delete": "Delete",
+            "delete_user_dialog_title": "Delete account of",
+            "delete_user_confirmation": "Are you sure you want to remove this user's account?",
+            "delete_account_dialog_title": "Delete your account",
+            "delete_user": "Delete user",
+            "account_deleted": "This user's account is deleted.",
             "ban_duration": {
                 "days": "Days",
                 "hours": "Hours",
-                "minutes": "Minutes"
+                "minutes": "Minutes",
+                "required": "Ban duration is required."
             },
             "ban_duration_error": {
                 "min_duration": "Ban must be at least 1 minute long",
@@ -477,7 +574,8 @@
             "unban_user_dialog_title": "Unban User",
             "unban_user_message": "was unbanned.",
             "close": "Close",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "related-opinions": "Reviews"
         }
     }
 }

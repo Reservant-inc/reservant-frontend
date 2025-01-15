@@ -168,41 +168,39 @@ const IngredientTable: React.FC = () => {
     })
   }
 
-  // TODO Nie wiem dlaczego to nie działa? Przesyła się poprawnie ale nie wyświetla się składnik
   const handleAddIngredient = async () => {
     try {
-      const restaurantId = activeRestaurantId
-
+      const restaurantId = activeRestaurantId;
+  
       if (restaurantId === -1) {
-        console.error('Invalid restaurant ID')
-        return
+        console.error('Invalid restaurant ID');
+        return;
       }
-
+  
       const payload = {
         publicName: formValues.name,
         unitOfMeasurement: formValues.unitOfMeasurement,
         minimalAmount: Number(formValues.minimalAmount),
         amountToOrder: 10,
         amount: formValues.amount ? Number(formValues.amount) : 0,
-        restaurantId: restaurantId
-      }
-
-      console.log('dane:', payload)
-
-      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload))
-
+        restaurantId: restaurantId,
+      };
+  
+      console.log('dane:', payload);
+  
+      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload));
+  
       if (response) {
-        console.log('Ingredient added successfully:', response.ingredientId)
+        console.log('Ingredient added successfully:', response.ingredientId);
+        fetchIngredients();
       } else {
-        console.warn('New ingredient added but no response returned')
+        console.warn('New ingredient added but no response returned');
       }
-
-      handleCloseModal()
-      fetchIngredients()
     } catch (error) {
-      console.error('Error adding ingredient:', error)
+      console.error('Error adding ingredient:', error);
     }
-  }
+  };
+  
 
   const handleIncreaseAmount = (id: number) => {
     setGroceryList(prevList =>
@@ -357,10 +355,6 @@ const IngredientTable: React.FC = () => {
   const EditToolbar = () => (
     <GridToolbarContainer>
       <div className="flex w-full items-center justify-start gap-5">
-        {/* Nagłówek "Ingredients" */}
-        <h1 className="text-lg font-semibold text-primary dark:text-secondary">
-          {t('warehouse.ingredients')}
-        </h1>
         <div className="z-1 flex h-[3rem] items-center gap-2 p-1">
           <button
             id="RestaurantListAddRestaurantButton"
@@ -393,7 +387,7 @@ const IngredientTable: React.FC = () => {
           <CircularProgress />
         </div>
       ) : ingredients.length > 0 ? (
-        <div className="">
+        <div className='h-full'>
           <DataGrid
             rows={ingredients.map((ingredient, index) => ({
               ...ingredient,
@@ -403,6 +397,12 @@ const IngredientTable: React.FC = () => {
             pageSizeOptions={[5, 10, 25, 100]}
             disableRowSelectionOnClick
             slots={{ toolbar: EditToolbar }}
+            autoPageSize={true}
+            sx={{
+              '& .MuiDataGrid-footerContainer': {
+                borderTop: 'none',
+              },
+            }}
           />
         </div>
       ) : (
@@ -440,9 +440,9 @@ const IngredientTable: React.FC = () => {
         onIncreaseAmount={handleIncreaseAmount}
         onDecreaseAmount={handleDecreaseAmount}
         onRemoveItem={handleRemoveItem}
-        onSubmitOrder={handleOrder} // funkcja od zamówienia
+        onSubmitOrder={handleOrder}
       />
-      ;{/* Dialog do edycji składnika */}
+      {/* Dialog do edycji składnika */}
       <EditIngredientDialog
         open={isEditDialogOpen}
         onClose={handleCloseEditDialog}
