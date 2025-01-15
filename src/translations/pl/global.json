@@ -454,6 +454,10 @@
             "created-by-user": "Utworzone przez użytkownika",
             "reported-user": "Zgłoszenie dotyczące użytkownika"
         },
+        "reviews": {
+            "no-reviews": "Brak opinii",
+            "search": "Szukaj opinii"
+        },
         "transaction-history": {
             "wallet": "Portfel",
             "account-balance": "Stan konta",
@@ -545,7 +549,9 @@
             "unban_user_dialog_title": "Odblokuj użytkownika",
             "unban_user_message": "został odblokowany.",
             "close": "Zamknij",
-            "cancel": "Anuluj"
+            "cancel": "Anuluj",
+            "related-opinions": "Opinie"
+        
         }
     }
 }

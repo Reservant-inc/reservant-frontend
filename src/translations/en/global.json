@@ -459,6 +459,10 @@
             "created-by-user": "Created by user",
             "reported-user": "Report regarding user"
         },
+        "reviews": {
+            "no-reviews": "No reviews yet",
+            "search": "Search reviews"
+        },
         "transaction-history": {
             "wallet": "Wallet",
             "account-balance": "Account balance",
@@ -549,7 +553,8 @@
             "unban_user_dialog_title": "Unban User",
             "unban_user_message": "was unbanned.",
             "close": "Close",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "related-opinions": "Rewiews"
         }
     }
 }
