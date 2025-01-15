@@ -35,22 +35,23 @@ export default function Reports() {
       console.log(response)
       let reports: any[] = []
 
-      if (response.length)
-        for (const i in response) {
+      if (response.items.length)
+        
+        for (const i in response.items) {
           reports.push({
             id: Number(i),
-            reportId: response.reportId,
-            description: response.description,
-            visitId: response.visitId,
-            reportedUserId: response.reportedUserId,
-            reportDate: response.reportDate,
-            category: response.category,
-            createdBy: response.createdBy,
-            reportedUser: response.reportedUser
+            reportId: response.items[i].reportId,
+            description: response.items[i].description,
+            visitId: response.items[i].visitId,
+            reportedUserId: response.items[i].reportedUserId,
+            reportDate: response.items[i].reportDate,
+            category: response.items[i].category,
+            createdBy: response.items[i].createdBy,
+            reportedUser: response.items[i].reportedUser
           })
         }
-
-      setRows(reports)
+        console.log(reports)
+        setRows(reports)
     } catch (error) {
       console.error('Error populating table', error)
     }
