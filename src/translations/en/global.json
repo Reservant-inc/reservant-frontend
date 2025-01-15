@@ -267,7 +267,8 @@
             "settings":"Settings",
             "language":"Language",
             "mode":"Dark mode",
-            "signout":"Sign out"
+            "signout":"Sign out",
+            "report":"Report a bug"
         },
         "settings":{
             "setting":"SettingFiller"

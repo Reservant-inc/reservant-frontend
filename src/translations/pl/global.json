@@ -262,7 +262,9 @@
             "settings":"Ustawienia",
             "language":"Język",
             "mode":"Tryb ciemny",
-            "signout":"Wylogowanie"
+            "signout":"Wylogowanie",
+            "report":"Zgłoś problem techniczny"
+
         },
         "settings":{
             "setting":"SettingFiller"
