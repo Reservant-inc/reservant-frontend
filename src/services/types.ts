@@ -49,6 +49,8 @@ export type RestaurantDetailsType = {
   nip: string
   groupId: number
   maxReservationDurationMinutes: number
+  isVerified: true
+  isArchived: true
 }
 
 export type GroupType = {
@@ -497,23 +499,22 @@ export type ComplaintUserInfo = {
 }
 
 export type ReportType = {
-  reportId: number;
-  description: string;
-  reportDate: string;
-  category: string;
-  createdBy: UserType;
-  reportedUser: UserType | null;
-  visit: VisitType | null;
-  resolutionComment: string;
-  resolvedBy: UserType;
-  resolutionDate: string;
+  reportId: number
+  description: string
+  reportDate: string
+  category: string
+  createdBy: UserType
+  reportedUser: UserType | null
+  visit: VisitType | null
+  resolutionComment: string
+  resolvedBy: UserType
+  resolutionDate: string
   assignedAgents: {
-    agent: UserType;
-    from: string;
-    until: string | null;
-  }[];
-};
-
+    agent: UserType
+    from: string
+    until: string | null
+  }[]
+}
 
 export type StatisticsType = {
   popularItems: {

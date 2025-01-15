@@ -251,7 +251,9 @@
             "minutes": "Minut",
             "tables": "Stoliki",
             "total-capacity": "Całkowita ilość miejsc",
-            "opening-hours": "Godziny otwarcia"
+            "opening-hours": "Godziny otwarcia",
+            "verified": "Czy zweryfikowana",
+            "archived": "Czy zarchiwizowana"
         }
     },
     "tools": {
@@ -515,9 +517,8 @@
             "cancel": "Anuluj",
             "assign": "Przypisz",
             "ok": "Ok",
-            "resolve": "Rozwiąż",
-            "already-assigned": "Już przypisany"
-            
+            "resolve-positive": "Rozpatrz",
+            "resolve-negative": "Odrzuć"
         },
         "user": {
             "account": "Konto",
