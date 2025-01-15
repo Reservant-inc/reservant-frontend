@@ -158,7 +158,7 @@ const DeliveriesTable: React.FC = () => {
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value as 'all' | 'delivered' | 'notDelivered')}
-            className="border-[1px] border-primary px-3 py-1 text-primary rounded-md  dark:border-secondary dark:text-secondary pr-8 "
+            className="border-[1px] border-primary px-3 py-1 text-primary rounded-md  dark:border-secondary dark:text-secondary pr-8 dark:bg-black"
           >
             <option value="all">{t('delivery.filter-all')}</option>
             <option value="delivered">{t('delivery.filter-delivered')}</option>
