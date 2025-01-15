@@ -49,6 +49,8 @@ export type RestaurantDetailsType = {
   nip: string
   groupId: number
   maxReservationDurationMinutes: number
+  isVerified: true
+  isArchived: true
 }
 
 export type GroupType = {
@@ -514,7 +516,6 @@ export type ReportType = {
     until: string | null
   }[]
   reportStatus: string
-
   threadId: number
 }
 

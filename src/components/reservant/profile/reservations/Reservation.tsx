@@ -115,8 +115,6 @@ const Reservation: React.FC<ReservationProps> = ({
           return
       }
 
-      console.log(reportData)
-
       await fetchPOST(endpoint, JSON.stringify(reportData))
       setAlertMessage('Your report has been submitted successfully.')
     } catch (error) {
@@ -246,12 +244,14 @@ const Reservation: React.FC<ReservationProps> = ({
                 >
                   {t('reservation.order')}
                 </option> */}
-                <option
-                  value="complain-employee"
-                  className="dark:text-grey-1 dark:bg-black"
-                >
-                  {t('reservation.employee')}
-                </option>
+                {reservation.orders.length > 0 && (
+                  <option
+                    value="complain-employee"
+                    className="dark:text-grey-1 dark:bg-black"
+                  >
+                    {t('reservation.employee')}
+                  </option>
+                )}
               </select>
 
               {reportType === 'complain-employee' && (

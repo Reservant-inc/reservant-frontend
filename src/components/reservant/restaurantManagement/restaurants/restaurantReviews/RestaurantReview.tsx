@@ -26,6 +26,7 @@ interface RestaurantReviewProps {
   onReviewDeleted?: () => void
   isOwnerView?: boolean
   restaurantId: number
+  isCustomerServiceView?: boolean
 }
 
 const RestaurantReview: React.FC<RestaurantReviewProps> = ({
@@ -34,7 +35,8 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   user,
   onReviewDeleted,
   isOwnerView,
-  restaurantId
+  restaurantId,
+  isCustomerServiceView = false,
 }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -46,24 +48,27 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   const [responseContents, setResponseContents] = useState<string>(
     review.restaurantResponse || ''
   )
-  const [restaurantLogo, setRestaurantLogo] = useState<string | null>(null)
+  const [restaurant, setRestaurant] = useState<{ name: string; logo: string | null } | null>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false) // State for expansion
+  
 
   const [t] = useTranslation('global')
 
+  // Pobieranie danych restauracji
   useEffect(() => {
-    if (review.restaurantResponse) {
-      const fetchRestaurantLogo = async () => {
+  
+      const fetchRestaurantData = async () => {
         try {
-          const restaurantData = await fetchGET(`/restaurants/${restaurantId}`)
-          setRestaurantLogo(restaurantData.logo || null)
+          const restaurantData = await fetchGET(`/restaurants/${restaurantId}`);
+          setRestaurant({ name: restaurantData.name, logo: restaurantData.logo });
+          console.log(restaurantData)
         } catch (error) {
-          console.error('Error fetching restaurant logo:', error)
+          console.error('Błąd przy pobieraniu danych restauracji:', error);
         }
-      }
-      fetchRestaurantLogo()
-    }
-  }, [review.restaurantResponse, restaurantId])
+      };
+      fetchRestaurantData();
+    
+  }, [isCustomerServiceView, restaurantId, review.restaurantResponse,]);
 
   const handleEditClick = () => {
     setEditedStars(review.stars)
@@ -142,6 +147,11 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
 
   return (
     <div className="flex flex-col gap-1 p-2 rounded-lg dark:bg-grey-6 bg-grey-0">
+      {isCustomerServiceView && restaurant && (
+        <div className="flex items-center gap-4 mb-2">
+          <p className="font-semibold text-lg">Restaurant: {restaurant.name}</p>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 ">
           <Avatar className="h-7 w-7">
@@ -195,7 +205,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           </span>
         )}
         <div className="review-actions flex items-center gap-1 ml-auto">
-          {review.authorId === user?.userId && (
+          {!isCustomerServiceView && review.authorId === user?.userId && (
             <>
               <Button
                 id="RestaurantReviewEditButton"
@@ -227,26 +237,29 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       {review.restaurantResponse && (
         <div className="bg-grey-1 dark:bg-grey-5 response-section p-4 rounded-lg border-l-4 border-primary dark:border-secondary flex items-start gap-4">
           <Avatar
-            src={getImage(restaurantLogo || '', '/path/to/default/logo.png')}
+            src={getImage(restaurant?.logo || '', '/path/to/default/logo.png')}
             alt="Restaurant Logo"
           />
-          <div className="response-content flex-grow">
+          
+          <div className="response-content flex-grow text-sm">
             <p>{new Date(review.answeredAt).toLocaleDateString()}</p>
-            <p>{review.restaurantResponse}</p>
-            <div className="flex justify-end">
-              <Button
-                onClick={handleRespondClick}
-                className="text-primary dark:text-secondary pb-0"
-              >
-                {t('reviews.edit-response')}
-              </Button>
-              <Button
-                onClick={() => setIsDeleteResponseDialogOpen(true)}
-                className="text-primary dark:text-secondary pb-0"
-              >
-                {t('general.delete')}
-              </Button>
-            </div>
+            <p >{review.restaurantResponse}</p>
+            {!isCustomerServiceView && (
+              <div className="flex justify-end">
+                <Button
+                  onClick={handleRespondClick}
+                  className="text-primary dark:text-secondary pb-0"
+                >
+                  {t('reviews.edit-response')}
+                </Button>
+                <Button
+                  onClick={() => setIsDeleteResponseDialogOpen(true)}
+                  className="text-primary dark:text-secondary pb-0"
+                >
+                  {t('general.delete')}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

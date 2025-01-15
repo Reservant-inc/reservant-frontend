@@ -256,7 +256,9 @@
             "minutes": "Minutes",
             "tables": "Tables",
             "total-capacity": "Total capacity",
-            "opening-hours": "Opening hours"
+            "opening-hours": "Opening hours",
+             "verified": "Is verified",
+            "archived": "Is archived"
         }
     },
     "tools": {
@@ -265,7 +267,8 @@
             "settings":"Settings",
             "language":"Language",
             "mode":"Dark mode",
-            "signout":"Sign out"
+            "signout":"Sign out",
+            "report":"Report a bug"
         },
         "settings":{
             "setting":"SettingFiller"
@@ -463,6 +466,10 @@
             "created-by-user": "Created by user",
             "reported-user": "Report regarding user"
         },
+        "reviews": {
+            "no-reviews": "No reviews yet",
+            "search": "Search reviews"
+        },
         "transaction-history": {
             "wallet": "Wallet",
             "account-balance": "Account balance",
@@ -520,7 +527,8 @@
             "cancel": "Cancel",
             "assign": "Assign",
             "ok": "Ok",
-            "resolve": "Resolve"
+            "resolve-positive": "Resolve",
+            "resolve-negative": "Reject"
         },
         "user": {
             "account": "Account",
@@ -537,6 +545,13 @@
             "ban_user_message_prefix": "User",
             "ban_user_message_suffix": "was banned for",
             "banned_until": "Banned until:",
+            "delete_account_confirmation": "Are you sure you want to delete your account?",
+            "delete": "Delete",
+            "delete_user_dialog_title": "Delete account of",
+            "delete_user_confirmation": "Are you sure you want to remove this user's account?",
+            "delete_account_dialog_title": "Delete your account",
+            "delete_user": "Delete user",
+            "account_deleted": "This user's account is deleted.",
             "ban_duration": {
                 "days": "Days",
                 "hours": "Hours",
@@ -553,7 +568,8 @@
             "unban_user_dialog_title": "Unban User",
             "unban_user_message": "was unbanned.",
             "close": "Close",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "related-opinions": "Reviews"
         }
     }
 }

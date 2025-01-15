@@ -251,7 +251,9 @@
             "minutes": "Minut",
             "tables": "Stoliki",
             "total-capacity": "Całkowita ilość miejsc",
-            "opening-hours": "Godziny otwarcia"
+            "opening-hours": "Godziny otwarcia",
+            "verified": "Czy zweryfikowana",
+            "archived": "Czy zarchiwizowana"
         }
     },
     "tools": {
@@ -260,7 +262,9 @@
             "settings":"Ustawienia",
             "language":"Język",
             "mode":"Tryb ciemny",
-            "signout":"Wylogowanie"
+            "signout":"Wylogowanie",
+            "report":"Zgłoś problem techniczny"
+
         },
         "settings":{
             "setting":"SettingFiller"
@@ -458,6 +462,10 @@
             "created-by-user": "Utworzone przez użytkownika",
             "reported-user": "Zgłoszenie dotyczące użytkownika"
         },
+        "reviews": {
+            "no-reviews": "Brak opinii",
+            "search": "Szukaj opinii"
+        },
         "transaction-history": {
             "wallet": "Portfel",
             "account-balance": "Stan konta",
@@ -515,8 +523,8 @@
             "cancel": "Anuluj",
             "assign": "Przypisz",
             "ok": "Ok",
-            "resolve": "Rozwiąż"
-            
+            "resolve-positive": "Rozpatrz",
+            "resolve-negative": "Odrzuć"
         },
         "user": {
             "account": "Konto",
@@ -533,6 +541,13 @@
             "ban_user_message_prefix": "Użytkownik",
             "ban_user_message_suffix": "został zablokowany na",
             "banned_until": "Zbanowany do:",
+            "delete_account_confirmation": "Czy na pewno chcesz usunąć swoje konto?",
+            "delete": "Usuń",
+            "delete_user_dialog_title": "Usuwanie konta użytkownika",
+            "delete_user_confirmation": "Czy na pewno chcesz usunąć konto tego użytkownika?",
+            "delete_account_dialog_title": "Usuń swoje konto",
+            "delete_user": "Usuń konto",
+            "account_deleted": "Konto tego użytkownika zostało usunięte.",
             "ban_duration": {
                 "days": "Dni",
                 "hours": "Godziny",
@@ -549,7 +564,9 @@
             "unban_user_dialog_title": "Odblokuj użytkownika",
             "unban_user_message": "został odblokowany.",
             "close": "Zamknij",
-            "cancel": "Anuluj"
+            "cancel": "Anuluj",
+            "related-opinions": "Opinie"
+        
         }
     }
 }
