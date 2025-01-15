@@ -298,6 +298,7 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           setAlertMessage={setAlertMessage}
           reportId={report.reportId}
           refreshReports={refreshReports}
+          assignedAgents={report.assignedAgents}
         />
       </div>
     </div>
