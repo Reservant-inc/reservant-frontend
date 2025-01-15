@@ -1,10 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import ReservationHistoryTabs from './ReservationHistoryTabs'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const ReservationHistoryTab: React.FC = () => {
-    const [t] = useTranslation('global');
+  const [t] = useTranslation('global')
 
   return (
     <div className="flex flex-col rounded-lg w-full h-full">

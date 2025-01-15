@@ -56,6 +56,24 @@ module.exports = {
     function ({ addVariant }) {
       addVariant('child', '& > *')
       addVariant('child-hover', '& > *:hover')
+    },
+    function ({ addBase, theme }) {
+      addBase({
+        'input:active, select:active, textarea:active ': {
+          borderColor: theme('colors.primary')
+        },
+        'input:focus, select:focus, textarea:focus': {
+          borderColor: theme('colors.primary'),
+          boxShadow: `0 0 0 1px ${theme('colors.primary')}`
+        },
+        '.dark input:active, .dark select:active, .dark textarea:active ': {
+          borderColor: theme('colors.secondary')
+        },
+        '.dark input:focus, .dark select:focus, .dark textarea:focus': {
+          borderColor: theme('colors.secondary'),
+          boxShadow: `0 0 0 1px ${theme('colors.secondary')}`
+        }
+      })
     }
   ]
 }

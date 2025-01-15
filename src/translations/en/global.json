@@ -256,7 +256,9 @@
             "minutes": "Minutes",
             "tables": "Tables",
             "total-capacity": "Total capacity",
-            "opening-hours": "Opening hours"
+            "opening-hours": "Opening hours",
+             "verified": "Is verified",
+            "archived": "Is archived"
         }
     },
     "tools": {
@@ -265,7 +267,8 @@
             "settings":"Settings",
             "language":"Language",
             "mode":"Dark mode",
-            "signout":"Sign out"
+            "signout":"Sign out",
+            "report":"Report a bug"
         },
         "settings":{
             "setting":"SettingFiller"
@@ -459,6 +462,10 @@
             "created-by-user": "Created by user",
             "reported-user": "Report regarding user"
         },
+        "reviews": {
+            "no-reviews": "No reviews yet",
+            "search": "Search reviews"
+        },
         "transaction-history": {
             "wallet": "Wallet",
             "account-balance": "Account balance",
@@ -516,7 +523,8 @@
             "cancel": "Cancel",
             "assign": "Assign",
             "ok": "Ok",
-            "resolve": "Resolve"
+            "resolve-positive": "Resolve",
+            "resolve-negative": "Reject"
         },
         "user": {
             "account": "Account",
@@ -556,7 +564,8 @@
             "unban_user_dialog_title": "Unban User",
             "unban_user_message": "was unbanned.",
             "close": "Close",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "related-opinions": "Reviews"
         }
     }
 }

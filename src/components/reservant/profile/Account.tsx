@@ -22,10 +22,8 @@ import { Key, Visibility, VisibilityOff } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import TransactionHistory from './TransactionHistory'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import { TransactionListType } from '../../../services/enums'
-
-
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -70,12 +68,13 @@ const Account: React.FC = () => {
   const [showMoneyDialog, setShowMoneyDialog] = useState<boolean>(false)
   const [value, setValue] = useState<number>(0)
   const [isDeleteAccountDialogOpen, setIsDeleteAccountDialogOpen] =
-    useState<boolean>(false);
-  const [deleteAccountCountdown, setDeleteAccountCountdown] = useState<number>(10);
-  const [isDeleteAccountDisabled, setIsDeleteAccountDisabled] = useState<boolean>(true);
+    useState<boolean>(false)
+  const [deleteAccountCountdown, setDeleteAccountCountdown] =
+    useState<number>(5)
+  const [isDeleteAccountDisabled, setIsDeleteAccountDisabled] =
+    useState<boolean>(true)
 
-
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [t] = useTranslation('global')
 
   const initialValues = {
@@ -114,36 +113,36 @@ const Account: React.FC = () => {
 
   useEffect(() => {
     if (isDeleteAccountDialogOpen) {
-      setDeleteAccountCountdown(10);
-      setIsDeleteAccountDisabled(true);
+      setDeleteAccountCountdown(5)
+      setIsDeleteAccountDisabled(true)
 
       const timer = setInterval(() => {
-        setDeleteAccountCountdown((prev) => {
+        setDeleteAccountCountdown(prev => {
           if (prev <= 1) {
-            clearInterval(timer);
-            setIsDeleteAccountDisabled(false);
-            return 0;
+            clearInterval(timer)
+            setIsDeleteAccountDisabled(false)
+            return 0
           }
-          return prev - 1;
-        });
-      }, 1000);
+          return prev - 1
+        })
+      }, 1000)
 
-      return () => clearInterval(timer);
+      return () => clearInterval(timer)
     } else {
       return undefined
     }
-  }, [isDeleteAccountDialogOpen]);
+  }, [isDeleteAccountDialogOpen])
 
   const handleDeleteAccount = async () => {
     try {
-      await fetchDELETE(`/user`);
-      navigate('/'); 
+      await fetchDELETE(`/user`)
+      navigate('/')
     } catch (error) {
-      console.error('Error deleting account:', error);
+      console.error('Error deleting account:', error)
     } finally {
-      setIsDeleteAccountDialogOpen(false);
+      setIsDeleteAccountDialogOpen(false)
     }
-  };
+  }
 
   const fetchUserData = async () => {
     try {
@@ -232,13 +231,12 @@ const Account: React.FC = () => {
               </>
             </button>
             <button
-        className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-red text-red transition hover:scale-105 hover:bg-red hover:text-white dark:border-red dark:text-red dark:hover:bg-red dark:hover:text-white"
-        onClick={() => setIsDeleteAccountDialogOpen(true)}
-      >
+              className="flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-lg p-1 border-red text-red transition hover:scale-105 hover:bg-red hover:text-white dark:border-red dark:text-red dark:hover:bg-red dark:hover:text-white"
+              onClick={() => setIsDeleteAccountDialogOpen(true)}
+            >
               <DeleteForeverIcon className="w-4 h-4" />
               <h1 className="text-nowrap">Delete account</h1>
             </button>
-            
           </div>
         </div>
         <div className="flex items-center gap-4 w-full">
@@ -269,8 +267,8 @@ const Account: React.FC = () => {
         <TransactionHistory listType={TransactionListType.Client} />
       </div>
 
-       {/* Delete Account Dialog */}
-       <Dialog
+      {/* Delete Account Dialog */}
+      <Dialog
         open={isDeleteAccountDialogOpen}
         onClose={() => setIsDeleteAccountDialogOpen(false)}
         title={t('customer-service.user.delete_account_dialog_title')}
@@ -293,7 +291,8 @@ const Account: React.FC = () => {
               onClick={handleDeleteAccount}
               disabled={isDeleteAccountDisabled}
             >
-              {t('customer-service.user.delete')} {isDeleteAccountDisabled && `(${deleteAccountCountdown})`}
+              {t('customer-service.user.delete')}{' '}
+              {isDeleteAccountDisabled && `(${deleteAccountCountdown})`}
             </button>
           </div>
         </div>
