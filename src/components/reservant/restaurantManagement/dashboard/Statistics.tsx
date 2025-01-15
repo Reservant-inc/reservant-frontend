@@ -7,6 +7,7 @@ import { FetchError } from '../../../../services/Errors'
 import { fetchGET } from '../../../../services/APIconn'
 import { format, subMonths, subWeeks } from 'date-fns'
 import { BarChart } from '@mui/x-charts/BarChart'
+import { useParams } from 'react-router-dom'
 
 enum Option {
   All = 'All',
@@ -36,11 +37,15 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
     scope === StatisticsScope.All ? Option.Group : Option.Single
   )
 
+  const { restaurantId } = useParams<{ restaurantId?: string }>()
+
   //these can be restaurants or groups, depending on selected option.
   const [objects, setObjects] = useState<{ name: string; id: number }[]>()
 
   //selected object assigned based on optional select.
-  const [object, setObject] = useState<{ name: string; id: number }>()
+  const [object, setObject] = useState<
+    { name: string; id: number } | undefined
+  >(restaurantId ? { name: '', id: Number(restaurantId) } : undefined)
 
   const [popularItemsStats, setPopularItemsStats] = useState<datasetType[]>([])
   const [customerCountStats, setCustomerCountStats] = useState<datasetType[]>(
@@ -73,7 +78,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
         break
     }
 
-    setObject(undefined)
+    scope === StatisticsScope.All && setObject(undefined)
     setTimePeriod(TimePeriod.PastMonth)
     setPopularItemsStats([])
     setCustomerCountStats([])
@@ -256,9 +261,6 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
     setReviewsStats(reviews)
   }
 
-  console.log(customerCountStats.map(stat => stat.date).reverse())
-  console.log(customerCountStats.map(stat => stat.date))
-
   return (
     <div className="p-4 h-full w-full flex flex-col gap-4">
       <div className="flex w-full">
@@ -339,7 +341,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             )}
           </>
         )}
-        {(object || option === Option.All) && (
+        {(object || option === Option.All || StatisticsScope.Single) && (
           <div className="flex gap-2 items-center">
             <h1 className="text-sm font-mont-bd">Time period:</h1>
             <select
