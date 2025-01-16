@@ -1,4 +1,4 @@
-import { ListItemButton } from '@mui/material'
+import { ListItemButton, Tooltip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp'
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp'
@@ -83,7 +83,7 @@ const ManagementTabs: React.FC = ({}) => {
             </div>
             <Tab
               path={`restaurant/${restaurantId}/restaurant-dashboard`}
-              title="Statistics"
+              title="Dashboard"
               icon={<Dashboard />}
               id="management_restaurant_dashboard"
             />
@@ -234,9 +234,17 @@ const ManagementTabs: React.FC = ({}) => {
           </div>
         )}
       </div>
-      <h1 className="text-xl dark:text-grey-0 text-right text-nowrap">
-        {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
-      </h1>
+      <Tooltip
+        title={
+          restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'
+        }
+        placement="bottom"
+        arrow
+      >
+        <h1 className="text-xl dark:text-grey-0 truncate text-right text-nowrap">
+          {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
+        </h1>
+      </Tooltip>
     </div>
   )
 }
