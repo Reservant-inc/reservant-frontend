@@ -83,7 +83,7 @@ const ManagementTabs: React.FC = ({}) => {
             </div>
             <Tab
               path={`restaurant/${restaurantId}/restaurant-dashboard`}
-              title="Statistics"
+              title="Dashboard"
               icon={<Dashboard />}
               id="management_restaurant_dashboard"
             />
