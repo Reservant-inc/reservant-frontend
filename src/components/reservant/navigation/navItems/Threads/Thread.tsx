@@ -140,7 +140,7 @@ const Thread: React.FC<ThreadProps> = ({
   return (
     <div
       key={thread.threadId}
-      className="w-[300px] h-full bg-white dark:bg-black rounded-t-md shadow-2xl flex flex-col"
+      className="w-[300px] h-full bg-white dark:bg-black rounded-t-md border-t-[1px] border-x-[1px] border-grey-3  flex flex-col"
     >
       <div className="w-full h-12 flex items-center justify-between px-2 shadow-md z-[1]">
         <div className="flex gap-2 items-center">
