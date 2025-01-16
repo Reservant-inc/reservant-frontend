@@ -23,10 +23,10 @@ const initialValues = {
 }
 
 interface RegisterEmpProps {
-  setIsModalOpen: Function
+  onClose: () => void
 }
 
-const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
+const RegisterEmp: React.FC<RegisterEmpProps> = ({ onClose }) => {
   const [t] = useTranslation('global')
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false)
@@ -55,7 +55,7 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ setIsModalOpen }) => {
 
       await fetchPOST('/auth/register-restaurant-employee', body)
 
-      setIsModalOpen(false)
+      onClose()
     } catch (error) {
       console.log(error)
     } finally {

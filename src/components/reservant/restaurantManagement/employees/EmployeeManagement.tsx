@@ -73,7 +73,7 @@ export default function EmployeeManagement() {
             lastName: response[i].lastName,
             birthDate: response[i].birthDate,
             phoneNumber:
-              response[i].phoneNumber.code + response[i].phoneNumber.number,
+              response[i].phoneNumber?.code + response[i].phoneNumber?.number,
             employments: tmp.slice()
           })
         }
@@ -343,10 +343,18 @@ export default function EmployeeManagement() {
       {isModalOpen && (
         <Dialog
           open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false)
+            populateRows()
+          }}
           title="Creating a new employee..."
         >
-          <EmployeeRegister setIsModalOpen={setIsModalOpen} />
+          <EmployeeRegister
+            onClose={() => {
+              setIsModalOpen(false)
+              populateRows()
+            }}
+          />
         </Dialog>
       )}
       {isEmploymentOpen && (
