@@ -390,7 +390,11 @@ export default function EmployeeRestaurantManagement() {
           onClose={() => setIsCreateModalOpen(false)}
           title="Creating a new employee..."
         >
-          <EmployeeRegister setIsModalOpen={setIsCreateModalOpen} />
+          <EmployeeRegister
+            onClose={() => {
+              setIsCreateModalOpen(false)
+            }}
+          />
         </Dialog>
       )}
       {isAddModalOpen && (
