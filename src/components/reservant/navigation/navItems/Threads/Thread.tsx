@@ -78,6 +78,7 @@ const Thread: React.FC<ThreadProps> = ({
         JSON.stringify({ contents: message })
       )
       setPage(0)
+      getMessages()
     } catch (error) {
       if (error instanceof FetchError) {
         console.log(error.formatErrors())
@@ -232,6 +233,11 @@ const Thread: React.FC<ThreadProps> = ({
                   type="text"
                   placeholder={t('threads.message')}
                   value={messageToSend}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      handleSendMessage(messageToSend)
+                    }
+                  }}
                   onChange={e => setMessageToSend(e.target.value)}
                   className="text-sm w-full placeholder:text-grey-2 dark:text-grey-1"
                 />
