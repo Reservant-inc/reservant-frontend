@@ -238,6 +238,10 @@ dialog::backdrop {
   border-bottom-color: transparent !important
 }
 
+.MuiChartsAxis-directionY .MuiChartsAxis-label {
+  transform: translateX(-10px) !important;
+}
+
 @tailwind base;
 @layer base{
 

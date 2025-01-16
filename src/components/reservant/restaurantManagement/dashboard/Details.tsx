@@ -36,7 +36,9 @@ const Details: React.FC = () => {
   const fetchRestaurantDetails = async () => {
     try {
       setIsLoading(true)
-      const response = await fetchGET(`/restaurants/${restaurantId}`)
+      const response = await fetchGET(
+        `/restaurants/${restaurantId}/full-details`
+      )
       setRestaurant(response)
     } catch (error) {
       console.error('Error fetching restaurant details:', error)
@@ -45,13 +47,8 @@ const Details: React.FC = () => {
     }
   }
 
-  const handleAccept = async () => {
-    fetchPOST(`/restaurants/${restaurantId}/verify`)
-    setAlertMessage('restaurant accepted')
-  }
-
   return (
-    <div className="flex h-full self-start overflow-y-auto flex-col w-full dark:bg-black bg-white rounded-lg p-4 ">
+    <div className="flex h-full self-start overflow-y-auto flex-col w-full dark:bg-black bg-white rounded-lg dark:text-grey-1 p-4 ">
       <h1 className="text-lg font-mont-bd">
         {t('restaurant-management.details.details')}
       </h1>
@@ -70,6 +67,28 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.name')}:{' '}
             </p>
             <p>{restaurant.name}</p>
+          </div>
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {' '}
+              {t('restaurant-management.details.verified')}:{' '}
+            </p>
+            <p>
+              {restaurant.isVerified
+                ? t('restaurant-management.details.yes')
+                : t('restaurant-management.details.no')}
+            </p>
+          </div>
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {' '}
+              {t('restaurant-management.details.archived')}:{' '}
+            </p>
+            <p>
+              {restaurant.isArchived
+                ? t('restaurant-management.details.yes')
+                : t('restaurant-management.details.no')}
+            </p>
           </div>
           <div className="flex gap-3 text-sm">
             <p className="font-mont-bd">
@@ -122,7 +141,7 @@ const Details: React.FC = () => {
               {t('restaurant-management.details.rating')}:{' '}
             </p>
             <p>
-              {restaurant.rating} / 5 ({restaurant.numberReviews}{' '}
+              {restaurant.rating ?? 0} / 5 ({restaurant.numberReviews ?? 0}{' '}
               {t('restaurant-management.details.reviews')})
             </p>
           </div>
@@ -133,23 +152,70 @@ const Details: React.FC = () => {
             </p>
             <p>{restaurant.tags.join(', ')} </p>
           </div>
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {t('restaurant-management.details.max-reservation-duration')}:{' '}
+            </p>
+            <p>
+              {restaurant.maxReservationDurationMinutes}{' '}
+              {t('restaurant-management.details.minutes')}
+            </p>
+          </div>
+
+          <div className="flex gap-3 text-sm">
+            <p className="font-mont-bd">
+              {t('restaurant-management.details.tables')}:{' '}
+            </p>
+            <p>
+              {restaurant.tables.length}{' '}
+              {t('restaurant-management.details.tables')} (
+              {t('restaurant-management.details.total-capacity')}:{' '}
+              {restaurant.tables.reduce(
+                (acc: number, table: { capacity: number }) =>
+                  acc + table.capacity,
+                0
+              )}
+              )
+            </p>
+          </div>
+
+          <div>
+            <p className="font-mont-bd">
+              {t('restaurant-management.details.opening-hours')}:{' '}
+            </p>
+            <ul className="text-sm text-grey-4 dark:text-grey-2 mt-2">
+              {restaurant.openingHours.map(
+                (hours: { from: string; until: string }, index: number) => (
+                  <li key={index}>
+                    {hours.from} - {hours.until}
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
           <h1>Files:</h1>
-          <Link to={``}>
+          <Link
+            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.rentalContract}`}
+          >
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.rental')}{' '}
             </h1>
           </Link>
-          <Link to={``}>
+          <Link
+            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.alcoholLicense}`}
+          >
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.alcohol')}{' '}
             </h1>
           </Link>
-          <Link to={``}>
+          <Link
+            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.businessPermission}`}
+          >
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.permission')}{' '}
             </h1>
           </Link>
-          <Link to={``}>
+          <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.idCard}`}>
             <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
               {t('restaurant-management.details.idcard')}{' '}
             </h1>
@@ -173,9 +239,17 @@ const Details: React.FC = () => {
               </div>
             </Dialog>
           )}
-          {isCustomerSupportManager() && (
+          {isCustomerSupportManager() && !restaurant.isVerified && (
             <button
-              onClick={handleAccept}
+              onClick={async () => {
+                try {
+                  fetchPOST(`/restaurants/${restaurantId}/verify`)
+                  restaurant.isVerified = true
+                  setAlertMessage('restaurant accepted')
+                } catch (error) {
+                  console.error('Error occured during verification:', error)
+                }
+              }}
               className="w-fit px-4 py-1 justify-self-right dark:bg-black border-[1px] rounded-md bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
               {t('restaurant-management.details.accept')}{' '}
@@ -184,7 +258,6 @@ const Details: React.FC = () => {
         </div>
       ) : (
         <p className="text-center text-grey-5">
-          {' '}
           {t('restaurant-management.details.nodata')}
         </p>
       )}

@@ -1,9 +1,8 @@
 # build step
-FROM node:16.13.2-alpine as build
+FROM node:22-alpine as build
 WORKDIR /app
-COPY package.json ./
-RUN npm install
 COPY . ./
+RUN npm i
 ARG REACT_APP_SERVER_IP="sekude"
 ENV REACT_APP_SERVER_IP $REACT_APP_SERVER_IP
 RUN npm run build

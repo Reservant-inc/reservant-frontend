@@ -1,38 +1,108 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
-import { fetchGET, getImage } from '../../../services/APIconn';
-import DefaultImage from '../../../assets/images/defaulImage.jpeg';
+import React, { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { CircularProgress } from '@mui/material'
+import { fetchGET, getImage } from '../../../services/APIconn'
+import DefaultImage from '../../../assets/images/user.jpg'
+import Details from '../../reservant/restaurantManagement/dashboard/Details'
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
 
 const RestaurantDetails: React.FC = () => {
-  const { restaurantId } = useParams<{ restaurantId: string }>();
-  const [restaurant, setRestaurant] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { restaurantId } = useParams<{ restaurantId: string }>()
+  const [restaurant, setRestaurant] = useState<any>(null)
+  const [employees, setEmployees] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     if (restaurantId) {
       const fetchRestaurantDetails = async () => {
         try {
-          setIsLoading(true);
-          const response = await fetchGET(`/restaurants/${restaurantId}`);
-          setRestaurant(response);
+          setIsLoading(true)
+          const response = await fetchGET(
+            `/restaurants/${restaurantId}/full-details`
+          )
+          setRestaurant(response)
         } catch (error) {
-          console.error('Error fetching restaurant details:', error);
+          console.error('Error fetching restaurant details:', error)
         } finally {
-          setIsLoading(false);
+          setIsLoading(false)
         }
-      };
+      }
 
-      fetchRestaurantDetails();
+      const fetchEmployees = async () => {
+        try {
+          const response = await fetchGET(
+            `/restaurants/${restaurantId}/employees`
+          )
+          setEmployees(response)
+        } catch (error) {
+          console.error('Error fetching employees:', error)
+        }
+      }
+
+      fetchRestaurantDetails()
+      fetchEmployees()
     }
-  }, [restaurantId]);
+  }, [restaurantId])
+
+  const renderEmployeeDetails = (employee: any) => (
+    <div key={employee.employeeId} className="p-4 bg-white my-2">
+      <div className="flex justify-between items-center">
+        <h1 className="font-mont-bd text-md">{`${employee.firstName} ${employee.lastName}`}</h1>
+        <Link to={`/customer-service/users/${employee.employeeId}`}>
+          <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+            Go to Profile
+          </h1>
+        </Link>
+      </div>
+      <div className="flex items-center gap-4 pt-2">
+        <img
+          src={DefaultImage}
+          alt={`${employee.firstName} ${employee.lastName}`}
+          className="w-10 h-10 rounded-full self-start"
+        />
+        <div>
+          <p className="font-mont-bd text-sm text-grey-3">
+            {employee.employeeId}
+          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm">Hall:</p>
+            {employee.isHallEmployee ? (
+              <CheckIcon className="text-green" />
+            ) : (
+              <CloseIcon className="text-red" />
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <p className="text-sm">Backdoor:</p>
+            {employee.isBackdoorEmployee ? (
+              <CheckIcon className="text-green" />
+            ) : (
+              <CloseIcon className="text-red" />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderEmployees = () => (
+    <div>
+      <h1 className="font-mont-bd text-md">Employees</h1>
+      {employees.length > 0 ? (
+        employees.map(employee => renderEmployeeDetails(employee))
+      ) : (
+        <p className="text-sm text-grey-3">No employees found.</p>
+      )}
+    </div>
+  )
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full">
         <CircularProgress />
       </div>
-    );
+    )
   }
 
   if (!restaurant) {
@@ -40,7 +110,7 @@ const RestaurantDetails: React.FC = () => {
       <div className="text-center">
         <p className="text-grey-5">No restaurant details available.</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -56,68 +126,16 @@ const RestaurantDetails: React.FC = () => {
           />
         </div>
 
+        {/* Employees List */}
         <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-[70%]">
-          <h1 className="text-lg font-mont-bd">mapka moze?</h1>
+          {renderEmployees()}
         </div>
       </div>
 
       {/* prawa kol */}
-<div className="flex flex-col bg-white rounded-lg p-8 shadow-md h-full w-1/2">
-  <h1 className="text-lg font-mont-bd">Restaurant Details</h1>
-  <div className="flex flex-col gap-4 mt-4">
-    <p>
-      <span className="font-mont-bd">Name:</span> {restaurant.name}
-    </p>
-    <p>
-      <span className="font-mont-bd">Type:</span> {restaurant.restaurantType}
-    </p>
-    <p>
-      <span className="font-mont-bd">Address:</span> {restaurant.address},{' '}
-      {restaurant.postalIndex}, {restaurant.city}
-    </p>
-    <p>
-      <span className="font-mont-bd">Location:</span> Lat {restaurant.location.latitude}, Lng{' '}
-      {restaurant.location.longitude}
-    </p>
-    <p>
-      <span className="font-mont-bd">Delivery:</span>{' '}
-      {restaurant.provideDelivery ? 'Yes' : 'No'}
-    </p>
-    <p>
-      <span className="font-mont-bd">Description:</span> {restaurant.description}
-    </p>
-    <p>
-      <span className="font-mont-bd">Rating:</span> {restaurant.rating} / 5 (
-      {restaurant.numberReviews} reviews)
-    </p>
-    <p>
-      <span className="font-mont-bd">Tags:</span> {restaurant.tags.join(', ')}
-    </p>
-    <p>
-      <span className="font-mont-bd">Max Reservation Duration:</span>{' '}
-      {restaurant.maxReservationDurationMinutes} minutes
-    </p>
-    <p>
-      <span className="font-mont-bd">Tables:</span> {restaurant.tables.length} (Total capacity: {restaurant.tables.reduce((acc: number, table: { capacity: number }) => acc + table.capacity, 0)}
-)
-    </p>
-    <div>
-      <span className="font-mont-bd">Opening Hours:</span>
-      <ul className="text-sm text-grey-4 dark:text-grey-2 mt-2">
-      {restaurant.openingHours.map((hours: { from: string; until: string }, index: number) => (
-
-          <li key={index}>
-            {hours.from} - {hours.until}
-          </li>
-        ))}
-      </ul>
+      <Details />
     </div>
-  </div>
-</div>
+  )
+}
 
-    </div>
-  );
-};
-
-export default RestaurantDetails;
-
+export default RestaurantDetails

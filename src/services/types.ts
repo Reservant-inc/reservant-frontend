@@ -48,6 +48,9 @@ export type RestaurantDetailsType = {
   idCard: string
   nip: string
   groupId: number
+  maxReservationDurationMinutes: number
+  isVerified: true
+  isArchived: true
 }
 
 export type GroupType = {
@@ -225,6 +228,7 @@ export type ThreadType = {
   threadId: number
   title: string
   participants: UserType[]
+  type: string
 }
 
 export type PaginationType = {
@@ -232,16 +236,7 @@ export type PaginationType = {
   totalPages: number
   perPage: number
   orderByOptions: string[]
-  items:
-    | ThreadType[]
-    | MessageType[]
-    | UserSearchType[]
-    | UserType[]
-    | TransactionType[]
-    | EventDataType[]
-    | VisitType[]
-    | IngredientType[]
-    | ReportType[]
+  items: any[]
 }
 
 export type UserType = {
@@ -496,23 +491,24 @@ export type ComplaintUserInfo = {
 }
 
 export type ReportType = {
-  reportId: number;
-  description: string;
-  reportDate: string;
-  category: string;
-  createdBy: UserType;
-  reportedUser: UserType | null;
-  visit: VisitType | null;
-  resolutionComment: string;
-  resolvedBy: UserType;
-  resolutionDate: string;
+  reportId: number
+  description: string
+  reportDate: string
+  category: string
+  createdBy: UserType
+  reportedUser: UserType | null
+  visit: VisitType | null
+  resolutionComment: string
+  resolvedBy: UserType
+  resolutionDate: string
   assignedAgents: {
-    agent: UserType;
-    from: string;
-    until: string | null;
-  }[];
-};
-
+    agent: UserType
+    from: string
+    until: string | null
+  }[]
+  reportStatus: string
+  threadId: number
+}
 
 export type StatisticsType = {
   popularItems: {

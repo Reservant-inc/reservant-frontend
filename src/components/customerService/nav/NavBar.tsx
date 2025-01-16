@@ -24,7 +24,6 @@ import UserSearchBar from '../../reservant/navigation/navItems/Friends/SearchBar
 import { ThemeContext } from '../../../contexts/ThemeContext'
 import Notifications from '../../reservant/navigation/navItems/Notifications/Notifications'
 
-
 const theme = createTheme({
   components: {
     MuiSwitch: {

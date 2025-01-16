@@ -73,7 +73,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="mb-4">
+      <div className=" h-[6%]">
         <Filters
           data={reservations}
           onFilterChange={handleFilterChange}
@@ -81,7 +81,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
           filterByName="restaurant"
         />
       </div>
-      <div className="flex flex-col gap-4 h-full">
+      <div className="flex flex-col gap-4 h-[94%]">
         <div
           id="scrollableDiv"
           className="flex flex-col h-full p-2 pr-3 overflow-y-auto scroll divide-y-[1px] divide-grey-0 dark:divide-grey-2"

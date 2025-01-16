@@ -227,6 +227,12 @@
             "selectedFile": "Wybrano plik",
             "sort": "Sortuj"
         },
+        "statistics": {
+            "statistics": "Statystyki",
+            "all-restaurants" : "Wszystkie restauracje",
+            "restaurant-group" : "Grupa restauracji",
+            "restaurant" : "Restauracja"
+        },
         "details":{
             "details": "Szczegóły restauracji",
             "id": "ID restauracji",
@@ -246,7 +252,14 @@
             "yes": "tak",
             "no": "nie",
             "location": "Lokalizacja",
-            "address": "Adres"
+            "address": "Adres",
+            "max-reservation-duration": "Maksymalny czas rezerwacji",
+            "minutes": "Minut",
+            "tables": "Stoliki",
+            "total-capacity": "Całkowita ilość miejsc",
+            "opening-hours": "Godziny otwarcia",
+            "verified": "Czy zweryfikowana",
+            "archived": "Czy zarchiwizowana"
         }
     },
     "tools": {
@@ -255,7 +268,9 @@
             "settings":"Ustawienia",
             "language":"Język",
             "mode":"Tryb ciemny",
-            "signout":"Wylogowanie"
+            "signout":"Wylogowanie",
+            "report":"Zgłoś problem techniczny"
+
         },
         "settings":{
             "setting":"SettingFiller"
@@ -271,7 +286,11 @@
         "send-message": "Wyślij wiadomość",
         "minimize": "Minimalizuj",
         "no-threads": "Nie masz jeszcze żadnych aktywnych wątków",
-        "loading": "Wątki się ładują"
+        "loading": "Wątki się ładują",
+        "type":"Typ wątków",
+        "all":"Wszystkie",
+        "events":"Wydarzenia",
+        "reports":"Zgłoszenia"
     },
     "friends": {
         "search": "Wyszukaj",
@@ -449,6 +468,10 @@
             "created-by-user": "Utworzone przez użytkownika",
             "reported-user": "Zgłoszenie dotyczące użytkownika"
         },
+        "reviews": {
+            "no-reviews": "Brak opinii",
+            "search": "Szukaj opinii"
+        },
         "transaction-history": {
             "wallet": "Portfel",
             "account-balance": "Stan konta",
@@ -481,7 +504,7 @@
             "select-agent": "Wybierz pracownika",
             "no-agent-selected": "Nie wybrano pracownika",
             "comment-required": "Komentarz jest wymagany.",
-            "comment-min": "Komentarz musi mieć co najmniej 5 znaków.",
+            "comment-min": "Komentarz musi mieć co najmniej 3 znaki.",
             "resolve-comment": "Dodaj komentarz aby rozwiązać zgłoszenie.",
             "date": "Data",
             "related-visit": "Powiązana wizyta",
@@ -506,8 +529,8 @@
             "cancel": "Anuluj",
             "assign": "Przypisz",
             "ok": "Ok",
-            "resolve": "Rozwiąż"
-            
+            "resolve-positive": "Rozpatrz",
+            "resolve-negative": "Odrzuć"
         },
         "user": {
             "account": "Konto",
@@ -524,6 +547,13 @@
             "ban_user_message_prefix": "Użytkownik",
             "ban_user_message_suffix": "został zablokowany na",
             "banned_until": "Zbanowany do:",
+            "delete_account_confirmation": "Czy na pewno chcesz usunąć swoje konto?",
+            "delete": "Usuń",
+            "delete_user_dialog_title": "Usuwanie konta użytkownika",
+            "delete_user_confirmation": "Czy na pewno chcesz usunąć konto tego użytkownika?",
+            "delete_account_dialog_title": "Usuń swoje konto",
+            "delete_user": "Usuń konto",
+            "account_deleted": "Konto tego użytkownika zostało usunięte.",
             "ban_duration": {
                 "days": "Dni",
                 "hours": "Godziny",
@@ -540,7 +570,9 @@
             "unban_user_dialog_title": "Odblokuj użytkownika",
             "unban_user_message": "został odblokowany.",
             "close": "Zamknij",
-            "cancel": "Anuluj"
+            "cancel": "Anuluj",
+            "related-opinions": "Opinie"
+        
         }
     }
 }

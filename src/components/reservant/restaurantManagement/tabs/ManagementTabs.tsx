@@ -1,8 +1,9 @@
-import { ListItemButton } from '@mui/material'
+import { ListItemButton, Tooltip } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import PeopleAltSharpIcon from '@mui/icons-material/PeopleAltSharp'
 import LocalDiningSharpIcon from '@mui/icons-material/LocalDiningSharp'
 import ReportIcon from '@mui/icons-material/Report'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import {
   ArrowBack,
   Dashboard,
@@ -51,9 +52,9 @@ const ManagementTabs: React.FC = ({}) => {
         {restaurantId === undefined ? (
           <div className="flex gap-2">
             <Tab
-              path="dashboard"
-              title="Dashboard"
-              icon={<Dashboard />}
+              path="statistics"
+              title="Statistics"
+              icon={<BarChartIcon />}
               id="management_dashboard"
             />
             <Tab
@@ -85,6 +86,12 @@ const ManagementTabs: React.FC = ({}) => {
               title="Dashboard"
               icon={<Dashboard />}
               id="management_restaurant_dashboard"
+            />
+            <Tab
+              path={`restaurant/${restaurantId}/restaurant-statistics`}
+              title="Statistics"
+              icon={<BarChartIcon />}
+              id="management_restaurant_statistics"
             />
             <Tab
               path={`restaurant/${restaurantId}/restaurant-employee-management`}
@@ -227,9 +234,17 @@ const ManagementTabs: React.FC = ({}) => {
           </div>
         )}
       </div>
-      <h1 className="text-xl dark:text-grey-0 text-right text-nowrap">
-        {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
-      </h1>
+      <Tooltip
+        title={
+          restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'
+        }
+        placement="bottom"
+        arrow
+      >
+        <h1 className="text-xl dark:text-grey-0 truncate text-right text-nowrap">
+          {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
+        </h1>
+      </Tooltip>
     </div>
   )
 }

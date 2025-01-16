@@ -7,7 +7,6 @@ import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RestaurantDetailsType } from '../../../services/types'
 import { ThemeContext } from '../../../contexts/ThemeContext'
-import PendingRestaurantDetails from './PendingRestaurantDetails'
 
 const PendingRestaurantsList: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
@@ -17,53 +16,49 @@ const PendingRestaurantsList: React.FC = () => {
   const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
 
   useEffect(() => {
-    fetchRestaurants();
-  }, []);
+    fetchRestaurants()
+  }, [])
 
   const fetchRestaurants = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const response = await fetchGET('/restaurants/unverified');
-      setRestaurants(response.items);
+      const response = await fetchGET('/restaurants/unverified')
+      setRestaurants(response.items)
     } catch (error) {
-      console.error('Error fetching restaurants:', error);
+      console.error('Error fetching restaurants:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-  const closeSidePanel = () => {
-    navigate('/customer-service/pending-restaurants');
-  };
+  }
 
   const selectedRestaurant = restaurants.find(
-    (restaurant) => restaurant.restaurantId === parseInt(restaurantId || '', 10)
-  );
+    restaurant => restaurant.restaurantId === parseInt(restaurantId || '', 10)
+  )
 
   const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: 'ID',
       flex: 0.5,
-      sortable: true,
+      sortable: true
     },
     {
       field: 'name',
       headerName: 'Name',
       flex: 1,
-      sortable: true,
+      sortable: true
     },
     {
       field: 'restaurantType',
       headerName: 'Type',
       flex: 1,
-      sortable: true,
+      sortable: true
     },
     {
       field: 'city',
       headerName: 'City',
       flex: 1,
-      sortable: true,
+      sortable: true
     },
     {
       field: 'description',
@@ -78,7 +73,7 @@ const PendingRestaurantsList: React.FC = () => {
               : params.row.description || 'No description'}
           </span>
         </Tooltip>
-      ),
+      )
     },
     {
       field: 'actions',
@@ -103,9 +98,9 @@ const PendingRestaurantsList: React.FC = () => {
             </IconButton>
           </span>
         </Tooltip>
-      ),
-    },
-  ];
+      )
+    }
+  ]
 
   return (
     <div className="h-full w-full flex flex-col">
@@ -145,20 +140,9 @@ const PendingRestaurantsList: React.FC = () => {
             )}
           </div>
         </div>
-
-        {/* Restaurant Details */}
-        {restaurantId && selectedRestaurant && (
-          <div className="h-full w-[400px] overflow-y-auto">
-            <PendingRestaurantDetails
-              restaurant={selectedRestaurant}
-              onClose={closeSidePanel}
-              fetchrestaurants={fetchRestaurants}
-            />
-          </div>
-        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PendingRestaurantsList;
+export default PendingRestaurantsList

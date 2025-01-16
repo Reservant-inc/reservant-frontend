@@ -77,11 +77,15 @@ const Notification: React.FC<NotificationProps> = ({
         `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/reviews-management`
       );
     } else if (
-      (notificationType === 'NotificationNewParticipationRequest' && user.userId) ||
-      (notificationType === 'NotificationParticipationRequestResponse' && user.userId)
+      (notificationType === 'NotificationNewParticipationRequest' && user.userId)
+      
     ) {
       navigate(`/reservant/profile/${user.userId}/event-history/created`);
-    } else if (notificationType === 'NotificationNewFriendRequest' && user.userId) {
+    } 
+    else if (notificationType === 'NotificationParticipationRequestResponse' && user.userId) {
+      navigate(`/reservant/profile/${user.userId}/event-history/participates`);
+    }
+    else if (notificationType === 'NotificationNewFriendRequest' && user.userId) {
       navigate(`/reservant/profile/${user.userId}/friends/incoming`);
     } else if (notificationType === 'NotificationRestaurantVerified' && user.userId) {
       navigate(

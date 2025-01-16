@@ -28,6 +28,7 @@ const Threads: React.FC = () => {
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
+  const [filter, setFilter] = useState<string>('')
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
@@ -145,23 +146,43 @@ const Threads: React.FC = () => {
           scrollableTarget="scrollableDiv"
           className="hidescroll"
         >
-          {threads.map(thread => (
-            <ListItemButton
-              key={thread.threadId}
-              className="w-full rounded-md p-2 dark:hover:bg-grey-5"
-              onClick={() => {
-                handleThreadOpen(thread)
-                pressHandler()
-              }}
-            >
-              {
-                <ThreadPreview
-                  thread={thread}
-                  renderUserPhotos={renderUserPhotos}
-                />
-              }
-            </ListItemButton>
-          ))}
+          {filter !== ''
+            ? threads
+                .filter(t => t.type === filter)
+                .map(thread => (
+                  <ListItemButton
+                    key={thread.threadId}
+                    className="w-full rounded-md p-2 dark:hover:bg-grey-5"
+                    onClick={() => {
+                      handleThreadOpen(thread)
+                      pressHandler()
+                    }}
+                  >
+                    {
+                      <ThreadPreview
+                        thread={thread}
+                        renderUserPhotos={renderUserPhotos}
+                      />
+                    }
+                  </ListItemButton>
+                ))
+            : threads.map(thread => (
+                <ListItemButton
+                  key={thread.threadId}
+                  className="w-full rounded-md p-2 dark:hover:bg-grey-5"
+                  onClick={() => {
+                    handleThreadOpen(thread)
+                    pressHandler()
+                  }}
+                >
+                  {
+                    <ThreadPreview
+                      thread={thread}
+                      renderUserPhotos={renderUserPhotos}
+                    />
+                  }
+                </ListItemButton>
+              ))}
         </InfiniteScroll>
       </List>
     )
@@ -225,14 +246,27 @@ const Threads: React.FC = () => {
             </div>
             {isCreatingThread && renderNewThreadForm()}
             <div className="w-full px-3 py-3">
-              <div className="flex h-10 w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-2 font-mont-md dark:border-grey-6 dark:bg-grey-5">
+              <div className="flex h-10 w-full items-center justify-between rounded-full border-[1px] border-grey-1 bg-grey-0 px-2 font-mont-md dark:border-grey-6 dark:bg-grey-5">
                 <input
                   type="text"
                   placeholder={t('threads.search')}
-                  className="clean-input h-8 w-[250px] p-2 dark:text-white dark:placeholder:text-grey-2"
+                  className="clean-input h-8 w-[230px] p-2 dark:text-white dark:placeholder:text-grey-2"
                 />
                 <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
               </div>
+            </div>
+            <div className="w-full flex items-center justify-between px-3 dark:text-grey-1">
+              <h1>{t('threads.type')}:</h1>
+              <select
+                value={filter}
+                onChange={e => setFilter(e.target.value)}
+                className="dark:bg-black pr-8 text-right"
+              >
+                <option value={''}>{t('threads.all')}</option>
+                <option value="Normal">{t('threads.friends')}</option>
+                <option value="Event">{t('threads.events')}</option>
+                <option value="Report">{t('threads.reports')}</option>
+              </select>
             </div>
             <div
               id="scrollableDiv"

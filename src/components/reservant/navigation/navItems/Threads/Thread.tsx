@@ -78,6 +78,7 @@ const Thread: React.FC<ThreadProps> = ({
         JSON.stringify({ contents: message })
       )
       setPage(0)
+      getMessages()
     } catch (error) {
       if (error instanceof FetchError) {
         console.log(error.formatErrors())
@@ -140,7 +141,7 @@ const Thread: React.FC<ThreadProps> = ({
   return (
     <div
       key={thread.threadId}
-      className="w-[300px] h-full bg-white dark:bg-black rounded-t-md shadow-2xl flex flex-col"
+      className="w-[300px] h-full bg-white dark:bg-black rounded-t-md border-t-[1px] border-x-[1px] border-grey-3  flex flex-col"
     >
       <div className="w-full h-12 flex items-center justify-between px-2 shadow-md z-[1]">
         <div className="flex gap-2 items-center">
@@ -169,9 +170,11 @@ const Thread: React.FC<ThreadProps> = ({
               </div>
             </div>
           )}
-          <h1 className="text-md font-mont-bd dark:text-white">
-            {thread.title}
-          </h1>
+          <Tooltip title={thread.title} placement="top" arrow>
+            <h1 className="text-md font-mont-bd w-44 truncate text-nowrap dark:text-white">
+              {thread.title}
+            </h1>
+          </Tooltip>
         </div>
         <div className="flex gap-1 items-center">
           <Tooltip title={t('threads.minimize')} placement="top" arrow>
@@ -230,6 +233,11 @@ const Thread: React.FC<ThreadProps> = ({
                   type="text"
                   placeholder={t('threads.message')}
                   value={messageToSend}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      handleSendMessage(messageToSend)
+                    }
+                  }}
                   onChange={e => setMessageToSend(e.target.value)}
                   className="text-sm w-full placeholder:text-grey-2 dark:text-grey-1"
                 />
