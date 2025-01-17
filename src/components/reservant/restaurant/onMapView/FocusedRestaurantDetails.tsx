@@ -67,6 +67,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           `/restaurants/${activeRestaurant.restaurantId}`
         )
         setRestaurant(data)
+        console.log(restaurant)
       } catch (error) {
         console.error('Error fetching restaurant details:', error)
       }
@@ -117,6 +118,52 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     setActiveTab(tab)
   }
 
+  const formatOpeningHours = (openingHours: ({ from: string; until: string } | null)[]): string[] => {
+    if (!openingHours || openingHours.length !== 7) return [''];
+  
+    const days = [
+  t('general.monday'),
+  t('general.tuesday'),
+  t('general.wednesday'),
+  t('general.thursday'),
+  t('general.friday'),
+  t('general.saturday'),
+  t('general.sunday'),
+];
+    let formattedHours: string[] = [];
+    let currentRange = null;
+  
+    for (let i = 0; i < openingHours.length; i++) {
+      const day = days[i];
+      const hours = openingHours[i];
+  
+      if (!hours) {
+        formattedHours.push(`${day}: Zamknięte`);
+        currentRange = null;
+        continue;
+      }
+  
+      const hoursString = `${t('general.from')} ${hours.from} ${t('general.until')} ${hours.until}`;
+  
+      if (currentRange && currentRange.hours === hoursString) {
+        currentRange.end = day;
+      } else {
+        if (currentRange) {
+          formattedHours.push(`${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`);
+        }
+        currentRange = { start: day, end: day, hours: hoursString };
+      }
+    }
+  
+    if (currentRange) {
+      formattedHours.push(`${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`);
+    }
+  
+    return formattedHours;
+  };
+  
+  
+
   const renderRestaurantDetails = () => {
     return (
       <div className="flex w-full flex-col gap-2 p-3">
@@ -134,6 +181,12 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           <h1 className="text-sm dark:text-white">
             {restaurant.address}, {restaurant.city}
           </h1>
+          <div className="text-sm dark:text-white">
+            <h1 className="font-bold">{t('restaurant-management.details.opening-hours')}:</h1>
+            {formatOpeningHours(restaurant.openingHours).map((line: string, index: number) => (
+              <div key={index}>{line}</div>
+            ))}
+          </div>
           <div className="flex items-center gap-3 text-sm">
             {restaurant.provideDelivery && (
               <div className="flex items-center gap-2">
@@ -374,3 +427,4 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
 }
 
 export default FocusedRestaurantDetails
+

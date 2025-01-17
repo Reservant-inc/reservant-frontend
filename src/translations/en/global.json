@@ -22,7 +22,16 @@
         "newest": "Newest",
         "ascending": "Ascending",
         "descending": "Descending",
-        "Sort": "Sort"
+        "Sort": "Sort",
+        "monday": "Mon",
+        "tuesday": "Tues",
+        "wednesday": "Wed", 
+        "thursday": "Thur",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun",
+        "from": "from", 
+        "until": "until"
     },
     "landing-page": {
         "loginButton": "Sign in",

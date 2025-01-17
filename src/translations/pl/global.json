@@ -21,7 +21,16 @@
         "newest": "Najnowsze",
         "ascending": "Rosnąco",
         "descending": "Malejąco",
-        "Sort": "Sortuj"
+        "Sort": "Sortuj",
+        "monday": "Pn",
+        "tuesday": "Wt",
+        "wednesday": "Śr", 
+        "thursday": "Czw",
+        "friday": "Pt",
+        "saturday": "Sob",
+        "sunday": "Niedz",
+        "from": "od", 
+        "until": "do"
     },
     "reservation": {
         "history": "Historia rezerwacji",
