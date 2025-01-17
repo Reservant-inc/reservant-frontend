@@ -2,7 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded'
 import AddCommentRoundedIcon from '@mui/icons-material/AddCommentRounded'
-import { fetchGET, fetchPOST, getImage } from '../../../../../services/APIconn'
+import {
+  fetchDELETE,
+  fetchGET,
+  fetchPOST,
+  getImage
+} from '../../../../../services/APIconn'
 import {
   PaginationType,
   ThreadType,
@@ -90,6 +95,21 @@ const Threads: React.FC = () => {
     setIsCreatingThread(!isCreatingThread)
   }
 
+  const deleteThread = async (threadId: number) => {
+    try {
+      await fetchDELETE(`/threads/${threadId}`)
+      setThreads(prev => {
+        return prev.filter(thread => thread.threadId !== threadId)
+      })
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.error(error.formatErrors())
+      } else {
+        console.error('Unexpected error while deleting thread', error)
+      }
+    }
+  }
+
   const postThread = async () => {
     try {
       const ids = friendsToAdd.map(friend => {
@@ -166,6 +186,7 @@ const Threads: React.FC = () => {
                 renderUserPhotos={renderUserPhotos}
                 handleThreadOpen={handleThreadOpen}
                 pressHandler={pressHandler}
+                deleteThread={deleteThread}
               />
             ))}
         </InfiniteScroll>

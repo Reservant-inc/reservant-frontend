@@ -4,19 +4,23 @@ import Cookies from 'js-cookie'
 import { useTranslation } from 'react-i18next'
 import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialog'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { FetchError } from '../../../../../services/Errors'
+import { fetchDELETE } from '../../../../../services/APIconn'
 
 interface ThreadPreviewProps {
   thread: ThreadType
   renderUserPhotos: Function
   handleThreadOpen: Function
   pressHandler: Function
+  deleteThread: Function
 }
 
 const ThreadPreview: React.FC<ThreadPreviewProps> = ({
   thread,
   renderUserPhotos,
   handleThreadOpen,
-  pressHandler
+  pressHandler,
+  deleteThread
 }) => {
   const [updatedThread, setUpdatedThread] = useState<ThreadType | null>(null)
   const [isPressed, setIsPressed] = useState<boolean>(false)
@@ -66,7 +70,7 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({
       <ConfirmationDialog
         open={isPressed}
         onClose={() => setIsPressed(false)}
-        onConfirm={() => console.log()}
+        onConfirm={() => deleteThread(thread.threadId)}
         confirmationText={t('threads.delete')}
       />
     </div>
