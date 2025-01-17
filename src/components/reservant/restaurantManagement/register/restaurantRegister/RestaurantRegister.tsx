@@ -57,8 +57,8 @@ const initialValues: RestaurantDataType = {
   ],
   maxReservationDurationMinutes: null,
   location: {
-    latitude: 52.396255,
-    longitude: 20.913649
+    latitude: 0,
+    longitude: 0
   }
 }
 
@@ -114,24 +114,48 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   }, [])
 
   const handleNextClick = async (formik: any) => {
-    setRequestLoading(true) // Ustawienie loading state
-
+    setRequestLoading(true);
+  
     try {
-      // Wykonaj walidację formularza
-      const errors = await formik.validateForm()
-
+      const errors = await formik.validateForm();
+  
       if (Object.keys(errors).length > 0) {
-        // Jeśli są błędy, zaznacz pola jako dotknięte i wyświetl błędy
         formik.setTouched(
           Object.keys(errors).reduce((acc: any, key: string) => {
-            acc[key] = true
-            return acc
+            acc[key] = true;
+            return acc;
           }, {})
-        )
-        return // Zatrzymaj proces przejścia dalej
+        );
+        return;
       }
-
+  
       if (activeStep === 1) {
+        let { address, postalIndex, city, location } = formik.values;
+  
+        let newLocation;
+        // Sprawdzamy, czy location jest (0, 0)
+        if (location?.latitude === 0 && location?.longitude === 0) {
+          // Jeśli tak, wykonujemy ponownie fetchCoordinates
+
+          
+          if (address && postalIndex && city) {
+            address = formatAddress(address);
+            const fullAddress = `${address}, ${postalIndex}, ${city}`;
+  
+            newLocation = await fetchCoordinates(fullAddress);
+  
+            if (!newLocation) {
+              setLocationError('This address does not exist');
+              return;
+            }
+  
+            formik.setFieldValue('location', newLocation); // Ustawiamy nowe współrzędne
+          } else {
+            setLocationError('Address is required to fetch location');
+            return;
+          }
+        }
+        if (newLocation?.latitude !== 0 && newLocation?.longitude !== 0) {
         const body = JSON.stringify({
           name: formik.values.name,
           nip: formik.values.nip,
@@ -139,22 +163,28 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           address: formik.values.address,
           postalIndex: formik.values.postalIndex,
           city: formik.values.city,
-          location: formik.values.location
-        })
-
-        await fetchPOST('/my-restaurants/validate-first-step', body)
+          location: newLocation
+        });
+  
+        await fetchPOST('/my-restaurants/validate-first-step', body);
+        
+        console.log(body)
       }
-
-      setServerError(null)
-      setActiveStep(prevStep => prevStep + 1)
+      
+      }
+      
+      setServerError(null);
+      setActiveStep((prevStep) => prevStep + 1);
     } catch (error) {
       if (error instanceof FetchError) {
-        setServerError(error.formatErrors())
+        setServerError(error.formatErrors());
       }
     } finally {
-      setRequestLoading(false) // Zakończenie loading state
+      setRequestLoading(false);
     }
-  }
+  };
+  
+  
 
   const fetchCoordinates = async (address: string) => {
     try {
@@ -167,13 +197,16 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
         throw new Error('Failed to fetch coordinates')
       }
       const data = await response.json()
+      console.log('API Response:', data);
 
       if (data.length <= 0) {
-        setLocationError('a')
+        setLocationError('this addres does not exist')
         throw new Error('No coordinates found for the given address')
       }
 
       locationError && setLocationError(undefined)
+
+      
 
       return {
         latitude: parseFloat(data[0].lat),

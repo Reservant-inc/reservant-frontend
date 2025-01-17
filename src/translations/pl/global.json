@@ -108,7 +108,8 @@
         "step1": "Dane lokalu",
         "step2": "Pozostałe informacje",
         "submit":"Koniec",
-        "group": "Grupa"
+        "group": "Grupa",
+        "complete": "Rejestracja zakończona"
     },
     "errors": {
         "login": {

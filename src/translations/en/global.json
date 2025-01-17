@@ -109,7 +109,8 @@
         "step1": "Local data",
         "step2": "More info",
         "submit": "Finish",
-        "group": "Group"
+        "group": "Group",
+        "complete": "Registration complete"
     },
     "errors": {
         "add-employee": {
