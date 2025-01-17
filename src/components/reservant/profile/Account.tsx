@@ -206,7 +206,7 @@ const Account: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full gap-2">
-      <div className="flex h-[40%] flex-col w-full bg-white dark:bg-black dark:text-grey-1 rounded-lg p-4 gap-4 shadow-md">
+      <div className="flex h-[250px] flex-col w-full bg-white dark:bg-black dark:text-grey-1 rounded-lg p-4 gap-4 shadow-md">
         <div className="flex justify-between w-full">
           <h1 className="text-lg font-mont-bd">Account</h1>
           <div className="flex gap-2">
@@ -261,7 +261,7 @@ const Account: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white h-[50%] dark:bg-black dark:text-grey-1 w-full h-fit rounded-lg p-4 shadow-md">
+      <div className="bg-white h-[calc(100%-250px)] dark:bg-black dark:text-grey-1 w-full rounded-lg p-4 shadow-md">
         <TransactionHistory listType={TransactionListType.Client} />
       </div>
 

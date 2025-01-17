@@ -481,7 +481,8 @@
             "account-balance": "Account balance",
             "no-transactions": "No transactions yet",
             "add-funds": "Add funds to your wallet",
-            "confirm": "Confirm"
+            "confirm": "Confirm",
+            "no-more": "No more transactions to load"
         }
     },
     "customer-service": {
