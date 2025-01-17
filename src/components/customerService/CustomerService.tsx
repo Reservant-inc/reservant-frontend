@@ -9,7 +9,6 @@ import ThreadContextProvider from '../../contexts/ThreadContext'
 
 const CustomerService: React.FC = () => {
   const navigate = useNavigate()
-
   const [t] = useTranslation('global')
 
   const isCustomerSupportManager = () => {
@@ -21,6 +20,7 @@ const CustomerService: React.FC = () => {
       )
     return false
   }
+
   return (
     <div className="w-full h-full bg-grey-1 dark:bg-grey-5 flex flex-col dark:text-white">
       <ThemeContextProvider>
@@ -28,8 +28,8 @@ const CustomerService: React.FC = () => {
           <div className="w-full h-[3.5rem] bg-white">
             <NavBar />
           </div>
-          <div className="flex gap-2 p-2 h-[calc(100%-3.5rem)] w-full">
-            <div className="w-64 h-full">
+          <div className="flex gap-2 p-2 h-[calc(100%-3.5rem)] w-full overflow-hidden">
+            <div className="w-64 h-full overflow-y-auto bg-grey-1 dark:bg-grey-5">
               <div className="w-full h-full bg-white dark:bg-black rounded-lg shadow-lg flex flex-col p-2 gap-2">
                 <h1 className="w-full text-xl dark:text-white font-mont-bd text-center">
                   Menu
@@ -52,7 +52,7 @@ const CustomerService: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="h-full w-[calc(100%-16rem)] rounded-lg">
+            <div className="h-full w-[calc(100%-16rem)] rounded-lg overflow-y-auto bg-grey-1 dark:bg-grey-5">
               <Outlet />
             </div>
           </div>
