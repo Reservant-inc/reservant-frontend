@@ -142,47 +142,32 @@ const Threads: React.FC = () => {
           dataLength={threads.length}
           next={() => setPage(prevPage => prevPage + 1)}
           hasMore={hasMore}
-          loader={<CircularProgress />}
+          loader={
+            <div className="flex w-full jusitfy-center">
+              <CircularProgress className="text-grey-2" />
+            </div>
+          }
+          endMessage={
+            <div className="flex w-full justify-center p-2">
+              <h1 className="text-grey-2 text-sm">
+                {t('profile.transaction-history.no-more')}
+              </h1>
+            </div>
+          }
           scrollableTarget="scrollableDiv"
-          className="hidescroll"
+          className="hidescroll h-full"
         >
-          {filter !== ''
-            ? threads
-                .filter(t => t.type === filter)
-                .map(thread => (
-                  <ListItemButton
-                    key={thread.threadId}
-                    className="w-full rounded-md p-2 dark:hover:bg-grey-5"
-                    onClick={() => {
-                      handleThreadOpen(thread)
-                      pressHandler()
-                    }}
-                  >
-                    {
-                      <ThreadPreview
-                        thread={thread}
-                        renderUserPhotos={renderUserPhotos}
-                      />
-                    }
-                  </ListItemButton>
-                ))
-            : threads.map(thread => (
-                <ListItemButton
-                  key={thread.threadId}
-                  className="w-full rounded-md p-2 dark:hover:bg-grey-5"
-                  onClick={() => {
-                    handleThreadOpen(thread)
-                    pressHandler()
-                  }}
-                >
-                  {
-                    <ThreadPreview
-                      thread={thread}
-                      renderUserPhotos={renderUserPhotos}
-                    />
-                  }
-                </ListItemButton>
-              ))}
+          {threads
+            .filter(t => t.type.includes(filter))
+            .map(thread => (
+              <ThreadPreview
+                key={thread.threadId}
+                thread={thread}
+                renderUserPhotos={renderUserPhotos}
+                handleThreadOpen={handleThreadOpen}
+                pressHandler={pressHandler}
+              />
+            ))}
         </InfiniteScroll>
       </List>
     )
@@ -260,7 +245,7 @@ const Threads: React.FC = () => {
               <select
                 value={filter}
                 onChange={e => setFilter(e.target.value)}
-                className="dark:bg-black pr-8 text-right"
+                className="dark:bg-black pr-8 text-left rounded-md"
               >
                 <option value={''}>{t('threads.all')}</option>
                 <option value="Normal">{t('threads.friends')}</option>

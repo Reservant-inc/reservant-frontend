@@ -294,7 +294,10 @@
         "type":"Threads type",
         "all":"All",
         "events":"Event",
-        "reports":"Report"
+        "reports":"Report",
+        "no-more": "No more threads to load",
+        "options": "Thread options",
+        "delete": "Are you sure you want to delete this thread? This operation is irreversible."
     },
     "friends": {
         "search": "Search",

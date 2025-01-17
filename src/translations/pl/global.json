@@ -290,7 +290,10 @@
         "type":"Typ wątków",
         "all":"Wszystkie",
         "events":"Wydarzenia",
-        "reports":"Zgłoszenia"
+        "reports":"Zgłoszenia",
+        "no-more": "Brak wątków do załadowania",
+        "options": "Opcje wątku",
+        "delete": "Czy na pewno chcesz usunąć wątek? Ta akcja jest niedwracalna."
     },
     "friends": {
         "search": "Wyszukaj",
