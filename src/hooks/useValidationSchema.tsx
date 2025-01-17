@@ -104,10 +104,7 @@ export const useValidationSchemas = () => {
     login: yup
       .string()
       .required(t('errors.user-register.login.required'))
-      .matches(
-        /^[1-9a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
-        t('errors.user-register.login.matches')
-      )
+      .matches(/^[1-9a-zA-Z]+$/, t('errors.user-register.login.matches'))
       .test('unique login', t('errors.user-register.login.taken'), login => {
         return new Promise((resolve, reject) => {
           fetchGET(`/auth/is-unique-login?login=${login}`)
