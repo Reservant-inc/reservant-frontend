@@ -46,7 +46,7 @@ const RestaurantDetails: React.FC = () => {
   }, [restaurantId])
 
   const renderEmployeeDetails = (employee: any) => (
-    <div key={employee.employeeId} className="p-4 bg-white my-2">
+    <div key={employee.employeeId} className="p-4 bg-white dark:bg-grey-5 my-2">
       <div className="flex justify-between items-center">
         <h1 className="font-mont-bd text-md">{`${employee.firstName} ${employee.lastName}`}</h1>
         <Link to={`/customer-service/users/${employee.employeeId}`}>
