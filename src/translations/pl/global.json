@@ -269,8 +269,9 @@
             "language":"Język",
             "mode":"Tryb ciemny",
             "signout":"Wylogowanie",
-            "report":"Zgłoś problem techniczny"
-
+            "report":"Zgłoś problem techniczny",
+            "become": "Zostań właścicielem",
+            "create" : "Dodaj swoją pierwszą restaurację"
         },
         "settings":{
             "setting":"SettingFiller"

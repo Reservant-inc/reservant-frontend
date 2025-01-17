@@ -13,6 +13,7 @@ import {
   Language,
   LightMode,
   Logout,
+  Restaurant,
   Settings
 } from '@mui/icons-material'
 import { CSSTransition } from 'react-transition-group'
@@ -26,11 +27,15 @@ import Dialog from '../../../reusableComponents/Dialog'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import { fetchPOST } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
+import RestaurantRegister from '../../restaurantManagement/register/restaurantRegister/RestaurantRegister'
+import RegisterSuccess from '../../restaurantManagement/register/restaurantRegister/RegisterSuccess'
 
 const Tools: React.FC = () => {
   const [t] = useTranslation('global')
   const [isPressed, setIsPressed] = useState(false)
   const [isComplaining, setIsComplaining] = useState(false)
+  const [isBecomingRestauranter, setIsBecomingRestauranter] = useState(false)
+  const [registerSucces, setRegisterSucces] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
   const navigate = useNavigate()
   const mainHeight = 392
@@ -146,6 +151,22 @@ const Tools: React.FC = () => {
       </button>
     )
   }
+  const BecomeRestauranter = () => {
+    return (
+      <button
+        id="RestauranterDropdownItem"
+        className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+        onClick={() => {
+          setIsBecomingRestauranter(true)
+          setActiveMenu('main')
+          setMenuHeight(mainHeight)
+        }}
+      >
+        <Restaurant />
+        <span className="ml-2">{t('tools.main.become')}</span>
+      </button>
+    )
+  }
 
   const LogoutButton = () => (
     <Form method="post" action="/logout">
@@ -235,10 +256,7 @@ const Tools: React.FC = () => {
                 >
                   <ChevronLeft />
                 </button>
-                <button className="menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5">
-                  <Settings />
-                  <span className="ml-2">{t('tools.settings.setting')} </span>
-                </button>
+                <BecomeRestauranter />
               </div>
             </CSSTransition>
 
@@ -334,6 +352,28 @@ const Tools: React.FC = () => {
             {alertMessage}
           </Alert>
         </div>
+      )}
+      {isBecomingRestauranter && (
+        <Dialog
+          open={isBecomingRestauranter}
+          onClose={() => {
+            setIsBecomingRestauranter(false)
+          }}
+          title={t('tools.main.create')}
+        >
+          <div className=" w-[500px] h-[500px] flex z-[-3] flex-col overflow-y-auto ">
+            {!registerSucces ? (
+              <RestaurantRegister
+                onRegisterSucces={() => setRegisterSucces(true)}
+              />
+            ) : (
+              <RegisterSuccess
+                onDialogClose={() => setIsBecomingRestauranter(false)}
+                onRegisterSucces={() => setRegisterSucces(false)}
+              />
+            )}
+          </div>
+        </Dialog>
       )}
     </>
   )

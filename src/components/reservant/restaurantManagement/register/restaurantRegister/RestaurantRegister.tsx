@@ -473,33 +473,20 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         formik.touched.restaurantType
                     )}
                   >
-                    <InputLabel
-                      id="restaurantType-label"
-                      className={`[&>*]:label-[20px] ${
-                        !(
-                          formik.errors.restaurantType &&
-                          formik.touched.restaurantType
-                        )
-                          ? 'dark:text-white text-black '
-                          : 'text-error dark:text-error'
-                      }`}
-                    >
-                      Business Type *
-                    </InputLabel>
                     <Field
-                      as={Select}
+                      as={'select'}
                       id="restaurantType"
                       name="restaurantType"
                       labelId="restaurantType-label"
                       value={formik.values.restaurantType}
                       onChange={formik.handleChange}
-                      className={`[&>*]:label-[20px]  [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
+                      className={` w-full pl-0 border-b-[1px] pr-8  dark:bg-black  ${
                         !(
                           formik.errors.restaurantType &&
                           formik.touched.restaurantType
                         )
-                          ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                          : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                          ? 'dark:border-white'
+                          : 'text-error border-error '
                       }`}
                       helperText={
                         formik.errors.restaurantType &&
@@ -507,27 +494,35 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         formik.errors.restaurantType
                       }
                     >
-                      <MenuItem
+                      <option
+                        id="restaurantRegister-opt-default"
+                        selected={true}
+                        disabled={true}
+                        value={''}
+                      >
+                        Business Type *
+                      </option>
+                      <option
                         id="restaurantRegister-opt-restaurant"
                         value={LocalType.Restaurant}
                         className="dark:text-white"
                       >
                         {t('restaurant-register.types.restaurant')}
-                      </MenuItem>
-                      <MenuItem
+                      </option>
+                      <option
                         id="restaurantRegister-opt-bar"
                         value={LocalType.Bar}
                         className="dark:text-white"
                       >
                         {t('restaurant-register.types.bar')}
-                      </MenuItem>
-                      <MenuItem
+                      </option>
+                      <option
                         id="restaurantRegister-opt-cafe"
                         value={LocalType.Cafe}
                         className="dark:text-white"
                       >
                         {t('restaurant-register.types.cafe')}
-                      </MenuItem>
+                      </option>
                     </Field>
 
                     {/* Wyświetlanie błędów */}
