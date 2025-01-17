@@ -31,9 +31,14 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
 
   const [t] = useTranslation('global')
 
-  const apiRoutes: Record<TransactionListType, string> = {
+  const transactionsApiRoutes: Record<TransactionListType, string> = {
     [TransactionListType.Client]: '/wallet/history',
     [TransactionListType.CustomerService]: `/users/${userId}/payment-history`
+  }
+
+  const walletApiRoutes: Record<TransactionListType, string> = {
+    [TransactionListType.Client]: '/wallet/status',
+    [TransactionListType.CustomerService]: `/users/${userId}/wallet-status`
   }
 
   useEffect(() => {
@@ -43,7 +48,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
   const fetchTransactions = async () => {
     try {
       const result: PaginationType = await fetchGET(
-        `${apiRoutes[listType]}?page=${page}`
+        `${transactionsApiRoutes[listType]}?page=${page}`
       )
       const newTransactions = result.items as TransactionType[]
 
@@ -98,7 +103,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
 
   const fetchWalletBalance = async () => {
     try {
-      const res = await fetchGET('/wallet/status')
+      const res = await fetchGET(walletApiRoutes[listType])
       setWallet(res.balance)
     } catch (error) {
       if (error instanceof FetchError) {
@@ -115,13 +120,11 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
 
   return (
     <div className="h-full">
-      <div className="h-[1.5rem]">
+      <div className="h-[7rem]">
         <h1 className="font-mont-bd text-lg">
           {t('customer-service.user.transaction_history')}
         </h1>
-      </div>
-      <div className="h-[calc(100%-1.5rem)]">
-        <div className="h-[1.5rem] flex justify-between">
+        <div className="flex justify-between items-center">
           <h1 className="text-md font-mont-bd">
             {t('profile.transaction-history.wallet')}
           </h1>
@@ -137,56 +140,61 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
             </button>
           )}
         </div>
-        <div className="h-[calc(100%-1.5rem)] flex flex-col gap-2 justify-center">
-          <div className="h-[2rem]">
-            <h1 className="text-sm font-mont-bd">{`${t('profile.transaction-history.account-balance')}: ${wallet} zł`}</h1>
-            <h1 className="text-sm">
-              {t('customer-service.user.transaction_history')}
-            </h1>
-          </div>
-          <div
-            id="scrollableDiv"
-            className="w-full h-[calc(100%-2rem)] rounded-lg overflow-y-auto scroll bg-grey-0 dark:bg-grey-6"
-          >
-            <InfiniteScroll
-              dataLength={transactions.length}
-              next={() => setPage(prevPage => prevPage + 1)}
-              hasMore={hasMore}
-              loader={
-                <CircularProgress className="self-center text-grey-2 w-10 h-10" />
-              }
-              scrollableTarget="scrollableDiv"
-              className="overflow-y-hidden flex flex-col rounded-lg p-2"
-            >
-              <div className="flex flex-col gap-1 h-full items-center divide-y-[1px] divide-grey-2">
-                {transactions.length > 0 ? (
-                  transactions.map((transaction, index) => (
-                    <div
-                      key={index}
-                      className="flex w-full p-2 justify-between text-sm"
-                    >
-                      <div className="flex gap-2 items-center">
-                        <h1>
-                          {transaction.amount > 0 ? (
-                            <AddIcon className="text-green" />
-                          ) : (
-                            <RemoveIcon className="text-error" />
-                          )}
-                        </h1>
-                        <h1 className="">{transaction.title}:</h1>
-                        <h1>{transaction.amount} PLN</h1>
-                      </div>
-                      <h1>{formatDate(transaction.time.toString())}</h1>
-                    </div>
-                  ))
-                ) : (
-                  <h1 className="text-grey-2 text-sm">
-                    {t('profile.transaction-history.no-transactions')}
-                  </h1>
-                )}
+        <h1 className="text-sm font-mont-bd">{`${t('profile.transaction-history.account-balance')}: ${wallet} zł`}</h1>
+        <h1 className="text-sm">
+          {t('customer-service.user.transaction_history')}
+        </h1>
+      </div>
+      <div className="h-[calc(100%-7rem)]">
+        <div
+          id="scrollableDiv"
+          className="w-full h-full rounded-lg overflow-y-auto scroll bg-grey-0 dark:bg-grey-6"
+        >
+          <InfiniteScroll
+            dataLength={transactions.length}
+            next={() => setPage(prevPage => prevPage + 1)}
+            hasMore={hasMore}
+            loader={
+              <CircularProgress className="self-center text-grey-2 w-10 h-10" />
+            }
+            endMessage={
+              <div className="flex w-full justify-center p-2">
+                <h1 className="text-grey-2 text-sm">
+                  {t('profile.transaction-history.no-more')}
+                </h1>
               </div>
-            </InfiniteScroll>
-          </div>
+            }
+            scrollableTarget="scrollableDiv"
+            className="overflow-y-hidden flex flex-col rounded-lg p-2"
+          >
+            <div className="flex flex-col gap-1 h-full items-center divide-y-[1px] divide-grey-2">
+              {transactions.length > 0 ? (
+                transactions.map((transaction, index) => (
+                  <div
+                    key={index}
+                    className="flex w-full p-2 justify-between text-sm"
+                  >
+                    <div className="flex gap-2 items-center">
+                      <h1>
+                        {transaction.amount > 0 ? (
+                          <AddIcon className="text-green" />
+                        ) : (
+                          <RemoveIcon className="text-error" />
+                        )}
+                      </h1>
+                      <h1 className="">{transaction.title}:</h1>
+                      <h1>{transaction.amount} PLN</h1>
+                    </div>
+                    <h1>{formatDate(transaction.time.toString())}</h1>
+                  </div>
+                ))
+              ) : (
+                <h1 className="text-grey-2 text-sm">
+                  {t('profile.transaction-history.no-transactions')}
+                </h1>
+              )}
+            </div>
+          </InfiniteScroll>
         </div>
       </div>
       {showMoneyDialog && (

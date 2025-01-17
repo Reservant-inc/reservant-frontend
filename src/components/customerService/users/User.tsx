@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { FetchError } from '../../../services/Errors'
 import { fetchDELETE, fetchGET, fetchPOST } from '../../../services/APIconn'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { ComplaintUserInfo } from '../../../services/types'
-import { CircularProgress, TextField } from '@mui/material'
+import { CircularProgress } from '@mui/material'
 import DefaultImage from '../../../assets/images/user.jpg'
 import GavelIcon from '@mui/icons-material/Gavel'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -31,7 +31,6 @@ const User: React.FC = () => {
 
   const { userId } = useParams<{ userId: string }>()
   const { t } = useTranslation('global')
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (userId) fetchUserData()

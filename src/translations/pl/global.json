@@ -477,7 +477,8 @@
             "account-balance": "Stan konta",
             "no-transactions": "Brak transakcji",
             "add-funds": "Dodaj środki do swojego konta",
-            "confirm": "Zatwierdź"
+            "confirm": "Zatwierdź",
+            "no-more": "Brak transakcji do załadowania"
         }
     },
     "customer-service": {
