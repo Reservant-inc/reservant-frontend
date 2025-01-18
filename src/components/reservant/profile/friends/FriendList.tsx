@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import SearchIcon from '@mui/icons-material/Search'
 import { fetchGET } from '../../../../services/APIconn'
 import { PaginationType, FriendData } from '../../../../services/types'
 import { FriendListType } from '../../../../services/enums'
 import Friend from './Friend'
 import { useTranslation } from 'react-i18next'
 import Search from '../../../reusableComponents/Search'
+import { CircularProgress } from '@mui/material'
 
 interface FriendListProps {
   listType: FriendListType
@@ -39,6 +39,7 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
   }, [location])
 
   const fetchFriends = async () => {
+    setLoading(true)
     try {
       const response: PaginationType = await fetchGET(apiRoute)
       const data: FriendData[] = response.items as unknown as FriendData[]
@@ -56,7 +57,7 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
   }
 
   const handleSearchChange = (query: string) => {
-    const normalizedQuery = query.trim().toLowerCase();
+    const normalizedQuery = query.trim().toLowerCase()
     setFilteredFriends(
       normalizedQuery.length >= 3
         ? friends.filter(friend =>
@@ -65,9 +66,8 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
               .includes(normalizedQuery)
           )
         : friends
-    );
-  };
-  
+    )
+  }
 
   return (
     <div className="flex flex-col bg-white rounded-lg w-full h-full dark:bg-black">
@@ -83,6 +83,8 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
             <p className="italic text-center dark:text-white">
               {noFriendsMessage[listType]}
             </p>
+          ) : loading ? (
+            <CircularProgress className="text-grey-2" />
           ) : (
             filteredFriends.map(friend => (
               <Friend
