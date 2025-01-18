@@ -96,6 +96,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       }
     }
 
+    console.log(restaurant.tables)
     fetchTags()
   }, [])
 
@@ -127,100 +128,109 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   }
 
   const handleSubmit = async (
-    values: any,
-    { setSubmitting, resetForm }: any
-  ) => {
-    setSubmitting(true)
+  values: any,
+  { setSubmitting, resetForm }: any
+) => {
+  setSubmitting(true);
 
-    try {
-      const {
-        groupId,
-        name,
-        restaurantType,
-        address,
-        city,
-        reservationDeposit,
-        maxReservationDurationMinutes,
-        provideDelivery,
-        description,
-        tags,
-        openingHours,
-        logo,
-        photos
-      } = values
+  try {
+    const {
+      groupId,
+      name,
+      restaurantType,
+      address,
+      city,
+      reservationDeposit,
+      maxReservationDurationMinutes,
+      provideDelivery,
+      description,
+      tags,
+      openingHours,
+      logo,
+      photos,
+      tables, // Dodane stoliki
+    } = values;
 
-      let cleanLogo = logo
-      if (cleanLogo?.startsWith('/uploads/')) {
-        cleanLogo = cleanLogo.replace('/uploads/', '')
-      }
-
-      const cleanPhotos = photos.map((photo: string) =>
-        photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
-      )
-
-      let cleanIdCard = restaurant.idCard
-      if (restaurant.idCard?.startsWith('/uploads/')) {
-        cleanIdCard = cleanIdCard.replace('/uploads/', '')
-      }
-
-      let cleanBusinessPermission = restaurant.businessPermission
-      if (restaurant.businessPermission?.startsWith('/uploads/')) {
-        cleanBusinessPermission = cleanBusinessPermission.replace(
-          '/uploads/',
-          ''
-        )
-      }
-
-      // Sprawdzanie zmiany grupy
-      const newGroup = groups.find(group => group.restaurantGroupId === groupId)
-      console.log(newGroup?.restaurantGroupId)
-      if (newGroup && newGroup.restaurantGroupId !== restaurant.groupId) {
-        // Jeśli groupId się zmienia, przenosimy restaurację do nowej grupy
-        await fetchPOST(
-          `/my-restaurants/${restaurant.restaurantId}/move-to-group`,
-          JSON.stringify({ groupId: newGroup.restaurantGroupId })
-        )
-      }
-
-      const data = {
-        restaurantId: restaurant.restaurantId,
-        groupId,
-        groupName: newGroup?.name,
-        name,
-        restaurantType,
-        address,
-        city,
-        reservationDeposit,
-        maxReservationDurationMinutes,
-        provideDelivery,
-        description,
-        tags,
-        openingHours,
-        logo: cleanLogo,
-        photos: cleanPhotos,
-        nip: restaurant.nip,
-        postalIndex: restaurant.postalIndex,
-        location: restaurant.location,
-        businessPermission: cleanBusinessPermission,
-        idCard: cleanIdCard
-      }
-
-      console.log('Dane wysyłane do API:', data)
-
-      await fetchPUT(
-        `/my-restaurants/${restaurant.restaurantId}`,
-        JSON.stringify(data)
-      )
-
-      onSuccess()
-      resetForm()
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      setErrorMessage('Failed to update restaurant. Please try again.')
-    } finally {
-      setSubmitting(false)
+    let cleanLogo = logo;
+    if (cleanLogo?.startsWith('/uploads/')) {
+      cleanLogo = cleanLogo.replace('/uploads/', '');
     }
+
+    const cleanPhotos = photos.map((photo: string) =>
+      photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
+    );
+
+    let cleanIdCard = restaurant.idCard;
+    if (restaurant.idCard?.startsWith('/uploads/')) {
+      cleanIdCard = cleanIdCard.replace('/uploads/', '');
+    }
+
+    let cleanBusinessPermission = restaurant.businessPermission;
+    if (restaurant.businessPermission?.startsWith('/uploads/')) {
+      cleanBusinessPermission = cleanBusinessPermission.replace(
+        '/uploads/',
+        ''
+      );
+    }
+
+    // Sprawdzanie zmiany grupy
+    const newGroup = groups.find(group => group.restaurantGroupId === groupId);
+    if (newGroup && newGroup.restaurantGroupId !== restaurant.groupId) {
+      await fetchPOST(
+        `/my-restaurants/${restaurant.restaurantId}/move-to-group`,
+        JSON.stringify({ groupId: newGroup.restaurantGroupId })
+      );
+    }
+
+    const data = {
+      restaurantId: restaurant.restaurantId,
+      groupId,
+      groupName: newGroup?.name,
+      name,
+      restaurantType,
+      address,
+      city,
+      reservationDeposit,
+      maxReservationDurationMinutes,
+      provideDelivery,
+      description,
+      tags,
+      openingHours,
+      logo: cleanLogo,
+      photos: cleanPhotos,
+      nip: restaurant.nip,
+      postalIndex: restaurant.postalIndex,
+      location: restaurant.location,
+      businessPermission: cleanBusinessPermission,
+      idCard: cleanIdCard,
+    };
+
+    console.log('Dane wysyłane do API:', data);
+
+    // Aktualizacja podstawowych danych restauracji
+    await fetchPUT(
+      `/my-restaurants/${restaurant.restaurantId}`,
+      JSON.stringify(data)
+    );
+
+    // Aktualizacja stolików – dodanie obiektu `request`
+    console.log('Aktualizacja stolików:', tables);
+    await fetchPUT(
+      `/my-restaurants/${restaurant.restaurantId}/tables`,
+      JSON.stringify({ tables  }) // Dodany obiekt `request`
+    );
+
+    onSuccess();
+    resetForm();
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    setErrorMessage('Failed to update restaurant. Please try again.');
+  } finally {
+    setSubmitting(false);
   }
+};
+
+  
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
@@ -247,7 +257,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             tags: restaurant.tags,
             openingHours: restaurant.openingHours,
             logo: restaurant.logo,
-            photos: restaurant.photos
+            photos: restaurant.photos,
+            tables: restaurant.tables
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -837,6 +848,65 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   </FieldArray>
                 </div>
               </div>
+
+              {/* Tables */}
+              <div className="mb-4">
+                <label
+                  htmlFor="tables"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
+                  Tables
+                </label>
+                <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
+                  <FieldArray name="tables">
+                    {({ push, remove }) => (
+                      <div className="flex flex-col w-full gap-2">
+                        {/* Nagłówki */}
+                        <div className="flex items-center gap-4 font-bold text-gray-500 dark:text-white text-sm border-b pb-2">
+                          <span className="w-20">Table ID</span>
+                          <span className="w-20">Capacity</span>
+                        </div>
+
+                        {formik.values.tables.map((table, index) => (
+                          <div key={index} className="flex items-center gap-4">
+                            <span className="w-20 text-sm font-bold text-gray-500 dark:text-white">
+                              {table.tableId}
+                            </span>
+
+                            <Field
+                              type="number"
+                              name={`tables[${index}].capacity`}
+                              className="w-20 text-center text-[15px] text-black dark:text-white border border-grey-15 dark:border-grey-2 rounded px-2"
+                              disabled={isReadOnly}
+                            />
+
+                            {!isReadOnly && (
+                              <button
+                                type="button"
+                                onClick={() => remove(index)}
+                                className="text-red-500 hover:text-red-700 text-sm"
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </div>
+                        ))}
+
+                        {!isReadOnly && (
+                          <button
+                            type="button"
+                            onClick={() => push({ tableId: formik.values.tables.length + 1, capacity: 4 })}
+                            className="mt-2 px-3 py-1 bg-primary dark:bg-secondary dark:hover:primary text-white text-sm rounded hover:bg-secondary"
+                          >
+                            Add Table
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </FieldArray>
+                </div>
+              </div>
+
 
               {/* Logo Preview and Upload Button */}
               <div className="mb-4">
