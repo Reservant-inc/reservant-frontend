@@ -36,7 +36,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   onReviewDeleted,
   isOwnerView,
   restaurantId,
-  isCustomerServiceView = false,
+  isCustomerServiceView = false
 }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -48,27 +48,26 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
   const [responseContents, setResponseContents] = useState<string>(
     review.restaurantResponse || ''
   )
-  const [restaurant, setRestaurant] = useState<{ name: string; logo: string | null } | null>(null);
+  const [restaurant, setRestaurant] = useState<{
+    name: string
+    logo: string | null
+  } | null>(null)
   const [isExpanded, setIsExpanded] = useState<boolean>(false) // State for expansion
-  
 
   const [t] = useTranslation('global')
 
   // Pobieranie danych restauracji
   useEffect(() => {
-  
-      const fetchRestaurantData = async () => {
-        try {
-          const restaurantData = await fetchGET(`/restaurants/${restaurantId}`);
-          setRestaurant({ name: restaurantData.name, logo: restaurantData.logo });
-          console.log(restaurantData)
-        } catch (error) {
-          console.error('Błąd przy pobieraniu danych restauracji:', error);
-        }
-      };
-      fetchRestaurantData();
-    
-  }, [isCustomerServiceView, restaurantId, review.restaurantResponse,]);
+    const fetchRestaurantData = async () => {
+      try {
+        const restaurantData = await fetchGET(`/restaurants/${restaurantId}`)
+        setRestaurant({ name: restaurantData.name, logo: restaurantData.logo })
+      } catch (error) {
+        console.error('Błąd przy pobieraniu danych restauracji:', error)
+      }
+    }
+    fetchRestaurantData()
+  }, [isCustomerServiceView, restaurantId, review.restaurantResponse])
 
   const handleEditClick = () => {
     setEditedStars(review.stars)
@@ -240,10 +239,10 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             src={getImage(restaurant?.logo || '', '/path/to/default/logo.png')}
             alt="Restaurant Logo"
           />
-          
+
           <div className="response-content flex-grow text-sm">
             <p>{new Date(review.answeredAt).toLocaleDateString()}</p>
-            <p >{review.restaurantResponse}</p>
+            <p>{review.restaurantResponse}</p>
             {!isCustomerServiceView && (
               <div className="flex justify-end">
                 <Button

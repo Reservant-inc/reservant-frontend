@@ -12,7 +12,6 @@ import { FetchError } from '../../services/Errors'
 import { RestaurantDetailsType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
-import FocusedRestaurantDetails from '../reservant/restaurant/onMapView/FocusedRestaurantDetails'
 import Map from '../reservant/map/Map'
 import GuestFocusedRestaurantDetails from './GuestFocusedRestaurantDetails'
 
@@ -52,9 +51,9 @@ export default function GuestHomePage() {
         setTags(response)
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error:', error)
+          console.error('Unexpected error:', error)
         }
       }
     }
@@ -90,9 +89,9 @@ export default function GuestHomePage() {
         })
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error:', error)
+          console.error('Unexpected error:', error)
         }
       }
     }
