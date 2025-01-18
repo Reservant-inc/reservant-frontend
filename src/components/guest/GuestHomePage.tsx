@@ -12,7 +12,6 @@ import { FetchError } from '../../services/Errors'
 import { RestaurantDetailsType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
-import FocusedRestaurantDetails from '../reservant/restaurant/onMapView/FocusedRestaurantDetails'
 import Map from '../reservant/map/Map'
 import GuestFocusedRestaurantDetails from './GuestFocusedRestaurantDetails'
 
@@ -119,6 +118,8 @@ export default function GuestHomePage() {
       return updatedTags
     })
   }
+
+  console.log(activeRestaurant)
 
   return (
     <div

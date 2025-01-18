@@ -162,8 +162,8 @@ export default function HomePage() {
     setIsTagFilterPressed(!isTagFilterPressed)
   }
 
-  const handleRestaurantClick = (id: number) => {
-    navigate(`../home/${id}`)
+  const handleRestaurantClick = (restaurant: RestaurantDetailsType) => {
+    navigate(`../home/${restaurant.restaurantId}`)
   }
 
   const handleCloseDetails = () => {
@@ -218,7 +218,7 @@ export default function HomePage() {
                   id="homePage-listItemButton"
                   onClick={() => {
                     setUserMovedMap(false)
-                    handleRestaurantClick(restaurant.restaurantId)
+                    handleRestaurantClick(restaurant)
                   }}
                   className={`rounded-md p-3 dark:bg-black
                       ${
