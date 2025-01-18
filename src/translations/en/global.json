@@ -148,6 +148,9 @@
                 "matches": "Passwords must match",
                 "required": "Password confirmation is required"
             },
+            "oldPassword": {
+                "required": "Old password is required"
+            },
             "success": "Registration finished successfully"
         },
         "restaurant-register": {
@@ -457,6 +460,18 @@
         "account": "Account",
         "reservations": "Reservations",
         "search": "Search by name",
+        "first-name": "First name",
+        "last-name": "Last name",
+        "phone-number": "Phone number",
+        "change-password": "Change password",
+        "edit-data": "Edit personal data",
+        "changing-pass": "Changing password...",
+        "old-pass": "Old password",
+        "new-pass": "New password",
+        "repeat-pass": "Repeat password",
+        "save-changes": "Save changes",
+        "editing-user": "Editing user information...",
+        "saving-changes": "Saving...",
         "friends": {
             "friends-tab": "Friends",
             "outgoing-tab": "Outgoing friend requests",

@@ -206,7 +206,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
           title={t('profile.transaction-history.add-funds')}
           open={showMoneyDialog}
         >
-          <div className="p-6 flex flex-col gap-6">
+          <div className="p-6 flex flex-col gap-6 dark:text-white">
             <div className="flex gap-2 items-center">
               <label htmlFor="fundsInput" className="font-mont-md">
                 {t('profile.transaction-history.add-funds')}

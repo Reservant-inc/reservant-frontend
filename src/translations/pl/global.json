@@ -142,6 +142,9 @@
                 "matches": "Podane hasła muszą być zgodne",
                 "required": "Wymagane jest potwierdzenie hasła"
             },
+            "oldPassword": {
+                "required": "Stare hasło jest wymagane"
+            },
             "success": "Rejestracja zakończona sukcesem"
         },
         "restaurant-register": {
@@ -453,6 +456,18 @@
         "account": "Konto",
         "reservations": "Rezerwacje",
         "search": "Szukaj po nazwie",
+        "first-name": "Imię",
+        "last-name": "Nazwisko",
+        "phone-number": "Numer telefonu",
+        "change-password": "Zmień hasło",
+        "edit-data": "Edytuj dane osobowe",
+        "changing-pass": "Zmiana hasła...",
+        "old-pass": "Stare hasło",
+        "new-pass": "Nowe hasło",
+        "repeat-pass": "Powtórz nowe hasło",
+        "save-changes": "Zapisz zmiany",
+        "editing-user": "Zmiana danych osobowych...",
+        "saving-changes": "Zapisywanie...",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
