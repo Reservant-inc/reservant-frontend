@@ -62,12 +62,13 @@ const Filters = <T extends Record<string, any>>({
       // Wyszukiwanie (dla zagnieżdżonego pola)
       if (searchQuery.length >= 3) {
         filteredData = filteredData.filter(item =>
-          item[filterByName]?.name
+          item[filterByName]
             ?.toString()
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
         );
       }
+      
   
       onFilterChange(filteredData);
     };

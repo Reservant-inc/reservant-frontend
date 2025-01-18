@@ -56,16 +56,18 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
   }
 
   const handleSearchChange = (query: string) => {
+    const normalizedQuery = query.trim().toLowerCase();
     setFilteredFriends(
-      query.length >= 3
+      normalizedQuery.length >= 3
         ? friends.filter(friend =>
             `${friend.otherUser.firstName} ${friend.otherUser.lastName}`
               .toLowerCase()
-              .includes(query)
+              .includes(normalizedQuery)
           )
         : friends
-    )
-  }
+    );
+  };
+  
 
   return (
     <div className="flex flex-col bg-white rounded-lg w-full h-full dark:bg-black">
