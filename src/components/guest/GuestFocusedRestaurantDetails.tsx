@@ -82,15 +82,20 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       ];
     
       let formattedHours: string[] = [];
-      let currentRange = null;
+      let currentRange: { start: string; end: string; hours: string } | null = null;
     
       for (let i = 0; i < openingHours.length; i++) {
         const day = days[i];
         const hours = openingHours[i];
     
-        // Pominięcie dni, które mają null/null jako godziny otwarcia
         if (!hours || hours.from === null || hours.until === null) {
-          currentRange = null;
+          // Jeśli natrafimy na dzień z null/null, to zamykamy poprzedni zakres
+          if (currentRange) {
+            formattedHours.push(
+              `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
+            );
+            currentRange = null;
+          }
           continue;
         }
     
@@ -100,14 +105,19 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
           currentRange.end = day;
         } else {
           if (currentRange) {
-            formattedHours.push(`${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`);
+            formattedHours.push(
+              `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
+            );
           }
           currentRange = { start: day, end: day, hours: hoursString };
         }
       }
     
+      // Jeśli po pętli nadal mamy aktywny zakres, dodajemy go do listy
       if (currentRange) {
-        formattedHours.push(`${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`);
+        formattedHours.push(
+          `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
+        );
       }
     
       return formattedHours;
