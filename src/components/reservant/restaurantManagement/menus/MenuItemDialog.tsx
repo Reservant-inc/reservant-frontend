@@ -58,6 +58,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   >([])
   const [isHovered, setIsHovered] = useState<boolean>(false)
 
+  
   useEffect(() => {
     getIngredients()
   }, [])
@@ -234,7 +235,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       }
                     >
                       <CloudUploadIcon />
-                      Upload photo
+                      {t('restaurant-management.menu.upload')}
                     </label>
                   </div>
                 )}
@@ -255,7 +256,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <div
                     className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name && formik.touched.name ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="name">Name:</label>
+                    <label htmlFor="name">{t('restaurant-management.menu.name')}:</label>
                     <Field
                       type="text"
                       id="name"
@@ -271,33 +272,14 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 </div>
                 <div>
                   <div
-                    className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price && formik.touched.price ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
-                  >
-                    <label htmlFor="alternateName">Price:</label>
-                    <Field
-                      type="text"
-                      id="price"
-                      name="price"
-                      className="w-full"
-                      //@TODO translation
-                    />
-                    <label>*</label>
-                  </div>
-                  {formik.errors.price && formik.touched.price && (
-                    <ErrorMes msg={formik.errors.price} />
-                  )}
-                </div>
-                <div>
-                  <div
                     className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName && formik.touched.alternateName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="alternateName">Alternate name:</label>
+                    <label htmlFor="alternateName">{t('restaurant-management.menu.alternateName')}:</label>
                     <Field
                       type="text"
                       id="alternateName"
                       name="alternateName"
                       className="w-full"
-                      //@TODO translation
                     />
                   </div>
                   {formik.errors.alternateName &&
@@ -307,15 +289,31 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                 </div>
                 <div>
                   <div
+                    className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price && formik.touched.price ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
+                  >
+                    <label htmlFor="price">{t('restaurant-management.menu.price')}:</label>
+                    <Field
+                      type="text"
+                      id="price"
+                      name="price"
+                      className="w-full"
+                    />
+                    <label>*</label>
+                  </div>
+                  {formik.errors.price && formik.touched.price && (
+                    <ErrorMes msg={formik.errors.price} />
+                  )}
+                </div>
+                <div>
+                  <div
                     className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alcoholPercentage && formik.touched.alcoholPercentage ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="alternateName">Alcohol percentage:</label>
+                    <label htmlFor="alcoholPercentage">{t('restaurant-management.menu.menuItemAlcoholPercentage')}:</label>
                     <Field
                       type="text"
                       id="alcoholPercentage"
                       name="alcoholPercentage"
                       className="w-full"
-                      //@TODO translation
                     />
                   </div>
                   {formik.errors.alcoholPercentage &&
@@ -359,7 +357,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               <Form className="flex flex-col pr-3">
                 <div className="flex flex-col gap-7">
                   <div className="flex  items-center justify-start gap-1 border-b-[1px] text-nowrap border-black text-black dark:text-grey-1 dark:border-white">
-                    <label className="">Ingredient:</label>
+                    <label className="">{t('restaurant-management.menu.ingredient')}:</label>
                     <Field
                       as={'select'}
                       id="ingredientId"
@@ -373,9 +371,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                         selected={true}
                         id="ingredientSelector-option-default"
                       >
-                        Ingredient
+                        {t('restaurant-management.menu.ingredient')}
                       </option>
-                      {/* //@TODO translation */}
                       {ingredients
                         .filter(
                           ingredient =>
@@ -401,7 +398,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       <div
                         className={`w-2/3 flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.amountUsed && formik.touched.amountUsed ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                       >
-                        <label htmlFor="alternateName">Amount:</label>
+                        <label htmlFor="alternateName">{t('restaurant-management.menu.amount')}:</label>
                         <Field
                           type="text"
                           id="amountUsed"
@@ -418,7 +415,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       >
                         <Add />
                         <h1 className="text-nowrap font-mont-md text-md">
-                          Add usage
+                        {t('restaurant-management.menu.addUsage')}
                         </h1>
                       </button>
                     </div>
@@ -465,7 +462,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               </ul>
             ) : (
               <h1 className="p-2 dark:text-grey-0">
-                Selected ingredients will appear here.
+                {t('restaurant-management.menu.noIngradietns')}.
               </h1>
             ) //@TODO translation
           }

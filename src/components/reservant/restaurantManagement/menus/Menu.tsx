@@ -12,6 +12,7 @@ import MenuItemDialog from './MenuItemDialog'
 import Dialog from '../../../reusableComponents/Dialog'
 import MenuDialog from './MenuDialog'
 import { MenuListContext } from './MenuList'
+import { useTranslation } from 'react-i18next'
 
 interface MenuProps {
   menu: MenuType
@@ -27,6 +28,8 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
   const [isEditingOpen, setIsEditingOpen] = useState<boolean>(false)
   const [isCreating, setIsCreating] = useState<boolean>(false)
   const { fetchMenus } = useContext(MenuListContext)
+
+   const { t } = useTranslation('global')
 
   const handleDeleteMenu = async () => {
     try {
@@ -83,7 +86,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
         <Dialog
           open={isEditingOpen}
           onClose={() => setIsEditingOpen(false)}
-          title={`Editing the "${menu.name}" menu...`} //@TODO translation
+          title={`${t('restaurant-management.menu.editingMenu')} "${menu.name}" menu...`}
         >
           <MenuDialog
             activeRestaurantId={activeRestaurantId}
@@ -99,7 +102,7 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
         <Dialog
           open={isCreating}
           onClose={() => setIsCreating(false)}
-          title={`Creating new menu item...`} //@TODO translation
+          title={`${t('restaurant-management.menu.creatingMenuItem')}..`} 
         >
           <MenuItemDialog
             activeRestaurantId={activeRestaurantId}

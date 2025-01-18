@@ -170,7 +170,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         <Dialog
           open={isEditingOpen}
           onClose={() => setIsEditingOpen(false)}
-          title={`Editing ${menuItem.name}...`}
+          title={`${t('restaurant-management.menu.editingMenu')} ${menuItem.name}...`}
         >
           <MenuItemDialog
             menu={menu}

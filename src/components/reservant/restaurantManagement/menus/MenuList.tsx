@@ -10,6 +10,7 @@ import Dialog from '../../../reusableComponents/Dialog'
 import MenuDialog from './MenuDialog'
 import Menu from './Menu'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 interface MenuListProps {
   activeRestaurantId?: number
@@ -25,6 +26,8 @@ export const MenuListContext = React.createContext<MenuListContextProps>({
 const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
   const [menus, setMenus] = useState<MenuType[]>([])
   const [menuIndex, setMenuIndex] = useState<number>(0)
+
+  const { t } = useTranslation('global')
 
   const [isCreating, setIsCreating] = useState<boolean>(false)
 
@@ -137,7 +140,7 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
           <Dialog
             open={isCreating}
             onClose={() => setIsCreating(false)}
-            title={`Creating a new menu...`} //@TODO translation
+            title={`${t('restaurant-management.menu.creatingMenu')}...`} //@TODO translation
           >
             <MenuDialog
               activeRestaurantId={activeRestaurantId}
