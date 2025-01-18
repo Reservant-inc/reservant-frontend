@@ -119,13 +119,6 @@ const RestaurantListSection: React.FC = () => {
     populateRows()
   }, [])
 
-  const handleEditClick = (id: GridRowId) => {
-    setRowModesModel(prevModel => ({
-      ...prevModel,
-      [id]: { mode: GridRowModes.Edit } // Using GridRowModes.Edit
-    }))
-  }
-
   const handleSaveClick = (id: GridRowId) => {
     setRowModesModel(prevModel => ({
       ...prevModel,
@@ -153,8 +146,7 @@ const RestaurantListSection: React.FC = () => {
       const response = await fetchDELETE(`/my-restaurants/${restaurantId}`)
       setRestaurantToDelete('')
       setIsConfirmationOpen(false)
-      console.log(response)
-      populateRows() // Refetch the data after deletion
+      populateRows()
     } catch (error) {
       console.error('Error deleting restaurant', error)
     }
@@ -195,8 +187,6 @@ const RestaurantListSection: React.FC = () => {
           photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
         )
       }
-
-      console.log('Dane wysyłane do API:', rowToUpdate)
 
       await fetchPUT(
         `/my-restaurants/${newRow.restaurantId}`,
