@@ -123,8 +123,8 @@
             },
             "login": {
                 "required": "Login is required",
-                "matches": "Login can only contain letters"
-
+                "matches": "Login can only contain letters",
+                "taken": "User with this login already exists"
             },
             "email": {
                 "matches": "Invalid e-mail",
@@ -147,7 +147,8 @@
             "confirmPassword": {
                 "matches": "Passwords must match",
                 "required": "Password confirmation is required"
-            }
+            },
+            "success": "Registration finished successfully"
         },
         "restaurant-register": {
             "name": {

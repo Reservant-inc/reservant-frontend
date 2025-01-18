@@ -117,8 +117,8 @@
             },
             "login": {
                 "required": "Login jest wymagany",
-                "matches": "Login może składać się tylko z liter"
-
+                "matches": "Login może składać się tylko z liter",
+                "taken": "Użytkownik z takim loginem już istnieje"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",
@@ -141,7 +141,8 @@
             "confirmPassword": {
                 "matches": "Podane hasła muszą być zgodne",
                 "required": "Wymagane jest potwierdzenie hasła"
-            }
+            },
+            "success": "Rejestracja zakończona sukcesem"
         },
         "restaurant-register": {
             "name": {

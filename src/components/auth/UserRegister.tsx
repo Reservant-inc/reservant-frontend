@@ -4,7 +4,7 @@ import { Formik, Form, Field, FormikValues } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useValidationSchemas } from '../../hooks/useValidationSchema'
 import { fetchPOST } from '../../services/APIconn'
-import { TextField } from '@mui/material'
+import { Alert, Snackbar, TextField } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { CSSTransition } from 'react-transition-group'
 import MuiPhoneNumber from 'mui-phone-number'
@@ -28,6 +28,7 @@ const UserRegister: React.FC = () => {
   const [requestLoading, setRequestLoading] = useState<boolean>(false)
   const [registerError, setRegisterError] = useState<string>('')
   const [activeStep, setActiveStep] = useState<number>(1)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const handleSubmit = async (
     values: FormikValues,
@@ -52,10 +53,13 @@ const UserRegister: React.FC = () => {
         password: values.password
       })
 
-      console.log(body)
       await fetchPOST('/auth/register-customer', body)
 
-      navigate('/login')
+      setSuccessMessage(t('errors.user-register.success'))
+
+      setTimeout(() => {
+        navigate('/login')
+      }, 4000)
     } catch (error) {
       console.log(error)
       setRegisterError('Registration failed. Please try again.')
@@ -65,9 +69,8 @@ const UserRegister: React.FC = () => {
     }
   }
 
-  const test = () => {
-    console.log('step2')
-    console.log(initialValues)
+  const handleCloseSnackbar = () => {
+    setSuccessMessage(null)
   }
 
   return (
@@ -376,6 +379,21 @@ const UserRegister: React.FC = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{ top: '60%' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
