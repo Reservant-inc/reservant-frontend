@@ -44,6 +44,17 @@ const DeliveryActionDialog: React.FC<DeliveryActionDialogProps> = ({
     }
   };
 
+  const formatDate = (date: string | null): string =>
+    date
+      ? new Date(date).toLocaleString('pl-PL', {
+          year: 'numeric',
+          month: 'long',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      : t('delivery.not-available');
+
   if (!deliveryDetails) {
     return null;
   }
@@ -63,14 +74,21 @@ const DeliveryActionDialog: React.FC<DeliveryActionDialogProps> = ({
         <div className="mt-4">
           <h2 className="text-lg font-semibold">{t('delivery.delivery-details')}</h2>
           <p>
-            <strong>{t('delivery.order-time')}:</strong> {deliveryDetails.orderTime}
+            <span className="font-mont-bd">{t('delivery.order-time')}:</span>{' '}
+            {formatDate(deliveryDetails.orderTime)}
           </p>
           <ul className="mt-2">
             {deliveryDetails.ingredients.map((ingredient: any, index: number) => (
-              <li key={index} className="py-2">
-                <strong>{t('delivery.store-name')}:</strong> {ingredient.storeName}
-                <p>{t('delivery.amount-ordered')}:{' '}
-                {ingredient.amountOrdered}</p>
+              <li key={index} className="py-2 px-4">
+                <span className="font-mont-bd">{t('delivery.store-name')}:</span> {ingredient.storeName}
+                <p>
+                  <span className="font-mont-bd">{t('delivery.amount-ordered')}:</span>{' '}
+                  {ingredient.amountOrdered}
+                </p>
+                <p>
+                  <span className="font-mont-bd">{t('delivery.expiry-date')}:</span>{' '}
+                  {formatDate(ingredient.expiryDate)}
+                </p>
               </li>
             ))}
           </ul>
