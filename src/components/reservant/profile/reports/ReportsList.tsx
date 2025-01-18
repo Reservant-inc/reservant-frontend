@@ -18,7 +18,6 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
   const [reports, setReports] = useState<
     (ReportType & { userRole?: string })[]
   >([])
-  const [isAscending, setIsAscending] = useState<boolean>(false)
   const [filteredReports, setFilteredReports] = useState<
     (ReportType & { userRole?: string })[]
   >([])
