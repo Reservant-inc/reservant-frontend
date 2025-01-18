@@ -240,7 +240,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           <CloseSharpIcon />
         </button>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent className='scroll'>
         <Formik
           initialValues={{
             groupId: restaurant.groupId,
