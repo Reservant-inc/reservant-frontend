@@ -80,8 +80,6 @@ const Map: React.FC<MapProps> = ({
     }
   }
 
-  console.log(activeRestaurant)
-
   return (
     <div className="relative h-full w-full">
       <MapContainer
