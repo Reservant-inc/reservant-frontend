@@ -493,7 +493,9 @@
             "add-funds": "Dodaj środki do swojego konta",
             "confirm": "Zatwierdź",
             "no-more": "Brak transakcji do załadowania"
-        }
+        },
+        "delete-account-button": "Usuń konto",
+        "delete_account_cannot_undone": "Tej akcji nie można cofnąć!"
     },
     "customer-service": {
         "reports": {

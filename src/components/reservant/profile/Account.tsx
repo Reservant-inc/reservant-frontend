@@ -24,6 +24,7 @@ import { format } from 'date-fns'
 import TransactionHistory from './TransactionHistory'
 import { useNavigate } from 'react-router-dom'
 import { TransactionListType } from '../../../services/enums'
+import { logoutAction } from '../../auth/auth';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -133,14 +134,15 @@ const Account: React.FC = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await fetchDELETE(`/user`)
+      await fetchDELETE(`/user`);
+      logoutAction();
       navigate('/')
     } catch (error) {
-      console.error('Error deleting account:', error)
+      console.error('Error deleting account:', error);
     } finally {
-      setIsDeleteAccountDialogOpen(false)
+      setIsDeleteAccountDialogOpen(false);
     }
-  }
+  };
 
   const fetchUserData = async () => {
     try {
@@ -233,7 +235,7 @@ const Account: React.FC = () => {
               onClick={() => setIsDeleteAccountDialogOpen(true)}
             >
               <DeleteForeverIcon className="w-4 h-4" />
-              <h1 className="text-nowrap">Delete account</h1>
+              <h1 className="text-nowrap">{t("profile.delete-account-button")}</h1>
             </button>
           </div>
         </div>
@@ -271,9 +273,12 @@ const Account: React.FC = () => {
         onClose={() => setIsDeleteAccountDialogOpen(false)}
         title={t('customer-service.user.delete_account_dialog_title')}
       >
-        <div className="p-4 flex flex-col justify-between min-h-[150px]">
+        <div className="dark:text-white p-4 flex flex-col justify-between min-h-[150px]">
           <p className="font-mont-bd">
             {t('customer-service.user.delete_account_confirmation')}
+          </p>
+          <p className="font-mont-md text-red">
+            {t('profile.delete_account_cannot_undone')}
           </p>
           <div className="flex justify-end gap-4">
             <button
@@ -283,7 +288,7 @@ const Account: React.FC = () => {
               {t('customer-service.user.cancel')}
             </button>
             <button
-              className={`text-sm border-red hover:scale-105 hover:bg-red hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-red transition ${
+              className={`text-sm border-red hover:scale-105 hover:bg-red hover:text-white dark:hover:scale-105 dark:hover:bg-red dark:hover:text-white dark:bg-black border-[1px] rounded-md p-3 bg-white text-red transition ${
                 isDeleteAccountDisabled ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               onClick={handleDeleteAccount}
