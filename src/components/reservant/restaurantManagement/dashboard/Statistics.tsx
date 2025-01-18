@@ -264,7 +264,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
   return (
     <div className="p-4 h-full w-full flex flex-col gap-4">
       <div className="flex w-full">
-        <h1 className="text-lg font-mont-bd">
+        <h1 className="text-lg font-mont-bd dark:text-white">
           {t('restaurant-management.statistics.statistics')}
         </h1>
       </div>
@@ -272,23 +272,39 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
         {scope === StatisticsScope.All && (
           <>
             <div className="flex gap-2 items-center">
-              <h1 className="text-sm font-mont-bd">Group:</h1>
+              <h1 className="text-sm font-mont-bd dark:text-white">
+                {t('restaurant-management.statistics.scope')}:
+              </h1>
               <select
                 value={option}
                 onChange={e => {
                   setOption(e.target.value as Option)
                 }}
-                className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+                className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
               >
-                <option value={Option.All}>All restaurants</option>
-                <option value={Option.Group}>Restaurant group</option>
-                <option value={Option.Single}>Restaurant</option>
+                <option value={Option.All} className="dark:text-white bg-black">
+                  {t('restaurant-management.statistics.all-restaurants')}
+                </option>
+                <option
+                  value={Option.Group}
+                  className="dark:text-white bg-black"
+                >
+                  {t('restaurant-management.statistics.restaurant-group')}
+                </option>
+                <option
+                  value={Option.Single}
+                  className="dark:text-white bg-black"
+                >
+                  {t('restaurant-management.statistics.restaurant')}
+                </option>
               </select>
             </div>
 
             {option === Option.Group && (
               <div className="flex gap-2 items-center">
-                <h1 className="text-sm font-mont-bd">Group:</h1>
+                <h1 className="text-sm font-mont-bd dark:text-white">
+                  {t('restaurant-management.statistics.group')}:
+                </h1>
                 <select
                   id="groupSelect"
                   value={object?.id ?? ''}
@@ -299,13 +315,21 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                     )
                     setObject(selectedObject)
                   }}
-                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
                 >
-                  <option value="" disabled>
-                    Select a group
+                  <option
+                    value=""
+                    disabled
+                    className="dark:text-white dark:bg-black"
+                  >
+                    {t('restaurant-management.statistics.select-group')}
                   </option>
                   {objects?.map(group => (
-                    <option key={group.id} value={group.id}>
+                    <option
+                      key={group.id}
+                      value={group.id}
+                      className="dark:text-white dark:bg-black"
+                    >
                       {group.name}
                     </option>
                   ))}
@@ -315,7 +339,9 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
 
             {option === Option.Single && (
               <div className="flex gap-2 items-center">
-                <h1 className="text-sm font-mont-bd">Restaurant:</h1>
+                <h1 className="text-sm font-mont-bd dark:text-white">
+                  {t('restaurant-management.statistics.restaurant')}:
+                </h1>
                 <select
                   id="restaurantSelect"
                   value={object?.id ?? ''}
@@ -326,13 +352,21 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                     )
                     setObject(selectedObject)
                   }}
-                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
                 >
-                  <option value="" disabled>
-                    Select a restaurant
+                  <option
+                    value=""
+                    disabled
+                    className="dark:text-white dark:bg-black"
+                  >
+                    {t('restaurant-management.statistics.select-restaurant')}
                   </option>
                   {objects?.map(restaurant => (
-                    <option key={restaurant.id} value={restaurant.id}>
+                    <option
+                      key={restaurant.id}
+                      value={restaurant.id}
+                      className="dark:text-white dark:bg-black"
+                    >
                       {restaurant.name}
                     </option>
                   ))}
@@ -343,23 +377,42 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
         )}
         {(object || option === Option.All || StatisticsScope.Single) && (
           <div className="flex gap-2 items-center">
-            <h1 className="text-sm font-mont-bd">Time period:</h1>
+            <h1 className="text-sm font-mont-bd dark:text-white">
+              {t('restaurant-management.statistics.time-period')}:
+            </h1>
             <select
               id="timePeriodSelect"
               value={timePeriod}
               onChange={e => setTimePeriod(e.target.value as TimePeriod)}
-              className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8"
+              className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
             >
-              <option value={TimePeriod.PastMonth}>Past Month</option>
-              <option value={TimePeriod.Past6Months}>Past 6 Months</option>
-              <option value={TimePeriod.PastYear}>Past Year</option>
+              <option
+                value={TimePeriod.PastMonth}
+                className="dark:text-white dark:bg-black"
+              >
+                {t('restaurant-management.statistics.month')}
+              </option>
+              <option
+                value={TimePeriod.Past6Months}
+                className="dark:text-white dark:bg-black"
+              >
+                {t('restaurant-management.statistics.six-months')}
+              </option>
+              <option
+                value={TimePeriod.PastYear}
+                className="dark:text-white dark:bg-black"
+              >
+                {t('restaurant-management.statistics.year')}
+              </option>
             </select>
           </div>
         )}
       </div>
-      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 rounded-lg">
+      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 dark:bg-grey-5 rounded-lg">
         <div className="h-full w-1/4 min-w-[300px]">
-          <h1>Customer count:</h1>
+          <h1 className="dark:text-white">
+            {t('restaurant-management.statistics.customer-count')}:
+          </h1>
           {customerCountStats.length > 0 ? (
             <BarChart
               xAxis={[
@@ -406,12 +459,16 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
-              <h1 className="text-sm text-grey-2">No data available</h1>
+              <h1 className="text-sm text-grey-2">
+                {t('restaurant-management.statistics.no-data')}
+              </h1>
             </div>
           )}
         </div>
         <div className="h-full w-1/4 min-w-[300px]">
-          <h1>Revenue:</h1>
+          <h1 className="dark:text-white">
+            {t('restaurant-management.statistics.revenue')}:
+          </h1>
           {revenueStats.length > 0 ? (
             <BarChart
               xAxis={[
@@ -436,9 +493,10 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                         revenue: number
                       }[]
 
-                      const result = revenueCount.reduce(
-                        (sum, item) => sum + item.revenue,
-                        0
+                      const result = parseFloat(
+                        revenueCount
+                          .reduce((sum, item) => sum + item.revenue, 0)
+                          .toFixed(2)
                       )
 
                       return result
@@ -454,12 +512,16 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
-              <h1 className="text-sm text-grey-2">No data available</h1>
+              <h1 className="text-sm text-grey-2">
+                {t('restaurant-management.statistics.no-data')}
+              </h1>
             </div>
           )}
         </div>
         <div className="h-full w-1/4 min-w-[300px]">
-          <h1>Review:</h1>
+          <h1 className="dark:text-white">
+            {t('restaurant-management.statistics.reviews')}:
+          </h1>
           {reviewsStats.length > 0 ? (
             <BarChart
               xAxis={[
@@ -502,7 +564,9 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
-              <h1 className="text-sm text-grey-2">No data available</h1>
+              <h1 className="text-sm text-grey-2">
+                {t('restaurant-management.statistics.no-data')}
+              </h1>
             </div>
           )}
         </div>
