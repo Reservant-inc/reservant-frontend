@@ -391,12 +391,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                 {`Step ${activeStep} of 3`}
               </span>
               {/* Step 1 */}
-              <CSSTransition
-                in={activeStep === 1}
-                timeout={500}
-                classNames="menu-primary"
-                unmountOnExit
-              >
+              {activeStep === 1 && (
                 <div className="flex w-full flex-col items-center gap-4">
                   <Field
                     type="text"
@@ -587,15 +582,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     )}
                   </div>
                 </div>
-              </CSSTransition>
+              )}
 
               {/* Step 2 */}
-              <CSSTransition
-                in={activeStep === 2}
-                timeout={500}
-                classNames="menu-secondary"
-                unmountOnExit
-              >
+              {activeStep === 2 && (
                 <div className="flex w-full flex-col items-center gap-4">
                   <FieldArray name="tags">
                     {({ push, remove }) => (
@@ -807,15 +797,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     )}
                   </div>
                 </div>
-              </CSSTransition>
+              )}
 
               {/* Step 3 */}
-              <CSSTransition
-                in={activeStep === 3}
-                timeout={500}
-                classNames="menu-secondary"
-                unmountOnExit
-              >
+              {activeStep === 3 && (
                 <div className="flex w-full flex-col items-center gap-4">
                   <div className="flex items-center w-4/5 gap-4">
                     <label
@@ -1090,7 +1075,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     </button>
                   </div>
                 </div>
-              </CSSTransition>
+              )}
             </div>
           </Form>
         )}
