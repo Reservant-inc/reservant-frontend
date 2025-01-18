@@ -116,7 +116,9 @@
                 "required": "Nazwisko jest wymagane"
             },
             "login": {
-                "required": "Login jest wymagany"
+                "required": "Login jest wymagany",
+                "matches": "Login może składać się tylko z liter"
+
             },
             "email": {
                 "matches": "Niepoprawny e-mail",

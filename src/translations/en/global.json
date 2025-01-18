@@ -122,7 +122,9 @@
                 "required": "Last name is required"
             },
             "login": {
-                "required": "Login is required"
+                "required": "Login is required",
+                "matches": "Login can only contain letters"
+
             },
             "email": {
                 "matches": "Invalid e-mail",
