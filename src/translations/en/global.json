@@ -596,7 +596,12 @@
             "assign": "Assign",
             "ok": "Ok",
             "resolve-positive": "Resolve",
-            "resolve-negative": "Reject"
+            "resolve-negative": "Reject",
+            "hall-emp": "Hall",
+            "backdoors-emp": "Backdoors",
+            "employees": "Employees",
+            "no-employees": "No employees found.",
+            "no-restaurant-details": "No restaurant details available."
         },
         "user": {
             "account": "Account",

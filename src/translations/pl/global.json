@@ -592,7 +592,12 @@
             "assign": "Przypisz",
             "ok": "Ok",
             "resolve-positive": "Rozpatrz",
-            "resolve-negative": "Odrzuć"
+            "resolve-negative": "Odrzuć",
+            "hall-emp": "Pracownik sali",
+            "backdoors-emp": "Pracownik zaplecza",
+            "employees": "Pracownicy lokalu",
+            "no-employees": "Nie znaleziono pracowników dla tego lokalu.",
+            "no-restaurant-details": "Nie znaleziono szczegółów restauracji."
         },
         "user": {
             "account": "Konto",
