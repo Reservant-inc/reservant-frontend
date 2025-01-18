@@ -665,67 +665,83 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                   </div>
 
                   <FieldArray name="openingHours">
-                    {({ push, remove }) => (
-                      <div className="flex flex-col w-4/5 gap-4">
-                        <FormLabel className="text  text-[15px] text-black font-mont-md mb-2 dark:text-white">
-                          Opening Hours *
-                        </FormLabel>
+  {({ replace }) => (
+    <div className="flex flex-col w-4/5 gap-4">
+      <FormLabel className="text text-[15px] text-black font-mont-md mb-2 dark:text-white">
+        Opening Hours *
+      </FormLabel>
 
-                        {/* Wyświetlanie 7 dni tygodnia od razu */}
-                        {[
-                          'Monday',
-                          'Tuesday',
-                          'Wednesday',
-                          'Thursday',
-                          'Friday',
-                          'Saturday',
-                          'Sunday'
-                        ].map((day, index) => (
-                          <div key={index} className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-gray-500 w-full dark:text-white ">
-                              {day}
-                            </span>
+      {[
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+      ].map((day, index) => {
+        const isClosed = formik.values.openingHours[index].from === null;
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].from`}
-                              name={`openingHours[${index}].from`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white [&>*]:text-black before:border-black before:border-black dark:before:border-white after:border-secondary"
-                            >
-                              <option value="" disabled>
-                                From
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              ))}
-                            </Field>
+        return (
+          <div key={index} className="flex items-center gap-4 w-full">
+            {/* Checkbox do oznaczenia czy dzień jest otwarty */}
+            <Checkbox
+              checked={!isClosed}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  // Jeśli checkbox jest ZAZNACZONY, ustaw domyślne godziny
+                  replace(index, { from: '00:00', until: '00:00' });
+                } else {
+                  // Jeśli checkbox jest ODZNACZONY, ustaw null
+                  replace(index, { from: null, until: null });
+                }
+              }}
+              className="text-grey-1 [&.Mui-checked]:text-secondary"
+            />
 
-                            <span className="text-sm font-bold text-gray-500 dark:text-white">
-                              -
-                            </span>
+            <span className="text-sm font-bold text-gray-500 w-full dark:text-white">
+              {day}
+            </span>
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].until`}
-                              name={`openingHours[${index}].until`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:dark:text-white before:border-black dark:before:border-white after:border-secondary"
-                            >
-                              <option value="" disabled>
-                                Until
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              ))}
-                            </Field>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </FieldArray>
+            {/* Pola wyboru godzin - widoczne tylko, jeśli dzień jest otwarty */}
+            {!isClosed && (
+              <>
+                <Field
+                  as={NativeSelect}
+                  id={`openingHours[${index}].from`}
+                  name={`openingHours[${index}].from`}
+                  className="w-4/5 text-[15px] text-black dark:text-white"
+                >
+                  {timeOptions.map(time => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </Field>
+
+                <span className="text-sm font-bold text-gray-500 dark:text-white">-</span>
+
+                <Field
+                  as={NativeSelect}
+                  id={`openingHours[${index}].until`}
+                  name={`openingHours[${index}].until`}
+                  className="w-4/5 text-[15px] text-black dark:text-white"
+                >
+                  {timeOptions.map(time => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </Field>
+              </>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  )}
+</FieldArray>
+
 
                   <Field
                     type="text"

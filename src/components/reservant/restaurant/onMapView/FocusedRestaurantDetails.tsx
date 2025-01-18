@@ -118,18 +118,19 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     setActiveTab(tab)
   }
 
-  const formatOpeningHours = (openingHours: ({ from: string; until: string } | null)[]): string[] => {
+  const formatOpeningHours = (openingHours: ({ from: string | null; until: string | null } | null)[]): string[] => {
     if (!openingHours || openingHours.length !== 7) return [''];
   
     const days = [
-  t('general.monday'),
-  t('general.tuesday'),
-  t('general.wednesday'),
-  t('general.thursday'),
-  t('general.friday'),
-  t('general.saturday'),
-  t('general.sunday'),
-];
+      t('general.monday'),
+      t('general.tuesday'),
+      t('general.wednesday'),
+      t('general.thursday'),
+      t('general.friday'),
+      t('general.saturday'),
+      t('general.sunday'),
+    ];
+  
     let formattedHours: string[] = [];
     let currentRange = null;
   
@@ -137,8 +138,8 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       const day = days[i];
       const hours = openingHours[i];
   
-      if (!hours) {
-        formattedHours.push(`${day}: Zamknięte`);
+      // Pominięcie dni, które mają null/null jako godziny otwarcia
+      if (!hours || hours.from === null || hours.until === null) {
         currentRange = null;
         continue;
       }
@@ -161,6 +162,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
   
     return formattedHours;
   };
+  
   
   
 
