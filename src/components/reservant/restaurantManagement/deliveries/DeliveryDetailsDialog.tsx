@@ -27,6 +27,17 @@ const DeliveryDetailsDialog: React.FC<DeliveryDetailsDialogProps> = ({
     }
   };
 
+  const formatDate = (date: string | null): string =>
+    date
+      ? new Date(date).toLocaleDateString('pl-PL', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      : t('delivery.not-available');
+
   if (!deliveryDetails) {
     return null;
   }
@@ -40,42 +51,38 @@ const DeliveryDetailsDialog: React.FC<DeliveryDetailsDialogProps> = ({
       <div className="p-4 text-black dark:text-white max-h-[65vh] min-w-[20vh] overflow-y-auto scroll">
         <h2 className="text-lg font-semibold mb-4">{t('delivery.delivery-details')}</h2>
         <p>
-          <strong>{t('delivery.delivery-id')}:</strong> {deliveryDetails.deliveryId}
+          <span className="font-mont-bd">{t('delivery.delivery-id')}:</span> {deliveryDetails.deliveryId}
         </p>
         <p>
-          <strong>{t('delivery.order-time')}:</strong> {deliveryDetails.orderTime}
+          <span className="font-mont-bd">{t('delivery.order-time')}:</span> {formatDate(deliveryDetails.orderTime)}
         </p>
         <p>
-          <strong>{t('delivery.delivered-time')}:</strong>{' '}
-          {deliveryDetails.deliveredTime || t('delivery.not-delivered')}
+          <span className="font-mont-bd">{t('delivery.delivered-time')}:</span>{' '}
+          {formatDate(deliveryDetails.deliveredTime) || t('delivery.not-delivered')}
         </p>
         <p>
-          <strong>{t('delivery.canceled-time')}:</strong>{' '}
-          {deliveryDetails.canceledTime || t('delivery.not-canceled')}
+          <span className="font-mont-bd">{t('delivery.canceled-time')}:</span>{' '}
+          {formatDate(deliveryDetails.canceledTime) || t('delivery.not-canceled')}
         </p>
         <p>
-          <strong>{t('delivery.restaurant-id')}:</strong> {deliveryDetails.restaurantId}
-        </p>
-        <p>
-          <strong>{t('delivery.user-id')}:</strong>{' '}
-          {deliveryDetails.userId || t('delivery.not-available')}
+          <span className="font-mont-bd">{t('delivery.restaurant-id')}:</span> {deliveryDetails.restaurantId}
         </p>
         <h3 className="text-md font-medium mt-4 mb-2">{t('delivery.ingredients')}</h3>
         <ul className="list-disc pl-6">
           {deliveryDetails.ingredients.map((ingredient: any, index: number) => (
             <li key={index} className="mb-2">
               <p>
-                <strong>{t('delivery.store-name')}:</strong> {ingredient.storeName}
+                <span className="font-mont-bd">{t('delivery.store-name')}:</span> {ingredient.storeName}
               </p>
               <p>
-                <strong>{t('delivery.amount-ordered')}:</strong> {ingredient.amountOrdered}
+                <span className="font-mont-bd">{t('delivery.amount-ordered')}:</span> {ingredient.amountOrdered}
               </p>
               <p>
-                <strong>{t('delivery.amount-delivered')}:</strong>{' '}
+                <span className="font-mont-bd">{t('delivery.amount-delivered')}:</span>{' '}
                 {ingredient.amountDelivered}
               </p>
               <p>
-                <strong>{t('delivery.expiry-date')}:</strong> {ingredient.expiryDate}
+                <span className="font-mont-bd">{t('delivery.expiry-date')}:</span> {formatDate(ingredient.expiryDate)}
               </p>
             </li>
           ))}

@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DeliveryActionDialog from './DeliveryActionDialog';
 import DeliveryDetailsDialog from './DeliveryDetailsDialog';
+import { Tooltip, IconButton, ThemeProvider } from '@mui/material'
+
 
 const DeliveriesTable: React.FC = () => {
   const [deliveries, setDeliveries] = useState<any[]>([]);
@@ -93,63 +95,134 @@ const DeliveriesTable: React.FC = () => {
       headerName: `${t('delivery.delivery-id')}`,
       flex: 1,
       sortable: true,
+      align: 'center',
+      headerAlign: 'center',
     },
     {
       field: 'orderTime',
       headerName: `${t('delivery.order-time')}`,
       flex: 1,
       sortable: true,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => (
+        params.row.orderTime
+          ? new Date(params.row.orderTime).toLocaleDateString('pl-PL', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          : t('delivery.no-date')
+      ),
     },
     {
       field: 'deliveredTime',
       headerName: `${t('delivery.delivered-time')}`,
       flex: 1,
       sortable: true,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => (
+        params.row.deliveredTime
+          ? new Date(params.row.deliveredTime).toLocaleDateString('pl-PL', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          : t('delivery.no-date')
+      ),
     },
     {
       field: 'canceledTime',
       headerName: `${t('delivery.canceled-time')}`,
       flex: 1,
       sortable: true,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridRenderCellParams) => (
+        params.row.canceledTime
+          ? new Date(params.row.canceledTime).toLocaleDateString('pl-PL', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          : t('delivery.no-date')
+      ),
     },
     {
       field: 'actions',
       headerName: `${t('delivery.actions')}`,
       flex: 1.5,
       sortable: false,
+      align: 'center',
+      headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
         const isDelivered = params.row.deliveredTime !== null;
+    
         return (
-          <div className="flex gap-2">
-            <button
-              disabled={isDelivered}
-              onClick={() => handleOpenActionDialog(params.row.deliveryId, 'confirm')}
-              className={`flex items-center justify-center rounded-md p-1 ${
-                isDelivered ? 'text-black dark:text-white' : 'text-green dark:text-green'
-              }`}
-            >
-              <CheckSharpIcon />
-            </button>
-            <button
-              disabled={isDelivered}
-              onClick={() => handleOpenActionDialog(params.row.deliveryId, 'cancel')}
-              className={`flex items-center justify-center rounded-md p-1 ${
-                isDelivered ? 'text-black dark:text-white' : 'text-red dark:text-red'
-              }`}
-            >
-              <CloseSharpIcon />
-            </button>
-            <button
-              onClick={() => handleOpenDetailsDialog(params.row.deliveryId)}
-              className="flex items-center justify-center rounded-md p-1 text-primary dark:text-secondary"
-            >
-              <ManageSearchIcon />
-            </button>
+          <div className="flex gap-2 justify-center items-center">
+            <Tooltip title={t('delivery.confirm')} arrow>
+              <span>
+                <IconButton
+                  onClick={() =>
+                    handleOpenActionDialog(params.row.deliveryId, 'confirm')
+                  }
+                  disabled={isDelivered}
+                  style={{
+                    color: isDelivered
+                      ? 'var(--grey-0)' 
+                      : 'var(--green)', 
+                  }}
+                >
+                  <CheckSharpIcon fontSize="medium" />
+                </IconButton>
+              </span>
+            </Tooltip>
+    
+            <Tooltip title={t('delivery.cancel')} arrow>
+              <span>
+                <IconButton
+                  onClick={() =>
+                    handleOpenActionDialog(params.row.deliveryId, 'cancel')
+                  }
+                  disabled={isDelivered}
+                  style={{
+                    color: isDelivered
+                      ? 'var(--grey-0)' 
+                      : 'var(--red)', 
+                  }}
+                >
+                  <CloseSharpIcon fontSize="medium" />
+                </IconButton>
+              </span>
+            </Tooltip>
+    
+            <Tooltip title={t('delivery.details')} arrow>
+              <span>
+                <IconButton
+                  onClick={() => handleOpenDetailsDialog(params.row.deliveryId)}
+                  style={{
+                    color: 'var(--primary)', 
+                  }}
+                >
+                  <ManageSearchIcon fontSize="medium" />
+                </IconButton>
+              </span>
+            </Tooltip>
           </div>
         );
       },
-    },
+    }
+    
   ];
+  
+  
 
   return (
     <>

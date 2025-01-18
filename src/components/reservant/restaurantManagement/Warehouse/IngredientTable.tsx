@@ -19,6 +19,10 @@ import AddIngredientDialog from './AddIngredientDialog'
 import ListIcon from '@mui/icons-material/List'
 import IngredientHistoryDialog from './IngredientHistoryDialog'
 import CircularProgress from '@mui/material/CircularProgress'
+import { IconButton, Tooltip } from '@mui/material'
+import EditQuantityDialog from './EditQuantityDialog'
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import TuneIcon from '@mui/icons-material/Tune';
 
 //Szymon TODO: podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
@@ -31,7 +35,9 @@ const IngredientTable: React.FC = () => {
   const [groceryList, setGroceryList] = useState<any[]>([])
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientType | null>(null)
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [isEditQuantityDialogOpen, setIsEditQuantityDialogOpen] = useState(false);
+    const [isEditIngredientDialogOpen, setIsEditIngredientDialogOpen] =
+      useState(false);
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false)
   const [availableIngredients, setAvailableIngredients] = useState<
     IngredientType[]
@@ -266,15 +272,25 @@ const IngredientTable: React.FC = () => {
     }
   }
 
-  const handleOpenEditDialog = (ingredient: IngredientType) => {
-    setSelectedIngredient(ingredient)
-    setIsEditDialogOpen(true)
-  }
+  const handleOpenEditQuantityDialog = (ingredient: IngredientType) => {
+    setSelectedIngredient(ingredient);
+    setIsEditQuantityDialogOpen(true);
+  };
 
-  const handleCloseEditDialog = () => {
-    setSelectedIngredient(null)
-    setIsEditDialogOpen(false)
-  }
+  const handleCloseEditQuantityDialog = () => {
+    setSelectedIngredient(null);
+    setIsEditQuantityDialogOpen(false);
+  };
+
+  const handleOpenEditIngredientDialog = (ingredient: IngredientType) => {
+    setSelectedIngredient(ingredient);
+    setIsEditIngredientDialogOpen(true);
+  };
+
+  const handleCloseEditIngredientDialog = () => {
+    setSelectedIngredient(null);
+    setIsEditIngredientDialogOpen(false);
+  };
 
   const handleOpenHistoryDialog = (ingredient: IngredientType) => {
     setSelectedIngredient(ingredient)
@@ -291,21 +307,21 @@ const IngredientTable: React.FC = () => {
       field: 'publicName',
       headerName: `${t('warehouse.name')}`,
       flex: 1,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'amount',
       headerName: `${t('warehouse.quantity')}`,
       flex: 1,
       sortable: true,
-      disableColumnMenu: true
+      disableColumnMenu: true,
     },
     {
       field: 'minimalAmount',
       headerName: `${t('warehouse.minimal-quantity')}`,
       flex: 1,
       sortable: true,
-      disableColumnMenu: true
+      disableColumnMenu: true,
     },
     {
       field: 'state',
@@ -313,19 +329,19 @@ const IngredientTable: React.FC = () => {
       flex: 1,
       disableColumnMenu: true,
       renderCell: (params: GridRenderCellParams) =>
-        params.row.amount > params.row.minimalAmount ? (
-          <span className="text-black dark:text-white">Enough in stock</span>
+        params.row.amount >= params.row.minimalAmount ? (
+          <span className="text-black dark:text-white">{t('warehouse.enough-in-stock')}</span>
         ) : (
           <span className="w-full rounded border-[1px] border-error bg-white p-2 text-center text-black dark:bg-black dark:text-white">
             {t('warehouse.needs-restocking')}
           </span>
-        )
+        ),
     },
     {
       field: 'unitOfMeasurement',
       headerName: `${t('warehouse.unit')}`,
       flex: 1,
-      sortable: true
+      sortable: true,
     },
     {
       field: 'actions',
@@ -333,24 +349,48 @@ const IngredientTable: React.FC = () => {
       flex: 1.5,
       disableColumnMenu: true,
       sortable: false,
+      align: 'center',
+      headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => (
-        <div className="flex gap-2">
-          <button
-            onClick={() => handleOpenEditDialog(params.row)}
-            
-          >
-            <EditIcon color="action"/>
-          </button>
-          <button
-            onClick={() => handleOpenHistoryDialog(params.row)}
-            
-          >
-            <ListIcon color="action"/>
-          </button>
+        <div className="flex gap-2 justify-center items-center">
+          <Tooltip title={t('warehouse.edit-quantity')} arrow>
+            <span>
+              <IconButton
+                onClick={() => handleOpenEditQuantityDialog(params.row)}
+                style={{ color: 'var(--primary)' }}
+              >
+                <TuneIcon fontSize="medium" /> 
+              </IconButton>
+            </span>
+          </Tooltip>
+      
+          <Tooltip title={t('warehouse.edit-ingredient')} arrow>
+            <span>
+              <IconButton
+                onClick={() => handleOpenEditIngredientDialog(params.row)}
+                style={{ color: 'var(--primary)' }}
+              >
+                <EditNoteIcon fontSize="medium" /> 
+              </IconButton>
+            </span>
+          </Tooltip>
+      
+          <Tooltip title={t('warehouse.history')} arrow>
+            <span>
+              <IconButton
+                onClick={() => handleOpenHistoryDialog(params.row)}
+                style={{ color: 'var(--primary)' }}
+              >
+                <ListIcon fontSize="medium" />
+              </IconButton>
+            </span>
+          </Tooltip>
         </div>
-      ),
+      )
+      
     },
-  ]
+  ];
+  
 
   const EditToolbar = () => (
     <GridToolbarContainer>
@@ -442,10 +482,17 @@ const IngredientTable: React.FC = () => {
         onRemoveItem={handleRemoveItem}
         onSubmitOrder={handleOrder}
       />
-      {/* Dialog do edycji składnika */}
+      {/* Dialog edycja ilości */}
+      <EditQuantityDialog
+        open={isEditQuantityDialogOpen}
+        onClose={handleCloseEditQuantityDialog}
+        ingredient={selectedIngredient}
+        onUpdate={fetchIngredients}
+      />
+      {/* Dialog edycja składnika całego */}
       <EditIngredientDialog
-        open={isEditDialogOpen}
-        onClose={handleCloseEditDialog}
+        open={isEditIngredientDialogOpen}
+        onClose={handleCloseEditIngredientDialog}
         ingredient={selectedIngredient}
         onUpdate={fetchIngredients}
       />

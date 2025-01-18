@@ -395,7 +395,28 @@
         "user": "Użytkownik",
         "loading-history": "Ładowanie historii...",
         "actions": "Działania",
-        "restaurant-no-ingredients": "Ta restauracja nie ma żadnych składników."
+        "restaurant-no-ingredients": "Ta restauracja nie ma żadnych składników.",
+        "ingredient-added": "Dodano nowy składnik:",
+        "ok": "Ok",
+        "enough-in-stock": "Wystarczająco",
+        "delivery-confirmation-title": "Potwierdzenie dostawy",
+        "edit-current-amount": "Aktualna ilość",
+        "edit-comment": "Komentarz",
+        "edit-name": "Nazwa",
+        "edit-unit": "Jednostka",
+        "edit-minimal-amount": "Minimalna ilość",
+        "edit-amount-to-order": "Ilość do zamówienia",
+        "edit-ingredient": "Edytuj składnik",
+        "amount-only": "Edytuj tylko ilość",
+        "editing": "Edycja",
+        "optional-comment": "Opcjonalny komentarz",
+        "required": "Wymagane",
+        "gram": "Gramy",
+        "liter": "Litr",
+        "unit-unit": "Opakowanie",
+        "edit-quantity": "Edytuj ilość",
+        "save": "Zapisz",
+        "comment-cannot-be-empty": "Komentarz nie może być pusty"
     },
     "delivery": {
         "deliveries": "Zarządzanie dostawami",
@@ -423,7 +444,9 @@
         "filter-all": "Wszystkie dostawy",
         "filter-delivered": "Tylko dostarczone",
         "filter-not-delivered": "Tylko niedostarczone",
-        "actions": "Działania"
+        "actions": "Działania",
+        "no-date": "-",
+        "not-available": "Niedostępne"
     },
     "profile": {
         "account": "Konto",

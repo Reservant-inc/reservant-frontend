@@ -52,16 +52,16 @@ const IngredientHistoryDialog: React.FC<IngredientHistoryDialogProps> = ({
       >
         <h1 className="text-lg font-semibold mb-4">{t('warehouse.ingredient-details')}</h1>
         <p>
-          <strong>{t('warehouse.name')}:</strong> {ingredient.publicName}
+          <span className="font-mont-bd">{t('warehouse.name')}:</span> {ingredient.publicName}
         </p>
         <p>
-          <strong>{t('warehouse.new-unit')}:</strong> {ingredient.unitOfMeasurement}
+          <span className="font-mont-bd">{t('warehouse.new-unit')}:</span> {ingredient.unitOfMeasurement}
         </p>
         <p>
-          <strong>{t('warehouse.new-minimal')}:</strong> {ingredient.minimalAmount}
+          <span className="font-mont-bd">{t('warehouse.new-minimal')}:</span> {ingredient.minimalAmount}
         </p>
         <p>
-          <strong>{t('warehouse.amount')}:</strong> {ingredient.amount}
+          <span className="font-mont-bd">{t('warehouse.amount')}:</span> {ingredient.amount}
         </p>
 
         <div className="mt-4">
@@ -69,51 +69,55 @@ const IngredientHistoryDialog: React.FC<IngredientHistoryDialogProps> = ({
           {loading ? (
             <p>{t('warehouse.loading-history')}</p>
           ) : error ? (
-            <p className="text-red-500">{error}</p>
+            <p className="text-red">{error}</p>
           ) : history.length === 0 ? (
             <p>{t('warehouse.no-history-message')}</p>
           ) : (
-            <ul className="divide-y divide-white dark:divide-black">
+            <ul className="divide-y divide-white dark:divide-black space-y-2">
               {history.map((correction) => {
                 const isIncrease = correction.newAmount > correction.oldAmount;
                 const amountChange = isIncrease
-                  ? `${correction.newAmount - correction.oldAmount}`
+                  ? `+${correction.newAmount - correction.oldAmount}`
                   : `-${correction.oldAmount - correction.newAmount}`;
                 const amountClass = isIncrease ? 'text-green' : 'text-red';
 
                 return (
                   <li
                     key={correction.correctionId}
-                    className="py-3 bg-grey-1 dark:bg-grey-6 p-2"
+                    className="py-3 bg-grey-1 dark:bg-grey-6 p-2 rounded-lg shadow-md"
                   >
-                    <h3
-                      className={`text-xl font-bold ${
-                        correction.newAmount > correction.oldAmount ? 'text-green' : 'text-red'
-                      }`}
-                    >
-                      {t('warehouse.change')}: {correction.newAmount > correction.oldAmount ? '+' : '-'}
-                      {Math.abs(correction.newAmount - correction.oldAmount)}
+                    <h3 className={`text-xl font-bold ${amountClass}`}>
+                      {t('warehouse.change')}: {amountChange}
                     </h3>
 
                     <p>
-                      <strong>{t('warehouse.date')}:</strong>{' '}
-                      {new Date(correction.correctionDate).toLocaleString()}
+                      <span className="font-mont-bd">{t('warehouse.date')}:</span>{' '}
+                      {new Date(correction.correctionDate).toLocaleString('pl-PL', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </p>
                     <p>
-                      <strong>{t('warehouse.id')}:</strong> {correction.correctionId}
+                      <span className="font-mont-bd">{t('warehouse.id')}:</span> {correction.correctionId}
                     </p>
                     <p>
-                      <strong>{t('warehouse.old-amount')}:</strong> {correction.oldAmount}
+                      <span className="font-mont-bd">{t('warehouse.old-amount')}:</span>{' '}
+                      {correction.oldAmount}
                     </p>
                     <p>
-                      <strong>{t('warehouse.new-amount1')}:</strong> {correction.newAmount}
+                      <span className="font-mont-bd">{t('warehouse.new-amount1')}:</span>{' '}
+                      {correction.newAmount}
                     </p>
                     <p>
-                      <strong>{t('warehouse.comment')}:</strong> {correction.comment}
+                      <span className="font-mont-bd">{t('warehouse.comment')}:</span>{' '}
+                      {correction.comment}
                     </p>
                     <p>
-                      <strong>{t('warehouse.user')}:</strong> {correction.user.firstName}{' '}
-                      {correction.user.lastName} ({correction.user.userId})
+                      <span className="font-mont-bd">{t('warehouse.user')}:</span>{' '}
+                      {correction.user.firstName} {correction.user.lastName} ({correction.user.userId})
                     </p>
                   </li>
                 );
