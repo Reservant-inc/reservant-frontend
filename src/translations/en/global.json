@@ -236,7 +236,19 @@
             "statistics": "Statistics",
             "all-restaurants" : "All restaurants",
             "restaurant-group" : "Restaurant group",
-            "restaurant" : "Restaurant"
+            "restaurant" : "Restaurant",
+            "group": "Group",
+            "select-group": "Select a group",
+            "select-restaurant": "Select a restaurant",
+            "time-period": "Time period",
+            "month": "Past Month",
+            "six-months": "Past 6 Months",
+            "year": "Past Year",
+            "customer-count": "Customer count",
+            "revenue": "Revenue",
+            "reviews": "Reviews",
+            "no-data": "No data available",
+            "scope": "Scope"
         },
         "details": {
             "details": "Restaurant details",
