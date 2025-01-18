@@ -72,6 +72,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   const [activeStep, setActiveStep] = useState<number>(1)
   const [requestLoading, setRequestLoading] = useState<boolean>(false)
 
+  const [loading, setLoading] = useState(false)
+  const [suggestions, setSuggestions] = useState<any[]>([])
+  const [dropdownVisible, setDropdownVisible] = useState(false)
+
   const [tags, setTags] = useState<string[]>([])
 
   const [serverError, setServerError] = useState<string | null>(null)
@@ -156,35 +160,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
     }
   }
 
-  const fetchCoordinates = async (address: string) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-          address
-        )}&format=json&addressdetails=1`
-      )
-      if (!response.ok) {
-        throw new Error('Failed to fetch coordinates')
-      }
-      const data = await response.json()
-
-      if (data.length <= 0) {
-        setLocationError('a')
-        throw new Error('No coordinates found for the given address')
-      }
-
-      locationError && setLocationError(undefined)
-
-      return {
-        latitude: parseFloat(data[0].lat),
-        longitude: parseFloat(data[0].lon)
-      }
-    } catch (error) {
-      console.error('Error fetching coordinates:', error)
-      return null
-    }
-  }
-
   const handleSubmit = async (values: any, formikHelpers: any) => {
     setRequestLoading(true)
 
@@ -250,8 +225,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           .filter((photo: any) => photo !== undefined) // Usuwanie wartości undefined
       }
 
-      console.log('Zaktualizowane wartości formularza:', updatedValues)
-
       if (updatedValues.groupId === null) {
         const restaurantGroupData = {
           name: `${updatedValues.name} Restaurants Group`,
@@ -271,8 +244,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
         // Przypisanie groupId z odpowiedzi
         updatedValues.groupId = groupResponse.restaurantGroupId
       }
-
-      console.log(updatedValues)
 
       // Krok 3: Wysyłamy zaktualizowane dane restauracji do /my-restaurants
       setTimeout(() => {}, 1000)
@@ -380,37 +351,95 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     }
                   />
 
-                  <Field
-                    type="text"
-                    id="address"
-                    name="address"
-                    label="Address *"
-                    variant="standard"
-                    as={TextField}
-                    onBlur={async () => {
-                      let { address, postalIndex, city } = formik.values
-                      if (address && postalIndex && city) {
-                        address = formatAddress(address)
-                        const fullAddress = `${address}, ${postalIndex}, ${city}`
-                        try {
-                          formik.setFieldValue(
-                            'location',
-                            await fetchCoordinates(fullAddress)
-                          )
-                        } catch (error) {
-                          console.error('Error fetching coordinates:', error)
+                  <div className="relative w-full flex items-center justify-center">
+                    <Field
+                      type="text"
+                      id="address"
+                      name="address"
+                      label="Address *"
+                      variant="standard"
+                      autoComplete={false}
+                      as={TextField}
+                      onBlur={async (
+                        e: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        const address = e.target.value
+                        formik.setFieldValue('address', address)
+
+                        if (address) {
+                          try {
+                            const response = await fetch(
+                              `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+                                address
+                              )}&format=json&addressdetails=1&limit=5`
+                            )
+                            if (!response.ok) {
+                              throw new Error('Failed to fetch suggestions')
+                            }
+                            const data = await response.json()
+                            setSuggestions(data)
+                            setDropdownVisible(true)
+                          } catch (error) {
+                            console.error('Error fetching suggestions:', error)
+                          }
+                        } else {
+                          setDropdownVisible(false) // Hide dropdown if no address input
                         }
+                      }}
+                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(locationError || (formik.errors.address && formik.touched.address)) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                      helperText={
+                        locationError
+                          ? locationError
+                          : formik.errors.address &&
+                            formik.touched.address &&
+                            formik.errors.address
                       }
-                    }}
-                    className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(locationError || (formik.errors.address && formik.touched.address)) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                    helperText={
-                      locationError
-                        ? locationError
-                        : formik.errors.address &&
-                          formik.touched.address &&
-                          formik.errors.address
-                    }
-                  />
+                    />
+                    {dropdownVisible && suggestions.length > 0 && (
+                      <ul
+                        style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          width: '100%',
+                          zIndex: 10,
+                          backgroundColor: 'white',
+                          border: '1px solid #ccc',
+                          maxHeight: '200px',
+                          overflowY: 'auto'
+                        }}
+                      >
+                        {suggestions.map((suggestion, index) => (
+                          <li
+                            key={index}
+                            onClick={() => {
+                              const address = (
+                                suggestion.address.road +
+                                ' ' +
+                                suggestion.address.house_number
+                              ).replace(/[„”]/g, '')
+
+                              console.log(address)
+
+                              formik.setFieldValue('address', address)
+                              formik.setFieldValue('location', {
+                                latitude: parseFloat(suggestion.lat),
+                                longitude: parseFloat(suggestion.lon)
+                              })
+                              setDropdownVisible(false) // Hide dropdown on selection
+                            }}
+                            style={{
+                              padding: '10px',
+                              cursor: 'pointer',
+                              borderBottom: '1px solid #eee'
+                            }}
+                          >
+                            {suggestion.display_name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
 
                   <Field
                     type="text"
