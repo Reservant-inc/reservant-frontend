@@ -49,7 +49,22 @@
         "birthDate": "Birth date:",
         "password": "Password",
         "confirmPassword": "Confirm password",
-        "registerButton": "Register"
+        "registerButton": "Register",
+        "register": "REGISTER",
+        "passwordCAP": "PASSWORD",
+        "confirmPasswordCAP": "CONFIRM PASSWORD",
+        "backToLogin": "Back to login",
+        "next": "NEXT",
+        "firstNameCAP": "FIRST NAME",
+        "lastNameCAP": "LASTNAME",
+        "phoneMuberCAP": "PHONE NUMBER",
+        "birthDateCAP": "BIRTH DATE",
+        "back": "BACK",
+        "submit": "SUBMIT",
+        "welcome": "WELCOME",
+        "errors": {
+            "login": "Invalid login or password"
+        }
     },
     "reservation": {
         "history": "Reservation history",
@@ -81,7 +96,7 @@
         "isBackdoorEmployee": "Backdoor employee",
         "isHallEmployee": "Hall employee" ,
         "addEmployee": "Assign employee"
-    },    
+    },  
     "restaurant-register": {
         "name": "Name",
         "address": "Address",

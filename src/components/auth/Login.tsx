@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      setSubmitting(true)
+      setSubmitting(true) 
       setRequestLoading(true)
 
       const response = await fetchPOST('/auth/login', JSON.stringify(values))
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
       login(response)
     } catch (error) {
       if (error instanceof FetchError) {
-        setLoginError('Invalid login or password')
+        setLoginError(`${t('auth.errors.login')}`)
       } else {
         console.log('Unexpected error:', error)
       }
@@ -101,7 +101,7 @@ const Login: React.FC = () => {
                   >
                     <div className="flex w-full flex-col items-center gap-6">
                       <h1 className="dont-semibold font-mont-md text-xl text-white">
-                        WELCOME
+                      {t('auth.welcome')}
                       </h1>
 
                       <Field
@@ -129,9 +129,9 @@ const Login: React.FC = () => {
                             formik.touched.password &&
                             formik.errors.password
                           }
-                          label="PASSWORD"
+                          label={t('auth.passwordCAP')}
                           variant="standard"
-                          className={` [&>*]:text-md w-full [&>*]:font-mont-md ${!(formik.errors.password && formik.touched.password) ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                          className={` [&>*]:text-md w-full [&>*]:font-mont-md [&>*]:text-[15px] ${!(formik.errors.password && formik.touched.password) ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
                           color="primary"
                           as={TextField}
                         />

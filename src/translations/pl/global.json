@@ -73,7 +73,22 @@
         "birthDate": "Data urodzenia",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",
-        "registerButton": "Zarejestruj się"
+        "registerButton": "Zarejestruj się",
+        "register": "REJESTRACJA",
+        "passwordCAP": "HASŁO",
+        "confirmPasswordCAP": "POTWIERDŹ HASŁO",
+        "backToLogin": "Wróc do logowania",
+        "next": "DALEJ",
+        "firstNameCAP": "IMIĘ",
+        "lastNameCAP": "NAZWISKO",
+        "phoneMuberCAP": "NUMER TELEFONU",
+        "birthDateCAP": "DATA URODZENIA",
+        "back": "COFNIJ",
+        "submit": "WYŚLIJ",
+        "welcome": "WITAJ",
+        "errors": {
+            "login": "Nieprawidłowy login lub hasło"
+        }
     },
     "add-employee": {
         "isBackdoorEmployee": "Pracownik zaplecza",
