@@ -358,7 +358,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       name="address"
                       label="Address *"
                       variant="standard"
-                      autoComplete={false}
                       as={TextField}
                       onBlur={async (
                         e: React.ChangeEvent<HTMLInputElement>
@@ -396,19 +395,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       }
                     />
                     {dropdownVisible && suggestions.length > 0 && (
-                      <ul
-                        style={{
-                          position: 'absolute',
-                          top: '100%',
-                          left: 0,
-                          width: '100%',
-                          zIndex: 10,
-                          backgroundColor: 'white',
-                          border: '1px solid #ccc',
-                          maxHeight: '200px',
-                          overflowY: 'auto'
-                        }}
-                      >
+                      <ul className="absolute left-0 top-[60px] w-full z-[10] bg-white dark:bg-black border-[1px] border-grey-2 max-h-[200px] overflow-y-auto scroll rounded-md ">
                         {suggestions.map((suggestion, index) => (
                           <li
                             key={index}
@@ -419,8 +406,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                                 suggestion.address.house_number
                               ).replace(/[„”]/g, '')
 
-                              console.log(address)
-
                               formik.setFieldValue('address', address)
                               formik.setFieldValue('location', {
                                 latitude: parseFloat(suggestion.lat),
@@ -428,11 +413,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                               })
                               setDropdownVisible(false) // Hide dropdown on selection
                             }}
-                            style={{
-                              padding: '10px',
-                              cursor: 'pointer',
-                              borderBottom: '1px solid #eee'
-                            }}
+                            className="p-4 pointer border-b-[1px] border-grey-2"
                           >
                             {suggestion.display_name}
                           </li>
