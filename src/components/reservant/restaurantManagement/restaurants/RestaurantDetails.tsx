@@ -235,7 +235,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
-        <span>Restaurant Details</span>
+        <span>{t('restaurant-management.details.details')}</span>
         <button onClick={onClose} className="text-grey-2">
           <CloseSharpIcon />
         </button>
@@ -270,7 +270,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="groupName"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Group Name
+                  {t('restaurant-management.details.group')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -333,7 +333,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="name"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Restaurant Name
+                  {t('restaurant-management.details.restaurantName')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -362,7 +362,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="restaurantType"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Business Type
+                  {t('restaurant-register.businessType')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -446,7 +446,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="address"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Address
+                  {t('restaurant-management.details.address')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -480,7 +480,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="city"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  City
+                  {t('restaurant-management.details.city')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -512,7 +512,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="reservationDeposit"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Reservation Deposit
+                  {t('restaurant-management.details.deposit')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -552,7 +552,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="reservationDeposit"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Max Reservation Duration in minutes
+                  {t('restaurant-management.details.max-reservation-duration')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -592,14 +592,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="provideDelivery"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Provide Delivery
+                  {t('restaurant-management.details.delivery')}
                 </label>
                 {isReadOnly ? (
                   <Field
                     as={TextField}
                     name="provideDelivery"
                     id="provideDelivery"
-                    value={formik.values.provideDelivery ? 'Yes' : 'No'}
+                    value={formik.values.provideDelivery ? `${t('restaurant-management.details.yes')}` : `${t('restaurant-management.details.no')}`}
                     fullWidth
                     InputProps={{
                       readOnly: true // Ustawienie pola na tylko do odczytu
@@ -645,14 +645,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                         value="true" // Teraz używamy stringa
                         className="dark:text-white"
                       >
-                        Yes
+                        {t('restaurant-management.details.yes')}
                       </MenuItem>
                       <MenuItem
                         id="provideDelivery-no"
                         value="false" // Teraz używamy stringa
                         className="dark:text-white"
                       >
-                        No
+                        {t('restaurant-management.details.no')}
                       </MenuItem>
                     </Field>
 
@@ -672,7 +672,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="description"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Description
+                  {t('restaurant-management.details.description')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -708,7 +708,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="description"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Tags
+                  {t('restaurant-management.details.tags')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="tags">
@@ -766,7 +766,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="openingHours"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Opening Hours
+                  {t('restaurant-management.details.opening')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="openingHours">
@@ -774,13 +774,13 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                       <div className="flex flex-col w-2/3 gap-4">
                         {/* Wyświetlanie 7 dni tygodnia od razu */}
                         {[
-                          'Monday',
-                          'Tuesday',
-                          'Wednesday',
-                          'Thursday',
-                          'Friday',
-                          'Saturday',
-                          'Sunday'
+                          `${t('restaurant-management.details.monday')}`,
+                          `${t('restaurant-management.details.tuesday')}`,
+                          `${t('restaurant-management.details.wednesday')}`,
+                          `${t('restaurant-management.details.thursday')}`,
+                          `${t('restaurant-management.details.friday')}`,
+                          `${t('restaurant-management.details.saturday')}`,
+                          `${t('restaurant-management.details.sunday')}`
                         ].map((day, index) => {
                           const isClosed = formik.values.openingHours[index].from === null;
 
@@ -855,7 +855,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="tables"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Tables
+                  {t('restaurant-management.details.tables')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="tables">
@@ -863,8 +863,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                       <div className="flex flex-col w-full gap-2">
                         {/* Nagłówki */}
                         <div className="flex items-center gap-4 font-bold text-gray-500 dark:text-white text-sm border-b pb-2">
-                          <span className="w-20">Table ID</span>
-                          <span className="w-20">Capacity</span>
+                          <span className="w-20">{t('restaurant-management.details.table')} ID</span>
+                          <span className="w-20">{t('restaurant-management.details.capacity')}</span>
                         </div>
 
                         {formik.values.tables.map((table, index) => (
@@ -875,7 +875,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 
                             <Field
                               type="number"
-                              name={`tables[${index}].capacity`}
+                              name={`tables[${index}].capacity`} ///////////////////////////
                               className="w-20 text-center text-[15px] text-black dark:text-white border border-grey-15 dark:border-grey-2 rounded px-2"
                               disabled={isReadOnly}
                             />
@@ -886,7 +886,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                                 onClick={() => remove(index)}
                                 className="text-red-500 hover:text-red-700 text-sm"
                               >
-                                Remove
+                                {t('restaurant-management.details.remove')}
                               </button>
                             )}
                           </div>
@@ -898,7 +898,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                             onClick={() => push({ tableId: formik.values.tables.length + 1, capacity: 4 })}
                             className="mt-2 px-3 py-1 bg-primary dark:bg-secondary dark:hover:primary text-white text-sm rounded hover:bg-secondary"
                           >
-                            Add Table
+                            {t('restaurant-management.details.addTable')}
                           </button>
                         )}
                       </div>
@@ -937,7 +937,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                         htmlFor={`logo-upload`}
                         className="cursor-pointer text-primary dark:text-secondary"
                       >
-                        <CloudUploadIcon /> Upload Logo
+                        <CloudUploadIcon /> {t('restaurant-management.details.logoUpload')}
                       </label>
                       <input
                         type="file"
@@ -962,7 +962,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="photos"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Photos
+                  {t('restaurant-management.details.photos')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="photos">
@@ -971,7 +971,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                         {' '}
                         {/* Wrapping photos in one row with scroll */}
                         {/* Wyświetlanie zdjęć */}
-                        {photos.length === 0 && <p>No photos uploaded yet</p>}
+                        {photos.length === 0 && <p>{t('general.noPhotos')}</p>}
                         {photos.map((photo, index) => (
                           <div key={index} className="relative">
                             <img
@@ -1012,7 +1012,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                               htmlFor={`photos-upload`}
                               className="cursor-pointer text-primary dark:text-secondary"
                             >
-                              <CloudUploadIcon /> Upload More Photos
+                              <CloudUploadIcon /> {t('general.uploadMore')}
                             </label>
                             <input
                               type="file"
@@ -1048,14 +1048,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                       disabled={formik.isSubmitting}
                       className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                     >
-                      Save Changes
+                      {t('general.save')}
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
                       className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                     >
-                      Cancel
+                      {t('general.cancel')}
                     </button>
                   </>
                 )}

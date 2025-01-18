@@ -30,7 +30,9 @@
         "saturday": "Sob",
         "sunday": "Niedz",
         "from": "od", 
-        "until": "do"
+        "until": "do",
+        "uploadMore": "Dodaj więcej zdjęć",
+        "noPhotos": "Dodaj więcej zdjęć"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -84,7 +86,7 @@
         "postalCode": "Kod pocztowy",
         "city": "Miasto",
         "businessType": "Rodzaj działalności",
-        "types": {
+        "types": { 
             "bar": "Bar",
             "restaurant": "Restauracja",
             "cafe": "Kawiarnia"
@@ -109,7 +111,9 @@
         "step2": "Pozostałe informacje",
         "submit":"Koniec",
         "group": "Grupa",
-        "complete": "Rejestracja zakończona"
+        "complete": "Rejestracja zakończona",
+        "reservationDeposit": "Depozyt",
+        "addRestaurant": "Dodaj restaurację"
     },
     "errors": {
         "login": {
@@ -211,7 +215,8 @@
         "groups": {
             "counter": "Liczba lokali",
             "add-button": "Dodaj Grupę",
-            "header": "Moje Grupy"
+            "header": "Moje Grupy",
+            "actions": "Akcje"
         },
         "menu": {
             "newMenu": "Dodaj nowe menu",
@@ -263,14 +268,33 @@
             "no": "nie",
             "location": "Lokalizacja",
             "address": "Adres",
-            "max-reservation-duration": "Maksymalny czas rezerwacji",
+            "max-reservation-duration": "Maksymalny czas rezerwacji w minutach",
             "minutes": "Minut",
             "tables": "Stoliki",
+            "table": "Stolik",
+            "capacity": "Pojemność",
             "total-capacity": "Całkowita ilość miejsc",
             "opening-hours": "Godziny otwarcia",
             "verified": "Czy zweryfikowana",
-            "archived": "Czy zarchiwizowana"
-        }
+            "archived": "Czy zarchiwizowana",
+            "group": "Nazwa grupy",
+            "photos": "Zdjęcia",
+            "logoUpload": "Dodaj logo",
+            "addTable": "Dodaj stolik",
+            "remove": "Usuń",
+            "monday": "Poniedziałek",
+            "tuesday": "Wtorek",
+            "wednesday": "Środa", 
+            "thursday": "Czwartek",
+            "friday": "Piątek",
+            "saturday": "Sobota",
+            "sunday": "Niedziela",
+            "opening": "Godziny otwarcia",
+            "deposit": "Depozyt rezerwcaji",
+            "city": "Miasto",
+            "restaurantName": "Nazwa restauracji",
+            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?"
+            }
     },
     "tools": {
         "main":{
