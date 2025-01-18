@@ -452,7 +452,7 @@
     "profile": {
         "account": "Konto",
         "reservations": "Rezerwacje",
-        "search": "Szukaj po nazwie...",
+        "search": "Szukaj po nazwie",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
@@ -481,7 +481,7 @@
             "created":"Utworzone przez ciebie",
             "oldest" : "Od najstarszych",
             "search":"Przeszukaj wydarzenia",
-            "participatedIn":"Uczestniczył/a",
+            "participatedIn":"Uczestniczył/a w",
             "manage":"Zarządzaj uczestnikami",
             "edit":"Edytuj wydarzenie",
             "delete":"Usuń wydarzenie",
@@ -494,7 +494,13 @@
             "applications-by": "Zgłoszenia do",
             "max-participants": "Maks. liczba uczestników",
             "creator": "Organizauje",
-            "events-feed": "Przegląd wydarzeń"
+            "events-feed": "Przegląd wydarzeń",
+            "no-created": "Nie utworzyłeś żadnych wydarzeń.",
+            "no-interested-in": "Nie jesteś zainteresowany żadnym wydarzeniem",
+            "no-participates": "Nie uczestniczysz w żadnym wydarzeniu.",
+            "no-event-history": "Brak wydarzeń do wyświetlenia.",
+            "friend-participate": "Jeden albo więcej Twoich znajomych uczestniczył w tym wydarzeniu.",
+            "you-created-event": "Utworzyłeś wydarzenie."
         },
         "reports" : {
             "reports": "Zgłoszenia",
@@ -517,7 +523,9 @@
             "add-funds": "Dodaj środki do swojego konta",
             "confirm": "Zatwierdź",
             "no-more": "Brak transakcji do załadowania"
-        }
+        },
+        "delete-account-button": "Usuń konto",
+        "delete_account_cannot_undone": "Tej akcji nie można cofnąć!"
     },
     "customer-service": {
         "reports": {

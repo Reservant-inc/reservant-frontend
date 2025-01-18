@@ -92,14 +92,16 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
   }
 
   const handleSearchChange = (query: string) => {
+    const normalizedQuery = query.trim().toLowerCase(); 
     setFilteredReports(
-      query.length >= 3
+      normalizedQuery.length >= 3
         ? reports.filter(report =>
-            report.description.toLowerCase().includes(query)
+            report.description.toLowerCase().includes(normalizedQuery) 
           )
         : reports
-    )
-  }
+    );
+  };
+  
 
   return (
     <div className="flex flex-col w-full h-full">

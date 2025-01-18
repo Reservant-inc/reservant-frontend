@@ -38,14 +38,14 @@ const HistoryTab: React.FC = ({}) => {
           tmp.push({
             id: Number(indx++),
             clientId: response.items[i].clientId,
-            date: response.items[i].date,
+            date: response.items[i].date ? new Date(response.items[i].date).toLocaleString() : '',
             deposit: response.items[i].deposit,
-            endTime: response.items[i].endTime,
+            endTime: response.items[i].endTime ? new Date(response.items[i].endTime).toLocaleString() : '',
             numberOfGuests: response.items[i].numberOfGuests,
             orders: response.items[i].orders,
             participants: response.items[i].participants,
-            paymentTime: response.items[i].paymentTime,
-            reservationDate: response.items[i].reservationDate,
+            paymentTime: response.items[i].paymentTime ? new Date(response.items[i].paymentTime).toLocaleString() : '',
+            reservationDate: response.items[i].reservationDate ? new Date(response.items[i].reservationDate).toLocaleString() : '',
             restaurant: response.items[i].restaurant,
             tableId: response.items[i].tableId,
             takeaway: response.items[i].takeaway,
@@ -71,14 +71,14 @@ const HistoryTab: React.FC = ({}) => {
       headerName: 'Visit ID',
       width: 150,
       editable: false,
-      type: 'string'
+      type: 'string',
     },
     {
       field: 'date',
       headerName: 'Started at',
       width: 200,
       editable: false,
-      type: 'string'
+      type: 'string',      
     },
     {
       field: 'endTime',

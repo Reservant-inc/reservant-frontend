@@ -456,7 +456,7 @@
     "profile": {
         "account": "Account",
         "reservations": "Reservations",
-        "search": "Search by name...",
+        "search": "Search by name",
         "friends": {
             "friends-tab": "Friends",
             "outgoing-tab": "Outgoing friend requests",
@@ -498,7 +498,13 @@
             "applications-by": "Application by",
             "max-participants": "Max no. participants",
             "creator": "Creator",
-            "events-feed": "Events feed"
+            "events-feed": "Events feed",
+            "no-created": "You have not created any events.",
+            "no-interested-in": "You are not interested in any events.",
+            "no-participates": "You are not a participant in any events.",
+            "no-event-history": "No events to view.",
+            "friend-participate": "One or more of your friends participated in this event.",
+            "you-created-event": "You created an event."
         },
         "reports" : {
             "reports": "Reports",
@@ -521,7 +527,9 @@
             "add-funds": "Add funds to your wallet",
             "confirm": "Confirm",
             "no-more": "No more transactions to load"
-        }
+        },
+        "delete-account-button": "Delete account",
+        "delete_account_cannot_undone": "This action cannot be undone!"
     },
     "customer-service": {
         "reports": {
