@@ -119,6 +119,13 @@ const RestaurantListSection: React.FC = () => {
     populateRows()
   }, [])
 
+  const handleEditClick = (id: GridRowId) => {
+    setRowModesModel(prevModel => ({
+      ...prevModel,
+      [id]: { mode: GridRowModes.Edit } // Using GridRowModes.Edit
+    }))
+  }
+
   const handleSaveClick = (id: GridRowId) => {
     setRowModesModel(prevModel => ({
       ...prevModel,

@@ -274,10 +274,7 @@
             "language":"Language",
             "mode":"Dark mode",
             "signout":"Sign out",
-            "report":"Report a bug",
-            "become": "Become an owner",
-            "create" : "Add your first restaurant"
-
+            "report":"Report a bug"
         },
         "settings":{
             "setting":"SettingFiller"
