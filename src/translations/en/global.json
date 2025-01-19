@@ -646,7 +646,18 @@
             "no-reports-created": "No created reports",
             "no-reports-customer-service": "No reports related to user",
             "created-by-user": "Created by user",
-            "reported-user": "Report regarding user"
+            "reported-user": "Report regarding user",
+            "status":{
+                "resolved": "Resolved",
+                "rejected": "Rejected",
+                "pending": "Pending"
+
+            },
+            "category": {
+                "technical": "Technical",
+                "emp": "Complaint on employee",
+                "lost": "Lost item"
+            }
         },
         "reviews": {
             "no-reviews": "No reviews yet",

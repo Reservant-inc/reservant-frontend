@@ -642,7 +642,17 @@
             "no-reports-created": "Brak utworzonych zgłoszeń",
             "no-reports-customer-service": "Brak zgłoszeń powiązanych z tym użytkownikiem" ,
             "created-by-user": "Utworzone przez użytkownika",
-            "reported-user": "Zgłoszenie dotyczące użytkownika"
+            "reported-user": "Zgłoszenie dotyczące użytkownika",
+            "status":{
+                "resolved": "Rozwiązane",
+                "rejected": "Odrzucony",
+                "pending": "Oczekuje"
+            },
+            "category": {
+                "technical": "Problem techniczny",
+                "emp": "Skarga na pracownika",
+                "lost": "Zgubiony przedmiot"
+            }
         },
         "reviews": {
             "no-reviews": "Brak opinii",
