@@ -63,7 +63,14 @@
         "employee-select": "Select an employee",
         "details": "Additional details",
         "describe-details": "Describe your issue in detail...",
-        "submit": "Submit Report"
+        "submit": "Submit Report",
+        "cancel-reservation-title": "Cancel Reservation",
+        "cancel-reservation-dialog": "Are you sure you want to cancel this reservation?",
+        "cancel-go-back": "Back",
+        "cancel-cancel": "Cancel reservation",
+        "cancel-no-orders": "No orders, ",
+        "no-upcoming": "No upcoming reservations.",
+        "no-history": "No reservation history."
     },
     "add-employee": {
         "isBackdoorEmployee": "Backdoor employee",
