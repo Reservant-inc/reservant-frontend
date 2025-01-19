@@ -9,6 +9,7 @@ import {
   Alert
 } from '@mui/material'
 import { fetchPOST } from '../../../services/APIconn'
+import CustomRating from '../../reusableComponents/CustomRating'
 
 interface RestaurantReviewFormProps {
   onClose: () => void
@@ -19,7 +20,7 @@ const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
   onClose,
   onSuccess
 }) => {
-  const [stars, setStars] = useState<number | null>(0)
+  const [stars, setStars] = useState<number>(0)
   const [contents, setContents] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -75,13 +76,11 @@ const RestaurantReviewForm: React.FC<RestaurantReviewFormProps> = ({
       sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
     >
       <Typography variant="h6">Dodaj opinię</Typography>
-      <Rating
-        name="review-rating"
-        value={stars}
-        onChange={(event, newValue) => {
-          setStars(newValue)
-        }}
-        precision={1} // only full numbers
+      <CustomRating
+        rating={stars}
+        readOnly={false}
+        onChange={setStars}
+        className="dark:text-white"
       />
       <TextField
         id="outlined-multiline-static"
