@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  FormControl,
-  Select,
-  MenuItem
-} from '@mui/material'
+import { Box, IconButton, FormControl, Select, MenuItem } from '@mui/material'
 import {
   GridToolbarContainer,
   GridRowModesModel,
@@ -43,6 +34,7 @@ import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialo
 import RegisterSuccess from '../../register/restaurantRegister/RegisterSuccess'
 import RestaurantRegister from '../../register/restaurantRegister/RestaurantRegister'
 import RestaurantDetails from '../RestaurantDetails'
+import Dialog from '../../../../reusableComponents/Dialog'
 
 const RestaurantListSection: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
@@ -471,53 +463,24 @@ const RestaurantListSection: React.FC = () => {
         className="border-0"
       />
 
-      <Dialog
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        sx={{
-          '& .MuiDialog-paper': {
-            width: '700px',
-            maxWidth: 'none', // Usuwa domyślną maksymalną szerokość
-            height: '92%', // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
-            maxHeight: 'none', // Wyłącza ograniczenia wysokości
-            margin: 0, // Usuwa marginesy, by dialog rozciągał się maksymalnie
-            display: 'flex', // Umożliwia elastyczne układanie zawartości
-            flexDirection: 'column' // Ustawia układ kolumnowy (przydatne dla treści)
-          }
-        }}
-      >
-        <DialogTitle className="text-center text-3xl font-bold dark:bg-black">
-          <IconButton
-            aria-label="close"
-            onClick={() => setIsDialogOpen(false)}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: theme => theme.palette.grey[500]
-            }}
-          >
-            <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="dark:bg-black scroll">
-          <Box>
-            {/* Show the registration form or the success message */}
-            {!registerSucces ? (
-              <RestaurantRegister
-                onRegisterSucces={() => handleRegistrationSucces()}
-              />
-            ) : (
-              <Box>
-                <RegisterSuccess
-                  onDialogClose={() => setIsDialogOpen(false)}
-                  onRegisterSucces={() => setRegisterSucces(false)}
-                />
-              </Box>
-            )}
-          </Box>
-        </DialogContent>
-      </Dialog>
+      {isDialogOpen && (
+        <Dialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          title="{t()}"
+        >
+          {!registerSucces ? (
+            <RestaurantRegister
+              onRegisterSucces={() => handleRegistrationSucces()}
+            />
+          ) : (
+            <RegisterSuccess
+              onDialogClose={() => setIsDialogOpen(false)}
+              onRegisterSucces={() => setRegisterSucces(false)}
+            />
+          )}
+        </Dialog>
+      )}
 
       {selectedRestaurant && isDetailsDialogOpen && (
         <RestaurantDetails
