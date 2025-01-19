@@ -201,7 +201,33 @@
                 "min": "Maxymalny czas rezerwacji nie moze być nizszy niz 30 minut",
                 "number": "Nalezy wprowadzić liczbę"
             }
+        },
+                "event-creation": {
+        "name": {
+            "required": "Nazwa wydarzenia jest wymagana"
+        },
+        "description": {
+            "required": "Opis jest wymagany"
+        },
+        "time": {
+            "required": "Czas wydarzenia jest wymagany",
+            "isFuture": "Czas wydarzenia musi być w przyszłości"
+        },
+        "mustJoinUntil": {
+            "required": "Czas na dołączenie jest wymagany",
+            "isFuture": "Czas na dołączenie musi być w przyszłości",
+            "isBefore": "Czas na dołączenie musi być przed czasem wydarzenia"
+        },
+        "maxPeople": {
+            "min": "Musi być co najmniej 1 osoba",
+            "max": "Nie może przekraczać 20 osób",
+            "required": "Maksymalna liczba osób jest wymagana"
+        },
+        "photoFileName": {
+            "required": "Zdjęcie jest wymagane"
         }
+        }
+
     },
     "restaurant-management": {
         "groups": {
@@ -330,6 +356,25 @@
         "is-delivering": "Dostawa",
         "delivery-fee": "Koszt dostawy",
         "events": "Wydarzenia:"
+    },
+    "event-creation": {
+        "even-title": "Wydarzenie",
+        "create-event": "Stwórz Wydarzenie",
+        "name": "Nazwa",
+        "description": "Opis",
+        "time-from": "Data wydarzenia",
+        "must-join-until": "Najpóźniejsza data dołączenia",
+        "max-people": "Maksymalna ilość uczestników",
+        "preview-picture": "Zdjęcie poglądowe",
+        "create": "Stwórz",
+        "cancel": "Anuluj",
+        "upload-photo": "Załaduj zdjęcie",
+        "delete-photo": "Usuń zdjęcie",
+        "event-creation-title": "Nowe wydarzenie",
+        "event-creation": "Utworzyłeś nowe wydarzenie",
+        "go-to-my-events": "Moje Wydarzenia",
+        "close": "Zamknij",
+        "event-loading": "Ładowanie szczegółów wydarzenia..."
     },
     "reviews": {
         "filter": "Filtruj",
