@@ -467,7 +467,7 @@ const RestaurantListSection: React.FC = () => {
         <Dialog
           open={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
-          title="{t()}"
+          title={t('restaurant-register.restaurant-register')}
         >
           {!registerSucces ? (
             <RestaurantRegister

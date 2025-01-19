@@ -13,32 +13,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { useTranslation } from 'react-i18next'
 
 const Profile: React.FC = () => {
-  const [user, setUser] = useState<UserType>()
-  const [loading, setLoading] = useState<boolean>(true)
-
   const [t] = useTranslation('global')
 
   const navigate = useNavigate()
-
-  useEffect(() => {
-    fetchUserData()
-  }, [])
-
-  const fetchUserData = async () => {
-    try {
-      const userdata = await fetchGET('/user')
-
-      setUser(userdata)
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.log(error.formatErrors())
-      } else {
-        console.log('Unexpected error')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <div className=" flex h-full w-full items-center justify-center gap-5 bg-grey-1 p-4 dark:bg-grey-6">
