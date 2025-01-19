@@ -140,7 +140,7 @@ const User: React.FC = () => {
   return (
     <div className="z-[0] flex h-full w-full items-center overflow-y-auto scroll justify-center gap-2 bg-grey-1 dark:bg-grey-6">
       <div className="flex flex-col gap-2 h-full w-1/2">
-        <div className="flex h-[40%] w-full self-start flex-col bg-white rounded-lg p-4 gap-4 shadow-md">
+        <div className="flex h-[40%] w-full self-start flex-col bg-white dark:bg-black rounded-lg p-4 gap-4 shadow-md">
           <div className="flex justify-between w-full">
             <h1 className="text-lg font-mont-bd">
               {t('customer-service.user.account')}
@@ -154,7 +154,7 @@ const User: React.FC = () => {
                 <>
                   {userInfo?.bannedUntil ? (
                     <button
-                      className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+                      className="border-[1px] rounded-lg p-1 text-primary hover:text-white"
                       onClick={handleUnbanUser}
                     >
                       <DeleteForeverIcon className="w-4 h-4" />
@@ -162,7 +162,7 @@ const User: React.FC = () => {
                     </button>
                   ) : (
                     <button
-                      className="border-[1px] rounded-lg p-1 text-primary hover:bg-primary hover:text-white"
+                      className="border-[1px] rounded-lg p-1 text-primary dark:text-secondary dark:hover:text-white hover:text-black"
                       onClick={() => setIsDialogOpen(true)}
                     >
                       <GavelIcon className="w-4 h-4" />
@@ -170,7 +170,7 @@ const User: React.FC = () => {
                     </button>
                   )}
                   <button
-                    className="border-[1px] rounded-lg p-1 text-red hover:bg-red hover:text-white"
+                    className="border-[1px] rounded-lg p-1 text-red  dark:hover:text-white hover:text-black"
                     onClick={() => setIsDeleteDialogOpen(true)}
                   >
                     <DeleteForeverIcon className="w-4 h-4" />
@@ -218,13 +218,13 @@ const User: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-[60%] w-full bg-white rounded-lg shadow-md p-4">
+        <div className="h-[60%] w-full bg-white dark:bg-black rounded-lg shadow-md p-4">
           <TransactionHistory listType={TransactionListType.CustomerService} />
         </div>
       </div>
 
       <div className="flex flex-col gap-2 h-full w-1/2">
-        <div className="h-full w-full bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <div className="h-full w-full bg-white dark:bg-black rounded-lg shadow-md p-4 flex flex-col gap-2">
           <div className="h-[2rem]">
             <h1 className="font-mont-bd text-lg">
               {t('customer-service.user.related_complaints')}
@@ -235,7 +235,7 @@ const User: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-full w-full bg-white rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <div className="h-full w-full rounded-lg shadow-md p-4 flex flex-col gap-2">
           <div className="h-[2rem]">
             <h1 className="font-mont-bd text-lg">
               {t('customer-service.user.related-opinions')}
