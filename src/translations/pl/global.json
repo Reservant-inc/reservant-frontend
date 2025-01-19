@@ -273,6 +273,7 @@
              "actions": "Akcje"
         },
         "menu": {
+            "menuType": "Typ menu",
             "newMenu": "Dodaj nowe menu",
             "editedMenu": "Edytuj menu",
             "name": "Nazwa",

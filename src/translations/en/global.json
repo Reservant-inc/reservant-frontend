@@ -278,6 +278,7 @@
              "actions": "Actions"
         },
         "menu": {
+            "menuType": "Menu type",
             "newMenu": "Add new menu",
             "editedMenu": "Edit menu",
             "name": "Name",
