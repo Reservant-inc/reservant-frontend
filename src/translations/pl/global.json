@@ -714,7 +714,8 @@
             "backdoors-emp": "Pracownik zaplecza",
             "employees": "Pracownicy lokalu",
             "no-employees": "Nie znaleziono pracowników dla tego lokalu.",
-            "no-restaurant-details": "Nie znaleziono szczegółów restauracji."
+            "no-restaurant-details": "Nie znaleziono szczegółów restauracji.",
+            "already-assigned": "Już przypisany"
         },
         "user": {
             "account": "Konto",
