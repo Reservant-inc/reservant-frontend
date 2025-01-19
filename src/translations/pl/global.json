@@ -685,6 +685,27 @@
             "cancel": "Anuluj",
             "related-opinions": "Opinie"
         
-        }
+        },
+        "visit-details": {
+    "visit-details": "Szczegóły wizyty",
+    "date": "Data",
+    "time": "Czas",
+    "guests": "Goście",
+    "takeaway": "Na wynos",
+    "yes": "Tak",
+    "no": "Nie",
+    "table-id": "Numer stolika",
+    "participants": "Uczestnicy",
+    "no-participants": "Brak uczestników.",
+    "go-to-profile": "Przejdź do profilu",
+    "orders": "Zamówienia",
+    "order-id": "Numer zamówienia",
+    "note": "Notatka",
+    "no-notes": "Brak notatek",
+    "cost": "Koszt",
+    "status": "Status",
+    "no-orders": "Brak zamówień.",
+    "employee": "Pracownik"
+  }
     }
 }
