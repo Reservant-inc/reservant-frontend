@@ -213,12 +213,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       JSON.stringify(data)
     );
 
+    if (restaurant.isVerified) {
     // Aktualizacja stolików – dodanie obiektu `request`
     console.log('Aktualizacja stolików:', tables);
     await fetchPUT(
       `/my-restaurants/${restaurant.restaurantId}/tables`,
       JSON.stringify({ tables  }) // Dodany obiekt `request`
     );
+  }
 
     onSuccess();
     resetForm();
@@ -848,7 +850,68 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   </FieldArray>
                 </div>
               </div>
-              
+
+              {/* Tables */}
+              {restaurant.isVerified && (
+                <div className="mb-4">
+                  <label
+                    htmlFor="tables"
+                    className="block text-sm font-medium dark:text-grey-2"
+                  >
+                    {t('restaurant-management.details.tables')}
+                  </label>
+                  <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
+                    <FieldArray name="tables">
+                      {({ push, remove }) => (
+                        <div className="flex flex-col w-full gap-2">
+                          {/* Nagłówki */}
+                          <div className="flex items-center gap-4 font-bold text-gray-500 dark:text-white text-sm border-b pb-2">
+                            <span className="w-20">{t('restaurant-management.details.table')} ID</span>
+                            <span className="w-20">{t('restaurant-management.details.capacity')}</span>
+                          </div>
+
+                          {formik.values.tables.map((table, index) => (
+                            <div key={index} className="flex items-center gap-4">
+                              <span className="w-20 text-sm font-bold text-gray-500 dark:text-white">
+                                {table.tableId}
+                              </span>
+
+                              <Field
+                                type="number"
+                                name={`tables[${index}].capacity`} 
+                                className="w-20 text-center text-[15px] text-black dark:text-white border border-grey-15 dark:border-grey-2 rounded px-2"
+                                disabled={isReadOnly}
+                              />
+
+                              {!isReadOnly && (
+                                <button
+                                  type="button"
+                                  onClick={() => remove(index)}
+                                  className="text-red-500 hover:text-red-700 text-sm"
+                                >
+                                  {t('restaurant-management.details.remove')}
+                                </button>
+                              )}
+                            </div>
+                          ))}
+
+                          {!isReadOnly && (
+                            <button
+                              type="button"
+                              onClick={() => push({ tableId: formik.values.tables.length + 1, capacity: 4 })}
+                              className="mt-2 px-3 py-1 bg-primary dark:bg-secondary text-white text-sm rounded"
+                            >
+                              {t('restaurant-management.details.addTable')}
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </FieldArray>
+                  </div>
+                </div>
+              )}
+
+
               {/* Logo Preview and Upload Button */}
               <div className="mb-4">
                 <label
