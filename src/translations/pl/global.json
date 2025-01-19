@@ -58,7 +58,14 @@
         "employee-select": "Wyierz pracownika",
         "details": "Dodatkowe informacje",
         "describe-details": "Opisz szczegółowo problem...",
-        "submit": "Wyślij Zgłoszenie"
+        "submit": "Wyślij Zgłoszenie",
+        "cancel-reservation-title": "Odwołanie rezerwacji",
+        "cancel-reservation-dialog": "Czy na pewno chcesz odwołać tę rezerwację?",
+        "cancel-go-back": "Powrót",
+        "cancel-cancel": "Odwołaj rezerwację",
+        "cancel-no-orders": "Brak zamówień, ",
+        "no-upcoming": "Brak nadchodzących rezerawcji.",
+        "no-history": "Brak historii rezerwacji."
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -365,7 +372,9 @@
             "deposit": "Depozyt rezerwcaji",
             "city": "Miasto",
             "restaurantName": "Nazwa restauracji",
-            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?"
+            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
+            "table": "Stolik",
+            "capacity": "Pojemność"
         }
     },
     "tools": {
