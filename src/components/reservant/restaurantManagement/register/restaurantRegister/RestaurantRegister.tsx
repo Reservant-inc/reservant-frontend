@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Formik, Form, Field, FieldArray } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { CSSTransition } from 'react-transition-group'
@@ -88,6 +88,46 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
     RestaurantRegisterStep2Schema,
     RestaurantRegisterStep3Schema
   } = useValidationSchemas()
+
+  const suggestionsRef = useRef<HTMLUListElement>(null)
+
+  const handleSearch = async (address: string) => {
+    if (address) {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            address
+          )}&format=json&addressdetails=1&limit=5`
+        )
+        if (!response.ok) {
+          throw new Error('Failed to fetch suggestions')
+        }
+        const data = await response.json()
+        setSuggestions(data)
+        setDropdownVisible(true)
+      } catch (error) {
+        console.error('Error fetching suggestions:', error)
+      }
+    } else {
+      setDropdownVisible(false)
+    }
+  }
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      suggestionsRef.current &&
+      !suggestionsRef.current.contains(e.target as Node)
+    ) {
+      setDropdownVisible(false)
+    }
+  }
+
+  React.useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -340,27 +380,12 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       onBlur={async (
                         e: React.ChangeEvent<HTMLInputElement>
                       ) => {
-                        const address = e.target.value
                         formik.setFieldTouched('address', true, true)
-
-                        if (address) {
-                          try {
-                            const response = await fetch(
-                              `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-                                address
-                              )}&format=json&addressdetails=1&limit=5`
-                            )
-                            if (!response.ok) {
-                              throw new Error('Failed to fetch suggestions')
-                            }
-                            const data = await response.json()
-                            setSuggestions(data)
-                            setDropdownVisible(true)
-                          } catch (error) {
-                            console.error('Error fetching suggestions:', error)
-                          }
-                        } else {
-                          setDropdownVisible(false)
+                        if (formik.values.address === '') {
+                          formik.setFieldValue('location', {
+                            latitude: undefined,
+                            longitude: undefined
+                          })
                         }
                       }}
                       className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!formik.errors.location ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -369,6 +394,13 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         t('errors.restaurant-register.address.required')
                       }
                     />
+                    <button
+                      type="button"
+                      onClick={() => handleSearch(formik.values.address)}
+                      className="ml-2 p-2 bg-blue-500 text-white rounded-md"
+                    >
+                      Search
+                    </button>
                     {dropdownVisible && suggestions.length > 0 && (
                       <ul className="absolute left-0 top-[60px] w-full z-[10] bg-white dark:bg-black border-[1px] border-grey-2 max-h-[200px] overflow-y-auto scroll rounded-md ">
                         {suggestions.map((suggestion, index) => (
