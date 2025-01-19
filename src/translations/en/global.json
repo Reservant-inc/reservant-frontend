@@ -390,7 +390,9 @@
             "language":"Language",
             "mode":"Dark mode",
             "signout":"Sign out",
-            "report":"Report a bug"
+            "report":"Report a bug",
+            "become": "Become an owner",
+            "create" : "Add your first restaurant"
         },
         "settings":{
             "setting":"SettingFiller"

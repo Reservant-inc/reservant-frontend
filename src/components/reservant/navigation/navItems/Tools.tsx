@@ -1,7 +1,16 @@
 import React, { useContext, useState } from 'react'
 import OutsideClickHandler from '../../../reusableComponents/OutsideClickHandler'
 import User from '../../../../assets/images/user.jpg'
-import { Alert, IconButton, Switch, createTheme } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Switch,
+  createTheme
+} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 import {
@@ -9,10 +18,12 @@ import {
   BugReport,
   ChevronLeft,
   ChevronRight,
+  Close,
   DarkMode,
   Language,
   LightMode,
   Logout,
+  Restaurant,
   Settings
 } from '@mui/icons-material'
 import { CSSTransition } from 'react-transition-group'
@@ -22,15 +33,18 @@ import { useTranslation } from 'react-i18next'
 import { Form, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { ThemeContext } from '../../../../contexts/ThemeContext'
-import Dialog from '../../../reusableComponents/Dialog'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import { fetchPOST } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
+import RestaurantRegister from '../../restaurantManagement/register/restaurantRegister/RestaurantRegister'
+import RegisterSuccess from '../../restaurantManagement/register/restaurantRegister/RegisterSuccess'
 
 const Tools: React.FC = () => {
   const [t] = useTranslation('global')
   const [isPressed, setIsPressed] = useState(false)
   const [isComplaining, setIsComplaining] = useState(false)
+  const [isBecomingRestauranter, setIsBecomingRestauranter] = useState(false)
+  const [registerSucces, setRegisterSucces] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
   const navigate = useNavigate()
   const mainHeight = 392
@@ -146,6 +160,22 @@ const Tools: React.FC = () => {
       </button>
     )
   }
+  const BecomeRestauranter = () => {
+    return (
+      <button
+        id="RestauranterDropdownItem"
+        className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+        onClick={() => {
+          setIsBecomingRestauranter(true)
+          setActiveMenu('main')
+          setMenuHeight(mainHeight)
+        }}
+      >
+        <Restaurant />
+        <span className="ml-2">{t('tools.main.become')}</span>
+      </button>
+    )
+  }
 
   const LogoutButton = () => (
     <Form method="post" action="/logout">
@@ -239,6 +269,7 @@ const Tools: React.FC = () => {
                   <Settings />
                   <span className="ml-2">{t('tools.settings.setting')} </span>
                 </button>
+                <BecomeRestauranter />
               </div>
             </CSSTransition>
 
@@ -335,6 +366,53 @@ const Tools: React.FC = () => {
           </Alert>
         </div>
       )}
+      <Dialog
+        open={isBecomingRestauranter}
+        onClose={() => setIsBecomingRestauranter(false)}
+        sx={{
+          '& .MuiDialog-paper': {
+            width: '700px',
+            maxWidth: 'none', // Usuwa domyślną maksymalną szerokość
+            height: '92%', // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
+            maxHeight: 'none', // Wyłącza ograniczenia wysokości
+            margin: 0, // Usuwa marginesy, by dialog rozciągał się maksymalnie
+            display: 'flex', // Umożliwia elastyczne układanie zawartości
+            flexDirection: 'column' // Ustawia układ kolumnowy (przydatne dla treści)
+          }
+        }}
+      >
+        <DialogTitle className="text-center text-3xl font-bold dark:bg-black">
+          <IconButton
+            aria-label="close"
+            onClick={() => setIsBecomingRestauranter(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: theme => theme.palette.grey[500]
+            }}
+          >
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent className="dark:bg-black scroll">
+          <Box>
+            {/* Show the registration form or the success message */}
+            {!registerSucces ? (
+              <RestaurantRegister
+                onRegisterSucces={() => setIsBecomingRestauranter(false)}
+              />
+            ) : (
+              <Box>
+                <RegisterSuccess
+                  onDialogClose={() => setIsBecomingRestauranter(false)}
+                  onRegisterSucces={() => setRegisterSucces(false)}
+                />
+              </Box>
+            )}
+          </Box>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
