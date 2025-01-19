@@ -57,8 +57,8 @@ const initialValues: RestaurantDataType = {
   ],
   maxReservationDurationMinutes: null,
   location: {
-    latitude: 52.396255,
-    longitude: 20.913649
+    latitude: 0,
+    longitude: 0
   }
 }
 
@@ -71,10 +71,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
 }) => {
   const [activeStep, setActiveStep] = useState<number>(1)
   const [requestLoading, setRequestLoading] = useState<boolean>(false)
-
-  const [loading, setLoading] = useState(false)
-  const [suggestions, setSuggestions] = useState<any[]>([])
-  const [dropdownVisible, setDropdownVisible] = useState(false)
 
   const [tags, setTags] = useState<string[]>([])
 
@@ -118,24 +114,48 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   }, [])
 
   const handleNextClick = async (formik: any) => {
-    setRequestLoading(true) // Ustawienie loading state
-
+    setRequestLoading(true);
+  
     try {
-      // Wykonaj walidację formularza
-      const errors = await formik.validateForm()
-
+      const errors = await formik.validateForm();
+  
       if (Object.keys(errors).length > 0) {
-        // Jeśli są błędy, zaznacz pola jako dotknięte i wyświetl błędy
         formik.setTouched(
           Object.keys(errors).reduce((acc: any, key: string) => {
-            acc[key] = true
-            return acc
+            acc[key] = true;
+            return acc;
           }, {})
-        )
-        return // Zatrzymaj proces przejścia dalej
+        );
+        return;
       }
-
+  
       if (activeStep === 1) {
+        let { address, postalIndex, city, location } = formik.values;
+  
+        let newLocation;
+        // Sprawdzamy, czy location jest (0, 0)
+        if (location?.latitude === 0 && location?.longitude === 0) {
+          // Jeśli tak, wykonujemy ponownie fetchCoordinates
+
+          
+          if (address && postalIndex && city) {
+            address = formatAddress(address);
+            const fullAddress = `${address}, ${postalIndex}, ${city}`;
+  
+            newLocation = await fetchCoordinates(fullAddress);
+  
+            if (!newLocation) {
+              setLocationError('This address does not exist');
+              return;
+            }
+  
+            formik.setFieldValue('location', newLocation); // Ustawiamy nowe współrzędne
+          } else {
+            setLocationError('Address is required to fetch location');
+            return;
+          }
+        }
+        if (newLocation?.latitude !== 0 && newLocation?.longitude !== 0) {
         const body = JSON.stringify({
           name: formik.values.name,
           nip: formik.values.nip,
@@ -143,20 +163,58 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           address: formik.values.address,
           postalIndex: formik.values.postalIndex,
           city: formik.values.city,
-          location: formik.values.location
-        })
-
-        await fetchPOST('/my-restaurants/validate-first-step', body)
+          location: newLocation
+        });
+  
+        await fetchPOST('/my-restaurants/validate-first-step', body);
+        
+        console.log(body)
       }
-
-      setServerError(null)
-      setActiveStep(prevStep => prevStep + 1)
+      
+      }
+      
+      setServerError(null);
+      setActiveStep((prevStep) => prevStep + 1);
     } catch (error) {
       if (error instanceof FetchError) {
-        setServerError(error.formatErrors())
+        setServerError(error.formatErrors());
       }
     } finally {
-      setRequestLoading(false) // Zakończenie loading state
+      setRequestLoading(false);
+    }
+  };
+  
+  
+
+  const fetchCoordinates = async (address: string) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          address
+        )}&format=json&addressdetails=1`
+      )
+      if (!response.ok) {
+        throw new Error('Failed to fetch coordinates')
+      }
+      const data = await response.json()
+      console.log('API Response:', data);
+
+      if (data.length <= 0) {
+        setLocationError('this addres does not exist')
+        throw new Error('No coordinates found for the given address')
+      }
+
+      locationError && setLocationError(undefined)
+
+      
+
+      return {
+        latitude: parseFloat(data[0].lat),
+        longitude: parseFloat(data[0].lon)
+      }
+    } catch (error) {
+      console.error('Error fetching coordinates:', error)
+      return null
     }
   }
 
@@ -225,6 +283,8 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           .filter((photo: any) => photo !== undefined) // Usuwanie wartości undefined
       }
 
+      console.log('Zaktualizowane wartości formularza:', updatedValues)
+
       if (updatedValues.groupId === null) {
         const restaurantGroupData = {
           name: `${updatedValues.name} Restaurants Group`,
@@ -244,6 +304,8 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
         // Przypisanie groupId z odpowiedzi
         updatedValues.groupId = groupResponse.restaurantGroupId
       }
+
+      console.log(updatedValues)
 
       // Krok 3: Wysyłamy zaktualizowane dane restauracji do /my-restaurants
       setTimeout(() => {}, 1000)
@@ -329,12 +391,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                 {`Step ${activeStep} of 3`}
               </span>
               {/* Step 1 */}
-              <CSSTransition
-                in={activeStep === 1}
-                timeout={500}
-                classNames="menu-primary"
-                unmountOnExit
-              >
+              {activeStep === 1 && (
                 <div className="flex w-full flex-col items-center gap-4">
                   <Field
                     type="text"
@@ -351,76 +408,37 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     }
                   />
 
-                  <div className="relative w-full flex items-center justify-center">
-                    <Field
-                      type="text"
-                      id="address"
-                      name="address"
-                      label="Address *"
-                      variant="standard"
-                      as={TextField}
-                      onBlur={async (
-                        e: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        const address = e.target.value
-                        formik.setFieldValue('address', address)
-
-                        if (address) {
-                          try {
-                            const response = await fetch(
-                              `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-                                address
-                              )}&format=json&addressdetails=1&limit=5`
-                            )
-                            if (!response.ok) {
-                              throw new Error('Failed to fetch suggestions')
-                            }
-                            const data = await response.json()
-                            setSuggestions(data)
-                            setDropdownVisible(true)
-                          } catch (error) {
-                            console.error('Error fetching suggestions:', error)
-                          }
-                        } else {
-                          setDropdownVisible(false) // Hide dropdown if no address input
+                  <Field
+                    type="text"
+                    id="address"
+                    name="address"
+                    label="Address *"
+                    variant="standard"
+                    as={TextField}
+                    onBlur={async () => {
+                      let { address, postalIndex, city } = formik.values
+                      if (address && postalIndex && city) {
+                        address = formatAddress(address)
+                        const fullAddress = `${address}, ${postalIndex}, ${city}`
+                        try {
+                          formik.setFieldValue(
+                            'location',
+                            await fetchCoordinates(fullAddress)
+                          )
+                        } catch (error) {
+                          console.error('Error fetching coordinates:', error)
                         }
-                      }}
-                      className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(locationError || (formik.errors.address && formik.touched.address)) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                      helperText={
-                        locationError
-                          ? locationError
-                          : formik.errors.address &&
-                            formik.touched.address &&
-                            formik.errors.address
                       }
-                    />
-                    {dropdownVisible && suggestions.length > 0 && (
-                      <ul className="absolute left-0 top-[60px] w-full z-[10] bg-white dark:bg-black border-[1px] border-grey-2 max-h-[200px] overflow-y-auto scroll rounded-md ">
-                        {suggestions.map((suggestion, index) => (
-                          <li
-                            key={index}
-                            onClick={() => {
-                              const address = (
-                                suggestion.address.road +
-                                ' ' +
-                                suggestion.address.house_number
-                              ).replace(/[„”]/g, '')
-
-                              formik.setFieldValue('address', address)
-                              formik.setFieldValue('location', {
-                                latitude: parseFloat(suggestion.lat),
-                                longitude: parseFloat(suggestion.lon)
-                              })
-                              setDropdownVisible(false) // Hide dropdown on selection
-                            }}
-                            className="p-4 pointer border-b-[1px] border-grey-2"
-                          >
-                            {suggestion.display_name}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+                    }}
+                    className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(locationError || (formik.errors.address && formik.touched.address)) ? '[&>*]:text-black dark:[&>*]:before:border-white [&>*]:before:border-black [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    helperText={
+                      locationError
+                        ? locationError
+                        : formik.errors.address &&
+                          formik.touched.address &&
+                          formik.errors.address
+                    }
+                  />
 
                   <Field
                     type="text"
@@ -564,15 +582,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     )}
                   </div>
                 </div>
-              </CSSTransition>
+              )}
 
               {/* Step 2 */}
-              <CSSTransition
-                in={activeStep === 2}
-                timeout={500}
-                classNames="menu-secondary"
-                unmountOnExit
-              >
+              {activeStep === 2 && (
                 <div className="flex w-full flex-col items-center gap-4">
                   <FieldArray name="tags">
                     {({ push, remove }) => (
@@ -642,13 +655,12 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                   </div>
 
                   <FieldArray name="openingHours">
-                    {({ push, remove }) => (
+                    {({ replace }) => (
                       <div className="flex flex-col w-4/5 gap-4">
-                        <FormLabel className="text  text-[15px] text-black font-mont-md mb-2 dark:text-white">
+                        <FormLabel className="text text-[15px] text-black font-mont-md mb-2 dark:text-white">
                           Opening Hours *
                         </FormLabel>
 
-                        {/* Wyświetlanie 7 dni tygodnia od razu */}
                         {[
                           'Monday',
                           'Tuesday',
@@ -657,52 +669,69 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           'Friday',
                           'Saturday',
                           'Sunday'
-                        ].map((day, index) => (
-                          <div key={index} className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-gray-500 w-full dark:text-white ">
-                              {day}
-                            </span>
+                        ].map((day, index) => {
+                          const isClosed = formik.values.openingHours[index].from === null;
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].from`}
-                              name={`openingHours[${index}].from`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white [&>*]:text-black before:border-black before:border-black dark:before:border-white after:border-secondary"
-                            >
-                              <option value="" disabled>
-                                From
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              ))}
-                            </Field>
+                          return (
+                            <div key={index} className="flex items-center gap-4 w-full">
+                              {/* Checkbox do oznaczenia czy dzień jest otwarty */}
+                              <Checkbox
+                                checked={!isClosed}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    // Jeśli checkbox jest ZAZNACZONY, ustaw domyślne godziny
+                                    replace(index, { from: '00:00', until: '00:00' });
+                                  } else {
+                                    // Jeśli checkbox jest ODZNACZONY, ustaw null
+                                    replace(index, { from: null, until: null });
+                                  }
+                                }}
+                                className="text-grey-1 [&.Mui-checked]:text-secondary"
+                              />
 
-                            <span className="text-sm font-bold text-gray-500 dark:text-white">
-                              -
-                            </span>
+                              <span className="text-sm font-bold text-gray-500 w-full dark:text-white">
+                                {day}
+                              </span>
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].until`}
-                              name={`openingHours[${index}].until`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:dark:text-white before:border-black dark:before:border-white after:border-secondary"
-                            >
-                              <option value="" disabled>
-                                Until
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              ))}
-                            </Field>
-                          </div>
-                        ))}
+                              {/* Pola wyboru godzin - widoczne tylko, jeśli dzień jest otwarty */}
+                              {!isClosed && (
+                                <>
+                                  <Field
+                                    as={NativeSelect}
+                                    id={`openingHours[${index}].from`}
+                                    name={`openingHours[${index}].from`}
+                                    className="w-4/5 text-[15px] text-black dark:text-white"
+                                  >
+                                    {timeOptions.map(time => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </Field>
+
+                                  <span className="text-sm font-bold text-gray-500 dark:text-white">-</span>
+
+                                  <Field
+                                    as={NativeSelect}
+                                    id={`openingHours[${index}].until`}
+                                    name={`openingHours[${index}].until`}
+                                    className="w-4/5 text-[15px] text-black dark:text-white"
+                                  >
+                                    {timeOptions.map(time => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                </>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </FieldArray>
+
 
                   <Field
                     type="text"
@@ -768,15 +797,10 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     )}
                   </div>
                 </div>
-              </CSSTransition>
+              )}
 
               {/* Step 3 */}
-              <CSSTransition
-                in={activeStep === 3}
-                timeout={500}
-                classNames="menu-secondary"
-                unmountOnExit
-              >
+              {activeStep === 3 && (
                 <div className="flex w-full flex-col items-center gap-4">
                   <div className="flex items-center w-4/5 gap-4">
                     <label
@@ -1051,7 +1075,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     </button>
                   </div>
                 </div>
-              </CSSTransition>
+              )}
             </div>
           </Form>
         )}
@@ -1061,3 +1085,4 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
 }
 
 export default RestaurantRegister
+
