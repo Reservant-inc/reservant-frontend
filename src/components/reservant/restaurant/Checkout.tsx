@@ -72,11 +72,19 @@ const Checkout: React.FC = () => {
 
   const onSubmit = async () => {
     try {
-      const addMoneyBody = JSON.stringify({
-        title: `Funds deposit for order in: ${restaurant.name}`,
-        amount: totalCost
-      })
-      await fetchPOST('/wallet/add-money', addMoneyBody)
+      const selectedPaymentMethod = (document.querySelector(
+        'input[name="paymentMethod"]:checked'
+      ) as HTMLInputElement)?.value;
+      
+      // jeśli Card to dodaje i odejmuje środki, jeśli Wallet to tylko odejmuje
+      // jezeli wybralismy Card i mamy cos w koszyku ale to jest darmowe to tez nie chcemy robic add-money
+      if (selectedPaymentMethod === 'Card' && items && items.length > 0 && totalCost > 0) {
+        const addMoneyBody = JSON.stringify({
+          title: `Funds deposit for order in: ${restaurant.name}`,
+          amount: totalCost,
+        });
+        await fetchPOST('/wallet/add-money', addMoneyBody);
+      }
 
       const visitBody = JSON.stringify({
         date: dateTime,
@@ -157,6 +165,7 @@ const Checkout: React.FC = () => {
                 <input
                   type="radio"
                   name="paymentMethod"
+                  value="Wallet"
                   defaultChecked={canAfford}
                   disabled={!canAfford}
                   className=" h-5 w-5 cursor-pointer border-[1px] border-grey-2 text-grey-3 checked:text-primary disabled:cursor-default dark:checked:text-secondary"
@@ -174,6 +183,7 @@ const Checkout: React.FC = () => {
                 <input
                   type="radio"
                   name="paymentMethod"
+                  value="Card"
                   defaultChecked={!canAfford}
                   className=" h-5 w-5 cursor-pointer border-[1px] border-grey-2 text-grey-3 checked:text-primary dark:checked:text-secondary"
                 />
