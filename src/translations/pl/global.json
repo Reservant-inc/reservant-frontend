@@ -21,7 +21,18 @@
         "newest": "Najnowsze",
         "ascending": "Rosnąco",
         "descending": "Malejąco",
-        "Sort": "Sortuj"
+        "Sort": "Sortuj",
+        "monday": "Pn",
+        "tuesday": "Wt",
+        "wednesday": "Śr", 
+        "thursday": "Czw",
+        "friday": "Pt",
+        "saturday": "Sob",
+        "sunday": "Niedz",
+        "from": "od", 
+        "until": "do",
+        "uploadMore": "Dodaj więcej zdjęć",
+        "noPhotos": "Dodaj więcej zdjęć"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -62,7 +73,22 @@
         "birthDate": "Data urodzenia",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",
-        "registerButton": "Zarejestruj się"
+        "registerButton": "Zarejestruj się",
+        "register": "REJESTRACJA",
+        "passwordCAP": "HASŁO",
+        "confirmPasswordCAP": "POTWIERDŹ HASŁO",
+        "backToLogin": "Wróc do logowania",
+        "next": "DALEJ",
+        "firstNameCAP": "IMIĘ",
+        "lastNameCAP": "NAZWISKO",
+        "phoneMuberCAP": "NUMER TELEFONU",
+        "birthDateCAP": "DATA URODZENIA",
+        "back": "COFNIJ",
+        "submit": "WYŚLIJ",
+        "welcome": "WITAJ",
+        "errors": {
+            "login": "Nieprawidłowy login lub hasło"
+        }
     },
     "add-employee": {
         "isBackdoorEmployee": "Pracownik zaplecza",
@@ -99,7 +125,10 @@
         "step1": "Dane lokalu",
         "step2": "Pozostałe informacje",
         "submit":"Koniec",
-        "group": "Grupa"
+        "group": "Grupa",
+        "complete": "Rejestracja zakończona",
+        "reservationDeposit": "Depozyt",
+        "addRestaurant": "Dodaj restaurację"
     },
     "errors": {
         "login": {
@@ -233,7 +262,8 @@
         "groups": {
             "counter": "Liczba lokali",
             "add-button": "Dodaj Grupę",
-            "header": "Moje Grupy"
+            "header": "Moje Grupy",
+             "actions": "Akcje"
         },
         "menu": {
             "newMenu": "Dodaj nowe menu",
@@ -257,7 +287,21 @@
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
             "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
             "selectedFile": "Wybrano plik",
-            "sort": "Sortuj"
+            "sort": "Sortuj",
+            "activeSince": "Aktywne od",
+            "activeUntil": "Aktywne do",
+            "menuItem": "Pozycja",
+            "noMenuItems": "Wybrane pozycje będą się pojawiać tutaj",
+            "addToMenu": "Dodaj do menu",
+            "creatingMenu": "Tworzenie nowego menu",
+            "editingMenu": "Edycja",
+            "creatingMenuItem": "Tworzenie nowej pozycji w menu",
+            "price": "Cena",
+            "upload": "Dodaj zdjęcie",
+            "ingredient": "Składnik",
+            "amount": "Ilość",
+            "addUsage": "Dodaj użycie",
+            "noIngradietns": "Wybrane składniki będą pojawiać się tutaj"
         },
         "statistics": {
             "statistics": "Statystyki",
@@ -303,7 +347,24 @@
             "total-capacity": "Całkowita ilość miejsc",
             "opening-hours": "Godziny otwarcia",
             "verified": "Czy zweryfikowana",
-            "archived": "Czy zarchiwizowana"
+            "archived": "Czy zarchiwizowana",
+            "group": "Nazwa grupy",
+            "photos": "Zdjęcia",
+            "logoUpload": "Dodaj logo",
+            "addTable": "Dodaj stolik",
+            "remove": "Usuń",
+            "monday": "Poniedziałek",
+            "tuesday": "Wtorek",
+            "wednesday": "Środa", 
+            "thursday": "Czwartek",
+            "friday": "Piątek",
+            "saturday": "Sobota",
+            "sunday": "Niedziela",
+            "opening": "Godziny otwarcia",
+            "deposit": "Depozyt rezerwcaji",
+            "city": "Miasto",
+            "restaurantName": "Nazwa restauracji",
+            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?"
         }
     },
     "tools": {
