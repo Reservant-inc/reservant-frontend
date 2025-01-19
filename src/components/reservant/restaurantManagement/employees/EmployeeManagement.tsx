@@ -55,28 +55,37 @@ export default function EmployeeManagement() {
 
       if (response.length)
         for (const i in response) {
-          const tmp: EmploymentType[] = []
-          for (const j in response[i].employments) {
-            tmp.push({
-              employmentId: response[i].employments[j].employmentId,
-              restaurantId: response[i].employments[j].restaurantId,
-              isBackdoorEmployee: response[i].employments[j].isBackdoorEmployee,
-              isHallEmployee: response[i].employments[j].isHallEmployee,
-              restaurantName: response[i].employments[j].restaurantName
+          if (
+            response[i].firstName !== 'DELETED' &&
+            response[i].lastName !== 'DELETED'
+          ) {
+            const tmp: EmploymentType[] = []
+            for (const j in response[i].employments) {
+              tmp.push({
+                employmentId: response[i].employments[j].employmentId,
+                restaurantId: response[i].employments[j].restaurantId,
+                isBackdoorEmployee:
+                  response[i].employments[j].isBackdoorEmployee,
+                isHallEmployee: response[i].employments[j].isHallEmployee,
+                restaurantName: response[i].employments[j].restaurantName
+              })
+            }
+            employees.push({
+              id: Number(i),
+              userId: response[i].userId,
+              login: response[i].login,
+              firstName: response[i].firstName,
+              lastName: response[i].lastName,
+              birthDate: response[i].birthDate,
+              phoneNumber:
+                response[i].phoneNumber?.code + response[i].phoneNumber?.number,
+              employments: tmp.slice()
             })
           }
-          employees.push({
-            id: Number(i),
-            userId: response[i].userId,
-            login: response[i].login,
-            firstName: response[i].firstName,
-            lastName: response[i].lastName,
-            birthDate: response[i].birthDate,
-            phoneNumber:
-              response[i].phoneNumber?.code + response[i].phoneNumber?.number,
-            employments: tmp.slice()
-          })
         }
+      for (const i in employees) {
+        employees[i].id = Number(i)
+      }
 
       setRows(employees)
     } catch (error) {

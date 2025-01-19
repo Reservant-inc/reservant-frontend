@@ -166,13 +166,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name && formik.touched.name ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="name">Name:</label>
+                  <label htmlFor="name">{t('restaurant-management.menu.name')}:</label>
                   <Field
                     type="text"
                     id="name"
                     name="name"
                     className="w-full "
-                    //@TODO translation
                   />
                   <label>*</label>
                 </div>
@@ -184,13 +183,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName && formik.touched.alternateName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="alternateName">Alternate name:</label>
+                  <label htmlFor="alternateName">{t('restaurant-management.menu.alternateName')}:</label>
                   <Field
                     type="text"
                     id="alternateName"
                     name="alternateName"
                     className="w-full"
-                    //@TODO translation
                   />
                 </div>
                 {formik.errors.alternateName &&
@@ -202,13 +200,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.menuType && formik.touched.menuType ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="menuType">Menu type:</label>
+                  <label htmlFor="menuType">{t('restaurant-management.menu.menuType')}:</label>
                   <Field
                     id="menuType"
                     name="menuType"
                     as={'select'}
                     className="border-none w-full dark:bg-black"
-                    //@TODO translation
                   >
                     <option
                       className=""
@@ -217,9 +214,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                       disabled={true}
                       id="MenuMenuType-option-default"
                     >
-                      Menu type
+                      {t('restaurant-management.menu.menuType')}
                     </option>
-                    {/* //@TODO translation */}
                     {menuTypes.map(menuType => (
                       <option className="text-black" value={menuType}>
                         {menuType}
@@ -236,13 +232,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateFrom && formik.touched.dateFrom ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="dateFrom">Active since:</label>
+                  <label htmlFor="dateFrom">{t('restaurant-management.menu.activeSince')}:</label>
                   <Field
                     type="date"
                     id="dateFrom"
                     name="dateFrom"
                     className="w-full"
-                    //@TODO translation
                   />
                   <label>*</label>
                 </div>
@@ -254,13 +249,12 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateUntil && formik.touched.dateUntil ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="dateUntil">Active until:</label>
+                  <label htmlFor="dateUntil">{t('restaurant-management.menu.activeUntil')}:</label>
                   <Field
                     type="date"
                     id="dateUntil"
                     name="dateUntil"
                     className="w-full"
-                    //@TODO translation
                   />
                   <label>*</label>
                 </div>
@@ -284,7 +278,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       <div className="flex flex-col w-2/3 gap-7">
         <form className="flex text-nowrap items-center gap-7 pr-3">
           <div className="flex items-center justify-start gap-1 w-2/3 border-b-[1px] dark:text-grey-1">
-            <label className="">Menu item:</label>
+            <label className="">{t('restaurant-management.menu.menuItem')}:</label>
             <select
               name="id"
               id="MenuDialogMenuItemSelector"
@@ -298,9 +292,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 selected={true}
                 id="MI-option-default"
               >
-                Menu item
+                {t('restaurant-management.menu.menuItem')}
               </option>
-              {/* @todo t  */}
               {menuItems
                 .filter(
                   menuItem =>
@@ -336,7 +329,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           >
             <Add />
 
-            <h1 className="font-mont-md text-md">Add to menu</h1>
+            <h1 className="font-mont-md text-md">{t('restaurant-management.menu.addToMenu')}</h1>
           </button>
         </form>
 
@@ -373,9 +366,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               </ul>
             ) : (
               <h1 className="p-2 dark:text-grey-1">
-                Selected menu items will appear here.
+                {t('restaurant-management.menu.noMenuItems')}.
               </h1>
-            ) //@TODO translation
+            )
           }
         </div>
       </div>

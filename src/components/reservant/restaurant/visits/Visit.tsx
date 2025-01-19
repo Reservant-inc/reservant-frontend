@@ -29,7 +29,7 @@ const getParsedDate = (): string => {
 const Visit: React.FC<VisitProps> = () => {
   const navigate = useNavigate()
 
-  const [t] = useTranslation('global');
+  const [t] = useTranslation('global')
 
   const today = getParsedDate()
 
@@ -147,10 +147,12 @@ const Visit: React.FC<VisitProps> = () => {
   }
 
   return (
-    <div className="relative flex h-full w-full gap-4 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-black dark:text-grey-0">
-      <div className="h-full w-3/4 items-center shadow-md flex flex-col items-center bg-white rounded-lg p-3">
+    <div className="relative flex h-full w-full gap-4 p-4 text-nowrap bg-grey-1 dark:border-t-[2px] dark:border-grey-4 dark:bg-grey-6 dark:text-grey-0">
+      <div className="h-full w-3/4 items-center shadow-md flex flex-col items-center bg-white dark:bg-black rounded-lg p-3">
         <div className="h-[2rem] w-full">
-          <h1 className="font-mont-bd text-lg text-center">Menu</h1>
+          <h1 className="font-mont-bd text-lg text-center dark:text-white">
+            Menu
+          </h1>
         </div>
         <div className="h-[calc(100%-2rem)] w-full">
           <MenuList
@@ -159,12 +161,16 @@ const Visit: React.FC<VisitProps> = () => {
           />
         </div>
       </div>
-      <div className=" flex h-full overflow-y-auto scroll rounded-lg shadow-md w-1/4 min-w-[360px] flex-col justify-between bg-white items-center gap-5 p-3">
-        <h1 className="text-lg font-mont-bd">{t('general.reservation')}</h1>
+      <div className=" flex h-full overflow-y-auto scroll rounded-lg shadow-md w-1/4 min-w-[360px] flex-col justify-between bg-white dark:bg-black items-center gap-5 p-3">
+        <h1 className="text-lg font-mont-bd dark:text-white">
+          {t('general.reservation')}
+        </h1>
         <div className="flex w-full flex-col gap-5">
           <div className="flex flex w-full flex-col justify-between gap-4">
             <div className="flex w-full justify-between">
-              <label className="text-md  font-mont-md ">{t('reservation.guests-in-total')}:</label>
+              <label className="text-md  font-mont-md ">
+                {t('reservation.guests-in-total')}:
+              </label>
               <input
                 type="number"
                 value={guests}
@@ -176,7 +182,7 @@ const Visit: React.FC<VisitProps> = () => {
               />
             </div>
           </div>
-          <div className="flex w-full flex-col gap-2 border-b-[1px] border-grey-1 py-2 text-sm">
+          <div className="flex w-full flex-col gap-2 border-b-[1px] border-grey-1 dark:border-grey-4 py-2 text-sm">
             <FriendSelector
               friendsToAdd={friendsToAdd}
               setFriendsToAdd={setFriendsToAdd}
@@ -184,7 +190,9 @@ const Visit: React.FC<VisitProps> = () => {
             />
           </div>
           <div className="flex w-full items-center justify-between gap-2">
-            <label className="text-md font-mont-md">{t('reservation.date')}:</label>
+            <label className="text-md font-mont-md">
+              {t('reservation.date')}:
+            </label>
             <input
               type="date"
               value={date}
@@ -201,7 +209,9 @@ const Visit: React.FC<VisitProps> = () => {
               value={selectedTimeslot}
               className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
             >
-              {timeSlots.length <= 0 && <option>{t('general.not-available')}</option>}
+              {timeSlots.length <= 0 && (
+                <option>{t('general.not-available')}</option>
+              )}
               {timeSlots.map((slot, index) => (
                 <option key={index} value={slot} className="hover:bg-grey-1">
                   {slot}

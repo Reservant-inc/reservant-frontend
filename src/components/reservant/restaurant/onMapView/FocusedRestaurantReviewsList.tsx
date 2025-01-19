@@ -205,8 +205,8 @@ const FocusedRestaurantReviewsList: React.FC<
 
         {/* Add Review Dialog */}
         <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-          <DialogTitle>{t('reviews.add-review')}</DialogTitle>
-          <DialogContent>
+          <DialogTitle className='dark:bg-grey-6 dark:text-white'>{t('reviews.add-review')}</DialogTitle>
+          <DialogContent className='dark:bg-grey-6 dark:text-white'>
             <h2>{t('reviews.rating')}:</h2>
             <Rating
               name="star-rating"
@@ -221,7 +221,7 @@ const FocusedRestaurantReviewsList: React.FC<
               rows={4}
             />
           </DialogContent>
-          <DialogActions>
+          <DialogActions className='dark:bg-grey-6'>
             <Button
               onClick={handleDialogClose}
               className="rounded-lg text-primary dark:text-secondary"
@@ -230,7 +230,7 @@ const FocusedRestaurantReviewsList: React.FC<
             </Button>
             <Button
               onClick={handleSubmitReview}
-              className={`rounded-lg ${isSubmitDisabled ? 'text-grey-3 dark:text-grey-5' : 'text-primary dark:text-secondary'}`}
+              className={`rounded-lg ${isSubmitDisabled ? 'text-grey-3 dark:text-grey-2' : 'text-primary dark:text-secondary'}`}
               disabled={isSubmitDisabled}
             >
               {t('general.submit')}

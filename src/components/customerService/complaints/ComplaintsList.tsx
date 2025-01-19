@@ -16,17 +16,24 @@ import { useTranslation } from 'react-i18next'
 const ComplaintsList: React.FC = () => {
   const [reports, setReports] = useState<ReportType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const navigate = useNavigate()
   const [alertMessage, setAlertMessage] = useState<string>('')
+  const [userId, setUserId] = useState<string | null>(null)
+  const [isManager, setIsManager] = useState<boolean>(false)
 
-  const { reportId } = useParams<{ reportId?: string }>()
-  const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
-
+  const navigate = useNavigate();
+  const { reportId } = useParams<{ reportId?: string }>();
+  const { isDark, lightTheme, darkTheme } = useContext(ThemeContext);
   const [t] = useTranslation('global')
 
   useEffect(() => {
-    fetchReports()
-  }, [])
+    fetchUserDetails();
+  }, []);
+
+  useEffect(() => {
+    if (userId !== null) {
+      fetchReports()
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (reportId) {
@@ -34,11 +41,24 @@ const ComplaintsList: React.FC = () => {
     }
   }, [reports])
 
+  const fetchUserDetails = async () => {
+    try {
+      const user = await fetchGET('/user');
+      setUserId(user.userId);
+      setIsManager(user.roles.includes('CustomerSupportManager'));
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+
   const fetchReports = async () => {
     setLoading(true)
     try {
-      const response: PaginationType = await fetchGET('/reports?perPage=-1')
-      setReports(response.items as ReportType[])
+      const url = isManager
+        ? '/reports?perPage=-1'
+        : `/reports?assignedToId=${userId}&perPage=-1`;
+      const response: PaginationType = await fetchGET(url);
+      setReports(response.items as ReportType[]);
     } catch (error) {
       console.error('Error fetching reports:', error)
     } finally {
@@ -119,7 +139,6 @@ const ComplaintsList: React.FC = () => {
         return resolvedBy ? (
           <Tooltip title={`${resolvedBy.userId}`}>
             <span>
-              {/* tu osoba ktora zamknęła zgłoszenie, w tooltip lista osób przez które przeszło zgłoszenie */}
               {resolvedBy.firstName} {resolvedBy.lastName}
             </span>
           </Tooltip>

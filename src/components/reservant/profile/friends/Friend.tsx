@@ -89,7 +89,7 @@ const Friend: React.FC<FriendProps> = ({
   }
 
   return (
-    <li className="flex flex-col gap-2 p-2 rounded-lg min-h-fit dark:text-grey-2 dark:bg-grey-6">
+    <li className="flex flex-col gap-2 p-2 rounded-lg min-h-fit dark:text-grey-2 dark:bg-black">
       <div className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <img
@@ -127,7 +127,7 @@ const Friend: React.FC<FriendProps> = ({
               <button
                 id={`${friend.otherUser.firstName}${friend.otherUser.lastName}RemoveFriend`}
                 onClick={handleOpenDialog}
-                className="flex gap-2 items-center text-error dark:bg-grey-5 hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-eror text-error transition hover:scale-105 hover:bg-error hover:text-white"
+                className="flex gap-2 items-center text-error dark:bg-black hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-eror text-error transition hover:scale-105 hover:bg-error hover:text-white"
                 disabled={loading}
               >
                 <PersonRemoveIcon className="text-sm" />
@@ -135,7 +135,7 @@ const Friend: React.FC<FriendProps> = ({
               </button>
               <button
                 id={`${friend.otherUser.firstName}${friend.otherUser.lastName}MessageFriend`}
-                className="flex gap-2 items-center text-primary dark:bg-grey-5 hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                className="flex gap-2 items-center text-primary dark:bg-black hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
               >
                 <MessageIcon className="text-sm" />
                 {t('profile.friends.message-friend-button')}
@@ -146,7 +146,7 @@ const Friend: React.FC<FriendProps> = ({
             <button
               id={`${friend.otherUser.firstName}${friend.otherUser.lastName}RemoveOutgoingRequest`}
               onClick={handleCancelRequest}
-              className="flex items-center gap-2 bg-white border-[1px] text-sm px-2 py-1 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5"
+              className="flex items-center gap-2 bg-white border-[1px] text-sm px-2 py-1 rounded-lg bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-black"
               disabled={loading}
             >
               <UndoIcon className="text-sm" />

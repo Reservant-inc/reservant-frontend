@@ -12,7 +12,7 @@ const Cart: React.FC<CartProps> = () => {
     useContext(CartContext)
 
   return (
-    <div className="flex flex-col w-full h-full items-center gap-2 rounded-lg bg-white py-2 dark:bg-grey-6">
+    <div className="flex flex-col w-full h-full items-center gap-2 rounded-lg bg-white dark:bg-black py-2 dark:bg-grey-6">
       <h1 className="font-mont-bd text-xl dark:text-white">Cart</h1>
       {items.length > 0 ? (
         <div className="scroll flex h-full w-full flex-col divide-y divide-solid divide-grey-1 overflow-y-auto border-y-[1px] border-grey-1 px-2 dark:divide-grey-5 dark:border-grey-5">

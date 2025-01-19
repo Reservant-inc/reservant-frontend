@@ -53,9 +53,9 @@ export default function HomePage() {
         setTags(response)
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error:', error)
+          console.error('Unexpected error:', error)
         }
       }
     }
@@ -85,9 +85,9 @@ export default function HomePage() {
         })
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error:', error)
+          console.error('Unexpected error:', error)
         }
       }
     }
@@ -112,9 +112,9 @@ export default function HomePage() {
         }
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error:', error)
+          console.error('Unexpected error:', error)
         }
       }
     }
@@ -162,8 +162,8 @@ export default function HomePage() {
     setIsTagFilterPressed(!isTagFilterPressed)
   }
 
-  const handleRestaurantClick = (id: number) => {
-    navigate(`../home/${id}`)
+  const handleRestaurantClick = (restaurant: RestaurantDetailsType) => {
+    navigate(`../home/${restaurant.restaurantId}`)
   }
 
   const handleCloseDetails = () => {
@@ -218,7 +218,7 @@ export default function HomePage() {
                   id="homePage-listItemButton"
                   onClick={() => {
                     setUserMovedMap(false)
-                    handleRestaurantClick(restaurant.restaurantId)
+                    handleRestaurantClick(restaurant)
                   }}
                   className={`rounded-md p-3 dark:bg-black
                       ${

@@ -127,7 +127,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
           </div>
           {menuItem.alcoholPercentage !== 0 && (
             <h1 className="text-sm text-grey-3">
-              alcohol contents - {menuItem.alcoholPercentage}%
+              {t('restaurant-management.menu.menuItemAlcoholPercentage')} - {menuItem.alcoholPercentage}%
             </h1>
           )}
         </div>
