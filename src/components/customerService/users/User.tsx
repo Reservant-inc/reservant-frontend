@@ -141,81 +141,91 @@ const User: React.FC = () => {
     <div className="z-[0] flex h-full w-full items-center overflow-y-auto scroll justify-center gap-2 bg-grey-1 dark:bg-grey-6">
       <div className="flex flex-col gap-2 h-full w-1/2">
         <div className="flex h-[40%] w-full self-start flex-col bg-white dark:bg-black rounded-lg p-4 gap-4 shadow-md">
-          <div className="flex justify-between w-full">
-            <h1 className="text-lg font-mont-bd">
-              {t('customer-service.user.account')}
-            </h1>
-            <div className="flex gap-2">
-              {userInfo?.birthDate === '0001-01-01' ? (
-                <p className="text-sm text-grey-4 italic">
-                  {t('customer-service.user.account_deleted')}
-                </p>
-              ) : (
-                <>
-                  {userInfo?.bannedUntil ? (
-                    <button
-                      className="border-[1px] rounded-lg p-1 text-primary hover:text-white"
-                      onClick={handleUnbanUser}
-                    >
-                      <DeleteForeverIcon className="w-4 h-4" />
-                      <span>{t('customer-service.user.unban_user')}</span>
-                    </button>
-                  ) : (
-                    <button
-                      className="border-[1px] rounded-lg p-1 text-primary dark:text-secondary dark:hover:text-white hover:text-black"
-                      onClick={() => setIsDialogOpen(true)}
-                    >
-                      <GavelIcon className="w-4 h-4" />
-                      <span>{t('customer-service.user.ban_user')}</span>
-                    </button>
-                  )}
-                  <button
-                    className="border-[1px] rounded-lg p-1 text-red  dark:hover:text-white hover:text-black"
-                    onClick={() => setIsDeleteDialogOpen(true)}
-                  >
-                    <DeleteForeverIcon className="w-4 h-4" />
-                    <span>{t('customer-service.user.delete_user')}</span>
-                  </button>
-                </>
-              )}
+          {isLoading ? (
+            <div className="w-full h-full flex items-center justify-center">
+              <CircularProgress className="text-grey-2" />
             </div>
-          </div>
-
-          <div className="flex items-center gap-4 w-full">
-            {userInfo ? (
-              <>
-                <img
-                  src={getImage(userInfo.photo, DefaultImage)}
-                  alt="User Profile"
-                  className="h-32 w-32 rounded-full"
-                />
-                <div className="flex flex-col gap-2 w-full">
-                  <div className="flex gap-2 items-center">
-                    <h1>{t('customer-service.user.name')}:</h1>
-                    <h1 className="text-md">{userInfo.firstName}</h1>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <h1>{t('customer-service.user.last_name')}:</h1>
-                    <h1 className="text-md">{userInfo.lastName}</h1>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <h1>{t('customer-service.user.phone_number')}:</h1>
-                    <h1 className="text-md">{userInfo.phoneNumber?.number}</h1>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <h1>{t('customer-service.user.birth_date')}:</h1>
-                    <h1 className="text-md">{userInfo.birthDate}</h1>
-                  </div>
-                  <div className="flex gap-2 items-center">
-                    <h1>{t('customer-service.user.login')}:</h1>
-                    <h1 className="text-md">{userInfo.login}</h1>
-                  </div>
+          ) : (
+            <>
+              <div className="flex justify-between w-full">
+                <h1 className="text-lg font-mont-bd">
+                  {t('customer-service.user.account')}
+                </h1>
+                <div className="flex gap-2">
+                  {userInfo?.birthDate === '0001-01-01' ? (
+                    <p className="text-sm text-grey-4 italic">
+                      {t('customer-service.user.account_deleted')}
+                    </p>
+                  ) : (
+                    <>
+                      {userInfo?.bannedUntil ? (
+                        <button
+                          className="border-[1px] rounded-lg p-1 text-primary hover:text-white"
+                          onClick={handleUnbanUser}
+                        >
+                          <DeleteForeverIcon className="w-4 h-4" />
+                          <span>{t('customer-service.user.unban_user')}</span>
+                        </button>
+                      ) : (
+                        <button
+                          className="border-[1px] rounded-lg p-1 text-primary dark:text-secondary dark:hover:text-white hover:text-black"
+                          onClick={() => setIsDialogOpen(true)}
+                        >
+                          <GavelIcon className="w-4 h-4" />
+                          <span>{t('customer-service.user.ban_user')}</span>
+                        </button>
+                      )}
+                      <button
+                        className="border-[1px] rounded-lg p-1 text-red  dark:hover:text-white hover:text-black"
+                        onClick={() => setIsDeleteDialogOpen(true)}
+                      >
+                        <DeleteForeverIcon className="w-4 h-4" />
+                        <span>{t('customer-service.user.delete_user')}</span>
+                      </button>
+                    </>
+                  )}
                 </div>
-              </>
-            ) : (
-              <CircularProgress />
-            )}
-          </div>
+              </div>
+
+              <div className="flex items-center gap-4 w-full">
+                {userInfo ? (
+                  <>
+                    <img
+                      src={getImage(userInfo.photo, DefaultImage)}
+                      alt="User Profile"
+                      className="h-32 w-32 rounded-full"
+                    />
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="flex gap-2 items-center">
+                        <h1>{t('customer-service.user.name')}:</h1>
+                        <h1 className="text-md">{userInfo.firstName}</h1>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <h1>{t('customer-service.user.last_name')}:</h1>
+                        <h1 className="text-md">{userInfo.lastName}</h1>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <h1>{t('customer-service.user.phone_number')}:</h1>
+                        <h1 className="text-md">
+                          {userInfo.phoneNumber?.number}
+                        </h1>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <h1>{t('customer-service.user.birth_date')}:</h1>
+                        <h1 className="text-md">{userInfo.birthDate}</h1>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <h1>{t('customer-service.user.login')}:</h1>
+                        <h1 className="text-md">{userInfo.login}</h1>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <CircularProgress />
+                )}
+              </div>
+            </>
+          )}
         </div>
 
         <div className="h-[60%] w-full bg-white dark:bg-black rounded-lg shadow-md p-4">
@@ -235,7 +245,7 @@ const User: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-full w-full rounded-lg shadow-md p-4 flex flex-col gap-2">
+        <div className="h-full w-full rounded-lg shadow-md p-4 flex flex-col gap-2 bg-white dark:bg-black">
           <div className="h-[2rem]">
             <h1 className="font-mont-bd text-lg">
               {t('customer-service.user.related-opinions')}
@@ -389,7 +399,7 @@ const User: React.FC = () => {
         } ${userInfo?.lastName || ''}`}
       >
         <div className="p-4 flex flex-col justify-between min-h-[150px]">
-          <p className="font-mont-bd">
+          <p className="font-mont-bd dark:text-white">
             {t('customer-service.user.delete_user_confirmation', {
               firstName: userInfo?.firstName,
               lastName: userInfo?.lastName
