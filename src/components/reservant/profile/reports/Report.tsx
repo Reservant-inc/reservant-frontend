@@ -33,7 +33,15 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
       <div className="flex w-full h-fit gap-2 bg-grey-0 dark:bg-grey-6 p-4 rounded-lg justify-between items-center">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center">
-            <h1 className="text-lg font-mont-bd">{report.category}</h1>
+            <h1 className="text-lg font-mont-bd">
+              {report.category === 'LostItem'
+                ? t('profile.reports.category.lost')
+                : report.category === 'RestaurantEmployeeReport'
+                  ? t('profile.reports.category.emp')
+                  : report.category === 'Technical'
+                    ? t('profile.reports.category.technical')
+                    : report.category}
+            </h1>
             {listType === ReportsListType.CustomerService &&
               (report.userRole === 'creator' ? (
                 <h1 className="text-sm text-green">
@@ -51,7 +59,11 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
               <Circle
                 className={`${report.reportStatus === 'ResolvedNegatively' ? 'text-red' : report.reportStatus === 'NotResolved' ? 'text-warning' : 'text-green'} text-xs`}
               />
-              {report.reportStatus}
+              {report.reportStatus === 'ResolvedNegatively'
+                ? t('profile.reports.status.rejected')
+                : report.reportStatus === 'NotResolved'
+                  ? t('profile.reports.status.pending')
+                  : t('profile.reports.status.resolved')}
             </p>
           )}
           <div className="flex flex-col gap-1">
