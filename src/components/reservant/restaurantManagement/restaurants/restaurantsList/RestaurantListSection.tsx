@@ -59,6 +59,9 @@ const RestaurantListSection: React.FC = () => {
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
 
+
+  const { t } = useTranslation('global')
+  
   const navigate = useNavigate()
   const populateRows = async () => {
     try {
@@ -119,6 +122,13 @@ const RestaurantListSection: React.FC = () => {
     populateRows()
   }, [])
 
+  const handleEditClick = (id: GridRowId) => {
+    setRowModesModel(prevModel => ({
+      ...prevModel,
+      [id]: { mode: GridRowModes.Edit } // Using GridRowModes.Edit
+    }))
+  }
+
   const handleSaveClick = (id: GridRowId) => {
     setRowModesModel(prevModel => ({
       ...prevModel,
@@ -146,7 +156,8 @@ const RestaurantListSection: React.FC = () => {
       const response = await fetchDELETE(`/my-restaurants/${restaurantId}`)
       setRestaurantToDelete('')
       setIsConfirmationOpen(false)
-      populateRows()
+      console.log(response)
+      populateRows() // Refetch the data after deletion
     } catch (error) {
       console.error('Error deleting restaurant', error)
     }
@@ -188,6 +199,8 @@ const RestaurantListSection: React.FC = () => {
         )
       }
 
+      console.log('Dane wysyłane do API:', rowToUpdate)
+
       await fetchPUT(
         `/my-restaurants/${newRow.restaurantId}`,
         JSON.stringify(rowToUpdate)
@@ -211,7 +224,7 @@ const RestaurantListSection: React.FC = () => {
             onClick={onAddClick}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ Add a restaurant</h1>
+            <h1 className="text-md font-mont-md">+ {t('restaurant-register.addRestaurant')}</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -221,7 +234,7 @@ const RestaurantListSection: React.FC = () => {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: t('restaurant-register.name'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -230,7 +243,7 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'restaurantType',
-      headerName: 'Local type',
+      headerName: t('restaurant-register.businessType'),
       type: 'string',
       width: 180,
       editable: true,
@@ -277,14 +290,14 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'city',
-      headerName: 'City',
+      headerName: t('restaurant-register.city'),
       type: 'string',
       width: 180,
       editable: true
     },
     {
       field: 'address',
-      headerName: 'Address',
+      headerName: t('restaurant-register.city'),
       type: 'string',
       width: 180,
       editable: true
@@ -300,7 +313,7 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'reservationDeposit',
-      headerName: 'Deposit',
+      headerName: t('restaurant-register.reservationDeposit'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -309,7 +322,7 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'groupName',
-      headerName: 'Group',
+      headerName: t('restaurant-register.group'),
       width: 250,
       editable: true,
       renderEditCell: params => {
@@ -356,7 +369,7 @@ const RestaurantListSection: React.FC = () => {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('restaurant-management.groups.actions'),
       width: 180,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -528,7 +541,7 @@ const RestaurantListSection: React.FC = () => {
         open={isConfirmationOpen}
         onClose={() => setIsConfirmationOpen(false)}
         onConfirm={() => handleDeleteRestaurant(restaurantToDelete)}
-        confirmationText="Are you sure you want to delete this restaurant?"
+        confirmationText={t('restaurant-management.details.confirmation')}
       />
     </div>
   )
