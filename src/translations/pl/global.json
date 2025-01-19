@@ -135,7 +135,8 @@
         "group": "Grupa",
         "complete": "Rejestracja zakończona",
         "reservationDeposit": "Depozyt",
-        "addRestaurant": "Dodaj restaurację"
+        "addRestaurant": "Dodaj restaurację",
+        "restaurant-register": "Zarejestruj nową restaurację"
     },
     "errors": {
         "login": {

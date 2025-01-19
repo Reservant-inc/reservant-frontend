@@ -137,7 +137,8 @@
         "group": "Group",
         "complete": "Registration complete",
         "reservationDeposit": "Deposit",
-        "addRestaurant": "Add a restaurant"
+        "addRestaurant": "Add a restaurant",
+        "restaurant-register": "Register new restaurant"
     },
     "errors": {
         "add-employee": {
