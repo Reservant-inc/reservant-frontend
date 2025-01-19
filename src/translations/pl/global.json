@@ -364,7 +364,9 @@
             "deposit": "Depozyt rezerwcaji",
             "city": "Miasto",
             "restaurantName": "Nazwa restauracji",
-            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?"
+            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
+            "table": "Stolik",
+            "capacity": "Pojemność"
         }
     },
     "tools": {
