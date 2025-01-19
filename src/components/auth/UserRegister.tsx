@@ -4,7 +4,7 @@ import { Formik, Form, Field, FormikValues } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useValidationSchemas } from '../../hooks/useValidationSchema'
 import { fetchPOST } from '../../services/APIconn'
-import { Alert, Snackbar, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import { CSSTransition } from 'react-transition-group'
 import MuiPhoneNumber from 'mui-phone-number'
@@ -17,7 +17,7 @@ const initialValues = {
   email: '',
   phoneNumber: '',
   birthDate: '',
-  password: '',
+  password: '', 
   confirmPassword: ''
 }
 
@@ -28,7 +28,6 @@ const UserRegister: React.FC = () => {
   const [requestLoading, setRequestLoading] = useState<boolean>(false)
   const [registerError, setRegisterError] = useState<string>('')
   const [activeStep, setActiveStep] = useState<number>(1)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   const handleSubmit = async (
     values: FormikValues,
@@ -53,13 +52,10 @@ const UserRegister: React.FC = () => {
         password: values.password
       })
 
+      console.log(body)
       await fetchPOST('/auth/register-customer', body)
 
-      setSuccessMessage(t('errors.user-register.success'))
-
-      setTimeout(() => {
-        navigate('/login')
-      }, 4000)
+      navigate('/login')
     } catch (error) {
       console.log(error)
       setRegisterError('Registration failed. Please try again.')
@@ -69,8 +65,9 @@ const UserRegister: React.FC = () => {
     }
   }
 
-  const handleCloseSnackbar = () => {
-    setSuccessMessage(null)
+  const test = () => {
+    console.log('step2')
+    console.log(initialValues)
   }
 
   return (
@@ -95,7 +92,7 @@ const UserRegister: React.FC = () => {
                     >
                       <div className="flex w-full flex-col items-center gap-4">
                         <h1 className="font-mont-md text-xl font-semibold text-white">
-                          REGISTER
+                          {t('auth.register')}
                         </h1>
                         <div className="flex w-full flex-col items-center gap-4">
                           <Field
@@ -140,7 +137,7 @@ const UserRegister: React.FC = () => {
                             type="password"
                             id="password"
                             name="password"
-                            label="PASSWORD"
+                            label={t('auth.passwordCAP')}
                             variant="standard"
                             helperText={
                               formik.errors.password &&
@@ -162,7 +159,7 @@ const UserRegister: React.FC = () => {
                             type="password"
                             id="confirmPassword"
                             name="confirmPassword"
-                            label="CONFIRM PASSWORD"
+                            label={t('auth.confirmPasswordCAP')}
                             variant="standard"
                             helperText={
                               formik.errors.confirmPassword &&
@@ -186,7 +183,7 @@ const UserRegister: React.FC = () => {
                               to="/login"
                               className="pointer flex h-[50px] w-4/5 items-center justify-center rounded-lg bg-primary font-mont-md text-white shadow-md"
                             >
-                              Back to login
+                              {t('auth.backToLogin')}
                             </Link>
                             <button
                               type="button"
@@ -218,7 +215,7 @@ const UserRegister: React.FC = () => {
                                   : 'bg-primary text-white'
                               }`}
                             >
-                              NEXT
+                             {t('auth.next')}
                             </button>
                           </div>
                         </div>
@@ -233,13 +230,13 @@ const UserRegister: React.FC = () => {
                     >
                       <div className="flex w-full flex-col items-center gap-4">
                         <h1 className="font-mont-md text-xl font-semibold text-white">
-                          REGISTER
+                          {t('auth.register')}
                         </h1>
                         <Field
                           type="text"
                           id="firstName"
                           name="firstName"
-                          label="FIRST NAME"
+                          label={t('auth.firstNameCAP')}
                           variant="standard"
                           helperText={
                             formik.errors.firstName &&
@@ -261,7 +258,7 @@ const UserRegister: React.FC = () => {
                           type="text"
                           id="lastName"
                           name="lastName"
-                          label="LAST NAME"
+                          label={t('auth.lastNameCAP')}
                           variant="standard"
                           helperText={
                             formik.errors.lastName &&
@@ -287,7 +284,7 @@ const UserRegister: React.FC = () => {
                               ? '[&>*]:text-white [&>*]:before:border-white [&>*]:after:border-secondary'
                               : '[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                           }`}
-                          label="PHONE NUMBER"
+                          label={t('auth.phoneMuberCAP')}
                           helperText={
                             formik.errors.phoneNumber &&
                             formik.touched.phoneNumber &&
@@ -306,7 +303,7 @@ const UserRegister: React.FC = () => {
                           type="date"
                           id="birthDate"
                           name="birthDate"
-                          label="BIRTH DATE"
+                          label={t('auth.birthDateCAP')}
                           variant="standard"
                           helperText={
                             formik.errors.birthDate &&
@@ -346,7 +343,7 @@ const UserRegister: React.FC = () => {
                             onClick={() => setActiveStep(1)}
                             className={`pointer flex h-[50px] w-4/5 items-center justify-center rounded-lg bg-primary text-white shadow-md`}
                           >
-                            BACK
+                            {t('auth.back')}
                           </button>
                           <button
                             type="submit"
@@ -360,7 +357,7 @@ const UserRegister: React.FC = () => {
                             {requestLoading ? (
                               <CircularProgress color="secondary" />
                             ) : (
-                              'SUBMIT'
+                              `${t('auth.submit')}`
                             )}
                           </button>
                         </div>
@@ -379,23 +376,9 @@ const UserRegister: React.FC = () => {
           </div>
         </div>
       </div>
-      <Snackbar
-        open={!!successMessage}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        sx={{ top: '60%' }}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="success"
-          sx={{ width: '100%' }}
-        >
-          {successMessage}
-        </Alert>
-      </Snackbar>
     </div>
   )
 }
 
 export default UserRegister
+

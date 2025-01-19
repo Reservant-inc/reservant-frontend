@@ -274,6 +274,7 @@
              "actions": "Akcje"
         },
         "menu": {
+            "menuType": "Typ menu",
             "newMenu": "Dodaj nowe menu",
             "editedMenu": "Edytuj menu",
             "name": "Nazwa",
@@ -289,7 +290,7 @@
             "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Procent alkocholu",
+            "menuItemAlcoholPercentage": "Zawrość alkocholu",
             "menuItemNameRequired": "Nazwa jest wymagana",
             "menuItemPriceRequired": "Cena jest wymagana",
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
