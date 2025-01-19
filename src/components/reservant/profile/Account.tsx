@@ -24,7 +24,7 @@ import { format } from 'date-fns'
 import TransactionHistory from './TransactionHistory'
 import { useNavigate } from 'react-router-dom'
 import { TransactionListType } from '../../../services/enums'
-import { logoutAction } from '../../auth/auth';
+import { logoutAction } from '../../auth/auth'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -37,7 +37,6 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1
 })
-
 
 const Account: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
@@ -64,10 +63,7 @@ const Account: React.FC = () => {
     phoneNumber: yup
       .string()
       .required(t('errors.user-register.phoneNumber.required'))
-      .matches(
-        /^\+\d{11}$/,
-        t('errors.user-register.phoneNumber.matches')
-      ),
+      .matches(/^\+\d{11}$/, t('errors.user-register.phoneNumber.matches')),
     firstName: yup
       .string()
       .required(t('errors.user-register.firstName.required'))
@@ -85,7 +81,7 @@ const Account: React.FC = () => {
   })
 
   const initialValues = {
-    phoneNumber: userInfo.phoneNumber?.number,
+    phoneNumber: `${userInfo.phoneNumber?.code || ''}${userInfo.phoneNumber?.number || ''}`,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName
   }
@@ -96,7 +92,9 @@ const Account: React.FC = () => {
     repeatPassword: ''
   }
   const passEditSchema = yup.object({
-    oldPassword: yup.string().required(t('errors.user-register.oldPassword.required')),
+    oldPassword: yup
+      .string()
+      .required(t('errors.user-register.oldPassword.required')),
     newPassword: yup
       .string()
       .matches(
@@ -142,15 +140,15 @@ const Account: React.FC = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await fetchDELETE(`/user`);
-      logoutAction();
+      await fetchDELETE(`/user`)
+      logoutAction()
       navigate('/')
     } catch (error) {
-      console.error('Error deleting account:', error);
+      console.error('Error deleting account:', error)
     } finally {
-      setIsDeleteAccountDialogOpen(false);
+      setIsDeleteAccountDialogOpen(false)
     }
-  };
+  }
 
   const fetchUserData = async () => {
     try {
@@ -174,10 +172,14 @@ const Account: React.FC = () => {
 
   const updateUserData = async (userData: any) => {
     try {
+      const phoneNumber = userData.phoneNumber || ''
+      const code = phoneNumber.slice(0, 3) // Pobiera pierwsze trzy znaki jako kod kraju
+      const number = phoneNumber.slice(3) // Pobiera resztę numeru
+
       await fetchPUT(
         '/user',
         JSON.stringify({
-          phoneNumber: userData.phoneNumber,
+          phoneNumber: { code, number },
           firstName: userData.firstName,
           lastName: userData.lastName,
           birthDate: '1999-12-31',
@@ -196,8 +198,8 @@ const Account: React.FC = () => {
   const openChangePassDialog = () => {
     setGeneralError(null)
     setIsChangingPass(true)
-  };
-  
+  }
+
   const updatePass = async (
     values: FormikValues,
     setFieldError: any,
@@ -208,32 +210,30 @@ const Account: React.FC = () => {
         '/auth/change-password',
         JSON.stringify({
           oldPassword: values.oldPassword,
-          newPassword: values.newPassword,
+          newPassword: values.newPassword
         })
-      );
-      alert('Password changed');
-      setGeneralError(null); 
-      setIsChangingPass(false);
+      )
+      alert('Password changed')
+      setGeneralError(null)
+      setIsChangingPass(false)
     } catch (error: any) {
       if (error.response) {
-        const response = await error.response.json();
-  
+        const response = await error.response.json()
+
         // jeżeli jest błąd oldPassword:
         if (response?.errors?.oldPassword?.includes('Incorrect password')) {
-          setFieldError('oldPassword', t('errors.incorrectOldPassword'));
-          setFieldValue('oldPassword', ''); 
-          setGeneralError(t('errors.user-register.oldPassword.no-match'));
-          return;
+          setFieldError('oldPassword', t('errors.incorrectOldPassword'))
+          setFieldValue('oldPassword', '')
+          setGeneralError(t('errors.user-register.oldPassword.no-match'))
+          return
         }
       }
-  
-      setFieldValue('oldPassword', '');
-      setGeneralError(t('errors.user-register.oldPassword.no-match'));
+
+      setFieldValue('oldPassword', '')
+      setGeneralError(t('errors.user-register.oldPassword.no-match'))
       // console.error('Unexpected error:', error);
     }
-  };
-  
-  
+  }
 
   const formatDate = (timestamp: string): string => {
     return format(new Date(timestamp), 'yyyy-MM-dd, HH:mm')
@@ -255,7 +255,7 @@ const Account: React.FC = () => {
             >
               <>
                 <Key className="w-4 h-4" />
-                <h1 className="text-nowrap">{t("profile.change-password")}</h1>
+                <h1 className="text-nowrap">{t('profile.change-password')}</h1>
               </>
             </button>
             <button
@@ -264,7 +264,7 @@ const Account: React.FC = () => {
             >
               <>
                 <EditSharpIcon className="w-4 h-4" />
-                <h1 className="text-nowrap">{t("profile.edit-data")}</h1>
+                <h1 className="text-nowrap">{t('profile.edit-data')}</h1>
               </>
             </button>
             <button
@@ -272,7 +272,9 @@ const Account: React.FC = () => {
               onClick={() => setIsDeleteAccountDialogOpen(true)}
             >
               <DeleteForeverIcon className="w-4 h-4" />
-              <h1 className="text-nowrap">{t("profile.delete-account-button")}</h1>
+              <h1 className="text-nowrap">
+                {t('profile.delete-account-button')}
+              </h1>
             </button>
           </div>
         </div>
@@ -284,15 +286,15 @@ const Account: React.FC = () => {
 
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-2 items-center">
-              <h1>{t("profile.first-name")}: </h1>
+              <h1>{t('profile.first-name')}: </h1>
               <h1 className="text-md">{userInfo.firstName}</h1>
             </div>
             <div className="flex gap-2 items-center">
-              <h1>{t("profile.last-name")}: </h1>
+              <h1>{t('profile.last-name')}: </h1>
               <h1 className="text-md">{userInfo.lastName}</h1>
             </div>
             <div className="flex gap-2 items-center">
-              <h1>{t("profile.phone-number")}: </h1>
+              <h1>{t('profile.phone-number')}: </h1>
               <h1 className="text-md">
                 {userInfo.phoneNumber?.code} {userInfo.phoneNumber?.number}
               </h1>
@@ -395,7 +397,9 @@ const Account: React.FC = () => {
                         <div
                           className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.firstName && touched.firstName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
-                          <label htmlFor="name">{t('profile.first-name')}:</label>
+                          <label htmlFor="name">
+                            {t('profile.first-name')}:
+                          </label>
                           <Field
                             type="text"
                             id="firstName"
@@ -413,7 +417,9 @@ const Account: React.FC = () => {
                         <div
                           className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.lastName && touched.lastName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
-                          <label htmlFor="name">{t('profile.last-name')}:</label>
+                          <label htmlFor="name">
+                            {t('profile.last-name')}:
+                          </label>
                           <Field
                             type="text"
                             id="lastName"
@@ -430,7 +436,9 @@ const Account: React.FC = () => {
                         <div
                           className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${errors.phoneNumber && touched.phoneNumber ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                         >
-                          <label htmlFor="name">{t('profile.phone-number')}:</label>
+                          <label htmlFor="name">
+                            {t('profile.phone-number')}:
+                          </label>
                           <Field
                             type="text"
                             id="phoneNumber"
@@ -449,7 +457,9 @@ const Account: React.FC = () => {
                       type="submit"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? `${t('profile.saving-changes')}` : `${t('profile.save-changes')}`}
+                      {isSubmitting
+                        ? `${t('profile.saving-changes')}`
+                        : `${t('profile.save-changes')}`}
                     </button>
                   </div>
                 </Form>
@@ -470,9 +480,12 @@ const Account: React.FC = () => {
               initialValues={passValues}
               validationSchema={passEditSchema}
               enableReinitialize
-              onSubmit={(values, { setSubmitting, setFieldError, setFieldValue }) => {
-                updatePass(values, setFieldError, setFieldValue);
-                setSubmitting(false);
+              onSubmit={(
+                values,
+                { setSubmitting, setFieldError, setFieldValue }
+              ) => {
+                updatePass(values, setFieldError, setFieldValue)
+                setSubmitting(false)
               }}
             >
               {({ isSubmitting, errors, touched }) => (
@@ -487,7 +500,9 @@ const Account: React.FC = () => {
                               : 'border-black text-black dark:text-grey-1 dark:border-white'
                           }`}
                         >
-                          <label htmlFor="oldPassword">{t('profile.old-pass')}:</label>
+                          <label htmlFor="oldPassword">
+                            {t('profile.old-pass')}:
+                          </label>
                           <Field
                             type={showOldPassword ? 'text' : 'password'}
                             id="oldPassword"
@@ -498,10 +513,14 @@ const Account: React.FC = () => {
                             id="showPassOld"
                             className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary"
                             onClick={() => {
-                              setShowOldPassword((prev) => !prev);
+                              setShowOldPassword(prev => !prev)
                             }}
                           >
-                            {showOldPassword ? <Visibility /> : <VisibilityOff />}
+                            {showOldPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
                           </span>
                         </div>
                         {errors.oldPassword && touched.oldPassword && (
@@ -517,7 +536,9 @@ const Account: React.FC = () => {
                               : 'border-black text-black dark:text-grey-1 dark:border-white'
                           }`}
                         >
-                          <label htmlFor="newPassword">{t('profile.new-pass')}:</label>
+                          <label htmlFor="newPassword">
+                            {t('profile.new-pass')}:
+                          </label>
                           <Field
                             type={showNewPassword ? 'text' : 'password'}
                             id="newPassword"
@@ -528,10 +549,14 @@ const Account: React.FC = () => {
                             id="showPassNew"
                             className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary"
                             onClick={() => {
-                              setShowNewPassword((prev) => !prev);
+                              setShowNewPassword(prev => !prev)
                             }}
                           >
-                            {showNewPassword ? <Visibility /> : <VisibilityOff />}
+                            {showNewPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
                           </span>
                         </div>
                         {errors.newPassword && touched.newPassword && (
@@ -546,7 +571,9 @@ const Account: React.FC = () => {
                               : 'border-black text-black dark:text-grey-1 dark:border-white'
                           }`}
                         >
-                          <label htmlFor="repeatPassword">{t('profile.repeat-pass')}:</label>
+                          <label htmlFor="repeatPassword">
+                            {t('profile.repeat-pass')}:
+                          </label>
                           <Field
                             type={showRepeatPassword ? 'text' : 'password'}
                             id="repeatPassword"
@@ -557,10 +584,14 @@ const Account: React.FC = () => {
                             id="showPassRep"
                             className="absolute text-grey-2 right-0 top-1/4 cursor-pointer dark:text-grey-0 hover:text-primary"
                             onClick={() => {
-                              setShowRepeatPassword((prev) => !prev);
+                              setShowRepeatPassword(prev => !prev)
                             }}
                           >
-                            {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
+                            {showRepeatPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
                           </span>
                         </div>
                         {errors.repeatPassword && touched.repeatPassword && (
@@ -571,7 +602,9 @@ const Account: React.FC = () => {
 
                     {/* error pod formularzem */}
                     {generalError && (
-                      <div className="text-error text-center my-4">{generalError}</div>
+                      <div className="text-error text-center my-4">
+                        {generalError}
+                      </div>
                     )}
                     <button
                       className="border-[1px] self-center px-2 h-8 w-[200px] text-sm rounded-lg p-1 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"

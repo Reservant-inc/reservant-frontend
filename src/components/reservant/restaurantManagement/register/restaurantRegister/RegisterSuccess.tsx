@@ -20,12 +20,12 @@ const RegisterSuccess: React.FC<RegisterSuccessrProps> = ({onDialogClose, onRegi
       <div className="w-full h-[80%] flex flex-col items-center justify-center">
         {/* Górna sekcja (Ikona) */}
         <div className="w-full flex items-center pt-10 pb-10 justify-center ">
-          <DoneIcon className="text-primary text-8xl" />
+          <DoneIcon className="text-primary dark:text-secondary text-8xl" />
         </div>
 
         {/* Dolna sekcja (Nagłówek i tekst) */}
         <div className="w-full flex flex-col items-center justify-center p-8">
-          <h2 className="text-4xl mb-4">Registration complete</h2>
+          <h2 className="text-4xl mb-4">{t('restaurant-register.complete')}</h2>
           <p className="text-lg text-black dark:text-grey-2 text-center">
             {t('restaurant-register.submitSuccessMessage')}
           </p> 
@@ -33,7 +33,7 @@ const RegisterSuccess: React.FC<RegisterSuccessrProps> = ({onDialogClose, onRegi
         <div className='p-20'>
             <button
                 onClick={() => handleButton()}
-                className={`flex h-[60px] w-[120px]  cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary text-white
+                className={`flex h-[60px] w-[120px]  cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary text-white
                     }`}
             >
                 OK

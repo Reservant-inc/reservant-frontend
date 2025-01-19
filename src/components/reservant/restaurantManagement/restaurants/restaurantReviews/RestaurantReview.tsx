@@ -264,8 +264,8 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       )}
 
       <Dialog open={isEditDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>{t('reviews.edit-review')}</DialogTitle>
-        <DialogContent>
+        <DialogTitle className='dark:bg-grey-6 dark:text-white'>{t('reviews.edit-review')}</DialogTitle>
+        <DialogContent className='dark:bg-grey-6 dark:text-white'>
           <h2>{t('reviews.rating')}:</h2>
           <Rating
             name="star-rating-edit"
@@ -278,10 +278,10 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             rows={4}
             value={editedContents}
             onChange={e => setEditedContents(e.target.value)}
-            className="w-full p-4 border rounded dark:bg-grey-700 dark:text-white dark:border-grey-500"
+            className="w-full p-4 border rounded dark:bg-grey-6 dark:text-white dark:border-grey-4"
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className='dark:bg-grey-6 dark:text-white'>
           <Button
             onClick={handleDialogClose}
             className="text-primary dark:text-secondary"
