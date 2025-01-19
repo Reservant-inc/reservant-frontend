@@ -22,7 +22,19 @@
         "newest": "Newest",
         "ascending": "Ascending",
         "descending": "Descending",
-        "Sort": "Sort"
+        "Sort": "Sort",
+        "monday": "Mon",
+        "tuesday": "Tues",
+        "wednesday": "Wed", 
+        "thursday": "Thur",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun",
+        "from": "from", 
+        "until": "until",
+        "uploadMore": "Upload more photos",
+        "noPhotos": "No photos uploaded yet",
+        "remove": "Remove"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -37,7 +49,22 @@
         "birthDate": "Birth date:",
         "password": "Password",
         "confirmPassword": "Confirm password",
-        "registerButton": "Register"
+        "registerButton": "Register",
+        "register": "REGISTER",
+        "passwordCAP": "PASSWORD",
+        "confirmPasswordCAP": "CONFIRM PASSWORD",
+        "backToLogin": "Back to login",
+        "next": "NEXT",
+        "firstNameCAP": "FIRST NAME",
+        "lastNameCAP": "LASTNAME",
+        "phoneMuberCAP": "PHONE NUMBER",
+        "birthDateCAP": "BIRTH DATE",
+        "back": "BACK",
+        "submit": "SUBMIT",
+        "welcome": "WELCOME",
+        "errors": {
+            "login": "Invalid login or password"
+        }
     },
     "reservation": {
         "history": "Reservation history",
@@ -100,7 +127,10 @@
         "step1": "Local data",
         "step2": "More info",
         "submit": "Finish",
-        "group": "Group"
+        "group": "Group",
+        "complete": "Registration complete",
+        "reservationDeposit": "Deposit",
+        "addRestaurant": "Add a restaurant"
     },
     "errors": {
         "add-employee": {
@@ -209,7 +239,8 @@
         "groups": {
             "counter": "Number of restaurants",
             "add-button": "Add a new Group",
-            "header": "My Groups"
+            "header": "My Groups",
+             "actions": "Actions"
         },
         "menu": {
             "newMenu": "Add new menu",
@@ -233,7 +264,22 @@
             "menuItemPriceMustBeNumber": "Price must be number",
             "menuItemAlcoholMustBeNumber": "Alocohol percentage must be number",
             "selectedFile": "Selected file",
-            "sort": "Sort by"
+            "sort": "Sort by",
+            "activeSince": "Active since",
+            "activeUntil": "Active until",
+            "menuItem": "Menu item",
+            "noMenuItems": "Selected menu items will appear here",
+            "addToMenu": "Add to menu",
+            "creatingMenu": "Creating a new menu",
+            "editingMenu": "Editing the",
+            "creatingMenuItem": "Creating a new menu item",
+            "price": "Price",
+            "upload": "Upload photo",
+            "ingredient": "Ingredient",
+            "amount": "Amount",
+            "addUsage": "Add usage",
+            "noIngradietns": "Selected ingredients will appear here"
+
         },
         "statistics": {
             "statistics": "Statistics",
@@ -279,7 +325,23 @@
             "total-capacity": "Total capacity",
             "opening-hours": "Opening hours",
              "verified": "Is verified",
-            "archived": "Is archived"
+            "archived": "Is archived",
+            "group": "Group Name",
+            "photos": "Photos",
+            "logoUpload": "Upload logo",
+            "addTable": "Add table",
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday", 
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturady",
+            "sunday": "Sunday",
+            "opening": "Opening hours",
+            "deposit": "Reservation Deposit",
+            "city": "City",
+            "restaurantName": "Restaurant Name",
+            "confirmation": "Are you sure you want to delete this restaurant?"
         }
     },
     "tools": {
