@@ -77,7 +77,8 @@ const Checkout: React.FC = () => {
       ) as HTMLInputElement)?.value;
       
       // jeśli Card to dodaje i odejmuje środki, jeśli Wallet to tylko odejmuje
-      if (selectedPaymentMethod === 'Card') {
+      // jezeli wybralismy Card i mamy cos w koszyku ale to jest darmowe to tez nie chcemy robic add-money
+      if (selectedPaymentMethod === 'Card' && items && items.length > 0 && totalCost > 0) {
         const addMoneyBody = JSON.stringify({
           title: `Funds deposit for order in: ${restaurant.name}`,
           amount: totalCost,
