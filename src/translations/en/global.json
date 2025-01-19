@@ -623,6 +623,28 @@
             "close": "Close",
             "cancel": "Cancel",
             "related-opinions": "Reviews"
-        }
+        },
+        "visit-details": {
+  "visit-details": "Visit Details",
+  "date": "Date",
+  "time": "Time",
+  "guests": "Guests",
+  "takeaway": "Takeaway",
+  "yes": "Yes",
+  "no": "No",
+  "table-id": "Table ID",
+  "participants": "Participants",
+  "no-participants": "No participants.",
+  "go-to-profile": "Go to profile",
+  "orders": "Orders",
+  "order-id": "Order ID",
+  "note": "Note",
+  "no-notes": "No notes",
+  "cost": "Cost",
+  "status": "Status",
+  "no-orders": "No orders.",
+  "employee": "Employee"
+}
+
     }
 }
