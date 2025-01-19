@@ -718,7 +718,8 @@
             "backdoors-emp": "Backdoors",
             "employees": "Employees",
             "no-employees": "No employees found.",
-            "no-restaurant-details": "No restaurant details available."
+            "no-restaurant-details": "No restaurant details available.",
+            "already-assigned": "Already assigned"
         },
         "user": {
             "account": "Account",
