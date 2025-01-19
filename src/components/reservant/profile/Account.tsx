@@ -84,7 +84,7 @@ const Account: React.FC = () => {
   })
 
   const initialValues = {
-    phoneNumber: userInfo.phoneNumber?.number,
+    phoneNumber: `${userInfo.phoneNumber?.code || ''}${userInfo.phoneNumber?.number || ''}`,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName
   }
@@ -173,24 +173,30 @@ const Account: React.FC = () => {
 
   const updateUserData = async (userData: any) => {
     try {
+      const phoneNumber = userData.phoneNumber || '';
+      const code = phoneNumber.slice(0, 3); // Pobiera pierwsze trzy znaki jako kod kraju
+      const number = phoneNumber.slice(3); // Pobiera resztę numeru
+  
       await fetchPUT(
         '/user',
         JSON.stringify({
-          phoneNumber: userData.phoneNumber,
+          phoneNumber: { code, number },
           firstName: userData.firstName,
           lastName: userData.lastName,
           birthDate: '1999-12-31',
           photo: photoFileName
         })
-      )
+      );
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log(error)
+      if (error instanceof FetchError) console.log(error.formatErrors());
+      else console.log(error);
     } finally {
-      setIsEditing(false)
-      fetchUserData()
+      setIsEditing(false);
+      fetchUserData();
     }
-  }
+  };
+
+  
   const updatePass = async (values: FormikValues) => {
     try {
       await fetchPOST(
