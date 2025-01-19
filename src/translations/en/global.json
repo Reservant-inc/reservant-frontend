@@ -148,6 +148,9 @@
                 "matches": "Passwords must match",
                 "required": "Password confirmation is required"
             },
+            "oldPassword": {
+                "required": "Old password is required"
+            },
             "success": "Registration finished successfully"
         },
         "restaurant-register": {
@@ -203,7 +206,32 @@
                 "min": "Maximum reservation duration cannot be less than 30 minutes",
                 "number": "You must enter a number"
             }
-        }
+        },
+        "event-creation": {
+    "name": {
+      "required": "Event name is required"
+    },
+    "description": {
+      "required": "Description is required"
+    },
+    "time": {
+      "required": "Event time is required",
+      "isFuture": "Event time must be in the future"
+    },
+    "mustJoinUntil": {
+      "required": "Must Join Until is required",
+      "isFuture": "Must Join Until must be in the future",
+      "isBefore": "Must Join Until time must be before the event time"
+    },
+    "maxPeople": {
+      "min": "Must be at least 1 person",
+      "max": "Cannot exceed 20 people",
+      "required": "Max People is required"
+    },
+    "photoFileName": {
+      "required": "Photo is required"
+    }
+  }
     },
     "restaurant-management": {
         "groups": {
@@ -332,6 +360,25 @@
         "delivery-fee": "Delivery fee",
         "events": "Events"
     },
+    "event-creation": {
+            "even-title": "Event",
+            "create-event": "Create an Event",
+            "name": "Event name",
+            "description": "Description",
+            "time-from": "Event time",
+            "must-join-until": "Must join until",
+            "max-people": "Max people",
+            "preview-picture": "Event preview picture",
+            "create": "Create event",
+            "cancel": "Cancel",
+            "upload-photo": "Upload photo",
+            "delete-photo": "Delete photo",
+            "event-creation-title": "New event created",
+            "event-creation": "You have created a new event",
+            "go-to-my-events": "Go to My Events",
+            "close": "Close",
+            "event-loading": "Loading event details..."
+        },
     "reviews": {
         "filter": "Filter",
         "reviews": "Reviews",
@@ -457,6 +504,18 @@
         "account": "Account",
         "reservations": "Reservations",
         "search": "Search by name",
+        "first-name": "First name",
+        "last-name": "Last name",
+        "phone-number": "Phone number",
+        "change-password": "Change password",
+        "edit-data": "Edit personal data",
+        "changing-pass": "Changing password...",
+        "old-pass": "Old password",
+        "new-pass": "New password",
+        "repeat-pass": "Repeat password",
+        "save-changes": "Save changes",
+        "editing-user": "Editing user information...",
+        "saving-changes": "Saving...",
         "friends": {
             "friends-tab": "Friends",
             "outgoing-tab": "Outgoing friend requests",
@@ -581,7 +640,12 @@
             "assign": "Assign",
             "ok": "Ok",
             "resolve-positive": "Resolve",
-            "resolve-negative": "Reject"
+            "resolve-negative": "Reject",
+            "hall-emp": "Hall",
+            "backdoors-emp": "Backdoors",
+            "employees": "Employees",
+            "no-employees": "No employees found.",
+            "no-restaurant-details": "No restaurant details available."
         },
         "user": {
             "account": "Account",

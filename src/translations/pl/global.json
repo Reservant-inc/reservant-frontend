@@ -142,6 +142,9 @@
                 "matches": "Podane hasła muszą być zgodne",
                 "required": "Wymagane jest potwierdzenie hasła"
             },
+            "oldPassword": {
+                "required": "Stare hasło jest wymagane"
+            },
             "success": "Rejestracja zakończona sukcesem"
         },
         "restaurant-register": {
@@ -198,7 +201,33 @@
                 "min": "Maxymalny czas rezerwacji nie moze być nizszy niz 30 minut",
                 "number": "Nalezy wprowadzić liczbę"
             }
+        },
+                "event-creation": {
+        "name": {
+            "required": "Nazwa wydarzenia jest wymagana"
+        },
+        "description": {
+            "required": "Opis jest wymagany"
+        },
+        "time": {
+            "required": "Czas wydarzenia jest wymagany",
+            "isFuture": "Czas wydarzenia musi być w przyszłości"
+        },
+        "mustJoinUntil": {
+            "required": "Czas na dołączenie jest wymagany",
+            "isFuture": "Czas na dołączenie musi być w przyszłości",
+            "isBefore": "Czas na dołączenie musi być przed czasem wydarzenia"
+        },
+        "maxPeople": {
+            "min": "Musi być co najmniej 1 osoba",
+            "max": "Nie może przekraczać 20 osób",
+            "required": "Maksymalna liczba osób jest wymagana"
+        },
+        "photoFileName": {
+            "required": "Zdjęcie jest wymagane"
         }
+        }
+
     },
     "restaurant-management": {
         "groups": {
@@ -328,6 +357,25 @@
         "delivery-fee": "Koszt dostawy",
         "events": "Wydarzenia:"
     },
+    "event-creation": {
+        "even-title": "Wydarzenie",
+        "create-event": "Stwórz Wydarzenie",
+        "name": "Nazwa",
+        "description": "Opis",
+        "time-from": "Data wydarzenia",
+        "must-join-until": "Najpóźniejsza data dołączenia",
+        "max-people": "Maksymalna ilość uczestników",
+        "preview-picture": "Zdjęcie poglądowe",
+        "create": "Stwórz",
+        "cancel": "Anuluj",
+        "upload-photo": "Załaduj zdjęcie",
+        "delete-photo": "Usuń zdjęcie",
+        "event-creation-title": "Nowe wydarzenie",
+        "event-creation": "Utworzyłeś nowe wydarzenie",
+        "go-to-my-events": "Moje Wydarzenia",
+        "close": "Zamknij",
+        "event-loading": "Ładowanie szczegółów wydarzenia..."
+    },
     "reviews": {
         "filter": "Filtruj",
         "reviews": "Opinie",
@@ -453,6 +501,18 @@
         "account": "Konto",
         "reservations": "Rezerwacje",
         "search": "Szukaj po nazwie",
+        "first-name": "Imię",
+        "last-name": "Nazwisko",
+        "phone-number": "Numer telefonu",
+        "change-password": "Zmień hasło",
+        "edit-data": "Edytuj dane osobowe",
+        "changing-pass": "Zmiana hasła...",
+        "old-pass": "Stare hasło",
+        "new-pass": "Nowe hasło",
+        "repeat-pass": "Powtórz nowe hasło",
+        "save-changes": "Zapisz zmiany",
+        "editing-user": "Zmiana danych osobowych...",
+        "saving-changes": "Zapisywanie...",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
@@ -577,7 +637,12 @@
             "assign": "Przypisz",
             "ok": "Ok",
             "resolve-positive": "Rozpatrz",
-            "resolve-negative": "Odrzuć"
+            "resolve-negative": "Odrzuć",
+            "hall-emp": "Pracownik sali",
+            "backdoors-emp": "Pracownik zaplecza",
+            "employees": "Pracownicy lokalu",
+            "no-employees": "Nie znaleziono pracowników dla tego lokalu.",
+            "no-restaurant-details": "Nie znaleziono szczegółów restauracji."
         },
         "user": {
             "account": "Konto",
