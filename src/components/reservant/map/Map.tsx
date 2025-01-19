@@ -31,7 +31,7 @@ const Map: React.FC<MapProps> = ({
 
     map.zoomControl.remove()
     map.setMinZoom(10)
-    map.setMaxZoom(18)
+    map.setMaxZoom(20)
 
     useEffect(() => {
       if (activeRestaurant && !userMovedMap) {

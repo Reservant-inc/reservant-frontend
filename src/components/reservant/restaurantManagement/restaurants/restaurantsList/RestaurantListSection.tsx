@@ -7,9 +7,7 @@ import {
   IconButton,
   FormControl,
   Select,
-  MenuItem,
-  createTheme,
-  ThemeProvider
+  MenuItem
 } from '@mui/material'
 import {
   GridToolbarContainer,
@@ -59,9 +57,8 @@ const RestaurantListSection: React.FC = () => {
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
 
-
   const { t } = useTranslation('global')
-  
+
   const navigate = useNavigate()
   const populateRows = async () => {
     try {
@@ -112,6 +109,7 @@ const RestaurantListSection: React.FC = () => {
           })
         }
       }
+
       setRows(tmp)
     } catch (error) {
       console.error('Error populating table', error)
@@ -121,13 +119,6 @@ const RestaurantListSection: React.FC = () => {
   useEffect(() => {
     populateRows()
   }, [])
-
-  const handleEditClick = (id: GridRowId) => {
-    setRowModesModel(prevModel => ({
-      ...prevModel,
-      [id]: { mode: GridRowModes.Edit } // Using GridRowModes.Edit
-    }))
-  }
 
   const handleSaveClick = (id: GridRowId) => {
     setRowModesModel(prevModel => ({
@@ -156,7 +147,6 @@ const RestaurantListSection: React.FC = () => {
       const response = await fetchDELETE(`/my-restaurants/${restaurantId}`)
       setRestaurantToDelete('')
       setIsConfirmationOpen(false)
-      console.log(response)
       populateRows() // Refetch the data after deletion
     } catch (error) {
       console.error('Error deleting restaurant', error)
@@ -186,6 +176,7 @@ const RestaurantListSection: React.FC = () => {
         'logo',
         'idCard'
       ]
+
       fieldsToClean.forEach(field => {
         if (rowToUpdate[field]?.startsWith('/uploads/')) {
           rowToUpdate[field] = rowToUpdate[field].replace('/uploads/', '')
@@ -224,7 +215,9 @@ const RestaurantListSection: React.FC = () => {
             onClick={onAddClick}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ {t('restaurant-register.addRestaurant')}</h1>
+            <h1 className="text-md font-mont-md">
+              + {t('restaurant-register.addRestaurant')}
+            </h1>
           </button>
         </div>
       </GridToolbarContainer>

@@ -74,6 +74,8 @@ export default function HomePage() {
           (restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId)
         )
 
+        console.log(response)
+
         setAllRestaurants([...allRestaurants, ...newRestaurants])
 
         setLoadedRestaurantIds(prevIds => {
