@@ -41,31 +41,31 @@ const PendingRestaurantsList: React.FC = () => {
     {
       field: 'id',
       headerName: 'ID',
-      flex: 0.1,
+      flex: 0.05,
       sortable: true
     },
     {
       field: 'name',
       headerName: t('customer-service.restaurant.name'),
-      flex: 0.25,
+      flex: 0.2,
       sortable: true
     },
     {
       field: 'restaurantType',
       headerName: t('customer-service.restaurant.type'),
-      flex: 0.25,
+      flex: 0.2,
       sortable: true
     },
     {
       field: 'city',
       headerName: t('customer-service.restaurant.city'),
-      flex: 0.25,
+      flex: 0.2,
       sortable: true
     },
     {
       field: 'description',
       headerName: t('customer-service.restaurant.description'),
-      flex: 0.5,
+      flex: 0.3,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip title={params.row.description || 'No description'}>
@@ -80,7 +80,7 @@ const PendingRestaurantsList: React.FC = () => {
     {
       field: 'actions',
       headerName: t('customer-service.restaurant.actions'),
-      flex: 0.1,
+      flex: 0.05,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip
