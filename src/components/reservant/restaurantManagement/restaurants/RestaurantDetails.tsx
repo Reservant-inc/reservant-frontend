@@ -96,6 +96,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       }
     }
 
+    console.log(restaurant.tables)
     fetchTags()
   }, [])
 
@@ -127,111 +128,119 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   }
 
   const handleSubmit = async (
-    values: any,
-    { setSubmitting, resetForm }: any
-  ) => {
-    setSubmitting(true)
+  values: any,
+  { setSubmitting, resetForm }: any
+) => {
+  setSubmitting(true);
 
-    try {
-      const {
-        groupId,
-        groupName,
-        name,
-        restaurantType,
-        address,
-        city,
-        reservationDeposit,
-        maxReservationDurationMinutes,
-        provideDelivery,
-        description,
-        tags,
-        openingHours,
-        logo,
-        photos
-      } = values
+  try {
+    const {
+      groupId,
+      name,
+      restaurantType,
+      address,
+      city,
+      reservationDeposit,
+      maxReservationDurationMinutes,
+      provideDelivery,
+      description,
+      tags,
+      openingHours,
+      logo,
+      photos,
+      tables, // Dodane stoliki
+    } = values;
 
-      let cleanLogo = logo
-      if (cleanLogo?.startsWith('/uploads/')) {
-        cleanLogo = cleanLogo.replace('/uploads/', '')
-      }
-
-      const cleanPhotos = photos.map((photo: string) =>
-        photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
-      )
-
-      let cleanIdCard = restaurant.idCard
-      if (restaurant.idCard?.startsWith('/uploads/')) {
-        cleanIdCard = cleanIdCard.replace('/uploads/', '')
-      }
-
-      let cleanBusinessPermission = restaurant.businessPermission
-      if (restaurant.businessPermission?.startsWith('/uploads/')) {
-        cleanBusinessPermission = cleanBusinessPermission.replace(
-          '/uploads/',
-          ''
-        )
-      }
-
-      // Sprawdzanie zmiany grupy
-      const newGroup = groups.find(group => group.restaurantGroupId === groupId)
-      console.log(newGroup?.restaurantGroupId)
-      if (newGroup && newGroup.restaurantGroupId !== restaurant.groupId) {
-        // Jeśli groupId się zmienia, przenosimy restaurację do nowej grupy
-        await fetchPOST(
-          `/my-restaurants/${restaurant.restaurantId}/move-to-group`,
-          JSON.stringify({ groupId: newGroup.restaurantGroupId })
-        )
-      }
-
-      const data = {
-        restaurantId: restaurant.restaurantId,
-        groupId,
-        groupName: newGroup?.name,
-        name,
-        restaurantType,
-        address,
-        city,
-        reservationDeposit,
-        maxReservationDurationMinutes,
-        provideDelivery,
-        description,
-        tags,
-        openingHours,
-        logo: cleanLogo,
-        photos: cleanPhotos,
-        nip: restaurant.nip,
-        postalIndex: restaurant.postalIndex,
-        location: restaurant.location,
-        businessPermission: cleanBusinessPermission,
-        idCard: cleanIdCard
-      }
-
-      console.log('Dane wysyłane do API:', data)
-
-      await fetchPUT(
-        `/my-restaurants/${restaurant.restaurantId}`,
-        JSON.stringify(data)
-      )
-
-      onSuccess()
-      resetForm()
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      setErrorMessage('Failed to update restaurant. Please try again.')
-    } finally {
-      setSubmitting(false)
+    let cleanLogo = logo;
+    if (cleanLogo?.startsWith('/uploads/')) {
+      cleanLogo = cleanLogo.replace('/uploads/', '');
     }
+
+    const cleanPhotos = photos.map((photo: string) =>
+      photo.startsWith('/uploads/') ? photo.replace('/uploads/', '') : photo
+    );
+
+    let cleanIdCard = restaurant.idCard;
+    if (restaurant.idCard?.startsWith('/uploads/')) {
+      cleanIdCard = cleanIdCard.replace('/uploads/', '');
+    }
+
+    let cleanBusinessPermission = restaurant.businessPermission;
+    if (restaurant.businessPermission?.startsWith('/uploads/')) {
+      cleanBusinessPermission = cleanBusinessPermission.replace(
+        '/uploads/',
+        ''
+      );
+    }
+
+    // Sprawdzanie zmiany grupy
+    const newGroup = groups.find(group => group.restaurantGroupId === groupId);
+    if (newGroup && newGroup.restaurantGroupId !== restaurant.groupId) {
+      await fetchPOST(
+        `/my-restaurants/${restaurant.restaurantId}/move-to-group`,
+        JSON.stringify({ groupId: newGroup.restaurantGroupId })
+      );
+    }
+
+    const data = {
+      restaurantId: restaurant.restaurantId,
+      groupId,
+      groupName: newGroup?.name,
+      name,
+      restaurantType,
+      address,
+      city,
+      reservationDeposit,
+      maxReservationDurationMinutes,
+      provideDelivery,
+      description,
+      tags,
+      openingHours,
+      logo: cleanLogo,
+      photos: cleanPhotos,
+      nip: restaurant.nip,
+      postalIndex: restaurant.postalIndex,
+      location: restaurant.location,
+      businessPermission: cleanBusinessPermission,
+      idCard: cleanIdCard,
+    };
+
+    console.log('Dane wysyłane do API:', data);
+
+    // Aktualizacja podstawowych danych restauracji
+    await fetchPUT(
+      `/my-restaurants/${restaurant.restaurantId}`,
+      JSON.stringify(data)
+    );
+
+    // Aktualizacja stolików – dodanie obiektu `request`
+    console.log('Aktualizacja stolików:', tables);
+    await fetchPUT(
+      `/my-restaurants/${restaurant.restaurantId}/tables`,
+      JSON.stringify({ tables  }) // Dodany obiekt `request`
+    );
+
+    onSuccess();
+    resetForm();
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    setErrorMessage('Failed to update restaurant. Please try again.');
+  } finally {
+    setSubmitting(false);
   }
+};
+
+  
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
-        <span>Restaurant Details</span>
+        <span>{t('restaurant-management.details.details')}</span>
         <button onClick={onClose} className="text-grey-2">
           <CloseSharpIcon />
         </button>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent className='scroll'>
         <Formik
           initialValues={{
             groupId: restaurant.groupId,
@@ -248,7 +257,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             tags: restaurant.tags,
             openingHours: restaurant.openingHours,
             logo: restaurant.logo,
-            photos: restaurant.photos
+            photos: restaurant.photos,
+            tables: restaurant.tables
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -260,7 +270,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="groupName"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Group Name
+                  {t('restaurant-management.details.group')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -323,7 +333,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="name"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Restaurant Name
+                  {t('restaurant-management.details.restaurantName')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -352,7 +362,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="restaurantType"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Business Type
+                  {t('restaurant-register.businessType')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -436,7 +446,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="address"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Address
+                  {t('restaurant-management.details.address')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -470,7 +480,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="city"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  City
+                  {t('restaurant-management.details.city')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -502,7 +512,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="reservationDeposit"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Reservation Deposit
+                  {t('restaurant-management.details.deposit')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -542,7 +552,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="reservationDeposit"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Max Reservation Duration in minutes
+                  {t('restaurant-management.details.max-reservation-duration')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -582,14 +592,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="provideDelivery"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Provide Delivery
+                  {t('restaurant-management.details.delivery')}
                 </label>
                 {isReadOnly ? (
                   <Field
                     as={TextField}
                     name="provideDelivery"
                     id="provideDelivery"
-                    value={formik.values.provideDelivery ? 'Yes' : 'No'}
+                    value={formik.values.provideDelivery ? `${t('restaurant-management.details.yes')}` : `${t('restaurant-management.details.no')}`}
                     fullWidth
                     InputProps={{
                       readOnly: true // Ustawienie pola na tylko do odczytu
@@ -635,14 +645,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                         value="true" // Teraz używamy stringa
                         className="dark:text-white"
                       >
-                        Yes
+                        {t('restaurant-management.details.yes')}
                       </MenuItem>
                       <MenuItem
                         id="provideDelivery-no"
                         value="false" // Teraz używamy stringa
                         className="dark:text-white"
                       >
-                        No
+                        {t('restaurant-management.details.no')}
                       </MenuItem>
                     </Field>
 
@@ -662,7 +672,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="description"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Description
+                  {t('restaurant-management.details.description')}
                 </label>
                 {isReadOnly ? (
                   <Field
@@ -698,7 +708,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="description"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Tags
+                  {t('restaurant-management.details.tags')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="tags">
@@ -756,72 +766,89 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="openingHours"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Opening Hours
+                  {t('restaurant-management.details.opening')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="openingHours">
-                    {({ push, remove }) => (
+                  {({ replace }) => (
                       <div className="flex flex-col w-2/3 gap-4">
                         {/* Wyświetlanie 7 dni tygodnia od razu */}
                         {[
-                          'Monday',
-                          'Tuesday',
-                          'Wednesday',
-                          'Thursday',
-                          'Friday',
-                          'Saturday',
-                          'Sunday'
-                        ].map((day, index) => (
+                          `${t('restaurant-management.details.monday')}`,
+                          `${t('restaurant-management.details.tuesday')}`,
+                          `${t('restaurant-management.details.wednesday')}`,
+                          `${t('restaurant-management.details.thursday')}`,
+                          `${t('restaurant-management.details.friday')}`,
+                          `${t('restaurant-management.details.saturday')}`,
+                          `${t('restaurant-management.details.sunday')}`
+                        ].map((day, index) => {
+                          const isClosed = formik.values.openingHours[index].from === null;
+
+                          return (
                           <div key={index} className="flex items-center gap-4">
-                            <span className="text-sm font-bold text-gray-500 w-full dark:text-white">
-                              {day}
-                            </span>
+{                             /* Checkbox do oznaczenia czy dzień jest otwarty */}
+                              <Checkbox
+                                disabled={isReadOnly}
+                                checked={!isClosed}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    // Jeśli checkbox jest ZAZNACZONY, ustaw domyślne godziny
+                                    replace(index, { from: '00:00', until: '00:00' });
+                                  } else {
+                                    // Jeśli checkbox jest ODZNACZONY, ustaw null
+                                    replace(index, { from: null, until: null });
+                                  }
+                                }}
+                                className="text-grey-1 [&.Mui-checked]:text-secondary"
+                              />
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].from`}
-                              name={`openingHours[${index}].from`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white [&>*]:text-black before:border-black before:border-black dark:before:border-white after:border-secondary"
-                              disabled={isReadOnly} // Jeśli tryb tylko do odczytu, zablokuj pole
-                            >
-                              <option value="" disabled>
-                                From
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              ))}
-                            </Field>
+                              <span className="text-sm font-bold text-gray-500 w-full dark:text-white">
+                                {day}
+                              </span>
 
-                            <span className="text-sm font-bold text-gray-500 dark:text-white">
-                              -
-                            </span>
+                              {/* Pola wyboru godzin - widoczne tylko, jeśli dzień jest otwarty */}
+                              {!isClosed && (
+                                <>
+                                  <Field
+                                    as={NativeSelect}
+                                    id={`openingHours[${index}].from`}
+                                    name={`openingHours[${index}].from`}
+                                    className="w-4/5 text-[15px] text-black dark:text-white"
+                                    disabled={isReadOnly}
+                                  >
+                                    {timeOptions.map(time => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </Field>
 
-                            <Field
-                              as={NativeSelect}
-                              id={`openingHours[${index}].until`}
-                              name={`openingHours[${index}].until`}
-                              className="[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:text-black [&>*]:dark:text-white before:border-black dark:before:border-white after:border-secondary"
-                              disabled={isReadOnly} // Jeśli tryb tylko do odczytu, zablokuj pole
-                            >
-                              <option value="" disabled>
-                                Until
-                              </option>
-                              {timeOptions.map(time => (
-                                <option key={time} value={time}>
-                                  {time}
-                                </option>
-                              ))}
-                            </Field>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                                  <span className="text-sm font-bold text-gray-500 dark:text-white">-</span>
+
+                                  <Field
+                                    as={NativeSelect}
+                                    id={`openingHours[${index}].until`}
+                                    name={`openingHours[${index}].until`}
+                                    className="w-4/5 text-[15px] text-black dark:text-white"
+                                    disabled={isReadOnly}
+                                  >
+                                    {timeOptions.map(time => (
+                                      <option key={time} value={time}>
+                                        {time}
+                                      </option>
+                                    ))}
+                                  </Field>
+                                </>
+                              )}
+                            </div>
+                          );
+                        })}
+                    </div>
+                  )}
                   </FieldArray>
                 </div>
               </div>
-
+              
               {/* Logo Preview and Upload Button */}
               <div className="mb-4">
                 <label
@@ -851,7 +878,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                         htmlFor={`logo-upload`}
                         className="cursor-pointer text-primary dark:text-secondary"
                       >
-                        <CloudUploadIcon /> Upload Logo
+                        <CloudUploadIcon /> {t('restaurant-management.details.logoUpload')}
                       </label>
                       <input
                         type="file"
@@ -876,7 +903,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   htmlFor="photos"
                   className="block text-sm font-medium dark:text-grey-2"
                 >
-                  Photos
+                  {t('restaurant-management.details.photos')}
                 </label>
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="photos">
@@ -885,7 +912,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                         {' '}
                         {/* Wrapping photos in one row with scroll */}
                         {/* Wyświetlanie zdjęć */}
-                        {photos.length === 0 && <p>No photos uploaded yet</p>}
+                        {photos.length === 0 && <p>{t('general.noPhotos')}</p>}
                         {photos.map((photo, index) => (
                           <div key={index} className="relative">
                             <img
@@ -926,7 +953,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                               htmlFor={`photos-upload`}
                               className="cursor-pointer text-primary dark:text-secondary"
                             >
-                              <CloudUploadIcon /> Upload More Photos
+                              <CloudUploadIcon /> {t('general.uploadMore')}
                             </label>
                             <input
                               type="file"
@@ -962,14 +989,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                       disabled={formik.isSubmitting}
                       className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                     >
-                      Save Changes
+                      {t('general.save')}
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
                       className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                     >
-                      Cancel
+                      {t('general.cancel')}
                     </button>
                   </>
                 )}
@@ -983,3 +1010,4 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
 }
 
 export default RestaurantDetails
+
