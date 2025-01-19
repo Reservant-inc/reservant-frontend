@@ -179,7 +179,8 @@
                 "required": "Wymagane jest potwierdzenie hasła"
             },
             "oldPassword": {
-                "required": "Stare hasło jest wymagane"
+                "required": "Stare hasło jest wymagane",
+                "no-match": "Niepoprawne stare hasło. Spróbuj ponownie."
             },
             "success": "Rejestracja zakończona sukcesem"
         },

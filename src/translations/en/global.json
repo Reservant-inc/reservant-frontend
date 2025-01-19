@@ -186,7 +186,8 @@
                 "required": "Password confirmation is required"
             },
             "oldPassword": {
-                "required": "Old password is required"
+                "required": "Old password is required",
+                "no-match": "Old password is incorrect. Try again."
             },
             "success": "Registration finished successfully"
         },
