@@ -36,6 +36,9 @@ const initialValues = {
 export default function EmploymentsManagement({ empid }: { empid: string }) {
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
+  const [t] = useTranslation('global')
+  const { RestaurantAddEmployeeSchema } = useValidationSchemas()
+  const [restaurants, setRestaurants] = useState<RestaurantShortType[]>([])
 
   useEffect(() => {
     populateRows()
@@ -126,7 +129,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   const columns: GridColDef[] = [
     {
       field: 'restaurantName',
-      headerName: 'Restaurant',
+      headerName: t('employee-management.restaurantName'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -135,14 +138,14 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     },
     {
       field: 'isHallEmployee',
-      headerName: 'Hall role',
+      headerName: t('employee-management.hallRole'),
       type: 'boolean',
       width: 180,
       editable: true
     },
     {
       field: 'isBackdoorEmployee',
-      headerName: 'Backdoor role',
+      headerName: t('employee-management.backdoorRole'),
       type: 'boolean',
       width: 180,
       editable: true
@@ -151,7 +154,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('employee-management.actions'),
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -198,9 +201,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
       }
     }
   ]
-  const [t] = useTranslation('global')
-  const { RestaurantAddEmployeeSchema } = useValidationSchemas()
-  const [restaurants, setRestaurants] = useState<RestaurantShortType[]>([])
+
 
   useEffect(() => {
     const getRestaurants = async () => {

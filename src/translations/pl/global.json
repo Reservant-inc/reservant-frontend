@@ -378,6 +378,41 @@
             "capacity": "Pojemność"
         }
     },
+    "employee-management": {
+        "userId": "ID użytkownika",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "phoneNumber": "Numer telefonu",
+        "birthDate": "Data urodzenia",
+        "actions": "Akcje",
+        "add-employee": "Dodaj pracownika",
+        "creating-employee": "Tworzenie nowego pracownika...",
+        "delete-employee-confirmation": "Czy na pewno usunąć tego pracownika?",
+        "restaurantName": "Nazwa restauracji",
+        "hallRole": "Pracownik sali",
+        "backdoorRole": "Pracownik zaplecza",
+        "assignedSince": "Przypisane od",
+        "assignedUntil": "Przypisane do",
+        "assign-employee": "Przypisz pracownika do restauracji",
+        "adding-employment": "Przypisywanie do restauracji..."
+
+    },
+    "management-tabs":{
+        "managementPanel": "Panel zarządzania",
+        "restaurant": "Restauracja",
+        "dashboard": "Panel zarządzania",
+        "employments": "Zatrudnienia",
+        "menus": "Menu",
+        "warehouse": "Magazyn",
+        "reservationHistory": "Historia rezerwacji",
+        "reviews": "Opinie",
+        "deliveries": "Dostawy",
+        "reports": "Zgłoszenia",
+        "restaurants": "Restauracje",
+        "statistics": "Statystyki",
+        "employeeManagement": "Zarządzanie pracownikami"
+
+    },
     "tools": {
         "main":{
             "profile":"Profil",
@@ -670,7 +705,11 @@
             "resolution-date": "Data rozwiązania",
             "actions": "Akcje",
             "reports": "Zgłoszenia",
-            "pending-restaurants": "Oczekujące restauracje"
+            "pending-restaurants": "Oczekujące restauracje",
+            "reported-user-id": "ID Zgłoszonego Użytkownika",
+            "report-id": "ID zgłoszenia",
+            "visit-id": "ID wizyty"
+
         },
         "report-details": {
             "report-details": "Detale zgłoszenia",
@@ -759,25 +798,54 @@
         
         },
         "visit-details": {
-    "visit-details": "Szczegóły wizyty",
-    "date": "Data",
-    "time": "Czas",
-    "guests": "Goście",
-    "takeaway": "Na wynos",
-    "yes": "Tak",
-    "no": "Nie",
-    "table-id": "Numer stolika",
-    "participants": "Uczestnicy",
-    "no-participants": "Brak uczestników.",
-    "go-to-profile": "Przejdź do profilu",
-    "orders": "Zamówienia",
-    "order-id": "Numer zamówienia",
-    "note": "Notatka",
-    "no-notes": "Brak notatek",
-    "cost": "Koszt",
-    "status": "Status",
-    "no-orders": "Brak zamówień.",
-    "employee": "Pracownik"
-  }
+            "visit-details": "Szczegóły wizyty",
+            "date": "Data",
+            "time": "Czas",
+            "guests": "Goście",
+            "takeaway": "Na wynos",
+            "yes": "Tak",
+            "no": "Nie",
+            "table-id": "Numer stolika",
+            "participants": "Uczestnicy",
+            "no-participants": "Brak uczestników.",
+            "go-to-profile": "Przejdź do profilu",
+            "orders": "Zamówienia",
+            "order-id": "Numer zamówienia",
+            "note": "Notatka",
+            "no-notes": "Brak notatek",
+            "cost": "Koszt",
+            "status": "Status",
+            "no-orders": "Brak zamówień.",
+            "employee": "Pracownik"
+        }
+    },
+    "cart":{
+        "cart":"Koszyk",
+        "no-items":"Brak pozycji w koszyku"
+    },
+    "checkout":{
+        "firstName":"Imię",
+        "lastName":"Nazwisko",
+        "selectPaymentMethod":"Wybierz metodę płatności",
+        "aditionalNotes":"Dodatkowe informacje",
+        "reservationDetails":"Szczegóły rezerwacji",
+        "totalNumberOfGuests":"Całkowita liczba gości",
+        "dateOfVerification":"Data weryfikacji",
+        "reservationDuration":"Czas trwania rezerwacji",
+        "reservationDeposit":"Depozyt za rezerwacje",
+        "orderCost":"Koszt zamówienia",
+        "totalCost":"Koszt całkowity",
+        "orderDetails":"Szczegóły zamówienia",
+        "quantity":"ilość",
+        "submit":"Potwierdź",
+        "wallet":"Portfel",
+        "card":"Karta płatnicza",
+        "userDetails":"Szczegóły użytkownika"
+    },
+    "complaints":{
+        "no":"Nie",
+        "yes":"Tak",
+        "none":"Brak",
+        "noComplaintsFound":"Nie znaleziono zgłoszeń."
     }
 }

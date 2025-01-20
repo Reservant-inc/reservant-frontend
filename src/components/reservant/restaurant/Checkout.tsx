@@ -8,6 +8,7 @@ import { FetchError } from '../../../services/Errors'
 import { CartContext } from '../../../contexts/CartContext'
 import { ReservationContext } from '../../../contexts/ReservationContext'
 import { format, parse, setHours, setMinutes } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 
 const Checkout: React.FC = () => {
   const parseDateTime = (date: string, timeSlot: string): Date => {
@@ -31,6 +32,7 @@ const Checkout: React.FC = () => {
   const { items, totalPrice } = useContext(CartContext)
   const { state } = useLocation()
   const { restaurant } = state
+  const [t] = useTranslation('global')
 
   const dateTime = parseDateTime(
     reservationData?.date ?? '',
@@ -135,14 +137,14 @@ const Checkout: React.FC = () => {
         {/* User and Payment Details */}
         <div className="flex h-full w-1/2 flex-col items-end justify-center gap-4">
           <div className="flex h-[150px] w-[350px] flex-col gap-2 rounded-lg bg-white shadow-md p-5 dark:bg-black">
-            <h1 className="self-center font-mont-bd text-xl">User details</h1>
+            <h1 className="self-center font-mont-bd text-xl">{t('checkout.userDetails')}</h1>
             <div className="separator flex flex-col divide-y-[1px] divide-grey-2">
               <span className="flex justify-between py-1">
-                <label>First name:</label>
+                <label>{t('checkout.firstName')}:</label>
                 <label>{user.firstName}</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>Last name:</label>
+                <label>{t('checkout.lastName')}:</label>
                 <label>{user.lastName}</label>
               </span>
             </div>
@@ -150,7 +152,7 @@ const Checkout: React.FC = () => {
 
           <div className="flex h-[150px] w-[350px] flex-col gap-3 rounded-lg bg-white shadow-md p-5 dark:bg-black">
             <h1 className="self-center font-mont-bd text-xl">
-              Select payment method
+              {t('checkout.selectPaymentMethod')}
             </h1>
             <div className="flex flex-col gap-2">
               <div className="flex w-full items-center gap-3  ">
@@ -165,7 +167,7 @@ const Checkout: React.FC = () => {
                   className={`${canAfford ? 'text-black dark:text-grey-0' : 'text-grey-3 dark:text-grey-3'}`}
                 >
                   {`
-                  Wallet ${wallet} zł 
+                  ${t('checkout.wallet')} ${wallet} zł 
                   ${canAfford ? '' : ' - insufficient founds'}`}
                 </span>
               </div>
@@ -177,7 +179,7 @@ const Checkout: React.FC = () => {
                   defaultChecked={!canAfford}
                   className=" h-5 w-5 cursor-pointer border-[1px] border-grey-2 text-grey-3 checked:text-primary dark:checked:text-secondary"
                 />
-                <span className="">Card</span>
+                <span className="">{t('checkout.card')}</span>
               </div>
             </div>
           </div>
@@ -186,7 +188,7 @@ const Checkout: React.FC = () => {
           {items?.length > 0 && (
             <div className="flex h-[300px] w-[350px] flex-col gap-3 rounded-lg bg-white shadow-md p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl">
-                Additional notes
+                {t('checkout.aditionalNotes')}
               </h1>
               <textarea
                 className="h-full w-full resize-none rounded-lg border-grey-1 dark:border-grey-6 dark:bg-black"
@@ -200,31 +202,31 @@ const Checkout: React.FC = () => {
         <div className="flex h-full w-1/2 flex-col items-start justify-center gap-4">
           <div className="flex h-[calc(300px+1rem)] w-[350px] flex-col gap-2 rounded-lg bg-white shadow-md p-5 dark:bg-black">
             <h1 className="self-center font-mont-bd text-xl">
-              Reservation details
+              {t('checkout.reservationDetails')}
             </h1>
             <div className="separator flex flex-col divide-y-[1px] divide-grey-2">
               <span className="flex justify-between py-1">
-                <label>Total number of guests:</label>
+                <label>{t('checkout.totalNumberOfGuests')}:</label>
                 <label>{reservationData?.guests}</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>Date of reservation:</label>
+                <label>{t('checkout.dateOfVerification')}:</label>
                 <label>{formatDateTime(dateTime)}</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>Reservation duration:</label>
+                <label>{t('checkout.reservationDuration')}:</label>
                 <label>30 min</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>Reservation deposit:</label>
+                <label>{t('checkout.reservationDeposit')}:</label>
                 <label>{restaurant?.reservationDeposit ?? 0} zł</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>Order cost:</label>
+                <label>{t('checkout.orderCost')}:</label>
                 <label>{totalPrice ? totalPrice : 0} zł</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>Total cost:</label>
+                <label>{t('choeckout.totalCost')}:</label>
                 <label>{totalCost} zł</label>
               </span>
             </div>
@@ -233,7 +235,7 @@ const Checkout: React.FC = () => {
           {items?.length > 0 && (
             <div className="flex h-[300px] w-[350px] flex-col gap-1 rounded-lg bg-white shadow-md p-5 dark:bg-black">
               <h1 className="self-center font-mont-bd text-xl">
-                Order details
+                {t('checkout.orderDetails')}
               </h1>
               <div className="scrollbar max-h-[calc(300px-2rem)] overflow-y-auto">
                 {items.map(item => (
@@ -249,7 +251,7 @@ const Checkout: React.FC = () => {
                     <div className="flex flex-col">
                       <h1 className="text-lg font-bold">{item.name}</h1>
                       <h2>{item.price} zł</h2>
-                      <h3>Quantity: {item.amount}</h3>
+                      <h3>{t('checkout.quantity')}: {item.amount}</h3>
                     </div>
                   </div>
                 ))}
@@ -271,7 +273,7 @@ const Checkout: React.FC = () => {
           onClick={onSubmit}
           className="rounded-lg bg-grey-2 py-2 px-4 shadow-md hover:bg-primary hover:text-white"
         >
-          Submit
+          {t('checkout.submit')}
         </button>
       </div>
     </div>
