@@ -242,7 +242,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                 <div className="mb-4">
                   <label
                     htmlFor="photo"
-                    className="block  w-4/5 font-mont-md text-[12px] dark:text-white mb-2"
+                    className="block  w-4/5 font-mont-md text-[15px] dark:text-white mb-2"
                   >
                     {t('event-creation.preview-picture')}
                   </label>
