@@ -11,6 +11,7 @@ import {
 import { fetchGET } from '../../../services/APIconn'
 import { useParams } from 'react-router-dom'
 import { ReportType } from '../../../services/types'
+import { useTranslation } from 'react-i18next'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -23,6 +24,7 @@ export default function Reports() {
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const { restaurantId } = useParams()
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     populateRows()
@@ -80,42 +82,42 @@ export default function Reports() {
   const columns: GridColDef[] = [
     {
       field: 'reportId',
-      headerName: 'Report ID',
+      headerName: t('customer-service.reports.report-id'),
       type: 'string',
       flex: 0.05,
       editable: false
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('customer-service.reports.description'),
       type: 'string',
       flex: 0.3,
       editable: false
     },
     {
       field: 'visitId',
-      headerName: 'Visit ID',
+      headerName: t('customer-service.reports.visit-id'),
       type: 'string',
       flex: 0.05,
       editable: false
     },
     {
       field: 'reportedUserId',
-      headerName: 'Reported User ID',
+      headerName: t('customer-service.reports.reported-user-id'),
       type: 'string',
       flex: 0.2,
       editable: false
     },
     {
       field: 'reportDate',
-      headerName: 'Report Date',
+      headerName: t('customer-service.reports.report-date'),
       type: 'string',
       flex: 0.1,
       editable: false
     },
     {
       field: 'category',
-      headerName: 'Category',
+      headerName: t('customer-service.reports.category'),
       type: 'string',
       flex: 0.2,
       editable: false

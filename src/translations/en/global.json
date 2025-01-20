@@ -247,30 +247,30 @@
             }
         },
         "event-creation": {
-    "name": {
-      "required": "Event name is required"
-    },
-    "description": {
-      "required": "Description is required"
-    },
-    "time": {
-      "required": "Event time is required",
-      "isFuture": "Event time must be in the future"
-    },
-    "mustJoinUntil": {
-      "required": "Must Join Until is required",
-      "isFuture": "Must Join Until must be in the future",
-      "isBefore": "Must Join Until time must be before the event time"
-    },
-    "maxPeople": {
-      "min": "Must be at least 1 person",
-      "max": "Cannot exceed 20 people",
-      "required": "Max People is required"
-    },
-    "photoFileName": {
-      "required": "Photo is required"
-    }
-  }
+            "name": {
+            "required": "Event name is required"
+            },
+            "description": {
+            "required": "Description is required"
+            },
+            "time": {
+            "required": "Event time is required",
+            "isFuture": "Event time must be in the future"
+            },
+            "mustJoinUntil": {
+            "required": "Must Join Until is required",
+            "isFuture": "Must Join Until must be in the future",
+            "isBefore": "Must Join Until time must be before the event time"
+            },
+            "maxPeople": {
+            "min": "Must be at least 1 person",
+            "max": "Cannot exceed 20 people",
+            "required": "Max People is required"
+            },
+            "photoFileName": {
+            "required": "Photo is required"
+            }
+        }
     },
     "restaurant-management": {
         "groups": {
@@ -383,6 +383,40 @@
             "table": "Table",
             "capacity": "Capacity"
         }
+    },
+    "employee-management": {
+        "userId": "User ID",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phoneNumber": "Phone number",
+        "birthDate": "Birth Date",
+        "actions": "Actions",
+        "add-employee": "Add an Employee",
+        "creating-employee": "Creating a new employee...",
+        "delete-employee-confirmation": "Are you sure you want to delete this employee?",
+        "restaurantName": "Restaurant name",
+        "hallRole": "Hall role",
+        "backdoorRole": "Backdoor Role",
+        "assignedSince": "Assigned since",
+        "assignedUntil": "Assigned until",
+        "assign-employee": "Assign an Employee to a restaurant",
+        "adding-employment": "Adding employment..."
+
+    },
+    "management-tabs":{
+        "managementPanel": "Management panel",
+        "restaurant": "Restaurant",
+        "dashboard": "Dashboard",
+        "employments": "Employments",
+        "menus": "Menus",
+        "warehouse": "Warehouse",
+        "reservationHistory": "Reservation history",
+        "reviews": "Reviews",
+        "deliveries": "Deliveries",
+        "reports": "Reports",
+        "restaurants": "Restaurants",
+        "statistics": "Statistics",
+        "employeeManagement": "Employee management"
     },
     "tools": {
         "main":{
@@ -686,7 +720,10 @@
             "resolution-date": "Resolution date",
             "actions": "Actions",
             "reports": "Reports",
-            "pending-restaurants": "Pending restaurants"
+            "pending-restaurants": "Pending restaurants",
+            "reported-user-id": "Reported User ID",
+            "report-id": "Report ID",
+            "visit-id": "Visit ID"
         },
         "report-details": {
             "report-details": "Report details",
@@ -794,14 +831,42 @@
             "status": "Status",
             "no-orders": "No orders.",
             "employee": "Employee"
-        },
-        "restaurant": {
-            "name": "Restaurant name",
-            "type": "Business type",
-            "city": "City",
-            "description": "Description",
-            "actions": "Actions"
         }
-
+    },
+    "cart":{
+        "cart":"Cart",
+        "no-items":"No items in the cart yet"
+    },
+    "checkout":{
+        "firstName":"First name",
+        "lastName":"Last name",
+        "selectPaymentMethod":"Select payment method",
+        "aditionalNotes":"Aditional notes",
+        "reservationDetails":"Reservation details",
+        "totalNumberOfGuests":"Total number of guests",
+        "dateOfVerification":"Date of reservation",
+        "reservationDuration":"Reservation duration",
+        "reservationDeposit":"Reservation deposit",
+        "orderCost":"Order cost",
+        "totalCost":"Total cost",
+        "orderDetails":"Order details",
+        "quantity":"Quantity",
+        "submit":"Submit",
+        "wallet":"Wallet",
+        "card":"Card",
+        "userDetails":"User details"
+    },
+    "complaints":{
+        "no":"No",
+        "yes":"Yes",
+        "none":"None",
+        "noComplaintsFound":"No complaints found."
+        },
+    "restaurant": {
+        "name": "Restaurant name",
+        "type": "Business type",
+        "city": "City",
+        "description": "Description",
+        "actions": "Actions"
     }
 }
