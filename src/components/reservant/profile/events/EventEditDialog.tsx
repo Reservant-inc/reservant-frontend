@@ -39,29 +39,32 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
   const { t } = useTranslation('global')
 
   const validationSchema = Yup.object({
-    name: Yup.string().required('Event Name is required'),
-    description: Yup.string().required('Description is required'),
+    name: Yup.string().required(t('errors.event-creation.name.required')),
+    description: Yup.string().required(t('errors.event-creation.description.required')),
     time: Yup.string()
-      .required('Event Time is required')
-      .test('is-future', 'Event Time must be in the future', value => {
+      .required(t('errors.event-creation.time.required'))
+      .test('is-future', t('errors.event-creation.time.isFuture'), value => {
         return new Date(value) > new Date() // Sprawdza, czy data jest późniejsza niż dzisiaj
       }),
     mustJoinUntil: Yup.string()
-      .required('Must Join Until is required')
-      .test('is-future', 'Must Join Until must be in the future', value => {
+      .required(t('errors.event-creation.mustJoinUntil.required'))
+      .test('is-future', t('errors.event-creation.mustJoinUntil.isFuture'), value => {
         return new Date(value) > new Date() // Sprawdza, czy data jest późniejsza niż dzisiaj
       })
       .test(
         'is-after-time',
-        'Must Join Until must be after Event Time',
+        t('errors.event-creation.mustJoinUntil.isBefore'),
         function (value) {
           const { time } = this.parent
           return new Date(value) < new Date(time) // Sprawdza, czy `mustJoinUntil` jest po `time`
         }
       ),
     maxPeople: Yup.number()
-      .min(1, 'Must be at least 1')
-      .required('Max People is required')
+      .min(1, t('errors.event-creation.maxPeople.min'))
+      .max(20, t('errors.event-creation.maxPeople.max'))
+      .required(t('errors.event-creation.maxPeople.required')),
+    photo: Yup.string()
+    .required((t('errors.event-creation.photoFileName.required')))
   })
 
   const uploadPhoto = async (photoFile: File) => {
@@ -129,174 +132,158 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
         >
           {formik => (
             <Form>
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium dark:text-white"
-                >
-                  {t('event-creation.name')}
-                </label>
-                <Field
-                  as={TextField}
-                  name="name"
-                  id="name"
-                  fullWidth
-                  className={`dark:border-white [&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                    !(formik.errors.name && formik.touched.name)
-                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
-                  }`}
-                  error={formik.touched.name && Boolean(formik.errors.name)}
-                  helperText={formik.touched.name && formik.errors.name}
-                />
-              </div>
-              <div className="mb-4">
-                <Field
-                  type="text"
-                  variant="standard"
-                  label={t('event-creation.description')}
-                  fullWidth
-                  as={TextField}
-                  name="description"
-                  id="description"
-                  className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
-                    !(formik.errors.description && formik.touched.description)
-                      ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
-                      : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
-                  }`}
-                  error={
-                    formik.touched.description &&
-                    Boolean(formik.errors.description)
-                  }
-                  helperText={
-                    formik.touched.description && formik.errors.description
-                  }
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="time"
-                  className="block text-sm font-medium dark:text-white"
-                >
-                  {t('event-creation.time-from')}
-                </label>
-                <Field
-                  as={TextField}
-                  name="time"
-                  type="datetime-local"
-                  id="time"
-                  fullWidth
-                  className={`dark:[color-scheme:dark] [&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                    !(formik.errors.time && formik.touched.time)
-                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
-                  }`}
-                  error={formik.touched.time && Boolean(formik.errors.time)}
-                  helperText={formik.touched.time && formik.errors.time}
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="mustJoinUntil"
-                  className="block text-sm font-medium dark:text-white"
-                >
-                  {t('event-creation.must-join-until')}
-                </label>
-                <Field
-                  as={TextField}
-                  name="mustJoinUntil"
-                  type="datetime-local"
-                  id="mustJoinUntil"
-                  fullWidth
-                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                    !(
-                      formik.errors.mustJoinUntil &&
-                      formik.touched.mustJoinUntil
-                    )
-                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
-                  }`}
-                  error={
-                    formik.touched.mustJoinUntil &&
-                    Boolean(formik.errors.mustJoinUntil)
-                  }
-                  helperText={
-                    formik.touched.mustJoinUntil && formik.errors.mustJoinUntil
-                  }
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="maxPeople"
-                  className="block text-sm font-medium dark:text-white"
-                >
-                  {t('event-creation.max-people')}
-                </label>
-                <Field
-                  as={TextField}
-                  name="maxPeople"
-                  type="number"
-                  id="maxPeople"
-                  fullWidth
-                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                    !(formik.errors.maxPeople && formik.touched.maxPeople)
-                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
-                  }`}
-                  error={
-                    formik.touched.maxPeople && Boolean(formik.errors.maxPeople)
-                  }
-                  helperText={
-                    formik.touched.maxPeople && formik.errors.maxPeople
-                  }
-                />
-              </div>
-
-              {/* Photo Preview and Upload Button */}
-              <div className="mb-4">
-                <label
-                  htmlFor="photo"
-                  className="block text-sm font-medium dark:text-white mb-2"
-                >
-                  {t('event-creation.preview-picture')}
-                </label>
-                <div
-                  className="relative min-w-64 min-h-64 flex items-center justify-center"
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                >
-                  <img
-                    className="w-64 h-64 absolute rounded-lg"
-                    src={
-                      photoPath === DefaultImage
-                        ? DefaultImage
-                        : getImage(photoPath, photoPath)
+              <div className='py-4'>
+                <div className="mb-4">
+                  <Field
+                    type="text"
+                    variant="standard"
+                    label={t('event-creation.name')}
+                    as={TextField}
+                    name="name"
+                    id="name"
+                    fullWidth
+                    className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
+                      !(formik.errors.name && formik.touched.name)
+                        ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
+                        : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
+                    }`}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                  />
+                </div>
+                <div className="mb-4">
+                  <Field
+                    type="text"
+                    variant="standard"
+                    label={t('event-creation.description')}
+                    fullWidth
+                    as={TextField}
+                    name="description"
+                    id="description"
+                    className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
+                      !(formik.errors.description && formik.touched.description)
+                        ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
+                        : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
+                    }`}
+                    error={
+                      formik.touched.description &&
+                      Boolean(formik.errors.description)
                     }
-                    alt="Event preview"
+                    helperText={
+                      formik.touched.description && formik.errors.description
+                    }
                   />
-                  {isHovered && (
-                    <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
-                      <label
-                        htmlFor="photo"
-                        className="shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary"
-                      >
-                        <CloudUploadIcon />
-                        {t('general.uploadPhoto')}
-                      </label>
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    id="photo"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={async e => {
-                      if (e.target.files && e.target.files.length > 0) {
-                        const fileName = await uploadPhoto(e.target.files[0])
-                        formik.setFieldValue('photo', fileName)
+                </div>
+                <div className="mb-4">
+                  <Field
+                    variant="standard"
+                    label={t('event-creation.time-from')}
+                    as={TextField}
+                    name="time"
+                    type="datetime-local"
+                    id="time"
+                    fullWidth
+                    className={`w-full dark:[color-scheme:dark] [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
+                      !(formik.errors.time && formik.touched.time)
+                        ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
+                        : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
+                    }`}
+                    error={formik.touched.time && Boolean(formik.errors.time)}
+                    helperText={formik.touched.time && formik.errors.time}
+                  />
+                </div>
+                <div className="mb-4">
+                  <Field
+                    variant="standard"
+                    label={t('event-creation.must-join-until')}
+                    as={TextField}
+                    name="mustJoinUntil"
+                    type="datetime-local"
+                    id="mustJoinUntil"
+                    fullWidth
+                    className={`w-full dark:[color-scheme:dark] [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
+                      !(formik.errors.mustJoinUntil && formik.touched.mustJoinUntil)
+                        ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
+                        : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
+                    }`}
+                    error={
+                      formik.touched.mustJoinUntil &&
+                      Boolean(formik.errors.mustJoinUntil)
+                    }
+                    helperText={
+                      formik.touched.mustJoinUntil && formik.errors.mustJoinUntil
+                    }
+                  />
+                </div>
+                <div className="mb-4">
+                  <Field
+                    variant="standard"
+                    label={t('event-creation.max-people')}
+                    as={TextField}
+                    name="maxPeople"
+                    type="number"
+                    id="maxPeople"
+                    fullWidth
+                    className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
+                      !(formik.errors.maxPeople && formik.touched.maxPeople)
+                        ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
+                        : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
+                    }`}
+                    error={
+                      formik.touched.maxPeople && Boolean(formik.errors.maxPeople)
+                    }
+                    helperText={
+                      formik.touched.maxPeople && formik.errors.maxPeople
+                    }
+                  />
+                </div>
+
+                {/* Photo Preview and Upload Button */}
+                <div className="mb-4">
+                  <label
+                    htmlFor="photo"
+                    className="block  w-4/5 font-mont-md text-[12px] dark:text-white mb-2"
+                  >
+                    {t('event-creation.preview-picture')}
+                  </label>
+                  <div
+                    className="relative min-w-64 min-h-64 flex items-center justify-center"
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                  >
+                    <img
+                      className="w-64 h-64 absolute rounded-lg"
+                      src={
+                        photoPath === DefaultImage
+                          ? DefaultImage
+                          : getImage(photoPath, photoPath)
                       }
-                    }}
-                  />
+                      alt="Event preview"
+                    />
+                    {isHovered && (
+                      <div className="bg-semi-trans w-64 h-64 absolute flex items-center justify-center rounded-lg">
+                        <label
+                          htmlFor="photo"
+                          className="shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary"
+                        >
+                          <CloudUploadIcon />
+                          {t('general.uploadPhoto')}
+                        </label>
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      id="photo"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={async e => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          const fileName = await uploadPhoto(e.target.files[0])
+                          formik.setFieldValue('photo', fileName)
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
 
