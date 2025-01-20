@@ -424,6 +424,7 @@ export type FriendData = {
     lastName: string
     photo: string
   }
+  privateMessageThreadId: number
 }
 
 export type Correction = {

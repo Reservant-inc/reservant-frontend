@@ -6,6 +6,7 @@ import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialo
 import DeleteIcon from '@mui/icons-material/Delete'
 import { FetchError } from '../../../../../services/Errors'
 import { fetchDELETE } from '../../../../../services/APIconn'
+import { ThreadScope } from '../../../../../services/enums'
 
 interface ThreadPreviewProps {
   thread: ThreadType
@@ -28,6 +29,17 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({
 
   const [t] = useTranslation('global')
 
+  const otherUser = thread.participants.find(
+    participant =>
+      participant.userId !==
+      JSON.parse(Cookies.get('userInfo') as string).userId
+  )
+
+  const threadTitle =
+    (thread.type as ThreadScope) === ThreadScope.Private
+      ? `${otherUser?.firstName} ${otherUser?.lastName}`
+      : thread.title
+
   useEffect(() => {
     const currentUserId = JSON.parse(Cookies.get('userInfo') as string).userId
     thread.participants = thread.participants.filter(
@@ -48,13 +60,13 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({
             key={thread.threadId}
             className="w-full rounded-md p-2 dark:hover:bg-grey-5 text-left"
             onClick={() => {
-              handleThreadOpen(thread)
+              handleThreadOpen({ ...updatedThread, title: threadTitle })
               pressHandler()
             }}
           >
             <div className="flex gap-3 items-center">
               {renderUserPhotos(updatedThread)}
-              <h1 className="text-sm dark:text-white">{thread.title}</h1>
+              <h1 className="text-sm dark:text-white">{threadTitle}</h1>
             </div>
           </button>
           {isHovering && (

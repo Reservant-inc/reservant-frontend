@@ -410,7 +410,8 @@
         "reports":"Zgłoszenia",
         "no-more": "Brak wątków do załadowania",
         "options": "Opcje wątku",
-        "delete": "Czy na pewno chcesz usunąć wątek? Ta akcja jest niedwracalna."
+        "delete": "Czy na pewno chcesz usunąć wątek? Ta akcja jest niedwracalna.",
+        "groups": "Grupy"
     },
     "friends": {
         "search": "Wyszukaj",

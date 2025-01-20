@@ -13,7 +13,7 @@ import {
   ThreadType,
   UserType
 } from '../../../../../services/types'
-import { Button, CircularProgress, List, ListItemButton } from '@mui/material'
+import { Button, CircularProgress, List } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import ThreadPreview from './ThreadPreview'
 import SearchIcon from '@mui/icons-material/Search'
@@ -23,17 +23,30 @@ import { useTranslation } from 'react-i18next'
 import FriendSelector from '../../../../reusableComponents/FriendSelector'
 import renderUserPhotos from '../../../../../utils/DisplayUserPhotos'
 import { ThreadContext } from '../../../../../contexts/ThreadContext'
+import { ThreadScope } from '../../../../../services/enums'
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false)
   const [isLoadingThreads, setIsLoadingThreads] = useState<boolean>(false)
   const [isCreatingThread, setIsCreatingThread] = useState<boolean>(false)
-  const [threadTitle, setThreadTitle] = useState<string>('')
+  const [threadTitle, setThreadTitle] = useState<string>()
   const [threads, setThreads] = useState<ThreadType[]>([])
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
   const [filter, setFilter] = useState<string>('')
+  const [option, setOption] = useState<ThreadScope>(ThreadScope.All)
+
+  const apiBase = '/user/threads'
+  const pageQuery = `page=${page}`
+
+  const apiRoute: Record<ThreadScope, string> = {
+    [ThreadScope.All]: `?`,
+    [ThreadScope.Private]: `?type=Private&`,
+    [ThreadScope.Normal]: `?type=Normal&`,
+    [ThreadScope.Event]: `?type=Event&`,
+    [ThreadScope.Report]: `?type=Report&`
+  }
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
@@ -61,7 +74,7 @@ const Threads: React.FC = () => {
       if (page === 0) setIsLoadingThreads(true)
 
       const result: PaginationType = await fetchGET(
-        `/user/threads?page=${page}`
+        `${apiBase}${apiRoute[option]}${pageQuery}`
       )
       const newThreads = result.items as ThreadType[]
 
@@ -86,7 +99,7 @@ const Threads: React.FC = () => {
 
   useEffect(() => {
     getThreads()
-  }, [])
+  }, [option])
 
   const toggleCreatingThread = () => {
     if (isCreatingThread) {
@@ -116,12 +129,19 @@ const Threads: React.FC = () => {
         return friend.userId
       })
 
-      const values = {
-        title: threadTitle,
-        participantIds: ids
-      }
+      const isGroupThread = friendsToAdd.length > 1
 
-      fetchPOST('/threads', JSON.stringify(values))
+      const values = isGroupThread
+        ? { title: threadTitle, participantIds: ids }
+        : { otherUserId: ids[0] }
+
+      const api = isGroupThread ? '/threads' : '/threads/create-private-thread'
+
+      fetchPOST(api, JSON.stringify(values))
+
+      setTimeout(() => {
+        getThreads()
+      }, 500)
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
@@ -132,6 +152,12 @@ const Threads: React.FC = () => {
       toggleCreatingThread()
       getThreads()
     }
+  }
+
+  const handleOptionChange = (option: ThreadScope) => {
+    setPage(0)
+    setThreads([])
+    setOption(option)
   }
 
   const renderThreadsContent = () => {
@@ -177,18 +203,16 @@ const Threads: React.FC = () => {
           scrollableTarget="scrollableDiv"
           className="hidescroll h-full"
         >
-          {threads
-            .filter(t => t.type.includes(filter))
-            .map(thread => (
-              <ThreadPreview
-                key={thread.threadId}
-                thread={thread}
-                renderUserPhotos={renderUserPhotos}
-                handleThreadOpen={handleThreadOpen}
-                pressHandler={pressHandler}
-                deleteThread={deleteThread}
-              />
-            ))}
+          {threads.map(thread => (
+            <ThreadPreview
+              key={thread.threadId}
+              thread={thread}
+              renderUserPhotos={renderUserPhotos}
+              handleThreadOpen={handleThreadOpen}
+              pressHandler={pressHandler}
+              deleteThread={deleteThread}
+            />
+          ))}
         </InfiniteScroll>
       </List>
     )
@@ -204,22 +228,28 @@ const Threads: React.FC = () => {
         </h1>
         <button
           className="flex h-8 w-8 items-center justify-center rounded-full bg-grey-1 dark:bg-grey-5"
+          disabled={
+            (friendsToAdd.length > 1 && threadTitle === undefined) ||
+            friendsToAdd.length === 0
+          }
           onClick={postThread}
         >
           <CheckIcon className="h-5 w-5 dark:text-grey-1" />
         </button>
       </div>
-      <div className="flex items-center gap-2 pb-1 pt-2">
-        <h1 className="font-mont-md text-sm dark:text-grey-1">
-          {t('threads.title')}:
-        </h1>
-        <input
-          type="text"
-          className={inputClass + ' w-full'}
-          value={threadTitle}
-          onChange={e => setThreadTitle(e.target.value)}
-        />
-      </div>
+      {friendsToAdd.length > 1 && (
+        <div className="flex items-center gap-2 pb-1 pt-2">
+          <h1 className="font-mont-md text-sm dark:text-grey-1">
+            {t('threads.title')}:
+          </h1>
+          <input
+            type="text"
+            className={inputClass + ' w-full'}
+            value={threadTitle}
+            onChange={e => setThreadTitle(e.target.value)}
+          />
+        </div>
+      )}
       <FriendSelector
         friendsToAdd={friendsToAdd}
         setFriendsToAdd={setFriendsToAdd}
@@ -264,14 +294,23 @@ const Threads: React.FC = () => {
             <div className="w-full flex items-center justify-between px-3 dark:text-grey-1">
               <h1>{t('threads.type')}:</h1>
               <select
-                value={filter}
-                onChange={e => setFilter(e.target.value)}
+                value={option}
+                onChange={e =>
+                  handleOptionChange(e.target.value as ThreadScope)
+                }
                 className="dark:bg-black pr-8 text-left rounded-md"
               >
-                <option value={''}>{t('threads.all')}</option>
-                <option value="Normal">{t('threads.friends')}</option>
-                <option value="Event">{t('threads.events')}</option>
-                <option value="Report">{t('threads.reports')}</option>
+                <option value={ThreadScope.All}>{t('threads.all')}</option>
+                <option value={ThreadScope.Private}>
+                  {t('threads.friends')}
+                </option>
+                <option value={ThreadScope.Event}>{t('threads.events')}</option>
+                <option value={ThreadScope.Report}>
+                  {t('threads.reports')}
+                </option>
+                <option value={ThreadScope.Normal}>
+                  {t('threads.groups')}
+                </option>
               </select>
             </div>
             <div

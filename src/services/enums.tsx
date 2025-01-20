@@ -62,3 +62,11 @@ export enum StatisticsScope {
   All = 'All',
   Single = 'Single'
 }
+
+export enum ThreadScope {
+  All = 'All',
+  Private = 'Private',
+  Normal = 'Normal',
+  Event = 'Event',
+  Report = 'Report'
+}

@@ -414,7 +414,8 @@
         "reports":"Report",
         "no-more": "No more threads to load",
         "options": "Thread options",
-        "delete": "Are you sure you want to delete this thread? This operation is irreversible."
+        "delete": "Are you sure you want to delete this thread? This operation is irreversible.",
+        "groups": "Groups"
     },
     "friends": {
         "search": "Search",
