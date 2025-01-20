@@ -165,8 +165,8 @@ const Account: React.FC = () => {
       setPhotoPath(res.path)
       setPhotoFileName(res.fileName)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
 
@@ -187,8 +187,8 @@ const Account: React.FC = () => {
         })
       )
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log(error)
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error(error)
     } finally {
       setIsEditing(false)
       fetchUserData()

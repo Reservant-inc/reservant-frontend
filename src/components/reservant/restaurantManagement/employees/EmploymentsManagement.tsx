@@ -270,7 +270,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
       ) as HTMLSelectElement
       selector.selectedIndex = 0
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

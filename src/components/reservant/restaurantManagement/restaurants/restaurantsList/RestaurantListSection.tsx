@@ -182,8 +182,6 @@ const RestaurantListSection: React.FC = () => {
         )
       }
 
-      console.log('Dane wysyłane do API:', rowToUpdate)
-
       await fetchPUT(
         `/my-restaurants/${newRow.restaurantId}`,
         JSON.stringify(rowToUpdate)

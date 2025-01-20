@@ -74,7 +74,6 @@ const User: React.FC = () => {
 
   const handleDeleteUser = async () => {
     try {
-      console.log('Deleting user...')
       await fetchDELETE(`/users/${userId}`)
       fetchUserData()
     } catch (error) {

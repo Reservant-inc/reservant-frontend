@@ -24,7 +24,11 @@ const SearchedFriend: React.FC<SearchedFriendProps> = ({ user }) => {
       fetchPOST(`/friends/${user.userId}/send-request`)
       user.friendStatus = FriendStatus.OutgoingRequest
     } catch (error) {
-      console.log('There was trouble sending friend request', error)
+      if (error instanceof FetchError) {
+        console.error(error.message)
+      } else {
+        console.error('There was trouble sending friend request', error)
+      }
     } finally {
       forceRefresh(!refresh)
     }
@@ -35,7 +39,11 @@ const SearchedFriend: React.FC<SearchedFriendProps> = ({ user }) => {
       fetchPOST(`/friends/${user.userId}/accept-request`)
       user.friendStatus = FriendStatus.Friend
     } catch (error) {
-      console.log('There was trouble accepting friend request', error)
+      if (error instanceof FetchError) {
+        console.error(error.message)
+      } else {
+        console.error('There was trouble accepting friend request', error)
+      }
     } finally {
       forceRefresh(!refresh)
     }
@@ -47,9 +55,9 @@ const SearchedFriend: React.FC<SearchedFriendProps> = ({ user }) => {
       user.friendStatus = FriendStatus.Stranger
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.message)
+        console.error(error.message)
       } else {
-        console.log('There was trouble deleting friend request', error)
+        console.error('There was trouble deleting friend request', error)
       }
     } finally {
       forceRefresh(!refresh)

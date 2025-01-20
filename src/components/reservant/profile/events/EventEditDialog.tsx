@@ -35,8 +35,6 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
   const [isHovered, setIsHovered] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  console.log(event)
-
   const validationSchema = Yup.object({
     name: Yup.string().required('Event Name is required'),
     description: Yup.string().required('Description is required'),

@@ -109,7 +109,6 @@ export function checkIfOwner() {
 }
 
 export function logoutAction() {
-  console.log('Logout action triggered')
   Cookies.remove('token')
   Cookies.remove('userInfo')
   return redirect('/')

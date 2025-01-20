@@ -71,9 +71,9 @@ const Threads: React.FC = () => {
       else setThreads(newThreads)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     } finally {
       setIsLoadingThreads(false)
@@ -124,9 +124,9 @@ const Threads: React.FC = () => {
       fetchPOST('/threads', JSON.stringify(values))
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     } finally {
       toggleCreatingThread()
