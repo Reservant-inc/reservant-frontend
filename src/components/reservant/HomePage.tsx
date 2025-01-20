@@ -16,6 +16,7 @@ import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
 import FocusedRestaurantDetails from './restaurant/onMapView/FocusedRestaurantDetails'
 import { useLocation } from 'react-router-dom'
+import { useSnackbar } from '../../contexts/SnackbarContext'
 
 export default function HomePage() {
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
@@ -34,9 +35,8 @@ export default function HomePage() {
   const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
     []
   )
-  const location = useLocation()
-  const [snackbarOpen, setSnackbarOpen] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null)
+
+  const { message, severity, open, closeSnackbar } = useSnackbar()
 
   const { restaurantId } = useParams<{ restaurantId?: string }>()
   const navigate = useNavigate()
@@ -49,20 +49,6 @@ export default function HomePage() {
     lon1: 21.06353759765625,
     lon2: 20.959854125976566
   })
-
-  useEffect(() => {
-    if (location.state?.snackbarMessage) {
-      setSnackbarMessage(location.state.snackbarMessage)
-      setSnackbarOpen(true);
-
-      // reset location.state po pierwszym uzyciu
-      navigate(location.pathname, { replace: true, state: {} })
-    }
-  }, [location, navigate])
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false)
-  }
 
   useEffect(() => {
     const getTags = async () => {
@@ -435,18 +421,18 @@ export default function HomePage() {
       </div>
 
       <Snackbar
-        open={snackbarOpen}
+        open={open}
         autoHideDuration={5000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={closeSnackbar}
       >
         <Alert
-          onClose={handleSnackbarClose}
-          severity="success"
+          onClose={closeSnackbar}
+          severity={severity}
           variant="filled"
           sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
+        > 
+        {/* TODO tłumaczenie message */}
+          {message} 
         </Alert>
       </Snackbar>
 

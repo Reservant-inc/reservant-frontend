@@ -111,9 +111,11 @@ const Checkout: React.FC = () => {
       }
 
       // jeśli sukces navigate do homepage i tam snackbar success
-      navigate('/reservant/home', {
-        state: { snackbarMessage: 'Visit created successfully.', snackbarSeverity: 'success' },
-      });
+      // navigate('/reservant/home', {
+      //   state: { snackbarMessage: 'Visit created successfully.', snackbarSeverity: 'success' },
+      // });
+      setSnackbar('Visit created successfully.', 'success') // TODO tłumaczenie message
+      navigate('/reservant/home')
     } catch (error) {
       if (error instanceof FetchError) {
         const errors = error.formatErrors()
