@@ -151,7 +151,7 @@ const User: React.FC = () => {
                   {t('customer-service.user.account')}
                 </h1>
                 <div className="flex gap-2">
-                  {userInfo?.birthDate === '0001-01-01' ? (
+                  {userInfo?.phoneNumber === null ? (
                     <p className="text-sm text-grey-4 italic">
                       {t('customer-service.user.account_deleted')}
                     </p>
