@@ -37,9 +37,9 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
       await fetchDELETE(`/menus/${menuId}`)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
   }

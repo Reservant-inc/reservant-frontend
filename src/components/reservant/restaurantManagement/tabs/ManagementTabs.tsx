@@ -21,12 +21,14 @@ import { RestaurantDetailsType } from '../../../../services/types'
 import { fetchGET } from '../../../../services/APIconn'
 import useWindowDimensions from '../../../../hooks/useWindowResize'
 import OutsideClickHandler from '../../../reusableComponents/OutsideClickHandler'
+import { useTranslation } from 'react-i18next'
 
 const ManagementTabs: React.FC = ({}) => {
   const navigate = useNavigate()
   const size = useWindowDimensions()
   const { restaurantId } = useParams()
   const [restaurant, setRestaurant] = useState<RestaurantDetailsType>()
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     if (restaurantId) getRestaurantInfo()
@@ -43,7 +45,7 @@ const ManagementTabs: React.FC = ({}) => {
   }
   const [isPressed, setIsPressed] = useState(false)
   const pressHandler = () => {
-    setIsPressed(!isPressed)
+    setIsPressed(prev => !prev)
   }
 
   return (
@@ -53,19 +55,19 @@ const ManagementTabs: React.FC = ({}) => {
           <div className="flex gap-2">
             <Tab
               path="statistics"
-              title="Statistics"
+              title={t('management-tabs.statistics')}
               icon={<BarChartIcon />}
               id="management_dashboard"
             />
             <Tab
               path="restaurants"
-              title="Restaurants"
+              title={t('management-tabs.restaurants')}
               icon={<LocalDiningSharpIcon />}
               id="management_restaurants"
             />
             <Tab
               path="employee-management"
-              title="Employee management"
+              title={t('management-tabs.employeeManagement')}
               icon={<PeopleAltSharpIcon />}
               id="management_employees"
             />
@@ -83,55 +85,55 @@ const ManagementTabs: React.FC = ({}) => {
             </div>
             <Tab
               path={`restaurant/${restaurantId}/restaurant-dashboard`}
-              title="Dashboard"
+              title={t('management-tabs.dashboard')}
               icon={<Dashboard />}
               id="management_restaurant_dashboard"
             />
             <Tab
               path={`restaurant/${restaurantId}/restaurant-statistics`}
-              title="Statistics"
+              title={t('management-tabs.statistics')}
               icon={<BarChartIcon />}
               id="management_restaurant_statistics"
             />
             <Tab
               path={`restaurant/${restaurantId}/restaurant-employee-management`}
-              title="Employments"
+              title={t('management-tabs.employments')}
               icon={<PeopleAltSharpIcon />}
               id="management_restaurant_employees"
             />
             <Tab
               path={`restaurant/${restaurantId}/menu-management`}
-              title="Menus"
+              title={t('management-tabs.menus')}
               id="management_restaurant_menus"
               icon={<Dining />}
             />
             <Tab
               path={`restaurant/${restaurantId}/warehouse-management`}
-              title="Warehouse"
+              title={t('management-tabs.warehouse')}
               icon={<Warehouse />}
               id="management_restaurant_warehouse"
             />
             <Tab
               path={`restaurant/${restaurantId}/reservation-history`}
-              title="Reservation history"
+              title={t('management-tabs.reservationHistory')}
               id="management_restaurant_history"
               icon={<History />}
             />
             <Tab
               path={`restaurant/${restaurantId}/reviews-management`}
-              title="Reviews"
+              title={t('management-tabs.reviews')}
               id="management_restaurant_reviews"
               icon={<RateReviewIcon />}
             />
             <Tab
               path={`restaurant/${restaurantId}/deliveries-management`}
-              title="Deliveries"
+              title={t('management-tabs.deliveries')}
               id="management_restaurant_deliveries"
               icon={<LocalShipping />}
             />
             <Tab
               path={`restaurant/${restaurantId}/reports`}
-              title="Reports"
+              title={t('management-tabs.reports')}
               id="management_reports"
               icon={<ReportIcon />}
             />
@@ -165,7 +167,7 @@ const ManagementTabs: React.FC = ({}) => {
                   <div className="w-full rounded-lg dark:bg-grey-5 bg-grey-0 relative z-[1] p-2 flex flex-col gap-2">
                     <Tab
                       path={`restaurant/${restaurantId}/restaurant-dashboard`}
-                      title="Dashboard"
+                      title={t('management-tabs.dashboard')}
                       icon={<Dashboard />}
                       id="management_restaurant_dashboard"
                       full={true}
@@ -173,7 +175,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/restaurant-employee-management`}
-                      title="Employments"
+                      title={t('management-tabs.employments')}
                       icon={<PeopleAltSharpIcon />}
                       onClose={pressHandler}
                       full={true}
@@ -181,7 +183,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/menu-management`}
-                      title="Menus"
+                      title={t('management-tabs.menus')}
                       id="management_restaurant_menus"
                       onClose={pressHandler}
                       full={true}
@@ -189,7 +191,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/warehouse-management`}
-                      title="Warehouse"
+                      title={t('management-tabs.warehouse')}
                       onClose={pressHandler}
                       full={true}
                       icon={<Warehouse />}
@@ -197,7 +199,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/reservation-history`}
-                      title="Reservation history"
+                      title={t('management-tabs.reservationHistory')}
                       id="management_restaurant_history"
                       onClose={pressHandler}
                       full={true}
@@ -205,7 +207,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/reviews-management`}
-                      title="Reviews"
+                      title={t('management-tabs.reviews')}
                       id="management_restaurant_reviews"
                       onClose={pressHandler}
                       full={true}
@@ -213,7 +215,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/deliveries-management`}
-                      title="Deliveries"
+                      title={t('management-tabs.deliveries')}
                       id="management_restaurant_deliveries"
                       onClose={pressHandler}
                       full={true}
@@ -221,7 +223,7 @@ const ManagementTabs: React.FC = ({}) => {
                     />
                     <Tab
                       path={`restaurant/${restaurantId}/reports`}
-                      title="Reports"
+                      title={t('management-tabs.reports')}
                       id="management_reports"
                       onClose={pressHandler}
                       full={true}
@@ -236,13 +238,13 @@ const ManagementTabs: React.FC = ({}) => {
       </div>
       <Tooltip
         title={
-          restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'
+          restaurantId ? `${t('management-tabs.restaurant')} ${restaurant?.name}` : t('management-tabs.managementPanel')
         }
         placement="bottom"
         arrow
       >
         <h1 className="text-xl dark:text-grey-0 truncate text-right text-nowrap">
-          {restaurantId ? `${restaurant?.name} restaurant` : 'Management panel'}
+          {restaurantId ? `${t('management-tabs.restaurant')} ${restaurant?.name}` : t('management-tabs.managementPanel')}
         </h1>
       </Tooltip>
     </div>

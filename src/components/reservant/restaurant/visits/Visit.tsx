@@ -107,9 +107,9 @@ const Visit: React.FC<VisitProps> = () => {
       setAvailableHours(visitHours)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('unexpected error', error)
+        console.error('unexpected error', error)
       }
     }
   }

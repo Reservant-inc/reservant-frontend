@@ -70,7 +70,6 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       await fetchDELETE(`/events/${event.eventId}`)
       closeDialog()
       refreshEvents()
-      console.log('Event deleted')
     } catch (error) {
       console.error('Error deleting event:', error)
     }
@@ -81,7 +80,6 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       await fetchDELETE(`/events/${event.eventId}/interested`)
       closeDialog()
       refreshEvents()
-      console.log('Left event')
     } catch (error) {
       console.error('Error leaving event:', error)
     }
@@ -146,8 +144,8 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
         {listType === EventListType.History && (
           <h1 className="text-sm text-grey-2 dark:text-grey-3 italic">
             {userInfo.userId !== creator.userId
-              ? `${t("profile.events.friend-participate")}`
-              : `${t("profile.events.you-created-event")}`}
+              ? `${t('profile.events.friend-participate')}`
+              : `${t('profile.events.you-created-event')}`}
           </h1>
         )}
 

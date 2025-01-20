@@ -26,6 +26,7 @@ import EmploymentsManagement from './EmploymentsManagement'
 import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
 import { FetchError } from '../../../../services/Errors'
 import { parsePhoneNumber } from 'libphonenumber-js'
+import { useTranslation } from 'react-i18next'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -35,6 +36,7 @@ interface EditToolbarProps {
 }
 
 export default function EmployeeManagement() {
+  const [t] = useTranslation('global')
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -102,7 +104,7 @@ export default function EmployeeManagement() {
             onClick={() => setIsModalOpen(true)}
             className="flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black"
           >
-            <h1 className="font-mont-md text-md">+ Add an employee</h1>
+            <h1 className="font-mont-md text-md">+ {t('employee-management.add-employee')}</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -149,9 +151,9 @@ export default function EmployeeManagement() {
       setEmpToDel('')
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
     populateRows()
@@ -185,9 +187,9 @@ export default function EmployeeManagement() {
         populateRows()
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error')
+          console.error('Unexpected error')
         }
       }
     }
@@ -209,28 +211,28 @@ export default function EmployeeManagement() {
   const columns: GridColDef[] = [
     {
       field: 'userId',
-      headerName: 'userId',
+      headerName: t('employee-management.userId'),
       type: 'string',
       width: 150,
       editable: false
     },
     {
       field: 'firstName',
-      headerName: 'First name',
+      headerName: t('employee-management.firstName'),
       type: 'string',
       width: 180,
       editable: true
     },
     {
       field: 'lastName',
-      headerName: 'Last name',
+      headerName: t('employee-management.lastName'),
       type: 'string',
       width: 180,
       editable: true
     },
     {
       field: 'phoneNumber',
-      headerName: 'Phone number',
+      headerName: t('employee-management.phoneNumber'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -239,7 +241,7 @@ export default function EmployeeManagement() {
     },
     {
       field: 'birthDate',
-      headerName: 'Birth date',
+      headerName: t('employee-management.birthDate'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -249,7 +251,7 @@ export default function EmployeeManagement() {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('employee-management.actions'),
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -356,7 +358,7 @@ export default function EmployeeManagement() {
             setIsModalOpen(false)
             populateRows()
           }}
-          title="Creating a new employee..."
+          title={t('employee-management.creating-employee')}
         >
           <EmployeeRegister
             onClose={() => {
@@ -382,7 +384,7 @@ export default function EmployeeManagement() {
           handleDeleteEmp(empToDel)
           populateRows()
         }}
-        confirmationText={`Are you sure you want to delete this employee?`} //@TODO translation
+        confirmationText={t('employee-management.delete-employee-confirmation')} //@TODO translation
       />
     </>
   )

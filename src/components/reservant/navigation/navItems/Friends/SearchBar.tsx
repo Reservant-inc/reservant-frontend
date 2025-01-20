@@ -57,8 +57,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
       const newRestaurants =
         restaurantResult.items as unknown as RestaurantType[]
 
-      console.log(restaurantResult)
-
       if (newUsers.length < 10 && newRestaurants.length < 10) {
         setHasMore(false)
       }
@@ -79,9 +77,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ isCustomerService }) => {
       }
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     } finally {
       setIsLoading(false)

@@ -83,7 +83,7 @@ const ComplaintsList: React.FC = () => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
-        <span>{params.row.resolutionDate ? 'Yes' : 'No'}</span>
+        <span>{params.row.resolutionDate ? `${t('complaints.yes')}` : `${t('complaints.no')}`}</span>
       )
     },
     {
@@ -247,7 +247,7 @@ const ComplaintsList: React.FC = () => {
                 </ThemeProvider>
               ) : (
                 <div className="flex justify-center items-center h-full text-lg">
-                  No complaints found.
+                  {t('complaints.noComplaintsFound')}
                 </div>
               )}
             </div>

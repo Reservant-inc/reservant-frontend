@@ -54,7 +54,6 @@ const CreateEventThread: React.FC<CreateEventThreadProps> = ({
     try {
       // Tworzenie wątku
       const response = await fetchPOST('/threads', JSON.stringify(threadData))
-      console.log('Thread created:', response)
       onClose() // Zamknij modal po stworzeniu wątku
     } catch (error) {
       console.error('Error creating thread:', error)

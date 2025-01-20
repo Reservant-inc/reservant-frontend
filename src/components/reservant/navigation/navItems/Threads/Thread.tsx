@@ -54,9 +54,9 @@ const Thread: React.FC<ThreadProps> = ({
       }
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     }
   }
@@ -81,9 +81,9 @@ const Thread: React.FC<ThreadProps> = ({
       getMessages()
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     } finally {
       setMessageToSend('')

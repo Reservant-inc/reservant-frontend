@@ -124,14 +124,14 @@ export default function EmployeeRestaurantManagement() {
             onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ Create an employee</h1>
+            <h1 className="text-md font-mont-md">+ {t('employee-management.add-employee')}</h1>
           </button>
           <button
             id="RestaurantEmpAdd"
             onClick={() => setIsAddModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ Assign an employee</h1>
+            <h1 className="text-md font-mont-md">+ {t('employee-management.assign-employee')}</h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -153,9 +153,9 @@ export default function EmployeeRestaurantManagement() {
       setEmpToDel('')
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
     populateRows()
@@ -222,7 +222,7 @@ export default function EmployeeRestaurantManagement() {
       ) as HTMLSelectElement
       selector.selectedIndex = 0
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -233,14 +233,14 @@ export default function EmployeeRestaurantManagement() {
   const columns: GridColDef[] = [
     {
       field: 'empID',
-      headerName: 'Employee ID',
+      headerName: t('employee-management.userId'),
       type: 'string',
       width: 180,
       editable: false
     },
     {
       field: 'firstName',
-      headerName: 'First name',
+      headerName: t('employee-management.firstName'),
       type: 'string',
       width: 180,
       editable: false
@@ -248,14 +248,14 @@ export default function EmployeeRestaurantManagement() {
 
     {
       field: 'lastName',
-      headerName: 'Last Name',
+      headerName: t('employee-management.lastName'),
       type: 'string',
       width: 180,
       editable: false
     },
     {
       field: 'phoneNumber',
-      headerName: 'Phone number',
+      headerName: t('employee-management.phoneNumber'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -264,7 +264,7 @@ export default function EmployeeRestaurantManagement() {
     },
     {
       field: 'isHallEmployee',
-      headerName: 'Hall role',
+      headerName: t('employee-management.hallRole'),
       type: 'boolean',
       width: 180,
       align: 'left',
@@ -273,7 +273,7 @@ export default function EmployeeRestaurantManagement() {
     },
     {
       field: 'isBackdoorEmployee',
-      headerName: 'Backdoor role',
+      headerName: t('employee-management.backdoorRole'),
       type: 'boolean',
       width: 180,
       align: 'left',
@@ -282,7 +282,7 @@ export default function EmployeeRestaurantManagement() {
     },
     {
       field: 'dateFrom',
-      headerName: 'Assigned since',
+      headerName: t('employee-management.assignedSince'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -291,7 +291,7 @@ export default function EmployeeRestaurantManagement() {
     },
     {
       field: 'dateUntil',
-      headerName: 'Assigned until',
+      headerName: t('employee-management.assignedUntil'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -301,7 +301,7 @@ export default function EmployeeRestaurantManagement() {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('employee-management.actions'),
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -388,7 +388,7 @@ export default function EmployeeRestaurantManagement() {
         <Dialog
           open={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          title="Creating a new employee..."
+          title={t('employee-management.creating-employee')}
         >
           <EmployeeRegister
             onClose={() => {
@@ -401,7 +401,7 @@ export default function EmployeeRestaurantManagement() {
         <Dialog
           open={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
-          title="Adding employment..."
+          title={t('employee-management.adding-employment')}
         >
           <div className="p-2 w-[500px] items-center justify-center flex">
             <Formik
@@ -511,7 +511,7 @@ export default function EmployeeRestaurantManagement() {
           handleDeleteEmp(empToDel)
           populateRows()
         }}
-        confirmationText={`Are you sure you want to delete this employment?`} //@TODO translation
+        confirmationText={t('employee-management.delete-employee-confirmation')} //@TODO translation
       />
     </div>
   )

@@ -39,7 +39,7 @@ export const useValidationSchemas = () => {
               else resolve(false)
             })
             .catch(error => {
-              console.log(error)
+              console.error(error)
             })
         })
       }),
@@ -113,7 +113,7 @@ export const useValidationSchemas = () => {
               else resolve(false)
             })
             .catch(error => {
-              console.log(error)
+              console.error(error)
             })
         })
       }),

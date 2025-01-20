@@ -73,13 +73,13 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           <p className="font-mont-bd">
             {t('customer-service.report-details.deposit')}:{' '}
           </p>
-          <p>{visit.deposit ? `${visit.deposit} USD` : 'None'}</p>
+          <p>{visit.deposit ? `${visit.deposit} USD` : `${t('complaints.none')}`}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
           <p className="font-mont-bd">
             {t('customer-service.report-details.takeaway')}:{' '}
           </p>
-          <p>{visit.takeaway ? 'Yes' : 'No'}</p>
+          <p>{visit.takeaway ? `${t('complaints.yes')}` : `${t('complaints.no')}`}</p>
         </h1>
         <h1 className="flex gap-3 text-sm">
           <p className="font-mont-bd">
