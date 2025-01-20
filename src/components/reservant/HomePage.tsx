@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Map from './map/Map'
-import { Button, List, ListItemButton, Typography } from '@mui/material'
+import { Alert, Button, List, ListItemButton, Snackbar, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp'
 import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp'
@@ -15,6 +15,7 @@ import { RestaurantDetailsType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
 import FocusedRestaurantDetails from './restaurant/onMapView/FocusedRestaurantDetails'
+import { useLocation } from 'react-router-dom'
 
 export default function HomePage() {
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
@@ -33,6 +34,9 @@ export default function HomePage() {
   const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
     []
   )
+  const location = useLocation()
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null)
 
   const { restaurantId } = useParams<{ restaurantId?: string }>()
   const navigate = useNavigate()
@@ -45,6 +49,20 @@ export default function HomePage() {
     lon1: 21.06353759765625,
     lon2: 20.959854125976566
   })
+
+  useEffect(() => {
+    if (location.state?.snackbarMessage) {
+      setSnackbarMessage(location.state.snackbarMessage)
+      setSnackbarOpen(true);
+
+      // reset location.state po pierwszym uzyciu
+      navigate(location.pathname, { replace: true, state: {} })
+    }
+  }, [location, navigate])
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false)
+  }
 
   useEffect(() => {
     const getTags = async () => {
@@ -415,6 +433,22 @@ export default function HomePage() {
           )}
         </OutsideClickHandler>
       </div>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={8000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
 
       {/* Restaurant Details */}
       {selectedRestaurant && (

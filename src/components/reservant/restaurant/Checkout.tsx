@@ -108,17 +108,17 @@ const Checkout: React.FC = () => {
         await fetchPOST('/orders', orderBody)
       }
 
-      alert('Visit created successfully.')
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.error(error.formatErrors())
-        alert(error.formatErrors())
-      } else {
-        console.error('Unexpected error', error)
-        alert('An unexpected error occurred.')
-      }
-    } finally {
-      navigate('/reservant/home')
+      navigate('/reservant/home', {
+      state: { snackbarMessage: 'Visit created successfully.', snackbarSeverity: 'success' },
+    })
+  } catch (error) {
+    if (error instanceof FetchError) {
+      console.error(error.formatErrors())
+      alert(error.formatErrors())
+    } else {
+      console.error('Unexpected error', error)
+      alert('An unexpected error occurred.')
+    }
     }
   }
 
