@@ -11,6 +11,7 @@ import {
 import { fetchGET } from '../../../services/APIconn'
 import { useParams } from 'react-router-dom'
 import { ReportType } from '../../../services/types'
+import { useTranslation } from 'react-i18next'
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void
@@ -23,6 +24,7 @@ export default function Reports() {
   const [rows, setRows] = useState<GridRowsProp>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const { restaurantId } = useParams()
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     populateRows()
@@ -36,22 +38,22 @@ export default function Reports() {
       let reports: any[] = []
 
       if (response.items.length)
-        
         for (const i in response.items) {
           reports.push({
             id: Number(i),
             reportId: response.items[i].reportId,
             description: response.items[i].description,
-            visitId: response.items[i].visitId,
-            reportedUserId: response.items[i].reportedUserId,
-            reportDate: response.items[i].reportDate,
+            visitId: response.items[i].visit.visitId,
+            reportedUserId: response.items[i].reportedUser?.userId,
+            reportDate: new Date(response.items[i].reportDate).toLocaleString(),
             category: response.items[i].category,
             createdBy: response.items[i].createdBy,
             reportedUser: response.items[i].reportedUser
           })
         }
-        console.log(reports)
-        setRows(reports)
+      console.log(response)
+      console.log(reports)
+      setRows(reports)
     } catch (error) {
       console.error('Error populating table', error)
     }
@@ -80,44 +82,44 @@ export default function Reports() {
   const columns: GridColDef[] = [
     {
       field: 'reportId',
-      headerName: 'Report ID',
+      headerName: t('customer-service.reports.report-id'),
       type: 'string',
-      width: 180,
+      flex: 0.05,
       editable: false
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('customer-service.reports.description'),
       type: 'string',
-      width: 300,
+      flex: 0.3,
       editable: false
     },
     {
       field: 'visitId',
-      headerName: 'Visit ID',
+      headerName: t('customer-service.reports.visit-id'),
       type: 'string',
-      width: 180,
+      flex: 0.05,
       editable: false
     },
     {
       field: 'reportedUserId',
-      headerName: 'Reported User ID',
+      headerName: t('customer-service.reports.reported-user-id'),
       type: 'string',
-      width: 220,
+      flex: 0.2,
       editable: false
     },
     {
       field: 'reportDate',
-      headerName: 'Report Date',
+      headerName: t('customer-service.reports.report-date'),
       type: 'string',
-      width: 200,
+      flex: 0.1,
       editable: false
     },
     {
       field: 'category',
-      headerName: 'Category',
+      headerName: t('customer-service.reports.category'),
       type: 'string',
-      width: 180,
+      flex: 0.2,
       editable: false
     }
   ]

@@ -10,7 +10,7 @@ import ComplaintDetails from './ComplaintDetails'
 import CloseIcon from '@mui/icons-material/Close'
 
 import { ThemeContext } from '../../../contexts/ThemeContext'
-import { PaginationType, ReportType } from '../../../services/types'
+import { PaginationType, ReportType, UserType } from '../../../services/types'
 import { useTranslation } from 'react-i18next'
 
 const ComplaintsList: React.FC = () => {
@@ -18,6 +18,7 @@ const ComplaintsList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [userId, setUserId] = useState<string | null>(null)
+  const [currentUser, setCurrentUser] = useState<UserType>({} as UserType)
   const [isManager, setIsManager] = useState<boolean>(false)
 
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ const ComplaintsList: React.FC = () => {
     try {
       const user = await fetchGET('/user');
       setUserId(user.userId);
+      setCurrentUser(user);
       setIsManager(user.roles.includes('CustomerSupportManager'));
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -81,7 +83,7 @@ const ComplaintsList: React.FC = () => {
       flex: 1,
       sortable: true,
       renderCell: (params: GridRenderCellParams) => (
-        <span>{params.row.resolutionDate ? 'Yes' : 'No'}</span>
+        <span>{params.row.resolutionDate ? `${t('complaints.yes')}` : `${t('complaints.no')}`}</span>
       )
     },
     {
@@ -245,7 +247,7 @@ const ComplaintsList: React.FC = () => {
                 </ThemeProvider>
               ) : (
                 <div className="flex justify-center items-center h-full text-lg">
-                  No complaints found.
+                  {t('complaints.noComplaintsFound')}
                 </div>
               )}
             </div>
@@ -258,6 +260,8 @@ const ComplaintsList: React.FC = () => {
                 onClose={closeSidePanel}
                 refreshReports={fetchReports}
                 setAlertMessage={setAlertMessage}
+                isManager={isManager}
+                currentUser={currentUser}
               />
             </div>
           )}

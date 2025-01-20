@@ -4,16 +4,18 @@ import { getImage } from '../../../services/APIconn'
 import DefaultImage from '../../../assets/images/defaulImage.jpeg'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
+import { useTranslation } from 'react-i18next'
 
 interface CartProps {}
 
 const Cart: React.FC<CartProps> = () => {
   const { items, decrementQuantity, incrementQuantity } =
     useContext(CartContext)
+  const [t] = useTranslation('global')
 
   return (
     <div className="flex flex-col w-full h-full items-center gap-2 rounded-lg bg-white dark:bg-black py-2 dark:bg-grey-6">
-      <h1 className="font-mont-bd text-xl dark:text-white">Cart</h1>
+      <h1 className="font-mont-bd text-xl dark:text-white">{t('cart.cart')}</h1>
       {items.length > 0 ? (
         <div className="scroll flex h-full w-full flex-col divide-y divide-solid divide-grey-1 overflow-y-auto border-y-[1px] border-grey-1 px-2 dark:divide-grey-5 dark:border-grey-5">
           {items.map(item => (
@@ -53,7 +55,7 @@ const Cart: React.FC<CartProps> = () => {
         </div>
       ) : (
         <h1 className="flex h-full w-full items-center justify-center text-grey-2">
-          No items in the cart yet
+          {t('cart.no-items')}
         </h1>
       )}
     </div>

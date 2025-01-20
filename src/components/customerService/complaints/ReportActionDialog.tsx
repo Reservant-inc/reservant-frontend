@@ -10,6 +10,7 @@ import {
 } from '../../../services/APIconn'
 import { useTranslation } from 'react-i18next'
 import DefaultImage from '../../../assets/images/user.jpg'
+import { UserType } from '../../../services/types'
 
 interface ReportActionDialogProps {
   open: boolean
@@ -19,6 +20,8 @@ interface ReportActionDialogProps {
   refreshReports: () => void
   setAlertMessage: Function
   assignedAgents: any[]
+  isManager: boolean
+  currentUser: UserType
 }
 
 const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
@@ -28,7 +31,9 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
   actionType,
   reportId,
   refreshReports,
-  assignedAgents
+  assignedAgents,
+  isManager,
+  currentUser
 }) => {
   const [agents, setAgents] = useState<any[]>([])
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -125,7 +130,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
           onSubmit={handleAssignSubmit}
         >
           {({ values, errors, touched, isValid, dirty }) => (
-            <Form className="p-4 flex flex-col gap-4 w-[400px]">
+            <Form className="p-4 flex flex-col gap-4 w-[400px] dark:text-white">
               <label htmlFor="agentId" className="font-mont-md text-sm">
                 {t('customer-service.report-details.select-agent')}
               </label>
@@ -136,7 +141,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                 className={`w-full cursor-pointer border ${
                   errors.agentId && touched.agentId
                     ? 'border-red'
-                    : 'border-primary'
+                    : 'border-primary dark:border-secondary'
                 } rounded-md`}
               >
                 {!values.agentId && (
@@ -158,20 +163,33 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                     </option>
                   )
                 })}
+                {isManager && (
+                  <option
+                    key={currentUser.userId}
+                    value={currentUser.userId}
+                    disabled={isAgentAssigned(currentUser.userId)}
+                  >
+                    {currentUser.firstName} {currentUser.lastName}{' '}
+                    {isAgentAssigned(currentUser.userId) &&
+                      `(${t('customer-service.report-details.already-assigned')})`}
+                  </option>
+                )}
               </Field>
               <div className="flex justify-end gap-4">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-primary border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md"
+                  className="px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
                 >
                   {t('customer-service.report-details.cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={!isValid || !dirty}
-                  className={`px-4 py-2 text-primary border-primary bg-white hover:bg-primary hover:text-white border-[1px] rounded-md ${
-                    !isValid || !dirty ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`px-4 py-2 text-primary dark:border-secondary dark:text-secondary  border-primary  border-[1px] rounded-md ${
+                    !isValid || !dirty
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black'
                   }`}
                 >
                   {t('customer-service.report-details.assign')}
