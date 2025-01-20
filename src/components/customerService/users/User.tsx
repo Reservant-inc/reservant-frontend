@@ -412,7 +412,7 @@ const User: React.FC = () => {
               {t('customer-service.user.cancel')}
             </button>
             <button
-              className={`text-sm border-red hover:scale-105 hover:bg-red hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-red transition ${
+              className={`text-sm dark:border-red border-red hover:scale-105 hover:bg-red dark:hover:bg-red dark:hover:text-white hover:text-white dark:text-red dark:hover:bg-red dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-red transition ${
                 isDeleteDisabled ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               onClick={handleDeleteUser}

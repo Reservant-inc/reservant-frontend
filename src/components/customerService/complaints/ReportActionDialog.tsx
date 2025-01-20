@@ -156,6 +156,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                       key={agent.userId}
                       value={agent.userId}
                       disabled={assigned}
+                      className={assigned ? "text-grey-4" : "text-black"}
                     >
                       {agent.firstName} {agent.lastName}{' '}
                       {assigned &&
@@ -168,6 +169,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                     key={currentUser.userId}
                     value={currentUser.userId}
                     disabled={isAgentAssigned(currentUser.userId)}
+                    className={isAgentAssigned(currentUser.userId) ? "text-grey-4" : "text-black"}
                   >
                     {currentUser.firstName} {currentUser.lastName}{' '}
                     {isAgentAssigned(currentUser.userId) &&

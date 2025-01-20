@@ -103,8 +103,6 @@ const Notification: React.FC<NotificationProps> = ({
   };
   
   
-
-
   const handleAcceptParticipation = async () => {
     setLoading(true);
     try {
@@ -187,7 +185,11 @@ Liczba osób: ${details.numberOfPeople}`;
     'NotificationParticipationRequestResponse',
     'NotificationReportEscalated',
     'NotificationNewReservation',
-    'NotificationReportAssigned'
+    'NotificationReportAssigned',
+    'NotificationNewRestaurantReview',
+    'NotificationVisitApprovedDeclined',
+    'NotificationNewParticipationRequest',
+    'NotificationNewMessage'
   ];
 
   return (
