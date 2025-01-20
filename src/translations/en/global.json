@@ -3,6 +3,7 @@
         "search": "Search...",
         "cancel": "Cancel",
         "save": "Save",
+        "saveChanges": "Save changes",
         "results": "Results",
         "no-results": "No results",
         "close": "Close",
@@ -34,7 +35,8 @@
         "until": "until",
         "uploadMore": "Upload more photos",
         "noPhotos": "No photos uploaded yet",
-        "remove": "Remove"
+        "remove": "Remove",
+        "uploadPhoto": "Upload photo"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -486,7 +488,8 @@
             "event-creation": "You have created a new event",
             "go-to-my-events": "Go to My Events",
             "close": "Close",
-            "event-loading": "Loading event details..."
+            "event-loading": "Loading event details...",
+            "edit-event": "Edit Event"
         },
     "reviews": {
         "filter": "Filter",

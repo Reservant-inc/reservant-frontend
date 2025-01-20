@@ -15,6 +15,7 @@ import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { getImage } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/user.jpg'
+import { useTranslation } from 'react-i18next'
 
 interface EventEditDialogProps {
   open: boolean
@@ -35,7 +36,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
   const [isHovered, setIsHovered] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  console.log(event)
+  const { t } = useTranslation('global')
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Event Name is required'),
@@ -107,19 +108,14 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
       onClose={onClose}
       fullWidth
       maxWidth="md"
-      PaperProps={{ className: 'bg-white dark:bg-black' }}
     >
-      <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
-        <span>Edit Event</span>
+      <DialogTitle className="flex justify-between items-center font-bold border-b dark:bg-grey-6 border-grey-1 dark:text-white">
+        <span>{t('event-creation.edit-event')}</span>
         <button onClick={onClose} className="text-grey-2">
           <CloseSharpIcon />
         </button>
       </DialogTitle>
-      <DialogContent>
-        {errorMessage && (
-          <div className="text-red-500 mb-4">{errorMessage}</div>
-        )}{' '}
-        {/* Display error message */}
+      <DialogContent className='scroll dark:bg-grey-6 '>
         <Formik
           initialValues={{
             name: event.name,
@@ -136,46 +132,56 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue, isSubmitting, values, errors, touched }) => (
+          { formik => (
             <Form>
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium dark:text-grey-2"
+                  className="block text-sm font-medium dark:text-white"
                 >
-                  Event Name
+                  {t('event-creation.name')}
                 </label>
                 <Field
                   as={TextField}
                   name="name"
                   id="name"
                   fullWidth
-                  error={touched.name && Boolean(errors.name)}
-                  helperText={touched.name && errors.name}
+                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                    !(formik.errors.name && formik.touched.name)
+                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                  }`}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium dark:text-grey-2"
+                  className="block text-sm font-medium dark:text-white"
                 >
-                  Description
+                {t('event-creation.description')}
                 </label>
                 <Field
                   as={TextField}
                   name="description"
                   id="description"
                   fullWidth
-                  error={touched.description && Boolean(errors.description)}
-                  helperText={touched.description && errors.description}
+                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                    !(formik.errors.description && formik.touched.description)
+                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                  }`}
+                  error={formik.touched.description && Boolean(formik.errors.description)}
+                  helperText={formik.touched.description && formik.errors.description}
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="time"
-                  className="block text-sm font-medium dark:text-grey-2"
+                  className="block text-sm font-medium dark:text-white"
                 >
-                  Event Time
+                  {t('event-creation.time-from')}
                 </label>
                 <Field
                   as={TextField}
@@ -183,16 +189,21 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   type="datetime-local"
                   id="time"
                   fullWidth
-                  error={touched.time && Boolean(errors.time)}
-                  helperText={touched.time && errors.time}
+                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                    !(formik.errors.time && formik.touched.time)
+                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                  }`}
+                  error={formik.touched.time && Boolean(formik.errors.time)}
+                  helperText={formik.touched.time && formik.errors.time}
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="mustJoinUntil"
-                  className="block text-sm font-medium dark:text-grey-2"
+                  className="block text-sm font-medium dark:text-white"
                 >
-                  Must Join Until
+                  {t('event-creation.must-join-until')}
                 </label>
                 <Field
                   as={TextField}
@@ -200,16 +211,21 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   type="datetime-local"
                   id="mustJoinUntil"
                   fullWidth
-                  error={touched.mustJoinUntil && Boolean(errors.mustJoinUntil)}
-                  helperText={touched.mustJoinUntil && errors.mustJoinUntil}
+                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                    !(formik.errors.mustJoinUntil && formik.touched.mustJoinUntil)
+                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                  }`}
+                  error={formik.touched.mustJoinUntil && Boolean(formik.errors.mustJoinUntil)}
+                  helperText={formik.touched.mustJoinUntil && formik.errors.mustJoinUntil}
                 />
               </div>
               <div className="mb-4">
                 <label
                   htmlFor="maxPeople"
-                  className="block text-sm font-medium dark:text-grey-2"
+                  className="block text-sm font-medium dark:text-white"
                 >
-                  Max People
+                  {t('event-creation.max-people')}
                 </label>
                 <Field
                   as={TextField}
@@ -217,8 +233,13 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   type="number"
                   id="maxPeople"
                   fullWidth
-                  error={touched.maxPeople && Boolean(errors.maxPeople)}
-                  helperText={touched.maxPeople && errors.maxPeople}
+                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                    !(formik.errors.maxPeople && formik.touched.maxPeople)
+                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
+                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                  }`}
+                  error={formik.touched.maxPeople && Boolean(formik.errors.maxPeople)}
+                  helperText={formik.touched.maxPeople && formik.errors.maxPeople}
                 />
               </div>
 
@@ -226,9 +247,9 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
               <div className="mb-4">
                 <label
                   htmlFor="photo"
-                  className="block text-sm font-medium dark:text-grey-2 mb-2"
+                  className="block text-sm font-medium dark:text-white mb-2"
                 >
-                  Event Preview Picture
+                  {t('event-creation.preview-picture')}
                 </label>
                 <div
                   className="relative min-w-64 min-h-64 flex items-center justify-center"
@@ -251,7 +272,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                         className="shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-secondary text-primary dark:hover:bg-secondary dark:hover:text-black hover:text-white hover:bg-primary"
                       >
                         <CloudUploadIcon />
-                        Upload photo
+                        {t('general.uploadPhoto')}
                       </label>
                     </div>
                   )}
@@ -263,7 +284,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                     onChange={async e => {
                       if (e.target.files && e.target.files.length > 0) {
                         const fileName = await uploadPhoto(e.target.files[0])
-                        setFieldValue('photo', fileName)
+                        formik.setFieldValue('photo', fileName)
                       }
                     }}
                   />
@@ -273,17 +294,17 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
               <div className="flex justify-end space-x-4">
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={formik.isSubmitting}
                   className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                 >
-                  Save Changes
+                  {t('general.saveChanges')}
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
                   className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                 >
-                  Cancel
+                  {t('general.cancel')}
                 </button>
               </div>
             </Form>
