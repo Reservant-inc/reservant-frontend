@@ -103,19 +103,14 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
   }
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth
-      maxWidth="md"
-    >
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle className="flex justify-between items-center font-bold border-b dark:bg-grey-6 border-grey-1 dark:text-white">
         <span>{t('event-creation.edit-event')}</span>
         <button onClick={onClose} className="text-grey-2">
           <CloseSharpIcon />
         </button>
       </DialogTitle>
-      <DialogContent className='scroll dark:bg-grey-6 '>
+      <DialogContent className="scroll dark:bg-grey-6 ">
         <Formik
           initialValues={{
             name: event.name,
@@ -132,7 +127,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          { formik => (
+          {formik => (
             <Form>
               <div className="mb-4">
                 <label
@@ -146,7 +141,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   name="name"
                   id="name"
                   fullWidth
-                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                  className={`dark:border-white [&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
                     !(formik.errors.name && formik.touched.name)
                       ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
                       : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
@@ -156,24 +151,26 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                 />
               </div>
               <div className="mb-4">
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium dark:text-white"
-                >
-                {t('event-creation.description')}
-                </label>
                 <Field
+                  type="text"
+                  variant="standard"
+                  label={t('event-creation.description')}
+                  fullWidth
                   as={TextField}
                   name="description"
                   id="description"
-                  fullWidth
-                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                  className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
                     !(formik.errors.description && formik.touched.description)
-                      ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
-                      : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
+                      ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
+                      : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                   }`}
-                  error={formik.touched.description && Boolean(formik.errors.description)}
-                  helperText={formik.touched.description && formik.errors.description}
+                  error={
+                    formik.touched.description &&
+                    Boolean(formik.errors.description)
+                  }
+                  helperText={
+                    formik.touched.description && formik.errors.description
+                  }
                 />
               </div>
               <div className="mb-4">
@@ -212,12 +209,20 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   id="mustJoinUntil"
                   fullWidth
                   className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
-                    !(formik.errors.mustJoinUntil && formik.touched.mustJoinUntil)
+                    !(
+                      formik.errors.mustJoinUntil &&
+                      formik.touched.mustJoinUntil
+                    )
                       ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
                       : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
                   }`}
-                  error={formik.touched.mustJoinUntil && Boolean(formik.errors.mustJoinUntil)}
-                  helperText={formik.touched.mustJoinUntil && formik.errors.mustJoinUntil}
+                  error={
+                    formik.touched.mustJoinUntil &&
+                    Boolean(formik.errors.mustJoinUntil)
+                  }
+                  helperText={
+                    formik.touched.mustJoinUntil && formik.errors.mustJoinUntil
+                  }
                 />
               </div>
               <div className="mb-4">
@@ -238,8 +243,12 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                       ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
                       : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
                   }`}
-                  error={formik.touched.maxPeople && Boolean(formik.errors.maxPeople)}
-                  helperText={formik.touched.maxPeople && formik.errors.maxPeople}
+                  error={
+                    formik.touched.maxPeople && Boolean(formik.errors.maxPeople)
+                  }
+                  helperText={
+                    formik.touched.maxPeople && formik.errors.maxPeople
+                  }
                 />
               </div>
 
