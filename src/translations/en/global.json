@@ -381,7 +381,8 @@
             "restaurantName": "Restaurant Name",
             "confirmation": "Are you sure you want to delete this restaurant?",
             "table": "Table",
-            "capacity": "Capacity"
+            "capacity": "Capacity",
+            "postalCode": "Postal code"
         }
     },
     "employee-management": {

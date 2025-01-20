@@ -376,7 +376,8 @@
             "restaurantName": "Nazwa restauracji",
             "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
             "table": "Stolik",
-            "capacity": "Pojemność"
+            "capacity": "Pojemność",
+            "postalCode": "Kod pocztowy"
         }
     },
     "employee-management": {

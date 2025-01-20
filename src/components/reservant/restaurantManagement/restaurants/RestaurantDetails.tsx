@@ -49,19 +49,52 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   groups,
   isReadOnly
 }) => {
+
+  const { t } = useTranslation('global')
+
   const validationSchema = Yup.object({
     groupName: Yup.string().required('Group Name is required'),
-    name: Yup.string().required('Restaurant Name is required'),
-    restaurantType: Yup.string().required('Restaurant Type is required'),
-    address: Yup.string().required('Address is required'),
-    city: Yup.string().required('City is required'),
-    reservationDeposit: Yup.number()
-      .min(0, 'Reservation Deposit must be non-negative')
-      .required('Reservation Deposit is required'),
-    maxReservationDurationMinutes: Yup.number()
-      .min(30, 'Maximum reservation duration cannot be less than 30 minutes')
-      .max(1440, 'Maximum reservation duration cannot exceed 1440 minutes')
-      .required('Maximum reservation duration is required')
+    name: Yup.string().required(t('errors.restaurant-register.name.required')),
+    restaurantType: Yup.string()
+    .required(t('errors.restaurant-register.businessType.required')),
+    address: Yup.string()
+    .required(t('errors.restaurant-register.address.required')),
+    city: Yup.string().required(t('errors.restaurant-register.city.required')),
+    reservationDeposit: Yup
+          .number()
+          .typeError(t('errors.restaurant-register.reservationDeposit.number')) // Komunikat dla nieprawidłowej liczby
+          .min(0, t('errors.restaurant-register.reservationDeposit.min'))
+          .max(300, t('errors.restaurant-register.reservationDeposit.max'))
+          .required(t('errors.restaurant-register.reservationDeposit.required')),
+    maxReservationDurationMinutes: Yup
+          .number()
+          .typeError(
+            t('errors.restaurant-register.maxReservationDurationMinutes.number')
+          ) // Komunikat dla nieprawidłowej liczby
+          .min(
+            30,
+            t('errors.restaurant-register.maxReservationDurationMinutes.min')
+          )
+          .max(
+            1140,
+            t('errors.restaurant-register.maxReservationDurationMinutes.max')
+          )
+          .required(
+            t('errors.restaurant-register.maxReservationDurationMinutes.required')
+          ),
+    postalCode: Yup
+          .string()
+          .matches(
+            /^[0-9]{2}-[0-9]{3}$/,
+            t('errors.restaurant-register.postalCode.matches')
+          )
+          .required(t('errors.restaurant-register.postalCode.required')),
+      description: Yup
+            .string()
+            .max(200, t('errors.restaurant-register.description.max'))
+            .min(3, t('errors.restaurant-register.description.min'))
+            .required(t('errors.restaurant-register.description.required')),
+      tags: Yup.array().min(3, t('errors.restaurant-register.tags.min'))
   })
 
   const [tags, setTags] = useState<string[]>([])
@@ -83,8 +116,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     return times
   }
   const timeOptions = generateTimeOptions()
-
-  const { t } = useTranslation('global')
 
   useEffect(() => {
     const fetchTags = async () => {
