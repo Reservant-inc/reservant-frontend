@@ -862,13 +862,11 @@
         "none":"None",
         "noComplaintsFound":"No complaints found."
         },
-        "restaurant": {
-            "name": "Restaurant name",
-            "type": "Business type",
-            "city": "City",
-            "description": "Description",
-            "actions": "Actions"
-        }
+    "restaurant": {
+        "name": "Restaurant name",
+        "type": "Business type",
+        "city": "City",
+        "description": "Description",
+        "actions": "Actions"
     }
-
 }

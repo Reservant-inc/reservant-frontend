@@ -860,12 +860,11 @@
         "none":"Brak",
         "noComplaintsFound":"Nie znaleziono zgłoszeń."
         },
-        "restaurant": {
-            "name": "Nazwa restauracji",
-            "type": "Rodzaj działalności",
-            "city": "Miasto",
-            "description": "Opis",
-            "actions": "Akcje"
-        }
+    "restaurant": {
+        "name": "Nazwa restauracji",
+        "type": "Rodzaj działalności",
+        "city": "Miasto",
+        "description": "Opis",
+        "actions": "Akcje"
     }
 }
