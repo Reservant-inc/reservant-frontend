@@ -1,16 +1,6 @@
 import React, { useContext, useState } from 'react'
 import OutsideClickHandler from '../../../reusableComponents/OutsideClickHandler'
 import User from '../../../../assets/images/user.jpg'
-import {
-  Alert,
-  Box,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Switch,
-  createTheme
-} from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 import {
@@ -38,6 +28,8 @@ import { fetchPOST } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import RestaurantRegister from '../../restaurantManagement/register/restaurantRegister/RestaurantRegister'
 import RegisterSuccess from '../../restaurantManagement/register/restaurantRegister/RegisterSuccess'
+import { Alert, createTheme, IconButton, Switch } from '@mui/material'
+import Dialog from '../../../reusableComponents/Dialog'
 
 const Tools: React.FC = () => {
   const [t] = useTranslation('global')
@@ -265,10 +257,7 @@ const Tools: React.FC = () => {
                 >
                   <ChevronLeft />
                 </button>
-                <button className="menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5">
-                  <Settings />
-                  <span className="ml-2">{t('tools.settings.setting')} </span>
-                </button>
+
                 <BecomeRestauranter />
               </div>
             </CSSTransition>
@@ -366,53 +355,24 @@ const Tools: React.FC = () => {
           </Alert>
         </div>
       )}
-      <Dialog
-        open={isBecomingRestauranter}
-        onClose={() => setIsBecomingRestauranter(false)}
-        sx={{
-          '& .MuiDialog-paper': {
-            width: '700px',
-            maxWidth: 'none', // Usuwa domyślną maksymalną szerokość
-            height: '92%', // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
-            maxHeight: 'none', // Wyłącza ograniczenia wysokości
-            margin: 0, // Usuwa marginesy, by dialog rozciągał się maksymalnie
-            display: 'flex', // Umożliwia elastyczne układanie zawartości
-            flexDirection: 'column' // Ustawia układ kolumnowy (przydatne dla treści)
-          }
-        }}
-      >
-        <DialogTitle className="text-center text-3xl font-bold dark:bg-black">
-          <IconButton
-            aria-label="close"
-            onClick={() => setIsBecomingRestauranter(false)}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: theme => theme.palette.grey[500]
-            }}
-          >
-            <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="dark:bg-black scroll">
-          <Box>
-            {/* Show the registration form or the success message */}
-            {!registerSucces ? (
-              <RestaurantRegister
-                onRegisterSucces={() => setIsBecomingRestauranter(false)}
-              />
-            ) : (
-              <Box>
-                <RegisterSuccess
-                  onDialogClose={() => setIsBecomingRestauranter(false)}
-                  onRegisterSucces={() => setRegisterSucces(false)}
-                />
-              </Box>
-            )}
-          </Box>
-        </DialogContent>
-      </Dialog>
+      {isBecomingRestauranter && (
+        <Dialog
+          open={isBecomingRestauranter}
+          onClose={() => setIsBecomingRestauranter(false)}
+          title={t('restaurant-register.restaurant-register')}
+        >
+          {!registerSucces ? (
+            <RestaurantRegister
+              onRegisterSucces={() => setRegisterSucces(true)}
+            />
+          ) : (
+            <RegisterSuccess
+              onDialogClose={() => setIsBecomingRestauranter(false)}
+              onRegisterSucces={() => setRegisterSucces(false)}
+            />
+          )}
+        </Dialog>
+      )}
     </>
   )
 }

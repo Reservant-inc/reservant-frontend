@@ -238,12 +238,14 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           .filter((photo: any) => photo !== undefined) // Usuwanie wartości undefined
       }
 
+      if (updatedValues.groupId === -1) updatedValues.groupId = null
+
       const response = await fetchPOST(
         '/my-restaurants',
         JSON.stringify(updatedValues)
       )
 
-      if (updatedValues.groupId === -1) {
+      if (updatedValues.groupId === null) {
         const restaurantGroupData = {
           name: `${updatedValues.name} Restaurants Group`,
           restaurantIds: [response.restaurantId]
