@@ -727,7 +727,14 @@
             "pending-restaurants": "Pending restaurants",
             "reported-user-id": "Reported User ID",
             "report-id": "Report ID",
-            "visit-id": "Visit ID"
+            "visit-id": "Visit ID",
+            "status":{
+                "status": "Status",
+                "resolved": "Resolved",
+                "rejected": "Rejected",
+                "pending": "Pending"
+
+            }
         },
         "report-details": {
             "report-details": "Report details",

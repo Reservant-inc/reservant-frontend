@@ -723,7 +723,14 @@
             "pending-restaurants": "Oczekujące restauracje",
             "reported-user-id": "ID Zgłoszonego Użytkownika",
             "report-id": "ID zgłoszenia",
-            "visit-id": "ID wizyty"
+            "visit-id": "ID wizyty",
+            "status":{
+                "status": "Status",
+                "resolved": "Rozwiązane",
+                "rejected": "Odrzucone",
+                "pending": "Oczekujące"
+
+            }
 
         },
         "report-details": {
