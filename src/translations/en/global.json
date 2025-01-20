@@ -879,5 +879,27 @@
         "city": "City",
         "description": "Description",
         "actions": "Actions"
+    },
+    "notifications": {
+        "3-newest": "Three newest",
+        "all": "All",
+        "loading": "Loading notifications...",
+        "notifications": "Notifications",
+        "no-new-notifications": "No new notifications.",
+        "read": "Read",
+        "new-friend-request": "Friend request sent.",
+        "friend-request-accepted": "accepted your friend request.",
+        "new-restaurant-review": "New review in",
+        "restaurant-verified": "has been verified.",
+        "visit-approved": "Visit approved.",
+        "visit-declined": "Visit declined.",
+        "new-participation-request": "A new person wants to join the event:",
+        "participation-accepted": "has accepted your participation.",
+        "participation-declined": "has declined your participation.",
+        "new-message": "New message in the thread:",
+        "report-escalated": "A new report has been escalated.",
+        "report-assigned": "You have been assigned to a new report.",
+        "new-reservation": "New reservation in",
+        "new-notification": "New notification."
     }
 }
