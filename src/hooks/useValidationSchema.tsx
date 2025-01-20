@@ -255,9 +255,6 @@ export const useValidationSchemas = () => {
 
   const RestaurantRegisterStep1Schema = yup.object({
     name: yup.string().required(t('errors.restaurant-register.name.required')),
-    address: yup
-      .string()
-      .required(t('errors.restaurant-register.address.required')),
     postalIndex: yup
       .string()
       .matches(
@@ -272,7 +269,25 @@ export const useValidationSchemas = () => {
       .required(t('errors.restaurant-register.tin.required')),
     restaurantType: yup
       .string()
-      .required(t('errors.restaurant-register.businessType.required'))
+      .required(t('errors.restaurant-register.businessType.required')),
+    location: yup
+      .object({
+        latitude: yup
+          .number()
+          .notOneOf(
+            [0],
+            t('errors.restaurant-register.location.latitude.invalid')
+          )
+          .required(t('errors.restaurant-register.location.latitude.required')),
+        longitude: yup
+          .number()
+          .notOneOf(
+            [0],
+            t('errors.restaurant-register.location.longitude.invalid')
+          )
+          .required(t('errors.restaurant-register.location.longitude.required'))
+      })
+      .required(t('errors.restaurant-register.address.required'))
   })
 
   const RestaurantEditSchema = yup.object({

@@ -7,6 +7,7 @@ import { fetchGET } from '../../../services/APIconn'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RestaurantDetailsType } from '../../../services/types'
 import { ThemeContext } from '../../../contexts/ThemeContext'
+import { useTranslation } from 'react-i18next'
 
 const PendingRestaurantsList: React.FC = () => {
   const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
@@ -14,6 +15,7 @@ const PendingRestaurantsList: React.FC = () => {
   const navigate = useNavigate()
   const { restaurantId } = useParams<{ restaurantId: string }>()
   const { isDark, lightTheme, darkTheme } = useContext(ThemeContext)
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     fetchRestaurants()
@@ -39,31 +41,31 @@ const PendingRestaurantsList: React.FC = () => {
     {
       field: 'id',
       headerName: 'ID',
-      flex: 0.5,
+      flex: 0.05,
       sortable: true
     },
     {
       field: 'name',
-      headerName: 'Name',
-      flex: 1,
+      headerName: t('customer-service.restaurant.name'),
+      flex: 0.2,
       sortable: true
     },
     {
       field: 'restaurantType',
-      headerName: 'Type',
-      flex: 1,
+      headerName: t('customer-service.restaurant.type'),
+      flex: 0.2,
       sortable: true
     },
     {
       field: 'city',
-      headerName: 'City',
-      flex: 1,
+      headerName: t('customer-service.restaurant.city'),
+      flex: 0.2,
       sortable: true
     },
     {
       field: 'description',
-      headerName: 'Description',
-      flex: 0.5,
+      headerName: t('customer-service.restaurant.description'),
+      flex: 0.3,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip title={params.row.description || 'No description'}>
@@ -77,8 +79,8 @@ const PendingRestaurantsList: React.FC = () => {
     },
     {
       field: 'actions',
-      headerName: 'Actions',
-      flex: 0.5,
+      headerName: t('customer-service.restaurant.actions'),
+      flex: 0.05,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip

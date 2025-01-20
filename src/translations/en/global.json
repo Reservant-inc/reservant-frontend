@@ -137,7 +137,8 @@
         "group": "Group",
         "complete": "Registration complete",
         "reservationDeposit": "Deposit",
-        "addRestaurant": "Add a restaurant"
+        "addRestaurant": "Add a restaurant",
+        "restaurant-register": "Register new restaurant"
     },
     "errors": {
         "add-employee": {
@@ -680,7 +681,18 @@
             "no-reports-created": "No created reports",
             "no-reports-customer-service": "No reports related to user",
             "created-by-user": "Created by user",
-            "reported-user": "Report regarding user"
+            "reported-user": "Report regarding user",
+            "status":{
+                "resolved": "Resolved",
+                "rejected": "Rejected",
+                "pending": "Pending"
+
+            },
+            "category": {
+                "technical": "Technical",
+                "emp": "Complaint on employee",
+                "lost": "Lost item"
+            }
         },
         "reviews": {
             "no-reviews": "No reviews yet",
@@ -755,7 +767,8 @@
             "backdoors-emp": "Backdoors",
             "employees": "Employees",
             "no-employees": "No employees found.",
-            "no-restaurant-details": "No restaurant details available."
+            "no-restaurant-details": "No restaurant details available.",
+            "already-assigned": "Already assigned"
         },
         "user": {
             "account": "Account",
@@ -848,6 +861,14 @@
         "yes":"Yes",
         "none":"None",
         "noComplaintsFound":"No complaints found."
+        },
+        "restaurant": {
+            "name": "Restaurant name",
+            "type": "Business type",
+            "city": "City",
+            "description": "Description",
+            "actions": "Actions"
+        }
     }
 
 }

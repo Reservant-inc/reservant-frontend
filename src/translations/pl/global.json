@@ -135,7 +135,8 @@
         "group": "Grupa",
         "complete": "Rejestracja zakończona",
         "reservationDeposit": "Depozyt",
-        "addRestaurant": "Dodaj restaurację"
+        "addRestaurant": "Dodaj restaurację",
+        "restaurant-register": "Zarejestruj nową restaurację"
     },
     "errors": {
         "login": {
@@ -677,7 +678,17 @@
             "no-reports-created": "Brak utworzonych zgłoszeń",
             "no-reports-customer-service": "Brak zgłoszeń powiązanych z tym użytkownikiem" ,
             "created-by-user": "Utworzone przez użytkownika",
-            "reported-user": "Zgłoszenie dotyczące użytkownika"
+            "reported-user": "Zgłoszenie dotyczące użytkownika",
+            "status":{
+                "resolved": "Rozwiązane",
+                "rejected": "Odrzucony",
+                "pending": "Oczekuje"
+            },
+            "category": {
+                "technical": "Problem techniczny",
+                "emp": "Skarga na pracownika",
+                "lost": "Zgubiony przedmiot"
+            }
         },
         "reviews": {
             "no-reviews": "Brak opinii",
@@ -753,7 +764,8 @@
             "backdoors-emp": "Pracownik zaplecza",
             "employees": "Pracownicy lokalu",
             "no-employees": "Nie znaleziono pracowników dla tego lokalu.",
-            "no-restaurant-details": "Nie znaleziono szczegółów restauracji."
+            "no-restaurant-details": "Nie znaleziono szczegółów restauracji.",
+            "already-assigned": "Już przypisany"
         },
         "user": {
             "account": "Konto",
@@ -847,5 +859,13 @@
         "yes":"Tak",
         "none":"Brak",
         "noComplaintsFound":"Nie znaleziono zgłoszeń."
+        },
+        "restaurant": {
+            "name": "Nazwa restauracji",
+            "type": "Rodzaj działalności",
+            "city": "Miasto",
+            "description": "Opis",
+            "actions": "Akcje"
+        }
     }
 }
