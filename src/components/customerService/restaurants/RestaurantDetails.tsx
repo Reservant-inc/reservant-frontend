@@ -114,26 +114,32 @@ const RestaurantDetails: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-6">
-      {/* lewa kol */}
-      <div className="flex flex-col gap-4 h-full w-1/2">
-        {/* Logo */}
-        <div className="flex h-[40%] bg-white rounded-lg overflow-hidden shadow-md">
-          <img
-            src={getImage(restaurant.logo, DefaultImage)}
-            alt={`${restaurant.name} Logo`}
-            className="object-cover w-full h-full"
-          />
+    <div className="h-full w-full flex flex-col">
+      {/* Nagłówek wyświetlany nad resztą */}
+      <h1 className="text-lg font-semibold p-2">Restaurant details</h1>
+  
+      {/* Reszta strony */}
+      <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-5 overflow-hidden">
+        {/* Lewa kolumna */}
+        <div className="flex flex-col gap-4 h-full w-1/2 overflow-hidden">
+          {/* Logo */}
+          <div className="flex h-[40%] bg-white rounded-lg overflow-hidden shadow-md">
+            <img
+              src={getImage(restaurant.logo, DefaultImage)}
+              alt={`${restaurant.name} Logo`}
+              className="object-cover w-full h-full"
+            />
+          </div>
+  
+          {/* Lista pracowników */}
+          <div className="flex flex-col bg-white dark:bg-black rounded-lg p-4 shadow-md h-[70%] overflow-y-auto">
+            {renderEmployees()}
+          </div>
         </div>
-
-        {/* Employees List */}
-        <div className="flex flex-col bg-white rounded-lg p-4 shadow-md h-[70%]">
-          {renderEmployees()}
-        </div>
+  
+        {/* Prawa kolumna */}
+        <Details />
       </div>
-
-      {/* prawa kol */}
-      <Details />
     </div>
   )
 }

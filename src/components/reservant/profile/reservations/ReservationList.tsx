@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { CircularProgress } from '@mui/material'
 import { FetchError } from '../../../../services/Errors'
 import Filters from '../../../reusableComponents/Filters'
+import { useTranslation } from 'react-i18next'
 
 interface ReservationListProps {
   listType: ReservationListType
@@ -22,6 +23,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
   )
 
   const location = useLocation()
+  const [t] = useTranslation('global')
 
   const apiRoutes: Record<ReservationListType, string> = {
     [ReservationListType.Incoming]: '/user/visits',
@@ -29,8 +31,8 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
   }
 
   const noEventsMessage: Record<ReservationListType, string> = {
-    [ReservationListType.Incoming]: 'Brak nadchodzących rezerwacji.',
-    [ReservationListType.Finished]: 'Brak historii rezerwacji'
+    [ReservationListType.Incoming]: `${t('reservation.no-upcoming')}`,
+    [ReservationListType.Finished]: `${t('reservation.no-history')}`
   }
 
   const apiRoute = apiRoutes[listType]
@@ -104,6 +106,11 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
                   reservation={reservation}
                   reservationType={listType}
                   key={reservation.visitId}
+                  refreshReservations={() =>
+                    setTimeout(() => {
+                      fetchReservations();
+                    }, 1000)
+                  }
                 />
               ))}
             </InfiniteScroll>

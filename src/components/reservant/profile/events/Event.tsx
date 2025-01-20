@@ -146,8 +146,8 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
         {listType === EventListType.History && (
           <h1 className="text-sm text-grey-2 dark:text-grey-3 italic">
             {userInfo.userId !== creator.userId
-              ? 'One or more of your friends participated in this event.'
-              : 'You created an event.'}
+              ? `${t("profile.events.friend-participate")}`
+              : `${t("profile.events.you-created-event")}`}
           </h1>
         )}
 

@@ -21,7 +21,18 @@
         "newest": "Najnowsze",
         "ascending": "Rosnąco",
         "descending": "Malejąco",
-        "Sort": "Sortuj"
+        "Sort": "Sortuj",
+        "monday": "Pn",
+        "tuesday": "Wt",
+        "wednesday": "Śr", 
+        "thursday": "Czw",
+        "friday": "Pt",
+        "saturday": "Sob",
+        "sunday": "Niedz",
+        "from": "od", 
+        "until": "do",
+        "uploadMore": "Dodaj więcej zdjęć",
+        "noPhotos": "Dodaj więcej zdjęć"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -47,7 +58,14 @@
         "employee-select": "Wyierz pracownika",
         "details": "Dodatkowe informacje",
         "describe-details": "Opisz szczegółowo problem...",
-        "submit": "Wyślij Zgłoszenie"
+        "submit": "Wyślij Zgłoszenie",
+        "cancel-reservation-title": "Odwołanie rezerwacji",
+        "cancel-reservation-dialog": "Czy na pewno chcesz odwołać tę rezerwację?",
+        "cancel-go-back": "Powrót",
+        "cancel-cancel": "Odwołaj rezerwację",
+        "cancel-no-orders": "Brak zamówień, ",
+        "no-upcoming": "Brak nadchodzących rezerawcji.",
+        "no-history": "Brak historii rezerwacji."
     },
     "landing-page": {
         "loginButton": "Zaloguj się",
@@ -62,7 +80,22 @@
         "birthDate": "Data urodzenia",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",
-        "registerButton": "Zarejestruj się"
+        "registerButton": "Zarejestruj się",
+        "register": "REJESTRACJA",
+        "passwordCAP": "HASŁO",
+        "confirmPasswordCAP": "POTWIERDŹ HASŁO",
+        "backToLogin": "Wróc do logowania",
+        "next": "DALEJ",
+        "firstNameCAP": "IMIĘ",
+        "lastNameCAP": "NAZWISKO",
+        "phoneMuberCAP": "NUMER TELEFONU",
+        "birthDateCAP": "DATA URODZENIA",
+        "back": "COFNIJ",
+        "submit": "WYŚLIJ",
+        "welcome": "WITAJ",
+        "errors": {
+            "login": "Nieprawidłowy login lub hasło"
+        }
     },
     "add-employee": {
         "isBackdoorEmployee": "Pracownik zaplecza",
@@ -99,7 +132,11 @@
         "step1": "Dane lokalu",
         "step2": "Pozostałe informacje",
         "submit":"Koniec",
-        "group": "Grupa"
+        "group": "Grupa",
+        "complete": "Rejestracja zakończona",
+        "reservationDeposit": "Depozyt",
+        "addRestaurant": "Dodaj restaurację",
+        "restaurant-register": "Zarejestruj nową restaurację"
     },
     "errors": {
         "login": {
@@ -116,7 +153,9 @@
                 "required": "Nazwisko jest wymagane"
             },
             "login": {
-                "required": "Login jest wymagany"
+                "required": "Login jest wymagany",
+                "matches": "Login może składać się tylko z liter",
+                "taken": "Użytkownik z takim loginem już istnieje"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",
@@ -139,7 +178,12 @@
             "confirmPassword": {
                 "matches": "Podane hasła muszą być zgodne",
                 "required": "Wymagane jest potwierdzenie hasła"
-            }
+            },
+            "oldPassword": {
+                "required": "Stare hasło jest wymagane",
+                "no-match": "Niepoprawne stare hasło. Spróbuj ponownie."
+            },
+            "success": "Rejestracja zakończona sukcesem"
         },
         "restaurant-register": {
             "name": {
@@ -195,15 +239,43 @@
                 "min": "Maxymalny czas rezerwacji nie moze być nizszy niz 30 minut",
                 "number": "Nalezy wprowadzić liczbę"
             }
+        },
+                "event-creation": {
+        "name": {
+            "required": "Nazwa wydarzenia jest wymagana"
+        },
+        "description": {
+            "required": "Opis jest wymagany"
+        },
+        "time": {
+            "required": "Czas wydarzenia jest wymagany",
+            "isFuture": "Czas wydarzenia musi być w przyszłości"
+        },
+        "mustJoinUntil": {
+            "required": "Czas na dołączenie jest wymagany",
+            "isFuture": "Czas na dołączenie musi być w przyszłości",
+            "isBefore": "Czas na dołączenie musi być przed czasem wydarzenia"
+        },
+        "maxPeople": {
+            "min": "Musi być co najmniej 1 osoba",
+            "max": "Nie może przekraczać 20 osób",
+            "required": "Maksymalna liczba osób jest wymagana"
+        },
+        "photoFileName": {
+            "required": "Zdjęcie jest wymagane"
         }
+        }
+
     },
     "restaurant-management": {
         "groups": {
             "counter": "Liczba lokali",
             "add-button": "Dodaj Grupę",
-            "header": "Moje Grupy"
+            "header": "Moje Grupy",
+             "actions": "Akcje"
         },
         "menu": {
+            "menuType": "Typ menu",
             "newMenu": "Dodaj nowe menu",
             "editedMenu": "Edytuj menu",
             "name": "Nazwa",
@@ -219,19 +291,45 @@
             "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Procent alkocholu",
+            "menuItemAlcoholPercentage": "Zawrość alkocholu",
             "menuItemNameRequired": "Nazwa jest wymagana",
             "menuItemPriceRequired": "Cena jest wymagana",
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
             "menuItemAlcoholMustBeNumber": "Procent alkocholu musi być liczbą",
             "selectedFile": "Wybrano plik",
-            "sort": "Sortuj"
+            "sort": "Sortuj",
+            "activeSince": "Aktywne od",
+            "activeUntil": "Aktywne do",
+            "menuItem": "Pozycja",
+            "noMenuItems": "Wybrane pozycje będą się pojawiać tutaj",
+            "addToMenu": "Dodaj do menu",
+            "creatingMenu": "Tworzenie nowego menu",
+            "editingMenu": "Edycja",
+            "creatingMenuItem": "Tworzenie nowej pozycji w menu",
+            "price": "Cena",
+            "upload": "Dodaj zdjęcie",
+            "ingredient": "Składnik",
+            "amount": "Ilość",
+            "addUsage": "Dodaj użycie",
+            "noIngradietns": "Wybrane składniki będą pojawiać się tutaj"
         },
         "statistics": {
             "statistics": "Statystyki",
             "all-restaurants" : "Wszystkie restauracje",
             "restaurant-group" : "Grupa restauracji",
-            "restaurant" : "Restauracja"
+            "restaurant" : "Restauracja",
+            "group": "Grupa",
+            "select-group": "Wybierz grupę",
+            "select-restaurant": "Wybierz restaurację",
+            "time-period": "Okres czasu",
+            "month": "Ostatni miesiąc",
+            "six-months": "Ostatnie 6 miesięcy",
+            "year": "Ostatni rok",
+            "customer-count": "Ilość klientów",
+            "revenue": "Zyski",
+            "reviews": "Oceny",
+            "no-data": "Brak dostępnych danych",
+            "scope": "Zakres"
         },
         "details":{
             "details": "Szczegóły restauracji",
@@ -259,7 +357,26 @@
             "total-capacity": "Całkowita ilość miejsc",
             "opening-hours": "Godziny otwarcia",
             "verified": "Czy zweryfikowana",
-            "archived": "Czy zarchiwizowana"
+            "archived": "Czy zarchiwizowana",
+            "group": "Nazwa grupy",
+            "photos": "Zdjęcia",
+            "logoUpload": "Dodaj logo",
+            "addTable": "Dodaj stolik",
+            "remove": "Usuń",
+            "monday": "Poniedziałek",
+            "tuesday": "Wtorek",
+            "wednesday": "Środa", 
+            "thursday": "Czwartek",
+            "friday": "Piątek",
+            "saturday": "Sobota",
+            "sunday": "Niedziela",
+            "opening": "Godziny otwarcia",
+            "deposit": "Depozyt rezerwcaji",
+            "city": "Miasto",
+            "restaurantName": "Nazwa restauracji",
+            "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
+            "table": "Stolik",
+            "capacity": "Pojemność"
         }
     },
     "tools": {
@@ -315,6 +432,25 @@
         "is-delivering": "Dostawa",
         "delivery-fee": "Koszt dostawy",
         "events": "Wydarzenia:"
+    },
+    "event-creation": {
+        "even-title": "Wydarzenie",
+        "create-event": "Stwórz Wydarzenie",
+        "name": "Nazwa",
+        "description": "Opis",
+        "time-from": "Data wydarzenia",
+        "must-join-until": "Najpóźniejsza data dołączenia",
+        "max-people": "Maksymalna ilość uczestników",
+        "preview-picture": "Zdjęcie poglądowe",
+        "create": "Stwórz",
+        "cancel": "Anuluj",
+        "upload-photo": "Załaduj zdjęcie",
+        "delete-photo": "Usuń zdjęcie",
+        "event-creation-title": "Nowe wydarzenie",
+        "event-creation": "Utworzyłeś nowe wydarzenie",
+        "go-to-my-events": "Moje Wydarzenia",
+        "close": "Zamknij",
+        "event-loading": "Ładowanie szczegółów wydarzenia..."
     },
     "reviews": {
         "filter": "Filtruj",
@@ -384,7 +520,28 @@
         "user": "Użytkownik",
         "loading-history": "Ładowanie historii...",
         "actions": "Działania",
-        "restaurant-no-ingredients": "Ta restauracja nie ma żadnych składników."
+        "restaurant-no-ingredients": "Ta restauracja nie ma żadnych składników.",
+        "ingredient-added": "Dodano nowy składnik:",
+        "ok": "Ok",
+        "enough-in-stock": "Wystarczająco",
+        "delivery-confirmation-title": "Potwierdzenie dostawy",
+        "edit-current-amount": "Aktualna ilość",
+        "edit-comment": "Komentarz",
+        "edit-name": "Nazwa",
+        "edit-unit": "Jednostka",
+        "edit-minimal-amount": "Minimalna ilość",
+        "edit-amount-to-order": "Ilość do zamówienia",
+        "edit-ingredient": "Edytuj składnik",
+        "amount-only": "Edytuj tylko ilość",
+        "editing": "Edycja",
+        "optional-comment": "Opcjonalny komentarz",
+        "required": "Wymagane",
+        "gram": "Gramy",
+        "liter": "Litr",
+        "unit-unit": "Opakowanie",
+        "edit-quantity": "Edytuj ilość",
+        "save": "Zapisz",
+        "comment-cannot-be-empty": "Komentarz nie może być pusty"
     },
     "delivery": {
         "deliveries": "Zarządzanie dostawami",
@@ -412,12 +569,26 @@
         "filter-all": "Wszystkie dostawy",
         "filter-delivered": "Tylko dostarczone",
         "filter-not-delivered": "Tylko niedostarczone",
-        "actions": "Działania"
+        "actions": "Działania",
+        "no-date": "-",
+        "not-available": "Niedostępne"
     },
     "profile": {
         "account": "Konto",
         "reservations": "Rezerwacje",
-        "search": "Szukaj po nazwie...",
+        "search": "Szukaj po nazwie",
+        "first-name": "Imię",
+        "last-name": "Nazwisko",
+        "phone-number": "Numer telefonu",
+        "change-password": "Zmień hasło",
+        "edit-data": "Edytuj dane osobowe",
+        "changing-pass": "Zmiana hasła...",
+        "old-pass": "Stare hasło",
+        "new-pass": "Nowe hasło",
+        "repeat-pass": "Powtórz nowe hasło",
+        "save-changes": "Zapisz zmiany",
+        "editing-user": "Zmiana danych osobowych...",
+        "saving-changes": "Zapisywanie...",
         "friends": {
             "friends-tab": "Znajomi",
             "outgoing-tab": "Wysłane zaproszenia",
@@ -446,7 +617,7 @@
             "created":"Utworzone przez ciebie",
             "oldest" : "Od najstarszych",
             "search":"Przeszukaj wydarzenia",
-            "participatedIn":"Uczestniczył/a",
+            "participatedIn":"Uczestniczył/a w",
             "manage":"Zarządzaj uczestnikami",
             "edit":"Edytuj wydarzenie",
             "delete":"Usuń wydarzenie",
@@ -459,7 +630,13 @@
             "applications-by": "Zgłoszenia do",
             "max-participants": "Maks. liczba uczestników",
             "creator": "Organizauje",
-            "events-feed": "Przegląd wydarzeń"
+            "events-feed": "Przegląd wydarzeń",
+            "no-created": "Nie utworzyłeś żadnych wydarzeń.",
+            "no-interested-in": "Nie jesteś zainteresowany żadnym wydarzeniem",
+            "no-participates": "Nie uczestniczysz w żadnym wydarzeniu.",
+            "no-event-history": "Brak wydarzeń do wyświetlenia.",
+            "friend-participate": "Jeden albo więcej Twoich znajomych uczestniczył w tym wydarzeniu.",
+            "you-created-event": "Utworzyłeś wydarzenie."
         },
         "reports" : {
             "reports": "Zgłoszenia",
@@ -469,7 +646,17 @@
             "no-reports-created": "Brak utworzonych zgłoszeń",
             "no-reports-customer-service": "Brak zgłoszeń powiązanych z tym użytkownikiem" ,
             "created-by-user": "Utworzone przez użytkownika",
-            "reported-user": "Zgłoszenie dotyczące użytkownika"
+            "reported-user": "Zgłoszenie dotyczące użytkownika",
+            "status":{
+                "resolved": "Rozwiązane",
+                "rejected": "Odrzucony",
+                "pending": "Oczekuje"
+            },
+            "category": {
+                "technical": "Problem techniczny",
+                "emp": "Skarga na pracownika",
+                "lost": "Zgubiony przedmiot"
+            }
         },
         "reviews": {
             "no-reviews": "Brak opinii",
@@ -482,7 +669,9 @@
             "add-funds": "Dodaj środki do swojego konta",
             "confirm": "Zatwierdź",
             "no-more": "Brak transakcji do załadowania"
-        }
+        },
+        "delete-account-button": "Usuń konto",
+        "delete_account_cannot_undone": "Tej akcji nie można cofnąć!"
     },
     "customer-service": {
         "reports": {
@@ -534,7 +723,13 @@
             "assign": "Przypisz",
             "ok": "Ok",
             "resolve-positive": "Rozpatrz",
-            "resolve-negative": "Odrzuć"
+            "resolve-negative": "Odrzuć",
+            "hall-emp": "Pracownik sali",
+            "backdoors-emp": "Pracownik zaplecza",
+            "employees": "Pracownicy lokalu",
+            "no-employees": "Nie znaleziono pracowników dla tego lokalu.",
+            "no-restaurant-details": "Nie znaleziono szczegółów restauracji.",
+            "already-assigned": "Już przypisany"
         },
         "user": {
             "account": "Konto",
@@ -577,6 +772,34 @@
             "cancel": "Anuluj",
             "related-opinions": "Opinie"
         
+        },
+        "visit-details": {
+            "visit-details": "Szczegóły wizyty",
+            "date": "Data",
+            "time": "Czas",
+            "guests": "Goście",
+            "takeaway": "Na wynos",
+            "yes": "Tak",
+            "no": "Nie",
+            "table-id": "Numer stolika",
+            "participants": "Uczestnicy",
+            "no-participants": "Brak uczestników.",
+            "go-to-profile": "Przejdź do profilu",
+            "orders": "Zamówienia",
+            "order-id": "Numer zamówienia",
+            "note": "Notatka",
+            "no-notes": "Brak notatek",
+            "cost": "Koszt",
+            "status": "Status",
+            "no-orders": "Brak zamówień.",
+            "employee": "Pracownik"
+        },
+        "restaurant": {
+            "name": "Nazwa restauracji",
+            "type": "Rodzaj działalności",
+            "city": "Miasto",
+            "description": "Opis",
+            "actions": "Akcje"
         }
     }
 }

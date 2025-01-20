@@ -36,22 +36,22 @@ export default function Reports() {
       let reports: any[] = []
 
       if (response.items.length)
-        
         for (const i in response.items) {
           reports.push({
             id: Number(i),
             reportId: response.items[i].reportId,
             description: response.items[i].description,
-            visitId: response.items[i].visitId,
-            reportedUserId: response.items[i].reportedUserId,
-            reportDate: response.items[i].reportDate,
+            visitId: response.items[i].visit.visitId,
+            reportedUserId: response.items[i].reportedUser?.userId,
+            reportDate: new Date(response.items[i].reportDate).toLocaleString(),
             category: response.items[i].category,
             createdBy: response.items[i].createdBy,
             reportedUser: response.items[i].reportedUser
           })
         }
-        console.log(reports)
-        setRows(reports)
+      console.log(response)
+      console.log(reports)
+      setRows(reports)
     } catch (error) {
       console.error('Error populating table', error)
     }
@@ -82,42 +82,42 @@ export default function Reports() {
       field: 'reportId',
       headerName: 'Report ID',
       type: 'string',
-      width: 180,
+      flex: 0.05,
       editable: false
     },
     {
       field: 'description',
       headerName: 'Description',
       type: 'string',
-      width: 300,
+      flex: 0.3,
       editable: false
     },
     {
       field: 'visitId',
       headerName: 'Visit ID',
       type: 'string',
-      width: 180,
+      flex: 0.05,
       editable: false
     },
     {
       field: 'reportedUserId',
       headerName: 'Reported User ID',
       type: 'string',
-      width: 220,
+      flex: 0.2,
       editable: false
     },
     {
       field: 'reportDate',
       headerName: 'Report Date',
       type: 'string',
-      width: 200,
+      flex: 0.1,
       editable: false
     },
     {
       field: 'category',
       headerName: 'Category',
       type: 'string',
-      width: 180,
+      flex: 0.2,
       editable: false
     }
   ]

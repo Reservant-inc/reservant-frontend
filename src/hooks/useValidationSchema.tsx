@@ -63,7 +63,7 @@ export const useValidationSchemas = () => {
     birthDate: yup
       .date()
       .min('1900-01-01', t('errors.user-register.birthDate.min'))
-      .max('2024-06-24', t('errors.user-register.birthDate.max'))
+      .max('2007-01-01', t('errors.user-register.birthDate.max'))
       .required(t('errors.user-register.birthDate.required')),
 
     password: yup
@@ -104,6 +104,7 @@ export const useValidationSchemas = () => {
     login: yup
       .string()
       .required(t('errors.user-register.login.required'))
+      .matches(/^[1-9a-zA-Z]+$/, t('errors.user-register.login.matches'))
       .test('unique login', t('errors.user-register.login.taken'), login => {
         return new Promise((resolve, reject) => {
           fetchGET(`/auth/is-unique-login?login=${login}`)
@@ -125,7 +126,11 @@ export const useValidationSchemas = () => {
       )
       .required(t('errors.user-register.phoneNumber.required')),
 
-    birthDate: yup.string().required(),
+    birthDate: yup
+      .date()
+      .min('1900-01-01', t('errors.user-register.birthDate.min'))
+      .max('2007-01-01', t('errors.user-register.birthDate.max'))
+      .required(t('errors.user-register.birthDate.required')),
 
     password: yup
       .string()
@@ -250,9 +255,6 @@ export const useValidationSchemas = () => {
 
   const RestaurantRegisterStep1Schema = yup.object({
     name: yup.string().required(t('errors.restaurant-register.name.required')),
-    address: yup
-      .string()
-      .required(t('errors.restaurant-register.address.required')),
     postalIndex: yup
       .string()
       .matches(
@@ -267,7 +269,25 @@ export const useValidationSchemas = () => {
       .required(t('errors.restaurant-register.tin.required')),
     restaurantType: yup
       .string()
-      .required(t('errors.restaurant-register.businessType.required'))
+      .required(t('errors.restaurant-register.businessType.required')),
+    location: yup
+      .object({
+        latitude: yup
+          .number()
+          .notOneOf(
+            [0],
+            t('errors.restaurant-register.location.latitude.invalid')
+          )
+          .required(t('errors.restaurant-register.location.latitude.required')),
+        longitude: yup
+          .number()
+          .notOneOf(
+            [0],
+            t('errors.restaurant-register.location.longitude.invalid')
+          )
+          .required(t('errors.restaurant-register.location.longitude.required'))
+      })
+      .required(t('errors.restaurant-register.address.required'))
   })
 
   const RestaurantEditSchema = yup.object({

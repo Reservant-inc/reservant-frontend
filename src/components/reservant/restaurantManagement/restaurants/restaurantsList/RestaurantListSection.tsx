@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  FormControl,
-  Select,
-  MenuItem,
-  createTheme,
-  ThemeProvider
-} from '@mui/material'
+import { Box, IconButton, FormControl, Select, MenuItem } from '@mui/material'
 import {
   GridToolbarContainer,
   GridRowModesModel,
@@ -45,6 +34,7 @@ import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialo
 import RegisterSuccess from '../../register/restaurantRegister/RegisterSuccess'
 import RestaurantRegister from '../../register/restaurantRegister/RestaurantRegister'
 import RestaurantDetails from '../RestaurantDetails'
+import Dialog from '../../../../reusableComponents/Dialog'
 
 const RestaurantListSection: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
@@ -58,6 +48,8 @@ const RestaurantListSection: React.FC = () => {
     useState<RestaurantType | null>(null)
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState<boolean>(false)
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
+
+  const { t } = useTranslation('global')
 
   const navigate = useNavigate()
   const populateRows = async () => {
@@ -109,6 +101,7 @@ const RestaurantListSection: React.FC = () => {
           })
         }
       }
+
       setRows(tmp)
     } catch (error) {
       console.error('Error populating table', error)
@@ -118,13 +111,6 @@ const RestaurantListSection: React.FC = () => {
   useEffect(() => {
     populateRows()
   }, [])
-
-  const handleEditClick = (id: GridRowId) => {
-    setRowModesModel(prevModel => ({
-      ...prevModel,
-      [id]: { mode: GridRowModes.Edit } // Using GridRowModes.Edit
-    }))
-  }
 
   const handleSaveClick = (id: GridRowId) => {
     setRowModesModel(prevModel => ({
@@ -153,7 +139,6 @@ const RestaurantListSection: React.FC = () => {
       const response = await fetchDELETE(`/my-restaurants/${restaurantId}`)
       setRestaurantToDelete('')
       setIsConfirmationOpen(false)
-      console.log(response)
       populateRows() // Refetch the data after deletion
     } catch (error) {
       console.error('Error deleting restaurant', error)
@@ -183,6 +168,7 @@ const RestaurantListSection: React.FC = () => {
         'logo',
         'idCard'
       ]
+
       fieldsToClean.forEach(field => {
         if (rowToUpdate[field]?.startsWith('/uploads/')) {
           rowToUpdate[field] = rowToUpdate[field].replace('/uploads/', '')
@@ -221,7 +207,9 @@ const RestaurantListSection: React.FC = () => {
             onClick={onAddClick}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ Add a restaurant</h1>
+            <h1 className="text-md font-mont-md">
+              + {t('restaurant-register.addRestaurant')}
+            </h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -231,7 +219,7 @@ const RestaurantListSection: React.FC = () => {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: t('restaurant-register.name'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -240,7 +228,7 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'restaurantType',
-      headerName: 'Local type',
+      headerName: t('restaurant-register.businessType'),
       type: 'string',
       width: 180,
       editable: true,
@@ -287,14 +275,14 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'city',
-      headerName: 'City',
+      headerName: t('restaurant-register.city'),
       type: 'string',
       width: 180,
       editable: true
     },
     {
       field: 'address',
-      headerName: 'Address',
+      headerName: t('restaurant-register.city'),
       type: 'string',
       width: 180,
       editable: true
@@ -310,7 +298,7 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'reservationDeposit',
-      headerName: 'Deposit',
+      headerName: t('restaurant-register.reservationDeposit'),
       type: 'string',
       width: 180,
       align: 'left',
@@ -319,7 +307,7 @@ const RestaurantListSection: React.FC = () => {
     },
     {
       field: 'groupName',
-      headerName: 'Group',
+      headerName: t('restaurant-register.group'),
       width: 250,
       editable: true,
       renderEditCell: params => {
@@ -366,7 +354,7 @@ const RestaurantListSection: React.FC = () => {
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: t('restaurant-management.groups.actions'),
       width: 180,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -475,53 +463,24 @@ const RestaurantListSection: React.FC = () => {
         className="border-0"
       />
 
-      <Dialog
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        sx={{
-          '& .MuiDialog-paper': {
-            width: '700px',
-            maxWidth: 'none', // Usuwa domyślną maksymalną szerokość
-            height: '92%', // Ustawia maksymalną wysokość na 100% dostępnej przestrzeni
-            maxHeight: 'none', // Wyłącza ograniczenia wysokości
-            margin: 0, // Usuwa marginesy, by dialog rozciągał się maksymalnie
-            display: 'flex', // Umożliwia elastyczne układanie zawartości
-            flexDirection: 'column' // Ustawia układ kolumnowy (przydatne dla treści)
-          }
-        }}
-      >
-        <DialogTitle className="text-center text-3xl font-bold dark:bg-black">
-          <IconButton
-            aria-label="close"
-            onClick={() => setIsDialogOpen(false)}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: theme => theme.palette.grey[500]
-            }}
-          >
-            <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent className="dark:bg-black scroll">
-          <Box>
-            {/* Show the registration form or the success message */}
-            {!registerSucces ? (
-              <RestaurantRegister
-                onRegisterSucces={() => handleRegistrationSucces()}
-              />
-            ) : (
-              <Box>
-                <RegisterSuccess
-                  onDialogClose={() => setIsDialogOpen(false)}
-                  onRegisterSucces={() => setRegisterSucces(false)}
-                />
-              </Box>
-            )}
-          </Box>
-        </DialogContent>
-      </Dialog>
+      {isDialogOpen && (
+        <Dialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          title={t('restaurant-register.restaurant-register')}
+        >
+          {!registerSucces ? (
+            <RestaurantRegister
+              onRegisterSucces={() => handleRegistrationSucces()}
+            />
+          ) : (
+            <RegisterSuccess
+              onDialogClose={() => setIsDialogOpen(false)}
+              onRegisterSucces={() => setRegisterSucces(false)}
+            />
+          )}
+        </Dialog>
+      )}
 
       {selectedRestaurant && isDetailsDialogOpen && (
         <RestaurantDetails
@@ -538,7 +497,7 @@ const RestaurantListSection: React.FC = () => {
         open={isConfirmationOpen}
         onClose={() => setIsConfirmationOpen(false)}
         onConfirm={() => handleDeleteRestaurant(restaurantToDelete)}
-        confirmationText="Are you sure you want to delete this restaurant?"
+        confirmationText={t('restaurant-management.details.confirmation')}
       />
     </div>
   )

@@ -154,7 +154,7 @@ const ManagementTabs: React.FC = ({}) => {
               <div className="flex items-center justify-center pl-2">
                 <ListItemButton
                   id="menu-listItem-back-button"
-                  className={` bg-white dark:bg-black  h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
+                  className={`   h-full w-full rounded-t-lg px-4 dark:text-grey-1 ${isPressed ? 'dark:bg-grey-5 bg-grey-0' : ' bg-white dark:bg-black '}`}
                   onClick={pressHandler}
                 >
                   <MoreVert className="h-6 w-6" />
@@ -162,7 +162,7 @@ const ManagementTabs: React.FC = ({}) => {
               </div>
               <div className="absolute">
                 {isPressed && (
-                  <div className="w-full rounded-b-lg bg-grey-5 relative z-[1] p-2 flex flex-col gap-2">
+                  <div className="w-full rounded-lg dark:bg-grey-5 bg-grey-0 relative z-[1] p-2 flex flex-col gap-2">
                     <Tab
                       path={`restaurant/${restaurantId}/restaurant-dashboard`}
                       title="Dashboard"

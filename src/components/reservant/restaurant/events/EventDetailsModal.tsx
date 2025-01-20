@@ -3,6 +3,7 @@ import { fetchGET, getImage } from '../../../../services/APIconn'
 import { useNavigate } from 'react-router-dom'
 import NoImage from '../../../../assets/images/no-image.png'
 import Dialog from '../../../reusableComponents/Dialog'
+import { useTranslation } from 'react-i18next'
 
 interface EventDetailsModalProps {
   eventId: number
@@ -20,6 +21,8 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
   const [error, setError] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const navigate = useNavigate()
+
+  const [t] = useTranslation('global')
 
   const fetchEventDetails = async () => {
     try {
@@ -60,25 +63,33 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title="Event Details">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title={t('event-creation.event-creation-title')}
+    >
       <div className="flex flex-col">
-        <h1 className="text-primary text-start font-bold p-2">
-          Utworzyłeś nowy event
+        <h1 className="text-primary dark:text-secondary text-start font-bold p-2">
+          {t('event-creation.event-creation')}
         </h1>
 
         <img
           src={getImage(eventDetails?.photo, NoImage)}
           alt="Event"
-          className="w-full h-auto object-cover rounded-sm"
+          className="w-full max-h-[50vh] object-cover rounded-sm"
         />
 
         <div className="p-6">
-          {loading && <p className="dark:text-white">Loading event details...</p>}
+          {loading && (
+            <p className="dark:text-white">
+              {t('event-creation.event-loading')}
+            </p>
+          )}
           {error && <p className="text-red">{error}</p>}
 
           {eventDetails && (
             <div className="pb-2">
-              <h2 className="text-lg font-bold text-primary">
+              <h2 className="text-lg font-bold text-primary dark:text-secondary">
                 {eventDetails.name}
               </h2>
 
@@ -95,20 +106,18 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
           <div className="flex justify-end w-full space-x-4">
             <button
               onClick={() =>
-                navigate(
-                  `/reservant/profile/${userId}/event-history/created`
-                )
+                navigate(`/reservant/profile/${userId}/event-history/created`)
               }
-              disabled={!userId} 
+              disabled={!userId}
               className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Go to My Events
+              {t('event-creation.go-to-my-events')}
             </button>
             <button
               onClick={onClose}
               className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             >
-              Close
+              {t('event-creation.close')}
             </button>
           </div>
         </div>

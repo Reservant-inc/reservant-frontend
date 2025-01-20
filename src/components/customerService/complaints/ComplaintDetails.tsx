@@ -14,13 +14,17 @@ interface ComplaintDetailsProps {
   onClose: () => void
   refreshReports: () => void
   setAlertMessage: Function
+  isManager: boolean
+  currentUser: UserType
 }
 
 const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
   report,
   onClose,
   setAlertMessage,
-  refreshReports
+  refreshReports,
+  isManager,
+  currentUser
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [actionType, setActionType] = useState<'assign' | 'resolve'>()
@@ -299,6 +303,8 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
           reportId={report.reportId}
           refreshReports={refreshReports}
           assignedAgents={report.assignedAgents}
+          isManager={isManager}
+          currentUser={currentUser}
         />
       </div>
     </div>

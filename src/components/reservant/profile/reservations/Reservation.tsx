@@ -20,11 +20,13 @@ import { useTranslation } from 'react-i18next'
 interface ReservationProps {
   reservation: VisitType
   reservationType: ReservationListType
+  refreshReservations: () => void
 }
 
 const Reservation: React.FC<ReservationProps> = ({
   reservation,
-  reservationType
+  reservationType,
+  refreshReservations
 }) => {
   const [orders, setOrders] = useState<OrderType[]>([])
   const [isComplaining, setIsComplaining] = useState<boolean>(false)
@@ -34,6 +36,7 @@ const Reservation: React.FC<ReservationProps> = ({
   const [selectedEmployee, setSelectedEmployee] = useState<string>('')
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false)
 
   const [t] = useTranslation('global')
 
@@ -127,7 +130,16 @@ const Reservation: React.FC<ReservationProps> = ({
     }
   }
 
-  const handleCancelReservation = () => {}
+  const handleCancelReservation = async () => {
+    try {
+      await fetchPOST(`/visits/${reservation.visitId}/cancel`);
+      setAlertMessage('Reservation canceled successfully.');
+      setIsCancelDialogOpen(false);
+      refreshReservations();
+    } catch (error) {
+      console.error('Failed to cancel reservation:', error);
+    }
+  };
 
   const allReservationEmployees = () => {
     let res: UserType[] = []
@@ -191,7 +203,7 @@ const Reservation: React.FC<ReservationProps> = ({
         <div className="flex flex-col gap-2">
           <button
             className={`text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black`}
-            onClick={() => handleCancelReservation()}
+            onClick={() => setIsCancelDialogOpen(true)}
           >
             {t('reservation.cancle')}
           </button>
@@ -312,6 +324,72 @@ const Reservation: React.FC<ReservationProps> = ({
           </Dialog>
         </>
       )}
+        <Dialog
+          open={isCancelDialogOpen}
+          onClose={() => setIsCancelDialogOpen(false)}
+          title={t('reservation.cancel-reservation-title')}
+        >
+          <div className="flex flex-col gap-4 p-4 dark:text-white">
+            <p className="font-mont-bd">
+              {t('reservation.cancel-reservation-dialog')}
+            </p>
+            <div className="flex gap-5">
+              <img
+                src={getImage(reservation.restaurant.logo, DefaultImage)}
+                alt="restaurant logo"
+                className="w-32 h-32 rounded-lg"
+              />
+              <div className="flex flex-col">
+                <h1 className="text-lg font-mont-bd">
+                  {reservation.restaurant.name} {reservation.restaurant.city}
+                </h1>
+                <h1 className="text-sm">
+                  {reservation.orders.length > 0
+                    ? `${reservation.orders.length} ${t('reservation.items')}, `
+                    : `${t('reservation.cancel-no-orders')}`}
+                  {format(new Date(reservation.reservationDate), 'dd.MM HH:mm')}
+                </h1>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 p-2">
+              {reservation.orders.length > 0 && (
+                orders.map((order) =>
+                  order.items.map((item) => (
+                    <div
+                      key={item.menuItem.menuItemId}
+                      className="flex gap-3 items-center"
+                    >
+                      <div className="flex items-center justify-center w-6 h-6 border-[1px] border-grey-0">
+                        <h1 className="text-sm">{item.amount}</h1>
+                      </div>
+                      <div className="flex flex-col">
+                        <h1 className="text-sm">
+                          {item.menuItem.name} {item.totalCost}zł
+                        </h1>
+                        <h1 className="text-[12px]">
+                          {item.menuItem.alternateName ?? ''}
+                          {item.menuItem.alcoholPercentage !== null
+                            ? ` ${item.menuItem.alcoholPercentage}‰`
+                            : ''}
+                        </h1>
+                      </div>
+                    </div>
+                  ))
+                )
+              )}
+            </div>
+
+            <div className="flex justify-end gap-4">
+              <button
+                className="text-sm px-4 border-[1px] dark:bg-black  rounded-md p-2 border-grey-0 bg-grey-0 transition hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                onClick={handleCancelReservation}
+              >
+                {t('reservation.cancel-cancel')}
+              </button>
+            </div>
+          </div>
+        </Dialog>
       {alertMessage && (
         <div className="fixed bottom-2 left-2">
           <Alert
