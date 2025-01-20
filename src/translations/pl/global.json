@@ -32,7 +32,8 @@
         "from": "od", 
         "until": "do",
         "uploadMore": "Dodaj więcej zdjęć",
-        "noPhotos": "Dodaj więcej zdjęć"
+        "noPhotos": "Dodaj więcej zdjęć",
+        "restaurant": "Restauracja"
     },
     "reservation": {
         "history": "Historia rezerwacji",

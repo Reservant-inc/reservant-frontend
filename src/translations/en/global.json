@@ -34,7 +34,8 @@
         "until": "until",
         "uploadMore": "Upload more photos",
         "noPhotos": "No photos uploaded yet",
-        "remove": "Remove"
+        "remove": "Remove",
+        "restaurant": "Restaurant"
     },
     "landing-page": {
         "loginButton": "Sign in",
