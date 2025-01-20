@@ -24,7 +24,6 @@ const FriendSelector: React.FC<FriendSelectorProps> = ({
   const [friendSearchQuery, setFriendSearchQuery] = useState<string>('')
   const [friends, setFriends] = useState<UserType[]>([])
   const [t] = useTranslation('global')
-  const inputClass = 'clean-input py-1 px-0 text-md italic dark:text-white'
 
   const fetchFriends = async (name: string) => {
     try {

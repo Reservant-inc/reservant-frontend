@@ -5,13 +5,10 @@ import { useTranslation } from 'react-i18next'
 import {
   Checkbox,
   CircularProgress,
-  FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
   InputLabel,
-  MenuItem,
-  NativeSelect,
   TextField
 } from '@mui/material'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
@@ -42,7 +39,7 @@ const initialValues: RestaurantDataType = {
   logo: null,
   photos: [],
   description: '',
-  groupId: null,
+  groupId: -1,
   reservationDeposit: null,
   openingHours: [
     { from: '00:00', until: '00:00' },
@@ -241,14 +238,12 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           .filter((photo: any) => photo !== undefined) // Usuwanie wartości undefined
       }
 
-      console.log(updatedValues)
-
       const response = await fetchPOST(
         '/my-restaurants',
         JSON.stringify(updatedValues)
       )
 
-      if (updatedValues.groupId === null) {
+      if (updatedValues.groupId === -1) {
         const restaurantGroupData = {
           name: `${updatedValues.name} Restaurants Group`,
           restaurantIds: [response.restaurantId]
@@ -1004,6 +999,13 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           : ''
                       }`}
                     >
+                      <option
+                        key="nullgroup"
+                        value={-1}
+                        className="dark:text-white dark:bg-black"
+                      >
+                        New group
+                      </option>
                       {groups?.map(group => (
                         <option
                           key={group.restaurantGroupId}
