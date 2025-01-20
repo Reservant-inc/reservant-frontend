@@ -12,6 +12,8 @@ import { UserType } from '../../../../services/types'
 import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { useTranslation } from 'react-i18next'
+import { Alert, Snackbar } from '@mui/material'
+import { useSnackbar } from '../../../../contexts/SnackbarContext'
 
 interface VisitProps {}
 
@@ -62,6 +64,8 @@ const Visit: React.FC<VisitProps> = () => {
     restaurant: restaurant
   }
 
+  const { message, severity, open, closeSnackbar } = useSnackbar()
+  
   useEffect(() => {
     if (friendsToAdd.length >= guests) {
       setGuests(prevState => prevState + 1)
@@ -259,6 +263,17 @@ const Visit: React.FC<VisitProps> = () => {
           </button>
         </div>
       </div>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={5000} 
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity={severity} variant="filled">
+          {message}
+        </Alert>
+      </Snackbar>
+
     </div>
   )
 }

@@ -4,7 +4,9 @@ import RestaurantReview from '../../restaurantManagement/restaurants/restaurantR
 import { ReviewType, User } from '../../../../services/types'
 import { useTranslation } from 'react-i18next'
 import { fetchGET, fetchPOST } from '../../../../services/APIconn'
+import { useSnackbar } from '../../../../contexts/SnackbarContext'
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -12,6 +14,7 @@ import {
   DialogTitle,
   Pagination,
   Rating,
+  Snackbar,
   Tooltip
 } from '@mui/material'
 import {
@@ -43,6 +46,7 @@ const FocusedRestaurantReviewsList: React.FC<
   const [reviewText, setReviewText] = useState('')
 
   const [t] = useTranslation('global')
+  const { message, severity, open, closeSnackbar, setSnackbar } = useSnackbar()
 
   const fetchReviews = async () => {
     try {
@@ -117,8 +121,10 @@ const FocusedRestaurantReviewsList: React.FC<
       refreshReviews()
       setCurrentPage(1)
       setHasReviewed(true)
+      setSnackbar('Review added successfully', 'success') // TODO tłumaczenie message
     } catch (error) {
       console.error('Error submitting review:', error)
+      setSnackbar('Error submitting review', 'error') // TODO tłumaczenie message
     }
   }
 
@@ -238,6 +244,15 @@ const FocusedRestaurantReviewsList: React.FC<
           </DialogActions>
         </Dialog>
       </div>
+      <Snackbar
+              open={open}
+              autoHideDuration={5000} 
+              onClose={closeSnackbar}
+            >
+              <Alert onClose={closeSnackbar} severity={severity} variant="filled">
+                {message}
+              </Alert>
+      </Snackbar>
     </div>
   )
 }

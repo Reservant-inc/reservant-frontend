@@ -436,7 +436,7 @@ export default function HomePage() {
 
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={8000}
+        autoHideDuration={5000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >

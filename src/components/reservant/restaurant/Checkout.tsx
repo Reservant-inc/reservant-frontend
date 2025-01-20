@@ -8,6 +8,7 @@ import { FetchError } from '../../../services/Errors'
 import { CartContext } from '../../../contexts/CartContext'
 import { ReservationContext } from '../../../contexts/ReservationContext'
 import { format, parse, setHours, setMinutes } from 'date-fns'
+import { useSnackbar } from '../../../contexts/SnackbarContext'
 
 const Checkout: React.FC = () => {
   const parseDateTime = (date: string, timeSlot: string): Date => {
@@ -27,6 +28,7 @@ const Checkout: React.FC = () => {
     return updatedDate
   }
 
+  const { setSnackbar } = useSnackbar()
   const { reservationData } = useContext(ReservationContext)
   const { items, totalPrice } = useContext(CartContext)
   const { state } = useLocation()
@@ -108,17 +110,23 @@ const Checkout: React.FC = () => {
         await fetchPOST('/orders', orderBody)
       }
 
+      // jeśli sukces navigate do homepage i tam snackbar success
       navigate('/reservant/home', {
-      state: { snackbarMessage: 'Visit created successfully.', snackbarSeverity: 'success' },
-    })
-  } catch (error) {
-    if (error instanceof FetchError) {
-      console.error(error.formatErrors())
-      alert(error.formatErrors())
-    } else {
-      console.error('Unexpected error', error)
-      alert('An unexpected error occurred.')
-    }
+        state: { snackbarMessage: 'Visit created successfully.', snackbarSeverity: 'success' },
+      });
+    } catch (error) {
+      if (error instanceof FetchError) {
+        const errors = error.formatErrors()
+        if (errors.includes('Duplicate')) {
+          setSnackbar('Masz już inną rezerwację w tym czasie', 'error') // TODO tłumaczenie message
+          navigate(-1)
+        } else {
+          console.error(errors)
+        }
+      } else {
+        console.error('Unexpected error:', error)
+        alert('An unexpected error occurred.')
+      }
     }
   }
 

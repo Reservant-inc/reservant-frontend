@@ -11,11 +11,12 @@ import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
 import { ReservationListType } from '../../../../services/enums'
-import { Alert, IconButton } from '@mui/material'
+import { Alert, IconButton, Snackbar } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import { report } from 'node:process'
 import { useTranslation } from 'react-i18next'
+import { useSnackbar } from '../../../../contexts/SnackbarContext'
 
 interface ReservationProps {
   reservation: VisitType
@@ -37,6 +38,7 @@ const Reservation: React.FC<ReservationProps> = ({
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false)
+  const { setSnackbar, open, closeSnackbar, severity, message } = useSnackbar()
 
   const [t] = useTranslation('global')
 
@@ -132,14 +134,16 @@ const Reservation: React.FC<ReservationProps> = ({
 
   const handleCancelReservation = async () => {
     try {
-      await fetchPOST(`/visits/${reservation.visitId}/cancel`);
-      setAlertMessage('Reservation canceled successfully.');
-      setIsCancelDialogOpen(false);
-      refreshReservations();
+      await fetchPOST(`/visits/${reservation.visitId}/cancel`)
+      setIsCancelDialogOpen(false)
+      await refreshReservations()
+      setSnackbar('Reservation cancelled successfully', 'success'); // TODO tłumaczenie message
     } catch (error) {
       console.error('Failed to cancel reservation:', error);
+      setSnackbar('There was a problem canceling your reservation.', 'error'); // TODO tłumaczenie message
     }
   };
+  
 
   const allReservationEmployees = () => {
     let res: UserType[] = []
@@ -390,28 +394,15 @@ const Reservation: React.FC<ReservationProps> = ({
             </div>
           </div>
         </Dialog>
-      {alertMessage && (
-        <div className="fixed bottom-2 left-2">
-          <Alert
-            variant="filled"
-            severity="success"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setAlertMessage('')
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            {alertMessage}
-          </Alert>
-        </div>
-      )}
+      <Snackbar
+        open={open}
+        autoHideDuration={5000} 
+        onClose={closeSnackbar}
+      >
+        <Alert onClose={closeSnackbar} severity={severity} variant="filled">
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
