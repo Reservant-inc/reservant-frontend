@@ -241,8 +241,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           .filter((photo: any) => photo !== undefined) // Usuwanie wartości undefined
       }
 
-      console.log(updatedValues)
-
       const response = await fetchPOST(
         '/my-restaurants',
         JSON.stringify(updatedValues)

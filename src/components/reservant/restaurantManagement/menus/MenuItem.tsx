@@ -58,9 +58,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setItem({ ...menuItem, ingredients })
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
   }
@@ -76,9 +76,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setIsConfirmationOpen(false)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
   }
@@ -91,9 +91,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setIsConfirmationOpen(false)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
   }
@@ -127,7 +127,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
           </div>
           {menuItem.alcoholPercentage !== 0 && (
             <h1 className="text-sm text-grey-3">
-              {t('restaurant-management.menu.menuItemAlcoholPercentage')} - {menuItem.alcoholPercentage}%
+              {t('restaurant-management.menu.menuItemAlcoholPercentage')} -{' '}
+              {menuItem.alcoholPercentage}%
             </h1>
           )}
         </div>

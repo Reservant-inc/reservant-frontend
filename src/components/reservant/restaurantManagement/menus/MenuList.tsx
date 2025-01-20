@@ -71,9 +71,9 @@ const MenuList: React.FC<MenuListProps> = ({ activeRestaurantId, type }) => {
         : setMenus(completeMenus)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error', error)
+        console.error('Unexpected error', error)
       }
     }
   }

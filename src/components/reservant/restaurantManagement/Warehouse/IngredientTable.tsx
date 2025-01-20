@@ -21,8 +21,8 @@ import IngredientHistoryDialog from './IngredientHistoryDialog'
 import CircularProgress from '@mui/material/CircularProgress'
 import { IconButton, Tooltip } from '@mui/material'
 import EditQuantityDialog from './EditQuantityDialog'
-import EditNoteIcon from '@mui/icons-material/EditNote';
-import TuneIcon from '@mui/icons-material/Tune';
+import EditNoteIcon from '@mui/icons-material/EditNote'
+import TuneIcon from '@mui/icons-material/Tune'
 
 //Szymon TODO: podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
@@ -35,9 +35,10 @@ const IngredientTable: React.FC = () => {
   const [groceryList, setGroceryList] = useState<any[]>([])
   const [selectedIngredient, setSelectedIngredient] =
     useState<IngredientType | null>(null)
-    const [isEditQuantityDialogOpen, setIsEditQuantityDialogOpen] = useState(false);
-    const [isEditIngredientDialogOpen, setIsEditIngredientDialogOpen] =
-      useState(false);
+  const [isEditQuantityDialogOpen, setIsEditQuantityDialogOpen] =
+    useState(false)
+  const [isEditIngredientDialogOpen, setIsEditIngredientDialogOpen] =
+    useState(false)
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false)
   const [availableIngredients, setAvailableIngredients] = useState<
     IngredientType[]
@@ -176,37 +177,33 @@ const IngredientTable: React.FC = () => {
 
   const handleAddIngredient = async () => {
     try {
-      const restaurantId = activeRestaurantId;
-  
+      const restaurantId = activeRestaurantId
+
       if (restaurantId === -1) {
-        console.error('Invalid restaurant ID');
-        return;
+        console.error('Invalid restaurant ID')
+        return
       }
-  
+
       const payload = {
         publicName: formValues.name,
         unitOfMeasurement: formValues.unitOfMeasurement,
         minimalAmount: Number(formValues.minimalAmount),
         amountToOrder: 10,
         amount: formValues.amount ? Number(formValues.amount) : 0,
-        restaurantId: restaurantId,
-      };
-  
-      console.log('dane:', payload);
-  
-      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload));
-  
+        restaurantId: restaurantId
+      }
+
+      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload))
+
       if (response) {
-        console.log('Ingredient added successfully:', response.ingredientId);
-        fetchIngredients();
+        fetchIngredients()
       } else {
-        console.warn('New ingredient added but no response returned');
+        console.warn('New ingredient added but no response returned')
       }
     } catch (error) {
-      console.error('Error adding ingredient:', error);
+      console.error('Error adding ingredient:', error)
     }
-  };
-  
+  }
 
   const handleIncreaseAmount = (id: number) => {
     setGroceryList(prevList =>
@@ -216,7 +213,6 @@ const IngredientTable: React.FC = () => {
           : item
       )
     )
-    console.log('Increased amount:', groceryList)
   }
 
   const handleDecreaseAmount = (id: number) => {
@@ -227,7 +223,6 @@ const IngredientTable: React.FC = () => {
           : item
       )
     )
-    console.log('Decreased amount:', groceryList)
   }
 
   const handleRemoveItem = (id: number) => {
@@ -273,24 +268,24 @@ const IngredientTable: React.FC = () => {
   }
 
   const handleOpenEditQuantityDialog = (ingredient: IngredientType) => {
-    setSelectedIngredient(ingredient);
-    setIsEditQuantityDialogOpen(true);
-  };
+    setSelectedIngredient(ingredient)
+    setIsEditQuantityDialogOpen(true)
+  }
 
   const handleCloseEditQuantityDialog = () => {
-    setSelectedIngredient(null);
-    setIsEditQuantityDialogOpen(false);
-  };
+    setSelectedIngredient(null)
+    setIsEditQuantityDialogOpen(false)
+  }
 
   const handleOpenEditIngredientDialog = (ingredient: IngredientType) => {
-    setSelectedIngredient(ingredient);
-    setIsEditIngredientDialogOpen(true);
-  };
+    setSelectedIngredient(ingredient)
+    setIsEditIngredientDialogOpen(true)
+  }
 
   const handleCloseEditIngredientDialog = () => {
-    setSelectedIngredient(null);
-    setIsEditIngredientDialogOpen(false);
-  };
+    setSelectedIngredient(null)
+    setIsEditIngredientDialogOpen(false)
+  }
 
   const handleOpenHistoryDialog = (ingredient: IngredientType) => {
     setSelectedIngredient(ingredient)
@@ -307,21 +302,21 @@ const IngredientTable: React.FC = () => {
       field: 'publicName',
       headerName: `${t('warehouse.name')}`,
       flex: 1,
-      sortable: true,
+      sortable: true
     },
     {
       field: 'amount',
       headerName: `${t('warehouse.quantity')}`,
       flex: 1,
       sortable: true,
-      disableColumnMenu: true,
+      disableColumnMenu: true
     },
     {
       field: 'minimalAmount',
       headerName: `${t('warehouse.minimal-quantity')}`,
       flex: 1,
       sortable: true,
-      disableColumnMenu: true,
+      disableColumnMenu: true
     },
     {
       field: 'state',
@@ -330,18 +325,20 @@ const IngredientTable: React.FC = () => {
       disableColumnMenu: true,
       renderCell: (params: GridRenderCellParams) =>
         params.row.amount >= params.row.minimalAmount ? (
-          <span className="text-black dark:text-white">{t('warehouse.enough-in-stock')}</span>
+          <span className="text-black dark:text-white">
+            {t('warehouse.enough-in-stock')}
+          </span>
         ) : (
           <span className="w-full rounded border-[1px] border-error bg-white p-2 text-center text-black dark:bg-black dark:text-white">
             {t('warehouse.needs-restocking')}
           </span>
-        ),
+        )
     },
     {
       field: 'unitOfMeasurement',
       headerName: `${t('warehouse.unit')}`,
       flex: 1,
-      sortable: true,
+      sortable: true
     },
     {
       field: 'actions',
@@ -359,22 +356,22 @@ const IngredientTable: React.FC = () => {
                 onClick={() => handleOpenEditQuantityDialog(params.row)}
                 style={{ color: 'var(--primary)' }}
               >
-                <TuneIcon fontSize="medium" /> 
+                <TuneIcon fontSize="medium" />
               </IconButton>
             </span>
           </Tooltip>
-      
+
           <Tooltip title={t('warehouse.edit-ingredient')} arrow>
             <span>
               <IconButton
                 onClick={() => handleOpenEditIngredientDialog(params.row)}
                 style={{ color: 'var(--primary)' }}
               >
-                <EditNoteIcon fontSize="medium" /> 
+                <EditNoteIcon fontSize="medium" />
               </IconButton>
             </span>
           </Tooltip>
-      
+
           <Tooltip title={t('warehouse.history')} arrow>
             <span>
               <IconButton
@@ -387,10 +384,8 @@ const IngredientTable: React.FC = () => {
           </Tooltip>
         </div>
       )
-      
-    },
-  ];
-  
+    }
+  ]
 
   const EditToolbar = () => (
     <GridToolbarContainer>
@@ -427,7 +422,7 @@ const IngredientTable: React.FC = () => {
           <CircularProgress />
         </div>
       ) : ingredients.length > 0 ? (
-        <div className='h-full'>
+        <div className="h-full">
           <DataGrid
             rows={ingredients.map((ingredient, index) => ({
               ...ingredient,
@@ -440,8 +435,8 @@ const IngredientTable: React.FC = () => {
             autoPageSize={true}
             sx={{
               '& .MuiDataGrid-footerContainer': {
-                borderTop: 'none',
-              },
+                borderTop: 'none'
+              }
             }}
           />
         </div>

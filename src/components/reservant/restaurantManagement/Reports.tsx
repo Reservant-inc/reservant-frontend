@@ -34,7 +34,6 @@ export default function Reports() {
     try {
       const response = await fetchGET(`/my-restaurants/${restaurantId}/reports`)
 
-      console.log(response)
       let reports: any[] = []
 
       if (response.items.length)
@@ -51,8 +50,6 @@ export default function Reports() {
             reportedUser: response.items[i].reportedUser
           })
         }
-      console.log(response)
-      console.log(reports)
       setRows(reports)
     } catch (error) {
       console.error('Error populating table', error)

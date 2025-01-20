@@ -1,5 +1,10 @@
-import React, { useState } from 'react'
-import { fetchDELETE, fetchPOST, getImage } from '../../../../services/APIconn'
+import React, { useContext, useState } from 'react'
+import {
+  fetchDELETE,
+  fetchGET,
+  fetchPOST,
+  getImage
+} from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/user.jpg'
 import { FriendListType } from '../../../../services/enums'
 import { useTranslation } from 'react-i18next'
@@ -9,19 +14,12 @@ import MessageIcon from '@mui/icons-material/Message'
 import UndoIcon from '@mui/icons-material/Undo'
 import CheckIcon from '@mui/icons-material/Check'
 import ClearIcon from '@mui/icons-material/Clear'
+import { FetchError } from '../../../../services/Errors'
+import { ThreadContext } from '../../../../contexts/ThreadContext'
+import { FriendData } from '../../../../services/types'
 
 interface FriendProps {
-  friend: {
-    dateSent: string
-    dateRead: string | null
-    dateAccepted: string | null
-    otherUser: {
-      userId: string
-      firstName: string
-      lastName: string
-      photo: string
-    }
-  }
+  friend: FriendData
   listType: FriendListType
   refreshFriends: () => void
 }
@@ -33,6 +31,10 @@ const Friend: React.FC<FriendProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
+
+  console.log(friend)
+
+  const { handleThreadOpen } = useContext(ThreadContext)
 
   const handleOpenDialog = () => setIsDialogOpen(true)
   const handleCloseDialog = () => setIsDialogOpen(false)
@@ -88,6 +90,38 @@ const Friend: React.FC<FriendProps> = ({
     }
   }
 
+  const handleOpenThread = async () => {
+    const otherUser = friend.otherUser
+
+    console.log(friend)
+
+    let response
+
+    try {
+      if (friend.privateMessageThreadId === 0) {
+        response = await fetchPOST(
+          '/threads/create-private-thread',
+          JSON.stringify({ otherUserId: otherUser.userId })
+        )
+        friend.privateMessageThreadId = response.threadId
+      } else {
+        response = await fetchGET(`/threads/${friend.privateMessageThreadId}`)
+      }
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.error(error.formatErrors())
+      }
+      {
+        console.error('Unexpected error while creating thread', error)
+      }
+    }
+
+    handleThreadOpen({
+      ...response,
+      title: `${otherUser.firstName} ${otherUser.lastName}`
+    })
+  }
+
   return (
     <li className="flex flex-col gap-2 p-2 rounded-lg min-h-fit dark:text-grey-2 dark:bg-black">
       <div className="flex items-center justify-between gap-6">
@@ -136,6 +170,7 @@ const Friend: React.FC<FriendProps> = ({
               <button
                 id={`${friend.otherUser.firstName}${friend.otherUser.lastName}MessageFriend`}
                 className="flex gap-2 items-center text-primary dark:bg-black hover:text-white border-[1px] text-sm px-2 py-1 rounded-lg bg-white border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white"
+                onClick={handleOpenThread}
               >
                 <MessageIcon className="text-sm" />
                 {t('profile.friends.message-friend-button')}

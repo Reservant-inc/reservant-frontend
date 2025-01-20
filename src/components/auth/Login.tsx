@@ -30,15 +30,15 @@ const Login: React.FC = () => {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      setSubmitting(true) 
+      setSubmitting(true)
       setRequestLoading(true)
 
       const response = await fetchPOST('/auth/login', JSON.stringify(values))
 
       if (response.status === 403) {
         // Jeśli status to 403, ustaw błąd z komunikatem
-        setLoginError(t('landing-page.error-403'));
-        return;  // Zatrzymujemy dalsze przetwarzanie
+        setLoginError(t('landing-page.error-403'))
+        return // Zatrzymujemy dalsze przetwarzanie
       }
 
       login(response)
@@ -46,7 +46,7 @@ const Login: React.FC = () => {
       if (error instanceof FetchError) {
         setLoginError(`${t('auth.errors.login')}`)
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     } finally {
       setSubmitting(false)
@@ -73,9 +73,9 @@ const Login: React.FC = () => {
       )
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('unexpected error')
+        console.error('unexpected error')
       }
     }
 
@@ -101,7 +101,7 @@ const Login: React.FC = () => {
                   >
                     <div className="flex w-full flex-col items-center gap-6">
                       <h1 className="dont-semibold font-mont-md text-xl text-white">
-                      {t('auth.welcome')}
+                        {t('auth.welcome')}
                       </h1>
 
                       <Field
@@ -193,4 +193,3 @@ const Login: React.FC = () => {
 }
 
 export default Login
-
