@@ -186,7 +186,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   type="datetime-local"
                   id="time"
                   fullWidth
-                  className={`[&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
+                  className={`dark:[color-scheme:dark] [&>*]:font-mont-md font-medium [&>*]:dark:text-white ${
                     !(formik.errors.time && formik.touched.time)
                       ? '[&>*]:text-black before:border-black dark:before:border-white after:border-secondary'
                       : '[&>*]:text-error dark:[&>*]:text-error before:border-error after:border-error'
