@@ -93,7 +93,7 @@ const Notification: React.FC<NotificationProps> = ({
       );
     } else if (notificationType === 'NotificationVisitApprovedDeclined' && user.userId) {
       navigate(
-        `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/restaurant-dashboard`
+        `/reservant/profile/${user.userId}/reservation-history/incoming`
       );
     } else if (notificationType === 'NotificationReportAssigned' && details.reportId) {
       navigate(`/customer-service/reports/${details.reportId}`);
