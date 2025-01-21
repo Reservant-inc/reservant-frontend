@@ -29,7 +29,13 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
     }
   }
 
-  console.log(report)
+  const isAssigned =
+    (Cookies.get('userInfo') as string) &&
+    report.assignedAgents.some(
+      assignedAgent =>
+        assignedAgent.agent.userId ===
+        JSON.parse(Cookies.get('userInfo') as string)?.userId
+    )
 
   return (
     <div className="p-2 pl-0 w-full">
@@ -84,17 +90,12 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
           </p>
         </div>
 
-        {(listType === ReportsListType.CustomerService &&
-          report.assignedAgents?.some(
-            assignedAgent =>
-              assignedAgent.agent?.userId ===
-              JSON.parse(Cookies.get('userInfo') as string).userId
-          )) ||
-          (listType === ReportsListType.Created && (
-            <button onClick={openChat}>
-              <Message />
-            </button>
-          ))}
+        {(listType === ReportsListType.Created ||
+          (listType === ReportsListType.CustomerService && isAssigned)) && (
+          <button onClick={openChat}>
+            <Message />
+          </button>
+        )}
       </div>
     </div>
   )

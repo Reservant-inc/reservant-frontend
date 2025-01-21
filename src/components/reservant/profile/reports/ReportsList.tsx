@@ -92,16 +92,15 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
   }
 
   const handleSearchChange = (query: string) => {
-    const normalizedQuery = query.trim().toLowerCase(); 
+    const normalizedQuery = query.trim().toLowerCase()
     setFilteredReports(
       normalizedQuery.length >= 3
         ? reports.filter(report =>
-            report.description.toLowerCase().includes(normalizedQuery) 
+            report.description.toLowerCase().includes(normalizedQuery)
           )
         : reports
-    );
-  };
-  
+    )
+  }
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -119,7 +118,11 @@ const ReportsList: React.FC<ReportsListProps> = ({ listType }) => {
               <p className="italic text-center">{noReportsMessage[listType]}</p>
             ) : (
               filteredReports.map(report => (
-                <Report report={report} listType={listType} />
+                <Report
+                  key={report.reportId}
+                  report={report}
+                  listType={listType}
+                />
               ))
             )
           ) : (
