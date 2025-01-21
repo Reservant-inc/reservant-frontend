@@ -18,6 +18,7 @@ import {
 } from '../../../../../services/APIconn'
 import { useTranslation } from 'react-i18next'
 import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialog'
+import DefaultImage from '../../../../../assets/images/user.jpg'
 
 interface RestaurantReviewProps {
   review: ReviewType
@@ -26,7 +27,7 @@ interface RestaurantReviewProps {
   onReviewDeleted?: () => void
   isOwnerView?: boolean
   restaurantId: number
-  isCustomerServiceView?: boolean
+  isCustomerServiceView?: boolean 
 }
 
 const RestaurantReview: React.FC<RestaurantReviewProps> = ({
@@ -148,16 +149,15 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
     <div className="flex flex-col gap-1 p-2 rounded-lg dark:bg-grey-6 bg-grey-0">
       {isCustomerServiceView && restaurant && (
         <div className="flex items-center gap-4 mb-2">
-          <p className="font-semibold text-lg">Restaurant: {restaurant.name}</p>
+          <p className="font-semibold text-lg">{t('general.restaurant')}: {restaurant.name}</p>
         </div>
       )}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 ">
-          <Avatar className="h-7 w-7">
-            <h1 className="text-sm">
-              {`${review.authorFullName.split(' ')[0].charAt(0)}${review.authorFullName.split(' ')[0].charAt(0)}`}
-            </h1>
-          </Avatar>
+        <Avatar
+            src={getImage(user?.photo || '', DefaultImage)}
+            alt="Restaurant Logo"
+          />
           <p className="text-sm">{review.authorFullName}</p>
           <p className="text-sm">
             {new Date(review.createdAt).toLocaleDateString()}
@@ -243,7 +243,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           <div className="response-content flex-grow text-sm">
             <p>{new Date(review.answeredAt).toLocaleDateString()}</p>
             <p>{review.restaurantResponse}</p>
-            {!isCustomerServiceView && (
+            {!isCustomerServiceView && isOwnerView && (
               <div className="flex justify-end">
                 <Button
                   onClick={handleRespondClick}
@@ -301,17 +301,17 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
         open={isRespondDialogOpen}
         onClose={() => setIsRespondDialogOpen(false)}
       >
-        <DialogTitle>{t('reviews.add-response')}</DialogTitle>
-        <DialogContent>
+        <DialogTitle className='dark:bg-grey-6 dark:text-white'>{t('reviews.add-response')}</DialogTitle>
+        <DialogContent className='dark:bg-grey-6'>
           <textarea
             rows={4}
             value={responseContents}
             onChange={e => setResponseContents(e.target.value)}
-            className="w-[400px] p-4 border rounded dark:bg-grey-700 dark:text-white dark:border-grey-500"
+            className="w-[400px] p-4 border rounded dark:bg-grey-6 dark:text-white dark:border-grey-500"
             placeholder={t('reviews.response-placeholder')}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className='dark:bg-grey-6 '>
           <Button
             onClick={() => setIsRespondDialogOpen(false)}
             className="text-primary dark:text-secondary"

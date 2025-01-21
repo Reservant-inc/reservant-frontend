@@ -3,6 +3,7 @@
         "search": "Search...",
         "cancel": "Cancel",
         "save": "Save",
+        "saveChanges": "Save changes",
         "results": "Results",
         "no-results": "No results",
         "close": "Close",
@@ -34,7 +35,9 @@
         "until": "until",
         "uploadMore": "Upload more photos",
         "noPhotos": "No photos uploaded yet",
-        "remove": "Remove"
+        "remove": "Remove",
+        "restaurant": "Restaurant",
+        "uploadPhoto": "Upload photo"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -162,7 +165,8 @@
             "login": {
                 "required": "Login is required",
                 "matches": "Login can only contain letters",
-                "taken": "User with this login already exists"
+                "taken": "User with this login already exists",
+                "invalid": "Login can only contain letters A-Z and numbers"
             },
             "email": {
                 "matches": "Invalid e-mail",
@@ -381,7 +385,8 @@
             "restaurantName": "Restaurant Name",
             "confirmation": "Are you sure you want to delete this restaurant?",
             "table": "Table",
-            "capacity": "Capacity"
+            "capacity": "Capacity",
+            "postalCode": "Postal code"
         }
     },
     "employee-management": {
@@ -425,7 +430,9 @@
             "language":"Language",
             "mode":"Dark mode",
             "signout":"Sign out",
-            "report":"Report a bug"
+            "report":"Report a bug",
+            "become": "Become an owner",
+            "create" : "Add your first restaurant"
         },
         "settings":{
             "setting":"SettingFiller"
@@ -470,7 +477,9 @@
         "order": "Order",
         "is-delivering": "Delivery",
         "delivery-fee": "Delivery fee",
-        "events": "Events"
+        "events": "Events",
+        "no-events-found": "No events found for this restaurant.",
+        "events-search": "Search events"
     },
     "event-creation": {
             "even-title": "Event",
@@ -489,7 +498,8 @@
             "event-creation": "You have created a new event",
             "go-to-my-events": "Go to My Events",
             "close": "Close",
-            "event-loading": "Loading event details..."
+            "event-loading": "Loading event details...",
+            "edit-event": "Edit Event"
         },
     "reviews": {
         "filter": "Filter",
@@ -727,7 +737,14 @@
             "pending-restaurants": "Pending restaurants",
             "reported-user-id": "Reported User ID",
             "report-id": "Report ID",
-            "visit-id": "Visit ID"
+            "visit-id": "Visit ID",
+            "status":{
+                "status": "Status",
+                "resolved": "Resolved",
+                "rejected": "Rejected",
+                "pending": "Pending"
+
+            }
         },
         "report-details": {
             "report-details": "Report details",
@@ -882,5 +899,27 @@
         "review-success": "Review added successfully.",
         "review-error": "Error submitting review.",
         "password-updated": "Password updated successfully."
+    },
+    "notifications": {
+        "3-newest": "Three newest",
+        "all": "All",
+        "loading": "Loading notifications...",
+        "notifications": "Notifications",
+        "no-new-notifications": "No new notifications.",
+        "read": "Read",
+        "new-friend-request": "Friend request sent.",
+        "friend-request-accepted": "accepted your friend request.",
+        "new-restaurant-review": "New review in",
+        "restaurant-verified": "has been verified.",
+        "visit-approved": "Visit approved.",
+        "visit-declined": "Visit declined.",
+        "new-participation-request": "A new person wants to join the event:",
+        "participation-accepted": "has accepted your participation.",
+        "participation-declined": "has declined your participation.",
+        "new-message": "New message in the thread:",
+        "report-escalated": "A new report has been escalated.",
+        "report-assigned": "You have been assigned to a new report.",
+        "new-reservation": "New reservation in",
+        "new-notification": "New notification."
     }
 }

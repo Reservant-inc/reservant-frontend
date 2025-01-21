@@ -218,6 +218,25 @@ const ComplaintDetails: React.FC<ComplaintDetailsProps> = ({
         </div>
         <div className="flex gap-3 text-sm">
           <p className="font-mont-bd">
+            {t('customer-service.reports.status.status')}:{' '}
+          </p>
+          <p>
+            {(() => {
+              switch (report.reportStatus) {
+                case 'NotResolved':
+                  return t('customer-service.reports.status.pending')
+                case 'ResolvedPositively':
+                  return t('customer-service.reports.status.resolved')
+                case 'ResolvedNegatively':
+                  return t('customer-service.reports.status.rejected')
+                default:
+                  return null
+              }
+            })()}
+          </p>
+        </div>
+        <div className="flex gap-3 text-sm">
+          <p className="font-mont-bd">
             {t('customer-service.reports.description')}:{' '}
           </p>
           <p className="break-words w-[270px]">

@@ -3,6 +3,7 @@
         "search": "Szukaj...",
         "cancel": "Anuluj",
         "save": "Zapisz",
+        "saveChanges": "Zapisz zmiany",
         "results": "Wyniki",
         "no-results": "Brak wyników",
         "close": "Zamknij",
@@ -32,7 +33,9 @@
         "from": "od", 
         "until": "do",
         "uploadMore": "Dodaj więcej zdjęć",
-        "noPhotos": "Dodaj więcej zdjęć"
+        "noPhotos": "Dodaj więcej zdjęć",
+        "restaurant": "Restauracja",
+        "uploadPhoto": "Dodaj zdjęcie"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -155,7 +158,8 @@
             "login": {
                 "required": "Login jest wymagany",
                 "matches": "Login może składać się tylko z liter",
-                "taken": "Użytkownik z takim loginem już istnieje"
+                "taken": "Użytkownik z takim loginem już istnieje",
+                "invalid": "Login może składać się tylko z liter A-Z i cyfr"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",
@@ -291,7 +295,7 @@
             "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Zawrość alkocholu",
+            "menuItemAlcoholPercentage": "Zawartość alkoholu",
             "menuItemNameRequired": "Nazwa jest wymagana",
             "menuItemPriceRequired": "Cena jest wymagana",
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
@@ -376,7 +380,8 @@
             "restaurantName": "Nazwa restauracji",
             "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
             "table": "Stolik",
-            "capacity": "Pojemność"
+            "capacity": "Pojemność",
+            "postalCode": "Kod pocztowy"
         }
     },
     "employee-management": {
@@ -421,7 +426,9 @@
             "language":"Język",
             "mode":"Tryb ciemny",
             "signout":"Wylogowanie",
-            "report":"Zgłoś problem techniczny"
+            "report":"Zgłoś problem techniczny",
+            "become": "Zostań właścicielem",
+            "create" : "Dodaj swoją pierwszą restaurację"
 
         },
         "settings":{
@@ -467,7 +474,9 @@
         "order": "Zamów",
         "is-delivering": "Dostawa",
         "delivery-fee": "Koszt dostawy",
-        "events": "Wydarzenia:"
+        "events": "Wydarzenia:",
+        "no-events-found": "Brak wydarzeń dla tej restauracji.",
+        "events-search": "Wyszukaj wydarzenie"
     },
     "event-creation": {
         "even-title": "Wydarzenie",
@@ -486,7 +495,8 @@
         "event-creation": "Utworzyłeś nowe wydarzenie",
         "go-to-my-events": "Moje Wydarzenia",
         "close": "Zamknij",
-        "event-loading": "Ładowanie szczegółów wydarzenia..."
+        "event-loading": "Ładowanie szczegółów wydarzenia...",
+        "edit-event": "Edytuj Wydarzenie"
     },
     "reviews": {
         "filter": "Filtruj",
@@ -723,7 +733,14 @@
             "pending-restaurants": "Oczekujące restauracje",
             "reported-user-id": "ID Zgłoszonego Użytkownika",
             "report-id": "ID zgłoszenia",
-            "visit-id": "ID wizyty"
+            "visit-id": "ID wizyty",
+            "status":{
+                "status": "Status",
+                "resolved": "Rozwiązane",
+                "rejected": "Odrzucone",
+                "pending": "Oczekujące"
+
+            }
 
         },
         "report-details": {
@@ -880,5 +897,27 @@
         "review-success": "Ocena utworzona.",
         "review-error": "Problem przy tworzeniu oceny.",
         "password-updated": "Hasło uaktualnione."
+    },
+    "notifications": {
+        "3-newest": "Trzy najnowsze",
+        "all": "Wszystkie",
+        "loading": "Ładowanie powiadomień...",
+        "notifications": "Powiadomienia",
+        "no-new-notifications": "Brak nowych powiadomień.",
+        "read": "Wyświetlono",
+        "new-friend-request": "Wysłano zaproszenie.",
+        "friend-request-accepted": "zaakceptował(a) Twoje zaproszenie do znajomych.",
+        "new-restaurant-review": "Nowa opinia w",
+        "restaurant-verified": "została zweryfikowana.",
+        "visit-approved": "Wizyta zaakceptowana.",
+        "visit-declined": "Wizyta odrzucona.",
+        "new-participation-request": "Nowa osoba zgłasza chęć uczestnictwa w wydarzeniu:",
+        "participation-accepted": "zaakceptował(a) Twoje uczestnictwo.",
+        "participation-declined": "odrzucił(a) Twoje uczestnictwo.",
+        "new-message": "Nowa wiadomość w wątku:",
+        "report-escalated": "Nowa skarga eskalowana.",
+        "report-assigned": "Zostałeś przypisany do nowej skargi.",
+        "new-reservation": "Nowa rezerwacja w",
+        "new-notification": "Nowe powiadomienie."
     }
 }

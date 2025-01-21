@@ -5,12 +5,14 @@ import NotificationList from './NotificationList';
 import { fetchGET } from '../../../../../services/APIconn';
 import { Button } from '@mui/material';
 import { ThemeContext } from '../../../../../contexts/ThemeContext';
+import { useTranslation } from 'react-i18next'
 
 const NotificationsButton: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [showAll, setShowAll] = useState<boolean>(false);
+  const [t] = useTranslation('global');
 
   const { isDark } = useContext(ThemeContext);
 
@@ -79,7 +81,7 @@ const NotificationsButton: React.FC = () => {
                 onClick={() => setShowAll(false)}
                 className="dark:bg-grey-5 dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black bg-white border-[1px] border-primary text-primary hover:text-white hover:bg-primary my-2 py-1 px-3 rounded transition hover:scale-105"
               >
-                3 Najnowsze
+                {t('notifications.3-newest')}
               </button>
             ) : (
               <button
@@ -87,7 +89,7 @@ const NotificationsButton: React.FC = () => {
                 onClick={() => setShowAll(true)}
                 className="dark:bg-grey-5 dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black bg-white border-[1px] border-primary text-primary hover:text-white hover:bg-primary my-2 py-1 px-3 rounded transition hover:scale-105"
               >
-                Wszystkie
+                {t('notifications.all')}
               </button>
             )}
           </div>

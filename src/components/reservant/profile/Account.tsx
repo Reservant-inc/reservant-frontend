@@ -281,10 +281,10 @@ const Account: React.FC = () => {
         </div>
         <div className="flex items-center gap-4 w-full">
           <img
+            alt='userImage'
             src={getImage(userInfo.photo, DefaultImage)}
             className="h-32 w-32 rounded-full"
           />
-
           <div className="flex flex-col gap-2 w-full">
             <div className="flex gap-2 items-center">
               <h1>{t('profile.first-name')}: </h1>

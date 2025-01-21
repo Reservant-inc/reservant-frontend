@@ -44,6 +44,7 @@ const FocusedRestaurantReviewsList: React.FC<
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [starRating, setStarRating] = useState<number | null>(0)
   const [reviewText, setReviewText] = useState('')
+  const [isOwner, setIsOwner] = useState<boolean>(false)
 
   const [t] = useTranslation('global')
   const { setSnackbar } = useSnackbar()
@@ -67,8 +68,21 @@ const FocusedRestaurantReviewsList: React.FC<
     }
   }
 
+  const fetchMyRestaurants = async () => {
+    try {
+      console.log('blabla')
+      const response = await fetchGET(`/my-restaurants/${activeRestaurantId}`);
+      if (response.restaurantId === activeRestaurantId) {
+        setIsOwner(true);
+      }
+    } catch (error) {
+      setIsOwner(false);
+    }
+  };
+
   useEffect(() => {
     fetchReviews()
+    fetchMyRestaurants()
   }, [currentPage, perPage, activeRestaurantId, sortOrder, ratingFilter])
 
   const refreshReviews = () => {
@@ -155,27 +169,29 @@ const FocusedRestaurantReviewsList: React.FC<
                   <SwapVertIcon className="w-5 h-5" />
                 </button>
               </Tooltip>
-              <button
-                className={`w-1/2 flex items-center justify-center gap-1 border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary ${
-                  hasReviewed
-                    ? 'cursor-not-allowed'
-                    : 'dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black'
-                }`}
-                onClick={handleAddReviewClick}
-                disabled={hasReviewed}
-              >
-                {hasReviewed ? (
-                  <>
-                    <h1>{t('reviews.review-submitted')}</h1>
-                    <CheckIcon className="w-5 h-5" />
-                  </>
-                ) : (
-                  <>
-                    <AddIcon className="w-5 h-5" />
-                    <h1 className="text-sm">{t('reviews.add-review')}</h1>
-                  </>
-                )}
-              </button>
+              {!isOwner && (
+                <button
+                  className={`w-1/2 flex items-center justify-center gap-1 border-[1px] border-primary dark:border-secondary rounded-lg text-primary dark:text-secondary ${
+                    hasReviewed
+                      ? 'cursor-not-allowed'
+                      : 'dark:hover:bg-secondary hover:bg-primary hover:text-white dark:hover:text-black'
+                  }`}
+                  onClick={handleAddReviewClick}
+                  disabled={hasReviewed}
+                >
+                  {hasReviewed ? (
+                    <>
+                      <h1>{t('reviews.review-submitted')}</h1>
+                      <CheckIcon className="w-5 h-5" />
+                    </>
+                  ) : (
+                    <>
+                      <AddIcon className="w-5 h-5" />
+                      <h1 className="text-sm">{t('reviews.add-review')}</h1>
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           )}
 
