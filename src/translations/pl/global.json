@@ -915,7 +915,10 @@
         "review-success": "Ocena utworzona.",
         "review-error": "Problem przy tworzeniu oceny.",
         "password-updated": "Hasło uaktualnione.",
-        "report-submitted": "Zgłoszenie wysłane."
+        "report-submitted": "Zgłoszenie wysłane.",
+        "user-banned": "Użytkownik zbanowany.",
+        "user-unbanned": "Użytkownik odbanowany.",
+        "ban-access-denied": "Nie masz uprawnień do zbanowania tego uzytkownika."
     },
     "notifications": {
         "3-newest": "Trzy najnowsze",
