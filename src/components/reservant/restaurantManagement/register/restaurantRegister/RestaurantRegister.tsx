@@ -340,7 +340,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="name"
                     name="name"
-                    label="Restaurant Name *"
+                    label={t('restaurant-register.name-field-label')}
                     variant="standard"
                     as={TextField}
                     className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.name && formik.touched.name) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -356,7 +356,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         type="text"
                         id="address"
                         name="address"
-                        label="Address *"
+                        label={t('restaurant-register.address-field-label')}
                         variant="standard"
                         autoComplete={false}
                         as={TextField}
@@ -424,7 +424,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="postalIndex"
                     name="postalIndex"
-                    label="Postal Code *"
+                    label={t('restaurant-register.postalCode-field-label')}
                     variant="standard"
                     as={TextField}
                     className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
@@ -443,7 +443,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="city"
                     name="city"
-                    label="City *"
+                    label={t('restaurant-register.city-field-label')}
                     variant="standard"
                     as={TextField}
                     className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.city && formik.touched.city) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -485,7 +485,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           : 'text-error dark:text-error'
                       }`}
                     >
-                      Business Type *
+                      {t('restaurant-register.business-type-label')}
                     </InputLabel>
 
                     <Field
@@ -535,7 +535,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
-                      Next
+                      {t('restaurant-register.next')}
                     </button>
 
                     {serverError && (
@@ -552,7 +552,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     {({ push, remove }) => (
                       <div className="flex flex-col w-4/5">
                         <FormLabel className="text text-black font-mont-md mb-2 dark:text-white">
-                          Tags *
+                          {t('restaurant-register.tags-label')}
                         </FormLabel>
                         <FormGroup className="grid grid-cols-2">
                           {' '}
@@ -599,7 +599,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                   <div className="[&>*]:label-[20px] w-[88%] [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white">
                     <FormControlLabel
                       label={
-                        <span className="text-[15px]">Provide Delivery</span>
+                        <span className="text-[15px]">{t('restaurant-register.provideDelivery-label')}</span>
                       }
                       control={
                         <Checkbox
@@ -619,17 +619,17 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     {({ replace }) => (
                       <div className="flex flex-col w-4/5 gap-4">
                         <FormLabel className="text text-[15px] text-black font-mont-md mb-2 dark:text-white">
-                          Opening Hours *
+                          {t('restaurant-register.openingHours-label')}
                         </FormLabel>
 
                         {[
-                          'Monday',
-                          'Tuesday',
-                          'Wednesday',
-                          'Thursday',
-                          'Friday',
-                          'Saturday',
-                          'Sunday'
+                          t('restaurant-management.details.monday'),
+                          t('restaurant-management.details.tuesday'),
+                          t('restaurant-management.details.wednesday'),
+                          t('restaurant-management.details.thursday'),
+                          t('restaurant-management.details.friday'),
+                          t('restaurant-management.details.saturday'),
+                          t('restaurant-management.details.sunday')
                         ].map((day, index) => {
                           const isClosed =
                             formik.values.openingHours[index].from === null
@@ -714,7 +714,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="description"
                     name="description"
-                    label="Description *"
+                    label={t('restaurant-register.description-label')}
                     variant="standard"
                     as={TextField}
                     className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.description && formik.touched.description) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -728,7 +728,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="reservationDeposit"
                     name="reservationDeposit"
-                    label="Reservation deposit *"
+                    label={t('restaurant-register.reservationDeposit-label')}
                     variant="standard"
                     as={TextField}
                     className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.reservationDeposit && formik.touched.reservationDeposit) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -742,7 +742,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="maxReservationDurationMinutes"
                     name="maxReservationDurationMinutes"
-                    label="Maximum reservation duration (minutes) *"
+                    label={t('restaurant-register.maximum-reservation-duration')}
                     variant="standard"
                     as={TextField}
                     className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -758,7 +758,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       onClick={() => setActiveStep(1)}
                       className="dark:text-white"
                     >
-                      Back
+                      {t('restaurant-register.backButton')}
                     </button>
                     <button
                       type="button"
@@ -766,7 +766,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
-                      Next
+                      {t('restaurant-register.nextButton')}
                     </button>
 
                     {serverError && (
@@ -784,7 +784,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       htmlFor="logo"
                       className="font-mont-md text-black text-sm flex-1 dark:text-white"
                     >
-                      Logo *
+                      {t('restaurant-register.logo')} *
                     </label>
                     <button
                       type="button"
@@ -817,7 +817,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       htmlFor="photos"
                       className="font-mont-md text-black dark:text-white text-sm flex-1 [&>*]:dark:text-white"
                     >
-                      Photos *
+                      {t('restaurant-register.photos-label')}
                     </label>
                     <button
                       type="button"
@@ -858,7 +858,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       htmlFor="idCard"
                       className="font-mont-md text-black dark:text-white text-sm flex-1 [&>*]:dark:text-white"
                     >
-                      ID Card *
+                      {t('restaurant-register.idCard')}
                     </label>
                     <button
                       type="button"
@@ -891,7 +891,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       htmlFor="businessPermission"
                       className="font-mont-md text-black text-sm flex-1 dark:text-white [&>*]:dark:text-white"
                     >
-                      Business Permission *
+                      {t('restaurant-register.businessPermission')}
                     </label>
                     <button
                       type="button"
@@ -928,7 +928,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       htmlFor="rentalContract"
                       className="font-mont-md text-black text-sm flex-1 dark:text-white [&>*]:dark:text-white"
                     >
-                      Rental Contract
+                      {t('restaurant-register.rentalContract')}
                     </label>
                     <button
                       type="button"
@@ -1033,7 +1033,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       onClick={() => setActiveStep(2)}
                       className="dark:text-white"
                     >
-                      Back
+                      {t('restaurant-register.backButton')}
                     </button>
                     <button
                       type="submit"
@@ -1043,7 +1043,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       {requestLoading ? (
                         <CircularProgress size={24} className="text-white" />
                       ) : (
-                        'Submit'
+                        t('general.submit')
                       )}
                     </button>
                   </div>

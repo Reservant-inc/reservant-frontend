@@ -139,7 +139,24 @@
         "complete": "Rejestracja zakończona",
         "reservationDeposit": "Depozyt",
         "addRestaurant": "Dodaj restaurację",
-        "restaurant-register": "Zarejestruj nową restaurację"
+        "restaurant-register": "Zarejestruj nową restaurację",
+        "name-field-label": "Nazwa Restauracji *",
+        "address-field-label": "Adres *",
+        "postalCode-field-label": "Kod Pocztowy *",
+        "city-field-label": "Miasto *",
+        "business-type-label": "Rodzaj Działalności *",
+        "next":"Dalej",
+        "tags-label": "Tagi *",
+        "provideDelivery-label":"Zapewnij dostawę",
+        "openingHours-label":"Godziny Otwarcia *",
+        "description-label":"Opis *",
+        "reservationDeposit-label":"Depozyt za wizytę *",
+        "maximum-reservation-duration":"Maksymalny czas rezerwacji (w minutach) *",
+        "photos-label": "Zdjęcia *",
+        "photos2": "Zdjęcia",
+        "idCard": "Dowód tożsamości *",
+        "businessPermission": "Zgoda na prowadzenie działalności *",
+        "rentalContract": "Umowa najmu"
     },
     "errors": {
         "login": {
