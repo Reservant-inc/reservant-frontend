@@ -3,11 +3,18 @@ import { Field, Formik } from 'formik';
 import Search from './Search';
 import { useTranslation } from 'react-i18next';
 
+type NestedKeyOf<T> = {
+  [K in keyof T & string]: T[K] extends object
+    ? `${K}.${NestedKeyOf<T[K]>}`
+    : K;
+}[keyof T & string];
+
 interface FiltersProps<T> {
   data: T[];
   onFilterChange: (filteredData: T[]) => void;
   sortBy: keyof T & string; // Klucz, po którym można sortować
-  filterByName: keyof T & string; // Klucz, po którym można wyszukiwać
+  // filterByName: keyof T & string; // Klucz, po którym można wyszukiwać
+  filterByName: NestedKeyOf<T>; // Klucz, po którym można wyszukiwać (płaski lub zagnieżdżony)
 }
 const Filters = <T extends Record<string, any>>({
     data,
@@ -34,7 +41,11 @@ const Filters = <T extends Record<string, any>>({
     const handleSearch = (query: string) => {
       applyFilters(data, sortOrder, startDate, endDate, query);
     };
-  
+
+    const getNestedValue = (obj: any, path: string) => {
+      return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    };
+      
     const applyFilters = (
       originalData: T[],
       sort: string,
@@ -61,15 +72,15 @@ const Filters = <T extends Record<string, any>>({
   
       // Wyszukiwanie (dla zagnieżdżonego pola)
       if (searchQuery.length >= 3) {
-        filteredData = filteredData.filter(item =>
-          item[filterByName]
+        filteredData = filteredData.filter(item => {
+          const value = getNestedValue(item, filterByName); // Obsługa zarówno prostych, jak i zagnieżdżonych kluczy
+          return value
             ?.toString()
             .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-        );
+            .includes(searchQuery.toLowerCase());
+        });
       }
       
-  
       onFilterChange(filteredData);
     };
   
@@ -103,7 +114,7 @@ const Filters = <T extends Record<string, any>>({
                   setFieldValue('startDate', value);
                   handleDateChange(value, endDate);
                 }}
-                className="border-[1px] px-3 py-1 h-full rounded-lg text-black dark:text-grey-1 border-grey-2 dark:border-grey-4 focus:border-primary dark:focus:border-secondary hover:cursor-pointer dark:bg-black"
+                className="dark:[color-scheme:dark] border-[1px] px-3 py-1 h-full rounded-lg text-black dark:text-grey-1 border-grey-2 dark:border-grey-4 focus:border-primary dark:focus:border-secondary hover:cursor-pointer dark:bg-black"
               />
               <Field
                 name="endDate"
@@ -114,7 +125,7 @@ const Filters = <T extends Record<string, any>>({
                   setFieldValue('endDate', value);
                   handleDateChange(startDate, value);
                 }}
-                className="border-[1px] px-3 py-1 h-full rounded-lg text-black dark:text-grey-1 border-grey-2 dark:border-grey-4 focus:border-primary dark:focus:border-secondary hover:cursor-pointer dark:bg-black"
+                className="dark:[color-scheme:dark] border-[1px] px-3 py-1 h-full rounded-lg text-black dark:text-grey-1 border-grey-2 dark:border-grey-4 focus:border-primary dark:focus:border-secondary hover:cursor-pointer dark:bg-black"
               />
             </div>
           )}
