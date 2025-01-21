@@ -122,7 +122,7 @@ const Tools: React.FC = () => {
       <img
         alt="userImage"
         src={getImage(userInfo.photo, User)}
-        className="h-6 w-6 rounded-full"
+        className="h-6 w-6 rounded-full border-[1px] border-grey-1 dark:border-grey-5"
       />
       <span className="ml-2">
         {userInfo.firstName} {userInfo.lastName}
@@ -239,7 +239,7 @@ const Tools: React.FC = () => {
           <img
             alt="userImage"
             src={getImage(userInfo.photo, User)}
-            className="h-10 w-10 rounded-full"
+            className="h-10 w-10 rounded-full border-[1px] border-grey-1 dark:border-grey-5"
           />
         </button>
         {isPressed && (
