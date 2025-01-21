@@ -48,8 +48,8 @@ const IngredientTable: React.FC = () => {
   const [formValues, setFormValues] = useState({
     name: '',
     unitOfMeasurement: 'Gram',
-    minimalAmount: '',
-    amount: ''
+    minimalAmount: 0,
+    amount: 0
   })
 
   const [t] = useTranslation('global')
@@ -170,8 +170,8 @@ const IngredientTable: React.FC = () => {
     setFormValues({
       name: '',
       unitOfMeasurement: 'Gram',
-      minimalAmount: '',
-      amount: ''
+      minimalAmount: 0,
+      amount: 0
     })
   }
 
