@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchGET, fetchPOST, getImage } from '../../../services/APIconn'
-import DefaultImage from '../../../assets/images/no-image.jpeg'
+import DefaultImage from '../../../assets/images/no-image.png'
 import Cookies from 'js-cookie'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { FetchError } from '../../../services/Errors'

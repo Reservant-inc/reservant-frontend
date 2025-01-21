@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { CartContext } from '../../../contexts/CartContext'
 import { getImage } from '../../../services/APIconn'
-import DefaultImage from '../../../assets/images/no-image.jpeg'
+import DefaultImage from '../../../assets/images/no-image.png'
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { useTranslation } from 'react-i18next'

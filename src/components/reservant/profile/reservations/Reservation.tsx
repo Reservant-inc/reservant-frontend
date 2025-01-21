@@ -6,7 +6,7 @@ import {
   UserType
 } from '../../../../services/types'
 import { fetchGET, getImage, fetchPOST } from '../../../../services/APIconn'
-import DefaultImage from '../../../../assets/images/no-image.jpeg'
+import DefaultImage from '../../../../assets/images/no-image.png'
 import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'

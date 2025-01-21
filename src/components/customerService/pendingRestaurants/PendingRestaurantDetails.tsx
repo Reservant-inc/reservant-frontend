@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { fetchPOST, getImage } from '../../../services/APIconn'
-import DefaultImage from '../../../assets/images/no-image.jpeg'
+import DefaultImage from '../../../assets/images/no-image.png'
 
 interface PendingRestaurantDetailsProps {
   restaurant: any
