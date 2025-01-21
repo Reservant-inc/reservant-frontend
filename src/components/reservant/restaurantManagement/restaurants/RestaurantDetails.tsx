@@ -165,6 +165,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         name,
         restaurantType,
         address,
+        postalIndex,
         city,
         reservationDeposit,
         maxReservationDurationMinutes,
@@ -225,7 +226,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         logo: cleanLogo,
         photos: cleanPhotos,
         nip: restaurant.nip,
-        postalIndex: restaurant.postalIndex,
+        postalIndex,
         location: restaurant.location,
         businessPermission: cleanBusinessPermission,
         idCard: cleanIdCard
@@ -281,7 +282,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             openingHours: restaurant.openingHours,
             logo: restaurant.logo,
             photos: restaurant.photos,
-            tables: restaurant.tables
+            tables: restaurant.tables,
+            postalIndex: restaurant.postalIndex
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -493,6 +495,40 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                       formik.touched.address && Boolean(formik.errors.address)
                     }
                     helperText={formik.touched.address && formik.errors.address}
+                    className="font-mont-md text-[15px] dark:text-white"
+                  />
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="postalIndex"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
+                  {t('restaurant-management.details.postalCode')}
+                </label>
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="postalIndex"
+                    id="postalIndex"
+                    fullWidth
+                    value={formik.values.postalIndex || ''}
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="postalIndex"
+                    id="postalIndex"
+                    fullWidth
+                    error={
+                      formik.touched.postalIndex && Boolean(formik.errors.postalIndex)
+                    }
+                    helperText={formik.touched.postalIndex && formik.errors.postalIndex}
                     className="font-mont-md text-[15px] dark:text-white"
                   />
                 )}
@@ -1089,9 +1125,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   <>
                     <button
                       type="submit"
-                      disabled={formik.isSubmitting}
-                      className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                    >
+                      disabled={!formik.isValid || formik.isSubmitting || !formik.dirty}
+                      className={`flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black
+                        ${!formik.isValid || formik.isSubmitting || !formik.dirty? 'cursor-not-allowed opacity-50' : ''}`}
+                      >
                       {t('general.save')}
                     </button>
                     <button
