@@ -62,6 +62,7 @@ const Visit: React.FC<VisitProps> = () => {
     restaurant: restaurant
   }
 
+  
   useEffect(() => {
     if (friendsToAdd.length >= guests) {
       setGuests(prevState => prevState + 1)
@@ -198,7 +199,7 @@ const Visit: React.FC<VisitProps> = () => {
               value={date}
               min={today}
               onChange={e => setDate(e.target.value)}
-              className=" flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-2 py-0 text-sm"
+              className="dark:[color-scheme:dark] flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-2 py-0 text-sm"
             />
           </div>
           <div className="flex h-full w-full items-center  justify-between gap-3 text-nowrap">
@@ -259,6 +260,8 @@ const Visit: React.FC<VisitProps> = () => {
           </button>
         </div>
       </div>
+
+
     </div>
   )
 }

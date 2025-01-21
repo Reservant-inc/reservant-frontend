@@ -11,11 +11,12 @@ import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
 import { ReservationListType } from '../../../../services/enums'
-import { Alert, IconButton } from '@mui/material'
+import { Alert, IconButton, Snackbar } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import { report } from 'node:process'
 import { useTranslation } from 'react-i18next'
+import { useSnackbar } from '../../../../contexts/SnackbarContext'
 
 interface ReservationProps {
   reservation: VisitType
@@ -37,6 +38,7 @@ const Reservation: React.FC<ReservationProps> = ({
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false)
+  const { setSnackbar } = useSnackbar()
 
   const [t] = useTranslation('global')
 
@@ -133,13 +135,28 @@ const Reservation: React.FC<ReservationProps> = ({
   const handleCancelReservation = async () => {
     try {
       await fetchPOST(`/visits/${reservation.visitId}/cancel`)
-      setAlertMessage('Reservation canceled successfully.')
+
       setIsCancelDialogOpen(false)
-      refreshReservations()
+      await refreshReservations()
+      setSnackbar(`${t('snackbar.reservation-cancel-success')}`, 'success');
     } catch (error) {
-      console.error('Failed to cancel reservation:', error)
+      if (error instanceof FetchError) {
+        const errors = error.formatErrors()
+        if(errors.includes('AccessDenied')) {
+          setIsCancelDialogOpen(false)
+          setSnackbar(`${t('snackbar.reservation-not-creator')}`, 'error') 
+        }
+      } else {
+        console.error('Failed to cancel reservation:', error);
+        setIsCancelDialogOpen(false)
+        setSnackbar(`${t('snackbar.reservation-cancel-problem')}`, 'error'); 
+      }
+      
+      
     }
-  }
+  };
+  
+
 
   const allReservationEmployees = () => {
     let res: UserType[] = []
@@ -385,29 +402,8 @@ const Reservation: React.FC<ReservationProps> = ({
             </button>
           </div>
         </div>
-      </Dialog>
-      {alertMessage && (
-        <div className="fixed bottom-2 left-2">
-          <Alert
-            variant="filled"
-            severity="success"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setAlertMessage('')
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            {alertMessage}
-          </Alert>
-        </div>
-      )}
+        </Dialog>
+
     </div>
   )
 }

@@ -888,6 +888,16 @@
         "description": "Opis",
         "actions": "Akcje"
     },
+    "snackbar": {
+        "reservation-cancel-success": "Rezerwacja anulowana.",
+        "reservation-not-creator": "Nie jesteś twórcą tej rezerwacji.",
+        "reservation-cancel-problem": "Problem przy anulowaniu rezerwacji.",
+        "visit-success": "Rezerwacja utworzona.",
+        "visit-duplicate": "Masz już inną rezerwację w tym czasie.",
+        "review-success": "Ocena utworzona.",
+        "review-error": "Problem przy tworzeniu oceny.",
+        "password-updated": "Hasło uaktualnione."
+    },
     "notifications": {
         "3-newest": "Trzy najnowsze",
         "all": "Wszystkie",

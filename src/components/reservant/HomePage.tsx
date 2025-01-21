@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Map from './map/Map'
-import { Button, List, ListItemButton, Typography } from '@mui/material'
+import { Alert, Button, List, ListItemButton, Snackbar, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp'
 import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp'
@@ -33,6 +33,7 @@ export default function HomePage() {
   const [allRestaurants, setAllRestaurants] = useState<RestaurantDetailsType[]>(
     []
   )
+
 
   const { restaurantId } = useParams<{ restaurantId?: string }>()
   const navigate = useNavigate()
@@ -413,6 +414,7 @@ export default function HomePage() {
           )}
         </OutsideClickHandler>
       </div>
+
 
       {/* Restaurant Details */}
       {selectedRestaurant && (

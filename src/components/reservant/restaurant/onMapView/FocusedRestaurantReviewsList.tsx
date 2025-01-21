@@ -4,7 +4,9 @@ import RestaurantReview from '../../restaurantManagement/restaurants/restaurantR
 import { ReviewType, User } from '../../../../services/types'
 import { useTranslation } from 'react-i18next'
 import { fetchGET, fetchPOST } from '../../../../services/APIconn'
+import { useSnackbar } from '../../../../contexts/SnackbarContext'
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -12,6 +14,7 @@ import {
   DialogTitle,
   Pagination,
   Rating,
+  Snackbar,
   Tooltip
 } from '@mui/material'
 import {
@@ -44,6 +47,7 @@ const FocusedRestaurantReviewsList: React.FC<
   const [isOwner, setIsOwner] = useState<boolean>(false)
 
   const [t] = useTranslation('global')
+  const { setSnackbar } = useSnackbar()
 
   const fetchReviews = async () => {
     try {
@@ -131,8 +135,10 @@ const FocusedRestaurantReviewsList: React.FC<
       refreshReviews()
       setCurrentPage(1)
       setHasReviewed(true)
+      setSnackbar(`${t('snackbar.review-success')}`, 'success') 
     } catch (error) {
       console.error('Error submitting review:', error)
+      setSnackbar(`${t('snackbar.review-error')}`, 'error') 
     }
   }
 
