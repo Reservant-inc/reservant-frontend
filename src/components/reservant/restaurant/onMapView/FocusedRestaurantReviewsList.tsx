@@ -70,15 +70,14 @@ const FocusedRestaurantReviewsList: React.FC<
 
   const fetchMyRestaurants = async () => {
     try {
-      console.log('blabla')
-      const response = await fetchGET(`/my-restaurants/${activeRestaurantId}`);
+      const response = await fetchGET(`/my-restaurants/${activeRestaurantId}`)
       if (response.restaurantId === activeRestaurantId) {
-        setIsOwner(true);
+        setIsOwner(true)
       }
     } catch (error) {
-      setIsOwner(false);
+      setIsOwner(false)
     }
-  };
+  }
 
   useEffect(() => {
     fetchReviews()
@@ -135,10 +134,10 @@ const FocusedRestaurantReviewsList: React.FC<
       refreshReviews()
       setCurrentPage(1)
       setHasReviewed(true)
-      setSnackbar(`${t('snackbar.review-success')}`, 'success') 
+      setSnackbar(`${t('snackbar.review-success')}`, 'success')
     } catch (error) {
       console.error('Error submitting review:', error)
-      setSnackbar(`${t('snackbar.review-error')}`, 'error') 
+      setSnackbar(`${t('snackbar.review-error')}`, 'error')
     }
   }
 
@@ -227,8 +226,10 @@ const FocusedRestaurantReviewsList: React.FC<
 
         {/* Add Review Dialog */}
         <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-          <DialogTitle className='dark:bg-grey-6 dark:text-white'>{t('reviews.add-review')}</DialogTitle>
-          <DialogContent className='dark:bg-grey-6 dark:text-white'>
+          <DialogTitle className="dark:bg-grey-6 dark:text-white">
+            {t('reviews.add-review')}
+          </DialogTitle>
+          <DialogContent className="dark:bg-grey-6 dark:text-white">
             <h2>{t('reviews.rating')}:</h2>
             <Rating
               name="star-rating"
@@ -243,7 +244,7 @@ const FocusedRestaurantReviewsList: React.FC<
               rows={4}
             />
           </DialogContent>
-          <DialogActions className='dark:bg-grey-6'>
+          <DialogActions className="dark:bg-grey-6">
             <Button
               onClick={handleDialogClose}
               className="rounded-lg text-primary dark:text-secondary"

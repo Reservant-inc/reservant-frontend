@@ -7,6 +7,7 @@ import { ReportsListType } from '../../../../services/enums'
 import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
+import Cookies from 'js-cookie'
 
 interface ReportProps {
   report: ReportType & { userRole?: string }
@@ -27,6 +28,14 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
       else console.error('Unexpected error')
     }
   }
+
+  const isAssigned =
+    (Cookies.get('userInfo') as string) &&
+    report.assignedAgents.some(
+      assignedAgent =>
+        assignedAgent.agent.userId ===
+        JSON.parse(Cookies.get('userInfo') as string)?.userId
+    )
 
   return (
     <div className="p-2 pl-0 w-full">
@@ -80,9 +89,13 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
             {report.description}
           </p>
         </div>
-        <button onClick={openChat}>
-          <Message />
-        </button>
+
+        {(listType === ReportsListType.Created ||
+          (listType === ReportsListType.CustomerService && isAssigned)) && (
+          <button onClick={openChat}>
+            <Message />
+          </button>
+        )}
       </div>
     </div>
   )

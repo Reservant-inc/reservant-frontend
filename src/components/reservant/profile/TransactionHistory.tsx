@@ -1,5 +1,5 @@
 import { format, formatDate } from 'date-fns'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { fetchGET, fetchPOST } from '../../../services/APIconn'
 import { FetchError } from '../../../services/Errors'
@@ -31,6 +31,8 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
 
   const [t] = useTranslation('global')
 
+  const scrollableDivRef = useRef<HTMLDivElement>(null)
+
   const transactionsApiRoutes: Record<TransactionListType, string> = {
     [TransactionListType.Client]: '/wallet/history',
     [TransactionListType.CustomerService]: `/users/${userId}/payment-history`
@@ -55,7 +57,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
       if (newTransactions.length < 10) {
         setHasMore(false)
       } else {
-        if (!hasMore) setHasMore(true)
+        setPage(prevPage => prevPage + 1)
       }
 
       if (page > 0) {
@@ -74,6 +76,24 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
       }
     }
   }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!scrollableDivRef.current || !hasMore) return
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollableDivRef.current
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        setPage(prevPage => prevPage + 1)
+      }
+    }
+
+    const div = scrollableDivRef.current
+    if (div) div.addEventListener('scroll', handleScroll)
+
+    return () => {
+      if (div) div.removeEventListener('scroll', handleScroll)
+    }
+  }, [hasMore])
 
   useEffect(() => {
     fetchTransactions()
@@ -147,29 +167,14 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
       </div>
       <div className="h-[calc(100%-7rem)]">
         <div
+          className="h-full overflow-y-auto scroll"
           id="scrollableDiv"
-          className="w-full h-full rounded-lg overflow-y-auto scroll bg-grey-0 dark:bg-grey-6"
+          ref={scrollableDivRef}
         >
-          <InfiniteScroll
-            dataLength={transactions.length}
-            next={() => setPage(prevPage => prevPage + 1)}
-            hasMore={hasMore}
-            loader={
-              <CircularProgress className="self-center text-grey-2 w-10 h-10" />
-            }
-            endMessage={
-              <div className="flex w-full justify-center p-2">
-                <h1 className="text-grey-2 text-sm">
-                  {t('profile.transaction-history.no-more')}
-                </h1>
-              </div>
-            }
-            scrollableTarget="scrollableDiv"
-            className="overflow-y-hidden flex flex-col rounded-lg p-2"
-          >
-            <div className="flex flex-col gap-1 h-full items-center divide-y-[1px] divide-grey-2">
-              {transactions.length > 0 ? (
-                transactions.map((transaction, index) => (
+          <div className="flex flex-col gap-1 h-full items-center divide-y-[1px] divide-grey-2">
+            {transactions.length > 0 ? (
+              <>
+                {transactions.map((transaction, index) => (
                   <div
                     key={index}
                     className="flex w-full p-2 justify-between text-sm"
@@ -187,14 +192,26 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
                     </div>
                     <h1>{formatDate(transaction.time.toString())}</h1>
                   </div>
-                ))
-              ) : (
-                <h1 className="text-grey-2 text-sm">
-                  {t('profile.transaction-history.no-transactions')}
-                </h1>
-              )}
-            </div>
-          </InfiniteScroll>
+                ))}
+                {hasMore && (
+                  <div className="flex w-full justify-center">
+                    <CircularProgress className="text-grey-2" />
+                  </div>
+                )}
+                {!hasMore && (
+                  <div className="flex w-full justify-center p-2">
+                    <h1 className="text-grey-2 text-sm">
+                      {t('profile.transaction-history.no-transactions')}
+                    </h1>
+                  </div>
+                )}
+              </>
+            ) : (
+              <h1 className="text-grey-2 text-sm">
+                {t('profile.transaction-history.no-transactions')}
+              </h1>
+            )}
+          </div>
         </div>
       </div>
       {showMoneyDialog && (

@@ -1,19 +1,23 @@
-import React, { createContext, ReactNode, useState, useMemo } from 'react'
+import React, { createContext, ReactNode, useState } from 'react'
 import Thread from '../components/reservant/navigation/navItems/Threads/Thread'
 import InactiveThread from '../components/reservant/navigation/navItems/Threads/InactiveThread'
 import { ThreadType } from '../services/types'
 import renderUserPhotos from '../utils/DisplayUserPhotos'
+import { fetchDELETE } from '../services/APIconn'
+import { FetchError } from '../services/Errors'
 
 interface ThreadContextProps {
   children: ReactNode
 }
 
 interface ThreadContextValue {
-  handleThreadOpen: Function
+  handleThreadOpen: (thread: ThreadType) => void
+  handleDeleteThread: (threadId: number) => Promise<void>
 }
 
 export const ThreadContext = createContext<ThreadContextValue>({
-  handleThreadOpen: () => {}
+  handleThreadOpen: () => {},
+  handleDeleteThread: async () => {}
 })
 
 const ThreadContextProvider: React.FC<ThreadContextProps> = ({ children }) => {
@@ -102,8 +106,27 @@ const ThreadContextProvider: React.FC<ThreadContextProps> = ({ children }) => {
     setActiveThreads(prevThreads => [...prevThreads, thread])
   }
 
+  const handleDeleteThread = async (threadId: number) => {
+    try {
+      await fetchDELETE(`/threads/${threadId}`)
+      setActiveThreads(prev =>
+        prev.filter(thread => thread.threadId !== threadId)
+      )
+      setInactiveThreads(prev =>
+        prev.filter(thread => thread.threadId !== threadId)
+      )
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.error(error.formatErrors())
+      } else {
+        console.error('Unexpected error while deleting thread', error)
+      }
+    }
+  }
+
   const ctxValue = {
-    handleThreadOpen: handleThreadOpen
+    handleThreadOpen,
+    handleDeleteThread
   }
 
   return (

@@ -16,12 +16,12 @@ import CheckIcon from '@mui/icons-material/Check'
 import ClearIcon from '@mui/icons-material/Clear'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
-import { FriendData } from '../../../../services/types'
+import { FriendData, ThreadType } from '../../../../services/types'
 
 interface FriendProps {
   friend: FriendData
   listType: FriendListType
-  refreshFriends: () => void
+  refreshFriends: Function
 }
 
 const Friend: React.FC<FriendProps> = ({
@@ -31,7 +31,6 @@ const Friend: React.FC<FriendProps> = ({
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
-
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
@@ -89,31 +88,41 @@ const Friend: React.FC<FriendProps> = ({
     }
   }
 
+  const createThread = async (id: string) => {
+    const response = await fetchPOST(
+      '/threads/create-private-thread',
+      JSON.stringify({ otherUserId: id })
+    )
+
+    return response
+  }
+
   const handleOpenThread = async () => {
     const otherUser = friend.otherUser
-
-    console.log(friend)
 
     let response
 
     try {
       if (friend.privateMessageThreadId === 0) {
-        response = await fetchPOST(
-          '/threads/create-private-thread',
-          JSON.stringify({ otherUserId: otherUser.userId })
-        )
-        friend.privateMessageThreadId = response.threadId
+        response = await createThread(otherUser.userId)
+
+        refreshFriends()
       } else {
         response = await fetchGET(`/threads/${friend.privateMessageThreadId}`)
       }
     } catch (error) {
       if (error instanceof FetchError) {
-        console.error(error.formatErrors())
-      }
-      {
+        if (error.errors === 'NotFound') {
+          response = await createThread(otherUser.userId)
+        } else {
+          console.error(error.formatErrors())
+        }
+      } else {
         console.error('Unexpected error while creating thread', error)
       }
     }
+
+    console.log(response)
 
     handleThreadOpen({
       ...response,

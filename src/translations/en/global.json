@@ -208,7 +208,8 @@
                 "required": "Postal code is required"
             },
             "city": {
-                "required": "City is required"
+                "required": "City is required",
+                "invalid": "City must only contain letter, spaces and hyphans"
             },
             "tin": {
                 "matches": "TIN must have 10 numbers",

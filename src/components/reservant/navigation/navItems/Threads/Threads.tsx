@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded'
 import AddCommentRoundedIcon from '@mui/icons-material/AddCommentRounded'
@@ -18,7 +18,6 @@ import CheckIcon from '@mui/icons-material/Check'
 import ThreadPreview from './ThreadPreview'
 import SearchIcon from '@mui/icons-material/Search'
 import { FetchError } from '../../../../../services/Errors'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { useTranslation } from 'react-i18next'
 import FriendSelector from '../../../../reusableComponents/FriendSelector'
 import renderUserPhotos from '../../../../../utils/DisplayUserPhotos'
@@ -34,7 +33,6 @@ const Threads: React.FC = () => {
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
-  const [filter, setFilter] = useState<string>('')
   const [option, setOption] = useState<ThreadScope>(ThreadScope.All)
 
   const apiBase = '/user/threads'
@@ -48,9 +46,11 @@ const Threads: React.FC = () => {
     [ThreadScope.Report]: `?type=Report&`
   }
 
-  const { handleThreadOpen } = useContext(ThreadContext)
+  const { handleThreadOpen, handleDeleteThread } = useContext(ThreadContext)
 
   const [t] = useTranslation('global')
+
+  const scrollableDivRef = useRef<HTMLDivElement>(null)
 
   const clearStates = () => {
     setThreadTitle('')
@@ -78,7 +78,11 @@ const Threads: React.FC = () => {
       )
       const newThreads = result.items as ThreadType[]
 
-      if (newThreads.length < 10) setHasMore(false)
+      if (newThreads.length < 10) {
+        setHasMore(false)
+      } else {
+        setPage(prevPage => prevPage + 1)
+      }
 
       if (page > 0) setThreads(prevThreads => [...prevThreads, ...newThreads])
       else setThreads(newThreads)
@@ -94,10 +98,29 @@ const Threads: React.FC = () => {
   }
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (!scrollableDivRef.current || !hasMore) return
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollableDivRef.current
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        setPage(prevPage => prevPage + 1)
+      }
+    }
+
+    const div = scrollableDivRef.current
+    if (div) div.addEventListener('scroll', handleScroll)
+
+    return () => {
+      if (div) div.removeEventListener('scroll', handleScroll)
+    }
+  }, [hasMore])
+
+  useEffect(() => {
     getThreads()
   }, [page])
 
   useEffect(() => {
+    setPage(0)
     getThreads()
   }, [option])
 
@@ -110,7 +133,7 @@ const Threads: React.FC = () => {
 
   const deleteThread = async (threadId: number) => {
     try {
-      await fetchDELETE(`/threads/${threadId}`)
+      handleDeleteThread(threadId)
       setThreads(prev => {
         return prev.filter(thread => thread.threadId !== threadId)
       })
@@ -184,24 +207,10 @@ const Threads: React.FC = () => {
 
     return (
       <List className="h-full w-full p-0">
-        <InfiniteScroll
-          dataLength={threads.length}
-          next={() => setPage(prevPage => prevPage + 1)}
-          hasMore={hasMore}
-          loader={
-            <div className="flex w-full jusitfy-center">
-              <CircularProgress className="text-grey-2" />
-            </div>
-          }
-          endMessage={
-            <div className="flex w-full justify-center p-2">
-              <h1 className="text-grey-2 text-sm">
-                {t('profile.transaction-history.no-more')}
-              </h1>
-            </div>
-          }
-          scrollableTarget="scrollableDiv"
-          className="hidescroll h-full"
+        <div
+          className="h-full overflow-y-auto scroll"
+          id="scrollableDiv"
+          ref={scrollableDivRef}
         >
           {threads.map(thread => (
             <ThreadPreview
@@ -213,7 +222,17 @@ const Threads: React.FC = () => {
               deleteThread={deleteThread}
             />
           ))}
-        </InfiniteScroll>
+          {hasMore && (
+            <div className="flex w-full justify-center">
+              <CircularProgress className="text-grey-2" />
+            </div>
+          )}
+          {!hasMore && (
+            <div className="flex w-full justify-center p-2">
+              <h1 className="text-grey-2 text-sm">{t('threads.no-more')}</h1>
+            </div>
+          )}
+        </div>
       </List>
     )
   }
@@ -269,7 +288,7 @@ const Threads: React.FC = () => {
         </Button>
         {isPressed && (
           <div className="nav-dropdown z-[1] flex h-[calc(100vh-4.5rem)] w-[300px] flex-col items-center bg-white dark:bg-black">
-            <div className="flex h-14 w-full items-center justify-between px-3 py-2">
+            <div className="flex h-[4rem] w-full items-center justify-between px-3 py-2">
               <h1 className="font-mont-bd text-xl text-black dark:text-white">
                 {t('threads.threads')}
               </h1>
@@ -286,9 +305,9 @@ const Threads: React.FC = () => {
                 <input
                   type="text"
                   placeholder={t('threads.search')}
-                  className="clean-input h-8 w-[230px] p-2 dark:text-white dark:placeholder:text-grey-2"
+                  className={inputClass + ' w-full'}
                 />
-                <SearchIcon className="h-[25px] w-[25px] hover:cursor-pointer dark:text-grey-2" />
+                <SearchIcon className="h-5 w-5 text-grey-4" />
               </div>
             </div>
             <div className="w-full flex items-center justify-between px-3 dark:text-grey-1">
@@ -313,12 +332,7 @@ const Threads: React.FC = () => {
                 </option>
               </select>
             </div>
-            <div
-              id="scrollableDiv"
-              className="scroll flex h-full w-full items-center justify-center overflow-y-auto px-2"
-            >
-              {renderThreadsContent()}
-            </div>
+            {renderThreadsContent()}
           </div>
         )}
       </OutsideClickHandler>

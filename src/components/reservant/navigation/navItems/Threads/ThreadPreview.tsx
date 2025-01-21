@@ -4,8 +4,6 @@ import Cookies from 'js-cookie'
 import { useTranslation } from 'react-i18next'
 import ConfirmationDialog from '../../../../reusableComponents/ConfirmationDialog'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { FetchError } from '../../../../../services/Errors'
-import { fetchDELETE } from '../../../../../services/APIconn'
 import { ThreadScope } from '../../../../../services/enums'
 
 interface ThreadPreviewProps {
@@ -42,9 +40,11 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({
 
   useEffect(() => {
     const currentUserId = JSON.parse(Cookies.get('userInfo') as string).userId
-    thread.participants = thread.participants.filter(
-      participant => participant.userId !== currentUserId
-    )
+    if (thread.participants.length > 1) {
+      thread.participants = thread.participants.filter(
+        participant => participant.userId !== currentUserId
+      )
+    }
     setUpdatedThread(thread)
   }, [])
 

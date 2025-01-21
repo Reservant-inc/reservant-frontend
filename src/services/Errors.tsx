@@ -6,7 +6,7 @@ export class FetchError extends Error {
     super(message)
     this.name = 'FetchError'
     this.status = status
-    this.errors = errors
+    this.errors = errors[''].map((error: string) => `${error}`).join('\n')
   }
 
   formatErrors(): string {

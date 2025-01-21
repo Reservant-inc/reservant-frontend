@@ -201,7 +201,8 @@
                 "required": "Kod pocztowy jest wymagany"
             },
             "city": {
-                "required": "Miasto jest wymagane"
+                "required": "Miasto jest wymagane",
+                "invalid": "Nazwa miasta powinna zawierać tylko litery, spacje i cudzysłowy"
             },
             "tin": {
                 "matches": "NIP musi mieć 10 cyfr",
