@@ -79,7 +79,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
           data={reservations}
           onFilterChange={handleFilterChange}
           sortBy="date"
-          filterByName="restaurant"
+          filterByName="restaurant.name"
         />
       </div>
       <div className="flex flex-col gap-4 h-[94%]">

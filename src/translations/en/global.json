@@ -164,7 +164,8 @@
             "login": {
                 "required": "Login is required",
                 "matches": "Login can only contain letters",
-                "taken": "User with this login already exists"
+                "taken": "User with this login already exists",
+                "invalid": "Login can only contain letters A-Z and numbers"
             },
             "email": {
                 "matches": "Invalid e-mail",
@@ -475,7 +476,9 @@
         "order": "Order",
         "is-delivering": "Delivery",
         "delivery-fee": "Delivery fee",
-        "events": "Events"
+        "events": "Events",
+        "no-events-found": "No events found for this restaurant.",
+        "events-search": "Search events"
     },
     "event-creation": {
             "even-title": "Event",

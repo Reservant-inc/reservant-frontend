@@ -157,7 +157,8 @@
             "login": {
                 "required": "Login jest wymagany",
                 "matches": "Login może składać się tylko z liter",
-                "taken": "Użytkownik z takim loginem już istnieje"
+                "taken": "Użytkownik z takim loginem już istnieje",
+                "invalid": "Login może składać się tylko z liter A-Z i cyfr"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",
@@ -293,7 +294,7 @@
             "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Zawrość alkocholu",
+            "menuItemAlcoholPercentage": "Zawartość alkoholu",
             "menuItemNameRequired": "Nazwa jest wymagana",
             "menuItemPriceRequired": "Cena jest wymagana",
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
@@ -472,7 +473,9 @@
         "order": "Zamów",
         "is-delivering": "Dostawa",
         "delivery-fee": "Koszt dostawy",
-        "events": "Wydarzenia:"
+        "events": "Wydarzenia:",
+        "no-events-found": "Brak wydarzeń dla tej restauracji.",
+        "events-search": "Wyszukaj wydarzenie"
     },
     "event-creation": {
         "even-title": "Wydarzenie",
