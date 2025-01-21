@@ -46,6 +46,16 @@ const Tools: React.FC = () => {
   const [reportNote, setReportNote] = useState<string>('')
   const [alertMessage, setAlertMessage] = useState<string>('')
 
+  const isOwner = () => {
+    if (Cookies.get('userInfo'))
+      return Boolean(
+        JSON.parse(Cookies.get('userInfo') as string).roles.includes(
+          'RestaurantOwner'
+        )
+      )
+    return false
+  }
+
   const theme = createTheme({
     components: {
       MuiSwitch: {
@@ -257,8 +267,7 @@ const Tools: React.FC = () => {
                 >
                   <ChevronLeft />
                 </button>
-
-                <BecomeRestauranter />
+                {!isOwner() && <BecomeRestauranter />}
               </div>
             </CSSTransition>
 
