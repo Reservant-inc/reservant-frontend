@@ -393,7 +393,7 @@
             "saturday": "Sobota",
             "sunday": "Niedziela",
             "opening": "Godziny otwarcia",
-            "deposit": "Depozyt restauracji",
+            "deposit": "Depozyt rezerwacji",
             "city": "Miasto",
             "restaurantName": "Nazwa restauracji",
             "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
@@ -914,7 +914,8 @@
         "visit-duplicate": "Masz już inną rezerwację w tym czasie.",
         "review-success": "Ocena utworzona.",
         "review-error": "Problem przy tworzeniu oceny.",
-        "password-updated": "Hasło uaktualnione."
+        "password-updated": "Hasło uaktualnione.",
+        "report-submitted": "Zgłoszenie wysłane."
     },
     "notifications": {
         "3-newest": "Trzy najnowsze",

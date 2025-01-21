@@ -915,7 +915,8 @@
         "visit-duplicate": "You already have a reservation at this time.",
         "review-success": "Review added successfully.",
         "review-error": "Error submitting review.",
-        "password-updated": "Password updated successfully."
+        "password-updated": "Password updated successfully.",
+        "report-submitted": "Report submitted successfully."
     },
     "notifications": {
         "3-newest": "Three newest",

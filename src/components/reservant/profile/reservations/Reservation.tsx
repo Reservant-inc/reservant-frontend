@@ -18,6 +18,7 @@ import { report } from 'node:process'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from '../../../../contexts/SnackbarContext'
 
+
 interface ReservationProps {
   reservation: VisitType
   reservationType: ReservationListType
@@ -129,6 +130,7 @@ const Reservation: React.FC<ReservationProps> = ({
       setReportType('')
       setReportNote('')
       setSelectedEmployee('')
+      setSnackbar(`${t('snackbar.report-submitted')}`, 'success');
     }
   }
 
