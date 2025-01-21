@@ -12,6 +12,7 @@ import { TextField, styled } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Photo } from '@mui/icons-material'
 
 interface EventCreationModalProps {
   handleClose: () => void
@@ -146,79 +147,116 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
               <div className="flex flex-col w-full gap-4">
                 <div className="flex-col gap-2 flex">
                   <>
-                      <label htmlFor="name" className={errors.name && touched.name ? 'text-error' : 'text-white dark:text-white'}>{t('event-creation.name')}:</label>
-                      <Field
-                        type="text"
-                        variant="standard"
-                        as={TextField}
-                        id="name"
-                        name="name"
-                        className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.name && touched.name) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                      />
+                    <label
+                      htmlFor="name"
+                      className={
+                        errors.name && touched.name
+                          ? 'text-error'
+                          : 'text-black dark:text-white'
+                      }
+                    >
+                      {t('event-creation.name')}:
+                    </label>
+                    <Field
+                      type="text"
+                      variant="standard"
+                      as={TextField}
+                      id="name"
+                      name="name"
+                      className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.name && touched.name) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    />
                     {errors.name && touched.name && (
                       <ErrorMes msg={errors.name} />
                     )}
                   </>
                   <>
-                      <label htmlFor="description" className={errors.description && touched.description ? 'text-error' : 'text-white dark:text-white'}>
-                        {t('event-creation.description')}:
-                      </label>
-                      <Field
-                        type="text"
-                        as={TextField}
-                        variant="standard"
-                        id="description"
-                        name="description"
-                        className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.description && touched.description) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                      />
+                    <label
+                      htmlFor="description"
+                      className={
+                        errors.description && touched.description
+                          ? 'text-error'
+                          : 'text-black dark:text-white'
+                      }
+                    >
+                      {t('event-creation.description')}:
+                    </label>
+                    <Field
+                      type="text"
+                      as={TextField}
+                      variant="standard"
+                      id="description"
+                      name="description"
+                      className={`w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.description && touched.description) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    />
                     {errors.description && touched.description && (
                       <ErrorMes msg={errors.description} />
                     )}
                   </>
                   <>
-                      <label htmlFor="time" className={errors.time && touched.time ? 'text-error' : 'text-white dark:text-white'}>
-                        {t('event-creation.time-from')}:
-                      </label>
-                      <Field
-                        type="datetime-local"
-                        as={TextField}
-                        variant="standard"
-                        id="time"
-                        name="time"
-                        className={`dark:[color-scheme:dark] w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.time && touched.time) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                      />
+                    <label
+                      htmlFor="time"
+                      className={
+                        errors.time && touched.time
+                          ? 'text-error'
+                          : 'text-black dark:text-white'
+                      }
+                    >
+                      {t('event-creation.time-from')}:
+                    </label>
+                    <Field
+                      type="datetime-local"
+                      as={TextField}
+                      variant="standard"
+                      id="time"
+                      name="time"
+                      className={`dark:[color-scheme:dark] w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.time && touched.time) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    />
                     {errors.time && touched.time && (
                       <ErrorMes msg={errors.time} />
                     )}
                   </>
                   <>
-                      <label htmlFor="mustJoinUntil" className={errors.mustJoinUntil && touched.mustJoinUntil ? 'text-error' : 'text-white dark:text-white'}>
-                        {t('event-creation.must-join-until')}:
-                      </label>
-                      <Field
-                        type="datetime-local"
-                        id="mustJoinUntil"
-                        name="mustJoinUntil"
-                        className={`dark:[color-scheme:dark] w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.mustJoinUntil && touched.mustJoinUntil) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                        as={TextField}
-                        variant="standard"
-                      />
+                    <label
+                      htmlFor="mustJoinUntil"
+                      className={
+                        errors.mustJoinUntil && touched.mustJoinUntil
+                          ? 'text-error'
+                          : 'text-black dark:text-white'
+                      }
+                    >
+                      {t('event-creation.must-join-until')}:
+                    </label>
+                    <Field
+                      type="datetime-local"
+                      id="mustJoinUntil"
+                      name="mustJoinUntil"
+                      className={`dark:[color-scheme:dark] w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.mustJoinUntil && touched.mustJoinUntil) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                      as={TextField}
+                      variant="standard"
+                    />
                     {errors.mustJoinUntil && touched.mustJoinUntil && (
                       <ErrorMes msg={errors.mustJoinUntil} />
                     )}
                   </>
                   <>
-                      <label htmlFor="maxPeople" className={errors.maxPeople && touched.maxPeople ? 'text-error' : 'text-white dark:text-white'}>
-                        {t('event-creation.max-people')}:
-                      </label>
-                      <Field
-                        as={TextField}
-                        variant="standard"
-                        type="number"
-                        id="maxPeople"
-                        name="maxPeople"
-                        className={`dark:[color-scheme:dark] w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.maxPeople && touched.maxPeople) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
-                      />
+                    <label
+                      htmlFor="maxPeople"
+                      className={
+                        errors.maxPeople && touched.maxPeople
+                          ? 'text-error'
+                          : 'text-black dark:text-white'
+                      }
+                    >
+                      {t('event-creation.max-people')}:
+                    </label>
+                    <Field
+                      as={TextField}
+                      variant="standard"
+                      type="number"
+                      id="maxPeople"
+                      name="maxPeople"
+                      className={`dark:[color-scheme:dark] w-full [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(errors.maxPeople && touched.maxPeople) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
+                    />
                     {errors.maxPeople && touched.maxPeople && (
                       <ErrorMes msg={errors.maxPeople} />
                     )}
@@ -259,26 +297,29 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
                               <CloudUploadIcon />
                               {t('event-creation.upload-photo')}
                             </label>
-                            <button
-                              type="button"
-                              disabled={photoPath === DefaultImage}
-                              onClick={() => {
-                                setPhotoPath(DefaultImage)
-                                setFieldValue('photoFileName', null)
-                                setPhotoError(
-                                  t(
-                                    'errors.event-creation.photoFileName.required'
+                            {values.photoFileName && (
+                              <button
+                                type="button"
+                                disabled={photoPath === DefaultImage}
+                                onClick={() => {
+                                  setPhotoPath(DefaultImage)
+                                  setFieldValue('photoFileName', null)
+                                  setPhotoError(
+                                    t(
+                                      'errors.event-creation.photoFileName.required'
+                                    )
                                   )
-                                )
-                              }}
-                              className={`shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-error text-error dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error  ${photoPath !== DefaultImage 
-                                ? 'hover:cursor-pointer dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error' 
-                                : 'opacity-20'
-                              }`}
-                            >
-                              <DeleteIcon />
-                              {t('event-creation.delete-photo')}
-                            </button>
+                                }}
+                                className={`shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-error text-error dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error  ${
+                                  photoPath !== DefaultImage
+                                    ? 'hover:cursor-pointer dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error'
+                                    : 'opacity-20'
+                                }`}
+                              >
+                                <DeleteIcon />
+                                {t('event-creation.delete-photo')}
+                              </button>
+                            )}
                           </div>
                         )}
                         <VisuallyHiddenInput
