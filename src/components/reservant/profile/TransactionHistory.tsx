@@ -215,6 +215,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
                 id="fundsInput"
                 type="number"
                 min={5}
+                step={5}
                 max={1000}
                 value={value}
                 onChange={e => setValue(parseInt(e.target.value))}
@@ -223,12 +224,13 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
               <h1>PLN</h1>
             </div>
             <button
-              className="self-end flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition hover:scale-105 hover:bg-green hover:text-white"
+              className="self-end flex items-center justify-center gap-1 px-4 text-sm border-[1px] rounded-md p-1 border-green text-green transition enabled:hover:scale-105 enabled:hover:bg-green enabled:hover:text-white"
               onClick={() => {
                 setShowMoneyDialog(false)
                 addFunds()
                 setValue(0)
               }}
+              disabled={value < 1 || value > 1000}
             >
               {t('profile.transaction-history.confirm')}
             </button>
