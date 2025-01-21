@@ -25,6 +25,7 @@ import TransactionHistory from './TransactionHistory'
 import { useNavigate } from 'react-router-dom'
 import { TransactionListType } from '../../../services/enums'
 import { logoutAction } from '../../auth/auth'
+import { useSnackbar } from '../../../contexts/SnackbarContext'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -58,6 +59,7 @@ const Account: React.FC = () => {
 
   const navigate = useNavigate()
   const [t] = useTranslation('global')
+  const { setSnackbar } = useSnackbar()
 
   const UserEditSchema = yup.object({
     phoneNumber: yup
@@ -213,9 +215,9 @@ const Account: React.FC = () => {
           newPassword: values.newPassword
         })
       )
-      alert('Password changed')
       setGeneralError(null)
       setIsChangingPass(false)
+      setSnackbar('Password updated successfully.', 'success')
     } catch (error: any) {
       if (error.response) {
         const response = await error.response.json()
@@ -231,7 +233,6 @@ const Account: React.FC = () => {
 
       setFieldValue('oldPassword', '')
       setGeneralError(t('errors.user-register.oldPassword.no-match'))
-      // console.error('Unexpected error:', error);
     }
   }
 

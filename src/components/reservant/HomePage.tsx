@@ -15,8 +15,6 @@ import { RestaurantDetailsType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
 import FocusedRestaurantDetails from './restaurant/onMapView/FocusedRestaurantDetails'
-import { useLocation } from 'react-router-dom'
-import { useSnackbar } from '../../contexts/SnackbarContext'
 
 export default function HomePage() {
   const [loadedRestaurantIds, setLoadedRestaurantIds] = useState<Set<number>>(
@@ -36,7 +34,6 @@ export default function HomePage() {
     []
   )
 
-  const { message, severity, open, closeSnackbar } = useSnackbar()
 
   const { restaurantId } = useParams<{ restaurantId?: string }>()
   const navigate = useNavigate()
@@ -418,21 +415,6 @@ export default function HomePage() {
         </OutsideClickHandler>
       </div>
 
-      <Snackbar
-        open={open}
-        autoHideDuration={5000}
-        onClose={closeSnackbar}
-      >
-        <Alert
-          onClose={closeSnackbar}
-          severity={severity}
-          variant="filled"
-          sx={{ width: '100%' }}
-        > 
-        {/* TODO tłumaczenie message */}
-          {message} 
-        </Alert>
-      </Snackbar>
 
       {/* Restaurant Details */}
       {selectedRestaurant && (

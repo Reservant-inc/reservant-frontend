@@ -46,7 +46,7 @@ const FocusedRestaurantReviewsList: React.FC<
   const [reviewText, setReviewText] = useState('')
 
   const [t] = useTranslation('global')
-  const { message, severity, open, closeSnackbar, setSnackbar } = useSnackbar()
+  const { setSnackbar } = useSnackbar()
 
   const fetchReviews = async () => {
     try {
@@ -244,15 +244,6 @@ const FocusedRestaurantReviewsList: React.FC<
           </DialogActions>
         </Dialog>
       </div>
-      <Snackbar
-              open={open}
-              autoHideDuration={5000} 
-              onClose={closeSnackbar}
-            >
-              <Alert onClose={closeSnackbar} severity={severity} variant="filled">
-                {message}
-              </Alert>
-      </Snackbar>
     </div>
   )
 }

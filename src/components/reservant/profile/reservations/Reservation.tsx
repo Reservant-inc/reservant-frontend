@@ -38,7 +38,7 @@ const Reservation: React.FC<ReservationProps> = ({
   const [alertMessage, setAlertMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false)
-  const { setSnackbar, open, closeSnackbar, severity, message } = useSnackbar()
+  const { setSnackbar } = useSnackbar()
 
   const [t] = useTranslation('global')
 
@@ -141,6 +141,7 @@ const Reservation: React.FC<ReservationProps> = ({
       setSnackbar('Reservation cancelled successfully', 'success'); // TODO tłumaczenie message
     } catch (error) {
       console.error('Failed to cancel reservation:', error);
+      setIsCancelDialogOpen(false)
       setSnackbar('There was a problem canceling your reservation.', 'error'); // TODO tłumaczenie message
     }
   };
@@ -392,15 +393,6 @@ const Reservation: React.FC<ReservationProps> = ({
           </div>
         </div>
         </Dialog>
-          <Snackbar
-            open={open}
-            autoHideDuration={5000} 
-            onClose={closeSnackbar}
-          >
-            <Alert onClose={closeSnackbar} severity={severity} variant="filled">
-              {message}
-            </Alert>
-          </Snackbar>
 
     </div>
   )
