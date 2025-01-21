@@ -29,6 +29,8 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
     }
   }
 
+  console.log(report)
+
   return (
     <div className="p-2 pl-0 w-full">
       <div className="flex w-full h-fit gap-2 bg-grey-0 dark:bg-grey-6 p-4 rounded-lg justify-between items-center">
