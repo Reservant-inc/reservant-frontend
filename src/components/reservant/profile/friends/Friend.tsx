@@ -21,17 +21,18 @@ import { FriendData } from '../../../../services/types'
 interface FriendProps {
   friend: FriendData
   listType: FriendListType
-  refreshFriends: () => void
+  refreshFriends: Function
+  onThreadCreation: Function
 }
 
 const Friend: React.FC<FriendProps> = ({
   friend,
   listType,
-  refreshFriends
+  refreshFriends,
+  onThreadCreation
 }) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
-
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
@@ -102,7 +103,8 @@ const Friend: React.FC<FriendProps> = ({
           '/threads/create-private-thread',
           JSON.stringify({ otherUserId: otherUser.userId })
         )
-        friend.privateMessageThreadId = response.threadId
+
+        onThreadCreation()
       } else {
         response = await fetchGET(`/threads/${friend.privateMessageThreadId}`)
       }
