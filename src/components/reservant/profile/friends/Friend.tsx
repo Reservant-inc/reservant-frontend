@@ -32,7 +32,6 @@ const Friend: React.FC<FriendProps> = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
 
-  console.log(friend)
 
   const { handleThreadOpen } = useContext(ThreadContext)
 
