@@ -130,18 +130,6 @@ const Tools: React.FC = () => {
     </button>
   )
 
-  const SettingsButton = () => (
-    <button
-      id="settingsDropdownItem"
-      className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
-      onClick={() => setActiveMenu('settings')}
-    >
-      <Settings />
-      <span className="ml-2">{t('tools.main.settings')}</span>
-      <ChevronRight className="ml-auto" />
-    </button>
-  )
-
   const LanguageButton = () => (
     <button
       id="languagesDropdownItem"
