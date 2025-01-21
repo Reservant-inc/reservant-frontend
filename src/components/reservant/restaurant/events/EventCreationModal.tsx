@@ -52,10 +52,10 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
   const [t] = useTranslation('global')
 
   const validationSchema = Yup.object({
-    name: Yup.string().required(t('errors.event-creation.name.required')),
+    name: Yup.string().required(t('errors.event-creation.name.required')).trim().min(1, t('errors.event-creation.name.required')),
     description: Yup.string().required(
       t('errors.event-creation.description.required')
-    ),
+    ).trim().min(1, t('errors.event-creation.description.required')),
     time: Yup.string()
       .required(t('errors.event-creation.time.required'))
       .test('is-future', t('errors.event-creation.time.isFuture'), value => {
@@ -75,7 +75,7 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
         t('errors.event-creation.mustJoinUntil.isBefore'),
         function (value) {
           const { time } = this.parent
-          return value && time ? new Date(value) <= new Date(time) : true
+          return value && time ? new Date(value) < new Date(time) : true
         }
       ),
     maxPeople: Yup.number()
