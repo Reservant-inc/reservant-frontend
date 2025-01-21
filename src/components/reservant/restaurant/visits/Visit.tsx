@@ -62,7 +62,6 @@ const Visit: React.FC<VisitProps> = () => {
     restaurant: restaurant
   }
 
-  
   useEffect(() => {
     if (friendsToAdd.length >= guests) {
       setGuests(prevState => prevState + 1)
@@ -237,7 +236,7 @@ const Visit: React.FC<VisitProps> = () => {
               })
               navigate('../checkout', { state: data })
             }}
-            disabled={selectedTimeslot === ''}
+            disabled={selectedTimeslot === '' || date === ''}
           >
             {t('reservation.skip-order')}
             <ArrowForward />
@@ -253,15 +252,13 @@ const Visit: React.FC<VisitProps> = () => {
               })
               navigate('../checkout', { state: data })
             }}
-            disabled={selectedTimeslot === ''}
+            disabled={selectedTimeslot === '' || date === ''}
           >
             {`${t('reservation.checkout')} ${totalPrice > 0 ? totalPrice + 'zł' : ''}`}
             <SellIcon />
           </button>
         </div>
       </div>
-
-
     </div>
   )
 }
