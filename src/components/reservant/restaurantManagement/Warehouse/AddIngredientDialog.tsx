@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import Dialog from '../../../reusableComponents/Dialog';
+import React, { useState } from 'react'
+import Dialog from '../../../reusableComponents/Dialog'
 
 interface AddIngredientDialogProps {
-  open: boolean;
-  onClose: () => void;
+  open: boolean
+  onClose: () => void
   formValues: {
-    name: string;
-    unitOfMeasurement: string;
-    minimalAmount: string;
-    amount: string;
-  };
-  onFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  onAddIngredient: () => Promise<void>;
-  t: (key: string) => string; 
+    name: string
+    unitOfMeasurement: string
+    minimalAmount: number
+    amount: number
+  }
+  onFormChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void
+  onAddIngredient: () => Promise<void>
+  t: (key: string) => string
 }
 
 const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
@@ -21,28 +23,44 @@ const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
   formValues,
   onFormChange,
   onAddIngredient,
-  t,
+  t
 }) => {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const handleAddIngredientClick = async () => {
-    await onAddIngredient();
-    setIsSuccess(true);
-  };
+    if (validate()) {
+      await onAddIngredient()
+      setIsSuccess(true)
+    }
+  }
+
+  const validate = () => {
+    if (
+      formValues.name === '' ||
+      isNaN(formValues.minimalAmount) ||
+      isNaN(formValues.amount) ||
+      formValues.minimalAmount < 0 ||
+      formValues.amount < 0
+    )
+      return false
+    return true
+  }
 
   const handleOkClick = () => {
-    setIsSuccess(false);
-    onClose();
-  };
+    setIsSuccess(false)
+    onClose()
+  }
 
-  if (!open) return null;
+  if (!open) return null
 
   return (
     <Dialog open={open} onClose={onClose} title={t('warehouse.add-ingredient')}>
       <div className="p-4 flex flex-col gap-3 text-black dark:text-white">
         {isSuccess ? (
           <>
-            <p>{t('warehouse.ingredient-added')} {formValues.name}</p>
+            <p>
+              {t('warehouse.ingredient-added')} {formValues.name}
+            </p>
             <button
               id="OkAddIngredientDialog"
               className="flex items-center self-end rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
@@ -53,7 +71,9 @@ const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
           </>
         ) : (
           <>
-            <label className="text-sm font-bold">{t('warehouse.new-name')}</label>
+            <label className="text-sm font-bold">
+              {t('warehouse.new-name')}
+            </label>
             <input
               type="text"
               name="name"
@@ -62,7 +82,9 @@ const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
               className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
               required
             />
-            <label className="text-sm font-bold">{t('warehouse.new-unit')}</label>
+            <label className="text-sm font-bold">
+              {t('warehouse.new-unit')}
+            </label>
             <select
               name="unitOfMeasurement"
               value={formValues.unitOfMeasurement}
@@ -73,7 +95,9 @@ const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
               <option value="Liter">Liter</option>
               <option value="Unit">Unit</option>
             </select>
-            <label className="text-sm font-bold">{t('warehouse.new-minimal')}</label>
+            <label className="text-sm font-bold">
+              {t('warehouse.new-minimal')}
+            </label>
             <input
               type="number"
               name="minimalAmount"
@@ -82,7 +106,9 @@ const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
               className="w-full rounded border border-grey-2 p-2 dark:bg-grey-5 dark:text-white"
               required
             />
-            <label className="text-sm font-bold">{t('warehouse.new-amount')}</label>
+            <label className="text-sm font-bold">
+              {t('warehouse.new-amount')}
+            </label>
             <input
               type="number"
               name="amount"
@@ -110,7 +136,7 @@ const AddIngredientDialog: React.FC<AddIngredientDialogProps> = ({
         )}
       </div>
     </Dialog>
-  );
-};
+  )
+}
 
-export default AddIngredientDialog;
+export default AddIngredientDialog
