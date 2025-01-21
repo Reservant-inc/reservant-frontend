@@ -3,6 +3,7 @@ import { CircularProgress } from '@mui/material'
 import FocusedRestaurantEventDetails from './FocusedRestaurantEventDetails'
 import SearchIcon from '@mui/icons-material/Search'
 import { fetchGET } from '../../../../services/APIconn'
+import { useTranslation } from 'react-i18next'
 
 interface Event {
   eventId: number
@@ -31,6 +32,7 @@ const FocusedRestaurantEventsList: React.FC<
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events)
   const [interestedEventsIds, setInterestedEventsIds] = useState<number[]>([])
 
+  const [t] = useTranslation('global')
   // Pobieramy listę zainteresowanych eventów po załadowaniu komponentu
   useEffect(() => {
     const fetchInterestedEvents = async () => {
@@ -66,8 +68,8 @@ const FocusedRestaurantEventsList: React.FC<
       <div className="flex w-full items-center rounded-full border-[1px] border-grey-1 bg-grey-0 px-1 font-mont-md dark:border-grey-6 dark:bg-grey-5">
         <input
           type="text"
-          placeholder="Search events"
-          className="w-full placeholder:text-grey-2"
+          placeholder={t('home-page.events-search')}
+          className="w-full placeholder:text-grey-2 dark:text-white"
           onChange={handleSearchChange}
         />
         <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
@@ -83,8 +85,8 @@ const FocusedRestaurantEventsList: React.FC<
           />
         ))
       ) : (
-        <div className="text-center">
-          <p>No events found for this restaurant.</p>
+        <div className="text-center dark:text-white">
+          <p>{t('home-page.no-events-found')}</p>
         </div>
       )}
     </div>

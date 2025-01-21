@@ -471,7 +471,9 @@
         "order": "Order",
         "is-delivering": "Delivery",
         "delivery-fee": "Delivery fee",
-        "events": "Events"
+        "events": "Events",
+        "no-events-found": "No events found for this restaurant.",
+        "events-search": "Search events"
     },
     "event-creation": {
             "even-title": "Event",

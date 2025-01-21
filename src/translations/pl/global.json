@@ -468,7 +468,9 @@
         "order": "Zamów",
         "is-delivering": "Dostawa",
         "delivery-fee": "Koszt dostawy",
-        "events": "Wydarzenia:"
+        "events": "Wydarzenia:",
+        "no-events-found": "Brak wydarzeń dla tej restauracji.",
+        "events-search": "Wyszukaj wydarzenie"
     },
     "event-creation": {
         "even-title": "Wydarzenie",
