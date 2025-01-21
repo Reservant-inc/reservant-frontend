@@ -31,8 +31,15 @@ const FocusedRestaurantEventsList: React.FC<
 > = ({ events }) => {
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events)
   const [interestedEventsIds, setInterestedEventsIds] = useState<number[]>([])
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
   const [t] = useTranslation('global')
+
+  useEffect(() => {
+    setFilteredEvents(events)
+    setSearchQuery('')
+  }, [events])
+  
   // Pobieramy listę zainteresowanych eventów po załadowaniu komponentu
   useEffect(() => {
     const fetchInterestedEvents = async () => {
@@ -50,6 +57,7 @@ const FocusedRestaurantEventsList: React.FC<
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase()
+    setSearchQuery(query)
     if (query.length >= 3) {
       setFilteredEvents(
         events.filter(event => event.name.toLowerCase().includes(query))
@@ -70,6 +78,7 @@ const FocusedRestaurantEventsList: React.FC<
           type="text"
           placeholder={t('home-page.events-search')}
           className="w-full placeholder:text-grey-2 dark:text-white"
+          value={searchQuery}
           onChange={handleSearchChange}
         />
         <SearchIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
