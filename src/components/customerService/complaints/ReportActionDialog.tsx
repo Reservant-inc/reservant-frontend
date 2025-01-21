@@ -2,14 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Dialog from '../../reusableComponents/Dialog'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import {
-  fetchPOST,
-  fetchPUT,
-  fetchGET,
-  getImage
-} from '../../../services/APIconn'
+import { fetchPOST, fetchPUT, fetchGET } from '../../../services/APIconn'
 import { useTranslation } from 'react-i18next'
-import DefaultImage from '../../../assets/images/user.jpg'
 import { UserType } from '../../../services/types'
 
 interface ReportActionDialogProps {
@@ -156,7 +150,7 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                       key={agent.userId}
                       value={agent.userId}
                       disabled={assigned}
-                      className={assigned ? "text-grey-4" : "text-black"}
+                      className={assigned ? 'text-grey-4' : 'text-black'}
                     >
                       {agent.firstName} {agent.lastName}{' '}
                       {assigned &&
@@ -169,7 +163,11 @@ const ReportActionDialog: React.FC<ReportActionDialogProps> = ({
                     key={currentUser.userId}
                     value={currentUser.userId}
                     disabled={isAgentAssigned(currentUser.userId)}
-                    className={isAgentAssigned(currentUser.userId) ? "text-grey-4" : "text-black"}
+                    className={
+                      isAgentAssigned(currentUser.userId)
+                        ? 'text-grey-4'
+                        : 'text-black'
+                    }
                   >
                     {currentUser.firstName} {currentUser.lastName}{' '}
                     {isAgentAssigned(currentUser.userId) &&

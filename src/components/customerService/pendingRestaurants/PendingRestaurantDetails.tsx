@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import { IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { fetchPOST, getImage } from '../../../services/APIconn';
-import DefaultImage from '../../../assets/images/defaulImage.jpeg';
+import React, { useState } from 'react'
+import { IconButton } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { fetchPOST, getImage } from '../../../services/APIconn'
+import DefaultImage from '../../../assets/images/no-image.jpeg'
 
 interface PendingRestaurantDetailsProps {
-  restaurant: any;
-  onClose: () => void;
-  fetchrestaurants: () => void;
+  restaurant: any
+  onClose: () => void
+  fetchrestaurants: () => void
 }
 
 const PendingRestaurantDetails: React.FC<PendingRestaurantDetailsProps> = ({
   restaurant,
   onClose,
-  fetchrestaurants,
+  fetchrestaurants
 }) => {
-  const [logoOpen, setLogoOpen] = useState<boolean>(false);
+  const [logoOpen, setLogoOpen] = useState<boolean>(false)
 
   const handleAccept = async () => {
-    await fetchPOST(`/restaurants/${restaurant.restaurantId}/verify`);
-    fetchrestaurants();
-    alert('Restaurant accepted');
-  };
+    await fetchPOST(`/restaurants/${restaurant.restaurantId}/verify`)
+    fetchrestaurants()
+    alert('Restaurant accepted')
+  }
 
   if (!restaurant) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <p>No details found for this restaurant.</p>
       </div>
-    );
+    )
   }
 
   return (
@@ -143,8 +143,7 @@ const PendingRestaurantDetails: React.FC<PendingRestaurantDetailsProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PendingRestaurantDetails;
-
+export default PendingRestaurantDetails

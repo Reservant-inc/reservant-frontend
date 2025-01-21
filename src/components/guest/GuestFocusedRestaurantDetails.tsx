@@ -14,7 +14,7 @@ import { fetchGET, getImage } from '../../services/APIconn'
 import { RestaurantDetailsType, ReviewType } from '../../services/types'
 import CustomRating from '../reusableComponents/CustomRating'
 import Carousel from '../reusableComponents/ImageCarousel/Carousel'
-import DefaultImage from '../../assets/images/defaulImage.jpeg'
+import DefaultImage from '../../assets/images/no-image.jpeg'
 import Dialog from '../reusableComponents/Dialog'
 import MenuList from '../reservant/restaurantManagement/menus/MenuList'
 import { MenuScreenType } from '../../services/enums'
@@ -68,61 +68,63 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     ? reviews.reduce((sum, review) => sum + review.stars, 0) / reviews.length
     : 0
 
+  const formatOpeningHours = (
+    openingHours: ({ from: string | null; until: string | null } | null)[]
+  ): string[] => {
+    if (!openingHours || openingHours.length !== 7) return ['']
 
-    const formatOpeningHours = (openingHours: ({ from: string | null; until: string | null } | null)[]): string[] => {
-      if (!openingHours || openingHours.length !== 7) return [''];
-    
-      const days = [
-        t('general.monday'),
-        t('general.tuesday'),
-        t('general.wednesday'),
-        t('general.thursday'),
-        t('general.friday'),
-        t('general.saturday'),
-        t('general.sunday'),
-      ];
-    
-      let formattedHours: string[] = [];
-      let currentRange: { start: string; end: string; hours: string } | null = null;
-    
-      for (let i = 0; i < openingHours.length; i++) {
-        const day = days[i];
-        const hours = openingHours[i];
-    
-        if (!hours || hours.from === null || hours.until === null) {
-          // Jeśli natrafimy na dzień z null/null, to zamykamy poprzedni zakres
-          if (currentRange) {
-            formattedHours.push(
-              `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
-            );
-            currentRange = null;
-          }
-          continue;
+    const days = [
+      t('general.monday'),
+      t('general.tuesday'),
+      t('general.wednesday'),
+      t('general.thursday'),
+      t('general.friday'),
+      t('general.saturday'),
+      t('general.sunday')
+    ]
+
+    let formattedHours: string[] = []
+    let currentRange: { start: string; end: string; hours: string } | null =
+      null
+
+    for (let i = 0; i < openingHours.length; i++) {
+      const day = days[i]
+      const hours = openingHours[i]
+
+      if (!hours || hours.from === null || hours.until === null) {
+        // Jeśli natrafimy na dzień z null/null, to zamykamy poprzedni zakres
+        if (currentRange) {
+          formattedHours.push(
+            `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
+          )
+          currentRange = null
         }
-    
-        const hoursString = `${t('general.from')} ${hours.from} ${t('general.until')} ${hours.until}`;
-    
-        if (currentRange && currentRange.hours === hoursString) {
-          currentRange.end = day;
-        } else {
-          if (currentRange) {
-            formattedHours.push(
-              `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
-            );
-          }
-          currentRange = { start: day, end: day, hours: hoursString };
+        continue
+      }
+
+      const hoursString = `${t('general.from')} ${hours.from} ${t('general.until')} ${hours.until}`
+
+      if (currentRange && currentRange.hours === hoursString) {
+        currentRange.end = day
+      } else {
+        if (currentRange) {
+          formattedHours.push(
+            `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
+          )
         }
+        currentRange = { start: day, end: day, hours: hoursString }
       }
-    
-      // Jeśli po pętli nadal mamy aktywny zakres, dodajemy go do listy
-      if (currentRange) {
-        formattedHours.push(
-          `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
-        );
-      }
-    
-      return formattedHours;
-    };  
+    }
+
+    // Jeśli po pętli nadal mamy aktywny zakres, dodajemy go do listy
+    if (currentRange) {
+      formattedHours.push(
+        `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
+      )
+    }
+
+    return formattedHours
+  }
 
   const renderRestaurantDetails = () => {
     return (
@@ -142,10 +144,14 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             {restaurant.address}, {restaurant.city}
           </h1>
           <div className="text-sm dark:text-white">
-            <h1 className="font-bold">{t('restaurant-management.details.opening-hours')}:</h1>
-            {formatOpeningHours(restaurant.openingHours).map((line: string, index: number) => (
-              <div key={index}>{line}</div>
-            ))}
+            <h1 className="font-bold">
+              {t('restaurant-management.details.opening-hours')}:
+            </h1>
+            {formatOpeningHours(restaurant.openingHours).map(
+              (line: string, index: number) => (
+                <div key={index}>{line}</div>
+              )
+            )}
           </div>
           <div className="flex items-center gap-3 text-sm">
             {restaurant.provideDelivery && (
@@ -201,7 +207,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             <div className="flex w-full justify-around gap-2 rounded-lg p-3">
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
-                  id='reservation-guest'
+                  id="reservation-guest"
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => navigate('login')}
                 >
@@ -215,7 +221,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               </div>
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
-                  id='events-guest'
+                  id="events-guest"
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => navigate('login')}
                 >
@@ -229,7 +235,7 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
               </div>
               <div className="flex h-full w-[70px] flex-col items-center gap-1">
                 <button
-                  id='menu-guest'
+                  id="menu-guest"
                   className="h-12 w-12 rounded-full border-[1px] border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
                   onClick={() => setShowMenu(true)}
                 >

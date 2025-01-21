@@ -73,8 +73,6 @@ const Threads: React.FC = () => {
       )
       const newThreads = result.items as ThreadType[]
 
-      console.log(newThreads)
-
       if (newThreads.length < 10) {
         setHasMore(false)
       } else {

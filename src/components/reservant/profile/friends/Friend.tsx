@@ -16,7 +16,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import ClearIcon from '@mui/icons-material/Clear'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
-import { FriendData, ThreadType } from '../../../../services/types'
+import { FriendData } from '../../../../services/types'
 
 interface FriendProps {
   friend: FriendData
