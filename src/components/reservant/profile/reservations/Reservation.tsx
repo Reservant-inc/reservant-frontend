@@ -6,7 +6,7 @@ import {
   UserType
 } from '../../../../services/types'
 import { fetchGET, getImage, fetchPOST } from '../../../../services/APIconn'
-import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
+import DefaultImage from '../../../../assets/images/no-image.png'
 import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
@@ -138,25 +138,21 @@ const Reservation: React.FC<ReservationProps> = ({
 
       setIsCancelDialogOpen(false)
       await refreshReservations()
-      setSnackbar(`${t('snackbar.reservation-cancel-success')}`, 'success');
+      setSnackbar(`${t('snackbar.reservation-cancel-success')}`, 'success')
     } catch (error) {
       if (error instanceof FetchError) {
         const errors = error.formatErrors()
-        if(errors.includes('AccessDenied')) {
+        if (errors.includes('AccessDenied')) {
           setIsCancelDialogOpen(false)
-          setSnackbar(`${t('snackbar.reservation-not-creator')}`, 'error') 
+          setSnackbar(`${t('snackbar.reservation-not-creator')}`, 'error')
         }
       } else {
-        console.error('Failed to cancel reservation:', error);
+        console.error('Failed to cancel reservation:', error)
         setIsCancelDialogOpen(false)
-        setSnackbar(`${t('snackbar.reservation-cancel-problem')}`, 'error'); 
+        setSnackbar(`${t('snackbar.reservation-cancel-problem')}`, 'error')
       }
-      
-      
     }
-  };
-  
-
+  }
 
   const allReservationEmployees = () => {
     let res: UserType[] = []
@@ -402,8 +398,7 @@ const Reservation: React.FC<ReservationProps> = ({
             </button>
           </div>
         </div>
-        </Dialog>
-
+      </Dialog>
     </div>
   )
 }

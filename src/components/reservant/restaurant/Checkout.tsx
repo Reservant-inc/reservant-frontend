@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchGET, fetchPOST, getImage } from '../../../services/APIconn'
-import DefaultImage from '../../../assets/images/defaulImage.jpeg'
+import DefaultImage from '../../../assets/images/no-image.png'
 import Cookies from 'js-cookie'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { FetchError } from '../../../services/Errors'
@@ -12,7 +12,6 @@ import { format, parse, setHours, setMinutes } from 'date-fns'
 import { useSnackbar } from '../../../contexts/SnackbarContext'
 
 import { useTranslation } from 'react-i18next'
-
 
 const Checkout: React.FC = () => {
   const parseDateTime = (date: string, timeSlot: string): Date => {
@@ -79,18 +78,25 @@ const Checkout: React.FC = () => {
 
   const onSubmit = async () => {
     try {
-      const selectedPaymentMethod = (document.querySelector(
-        'input[name="paymentMethod"]:checked'
-      ) as HTMLInputElement)?.value;
-      
+      const selectedPaymentMethod = (
+        document.querySelector(
+          'input[name="paymentMethod"]:checked'
+        ) as HTMLInputElement
+      )?.value
+
       // jeśli Card to dodaje i odejmuje środki, jeśli Wallet to tylko odejmuje
       // jezeli wybralismy Card i mamy cos w koszyku ale to jest darmowe to tez nie chcemy robic add-money
-      if (selectedPaymentMethod === 'Card' && items && items.length > 0 && totalCost > 0) {
+      if (
+        selectedPaymentMethod === 'Card' &&
+        items &&
+        items.length > 0 &&
+        totalCost > 0
+      ) {
         const addMoneyBody = JSON.stringify({
           title: `Funds deposit for order in: ${restaurant.name}`,
-          amount: totalCost,
-        });
-        await fetchPOST('/wallet/add-money', addMoneyBody);
+          amount: totalCost
+        })
+        await fetchPOST('/wallet/add-money', addMoneyBody)
       }
 
       const visitBody = JSON.stringify({
@@ -115,13 +121,13 @@ const Checkout: React.FC = () => {
         await fetchPOST('/orders', orderBody)
       }
 
-      setSnackbar(`${t('snackbar.visit-success')}`, 'success') 
+      setSnackbar(`${t('snackbar.visit-success')}`, 'success')
       navigate('/reservant/home')
     } catch (error) {
       if (error instanceof FetchError) {
         const errors = error.formatErrors()
         if (errors.includes('Duplicate')) {
-          setSnackbar(`${t('snackbar.visit-duplicate')}`, 'error') 
+          setSnackbar(`${t('snackbar.visit-duplicate')}`, 'error')
           navigate(-1)
         } else {
           console.error(errors)
@@ -154,7 +160,9 @@ const Checkout: React.FC = () => {
         {/* User and Payment Details */}
         <div className="flex h-full w-1/2 flex-col items-end justify-center gap-4">
           <div className="flex h-[150px] w-[350px] flex-col gap-2 rounded-lg bg-white shadow-md p-5 dark:bg-black">
-            <h1 className="self-center font-mont-bd text-xl">{t('checkout.userDetails')}</h1>
+            <h1 className="self-center font-mont-bd text-xl">
+              {t('checkout.userDetails')}
+            </h1>
             <div className="separator flex flex-col divide-y-[1px] divide-grey-2">
               <span className="flex justify-between py-1">
                 <label>{t('checkout.firstName')}:</label>
@@ -270,7 +278,9 @@ const Checkout: React.FC = () => {
                     <div className="flex flex-col">
                       <h1 className="text-lg font-bold">{item.name}</h1>
                       <h2>{item.price} zł</h2>
-                      <h3>{t('checkout.quantity')}: {item.amount}</h3>
+                      <h3>
+                        {t('checkout.quantity')}: {item.amount}
+                      </h3>
                     </div>
                   </div>
                 ))}

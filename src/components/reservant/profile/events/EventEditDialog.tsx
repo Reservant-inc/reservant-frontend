@@ -34,7 +34,6 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
     event.photo || DefaultImage
   )
   const [isHovered, setIsHovered] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const { t } = useTranslation('global')
 
@@ -81,7 +80,6 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
       return res.fileName
     } catch (error) {
       console.error('Error uploading photo:', error)
-      setErrorMessage('Failed to upload photo. Please try again.')
       return null
     }
   }
@@ -106,7 +104,6 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
       resetForm()
       onSuccess()
     } catch (error: any) {
-      setErrorMessage(error.message || 'An unknown error occurred.')
     } finally {
       setSubmitting(false)
     }
@@ -265,11 +262,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                   >
                     <img
                       className="w-64 h-64 absolute rounded-lg"
-                      src={
-                        photoPath === DefaultImage
-                          ? DefaultImage
-                          : getImage(photoPath, photoPath)
-                      }
+                      src={getImage(photoPath, DefaultImage)}
                       alt="Event preview"
                     />
                     {isHovered && (
