@@ -12,6 +12,7 @@ import { TextField, styled } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Photo } from '@mui/icons-material'
 
 interface EventCreationModalProps {
   handleClose: () => void
@@ -296,27 +297,29 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
                               <CloudUploadIcon />
                               {t('event-creation.upload-photo')}
                             </label>
-                            <button
-                              type="button"
-                              disabled={photoPath === DefaultImage}
-                              onClick={() => {
-                                setPhotoPath(DefaultImage)
-                                setFieldValue('photoFileName', null)
-                                setPhotoError(
-                                  t(
-                                    'errors.event-creation.photoFileName.required'
+                            {values.photoFileName && (
+                              <button
+                                type="button"
+                                disabled={photoPath === DefaultImage}
+                                onClick={() => {
+                                  setPhotoPath(DefaultImage)
+                                  setFieldValue('photoFileName', null)
+                                  setPhotoError(
+                                    t(
+                                      'errors.event-creation.photoFileName.required'
+                                    )
                                   )
-                                )
-                              }}
-                              className={`shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-error text-error dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error  ${
-                                photoPath !== DefaultImage
-                                  ? 'hover:cursor-pointer dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error'
-                                  : 'opacity-20'
-                              }`}
-                            >
-                              <DeleteIcon />
-                              {t('event-creation.delete-photo')}
-                            </button>
+                                }}
+                                className={`shadow hover:cursor-pointer self-center h-10 w-48 flex justify-center items-center gap-1 rounded-lg p-1 dark:bg-grey-5 bg-grey-0 dark:text-error text-error dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error  ${
+                                  photoPath !== DefaultImage
+                                    ? 'hover:cursor-pointer dark:hover:bg-error dark:hover:text-white hover:text-white hover:bg-error'
+                                    : 'opacity-20'
+                                }`}
+                              >
+                                <DeleteIcon />
+                                {t('event-creation.delete-photo')}
+                              </button>
+                            )}
                           </div>
                         )}
                         <VisuallyHiddenInput
