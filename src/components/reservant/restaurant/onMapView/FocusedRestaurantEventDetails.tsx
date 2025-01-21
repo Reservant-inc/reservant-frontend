@@ -142,6 +142,12 @@ const FocusedRestaurantEventDetails: React.FC<
             </p>
             <p>
               <strong className="text-primary dark:text-secondary">
+                {t('profile.events.participantss')}:{' '}
+              </strong>{' '}
+              {participants.length}
+            </p>
+            <p>
+              <strong className="text-primary dark:text-secondary">
                 {t('profile.events.max-participants')}:
               </strong>{' '}
               {event.maxPeople}
