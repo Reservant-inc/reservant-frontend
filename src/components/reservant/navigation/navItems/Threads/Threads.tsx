@@ -61,9 +61,6 @@ const Threads: React.FC = () => {
     if (isPressed) {
       setIsCreatingThread(false)
       clearStates()
-    } else {
-      setHasMore(true)
-      setPage(0)
     }
 
     setIsPressed(!isPressed)
@@ -71,12 +68,12 @@ const Threads: React.FC = () => {
 
   const getThreads = async () => {
     try {
-      if (page === 0) setIsLoadingThreads(true)
-
       const result: PaginationType = await fetchGET(
         `${apiBase}${apiRoute[option]}${pageQuery}`
       )
       const newThreads = result.items as ThreadType[]
+
+      console.log(newThreads)
 
       if (newThreads.length < 10) {
         setHasMore(false)
@@ -92,8 +89,6 @@ const Threads: React.FC = () => {
       } else {
         console.error('Unexpected error:', error)
       }
-    } finally {
-      setIsLoadingThreads(false)
     }
   }
 
@@ -184,27 +179,6 @@ const Threads: React.FC = () => {
   }
 
   const renderThreadsContent = () => {
-    if (isLoadingThreads) {
-      return (
-        <div className="flex flex-col items-center gap-2">
-          <h1 className="text-lg italic text-grey-6 dark:text-grey-2">
-            {t('threads.loading')}
-          </h1>
-          <CircularProgress className="h-8 w-8 text-grey-2" />
-        </div>
-      )
-    }
-
-    if (!threads.length) {
-      return (
-        <div className="flex flex-col items-center justify-center gap-3">
-          <h1 className="text-center text-lg italic text-grey-6 dark:text-grey-2">
-            {t('threads.no-threads')}
-          </h1>
-        </div>
-      )
-    }
-
     return (
       <List className="h-full w-full p-0">
         <div
