@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import OutsideClickHandler from '../../../reusableComponents/OutsideClickHandler'
 import User from '../../../../assets/images/user.jpg'
 import CloseIcon from '@mui/icons-material/Close'
@@ -24,12 +24,13 @@ import { Form, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { ThemeContext } from '../../../../contexts/ThemeContext'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
-import { fetchPOST } from '../../../../services/APIconn'
+import { fetchGET, fetchPOST, getImage } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import RestaurantRegister from '../../restaurantManagement/register/restaurantRegister/RestaurantRegister'
 import RegisterSuccess from '../../restaurantManagement/register/restaurantRegister/RegisterSuccess'
 import { Alert, createTheme, IconButton, Switch } from '@mui/material'
 import Dialog from '../../../reusableComponents/Dialog'
+import { UserType } from '../../../../services/types'
 
 const Tools: React.FC = () => {
   const [t] = useTranslation('global')
@@ -39,14 +40,26 @@ const Tools: React.FC = () => {
   const [registerSucces, setRegisterSucces] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
   const navigate = useNavigate()
-  const mainHeight = 392
-  const [menuHeight, setMenuHeight] = useState(mainHeight)
   const { toggleTheme } = useContext(ThemeContext)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
   const [alertMessage, setAlertMessage] = useState<string>('')
-  const user = JSON.parse(Cookies.get('userInfo') as string)
 
+  const [userInfo, setUserInfo] = useState<UserType>({} as UserType)
+
+  useEffect(() => {
+    fetchUserData()
+  }, [])
+
+  const fetchUserData = async () => {
+    try {
+      const user = await fetchGET('/user')
+      setUserInfo(user)
+    } catch (error) {
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error(error)
+    }
+  }
   const isOwner = () => {
     if (Cookies.get('userInfo'))
       return Boolean(
@@ -56,6 +69,9 @@ const Tools: React.FC = () => {
       )
     return false
   }
+
+  const mainHeight = !isOwner() ? 392 : 328
+  const [menuHeight, setMenuHeight] = useState(mainHeight)
 
   const theme = createTheme({
     components: {
@@ -100,25 +116,17 @@ const Tools: React.FC = () => {
       id="profileDropdownItem"
       className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       onClick={() => {
-        navigate(`profile/${user.userId}/account`)
+        navigate(`profile/${userInfo.userId}/account`)
       }}
     >
-      <AccountCircle />
+      <img
+        alt="userImage"
+        src={getImage(userInfo.photo, User)}
+        className="h-6 w-6 rounded-full border-[1px] border-grey-1 dark:border-grey-5"
+      />
       <span className="ml-2">
-        {user.firstName} {user.lastName}
+        {userInfo.firstName} {userInfo.lastName}
       </span>
-    </button>
-  )
-
-  const SettingsButton = () => (
-    <button
-      id="settingsDropdownItem"
-      className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
-      onClick={() => setActiveMenu('settings')}
-    >
-      <Settings />
-      <span className="ml-2">{t('tools.main.settings')}</span>
-      <ChevronRight className="ml-auto" />
     </button>
   )
 
@@ -228,7 +236,11 @@ const Tools: React.FC = () => {
           className="flex h-10 w-10 items-center justify-center"
           onClick={pressHandler}
         >
-          <img src={User} alt="logo" className="rounded-full" />
+          <img
+            alt="userImage"
+            src={getImage(userInfo.photo, User)}
+            className="h-10 w-10 rounded-full border-[1px] border-grey-1 dark:border-grey-5"
+          />
         </button>
         {isPressed && (
           <div
@@ -245,9 +257,9 @@ const Tools: React.FC = () => {
               <div className="w-full p-2 flex flex-col gap-2">
                 <ThemeProvider theme={theme}>
                   <ProfileButton />
-                  <SettingsButton />
                   <LanguageButton />
                   <ThemeToggleButton />
+                  {!isOwner() && <BecomeRestauranter />}
                   <ReportBugButton />
                   <LogoutButton />
                 </ThemeProvider>
@@ -269,7 +281,6 @@ const Tools: React.FC = () => {
                 >
                   <ChevronLeft />
                 </button>
-                {!isOwner() && <BecomeRestauranter />}
               </div>
             </CSSTransition>
 
