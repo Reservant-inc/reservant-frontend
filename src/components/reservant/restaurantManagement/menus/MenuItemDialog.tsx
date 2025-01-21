@@ -58,7 +58,6 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
   >([])
   const [isHovered, setIsHovered] = useState<boolean>(false)
 
-  
   useEffect(() => {
     getIngredients()
   }, [])
@@ -85,8 +84,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       }
       setIngredients(tmp)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
 
@@ -97,8 +96,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       setPhotoPath(res.photo)
       setPhotoFileName(res.photo.substr(9))
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
 
@@ -108,8 +107,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       setPhotoPath(res.path)
       setPhotoFileName(res.fileName)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
 
@@ -133,8 +132,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       })
       menuItemRes = await fetchPOST('/menu-items', body)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     } finally {
       setSubmitting(false)
     }
@@ -147,8 +146,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         await fetchPOST(`/menus/${menu?.menuId}/items`, body)
         onClose()
       } catch (error) {
-        if (error instanceof FetchError) console.log(error.formatErrors())
-        else console.log('Unexpected error')
+        if (error instanceof FetchError) console.error(error.formatErrors())
+        else console.error('Unexpected error')
       } finally {
         setSubmitting(false)
       }
@@ -175,8 +174,8 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
       await fetchPUT(`/menu-items/${menuItemToEdit?.menuItemId}`, body)
       onClose()
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     } finally {
       setSubmitting(false)
     }
@@ -256,7 +255,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <div
                     className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name && formik.touched.name ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="name">{t('restaurant-management.menu.name')}:</label>
+                    <label htmlFor="name">
+                      {t('restaurant-management.menu.name')}:
+                    </label>
                     <Field
                       type="text"
                       id="name"
@@ -274,7 +275,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <div
                     className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName && formik.touched.alternateName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="alternateName">{t('restaurant-management.menu.alternateName')}:</label>
+                    <label htmlFor="alternateName">
+                      {t('restaurant-management.menu.alternateName')}:
+                    </label>
                     <Field
                       type="text"
                       id="alternateName"
@@ -291,7 +294,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <div
                     className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.price && formik.touched.price ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="price">{t('restaurant-management.menu.price')}:</label>
+                    <label htmlFor="price">
+                      {t('restaurant-management.menu.price')}:
+                    </label>
                     <Field
                       type="text"
                       id="price"
@@ -308,7 +313,12 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                   <div
                     className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alcoholPercentage && formik.touched.alcoholPercentage ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                   >
-                    <label htmlFor="alcoholPercentage">{t('restaurant-management.menu.menuItemAlcoholPercentage')}:</label>
+                    <label htmlFor="alcoholPercentage">
+                      {t(
+                        'restaurant-management.menu.menuItemAlcoholPercentage'
+                      )}
+                      :
+                    </label>
                     <Field
                       type="text"
                       id="alcoholPercentage"
@@ -357,7 +367,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
               <Form className="flex flex-col pr-3">
                 <div className="flex flex-col gap-7">
                   <div className="flex  items-center justify-start gap-1 border-b-[1px] text-nowrap border-black text-black dark:text-grey-1 dark:border-white">
-                    <label className="">{t('restaurant-management.menu.ingredient')}:</label>
+                    <label className="">
+                      {t('restaurant-management.menu.ingredient')}:
+                    </label>
                     <Field
                       as={'select'}
                       id="ingredientId"
@@ -398,7 +410,9 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       <div
                         className={`w-2/3 flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.amountUsed && formik.touched.amountUsed ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                       >
-                        <label htmlFor="alternateName">{t('restaurant-management.menu.amount')}:</label>
+                        <label htmlFor="alternateName">
+                          {t('restaurant-management.menu.amount')}:
+                        </label>
                         <Field
                           type="text"
                           id="amountUsed"
@@ -415,7 +429,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
                       >
                         <Add />
                         <h1 className="text-nowrap font-mont-md text-md">
-                        {t('restaurant-management.menu.addUsage')}
+                          {t('restaurant-management.menu.addUsage')}
                         </h1>
                       </button>
                     </div>
@@ -430,42 +444,40 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
         </Formik>
 
         <div className="dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full   rounded-lg pr-3">
-          {
-            selectedIngredients.length > 0 ? (
-              <ul className="flex flex-col  max-h-full w-full gap-2">
-                {selectedIngredients.map(ingredient => (
-                  <li
-                    key={ingredient.ingredientId + ingredient.amountUsed}
-                    className="h-fit w-full gap-1 dark:text-grey-0  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
-                  >
-                    <p className="overflow-hidden text-ellipsis">
-                      {getIngredientDetails(ingredient)?.publicName}:{' '}
-                      {ingredient.amountUsed}{' '}
-                      {getIngredientDetails(ingredient)?.unitOfMeasurement}
-                    </p>
-                    <button
-                      className=" dark:bg-black  flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm"
-                      onClick={() => {
-                        setSelectedIngredients(
-                          selectedIngredients.filter(
-                            ingredientToRemove =>
-                              ingredientToRemove.ingredientId !==
-                              ingredient.ingredientId
-                          )
+          {selectedIngredients.length > 0 ? (
+            <ul className="flex flex-col  max-h-full w-full gap-2">
+              {selectedIngredients.map(ingredient => (
+                <li
+                  key={ingredient.ingredientId + ingredient.amountUsed}
+                  className="h-fit w-full gap-1 dark:text-grey-0  bg-white dark:bg-black items-center p-2 justify-between flex border-[1px] border-grey-1 dark:border-grey-5 rounded-lg"
+                >
+                  <p className="overflow-hidden text-ellipsis">
+                    {getIngredientDetails(ingredient)?.publicName}:{' '}
+                    {ingredient.amountUsed}{' '}
+                    {getIngredientDetails(ingredient)?.unitOfMeasurement}
+                  </p>
+                  <button
+                    className=" dark:bg-black  flex items-center justify-center  p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm"
+                    onClick={() => {
+                      setSelectedIngredients(
+                        selectedIngredients.filter(
+                          ingredientToRemove =>
+                            ingredientToRemove.ingredientId !==
+                            ingredient.ingredientId
                         )
-                      }}
-                    >
-                      <Remove className="h-4 w-4" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h1 className="p-2 dark:text-grey-0">
-                {t('restaurant-management.menu.noIngradietns')}.
-              </h1>
-            ) 
-          }
+                      )
+                    }}
+                  >
+                    <Remove className="h-4 w-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <h1 className="p-2 dark:text-grey-0">
+              {t('restaurant-management.menu.noIngradietns')}.
+            </h1>
+          )}
         </div>
       </div>
     </div>

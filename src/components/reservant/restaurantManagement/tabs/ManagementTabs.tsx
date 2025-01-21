@@ -45,7 +45,7 @@ const ManagementTabs: React.FC = ({}) => {
   }
   const [isPressed, setIsPressed] = useState(false)
   const pressHandler = () => {
-    setIsPressed(!isPressed)
+    setIsPressed(prev => !prev)
   }
 
   return (

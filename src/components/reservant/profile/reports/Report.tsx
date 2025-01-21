@@ -23,8 +23,8 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
       const response: ThreadType = await fetchGET(`/threads/${report.threadId}`)
       handleThreadOpen(response)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
 

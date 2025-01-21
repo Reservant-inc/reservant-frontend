@@ -40,7 +40,9 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t('errors.event-creation.name.required')),
-    description: Yup.string().required(t('errors.event-creation.description.required')),
+    description: Yup.string().required(
+      t('errors.event-creation.description.required')
+    ),
     time: Yup.string()
       .required(t('errors.event-creation.time.required'))
       .test('is-future', t('errors.event-creation.time.isFuture'), value => {
@@ -48,9 +50,13 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
       }),
     mustJoinUntil: Yup.string()
       .required(t('errors.event-creation.mustJoinUntil.required'))
-      .test('is-future', t('errors.event-creation.mustJoinUntil.isFuture'), value => {
-        return new Date(value) > new Date() // Sprawdza, czy data jest późniejsza niż dzisiaj
-      })
+      .test(
+        'is-future',
+        t('errors.event-creation.mustJoinUntil.isFuture'),
+        value => {
+          return new Date(value) > new Date() // Sprawdza, czy data jest późniejsza niż dzisiaj
+        }
+      )
       .test(
         'is-after-time',
         t('errors.event-creation.mustJoinUntil.isBefore'),
@@ -63,8 +69,9 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
       .min(1, t('errors.event-creation.maxPeople.min'))
       .max(20, t('errors.event-creation.maxPeople.max'))
       .required(t('errors.event-creation.maxPeople.required')),
-    photo: Yup.string()
-    .required((t('errors.event-creation.photoFileName.required')))
+    photo: Yup.string().required(
+      t('errors.event-creation.photoFileName.required')
+    )
   })
 
   const uploadPhoto = async (photoFile: File) => {
@@ -132,7 +139,7 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
         >
           {formik => (
             <Form>
-              <div className='py-4'>
+              <div className="py-4">
                 <div className="mb-4">
                   <Field
                     type="text"
@@ -202,7 +209,10 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                     id="mustJoinUntil"
                     fullWidth
                     className={`w-full dark:[color-scheme:dark] [&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${
-                      !(formik.errors.mustJoinUntil && formik.touched.mustJoinUntil)
+                      !(
+                        formik.errors.mustJoinUntil &&
+                        formik.touched.mustJoinUntil
+                      )
                         ? '[&>*]:text-black [&>*]:before:border-black [&>*]:after:border-secondary dark:[&>*]:before:border-white'
                         : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                     }`}
@@ -211,7 +221,8 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                       Boolean(formik.errors.mustJoinUntil)
                     }
                     helperText={
-                      formik.touched.mustJoinUntil && formik.errors.mustJoinUntil
+                      formik.touched.mustJoinUntil &&
+                      formik.errors.mustJoinUntil
                     }
                   />
                 </div>
@@ -230,7 +241,8 @@ const EventEditDialog: React.FC<EventEditDialogProps> = ({
                         : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'
                     }`}
                     error={
-                      formik.touched.maxPeople && Boolean(formik.errors.maxPeople)
+                      formik.touched.maxPeople &&
+                      Boolean(formik.errors.maxPeople)
                     }
                     helperText={
                       formik.touched.maxPeople && formik.errors.maxPeople

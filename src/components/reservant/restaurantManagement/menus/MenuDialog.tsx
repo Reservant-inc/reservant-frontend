@@ -47,8 +47,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       )
       setMenuItems(res)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
 
@@ -57,8 +57,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       const res = await fetchGET(`/menus/menu-types`)
       setMenuTypes(res)
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
   const handleSaveNewMenu = async (
@@ -92,9 +92,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       responseMenu = await fetchPOST('/menus', body)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
     try {
@@ -105,8 +105,8 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       setSubmitting(false)
       onClose()
     } catch (error) {
-      if (error instanceof FetchError) console.log(error.formatErrors())
-      else console.log('Unexpected error')
+      if (error instanceof FetchError) console.error(error.formatErrors())
+      else console.error('Unexpected error')
     }
   }
   const handleEditMenu = async (
@@ -130,9 +130,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       onClose()
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
   }
@@ -166,7 +166,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.name && formik.touched.name ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="name">{t('restaurant-management.menu.name')}:</label>
+                  <label htmlFor="name">
+                    {t('restaurant-management.menu.name')}:
+                  </label>
                   <Field
                     type="text"
                     id="name"
@@ -183,7 +185,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.alternateName && formik.touched.alternateName ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="alternateName">{t('restaurant-management.menu.alternateName')}:</label>
+                  <label htmlFor="alternateName">
+                    {t('restaurant-management.menu.alternateName')}:
+                  </label>
                   <Field
                     type="text"
                     id="alternateName"
@@ -200,7 +204,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.menuType && formik.touched.menuType ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="menuType">{t('restaurant-management.menu.menuType')}:</label>
+                  <label htmlFor="menuType">
+                    {t('restaurant-management.menu.menuType')}:
+                  </label>
                   <Field
                     id="menuType"
                     name="menuType"
@@ -232,7 +238,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateFrom && formik.touched.dateFrom ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="dateFrom">{t('restaurant-management.menu.activeSince')}:</label>
+                  <label htmlFor="dateFrom">
+                    {t('restaurant-management.menu.activeSince')}:
+                  </label>
                   <Field
                     type="date"
                     id="dateFrom"
@@ -249,7 +257,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                 <div
                   className={`flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.dateUntil && formik.touched.dateUntil ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="dateUntil">{t('restaurant-management.menu.activeUntil')}:</label>
+                  <label htmlFor="dateUntil">
+                    {t('restaurant-management.menu.activeUntil')}:
+                  </label>
                   <Field
                     type="date"
                     id="dateUntil"
@@ -278,7 +288,9 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
       <div className="flex flex-col w-2/3 gap-7">
         <form className="flex text-nowrap items-center gap-7 pr-3">
           <div className="flex items-center justify-start gap-1 w-2/3 border-b-[1px] dark:text-grey-1">
-            <label className="">{t('restaurant-management.menu.menuItem')}:</label>
+            <label className="">
+              {t('restaurant-management.menu.menuItem')}:
+            </label>
             <select
               name="id"
               id="MenuDialogMenuItemSelector"
@@ -329,47 +341,47 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
           >
             <Add />
 
-            <h1 className="font-mont-md text-md">{t('restaurant-management.menu.addToMenu')}</h1>
+            <h1 className="font-mont-md text-md">
+              {t('restaurant-management.menu.addToMenu')}
+            </h1>
           </button>
         </form>
 
         <div className="  dark:bg-black bg-white overflow-y-auto scroll scroll-smooth w-full  h-full rounded-lg pr-3">
-          {
-            selectedMenuItems.length > 0 ? (
-              <ul className="flex flex-col h-full w-full gap-2">
-                {selectedMenuItems.map((menuItem: MenuItemType) => (
-                  <li
-                    className="relative bg-white dark:bg-black rounded-lg  "
-                    key={menuItem.menuItemId + menuItem.name}
-                  >
-                    <MenuItem
-                      key={menuItem.menuItemId}
-                      type={MenuScreenType.Preview}
-                      menuItem={menuItem}
-                      menu={menu}
-                      activeRestaurantId={activeRestaurantId}
-                    />
-                    <button
-                      className="absolute dark:bg-black top-2 right-2 flex items-center justify-center bg-white p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm"
-                      onClick={() => {
-                        setSelectedMenuItems(
-                          selectedMenuItems.filter(
-                            e => e.menuItemId !== menuItem.menuItemId
-                          )
+          {selectedMenuItems.length > 0 ? (
+            <ul className="flex flex-col h-full w-full gap-2">
+              {selectedMenuItems.map((menuItem: MenuItemType) => (
+                <li
+                  className="relative bg-white dark:bg-black rounded-lg  "
+                  key={menuItem.menuItemId + menuItem.name}
+                >
+                  <MenuItem
+                    key={menuItem.menuItemId}
+                    type={MenuScreenType.Preview}
+                    menuItem={menuItem}
+                    menu={menu}
+                    activeRestaurantId={activeRestaurantId}
+                  />
+                  <button
+                    className="absolute dark:bg-black top-2 right-2 flex items-center justify-center bg-white p-1 px-2 h-6 w-6 rounded-full border-[1px] border-primary text-primary hover:bg-primary dark:border-secondary dark:hover:bg-secondary dark:text-secondary dark:hover:text-black hover:text-white text-sm"
+                    onClick={() => {
+                      setSelectedMenuItems(
+                        selectedMenuItems.filter(
+                          e => e.menuItemId !== menuItem.menuItemId
                         )
-                      }}
-                    >
-                      <Remove className="h-4 w-4" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <h1 className="p-2 dark:text-grey-1">
-                {t('restaurant-management.menu.noMenuItems')}.
-              </h1>
-            )
-          }
+                      )
+                    }}
+                  >
+                    <Remove className="h-4 w-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <h1 className="p-2 dark:text-grey-1">
+              {t('restaurant-management.menu.noMenuItems')}.
+            </h1>
+          )}
         </div>
       </div>
     </div>

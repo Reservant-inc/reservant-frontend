@@ -153,9 +153,9 @@ export default function EmployeeRestaurantManagement() {
       setEmpToDel('')
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
     populateRows()
@@ -222,7 +222,7 @@ export default function EmployeeRestaurantManagement() {
       ) as HTMLSelectElement
       selector.selectedIndex = 0
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
