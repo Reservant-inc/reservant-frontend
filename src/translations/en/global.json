@@ -3,6 +3,7 @@
         "search": "Search...",
         "cancel": "Cancel",
         "save": "Save",
+        "saveChanges": "Save changes",
         "results": "Results",
         "no-results": "No results",
         "close": "Close",
@@ -34,7 +35,8 @@
         "until": "until",
         "uploadMore": "Upload more photos",
         "noPhotos": "No photos uploaded yet",
-        "remove": "Remove"
+        "remove": "Remove",
+        "uploadPhoto": "Upload photo"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -381,7 +383,8 @@
             "restaurantName": "Restaurant Name",
             "confirmation": "Are you sure you want to delete this restaurant?",
             "table": "Table",
-            "capacity": "Capacity"
+            "capacity": "Capacity",
+            "postalCode": "Postal code"
         }
     },
     "employee-management": {
@@ -489,7 +492,8 @@
             "event-creation": "You have created a new event",
             "go-to-my-events": "Go to My Events",
             "close": "Close",
-            "event-loading": "Loading event details..."
+            "event-loading": "Loading event details...",
+            "edit-event": "Edit Event"
         },
     "reviews": {
         "filter": "Filter",
