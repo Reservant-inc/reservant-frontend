@@ -7,6 +7,7 @@ import { ReportsListType } from '../../../../services/enums'
 import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
+import Cookies from 'js-cookie'
 
 interface ReportProps {
   report: ReportType & { userRole?: string }
@@ -80,9 +81,18 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
             {report.description}
           </p>
         </div>
-        <button onClick={openChat}>
-          <Message />
-        </button>
+
+        {(listType === ReportsListType.CustomerService &&
+          report.assignedAgents?.some(
+            assignedAgent =>
+              assignedAgent.agent?.userId ===
+              JSON.parse(Cookies.get('userInfo') as string).userId
+          )) ||
+          (listType === ReportsListType.Created && (
+            <button onClick={openChat}>
+              <Message />
+            </button>
+          ))}
       </div>
     </div>
   )
