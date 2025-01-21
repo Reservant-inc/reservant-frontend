@@ -238,9 +238,9 @@
                 "number": "Nalezy wprowadzić liczbę"
             },
             "maxReservationDurationMinutes": {
-                "required": "Maxymalny czas rezerwacji jest wymagany",
-                "max": "Maxymalny czas rezerwacji nie moze przekroczyć 1440 minut",
-                "min": "Maxymalny czas rezerwacji nie moze być nizszy niz 30 minut",
+                "required": "Maksymalny czas rezerwacji jest wymagany",
+                "max": "Maksymalny czas rezerwacji nie moze przekroczyć 1440 minut",
+                "min": "Maksymalny czas rezerwacji nie moze być nizszy niz 30 minut",
                 "number": "Nalezy wprowadzić liczbę"
             }
         },
@@ -375,7 +375,7 @@
             "saturday": "Sobota",
             "sunday": "Niedziela",
             "opening": "Godziny otwarcia",
-            "deposit": "Depozyt rezerwcaji",
+            "deposit": "Depozyt restauracji",
             "city": "Miasto",
             "restaurantName": "Nazwa restauracji",
             "confirmation": "Jesteś pewnien(a), ze chcesz usunąć tą restaurację?",
