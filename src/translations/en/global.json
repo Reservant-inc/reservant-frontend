@@ -938,5 +938,14 @@
         "report-assigned": "You have been assigned to a new report.",
         "new-reservation": "New reservation in",
         "new-notification": "New notification."
+    },
+    "ParticipantMenageDialog":{
+        "manageParticipants":"Manage Participants",
+        "participants": "Participants",
+        "interested": "Interested",
+        "pastAcceptTime": "Time for accepting new participants is over",
+        "participantLimit": "Participant limit Reached",
+        "acceptParticipant": "Accept user participation",
+        "decline": "Decline"
     }
 }
