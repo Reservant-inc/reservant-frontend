@@ -121,10 +121,10 @@ const FocusedRestaurantReviewsList: React.FC<
       refreshReviews()
       setCurrentPage(1)
       setHasReviewed(true)
-      setSnackbar('Review added successfully', 'success') // TODO tłumaczenie message
+      setSnackbar(`${t('snackbar.review-success')}`, 'success') 
     } catch (error) {
       console.error('Error submitting review:', error)
-      setSnackbar('Error submitting review', 'error') // TODO tłumaczenie message
+      setSnackbar(`${t('snackbar.review-error')}`, 'error') 
     }
   }
 

@@ -138,18 +138,18 @@ const Reservation: React.FC<ReservationProps> = ({
 
       setIsCancelDialogOpen(false)
       await refreshReservations()
-      setSnackbar('Reservation cancelled successfully', 'success'); // TODO tłumaczenie message
+      setSnackbar(`${t('snackbar.reservation-cancel-success')}`, 'success');
     } catch (error) {
       if (error instanceof FetchError) {
         const errors = error.formatErrors()
         if(errors.includes('AccessDenied')) {
           setIsCancelDialogOpen(false)
-          setSnackbar('You are not the creator of this reservation.', 'error') // TODO tłuamczenie
+          setSnackbar(`${t('snackbar.reservation-not-creator')}`, 'error') 
         }
       } else {
         console.error('Failed to cancel reservation:', error);
         setIsCancelDialogOpen(false)
-        setSnackbar('There was a problem canceling your reservation.', 'error'); // TODO tłumaczenie message
+        setSnackbar(`${t('snackbar.reservation-cancel-problem')}`, 'error'); 
       }
       
       

@@ -872,5 +872,15 @@
         "city": "City",
         "description": "Description",
         "actions": "Actions"
+    },
+    "snackbar": {
+        "reservation-cancel-success": "Reservation cancelled successfully.",
+        "reservation-not-creator": "You are not the creator of this reservation.",
+        "reservation-cancel-problem": "There was a problem canceling your reservation.",
+        "visit-success": "Reservation created successfully.",
+        "visit-duplicate": "You already have a reservation at this time.",
+        "review-success": "Review added successfully.",
+        "review-error": "Error submitting review.",
+        "password-updated": "Password updated successfully."
     }
 }

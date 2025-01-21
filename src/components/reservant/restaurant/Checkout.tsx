@@ -115,17 +115,13 @@ const Checkout: React.FC = () => {
         await fetchPOST('/orders', orderBody)
       }
 
-      // jeśli sukces navigate do homepage i tam snackbar success
-      // navigate('/reservant/home', {
-      //   state: { snackbarMessage: 'Visit created successfully.', snackbarSeverity: 'success' },
-      // });
-      setSnackbar('Visit created successfully.', 'success') // TODO tłumaczenie message
+      setSnackbar(`${t('snackbar.visit-success')}`, 'success') 
       navigate('/reservant/home')
     } catch (error) {
       if (error instanceof FetchError) {
         const errors = error.formatErrors()
         if (errors.includes('Duplicate')) {
-          setSnackbar('Masz już inną rezerwację w tym czasie', 'error') // TODO tłumaczenie message
+          setSnackbar(`${t('snackbar.visit-duplicate')}`, 'error') 
           navigate(-1)
         } else {
           console.error(errors)

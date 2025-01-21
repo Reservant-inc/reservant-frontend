@@ -217,7 +217,7 @@ const Account: React.FC = () => {
       )
       setGeneralError(null)
       setIsChangingPass(false)
-      setSnackbar('Password updated successfully.', 'success')
+      setSnackbar(`${t('snackbar.password-updated')}`, 'success')
     } catch (error: any) {
       if (error.response) {
         const response = await error.response.json()
