@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
-import { fetchPOST, getImage } from '../../../../../services/APIconn';
-import { Rating } from '@mui/material';
-import { formatDistanceToNow, format } from 'date-fns';
-import { pl } from 'date-fns/locale';
-import { useNavigate } from 'react-router-dom';
-import DefaultPhoto from '../../../../../assets/images/user.jpg';
+import React, { useState } from 'react'
+import { fetchGET, fetchPOST, getImage } from '../../../../../services/APIconn'
+import { Rating } from '@mui/material'
+import { formatDistanceToNow, format } from 'date-fns'
+import { pl } from 'date-fns/locale'
+import { useNavigate } from 'react-router-dom'
+import DefaultPhoto from '../../../../../assets/images/user.jpg'
+import Cookies from 'js-cookie'
+import { LoginResponseType } from '../../../../../services/types'
+import { FetchError } from '../../../../../services/Errors'
+import { useTranslation } from 'react-i18next'
 
 interface NotificationProps {
-  notificationId: number;
-  dateCreated: string;
-  dateRead: string | null;
-  notificationType: string;
-  details: any;
-  markAsRead: () => void;
-  photo: any;
-  user: any | null;
-  closeNotifications: any;
+  notificationId: number
+  dateCreated: string
+  dateRead: string | null
+  notificationType: string
+  details: any
+  markAsRead: () => void
+  photo: any
+  user: any | null
+  closeNotifications: any
 }
 
 const Notification: React.FC<NotificationProps> = ({
@@ -29,28 +33,29 @@ const Notification: React.FC<NotificationProps> = ({
   user,
   closeNotifications
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
-  const [isRead, setIsRead] = useState(dateRead !== null);
-  const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [actionMessage, setActionMessage] = useState<string | null>(null)
+  const [isRead, setIsRead] = useState(dateRead !== null)
+  const navigate = useNavigate()
 
   const toggleExpand = async () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded(!isExpanded)
 
     if (!isRead) {
       try {
         await fetchPOST(
           '/notifications/mark-read',
           JSON.stringify({ notificationIds: [notificationId] })
-        );
-        setIsRead(true);
-        markAsRead();
+        )
+        setIsRead(true)
+        markAsRead()
       } catch (error: any) {
-        console.error('Error marking notification as read:', error);
+        console.error('Error marking notification as read:', error)
       }
     }
-  };
+  }
+  const [t] = useTranslation('global')
 
   const handleNavigation = async () => {
     if (!isRead) {
@@ -58,16 +63,19 @@ const Notification: React.FC<NotificationProps> = ({
         await fetchPOST(
           '/notifications/mark-read',
           JSON.stringify({ notificationIds: [notificationId] })
-        );
-        setIsRead(true);
-        markAsRead();
+        )
+        setIsRead(true)
+        markAsRead()
       } catch (error) {
-        console.error('Error marking notification as read:', error);
+        console.error('Error marking notification as read:', error)
       }
     }
-  
-    if (notificationType === 'NotificationFriendRequestAccepted' && user.userId) {
-      navigate(`/reservant/profile/${user.userId}/friends/list`);
+
+    if (
+      notificationType === 'NotificationFriendRequestAccepted' &&
+      user.userId
+    ) {
+      navigate(`/reservant/profile/${user.userId}/friends/list`)
     } else if (
       notificationType === 'NotificationNewRestaurantReview' &&
       user &&
@@ -75,110 +83,145 @@ const Notification: React.FC<NotificationProps> = ({
     ) {
       navigate(
         `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/reviews-management`
-      );
+      )
     } else if (
-      (notificationType === 'NotificationNewParticipationRequest' && user.userId)
-      
+      notificationType === 'NotificationNewParticipationRequest' &&
+      user.userId
     ) {
-      navigate(`/reservant/profile/${user.userId}/event-history/created`);
-    } 
-    else if (notificationType === 'NotificationParticipationRequestResponse' && user.userId) {
-      navigate(`/reservant/profile/${user.userId}/event-history/participates`);
-    }
-    else if (notificationType === 'NotificationNewFriendRequest' && user.userId) {
-      navigate(`/reservant/profile/${user.userId}/friends/incoming`);
-    } else if (notificationType === 'NotificationRestaurantVerified' && user.userId) {
-      navigate(
-        `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/restaurant-dashboard`
-      );
-    } else if (notificationType === 'NotificationVisitApprovedDeclined' && user.userId) {
-      navigate(
-        `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/restaurant-dashboard`
-      );
-    } else if (notificationType === 'NotificationReportAssigned' && details.reportId) {
-      navigate(`/customer-service/reports/${details.reportId}`);
-    }
-  
-    closeNotifications();
-  };
-  
-  
+      navigate(`/reservant/profile/${user.userId}/event-history/created`)
+    } else if (
+      notificationType === 'NotificationParticipationRequestResponse' &&
+      user.userId
+    ) {
+      navigate(`/reservant/profile/${user.userId}/event-history/participates`)
+    } else if (
+      notificationType === 'NotificationNewFriendRequest' &&
+      user.userId
+    ) {
+      navigate(`/reservant/profile/${user.userId}/friends/incoming`)
+    } else if (
+      notificationType === 'NotificationRestaurantVerified' &&
+      user.userId
+    ) {
+      const response: LoginResponseType = await fetchPOST('/auth/refresh-token')
+      Cookies.set('token', response.token, { expires: 1 })
 
+      try {
+        const userInfo = await fetchGET('/user')
+
+        Cookies.set(
+          'userInfo',
+          JSON.stringify({
+            userId: userInfo.userId,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            roles: userInfo.roles,
+            photo: userInfo.photo
+          }),
+          { expires: 1 }
+        )
+      } catch (error) {
+        if (error instanceof FetchError) {
+          console.log(error.formatErrors())
+        } else {
+          console.log('unexpected error')
+        }
+      }
+
+      navigate(
+        `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/restaurant-dashboard`
+      )
+    } else if (
+      notificationType === 'NotificationVisitApprovedDeclined' &&
+      user.userId
+    ) {
+      navigate(
+        `/reservant/${user.firstName}-${user.lastName}/management/restaurant/${details.restaurantId}/restaurant-dashboard`
+      )
+    } else if (
+      notificationType === 'NotificationReportAssigned' &&
+      details.reportId
+    ) {
+      navigate(`/customer-service/reports/${details.reportId}`)
+    }
+
+    closeNotifications()
+  }
 
   const handleAcceptParticipation = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       await fetchPOST(
         `/events/${details.eventId}/accept-user/${details.senderId}`,
         {}
-      );
-      setActionMessage('Zaakceptowano');
+      )
+      setActionMessage('Zaakceptowano')
     } catch (error) {
-      console.error('Error accepting participation request:', error);
+      console.error('Error accepting participation request:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleRejectParticipation = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       await fetchPOST(
         `/events/${details.eventId}/reject-user/${details.senderId}`,
         {}
-      );
-      setActionMessage('Odrzucono');
+      )
+      setActionMessage('Odrzucono')
     } catch (error) {
-      console.error('Error rejecting participation request:', error);
+      console.error('Error rejecting participation request:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
 
     if (diffInDays < 1) {
-      return format(date, 'HH:mm', { locale: pl });
+      return format(date, 'HH:mm', { locale: pl })
     } else if (diffInDays < 7) {
-      return formatDistanceToNow(date, { addSuffix: true, locale: pl });
+      return formatDistanceToNow(date, { addSuffix: true, locale: pl })
     } else {
-      return format(date, 'dd.MM.yyyy', { locale: pl });
+      return format(date, 'dd.MM.yyyy', { locale: pl })
     }
-  };
+  }
 
   const renderNotificationText = () => {
     switch (notificationType) {
       case 'NotificationNewFriendRequest':
-        return 'Wysłano zaproszenie.';
+        return 'Wysłano zaproszenie.'
       case 'NotificationFriendRequestAccepted':
-        return `${details.acceptingUserFullName} zaakceptował(a) Twoje zaproszenie do znajomych.`;
+        return `${details.acceptingUserFullName} zaakceptował(a) Twoje zaproszenie do znajomych.`
       case 'NotificationNewRestaurantReview':
-        return `${details.restaurantName}: Nowa opinia`;
+        return `${details.restaurantName}: Nowa opinia`
       case 'NotificationRestaurantVerified':
-        return `Restauracja ${details.restaurantName} została zweryfikowana`;
+        return `Restauracja ${details.restaurantName} została zweryfikowana`
       case 'NotificationVisitApprovedDeclined':
-        return `${details.restaurantName}: Wizyta ${details.isAccepted ? 'zaakceptowana' : 'odrzucona'}`;
+        return `${details.restaurantName}: Wizyta ${details.isAccepted ? 'zaakceptowana' : 'odrzucona'}`
       case 'NotificationNewParticipationRequest':
-        return `${details.eventName}: Nowa osoba zgłasza chęć uczestnictwa.`;
+        return `${details.eventName}: Nowa osoba zgłasza chęć uczestnictwa.`
       case 'NotificationParticipationRequestResponse':
-        return `${details.name}: ${details.creatorName} ${details.isAccepted ? 'zaakceptował(a)' : 'odrzucił(a)'} Twoje uczestnictwo.`;
+        return `${details.name}: ${details.creatorName} ${details.isAccepted ? 'zaakceptował(a)' : 'odrzucił(a)'} Twoje uczestnictwo.`
       case 'NotificationNewMessage':
-        return `Nowa wiadomość od ${details.authorName} w wątku ${details.threadTitle}.`;
+        return `Nowa wiadomość od ${details.authorName} w wątku ${details.threadTitle}.`
       case 'NotificationReportEscalated':
-        return `Nowa skarga eskalowana.`;
+        return `Nowa skarga eskalowana.`
       case 'NotificationReportAssigned':
-        return 'Zostałeś przypisany do nowej skargi.';
+        return 'Zostałeś przypisany do nowej skargi.'
       case 'NotificationNewReservation':
         return `Nowa rezerwacja w ${details.restaurantName}.
 ${format(new Date(details.date), 'HH:mm', { locale: pl })} - ${format(new Date(details.endTime), 'HH:mm', { locale: pl })}
-Liczba osób: ${details.numberOfPeople}`;
+Liczba osób: ${details.numberOfPeople}`
       default:
-        return 'Nowe powiadomienie.';
+        return 'Nowe powiadomienie.'
     }
-  };
+  }
 
   const noExpandNotificationTypes = [
     'NotificationRestaurantVerified',
@@ -188,7 +231,7 @@ Liczba osób: ${details.numberOfPeople}`;
     'NotificationReportEscalated',
     'NotificationNewReservation',
     'NotificationReportAssigned'
-  ];
+  ]
 
   return (
     <div
@@ -198,9 +241,9 @@ Liczba osób: ${details.numberOfPeople}`;
           : 'hover:bg-grey-1 dark:hover:bg-grey-5'
       }`}
       onClick={() => {
-        handleNavigation();
+        handleNavigation()
         if (!noExpandNotificationTypes.includes(notificationType)) {
-          toggleExpand();
+          toggleExpand()
         }
       }}
     >
@@ -230,7 +273,7 @@ Liczba osób: ${details.numberOfPeople}`;
             maxHeight: isExpanded ? '300px' : '0',
             overflow: 'hidden',
             transition: 'max-height 0.4s ease, opacity 0.4s ease',
-            opacity: isExpanded ? 1 : 0,
+            opacity: isExpanded ? 1 : 0
           }}
         >
           {isExpanded &&
@@ -242,9 +285,9 @@ Liczba osób: ${details.numberOfPeople}`;
                 ) : (
                   <div className="mt-2 flex justify-between">
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAcceptParticipation();
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleAcceptParticipation()
                       }}
                       disabled={loading}
                       className="bg-primary hover:bg-primary-2 text-white p-1 rounded"
@@ -252,9 +295,9 @@ Liczba osób: ${details.numberOfPeople}`;
                       Zaakceptuj
                     </button>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRejectParticipation();
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleRejectParticipation()
                       }}
                       disabled={loading}
                       className="bg-primary-2 hover:bg-primary-3 text-white p-1 rounded"
@@ -283,7 +326,7 @@ Liczba osób: ${details.numberOfPeople}`;
                 <p>
                   Data wizyty:{' '}
                   {format(new Date(details.date), 'dd.MM.yyyy HH:mm', {
-                    locale: pl,
+                    locale: pl
                   })}
                 </p>
               </div>
@@ -292,11 +335,10 @@ Liczba osób: ${details.numberOfPeople}`;
       )}
 
       <div className="flex justify-end items-center mt-1">
-
         {isRead && <span className="text-xs ml-auto">Wyświetlono</span>}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Notification;
+export default Notification

@@ -24,7 +24,6 @@ const FriendSelector: React.FC<FriendSelectorProps> = ({
   const [friendSearchQuery, setFriendSearchQuery] = useState<string>('')
   const [friends, setFriends] = useState<UserType[]>([])
   const [t] = useTranslation('global')
-  const inputClass = 'clean-input py-1 px-0 text-md italic dark:text-white'
 
   const fetchFriends = async (name: string) => {
     try {
@@ -42,9 +41,9 @@ const FriendSelector: React.FC<FriendSelectorProps> = ({
       setFriends(filteredResult)
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error:', error)
+        console.error('Unexpected error:', error)
       }
     } finally {
       setIsLoadingFriends(false)

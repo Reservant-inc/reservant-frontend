@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import OutsideClickHandler from '../../../reusableComponents/OutsideClickHandler'
 import User from '../../../../assets/images/user.jpg'
-import { Alert, IconButton, Switch, createTheme } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 import {
@@ -9,10 +8,12 @@ import {
   BugReport,
   ChevronLeft,
   ChevronRight,
+  Close,
   DarkMode,
   Language,
   LightMode,
   Logout,
+  Restaurant,
   Settings
 } from '@mui/icons-material'
 import { CSSTransition } from 'react-transition-group'
@@ -22,15 +23,20 @@ import { useTranslation } from 'react-i18next'
 import { Form, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { ThemeContext } from '../../../../contexts/ThemeContext'
-import Dialog from '../../../reusableComponents/Dialog'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
 import { fetchPOST } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
+import RestaurantRegister from '../../restaurantManagement/register/restaurantRegister/RestaurantRegister'
+import RegisterSuccess from '../../restaurantManagement/register/restaurantRegister/RegisterSuccess'
+import { Alert, createTheme, IconButton, Switch } from '@mui/material'
+import Dialog from '../../../reusableComponents/Dialog'
 
 const Tools: React.FC = () => {
   const [t] = useTranslation('global')
   const [isPressed, setIsPressed] = useState(false)
   const [isComplaining, setIsComplaining] = useState(false)
+  const [isBecomingRestauranter, setIsBecomingRestauranter] = useState(false)
+  const [registerSucces, setRegisterSucces] = useState(false)
   const [activeMenu, setActiveMenu] = useState('main')
   const navigate = useNavigate()
   const mainHeight = 392
@@ -146,6 +152,22 @@ const Tools: React.FC = () => {
       </button>
     )
   }
+  const BecomeRestauranter = () => {
+    return (
+      <button
+        id="RestauranterDropdownItem"
+        className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
+        onClick={() => {
+          setIsBecomingRestauranter(true)
+          setActiveMenu('main')
+          setMenuHeight(mainHeight)
+        }}
+      >
+        <Restaurant />
+        <span className="ml-2">{t('tools.main.become')}</span>
+      </button>
+    )
+  }
 
   const LogoutButton = () => (
     <Form method="post" action="/logout">
@@ -235,10 +257,8 @@ const Tools: React.FC = () => {
                 >
                   <ChevronLeft />
                 </button>
-                <button className="menu-item w-full flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5">
-                  <Settings />
-                  <span className="ml-2">{t('tools.settings.setting')} </span>
-                </button>
+
+                <BecomeRestauranter />
               </div>
             </CSSTransition>
 
@@ -334,6 +354,24 @@ const Tools: React.FC = () => {
             {alertMessage}
           </Alert>
         </div>
+      )}
+      {isBecomingRestauranter && (
+        <Dialog
+          open={isBecomingRestauranter}
+          onClose={() => setIsBecomingRestauranter(false)}
+          title={t('restaurant-register.restaurant-register')}
+        >
+          {!registerSucces ? (
+            <RestaurantRegister
+              onRegisterSucces={() => setRegisterSucces(true)}
+            />
+          ) : (
+            <RegisterSuccess
+              onDialogClose={() => setIsBecomingRestauranter(false)}
+              onRegisterSucces={() => setRegisterSucces(false)}
+            />
+          )}
+        </Dialog>
       )}
     </>
   )

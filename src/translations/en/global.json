@@ -3,6 +3,7 @@
         "search": "Search...",
         "cancel": "Cancel",
         "save": "Save",
+        "saveChanges": "Save changes",
         "results": "Results",
         "no-results": "No results",
         "close": "Close",
@@ -35,7 +36,8 @@
         "uploadMore": "Upload more photos",
         "noPhotos": "No photos uploaded yet",
         "remove": "Remove",
-        "restaurant": "Restaurant"
+        "restaurant": "Restaurant",
+        "uploadPhoto": "Upload photo"
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -382,7 +384,8 @@
             "restaurantName": "Restaurant Name",
             "confirmation": "Are you sure you want to delete this restaurant?",
             "table": "Table",
-            "capacity": "Capacity"
+            "capacity": "Capacity",
+            "postalCode": "Postal code"
         }
     },
     "employee-management": {
@@ -426,7 +429,9 @@
             "language":"Language",
             "mode":"Dark mode",
             "signout":"Sign out",
-            "report":"Report a bug"
+            "report":"Report a bug",
+            "become": "Become an owner",
+            "create" : "Add your first restaurant"
         },
         "settings":{
             "setting":"SettingFiller"
@@ -490,7 +495,8 @@
             "event-creation": "You have created a new event",
             "go-to-my-events": "Go to My Events",
             "close": "Close",
-            "event-loading": "Loading event details..."
+            "event-loading": "Loading event details...",
+            "edit-event": "Edit Event"
         },
     "reviews": {
         "filter": "Filter",
@@ -728,7 +734,14 @@
             "pending-restaurants": "Pending restaurants",
             "reported-user-id": "Reported User ID",
             "report-id": "Report ID",
-            "visit-id": "Visit ID"
+            "visit-id": "Visit ID",
+            "status":{
+                "status": "Status",
+                "resolved": "Resolved",
+                "rejected": "Rejected",
+                "pending": "Pending"
+
+            }
         },
         "report-details": {
             "report-details": "Report details",
@@ -873,5 +886,27 @@
         "city": "City",
         "description": "Description",
         "actions": "Actions"
+    },
+    "notifications": {
+        "3-newest": "Three newest",
+        "all": "All",
+        "loading": "Loading notifications...",
+        "notifications": "Notifications",
+        "no-new-notifications": "No new notifications.",
+        "read": "Read",
+        "new-friend-request": "Friend request sent.",
+        "friend-request-accepted": "accepted your friend request.",
+        "new-restaurant-review": "New review in",
+        "restaurant-verified": "has been verified.",
+        "visit-approved": "Visit approved.",
+        "visit-declined": "Visit declined.",
+        "new-participation-request": "A new person wants to join the event:",
+        "participation-accepted": "has accepted your participation.",
+        "participation-declined": "has declined your participation.",
+        "new-message": "New message in the thread:",
+        "report-escalated": "A new report has been escalated.",
+        "report-assigned": "You have been assigned to a new report.",
+        "new-reservation": "New reservation in",
+        "new-notification": "New notification."
     }
 }
