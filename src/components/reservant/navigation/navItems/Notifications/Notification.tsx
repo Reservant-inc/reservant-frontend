@@ -222,12 +222,15 @@ const Notification: React.FC<NotificationProps> = ({
     <div
       className={`rounded-md p-3 dark:bg-black cursor-pointer mb-1 dark:text-white ${
         isRead
-          ? 'bg-grey-1 dark:bg-grey-5'
+          ? 'bg-grey-1 dark:bg-grey-5 cursor-auto'
           : 'hover:bg-grey-1 dark:hover:bg-grey-5'
       }`}
       onClick={() => {
-        handleNavigation()
+        if (!isRead) {
+          handleNavigation();
+        }
       }}
+      aria-disabled={isRead}
     >
       <div className="flex items-center space-x-2">
         {(notificationType === 'NotificationNewRestaurantReview' ||
