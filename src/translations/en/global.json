@@ -141,7 +141,23 @@
         "complete": "Registration complete",
         "reservationDeposit": "Deposit",
         "addRestaurant": "Add a restaurant",
-        "restaurant-register": "Register new restaurant"
+        "restaurant-register": "Register new restaurant",
+        "name-field-label": "Restaurant Name *",
+        "address-field-label": "Address *",
+        "postalCode-field-label": "Postal Code *",
+        "city-field-label": "City *",
+        "business-type-label": "Business Type *",
+        "tags-label": "Tags *",
+        "provideDelivery-label":"Provide Delivery",
+        "openingHours-label":"Opening Hours *",
+        "description-label":"Description *",
+        "reservationDeposit-label":"Reservation Deposit *",
+        "maximum-reservation-duration":"Maximum reservation duration (minutes) *",
+        "photos-label": "Photos *",
+        "photos2": "Photos",
+        "idCard": "ID Card *",
+        "businessPermission": "Business Permission *",
+        "rentalContract": "Rental Contract"
     },
     "errors": {
         "add-employee": {
