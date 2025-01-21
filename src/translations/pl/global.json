@@ -155,7 +155,8 @@
             "login": {
                 "required": "Login jest wymagany",
                 "matches": "Login może składać się tylko z liter",
-                "taken": "Użytkownik z takim loginem już istnieje"
+                "taken": "Użytkownik z takim loginem już istnieje",
+                "invalid": "Login może składać się tylko z liter A-Z i cyfr"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",

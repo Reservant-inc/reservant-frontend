@@ -162,7 +162,8 @@
             "login": {
                 "required": "Login is required",
                 "matches": "Login can only contain letters",
-                "taken": "User with this login already exists"
+                "taken": "User with this login already exists",
+                "invalid": "Login can only contain letters A-Z and numbers"
             },
             "email": {
                 "matches": "Invalid e-mail",

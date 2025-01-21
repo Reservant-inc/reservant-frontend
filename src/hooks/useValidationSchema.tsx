@@ -30,6 +30,10 @@ export const useValidationSchemas = () => {
 
     login: yup
       .string()
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        t('errors.user-register.login.invalid') //
+      )
       .required(t('errors.user-register.login.required'))
       .test('unique login', t('errors.user-register.login.taken'), login => {
         return new Promise((resolve, reject) => {

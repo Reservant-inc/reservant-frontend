@@ -304,7 +304,7 @@ const UserRegister: React.FC = () => {
                             formik.touched.birthDate &&
                             formik.errors.birthDate
                           }
-                          className={`w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
+                          className={`dark:[color-scheme:dark] [color-scheme:dark] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:label-[20px] ${
                             !(
                               formik.errors.birthDate &&
                               formik.touched.birthDate
