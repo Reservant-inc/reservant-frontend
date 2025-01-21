@@ -212,28 +212,29 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           </button>
         )}
         <div className="flex space-x-4">
-          {listType === EventListType.Created && (
-            <>
-              <button
-                className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                onClick={() => openDialog('manageParticipants')}
-              >
-                {t('profile.events.manage')}
-              </button>
-              <button
-                className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                onClick={() => openDialog('edit')}
-              >
-                {t('profile.events.edit')}
-              </button>
-              <button
-                className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                onClick={() => openDialog('delete')}
-              >
-                {t('profile.events.delete')}
-              </button>
-            </>
-          )}
+          {listType === EventListType.Created &&
+            new Date(event.time) >= new Date() && (
+              <>
+                <button
+                  className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                  onClick={() => openDialog('manageParticipants')}
+                >
+                  {t('profile.events.manage')}
+                </button>
+                <button
+                  className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                  onClick={() => openDialog('edit')}
+                >
+                  {t('profile.events.edit')}
+                </button>
+                <button
+                  className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+                  onClick={() => openDialog('delete')}
+                >
+                  {t('profile.events.delete')}
+                </button>
+              </>
+            )}
         </div>
       </div>
 
