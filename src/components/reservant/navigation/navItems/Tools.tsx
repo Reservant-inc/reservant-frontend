@@ -45,6 +45,7 @@ const Tools: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
   const [alertMessage, setAlertMessage] = useState<string>('')
+  const user = JSON.parse(Cookies.get('userInfo') as string)
 
   const isOwner = () => {
     if (Cookies.get('userInfo'))
@@ -99,12 +100,13 @@ const Tools: React.FC = () => {
       id="profileDropdownItem"
       className="flex h-14 items-center rounded-lg p-2 text-black hover:bg-grey-1 dark:text-grey-1 dark:hover:bg-grey-5"
       onClick={() => {
-        const user = JSON.parse(Cookies.get('userInfo') as string)
         navigate(`profile/${user.userId}/account`)
       }}
     >
       <AccountCircle />
-      <span className="ml-2">{t('tools.main.profile')}</span>
+      <span className="ml-2">
+        {user.firstName} {user.lastName}
+      </span>
     </button>
   )
 
