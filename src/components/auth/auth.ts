@@ -99,10 +99,11 @@ export function redirectIfLoggedIn() {
 export function checkIfOwner() {
   const isOwner = Boolean(
     JSON.parse(Cookies.get('userInfo') as string).roles.includes(
-      'Restaurant Owner'
+      'RestaurantOwner'
     )
   )
-  if (isOwner) {
+
+  if (!isOwner) {
     return redirect('/reservant/home')
   }
   return null
