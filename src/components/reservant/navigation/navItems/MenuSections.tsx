@@ -4,10 +4,12 @@ import Cookies from 'js-cookie'
 import StorefrontSharpIcon from '@mui/icons-material/StorefrontSharp'
 import HomeIcon from '@mui/icons-material/Home'
 import CelebrationSharpIcon from '@mui/icons-material/CelebrationSharp'
+import useWindowDimensions from '../../../../hooks/useWindowResize'
 
 interface SectionProps {}
 
 const Sections: React.FC<SectionProps> = () => {
+  const size = useWindowDimensions()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -32,10 +34,11 @@ const Sections: React.FC<SectionProps> = () => {
         <button
           id="NavbarHomeSectionButton"
           className={
-            'relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl text-grey-2' +
+            'relative mt-1 flex h-12 flex-col items-center justify-between rounded-xl text-grey-2' +
             (isClickedHome
               ? ' hover:bg-transpartent text-primary dark:text-secondary dark:hover:bg-none'
-              : ' hover:bg-grey-1 dark:hover:bg-grey-5')
+              : ' hover:bg-grey-1 dark:hover:bg-grey-5') +
+            (size.width > 600 ? ' w-28' : ' w-14')
           }
           onClick={() => navigate('home')}
         >
@@ -49,10 +52,11 @@ const Sections: React.FC<SectionProps> = () => {
         <button
           id="NavbarEventsButton"
           className={
-            'relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl text-grey-2' +
+            'relative mt-1 flex h-12  flex-col items-center justify-between rounded-xl text-grey-2' +
             (isClickedEvents
               ? ' hover:bg-transpartent text-primary dark:text-secondary dark:hover:bg-none'
-              : ' hover:bg-grey-1 dark:hover:bg-grey-5')
+              : ' hover:bg-grey-1 dark:hover:bg-grey-5') +
+            (size.width > 600 ? ' w-28' : ' w-14')
           }
           onClick={() => navigate('events')}
         >
@@ -67,10 +71,11 @@ const Sections: React.FC<SectionProps> = () => {
           <button
             id="NavbarRestaurantsSectionButton"
             className={
-              'relative mt-1 flex h-12 w-28 flex-col items-center justify-between rounded-xl text-grey-2' +
+              'relative mt-1 flex h-12 flex-col items-center justify-between rounded-xl text-grey-2' +
               (isClickedRestaurants
                 ? ' hover:bg-transpartent text-primary dark:text-secondary dark:hover:bg-none'
-                : ' hover:bg-grey-1 dark:hover:bg-grey-5')
+                : ' hover:bg-grey-1 dark:hover:bg-grey-5') +
+              (size.width > 600 ? ' w-28' : ' w-14')
             }
             onClick={() =>
               navigate(

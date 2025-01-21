@@ -38,7 +38,7 @@ const NavBar: React.FC = () => {
         <Sections />
 
         <div className="flex h-full flex-1 items-center justify-end gap-3">
-          <SearchBar isCustomerService={false} />
+          {size.width > 1000 && <SearchBar isCustomerService={false} />}
           <Threads />
           <Notifications />
           <Tools />

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { StatisticsScope } from '../../../../services/enums'
 import { StatisticsProps } from './Dashboard'
 import { useTranslation } from 'react-i18next'
-import { StatisticsType } from '../../../../services/types'
+import { MenuItemType, StatisticsType } from '../../../../services/types'
 import { FetchError } from '../../../../services/Errors'
 import { fetchGET } from '../../../../services/APIconn'
 import { format, subMonths, subWeeks } from 'date-fns'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { useParams } from 'react-router-dom'
+import { PieChart } from '@mui/x-charts'
 
 enum Option {
   All = 'All',
@@ -282,18 +283,21 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                 }}
                 className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
               >
-                <option value={Option.All} className="dark:text-white bg-black">
+                <option
+                  value={Option.All}
+                  className="dark:text-white dark:bg-black"
+                >
                   {t('restaurant-management.statistics.all-restaurants')}
                 </option>
                 <option
                   value={Option.Group}
-                  className="dark:text-white bg-black"
+                  className="dark:text-white dark:bg-black"
                 >
                   {t('restaurant-management.statistics.restaurant-group')}
                 </option>
                 <option
                   value={Option.Single}
-                  className="dark:text-white bg-black"
+                  className="dark:text-white dark:bg-black"
                 >
                   {t('restaurant-management.statistics.restaurant')}
                 </option>
@@ -408,7 +412,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
           </div>
         )}
       </div>
-      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 dark:bg-grey-5 rounded-lg">
+      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 dark:bg-grey-5 rounded-lg overflow-auto scroll">
         <div className="h-full w-1/4 min-w-[300px]">
           <h1 className="dark:text-white">
             {t('restaurant-management.statistics.customer-count')}:

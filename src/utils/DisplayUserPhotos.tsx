@@ -22,10 +22,7 @@ const renderUserPhotos = (thread: ThreadType) => {
   ) : (
     <div className="flex h-10 w-10 items-center justify-center">
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-black">
-        <img
-          src={getImage(thread.participants[0].photo, DefaultPhoto)}
-          className="h-9 w-9 rounded-full"
-        />
+        <img src={DefaultPhoto} className="h-9 w-9 rounded-full" />
       </div>
     </div>
   )
