@@ -27,7 +27,6 @@ const Thread: React.FC<ThreadProps> = ({
   handleThreadClose,
   handleThreadMinimize
 }) => {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
   const [messageToSend, setMessageToSend] = useState<string>('')
   const [messages, setMessages] = useState<MessageType[]>([])
   const [page, setPage] = useState<number>(0)
@@ -196,69 +195,61 @@ const Thread: React.FC<ThreadProps> = ({
         </div>
       </div>
       <div className="h-[calc(100%-3rem)] w-full z-[0] dark:bg-grey-6">
-        {isEditing ? (
-          <div>{/* Editing logic here */}</div>
-        ) : (
-          <div className="flex flex-col h-full w-full">
-            <div
-              id="scrollableDiv"
-              className="h-full w-full overflow-y-auto scroll grid items-end pb-1"
-              ref={scrollableDivRef}
-            >
-              <InfiniteScroll
-                dataLength={messages.length}
-                next={() => setPage(prevPage => prevPage + 1)}
-                hasMore={hasMore}
-                loader={
-                  <div className="w-full flex justify-center text-grey-1">
-                    <CircularProgress />
-                  </div>
-                }
-                scrollableTarget="scrollableDiv"
-                className="px-2 hidescroll"
-                inverse={true}
-              >
-                <div className="h-full w-full flex flex-col-reverse gap-4">
-                  {messages.map(message => renderMessage(message))}
+        <div className="flex flex-col h-full w-full">
+          <div
+            id="scrollableDiv"
+            className="h-full w-full overflow-y-auto scroll grid items-end pb-1"
+            ref={scrollableDivRef}
+          >
+            <InfiniteScroll
+              dataLength={messages.length}
+              next={() => setPage(prevPage => prevPage + 1)}
+              hasMore={hasMore}
+              loader={
+                <div className="w-full flex justify-center text-grey-1">
+                  <CircularProgress />
                 </div>
-              </InfiniteScroll>
-            </div>
-            <div className="flex items-center justify-between h-12 w-full p-2 gap-2 relative">
-              <div
-                className={`border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 rounded-full transition-all duration-300 ${
-                  messageToSend.length > 0 ? 'w-[calc(100%-48px)]' : 'w-full'
-                }`}
-              >
-                <input
-                  type="text"
-                  placeholder={t('threads.message')}
-                  value={messageToSend}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') {
-                      handleSendMessage(messageToSend)
-                    }
-                  }}
-                  onChange={e => setMessageToSend(e.target.value)}
-                  className="text-sm w-full placeholder:text-grey-2 dark:text-grey-1"
-                />
+              }
+              scrollableTarget="scrollableDiv"
+              className="px-2 hidescroll"
+              inverse={true}
+            >
+              <div className="h-full w-full flex flex-col-reverse gap-4">
+                {messages.map(message => renderMessage(message))}
               </div>
-              <button
-                className={`absolute p-2 hover:bg-grey-0 dark:hover:bg-grey-5 hover:text-primary dark:hover:text-secondary rounded-full h-10 flex items-center justify-center fade-in-opacity right-2 ${
-                  messageToSend.length > 0 ? 'opacity-100' : 'opacity-0 z-[-1]'
-                }`}
-                onClick={() => handleSendMessage(messageToSend)}
-              >
-                <Tooltip
-                  title={t('threads.send-message')}
-                  placement="left"
-                  arrow
-                >
-                  <SendRoundedIcon className="h-6 w-6 dark:text-white" />
-                </Tooltip>
-              </button>
-            </div>
+            </InfiniteScroll>
           </div>
-        )}
+          <div className="flex items-center justify-between h-12 w-full p-2 gap-2 relative">
+            <div
+              className={`border-[1px] border-grey-1 dark:border-grey-6 bg-grey-0 dark:bg-grey-5 rounded-full transition-all duration-300 ${
+                messageToSend.length > 0 ? 'w-[calc(100%-48px)]' : 'w-full'
+              }`}
+            >
+              <input
+                type="text"
+                placeholder={t('threads.message')}
+                value={messageToSend}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    handleSendMessage(messageToSend)
+                  }
+                }}
+                onChange={e => setMessageToSend(e.target.value)}
+                className="text-sm w-full placeholder:text-grey-2 dark:text-grey-1"
+              />
+            </div>
+            <button
+              className={`absolute p-2 hover:bg-grey-0 dark:hover:bg-grey-5 hover:text-primary dark:hover:text-secondary rounded-full h-10 flex items-center justify-center fade-in-opacity right-2 ${
+                messageToSend.length > 0 ? 'opacity-100' : 'opacity-0 z-[-1]'
+              }`}
+              onClick={() => handleSendMessage(messageToSend)}
+            >
+              <Tooltip title={t('threads.send-message')} placement="left" arrow>
+                <SendRoundedIcon className="h-6 w-6 dark:text-white" />
+              </Tooltip>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )

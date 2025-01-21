@@ -89,7 +89,6 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
             filteredFriends.map(friend => (
               <Friend
                 key={friend.otherUser.userId}
-                onThreadCreation={fetchFriends}
                 friend={friend}
                 listType={listType}
                 refreshFriends={refreshFriends}

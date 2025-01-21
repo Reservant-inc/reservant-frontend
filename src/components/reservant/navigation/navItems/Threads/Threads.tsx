@@ -34,7 +34,6 @@ const Threads: React.FC = () => {
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
-  const [filter, setFilter] = useState<string>('')
   const [option, setOption] = useState<ThreadScope>(ThreadScope.All)
 
   const apiBase = '/user/threads'
@@ -48,7 +47,7 @@ const Threads: React.FC = () => {
     [ThreadScope.Report]: `?type=Report&`
   }
 
-  const { handleThreadOpen } = useContext(ThreadContext)
+  const { handleThreadOpen, handleDeleteThread } = useContext(ThreadContext)
 
   const [t] = useTranslation('global')
 
@@ -110,7 +109,7 @@ const Threads: React.FC = () => {
 
   const deleteThread = async (threadId: number) => {
     try {
-      await fetchDELETE(`/threads/${threadId}`)
+      handleDeleteThread(threadId)
       setThreads(prev => {
         return prev.filter(thread => thread.threadId !== threadId)
       })
