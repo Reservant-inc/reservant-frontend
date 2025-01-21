@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Notification from './Notification';
 import { fetchGET } from '../../../../../services/APIconn';
 import { CircularProgress } from '@mui/material';
+import { useTranslation } from 'react-i18next'
 
 interface NotificationData {
   notificationId: number;
@@ -26,6 +27,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState(null);
+  const [t] = useTranslation('global');
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -69,7 +71,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
     return (
       <div className="flex flex-col items-center justify-center h-full w-full text-grey-3">
         <CircularProgress className="mb-4" />
-        <p className="text-sm">Loading notifications...</p>
+        <p className="text-sm">{t('notifications.loading')}</p>
       </div>
     );
   }
@@ -81,7 +83,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
       }`}
     >
       <div className="flex h-14 w-full items-center justify-between px-3 pt-4">
-        <p className="font-mont-bd text-xl dark:text-white">Notifications</p>
+        <p className="font-mont-bd text-xl dark:text-white">{t('notifications.notifications')}</p>
       </div>
 
       <div
@@ -91,7 +93,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
       >
         {filteredNotifications.length === 0 ? (
           <div className="flex justify-center items-center h-full">
-            <p className="text-center text-sm text-grey-3 italic">Brak nowych powiadomień</p>
+            <p className="text-center text-sm text-grey-3 italic">{t('notifications.no-new-notifications')}</p>
           </div>
         ) : (
           filteredNotifications.map((notification) => (
