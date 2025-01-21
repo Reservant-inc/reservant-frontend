@@ -256,7 +256,7 @@ export default function HomePage() {
                           ? t('home-page.delivery')
                           : t('home-page.no-delivery')}
                       </h1>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
                         {restaurant.tags.map((tag: string, index: number) => (
                           <h1
                             className="font-mont-md text-sm dark:text-white"

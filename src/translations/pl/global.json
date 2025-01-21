@@ -514,7 +514,9 @@
         "go-to-my-events": "Moje Wydarzenia",
         "close": "Zamknij",
         "event-loading": "Ładowanie szczegółów wydarzenia...",
-        "edit-event": "Edytuj Wydarzenie"
+        "edit-event": "Edytuj Wydarzenie",
+        "leave-confirmation": "Jesteś pewnien, że chcesz opuścić to wydarzenie?",
+        "delete-confirmation": "Jesteś pewnien, że chcesz usunąć to wydarzenie?"
     },
     "reviews": {
         "filter": "Filtruj",
