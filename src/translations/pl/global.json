@@ -292,7 +292,7 @@
             "editedMenuItem": "Edytuj pozycję menu",
             "menuItemName": "Nazwa",
             "menuItemPrice": "Cena",
-            "menuItemAlcoholPercentage": "Zawrość alkocholu",
+            "menuItemAlcoholPercentage": "Zawartość alkoholu",
             "menuItemNameRequired": "Nazwa jest wymagana",
             "menuItemPriceRequired": "Cena jest wymagana",
             "menuItemPriceMustBeNumber": "Cena musi być liczbą",
