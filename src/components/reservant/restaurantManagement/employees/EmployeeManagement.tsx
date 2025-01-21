@@ -151,9 +151,9 @@ export default function EmployeeManagement() {
       setEmpToDel('')
     } catch (error) {
       if (error instanceof FetchError) {
-        console.log(error.formatErrors())
+        console.error(error.formatErrors())
       } else {
-        console.log('Unexpected error')
+        console.error('Unexpected error')
       }
     }
     populateRows()
@@ -187,9 +187,9 @@ export default function EmployeeManagement() {
         populateRows()
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error')
+          console.error('Unexpected error')
         }
       }
     }

@@ -17,7 +17,7 @@ const initialValues = {
   email: '',
   phoneNumber: '',
   birthDate: '',
-  password: '', 
+  password: '',
   confirmPassword: ''
 }
 
@@ -52,22 +52,16 @@ const UserRegister: React.FC = () => {
         password: values.password
       })
 
-      console.log(body)
       await fetchPOST('/auth/register-customer', body)
 
       navigate('/login')
     } catch (error) {
-      console.log(error)
+      console.error(error)
       setRegisterError('Registration failed. Please try again.')
     } finally {
       setSubmitting(false)
       setRequestLoading(false)
     }
-  }
-
-  const test = () => {
-    console.log('step2')
-    console.log(initialValues)
   }
 
   return (
@@ -215,7 +209,7 @@ const UserRegister: React.FC = () => {
                                   : 'bg-primary text-white'
                               }`}
                             >
-                             {t('auth.next')}
+                              {t('auth.next')}
                             </button>
                           </div>
                         </div>
@@ -381,4 +375,3 @@ const UserRegister: React.FC = () => {
 }
 
 export default UserRegister
-

@@ -68,9 +68,9 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
         setRows(tmp)
       } catch (error) {
         if (error instanceof FetchError) {
-          console.log(error.formatErrors())
+          console.error(error.formatErrors())
         } else {
-          console.log('Unexpected error')
+          console.error('Unexpected error')
         }
       }
     }

@@ -8,6 +8,7 @@ import DefaultPhoto from '../../../../../assets/images/user.jpg'
 import Cookies from 'js-cookie'
 import { LoginResponseType } from '../../../../../services/types'
 import { FetchError } from '../../../../../services/Errors'
+import { useTranslation } from 'react-i18next'
 
 interface NotificationProps {
   notificationId: number
@@ -54,6 +55,7 @@ const Notification: React.FC<NotificationProps> = ({
       }
     }
   }
+  const [t] = useTranslation('global')
 
   const handleNavigation = async () => {
     if (!isRead) {

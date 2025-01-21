@@ -57,7 +57,7 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ onClose }) => {
 
       onClose()
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setSubmitting(false)
     }

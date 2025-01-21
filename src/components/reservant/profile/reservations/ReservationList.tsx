@@ -59,7 +59,6 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
 
       setReservations(updatedReservations)
       setFilteredReservations(updatedReservations)
-      console.log(reservations)
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
@@ -108,7 +107,7 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
                   key={reservation.visitId}
                   refreshReservations={() =>
                     setTimeout(() => {
-                      fetchReservations();
+                      fetchReservations()
                     }, 1000)
                   }
                 />
