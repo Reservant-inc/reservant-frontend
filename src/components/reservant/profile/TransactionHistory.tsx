@@ -230,7 +230,7 @@ const TransactionHistory: React.FC<TranstacionHistoryProps> = ({
                 addFunds()
                 setValue(0)
               }}
-              disabled={value < 1}
+              disabled={value < 1 || value > 1000}
             >
               {t('profile.transaction-history.confirm')}
             </button>
