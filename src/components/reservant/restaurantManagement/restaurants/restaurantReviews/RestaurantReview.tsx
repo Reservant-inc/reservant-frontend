@@ -243,7 +243,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
           <div className="response-content flex-grow text-sm">
             <p>{new Date(review.answeredAt).toLocaleDateString()}</p>
             <p>{review.restaurantResponse}</p>
-            {!isCustomerServiceView && (
+            {!isCustomerServiceView && isOwnerView && (
               <div className="flex justify-end">
                 <Button
                   onClick={handleRespondClick}
