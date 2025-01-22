@@ -164,6 +164,7 @@ const DeliveriesTable: React.FC = () => {
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
         const isDelivered = params.row.deliveredTime !== null;
+        const isCanceled = params.row.canceledTime !== null;
     
         return (
           <div className="flex gap-2 justify-center items-center">
@@ -173,9 +174,9 @@ const DeliveriesTable: React.FC = () => {
                   onClick={() =>
                     handleOpenActionDialog(params.row.deliveryId, 'confirm')
                   }
-                  disabled={isDelivered}
+                  disabled={isDelivered || isCanceled}
                   style={{
-                    color: isDelivered
+                    color: isDelivered || isCanceled
                       ? 'var(--grey-0)' 
                       : 'var(--green)', 
                   }}
@@ -191,9 +192,9 @@ const DeliveriesTable: React.FC = () => {
                   onClick={() =>
                     handleOpenActionDialog(params.row.deliveryId, 'cancel')
                   }
-                  disabled={isDelivered}
+                  disabled={isDelivered || isCanceled}
                   style={{
-                    color: isDelivered
+                    color: isDelivered|| isCanceled
                       ? 'var(--grey-0)' 
                       : 'var(--red)', 
                   }}

@@ -15,6 +15,7 @@ import TransactionHistory from '../../reservant/profile/TransactionHistory'
 import { ReportsListType, TransactionListType } from '../../../services/enums'
 import ReportsList from '../../reservant/profile/reports/ReportsList'
 import ReviewsList from '../../reservant/restaurantManagement/restaurants/restaurantReviews/ReviewsList'
+import { Snackbar, Alert } from '@mui/material'
 
 const getImage = (photo: string | null, defaultImage: string) =>
   photo || defaultImage
@@ -23,11 +24,12 @@ const User: React.FC = () => {
   const [userInfo, setUserInfo] = useState<ComplaintUserInfo>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
-  const [banMessage, setBanMessage] = useState<string | null>(null)
-  const [unbanMessage, setUnbanMessage] = useState<string | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false)
   const [deleteCountdown, setDeleteCountdown] = useState<number>(5)
   const [isDeleteDisabled, setIsDeleteDisabled] = useState<boolean>(true)
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
+  const [unbanSnackbarOpen, setUnbanSnackbarOpen] = useState<boolean>(false)
+  const [snackbarBanManager, setSnackbarBanManager] = useState<boolean>(false)
 
   const { userId } = useParams<{ userId: string }>()
   const { t } = useTranslation('global')
@@ -92,45 +94,35 @@ const User: React.FC = () => {
       const timeSpan = `${values.days}.${values.hours}:${values.minutes}:00.0`
       const payload = { timeSpan }
       await fetchPOST(`/users/${userId}/ban`, JSON.stringify(payload))
-
-      const parts = []
-      if (values.days > 0)
-        parts.push(
-          `${values.days} ${t('customer-service.user.ban_duration.days')}`
-        )
-      if (values.hours > 0)
-        parts.push(
-          `${values.hours} ${t('customer-service.user.ban_duration.hours')}`
-        )
-      if (values.minutes > 0)
-        parts.push(
-          `${values.minutes} ${t('customer-service.user.ban_duration.minutes')}`
-        )
-      const message = `${t(
-        'customer-service.user.ban_user_message_prefix'
-      )} ${userInfo?.firstName} ${userInfo?.lastName} ${t(
-        'customer-service.user.ban_user_message_suffix'
-      )} ${parts.join(' ')}.`
-
-      setBanMessage(message)
+      setSnackbarOpen(true)
     } catch (error) {
-      console.error('Error banning user:', error)
+        if (error instanceof FetchError) {
+          // const errors = error.formatErrors()
+          if (error.status === 400) {
+            setSnackbarBanManager(true)
+          } else {
+            // console.error(errors)
+          }
+        }
     } finally {
       fetchUserData()
     }
   }
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false)
+  }
+
+  const handleUnbanSnackbarClose = () => setUnbanSnackbarOpen(false)
+
+  const handleSnackbarBanManagerClose = () => setSnackbarBanManager(false)
+
   const handleUnbanUser = async () => {
     try {
       await fetchPOST(`/users/${userId}/unban`, {})
-      setUnbanMessage(
-        `${t('customer-service.user.ban_user_message_prefix')} ${
-          userInfo?.firstName
-        } ${userInfo?.lastName} ${t('customer-service.user.unban_user_message')}`
-      )
+      setUnbanSnackbarOpen(true)
     } catch (error) {
       console.error('Error unbanning user:', error)
-      setUnbanMessage(null)
     } finally {
       fetchUserData()
     }
@@ -259,134 +251,83 @@ const User: React.FC = () => {
       <Dialog
         open={isDialogOpen}
         onClose={() => {
-          setIsDialogOpen(false)
-          setBanMessage(null)
+          setIsDialogOpen(false);
         }}
-        title={`${t('customer-service.user.ban_user_dialog_title')} ${
-          userInfo?.firstName || ''
-        } ${userInfo?.lastName || ''}`}
+        title={`${t('customer-service.user.ban_user_dialog_title')} ${userInfo?.firstName || ''} ${
+          userInfo?.lastName || ''
+        }`}
       >
-        {banMessage ? (
-          <div className="p-4 flex flex-col justify-between gap-4 h-[200px] w-[300px]">
-            <div className="p-4 flex items-center justify-center h-full w-full">
-              <p className="font-mont-bd">{banMessage}</p>
-            </div>
+        <Formik
+          initialValues={{ timeValue: 1, timeUnit: 'Hours' }}
+          validationSchema={Yup.object({
+            timeValue: Yup.number()
+              .min(1, t('customer-service.user.ban_duration_error.min_duration'))
+              .required(t('customer-service.user.ban_duration.required'))
+          })}
+          onSubmit={(values, { resetForm }) => {
+            handleBanUser({
+              days: values.timeUnit === 'Days' ? values.timeValue : 0,
+              hours: values.timeUnit === 'Hours' ? values.timeValue : 0,
+              minutes: values.timeUnit === 'Minutes' ? values.timeValue : 0
+            });
 
-            <div className="flex justify-end">
-              <button
-                className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-                onClick={() => {
-                  setIsDialogOpen(false)
-                  setBanMessage(null)
-                }}
-              >
-                {t('customer-service.user.close')}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <Formik
-            initialValues={{ timeValue: 1, timeUnit: 'Hours' }}
-            validationSchema={Yup.object({
-              timeValue: Yup.number()
-                .min(
-                  1,
-                  t('customer-service.user.ban_duration_error.min_duration')
-                )
-                .required(t('customer-service.user.ban_duration.required'))
-            })}
-            onSubmit={(values, { resetForm }) => {
-              const timeSpan =
-                values.timeUnit === 'Days'
-                  ? `${values.timeValue}.0:0:0.0`
-                  : values.timeUnit === 'Hours'
-                    ? `0.${values.timeValue}:0:0.0`
-                    : `0.0:${values.timeValue}:0.0`
-
-              handleBanUser({
-                days: values.timeUnit === 'Days' ? values.timeValue : 0,
-                hours: values.timeUnit === 'Hours' ? values.timeValue : 0,
-                minutes: values.timeUnit === 'Minutes' ? values.timeValue : 0
-              })
-
-              setBanMessage(
-                `${t('customer-service.user.ban_user_message_prefix')} ${
-                  userInfo?.firstName
-                } ${userInfo?.lastName} ${t(
-                  'customer-service.user.ban_user_message_suffix'
-                )}`
-              )
-
-              resetForm()
-            }}
-          >
-            {formik => (
-              <Form className="h-[200px] w-[300px] flex flex-col justify-between p-4">
-                <div className="flex flex-col gap-4">
-                  <div
-                    className={`flex items-center gap-4 p-2 border-2 rounded-md ${
-                      formik.touched.timeValue && formik.errors.timeValue
-                        ? 'border-red'
-                        : 'border-primary'
-                    }`}
+            setIsDialogOpen(false); 
+            resetForm();
+          }}
+        >
+          {formik => (
+            <Form className="h-[200px] w-[300px] flex flex-col justify-between p-4">
+              <div className="flex flex-col gap-4">
+                <div
+                  className={`flex items-center gap-4 p-2 border-2 rounded-md ${
+                    formik.touched.timeValue && formik.errors.timeValue
+                      ? 'border-red'
+                      : 'border-primary'
+                  }`}
+                >
+                  <Field
+                    as="select"
+                    name="timeUnit"
+                    className="text-sm cursor-pointer rounded-md p-2 bg-white dark:bg-black dark:text-white w-1/2"
                   >
-                    <Field
-                      as="select"
-                      name="timeUnit"
-                      className="text-sm cursor-pointer rounded-md p-2 bg-white dark:bg-black dark:text-white w-1/2"
-                    >
-                      <option value="Minutes">
-                        {t('customer-service.user.ban_duration.minutes')}
-                      </option>
-                      <option value="Hours">
-                        {t('customer-service.user.ban_duration.hours')}
-                      </option>
-                      <option value="Days">
-                        {t('customer-service.user.ban_duration.days')}
-                      </option>
-                    </Field>
+                    <option value="Minutes">{t('customer-service.user.ban_duration.minutes')}</option>
+                    <option value="Hours">{t('customer-service.user.ban_duration.hours')}</option>
+                    <option value="Days">{t('customer-service.user.ban_duration.days')}</option>
+                  </Field>
 
-                    <Field
-                      name="timeValue"
-                      type="number"
-                      className="text-sm rounded-md p-2 bg-white dark:bg-black dark:text-white w-2/3"
-                    />
-                  </div>
-
-                  {formik.touched.timeValue && formik.errors.timeValue && (
-                    <p className="text-red text-sm mt-2">
-                      {formik.errors.timeValue}
-                    </p>
-                  )}
+                  <Field
+                    name="timeValue"
+                    type="number"
+                    className="text-sm rounded-md p-2 bg-white dark:bg-black dark:text-white w-2/3"
+                  />
                 </div>
 
-                <div className="flex justify-end gap-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsDialogOpen(false)
-                      setBanMessage(null)
-                    }}
-                    className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-                  >
-                    {t('customer-service.user.cancel')}
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={formik.isSubmitting || !!formik.errors.timeValue}
-                    className={`text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
-                      formik.errors.timeValue
-                        ? 'opacity-50 cursor-not-allowed'
-                        : ''
-                    }`}
-                  >
-                    {t('customer-service.user.ban_user')}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        )}
+                {formik.touched.timeValue && formik.errors.timeValue && (
+                  <p className="text-red text-sm mt-2">{formik.errors.timeValue}</p>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
+                >
+                  {t('customer-service.user.cancel')}
+                </button>
+                <button
+                  type="submit"
+                  disabled={formik.isSubmitting || !!formik.errors.timeValue}
+                  className={`text-nowrap text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
+                    formik.errors.timeValue ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  {t('customer-service.user.ban_user')}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </Dialog>
 
       {/* Delete User Dialog */}
@@ -425,24 +366,36 @@ const User: React.FC = () => {
         </div>
       </Dialog>
 
-      {/* Unban User Dialog */}
-      <Dialog
-        open={!!unbanMessage}
-        onClose={() => setUnbanMessage(null)}
-        title={t('customer-service.user.unban_user_dialog_title')}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <div className="p-4 flex flex-col justify-between min-h-[150px]">
-          <p className="font-mont-bd">{unbanMessage}</p>
-          <div className="flex justify-end">
-            <button
-              className="text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md p-3 bg-white text-primary transition"
-              onClick={() => setUnbanMessage(null)}
-            >
-              {t('customer-service.user.close')}
-            </button>
-          </div>
-        </div>
-      </Dialog>
+        <Alert onClose={handleSnackbarClose} severity="success" variant="filled">
+          {t('snackbar.user-banned')}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={unbanSnackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleUnbanSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={handleUnbanSnackbarClose} severity="success" variant="filled">
+          {t('snackbar.user-unbanned')}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={snackbarBanManager}
+        autoHideDuration={5000}
+        onClose={handleSnackbarBanManagerClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={handleSnackbarBanManagerClose} severity="error" variant="filled">
+          {t('snackbar.ban-access-denied')}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
