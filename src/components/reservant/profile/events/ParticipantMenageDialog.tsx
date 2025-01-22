@@ -20,8 +20,6 @@ interface ParticipantMenageDialogProps {
   maxPeople?: number; // Dodano pole `maxPeople`
 }
 
-const [t] = useTranslation('global')
-
 const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
   open,
   onClose,
@@ -32,6 +30,8 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
   mustJoinUntil,
   maxPeople
 }) => {
+const [t] = useTranslation('global')
+
   // Check if the current date is past mustJoinUntil
   const isPastDeadline = mustJoinUntil
     ? new Date() > new Date(mustJoinUntil)
