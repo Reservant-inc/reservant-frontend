@@ -214,7 +214,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     className="border-none w-full dark:bg-black"
                   >
                     <option
-                      className=""
+                      className="dark:text-white dark:bg-black"
                       value=""
                       selected={true}
                       disabled={true}
@@ -223,7 +223,10 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                       {t('restaurant-management.menu.menuType')}
                     </option>
                     {menuTypes.map(menuType => (
-                      <option className="text-black" value={menuType}>
+                      <option
+                        className="text-black dark:text-white dark:bg-black"
+                        value={menuType}
+                      >
                         {menuType}
                       </option>
                     ))}
@@ -245,7 +248,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     type="date"
                     id="dateFrom"
                     name="dateFrom"
-                    className="w-full"
+                    className="w-full dark:[color-scheme:dark]"
                   />
                   <label>*</label>
                 </div>
@@ -264,7 +267,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     type="date"
                     id="dateUntil"
                     name="dateUntil"
-                    className="w-full"
+                    className="w-full dark:[color-scheme:dark]"
                   />
                   <label>*</label>
                 </div>
