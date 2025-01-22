@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { StatisticsScope } from '../../../../services/enums'
 import { StatisticsProps } from './Dashboard'
 import { useTranslation } from 'react-i18next'
-import { MenuItemType, StatisticsType } from '../../../../services/types'
+import { StatisticsType } from '../../../../services/types'
 import { FetchError } from '../../../../services/Errors'
 import { fetchGET } from '../../../../services/APIconn'
 import { format, subMonths, subWeeks } from 'date-fns'
 import { BarChart } from '@mui/x-charts/BarChart'
 import { useParams } from 'react-router-dom'
-import { PieChart } from '@mui/x-charts'
 
 enum Option {
   All = 'All',
@@ -89,7 +88,8 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
 
   //checks whether object is undefined so as to not call the method on initial page load
   useEffect(() => {
-    object != undefined && fetchStatistics()
+    ;(object != undefined || (option === Option.All && object === undefined)) &&
+      fetchStatistics()
   }, [object, timePeriod])
 
   const fetchGroups = async () => {
@@ -412,8 +412,8 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
           </div>
         )}
       </div>
-      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 dark:bg-grey-5 rounded-lg overflow-auto scroll">
-        <div className="h-full w-1/4 min-w-[300px]">
+      <div className="flex h-full w-full gap-4 p-4 bg-grey-0 dark:bg-grey-5 rounded-lg overflow-y-hidden">
+        <div className="h-full w-1/3 min-w-[300px]">
           <h1 className="dark:text-white">
             {t('restaurant-management.statistics.customer-count')}:
           </h1>
@@ -458,8 +458,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               grid={{ horizontal: true }}
               barLabel="value"
               margin={{ bottom: 100 }}
-              width={350}
-              height={350}
+              className="w-full"
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
@@ -469,7 +468,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             </div>
           )}
         </div>
-        <div className="h-full w-1/4 min-w-[300px]">
+        <div className="h-full w-1/3 min-w-[300px]">
           <h1 className="dark:text-white">
             {t('restaurant-management.statistics.revenue')}:
           </h1>
@@ -511,8 +510,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               grid={{ horizontal: true }}
               margin={{ bottom: 100 }}
               barLabel="value"
-              width={350}
-              height={350}
+              className="w-full"
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
@@ -522,7 +520,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
             </div>
           )}
         </div>
-        <div className="h-full w-1/4 min-w-[300px]">
+        <div className="h-full w-1/3 min-w-[300px]">
           <h1 className="dark:text-white">
             {t('restaurant-management.statistics.reviews')}:
           </h1>
@@ -563,8 +561,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               grid={{ horizontal: true }}
               margin={{ bottom: 100 }}
               barLabel="value"
-              width={350}
-              height={350}
+              className="w-full"
             />
           ) : (
             <div className="h-full w-full flex items-center justify-center">
