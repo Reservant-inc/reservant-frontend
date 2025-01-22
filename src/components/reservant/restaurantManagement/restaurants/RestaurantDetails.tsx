@@ -4,13 +4,10 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
-  Button,
-  InputLabel,
   Select,
   MenuItem,
   FormHelperText,
   FormControl,
-  FormLabel,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -31,6 +28,7 @@ import {
 } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/user.jpg'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import SearchIcon from '@mui/icons-material/Search'
 
 interface RestaurantDetailsProps {
   restaurant: RestaurantType
@@ -81,7 +79,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       .required(
         t('errors.restaurant-register.maxReservationDurationMinutes.required')
       ),
-    postalCode: Yup.string()
+    postalIndex: Yup.string()
       .matches(
         /^[0-9]{2}-[0-9]{3}$/,
         t('errors.restaurant-register.postalCode.matches')
@@ -99,7 +97,9 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     restaurant.logo || DefaultImage
   )
   const [photos, setPhotos] = useState<string[]>(restaurant.photos || [])
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const [suggestions, setSuggestions] = useState<any[]>([])
+  const [dropdownVisible, setDropdownVisible] = useState(false)
 
   const generateTimeOptions = () => {
     const times = []
@@ -113,6 +113,28 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     return times
   }
   const timeOptions = generateTimeOptions()
+
+  const handleSearch = async (address: string) => {
+    if (address) {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            address
+          )}&format=json&addressdetails=1&limit=5`
+        )
+        if (!response.ok) {
+          throw new Error('Failed to fetch suggestions')
+        }
+        const data = await response.json()
+        setSuggestions(data)
+        setDropdownVisible(true)
+      } catch (error) {
+        console.error('Error fetching suggestions:', error)
+      }
+    } else {
+      setDropdownVisible(false)
+    }
+  }
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -133,7 +155,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       return res.fileName
     } catch (error) {
       console.error('Error uploading logo:', error)
-      setErrorMessage('Failed to upload logo. Please try again.')
       return null
     }
   }
@@ -148,7 +169,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       throw new Error('Upload failed')
     } catch (error) {
       console.error('Error uploading photo:', error)
-      setErrorMessage('Failed to upload photo. Please try again.')
       return null // Upewnij się, że zwracamy null przy błędzie
     }
   }
@@ -175,6 +195,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         openingHours,
         logo,
         photos,
+        location,
         tables // Dodane stoliki
       } = values
 
@@ -217,6 +238,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         restaurantType,
         address,
         city,
+        location,
         reservationDeposit,
         maxReservationDurationMinutes,
         provideDelivery,
@@ -227,7 +249,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         photos: cleanPhotos,
         nip: restaurant.nip,
         postalIndex,
-        location: restaurant.location,
         businessPermission: cleanBusinessPermission,
         idCard: cleanIdCard
       }
@@ -250,7 +271,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
       resetForm()
     } catch (error) {
       console.error('Error submitting form:', error)
-      setErrorMessage('Failed to update restaurant. Please try again.')
     } finally {
       setSubmitting(false)
     }
@@ -283,7 +303,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             logo: restaurant.logo,
             photos: restaurant.photos,
             tables: restaurant.tables,
-            postalIndex: restaurant.postalIndex
+            postalIndex: restaurant.postalIndex,
+            location: restaurant.location
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -486,17 +507,75 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                     className="font-mont-md text-[15px] font-medium dark:text-white"
                   />
                 ) : (
-                  <Field
-                    as={TextField}
-                    name="address"
-                    id="address"
-                    fullWidth
-                    error={
-                      formik.touched.address && Boolean(formik.errors.address)
-                    }
-                    helperText={formik.touched.address && formik.errors.address}
-                    className="font-mont-md text-[15px] dark:text-white"
-                  />
+                  <div className="relative w-full flex items-center justify-center">
+                    <div className="w-full flex">
+                      <Field
+                        as={TextField}
+                        name="address"
+                        id="address"
+                        fullWidth
+                        error={
+                          formik.touched.address &&
+                          Boolean(formik.errors.address)
+                        }
+                        helperText={
+                          formik.touched.address && formik.errors.address
+                        }
+                        className="font-mont-md text-[15px] dark:text-white"
+                        onBlur={async (
+                          e: React.ChangeEvent<HTMLInputElement>
+                        ) => {
+                          formik.setFieldTouched('address', true, true)
+                          if (formik.values.address === '') {
+                            formik.setFieldValue('location', {
+                              latitude: undefined,
+                              longitude: undefined
+                            })
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleSearch(formik.values.address)}
+                        className="ml-2 p-2 bg-blue-500 text-white rounded-md"
+                      >
+                        <SearchIcon className="dark:text-white text-black" />
+                      </button>
+                    </div>
+                    {dropdownVisible && suggestions.length > 0 && (
+                      <ul className="absolute left-0 top-[60px] w-full z-[10] bg-white dark:bg-black dark:text-white border-[1px] border-grey-2 max-h-[200px] overflow-y-auto scroll rounded-md ">
+                        {suggestions.map((suggestion, index) => (
+                          <li
+                            key={index}
+                            onClick={() => {
+                              const address = suggestion.address.road
+                                ? suggestion.address.house_number
+                                  ? `${suggestion.address.road} ${suggestion.address.house_number}`
+                                  : suggestion.address.road
+                                : suggestion.address.country
+                                  ? suggestion.address.country
+                                  : ''
+
+                              const formattedAddress = address.replace(
+                                /[„”]/g,
+                                ''
+                              )
+
+                              formik.setFieldValue('address', formattedAddress)
+                              formik.setFieldValue('location', {
+                                latitude: parseFloat(suggestion.lat),
+                                longitude: parseFloat(suggestion.lon)
+                              })
+                              setDropdownVisible(false) // Hide dropdown on selection
+                            }}
+                            className="p-4 pointer border-b-[1px] border-grey-2"
+                          >
+                            {suggestion.display_name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 )}
               </div>
 
@@ -526,9 +605,12 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                     id="postalIndex"
                     fullWidth
                     error={
-                      formik.touched.postalIndex && Boolean(formik.errors.postalIndex)
+                      formik.touched.postalIndex &&
+                      Boolean(formik.errors.postalIndex)
                     }
-                    helperText={formik.touched.postalIndex && formik.errors.postalIndex}
+                    helperText={
+                      formik.touched.postalIndex && formik.errors.postalIndex
+                    }
                     className="font-mont-md text-[15px] dark:text-white"
                   />
                 )}
@@ -813,7 +895,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                             />
                           ))}
                         </FormGroup>
-                        {formik.touched.tags && formik.errors.tags && (
+                        {formik.errors.tags && (
                           <div className="text-error text-[15px] text-sm mt-1 font-mont-md">
                             {formik.errors.tags}
                           </div>
@@ -1125,10 +1207,11 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   <>
                     <button
                       type="submit"
-                      disabled={!formik.isValid || formik.isSubmitting || !formik.dirty}
-                      className={`flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black
-                        ${!formik.isValid || formik.isSubmitting || !formik.dirty? 'cursor-not-allowed opacity-50' : ''}`}
-                      >
+                      disabled={
+                        !formik.isValid || formik.isSubmitting || !formik.dirty
+                      }
+                      className={`flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black disabled:cursor-not-allowed disabled:opacity-50`}
+                    >
                       {t('general.save')}
                     </button>
                     <button
