@@ -7,7 +7,7 @@ import {
 } from '../../../../services/types'
 import { FetchError } from '../../../../services/Errors'
 import { fetchDELETE, fetchGET, getImage } from '../../../../services/APIconn'
-import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
+import DefaultImage from '../../../../assets/images/no-image.png'
 import { MenuScreenType } from '../../../../services/enums'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'

@@ -27,7 +27,7 @@ interface RestaurantReviewProps {
   onReviewDeleted?: () => void
   isOwnerView?: boolean
   restaurantId: number
-  isCustomerServiceView?: boolean 
+  isCustomerServiceView?: boolean
 }
 
 const RestaurantReview: React.FC<RestaurantReviewProps> = ({
@@ -149,12 +149,14 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
     <div className="flex flex-col gap-1 p-2 rounded-lg dark:bg-grey-6 bg-grey-0">
       {isCustomerServiceView && restaurant && (
         <div className="flex items-center gap-4 mb-2">
-          <p className="font-semibold text-lg">{t('general.restaurant')}: {restaurant.name}</p>
+          <p className="font-semibold text-lg">
+            {t('general.restaurant')}: {restaurant.name}
+          </p>
         </div>
       )}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 ">
-        <Avatar
+          <Avatar
             src={getImage(user?.photo || '', DefaultImage)}
             alt="Restaurant Logo"
           />
@@ -264,8 +266,10 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
       )}
 
       <Dialog open={isEditDialogOpen} onClose={handleDialogClose}>
-        <DialogTitle className='dark:bg-grey-6 dark:text-white'>{t('reviews.edit-review')}</DialogTitle>
-        <DialogContent className='dark:bg-grey-6 dark:text-white'>
+        <DialogTitle className="dark:bg-grey-6 dark:text-white">
+          {t('reviews.edit-review')}
+        </DialogTitle>
+        <DialogContent className="dark:bg-grey-6 dark:text-white">
           <h2>{t('reviews.rating')}:</h2>
           <Rating
             name="star-rating-edit"
@@ -281,7 +285,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             className="w-full p-4 border rounded dark:bg-grey-6 dark:text-white dark:border-grey-4"
           />
         </DialogContent>
-        <DialogActions className='dark:bg-grey-6 dark:text-white'>
+        <DialogActions className="dark:bg-grey-6 dark:text-white">
           <Button
             onClick={handleDialogClose}
             className="text-primary dark:text-secondary"
@@ -301,8 +305,10 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
         open={isRespondDialogOpen}
         onClose={() => setIsRespondDialogOpen(false)}
       >
-        <DialogTitle className='dark:bg-grey-6 dark:text-white'>{t('reviews.add-response')}</DialogTitle>
-        <DialogContent className='dark:bg-grey-6'>
+        <DialogTitle className="dark:bg-grey-6 dark:text-white">
+          {t('reviews.add-response')}
+        </DialogTitle>
+        <DialogContent className="dark:bg-grey-6">
           <textarea
             rows={4}
             value={responseContents}
@@ -311,7 +317,7 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
             placeholder={t('reviews.response-placeholder')}
           />
         </DialogContent>
-        <DialogActions className='dark:bg-grey-6 '>
+        <DialogActions className="dark:bg-grey-6 ">
           <Button
             onClick={() => setIsRespondDialogOpen(false)}
             className="text-primary dark:text-secondary"

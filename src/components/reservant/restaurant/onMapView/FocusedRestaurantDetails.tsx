@@ -18,8 +18,7 @@ import { useTranslation } from 'react-i18next'
 import Dialog from '../../../reusableComponents/Dialog'
 import { MenuScreenType } from '../../../../services/enums'
 import MenuList from '../../restaurantManagement/menus/MenuList'
-import DefaultImage from '../../../../assets/images/defaulImage.jpeg'
-import CartContextProvider from '../../../../contexts/CartContext'
+import DefaultImage from '../../../../assets/images/no-image.png'
 import EventCreationModal from '../events/EventCreationModal'
 import EventDetailsModal from '../events/EventDetailsModal'
 import { useNavigate } from 'react-router-dom'
@@ -117,9 +116,11 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
     setActiveTab(tab)
   }
 
-  const formatOpeningHours = (openingHours: ({ from: string | null; until: string | null } | null)[]): string[] => {
-    if (!openingHours || openingHours.length !== 7) return [''];
-  
+  const formatOpeningHours = (
+    openingHours: ({ from: string | null; until: string | null } | null)[]
+  ): string[] => {
+    if (!openingHours || openingHours.length !== 7) return ['']
+
     const days = [
       t('general.monday'),
       t('general.tuesday'),
@@ -127,50 +128,51 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
       t('general.thursday'),
       t('general.friday'),
       t('general.saturday'),
-      t('general.sunday'),
-    ];
-  
-    let formattedHours: string[] = [];
-    let currentRange: { start: string; end: string; hours: string } | null = null;
-  
+      t('general.sunday')
+    ]
+
+    let formattedHours: string[] = []
+    let currentRange: { start: string; end: string; hours: string } | null =
+      null
+
     for (let i = 0; i < openingHours.length; i++) {
-      const day = days[i];
-      const hours = openingHours[i];
-  
+      const day = days[i]
+      const hours = openingHours[i]
+
       if (!hours || hours.from === null || hours.until === null) {
         // Jeśli natrafimy na dzień z null/null, to zamykamy poprzedni zakres
         if (currentRange) {
           formattedHours.push(
             `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
-          );
-          currentRange = null;
+          )
+          currentRange = null
         }
-        continue;
+        continue
       }
-  
-      const hoursString = `${t('general.from')} ${hours.from} ${t('general.until')} ${hours.until}`;
-  
+
+      const hoursString = `${t('general.from')} ${hours.from} ${t('general.until')} ${hours.until}`
+
       if (currentRange && currentRange.hours === hoursString) {
-        currentRange.end = day;
+        currentRange.end = day
       } else {
         if (currentRange) {
           formattedHours.push(
             `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
-          );
+          )
         }
-        currentRange = { start: day, end: day, hours: hoursString };
+        currentRange = { start: day, end: day, hours: hoursString }
       }
     }
-  
+
     // Jeśli po pętli nadal mamy aktywny zakres, dodajemy go do listy
     if (currentRange) {
       formattedHours.push(
         `${currentRange.start}${currentRange.end !== currentRange.start ? '-' + currentRange.end : ''}: ${currentRange.hours}`
-      );
+      )
     }
-  
-    return formattedHours;
-  };
+
+    return formattedHours
+  }
 
   const renderRestaurantDetails = () => {
     return (
@@ -190,10 +192,14 @@ const FocusedRestaurantDetails: React.FC<FocusedRestaurantDetailsProps> = ({
             {restaurant.address}, {restaurant.city}
           </h1>
           <div className="text-sm dark:text-white">
-            <h1 className="font-bold">{t('restaurant-management.details.opening-hours')}:</h1>
-            {formatOpeningHours(restaurant.openingHours).map((line: string, index: number) => (
-              <div key={index}>{line}</div>
-            ))}
+            <h1 className="font-bold">
+              {t('restaurant-management.details.opening-hours')}:
+            </h1>
+            {formatOpeningHours(restaurant.openingHours).map(
+              (line: string, index: number) => (
+                <div key={index}>{line}</div>
+              )
+            )}
           </div>
           <div className="flex items-center gap-3 text-sm">
             {restaurant.provideDelivery && (

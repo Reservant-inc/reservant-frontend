@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import { UserSearchType } from '../../../../../services/types'
-import { fetchDELETE, fetchPOST } from '../../../../../services/APIconn'
+import {
+  fetchDELETE,
+  fetchPOST,
+  getImage
+} from '../../../../../services/APIconn'
 import { FriendStatus } from '../../../../../services/enums'
 import CheckSharpIcon from '@mui/icons-material/CheckSharp'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
@@ -68,7 +72,7 @@ const SearchedFriend: React.FC<SearchedFriendProps> = ({ user }) => {
     <div className="flex w-full justify-between">
       <div className="flex w-[60%] items-center gap-[5px] overflow-x-hidden text-sm">
         <img
-          src={DefaultPhoto}
+          src={getImage(user.photo, DefaultPhoto)}
           alt="user photo"
           className="h-8 w-8 rounded-full"
         />

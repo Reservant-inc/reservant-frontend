@@ -56,7 +56,7 @@ const FriendReq: React.FC<FriendReqProps> = ({
       {/* Sekcja główna zaproszenia */}
       <div className="flex items-center space-x-2">
         <img
-          src={photo ? getImage(photo, '') : DefaultPhoto}
+          src={getImage(photo, DefaultPhoto)}
           alt="User avatar"
           className="w-8 h-8 rounded-full"
         />
@@ -86,7 +86,6 @@ const FriendReq: React.FC<FriendReqProps> = ({
             onClick={handleReject}
             disabled={loading}
             className="border-[1px] bg-grey-0 border-primary text-primary transition hover:scale-105 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-black dark:border-secondary dark:text-secondary dark:bg-grey-5 p-1 rounded transition hover:scale-105"
-            
           >
             Odrzuć
           </button>

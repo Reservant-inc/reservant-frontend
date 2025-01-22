@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   fetchDELETE,
   fetchGET,
@@ -31,8 +31,6 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
     type: null
   })
   const [eventDetails, setEventDetails] = useState<EventDataType | null>(null)
-  const [loadingDetails, setLoadingDetails] = useState(false)
-  const [loadingParticipants, setLoadingParticipants] = useState(false)
   const [interestedUsers, setInterestedUsers] = useState<InterestedUser[]>([])
   const [participants, setParticipants] = useState<InterestedUser[]>([])
   const [t] = useTranslation('global')
@@ -86,7 +84,6 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   }
 
   const fetchEventDetails = async () => {
-    setLoadingDetails(true)
     try {
       const response = await fetchGET(`/events/${event.eventId}`)
       setEventDetails(response)
@@ -94,19 +91,16 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
     } catch (error) {
       console.error('Error fetching event details:', error)
     } finally {
-      setLoadingDetails(false)
     }
   }
 
   const fetchInterestedUsers = async () => {
-    setLoadingParticipants(true)
     try {
       const response = await fetchGET(`/events/${event.eventId}/interested`)
       setInterestedUsers(response.items || [])
     } catch (error) {
       console.error('Error fetching interested users:', error)
     } finally {
-      setLoadingParticipants(false)
     }
   }
 

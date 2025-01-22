@@ -49,52 +49,49 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
   groups,
   isReadOnly
 }) => {
-
   const { t } = useTranslation('global')
 
   const validationSchema = Yup.object({
     groupName: Yup.string().required('Group Name is required'),
     name: Yup.string().required(t('errors.restaurant-register.name.required')),
-    restaurantType: Yup.string()
-    .required(t('errors.restaurant-register.businessType.required')),
-    address: Yup.string()
-    .required(t('errors.restaurant-register.address.required')),
+    restaurantType: Yup.string().required(
+      t('errors.restaurant-register.businessType.required')
+    ),
+    address: Yup.string().required(
+      t('errors.restaurant-register.address.required')
+    ),
     city: Yup.string().required(t('errors.restaurant-register.city.required')),
-    reservationDeposit: Yup
-          .number()
-          .typeError(t('errors.restaurant-register.reservationDeposit.number')) // Komunikat dla nieprawidłowej liczby
-          .min(0, t('errors.restaurant-register.reservationDeposit.min'))
-          .max(300, t('errors.restaurant-register.reservationDeposit.max'))
-          .required(t('errors.restaurant-register.reservationDeposit.required')),
-    maxReservationDurationMinutes: Yup
-          .number()
-          .typeError(
-            t('errors.restaurant-register.maxReservationDurationMinutes.number')
-          ) // Komunikat dla nieprawidłowej liczby
-          .min(
-            30,
-            t('errors.restaurant-register.maxReservationDurationMinutes.min')
-          )
-          .max(
-            1140,
-            t('errors.restaurant-register.maxReservationDurationMinutes.max')
-          )
-          .required(
-            t('errors.restaurant-register.maxReservationDurationMinutes.required')
-          ),
-    postalCode: Yup
-          .string()
-          .matches(
-            /^[0-9]{2}-[0-9]{3}$/,
-            t('errors.restaurant-register.postalCode.matches')
-          )
-          .required(t('errors.restaurant-register.postalCode.required')),
-      description: Yup
-            .string()
-            .max(200, t('errors.restaurant-register.description.max'))
-            .min(3, t('errors.restaurant-register.description.min'))
-            .required(t('errors.restaurant-register.description.required')),
-      tags: Yup.array().min(3, t('errors.restaurant-register.tags.min'))
+    reservationDeposit: Yup.number()
+      .typeError(t('errors.restaurant-register.reservationDeposit.number')) // Komunikat dla nieprawidłowej liczby
+      .min(0, t('errors.restaurant-register.reservationDeposit.min'))
+      .max(300, t('errors.restaurant-register.reservationDeposit.max'))
+      .required(t('errors.restaurant-register.reservationDeposit.required')),
+    maxReservationDurationMinutes: Yup.number()
+      .typeError(
+        t('errors.restaurant-register.maxReservationDurationMinutes.number')
+      ) // Komunikat dla nieprawidłowej liczby
+      .min(
+        30,
+        t('errors.restaurant-register.maxReservationDurationMinutes.min')
+      )
+      .max(
+        1140,
+        t('errors.restaurant-register.maxReservationDurationMinutes.max')
+      )
+      .required(
+        t('errors.restaurant-register.maxReservationDurationMinutes.required')
+      ),
+    postalCode: Yup.string()
+      .matches(
+        /^[0-9]{2}-[0-9]{3}$/,
+        t('errors.restaurant-register.postalCode.matches')
+      )
+      .required(t('errors.restaurant-register.postalCode.required')),
+    description: Yup.string()
+      .max(200, t('errors.restaurant-register.description.max'))
+      .min(3, t('errors.restaurant-register.description.min'))
+      .required(t('errors.restaurant-register.description.required')),
+    tags: Yup.array().min(3, t('errors.restaurant-register.tags.min'))
   })
 
   const [tags, setTags] = useState<string[]>([])
@@ -168,6 +165,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         name,
         restaurantType,
         address,
+        postalIndex,
         city,
         reservationDeposit,
         maxReservationDurationMinutes,
@@ -228,7 +226,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
         logo: cleanLogo,
         photos: cleanPhotos,
         nip: restaurant.nip,
-        postalIndex: restaurant.postalIndex,
+        postalIndex,
         location: restaurant.location,
         businessPermission: cleanBusinessPermission,
         idCard: cleanIdCard
@@ -284,7 +282,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             openingHours: restaurant.openingHours,
             logo: restaurant.logo,
             photos: restaurant.photos,
-            tables: restaurant.tables
+            tables: restaurant.tables,
+            postalIndex: restaurant.postalIndex
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -496,6 +495,40 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                       formik.touched.address && Boolean(formik.errors.address)
                     }
                     helperText={formik.touched.address && formik.errors.address}
+                    className="font-mont-md text-[15px] dark:text-white"
+                  />
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="postalIndex"
+                  className="block text-sm font-medium dark:text-grey-2"
+                >
+                  {t('restaurant-management.details.postalCode')}
+                </label>
+                {isReadOnly ? (
+                  <Field
+                    as={TextField}
+                    name="postalIndex"
+                    id="postalIndex"
+                    fullWidth
+                    value={formik.values.postalIndex || ''}
+                    InputProps={{
+                      readOnly: true
+                    }}
+                    className="font-mont-md text-[15px] font-medium dark:text-white"
+                  />
+                ) : (
+                  <Field
+                    as={TextField}
+                    name="postalIndex"
+                    id="postalIndex"
+                    fullWidth
+                    error={
+                      formik.touched.postalIndex && Boolean(formik.errors.postalIndex)
+                    }
+                    helperText={formik.touched.postalIndex && formik.errors.postalIndex}
                     className="font-mont-md text-[15px] dark:text-white"
                   />
                 )}
@@ -973,11 +1006,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   <div className="flex items-center justify-start gap-4">
                     <img
                       className="w-32 h-32 object-cover rounded-lg" // Zwiększenie rozmiaru logo
-                      src={
-                        logoPath === DefaultImage
-                          ? DefaultImage
-                          : getImage(logoPath, logoPath)
-                      }
+                      src={getImage(logoPath, DefaultImage)}
                       alt="Logo preview"
                     />
                   </div>
@@ -1029,9 +1058,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                           <div key={index} className="relative">
                             <img
                               className="w-32 h-32 object-cover rounded-lg"
-                              src={
-                                photo ? getImage(photo, photo) : DefaultImage
-                              }
+                              src={getImage(photo, DefaultImage)}
                               alt={`Uploaded photo ${index + 1}`}
                             />
                             {/* Usuwanie zdjęcia, tylko jeśli nie jest w trybie readonly */}
@@ -1098,9 +1125,10 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                   <>
                     <button
                       type="submit"
-                      disabled={formik.isSubmitting}
-                      className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-                    >
+                      disabled={!formik.isValid || formik.isSubmitting || !formik.dirty}
+                      className={`flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black
+                        ${!formik.isValid || formik.isSubmitting || !formik.dirty? 'cursor-not-allowed opacity-50' : ''}`}
+                      >
                       {t('general.save')}
                     </button>
                     <button

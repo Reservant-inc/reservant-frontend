@@ -8,16 +8,17 @@ import CheckSharpIcon from '@mui/icons-material/CheckSharp';
 import { InterestedUser } from '../../../../services/types';
 import UserDefault from '../../../../assets/images/user.jpg';
 import { useTranslation } from 'react-i18next';
+import { getImage } from '../../../../services/APIconn'
 
 interface ParticipantMenageDialogProps {
-  open: boolean;
-  onClose: () => void;
-  participants: InterestedUser[];
-  interestedUsers: InterestedUser[];
-  onAcceptUser: (userId: string) => void;
-  onRejectUser: (userId: string) => void;
-  mustJoinUntil?: string | null;
-  maxPeople?: number; // Dodano pole `maxPeople`
+  open: boolean
+  onClose: () => void
+  participants: InterestedUser[]
+  interestedUsers: InterestedUser[]
+  onAcceptUser: (userId: string) => void
+  onRejectUser: (userId: string) => void
+  mustJoinUntil?: string | null
+  maxPeople?: number // Dodano pole `maxPeople`
 }
 
 const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
@@ -35,16 +36,22 @@ const [t] = useTranslation('global')
   // Check if the current date is past mustJoinUntil
   const isPastDeadline = mustJoinUntil
     ? new Date() > new Date(mustJoinUntil)
-    : false;
+    : false
 
   // Check if the maxPeople limit has been reached
-  const isLimitReached = maxPeople !== undefined && participants.length >= maxPeople;
+  const isLimitReached =
+    maxPeople !== undefined && participants.length >= maxPeople
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md"
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
       PaperProps={{
         className: 'bg-white dark:bg-black'
-      }}>
+      }}
+    >
       <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
         <span>{t('ParticipantsMenageDialog.menageParticipants')}</span>
         <button onClick={onClose} className="text-grey-2">
@@ -59,10 +66,10 @@ const [t] = useTranslation('global')
             {t('ParticipantsMenageDialog.participants')} <span className="text-grey-3">({participants.length})</span>
             </h2>
             <div className="space-y-4 dark:text-white">
-              {participants.map((user) => (
+              {participants.map(user => (
                 <div key={user.userId} className="flex items-center space-x-4">
                   <img
-                    src={user.photo || UserDefault}
+                    src={getImage(user.photo, UserDefault)}
                     alt={`${user.firstName} ${user.lastName}`}
                     className="h-10 w-10 rounded-full"
                   />
@@ -80,10 +87,13 @@ const [t] = useTranslation('global')
             {t('ParticipantsMenageDialog.interested')} <span className="text-grey-3">({interestedUsers.length})</span>
             </h2>
             <div className="space-y-4">
-              {interestedUsers.map((user) => (
-                <div key={user.userId} className="flex items-center space-x-4 dark:text-white">
+              {interestedUsers.map(user => (
+                <div
+                  key={user.userId}
+                  className="flex items-center space-x-4 dark:text-white"
+                >
                   <img
-                    src={user.photo || UserDefault}
+                    src={getImage(user.photo, UserDefault)}
                     alt={`${user.firstName} ${user.lastName}`}
                     className="h-10 w-10 rounded-full "
                   />
@@ -104,9 +114,15 @@ const [t] = useTranslation('global')
                       >
                         <button
                           className={` ${
-                            isPastDeadline || isLimitReached ? 'text-grey-3' : 'text-primary'
+                            isPastDeadline || isLimitReached
+                              ? 'text-grey-3'
+                              : 'text-primary'
                           }`}
-                          onClick={() => !isPastDeadline && !isLimitReached && onAcceptUser(user.userId)}
+                          onClick={() =>
+                            !isPastDeadline &&
+                            !isLimitReached &&
+                            onAcceptUser(user.userId)
+                          }
                           disabled={isPastDeadline || isLimitReached}
                         >
                           <CheckSharpIcon />
@@ -130,7 +146,7 @@ const [t] = useTranslation('global')
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default ParticipantMenageDialog;
+export default ParticipantMenageDialog
