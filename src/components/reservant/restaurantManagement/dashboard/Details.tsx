@@ -48,7 +48,7 @@ const Details: React.FC = () => {
   }
 
   return (
-    <div className="flex h-full self-start overflow-y-auto flex-col w-full dark:bg-black bg-white rounded-lg dark:text-grey-1 p-4 ">
+    <div className="flex h-full self-start overflow-y-auto scroll flex-col w-full dark:bg-black bg-white rounded-lg dark:text-grey-1 p-4 ">
       <h1 className="text-lg font-mont-bd">
         {t('restaurant-management.details.details')}
       </h1>
