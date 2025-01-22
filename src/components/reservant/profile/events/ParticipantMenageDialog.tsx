@@ -1,12 +1,13 @@
-import React from 'react'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import Tooltip from '@mui/material/Tooltip'
-import CloseSharpIcon from '@mui/icons-material/CloseSharp'
-import CheckSharpIcon from '@mui/icons-material/CheckSharp'
-import { InterestedUser } from '../../../../services/types'
-import UserDefault from '../../../../assets/images/user.jpg'
+import React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Tooltip from '@mui/material/Tooltip';
+import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import CheckSharpIcon from '@mui/icons-material/CheckSharp';
+import { InterestedUser } from '../../../../services/types';
+import UserDefault from '../../../../assets/images/user.jpg';
+import { useTranslation } from 'react-i18next';
 import { getImage } from '../../../../services/APIconn'
 
 interface ParticipantMenageDialogProps {
@@ -30,6 +31,8 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
   mustJoinUntil,
   maxPeople
 }) => {
+const [t] = useTranslation('global')
+
   // Check if the current date is past mustJoinUntil
   const isPastDeadline = mustJoinUntil
     ? new Date() > new Date(mustJoinUntil)
@@ -50,7 +53,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
       }}
     >
       <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
-        <span>Zarządzaj uczestnikami</span>
+        <span>{t('ParticipantsMenageDialog.menageParticipants')}</span>
         <button onClick={onClose} className="text-grey-2">
           <CloseSharpIcon />
         </button>
@@ -60,8 +63,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
           {/* Participants Column */}
           <div className="flex-1">
             <h2 className="text-lg font-bold mb-1 dark:text-white">
-              Uczestnicy{' '}
-              <span className="text-grey-3">({participants.length})</span>
+            {t('ParticipantsMenageDialog.participants')} <span className="text-grey-3">({participants.length})</span>
             </h2>
             <div className="space-y-4 dark:text-white">
               {participants.map(user => (
@@ -82,8 +84,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
           {/* Interested Users Column */}
           <div className="flex-1">
             <h2 className="text-lg font-bold mb-1 dark:text-white">
-              Zainteresowani{' '}
-              <span className="text-grey-3">({interestedUsers.length})</span>
+            {t('ParticipantsMenageDialog.interested')} <span className="text-grey-3">({interestedUsers.length})</span>
             </h2>
             <div className="space-y-4">
               {interestedUsers.map(user => (
@@ -105,10 +106,10 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
                       <Tooltip
                         title={
                           isPastDeadline
-                            ? 'Czas na akceptację minął'
+                            ? t('ParticipantMenageDialog.pastAcceptTime')
                             : isLimitReached
-                              ? 'Osiągnięto limit uczestników'
-                              : 'Zaakceptuj użytkownika'
+                            ? t('ParticipantMenageDialog.participantLimit')
+                            : t('ParticipantMenageDialog.acceptParticipant')
                         }
                       >
                         <button
@@ -128,7 +129,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
                         </button>
                       </Tooltip>
                       {/* Reject button */}
-                      <Tooltip title="Odrzuć">
+                      <Tooltip title={t('ParticipantMenageDialog.decline')}>
                         <button
                           className="text-danger"
                           onClick={() => onRejectUser(user.userId)}

@@ -937,5 +937,14 @@
         "report-assigned": "Zostałeś przypisany do nowej skargi.",
         "new-reservation": "Nowa rezerwacja w",
         "new-notification": "Nowe powiadomienie."
+    },
+    "ParticipantMenageDialog":{
+        "manageParticipants":"Zarządzaj uczestnikami",
+        "participants": "Uczestnicy",
+        "interested": "Zainteresowani",
+        "pastAcceptTime": "Czas na akceptację minął",
+        "participantLimit": "Osiągnięto limit uczestników",
+        "acceptParticipant": "Zaakceptuj uczestnictwo użytkownika",
+        "decline": "Odrzuć"
     }
 }
