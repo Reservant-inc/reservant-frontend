@@ -142,7 +142,14 @@ const Notification: React.FC<NotificationProps> = ({
   const renderNotificationText = () => {
     switch (notificationType) {
       case 'NotificationNewFriendRequest':
-        return <span>{t('notifications.new-friend-request')}</span>
+        return (
+          <span>
+            {t('notifications.new-friend-request')}
+            <span className='font-mont-bd'>
+              {' '}{details.senderName}
+            </span>
+          </span>
+        )
       case 'NotificationFriendRequestAccepted':
         return (
           <span>
@@ -238,6 +245,8 @@ const Notification: React.FC<NotificationProps> = ({
           notificationType === 'NotificationVisitApprovedDeclined' ||
           notificationType === 'NotificationNewParticipationRequest' ||
           notificationType === 'NotificationReportEscalated' ||
+          notificationType === 'NotificationNewFriendRequest' ||
+          notificationType === 'NotificationFriendRequestAccepted' ||
           notificationType === 'NotificationParticipationRequestResponse') && (
           <img
             src={getImage(photo, DefaultPhoto)}
