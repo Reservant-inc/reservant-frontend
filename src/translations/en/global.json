@@ -516,7 +516,9 @@
             "go-to-my-events": "Go to My Events",
             "close": "Close",
             "event-loading": "Loading event details...",
-            "edit-event": "Edit Event"
+            "edit-event": "Edit Event",
+            "leave-confirmation": "Are you sure you want to leave this event?",
+            "delete-confirmation": "Are you sure you want to delete this event?"
         },
     "reviews": {
         "filter": "Filter",

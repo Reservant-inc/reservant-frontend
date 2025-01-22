@@ -261,7 +261,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           open={dialogState.isOpen}
           onClose={closeDialog}
           onConfirm={handleLeaveEvent}
-          confirmationText="Are you sure you want to leave this event?"
+          confirmationText={t('event-creation.leave-confirmation')}
         />
       )}
 
@@ -270,7 +270,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           open={dialogState.isOpen}
           onClose={closeDialog}
           onConfirm={handleDeleteEvent}
-          confirmationText="Are you sure you want to delete this event?"
+          confirmationText={t('event-creation.delete-confirmation')}
         />
       )}
     </div>
