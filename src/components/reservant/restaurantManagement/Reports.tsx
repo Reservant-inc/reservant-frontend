@@ -61,7 +61,9 @@ export default function Reports() {
               : '',
             resolutionComment: response.items[i].resolutionComment,
             // resolvedBy: response.items[i].resolvedBy,
-            resolutionDate: response.items[i].resolvedBy,
+            resolutionDate: response.items[i].resolutionDate
+              ? new Date(response.items[i].resolutionDate).toLocaleString()
+              : '',
             // assignedAgents: response.items[i].assignedAgents,
             reportStatus:
               response.items[i].reportStatus === 'ResolvedNegatively'
