@@ -761,7 +761,9 @@
                 "rejected": "Odrzucone",
                 "pending": "Oczekujące"
 
-            }
+            },
+            "reported-employee":"Zgłoszony pracownik",
+            "resolution-note": "Notatka do rozwiązania"
 
         },
         "report-details": {
