@@ -106,63 +106,63 @@ export default function Reports() {
       field: 'reportId',
       headerName: t('customer-service.reports.report-id'),
       type: 'string',
-      flex: 0.05,
+      flex: 1,
       editable: false
     },
     {
       field: 'reportStatus',
       headerName: t('customer-service.reports.status.status'),
       type: 'string',
-      flex: 0.1,
+      flex: 1,
       editable: false
     },
     {
       field: 'category',
       headerName: t('customer-service.reports.category'),
       type: 'string',
-      flex: 0.1,
+      flex: 2,
       editable: false
     },
     {
       field: 'description',
       headerName: t('customer-service.reports.description'),
       type: 'string',
-      flex: 0.1,
+      flex: 3,
       editable: false
     },
     {
       field: 'reportDate',
       headerName: t('customer-service.reports.report-date'),
       type: 'string',
-      flex: 0.1,
+      flex: 2,
       editable: false
     },
     {
       field: 'visitId',
       headerName: t('customer-service.reports.visit-id'),
       type: 'string',
-      flex: 0.05,
+      flex: 1,
       editable: false
     },
     {
       field: 'reportedEmployee',
       headerName: t('customer-service.reports.reported-employee'),
       type: 'string',
-      flex: 0.1,
+      flex: 2.5,
       editable: false
     },
     {
       field: 'resolutionDate',
       headerName: t('customer-service.reports.resolution-date'),
       type: 'string',
-      flex: 0.1,
+      flex: 2,
       editable: false
     },
     {
       field: 'resolutionComment',
       headerName: t('customer-service.reports.resolution-note'),
       type: 'string',
-      flex: 0.1,
+      flex: 3,
       editable: false
     }
   ]
