@@ -97,11 +97,12 @@ const GroceryListDialog: React.FC<GroceryListDialogProps> = ({
             <option
               value=""
               disabled 
+              className="dark:text-white dark:bg-black"
             >
               {t('warehouse.select-ingredient')}
             </option>
             {availableIngredients.map((ingredient) => (
-              <option key={ingredient.ingredientId} value={ingredient.publicName}>
+              <option key={ingredient.ingredientId} value={ingredient.publicName} className="text-black dark:text-white dark:bg-black">
                 {ingredient.publicName}
               </option>
             ))}
