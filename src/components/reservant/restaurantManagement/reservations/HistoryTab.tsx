@@ -1,25 +1,26 @@
-import OrderHistory from './OrderHistory'
 import React, { useEffect, useState } from 'react'
-import {
-  GridRowsProp,
-  GridRowModesModel,
-  DataGrid,
-  GridColDef,
-  GridActionsCellItem
-} from '@mui/x-data-grid'
-import { fetchGET } from '../../../../services/APIconn'
+import { fetchGET, getImage } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { OrderType, VisitType } from '../../../../services/types'
-import { ArrowForwardIos } from '@mui/icons-material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useParams } from 'react-router-dom'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  IconButton
+} from '@mui/material'
+import {
+  Check,
+  Close,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  KeyboardArrowRight
+} from '@mui/icons-material'
+import Default from '../../../../assets/images/defaultMenuItemImage.png'
 
 const HistoryTab: React.FC = ({}) => {
-  const [ordersOpen, setOrdersOpen] = useState<boolean>(false)
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
-  const [rows, setRows] = useState<GridRowsProp>([])
-  const [activeOrders, setActiveOrders] = useState<OrderType[]>([])
-  const [activeVisitId, setActiveVisitId] = useState<number | null>(null)
+  const [visits, setVisits] = useState<VisitType[]>([])
 
   const { restaurantId } = useParams()
 
@@ -33,35 +34,50 @@ const HistoryTab: React.FC = ({}) => {
           `/restaurants/${activeRestaurantId}/visits`
         )
         let tmp: VisitType[] = []
-        let indx = 0
         for (const i in response.items) {
+          let orders: OrderType[] = []
+
+          try {
+            for (const j in response.items[i].orders) {
+              const fetchedOrder: OrderType = await fetchGET(
+                `/orders/${response.items[i].orders[j].orderId}`
+              )
+              orders.push(fetchedOrder)
+            }
+          } catch (error) {
+            if (error instanceof FetchError) {
+              console.error(error.formatErrors())
+            } else {
+              console.error('Unexpected error')
+            }
+          }
+
           tmp.push({
-            id: Number(indx++),
-            clientId: response.items[i].clientId,
-            date: response.items[i].date
-              ? new Date(response.items[i].date).toLocaleString()
-              : '',
-            deposit: response.items[i].deposit,
-            endTime: response.items[i].endTime
-              ? new Date(response.items[i].endTime).toLocaleString()
-              : '',
-            numberOfGuests: response.items[i].numberOfGuests,
-            orders: response.items[i].orders,
-            participants: response.items[i].participants,
-            paymentTime: response.items[i].paymentTime
-              ? new Date(response.items[i].paymentTime).toLocaleString()
-              : '',
+            visitId: response.items[i].visitId,
             reservationDate: response.items[i].reservationDate
               ? new Date(response.items[i].reservationDate).toLocaleString()
               : '',
-            restaurant: response.items[i].restaurant,
-            tableId: response.items[i].tableId,
-            takeaway: response.items[i].takeaway,
+            date: response.items[i].date
+              ? new Date(response.items[i].date).toLocaleString()
+              : '',
+            endTime: response.items[i].endTime
+              ? new Date(response.items[i].endTime).toLocaleString()
+              : '',
+            paymentTime: response.items[i].paymentTime
+              ? new Date(response.items[i].paymentTime).toLocaleString()
+              : '',
+            participants: response.items[i].participants,
+            numberOfGuests: response.items[i].numberOfGuests,
             tip: response.items[i].tip,
-            visitId: response.items[i].visitId
+            takeaway: response.items[i].takeaway,
+            tableId: response.items[i].tableId,
+            orders: orders,
+            deposit: response.items[i].deposit,
+            clientId: response.items[i].clientId,
+            restaurant: response.items[i].restaurant
           })
         }
-        setRows(tmp)
+        setVisits(tmp)
       } catch (error) {
         if (error instanceof FetchError) {
           console.error(error.formatErrors())
@@ -73,143 +89,172 @@ const HistoryTab: React.FC = ({}) => {
     populateRows()
   }, [])
 
-  const columns: GridColDef[] = [
-    {
-      field: 'visitId',
-      headerName: 'Visit ID',
-      width: 150,
-      editable: false,
-      type: 'string'
-    },
-    {
-      field: 'date',
-      headerName: 'Started at',
-      width: 200,
-      editable: false,
-      type: 'string'
-    },
-    {
-      field: 'endTime',
-      headerName: 'Finished at',
-      width: 200,
-      editable: false,
-      type: 'string'
-    },
-    {
-      field: 'reservationDate',
-      headerName: 'Date of reservation',
-      width: 200,
-      editable: false,
-      type: 'string'
-    },
-    {
-      field: 'paymentTime',
-      headerName: 'Date of payment',
-      width: 200,
-      editable: false,
-      type: 'string'
-    },
-    {
-      field: 'deposit',
-      headerName: 'Deposit amount',
-      width: 150,
-      editable: false,
-      type: 'number'
-    },
-    {
-      field: 'tip',
-      headerName: 'Tip',
-      width: 150,
-      editable: false,
-      type: 'number'
-    },
-    {
-      field: 'takeaway',
-      headerName: 'Takeaway?',
-      width: 150,
-      editable: false,
-      type: 'boolean'
-    },
-    {
-      field: 'numberOfGuests',
-      headerName: 'Number of guests',
-      width: 150,
-      editable: false,
-      type: 'number'
-    },
-    {
-      field: 'tableId',
-      headerName: 'Table number',
-      width: 150,
-      editable: false,
-      type: 'number'
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Details',
-      width: 150,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={<ArrowForwardIos />}
-            label="Details"
-            id={
-              'VisitSeeDetailsButton' +
-              rows[parseInt(id.toString())].id +
-              rows[parseInt(id.toString())].name
-            }
-            className="textPrimary"
-            onClick={() => {
-              setActiveOrders(rows[parseInt(id.toString())].orders)
-              setActiveVisitId(rows[parseInt(id.toString())].visitId)
-              setOrdersOpen(true)
-            }}
-            color="inherit"
-          />
-        ]
-      }
+  const RenderVisitRow = ({ visit }: { visit: VisitType }) => {
+    const [open, setOpen] = useState(false)
+
+    const toggleDetails = () => {
+      setOpen(prev => !prev)
     }
-  ]
+
+    const ordersEarnings = visit.orders.reduce(
+      (sum: number, order: OrderType) => sum + order.cost,
+      0
+    )
+
+    return (
+      <>
+        <TableRow>
+          <TableCell>
+            {visit.orders.length ? (
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                className="dark:text-grey-0"
+                onClick={() => {
+                  toggleDetails()
+                }}
+              >
+                {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowRight />}
+              </IconButton>
+            ) : (
+              <></>
+            )}
+          </TableCell>
+          <TableCell>{visit.visitId}</TableCell>
+          <TableCell>{visit.reservationDate}</TableCell>
+          <TableCell>{visit.date}</TableCell>
+          <TableCell>{visit.endTime}</TableCell>
+          <TableCell>{visit.orders.length}</TableCell>
+          <TableCell>{ordersEarnings.toFixed(2)}</TableCell>
+          <TableCell>{visit.tip ?? 0}</TableCell>
+          <TableCell>
+            {visit.tip
+              ? (ordersEarnings + visit.tip).toFixed(2)
+              : ordersEarnings.toFixed(2)}
+          </TableCell>
+          <TableCell>{visit.takeaway ? <Check /> : <Close />}</TableCell>
+          <TableCell>
+            {visit.participants.length + visit.numberOfGuests}
+          </TableCell>
+          <TableCell>{visit.tableId}</TableCell>
+        </TableRow>
+        {open && (
+          <TableRow className="bg-grey-0 dark:bg-grey-5">
+            <TableCell colSpan={12}>
+              <Table className="w-full">
+                <TableHead>
+                  <TableCell>Expand</TableCell>
+                  <TableCell>Order ID</TableCell>
+                  <TableCell>Assigned employee</TableCell>
+                  <TableCell>Items ordered count</TableCell>
+                  <TableCell>Earnings</TableCell>
+                </TableHead>
+                <TableBody>
+                  {visit.orders.map((order: OrderType) => (
+                    <RenderOrderRow key={order.orderId} order={order} />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableCell>
+          </TableRow>
+        )}
+      </>
+    )
+  }
+
+  const RenderOrderRow = ({ order }: { order: OrderType }) => {
+    const [open, setOpen] = useState(false)
+
+    const toggleDetails = () => {
+      setOpen(prev => !prev)
+    }
+
+    return (
+      <>
+        <TableRow>
+          <TableCell>
+            {order.items.length ? (
+              <IconButton
+                aria-label="expand row"
+                size="small"
+                className="dark:text-grey-0"
+                onClick={() => {
+                  toggleDetails()
+                }}
+              >
+                {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowRight />}
+              </IconButton>
+            ) : (
+              <></>
+            )}
+          </TableCell>
+          <TableCell>{order.orderId}</TableCell>
+          <TableCell>
+            {order.assignedEmployee.firstName +
+              ' ' +
+              order.assignedEmployee.lastName}
+          </TableCell>
+          <TableCell>{order.items.length}</TableCell>
+          <TableCell>{order.cost}</TableCell>
+        </TableRow>
+        {open && (
+          <TableRow className="bg-grey-1 dark:bg-grey-6">
+            <TableCell colSpan={6}>
+              <Table className="w-full">
+                <TableHead>
+                  <TableCell>Image</TableCell>
+                  <TableCell>Menu item name</TableCell>
+                  <TableCell>One item price</TableCell>
+                  <TableCell>Ordered count</TableCell>
+                  <TableCell>Total</TableCell>
+                </TableHead>
+                <TableBody>
+                  {order.items.map(order => (
+                    <TableRow>
+                      <TableCell>
+                        <img
+                          src={getImage(order.menuItem.photo, Default)}
+                          className="w-12 h-12"
+                        />
+                      </TableCell>
+                      <TableCell>{order.menuItem.name}</TableCell>
+                      <TableCell>{order.oneItemPrice}</TableCell>
+                      <TableCell>{order.amount}</TableCell>
+                      <TableCell>{order.totalCost}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableCell>
+          </TableRow>
+        )}
+      </>
+    )
+  }
 
   return (
-    <div className="h-full w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
-      {!ordersOpen ? (
-        <div className="h-full w-full rounded-lg bg-white dark:bg-black">
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            disableRowSelectionOnClick
-            initialState={{
-              pagination: { paginationModel: { pageSize: 5 } }
-            }}
-            pageSizeOptions={[5, 10, 25]}
-            className="h-full w-full border-0"
-          />
-        </div>
-      ) : (
-        <div className="h-full w-full rounded-lg bg-white dark:bg-black">
-          <div className="flex items-center  gap-6">
-            <button
-              onClick={() => setOrdersOpen(false)}
-              className=" m-3 flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-            >
-              <ArrowBackIcon />
-              <h1 className="text-md font-mont-md"> Back </h1>
-            </button>
-            <h1 className="text-md font-mont-md dark:text-grey-0">
-              {' '}
-              Visit {activeVisitId ? activeVisitId : ''} orders{' '}
-            </h1>
-          </div>
-          <div className="">
-            <OrderHistory orders={activeOrders} />
-          </div>
-        </div>
-      )}
+    <div className="h-full overflow-y-auto scroll w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
+      <Table>
+        <TableHead>
+          <TableCell>Expand</TableCell>
+          <TableCell>Visit ID</TableCell>
+          <TableCell>Date of reservation</TableCell>
+          <TableCell>Started at</TableCell>
+          <TableCell>Finished at</TableCell>
+          <TableCell>Orders count</TableCell>
+          <TableCell>Earnings</TableCell>
+          <TableCell>Tip</TableCell>
+          <TableCell>Total earnings</TableCell>
+          <TableCell>Takeaway?</TableCell>
+          <TableCell>Clients in total</TableCell>
+          <TableCell>Table number</TableCell>
+        </TableHead>
+        <TableBody>
+          {visits.map((visit: VisitType) => (
+            <RenderVisitRow key={visit.visitId} visit={visit} />
+          ))}
+        </TableBody>
+      </Table>
     </div>
   )
 }
