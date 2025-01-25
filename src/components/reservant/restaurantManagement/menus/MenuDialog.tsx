@@ -121,8 +121,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
         alternateName: values.alternateName,
         menuType: values.menuType,
         dateFrom: values.dateFrom,
-        dateUntil: values.dateUntil,
-        photo: '',
+        dateUntil: values.dateUntil ? values.dateUntil : null,
         menuItemsIds: getSelectedMenuItemsIds()
       })
 
@@ -269,7 +268,6 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
                     name="dateUntil"
                     className="w-full dark:[color-scheme:dark]"
                   />
-                  <label>*</label>
                 </div>
                 {formik.errors.dateUntil && formik.touched.dateUntil && (
                   <ErrorMes msg={formik.errors.dateUntil} />
