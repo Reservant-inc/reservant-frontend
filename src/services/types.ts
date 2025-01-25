@@ -397,7 +397,14 @@ export type EventDataType = {
 
 export type EventDialogState = {
   isOpen: boolean
-  type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit' | null
+  type:
+    | 'delete'
+    | 'leave'
+    | 'details'
+    | 'manageParticipants'
+    | 'edit'
+    | 'seeParticipants'
+    | null
 }
 
 export type InterestedUser = {

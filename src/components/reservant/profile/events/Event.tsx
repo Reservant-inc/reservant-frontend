@@ -19,6 +19,8 @@ import ParticipantMenageDialog from './ParticipantMenageDialog'
 import EventEditDialog from './EventEditDialog'
 import { useTranslation } from 'react-i18next'
 
+import Dialog from '../../../reusableComponents/Dialog'
+
 interface EventProps {
   event: EventDataType
   listType: EventListType
@@ -41,7 +43,13 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const restaurant = event.restaurant
 
   const openDialog = async (
-    type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit'
+    type:
+      | 'delete'
+      | 'leave'
+      | 'details'
+      | 'manageParticipants'
+      | 'edit'
+      | 'seeParticipants'
   ) => {
     setDialogState({ isOpen: true, type })
 
@@ -50,6 +58,9 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
     }
 
     if (type === 'edit') {
+      await fetchEventDetails()
+    }
+    if (type === 'seeParticipants') {
       await fetchEventDetails()
     }
 
@@ -164,15 +175,16 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
                 <p className="font-mont-bd">{restaurant?.name}</p>
               </a>
             </h1>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <h1 className="text-sm text-grey-4 dark:text-grey-2">
                 {event.restaurant?.city}, {formatDate(event.time)}
               </h1>
-              {event.participants && (
-                <h1 className="text-sm text-grey-4 dark:text-grey-2 underline hover:cursor-pointer">
-                  {event.participants.length} {t('profile.events.participated')}
-                </h1>
-              )}
+              <h1
+                className="text-sm text-grey-4 dark:text-grey-2 underline hover:cursor-pointer"
+                onClick={() => openDialog('seeParticipants')}
+              >
+                {t('profile.events.see-participants')}
+              </h1>
             </div>
           </div>
         </div>
@@ -272,6 +284,38 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           onConfirm={handleDeleteEvent}
           confirmationText={t('event-creation.delete-confirmation')}
         />
+      )}
+
+      {dialogState.isOpen && dialogState.type === 'seeParticipants' && (
+        <Dialog
+          open={dialogState.isOpen}
+          onClose={closeDialog}
+          title={t('profile.events.see-participants')}
+        >
+          <div className="w-[300px] max-h-[500px] overflow-y-auto scroll">
+            <div className="space-y-4 dark:text-white p-2">
+              {participants.length > 0 ? (
+                participants.map(user => (
+                  <div
+                    key={user.userId}
+                    className="flex items-center space-x-4"
+                  >
+                    <img
+                      src={getImage(user.photo, DefaultImage)}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <span>
+                      {user.firstName} {user.lastName}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <h1>{t('customer-service.visit-details.no-participants')}</h1>
+              )}
+            </div>
+          </div>
+        </Dialog>
       )}
     </div>
   )
