@@ -9,7 +9,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  IconButton
+  IconButton,
+  TableContainer
 } from '@mui/material'
 import {
   Check,
@@ -141,20 +142,22 @@ const HistoryTab: React.FC = ({}) => {
         {open && (
           <TableRow className="bg-grey-0 dark:bg-grey-5">
             <TableCell colSpan={12}>
-              <Table className="w-full">
-                <TableHead>
-                  <TableCell>Expand</TableCell>
-                  <TableCell>Order ID</TableCell>
-                  <TableCell>Assigned employee</TableCell>
-                  <TableCell>Items ordered count</TableCell>
-                  <TableCell>Earnings</TableCell>
-                </TableHead>
-                <TableBody>
-                  {visit.orders.map((order: OrderType) => (
-                    <RenderOrderRow key={order.orderId} order={order} />
-                  ))}
-                </TableBody>
-              </Table>
+              <TableContainer>
+                <Table className="w-full">
+                  <TableHead>
+                    <TableCell>Expand</TableCell>
+                    <TableCell>Order ID</TableCell>
+                    <TableCell>Assigned employee</TableCell>
+                    <TableCell>Items ordered count</TableCell>
+                    <TableCell>Earnings</TableCell>
+                  </TableHead>
+                  <TableBody>
+                    {visit.orders.map((order: OrderType) => (
+                      <RenderOrderRow key={order.orderId} order={order} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </TableCell>
           </TableRow>
         )}
@@ -200,31 +203,33 @@ const HistoryTab: React.FC = ({}) => {
         {open && (
           <TableRow className="bg-grey-1 dark:bg-grey-6">
             <TableCell colSpan={6}>
-              <Table className="w-full">
-                <TableHead>
-                  <TableCell>Image</TableCell>
-                  <TableCell>Menu item name</TableCell>
-                  <TableCell>One item price</TableCell>
-                  <TableCell>Ordered count</TableCell>
-                  <TableCell>Total</TableCell>
-                </TableHead>
-                <TableBody>
-                  {order.items.map(order => (
-                    <TableRow>
-                      <TableCell>
-                        <img
-                          src={getImage(order.menuItem.photo, Default)}
-                          className="w-12 h-12"
-                        />
-                      </TableCell>
-                      <TableCell>{order.menuItem.name}</TableCell>
-                      <TableCell>{order.oneItemPrice}</TableCell>
-                      <TableCell>{order.amount}</TableCell>
-                      <TableCell>{order.totalCost}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <TableContainer>
+                <Table className="w-full">
+                  <TableHead>
+                    <TableCell>Image</TableCell>
+                    <TableCell>Menu item name</TableCell>
+                    <TableCell>One item price</TableCell>
+                    <TableCell>Ordered count</TableCell>
+                    <TableCell>Total</TableCell>
+                  </TableHead>
+                  <TableBody>
+                    {order.items.map(order => (
+                      <TableRow>
+                        <TableCell>
+                          <img
+                            src={getImage(order.menuItem.photo, Default)}
+                            className="w-12 h-12"
+                          />
+                        </TableCell>
+                        <TableCell>{order.menuItem.name}</TableCell>
+                        <TableCell>{order.oneItemPrice}</TableCell>
+                        <TableCell>{order.amount}</TableCell>
+                        <TableCell>{order.totalCost}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </TableCell>
           </TableRow>
         )}
@@ -234,27 +239,29 @@ const HistoryTab: React.FC = ({}) => {
 
   return (
     <div className="h-full overflow-y-auto scroll w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
-      <Table>
-        <TableHead>
-          <TableCell>Expand</TableCell>
-          <TableCell>Visit ID</TableCell>
-          <TableCell>Date of reservation</TableCell>
-          <TableCell>Started at</TableCell>
-          <TableCell>Finished at</TableCell>
-          <TableCell>Orders count</TableCell>
-          <TableCell>Earnings</TableCell>
-          <TableCell>Tip</TableCell>
-          <TableCell>Total earnings</TableCell>
-          <TableCell>Takeaway?</TableCell>
-          <TableCell>Clients in total</TableCell>
-          <TableCell>Table number</TableCell>
-        </TableHead>
-        <TableBody>
-          {visits.map((visit: VisitType) => (
-            <RenderVisitRow key={visit.visitId} visit={visit} />
-          ))}
-        </TableBody>
-      </Table>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableCell>Expand</TableCell>
+            <TableCell>Visit ID</TableCell>
+            <TableCell>Date of reservation</TableCell>
+            <TableCell>Started at</TableCell>
+            <TableCell>Finished at</TableCell>
+            <TableCell>Orders count</TableCell>
+            <TableCell>Earnings</TableCell>
+            <TableCell>Tip</TableCell>
+            <TableCell>Total earnings</TableCell>
+            <TableCell>Takeaway?</TableCell>
+            <TableCell>Clients in total</TableCell>
+            <TableCell>Table number</TableCell>
+          </TableHead>
+          <TableBody>
+            {visits.map((visit: VisitType) => (
+              <RenderVisitRow key={visit.visitId} visit={visit} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }
