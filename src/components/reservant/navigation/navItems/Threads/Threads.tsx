@@ -9,6 +9,7 @@ import {
   getImage
 } from '../../../../../services/APIconn'
 import {
+  FriendData,
   PaginationType,
   ThreadType,
   UserType
@@ -23,6 +24,7 @@ import FriendSelector from '../../../../reusableComponents/FriendSelector'
 import renderUserPhotos from '../../../../../utils/DisplayUserPhotos'
 import { ThreadContext } from '../../../../../contexts/ThreadContext'
 import { ThreadScope } from '../../../../../services/enums'
+import PrivateThreadPreview from './PrivateThreadPreview'
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false)
@@ -33,20 +35,20 @@ const Threads: React.FC = () => {
   const [page, setPage] = useState<number>(0)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
-  const [option, setOption] = useState<ThreadScope>(ThreadScope.All)
+  const [option, setOption] = useState<ThreadScope>(ThreadScope.Private)
+  const [friends, setFriends] = useState<FriendData[]>([])
 
   const apiBase = '/user/threads'
   const pageQuery = `page=${page}`
 
   const apiRoute: Record<ThreadScope, string> = {
-    [ThreadScope.All]: `?`,
     [ThreadScope.Private]: `?type=Private&`,
     [ThreadScope.Normal]: `?type=Normal&`,
     [ThreadScope.Event]: `?type=Event&`,
     [ThreadScope.Report]: `?type=Report&`
   }
 
-  const { handleThreadOpen, handleDeleteThread } = useContext(ThreadContext)
+  const { handleThreadOpen } = useContext(ThreadContext)
 
   const [t] = useTranslation('global')
 
@@ -64,6 +66,16 @@ const Threads: React.FC = () => {
     }
 
     setIsPressed(!isPressed)
+  }
+
+  const getFriends = async () => {
+    try {
+      const response: PaginationType = await fetchGET('/friends')
+      const data: FriendData[] = response.items as unknown as FriendData[]
+      setFriends(data)
+    } catch (error) {
+      console.error('Error fetching friends:', error)
+    }
   }
 
   const getThreads = async () => {
@@ -109,12 +121,21 @@ const Threads: React.FC = () => {
   }, [hasMore])
 
   useEffect(() => {
-    getThreads()
+    if (option != ThreadScope.Private) {
+      getThreads()
+    }
   }, [page])
 
   useEffect(() => {
     setPage(0)
-    getThreads()
+
+    if (option == ThreadScope.Private) {
+      setHasMore(false)
+      getFriends()
+    } else {
+      setHasMore(true)
+      getThreads()
+    }
   }, [option])
 
   const toggleCreatingThread = () => {
@@ -122,21 +143,6 @@ const Threads: React.FC = () => {
       clearStates()
     }
     setIsCreatingThread(!isCreatingThread)
-  }
-
-  const deleteThread = async (threadId: number) => {
-    try {
-      handleDeleteThread(threadId)
-      setThreads(prev => {
-        return prev.filter(thread => thread.threadId !== threadId)
-      })
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.error(error.formatErrors())
-      } else {
-        console.error('Unexpected error while deleting thread', error)
-      }
-    }
   }
 
   const postThread = async () => {
@@ -176,6 +182,36 @@ const Threads: React.FC = () => {
     setOption(option)
   }
 
+  const renderPrivateThreadsContent = () => {
+    return (
+      <List className="h-full w-full p-0">
+        <div
+          className="h-full overflow-y-auto scroll"
+          id="scrollableDiv"
+          ref={scrollableDivRef}
+        >
+          {friends.map(friend => (
+            <PrivateThreadPreview
+              key={friend.otherUser.userId}
+              friend={friend}
+              getFriends={() => {
+                setHasMore(false)
+                getFriends()
+              }}
+              handleThreadOpen={handleThreadOpen}
+              pressHandler={pressHandler}
+            />
+          ))}
+          {!hasMore && (
+            <div className="flex w-full justify-center p-2">
+              <h1 className="text-grey-2 text-sm">{t('threads.no-more')}</h1>
+            </div>
+          )}
+        </div>
+      </List>
+    )
+  }
+
   const renderThreadsContent = () => {
     return (
       <List className="h-full w-full p-0">
@@ -191,7 +227,6 @@ const Threads: React.FC = () => {
               renderUserPhotos={renderUserPhotos}
               handleThreadOpen={handleThreadOpen}
               pressHandler={pressHandler}
-              deleteThread={deleteThread}
             />
           ))}
           {hasMore && (
@@ -291,7 +326,6 @@ const Threads: React.FC = () => {
                 }
                 className="dark:bg-black pr-8 text-left rounded-md"
               >
-                <option value={ThreadScope.All}>{t('threads.all')}</option>
                 <option value={ThreadScope.Private}>
                   {t('threads.friends')}
                 </option>
@@ -304,7 +338,9 @@ const Threads: React.FC = () => {
                 </option>
               </select>
             </div>
-            {renderThreadsContent()}
+            {option === ThreadScope.Private
+              ? renderPrivateThreadsContent()
+              : renderThreadsContent()}
           </div>
         )}
       </OutsideClickHandler>

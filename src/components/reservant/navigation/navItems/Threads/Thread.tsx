@@ -33,6 +33,11 @@ const Thread: React.FC<ThreadProps> = ({
   const [hasMore, setHasMore] = useState<boolean>(true)
   const participants = thread.participants
 
+  thread.participants = thread.participants.filter(
+    participant =>
+      participant.userId != JSON.parse(Cookies.get('userInfo') as string).userId
+  )
+
   const [t] = useTranslation('global')
 
   const scrollableDivRef = useRef<HTMLDivElement | null>(null)

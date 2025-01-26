@@ -112,7 +112,7 @@ const Friend: React.FC<FriendProps> = ({
       }
     } catch (error) {
       if (error instanceof FetchError) {
-        if (error.errors === 'NotFound') {
+        if (error.errors.includes('NotFound')) {
           response = await createThread(otherUser.userId)
         } else {
           console.error(error.formatErrors())
@@ -121,8 +121,6 @@ const Friend: React.FC<FriendProps> = ({
         console.error('Unexpected error while creating thread', error)
       }
     }
-
-    console.log(response)
 
     handleThreadOpen({
       ...response,

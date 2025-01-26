@@ -12,12 +12,10 @@ interface ThreadContextProps {
 
 interface ThreadContextValue {
   handleThreadOpen: (thread: ThreadType) => void
-  handleDeleteThread: (threadId: number) => Promise<void>
 }
 
 export const ThreadContext = createContext<ThreadContextValue>({
-  handleThreadOpen: () => {},
-  handleDeleteThread: async () => {}
+  handleThreadOpen: () => {}
 })
 
 const ThreadContextProvider: React.FC<ThreadContextProps> = ({ children }) => {
@@ -106,27 +104,8 @@ const ThreadContextProvider: React.FC<ThreadContextProps> = ({ children }) => {
     setActiveThreads(prevThreads => [...prevThreads, thread])
   }
 
-  const handleDeleteThread = async (threadId: number) => {
-    try {
-      await fetchDELETE(`/threads/${threadId}`)
-      setActiveThreads(prev =>
-        prev.filter(thread => thread.threadId !== threadId)
-      )
-      setInactiveThreads(prev =>
-        prev.filter(thread => thread.threadId !== threadId)
-      )
-    } catch (error) {
-      if (error instanceof FetchError) {
-        console.error(error.formatErrors())
-      } else {
-        console.error('Unexpected error while deleting thread', error)
-      }
-    }
-  }
-
   const ctxValue = {
-    handleThreadOpen,
-    handleDeleteThread
+    handleThreadOpen
   }
 
   return (
