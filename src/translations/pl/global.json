@@ -35,7 +35,9 @@
         "uploadMore": "Dodaj więcej zdjęć",
         "noPhotos": "Dodaj więcej zdjęć",
         "restaurant": "Restauracja",
-        "uploadPhoto": "Dodaj zdjęcie"
+        "uploadPhoto": "Dodaj zdjęcie",
+        "step": "Krok",
+        "of": "z"
     },
     "reservation": {
         "history": "Historia rezerwacji",
