@@ -172,10 +172,10 @@ const FocusedRestaurantEventDetails: React.FC<
               }`}
             >
               {isParticipant
-                ? 'Opuść wydarzenie'
+                ? t('profile.events.leave')
                 : isInterested
-                  ? 'Usuń zainteresowanie'
-                  : 'Zainteresuj się'}
+                  ? t('profile.events.revoke')
+                  : t('general.join')}
             </button>
           )}
           {isCreator && (

@@ -37,7 +37,9 @@
         "noPhotos": "No photos uploaded yet",
         "remove": "Remove",
         "restaurant": "Restaurant",
-        "uploadPhoto": "Upload photo"
+        "uploadPhoto": "Upload photo",
+        "join": "Sign up"
+
     },
     "landing-page": {
         "loginButton": "Sign in",

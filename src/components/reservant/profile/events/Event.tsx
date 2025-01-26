@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   fetchDELETE,
   fetchGET,
@@ -40,6 +40,23 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const userInfo = JSON.parse(Cookies.get('userInfo') as string)
 
   const creator = event.creator
+
+  const [isParticipant, setIsParticipant] = useState<boolean>(false)
+
+  const isCreator = creator.userId === userInfo.userId
+
+  const [isInterested, setIsInterested] = useState<boolean>(false)
+  useEffect(() => {
+    const getInterest = async () => {
+      const res = await fetchGET(
+        `/user/is-interested-in-event/${event.eventId}`
+      )
+      setIsInterested(res)
+    }
+    getInterest()
+    fetchEventDetails()
+  }, [])
+
   const restaurant = event.restaurant
 
   const openDialog = async (
@@ -53,19 +70,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   ) => {
     setDialogState({ isOpen: true, type })
 
-    if (type === 'details') {
-      await fetchEventDetails()
-    }
-
-    if (type === 'edit') {
-      await fetchEventDetails()
-    }
-    if (type === 'seeParticipants') {
-      await fetchEventDetails()
-    }
-
     if (type === 'manageParticipants') {
-      await fetchEventDetails()
       await fetchInterestedUsers()
     }
   }
@@ -93,15 +98,25 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       console.error('Error leaving event:', error)
     }
   }
+  const handleInterestClick = async () => {
+    try {
+      await fetchPOST(`/events/${event.eventId}/interested`)
+      refreshEvents()
+    } catch (error) {
+      console.error('Error sending interest request:', error)
+    }
+  }
 
   const fetchEventDetails = async () => {
     try {
       const response = await fetchGET(`/events/${event.eventId}`)
       setEventDetails(response)
       setParticipants(response.participants || [])
+      setIsParticipant(
+        response.participants.some((p: any) => p.userId === userInfo.userId)
+      )
     } catch (error) {
       console.error('Error fetching event details:', error)
-    } finally {
     }
   }
 
@@ -201,7 +216,8 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       </div>
 
       <div className="flex gap-2 py-3">
-        {listType === EventListType.Interested && (
+        {(listType === EventListType.Interested ||
+          (!isCreator && isInterested)) && (
           <button
             className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             onClick={() => openDialog('leave')}
@@ -209,12 +225,21 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
             {t('profile.events.revoke')}
           </button>
         )}
-        {listType === EventListType.Participates && (
+        {(listType === EventListType.Participates ||
+          (!isCreator && isParticipant)) && (
           <button
             className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             onClick={() => openDialog('leave')}
           >
             {t('profile.events.leave')}
+          </button>
+        )}
+        {!isCreator && !isParticipant && !isInterested && (
+          <button
+            className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+            onClick={() => handleInterestClick()}
+          >
+            {t('general.join')}
           </button>
         )}
         <div className="flex space-x-4">
