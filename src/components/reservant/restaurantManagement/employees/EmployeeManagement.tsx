@@ -279,7 +279,7 @@ export default function EmployeeManagement() {
         <Dialog
           open={isEmploymentOpen}
           onClose={() => setIsEmploymentOpen(false)}
-          title="Employments"
+          title={t('management-tabs.employments')}
         >
           <EmploymentsManagement empid={selectedId} />
         </Dialog>
