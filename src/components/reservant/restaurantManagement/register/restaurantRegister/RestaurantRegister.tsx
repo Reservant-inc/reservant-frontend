@@ -533,7 +533,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
-                      {t('restaurant-register.next')}
+                      {t('restaurant-register.nextButton')}
                     </button>
 
                     {serverError && (
