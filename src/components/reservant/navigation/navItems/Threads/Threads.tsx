@@ -23,7 +23,6 @@ import PrivateThreadPreview from './PrivateThreadPreview'
 
 const Threads: React.FC = () => {
   const [isPressed, setIsPressed] = useState<boolean>(false)
-  const [isLoadingThreads, setIsLoadingThreads] = useState<boolean>(false)
   const [isCreatingThread, setIsCreatingThread] = useState<boolean>(false)
   const [threadTitle, setThreadTitle] = useState<string>()
   const [threads, setThreads] = useState<ThreadType[]>([])
@@ -32,6 +31,7 @@ const Threads: React.FC = () => {
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>([])
   const [option, setOption] = useState<ThreadScope>(ThreadScope.Private)
   const [friends, setFriends] = useState<FriendData[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   const apiBase = '/user/threads'
   const pageQuery = `page=${page}`
@@ -178,6 +178,12 @@ const Threads: React.FC = () => {
   }
 
   const renderPrivateThreadsContent = () => {
+    const filteredFriends = friends.filter(friend => {
+      const fullName =
+        `${friend.otherUser.firstName} ${friend.otherUser.lastName}`.toLowerCase()
+      return fullName.includes(searchTerm.toLowerCase())
+    })
+
     return (
       <List className="h-full w-full p-0">
         <div
@@ -185,7 +191,7 @@ const Threads: React.FC = () => {
           id="scrollableDiv"
           ref={scrollableDivRef}
         >
-          {friends.map(friend => (
+          {filteredFriends.map(friend => (
             <PrivateThreadPreview
               key={friend.otherUser.userId}
               friend={friend}
@@ -208,6 +214,10 @@ const Threads: React.FC = () => {
   }
 
   const renderThreadsContent = () => {
+    const filteredThreads = threads.filter(thread =>
+      thread.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+
     return (
       <List className="h-full w-full p-0">
         <div
@@ -215,7 +225,7 @@ const Threads: React.FC = () => {
           id="scrollableDiv"
           ref={scrollableDivRef}
         >
-          {threads.map(thread => (
+          {filteredThreads.map(thread => (
             <ThreadPreview
               key={thread.threadId}
               thread={thread}
@@ -308,6 +318,8 @@ const Threads: React.FC = () => {
                   type="text"
                   placeholder={t('threads.search')}
                   className={inputClass + ' w-full'}
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
                 />
                 <SearchIcon className="h-5 w-5 text-grey-4" />
               </div>
