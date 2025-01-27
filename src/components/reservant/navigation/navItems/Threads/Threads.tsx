@@ -50,7 +50,7 @@ const Threads: React.FC = () => {
   const scrollableDivRef = useRef<HTMLDivElement>(null)
 
   const clearStates = () => {
-    setThreadTitle('')
+    setThreadTitle(undefined)
     setFriendsToAdd([])
   }
 
