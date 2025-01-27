@@ -234,14 +234,17 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
             {t('profile.events.leave')}
           </button>
         )}
-        {!isCreator && !isParticipant && !isInterested && (
-          <button
-            className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
-            onClick={() => handleInterestClick()}
-          >
-            {t('general.join')}
-          </button>
-        )}
+        {new Date(event.time) >= new Date() &&
+          !isCreator &&
+          !isParticipant &&
+          !isInterested && (
+            <button
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+              onClick={() => handleInterestClick()}
+            >
+              {t('general.join')}
+            </button>
+          )}
         <div className="flex space-x-4">
           {listType === EventListType.Created &&
             new Date(event.time) >= new Date() && (
