@@ -6,12 +6,14 @@ import DefaultImage from '../../../assets/images/user.jpg'
 import Details from '../../reservant/restaurantManagement/dashboard/Details'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
+import { useTranslation } from 'react-i18next'
 
 const RestaurantDetails: React.FC = () => {
   const { restaurantId } = useParams<{ restaurantId: string }>()
   const [restaurant, setRestaurant] = useState<any>(null)
   const [employees, setEmployees] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [t] = useTranslation('global')
 
   useEffect(() => {
     if (restaurantId) {
@@ -46,12 +48,12 @@ const RestaurantDetails: React.FC = () => {
   }, [restaurantId])
 
   const renderEmployeeDetails = (employee: any) => (
-    <div key={employee.employeeId} className="p-4 bg-white my-2">
+    <div key={employee.employeeId} className="p-4 bg-white my-2 dark:text-white dark:bg-black">
       <div className="flex justify-between items-center">
         <h1 className="font-mont-bd text-md">{`${employee.firstName} ${employee.lastName}`}</h1>
         <Link to={`/customer-service/users/${employee.employeeId}`}>
           <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
-            Go to Profile
+            {t('customer-service.restaurant-details.go-to-profile')}
           </h1>
         </Link>
       </div>
@@ -63,10 +65,10 @@ const RestaurantDetails: React.FC = () => {
         />
         <div>
           <p className="font-mont-bd text-sm text-grey-3">
-            {employee.employeeId}
+            {`${t('customer-service.restaurant-details.employee-id')}: ${employee.employeeId}`}
           </p>
           <div className="flex items-center gap-2">
-            <p className="text-sm">Hall:</p>
+            <p className="text-sm">{t('customer-service.restaurant-details.hall')}:</p>
             {employee.isHallEmployee ? (
               <CheckIcon className="text-green" />
             ) : (
@@ -74,7 +76,7 @@ const RestaurantDetails: React.FC = () => {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-sm">Backdoor:</p>
+            <p className="text-sm">{t('customer-service.restaurant-details.backdoor')}:</p>
             {employee.isBackdoorEmployee ? (
               <CheckIcon className="text-green" />
             ) : (
@@ -88,11 +90,13 @@ const RestaurantDetails: React.FC = () => {
 
   const renderEmployees = () => (
     <div>
-      <h1 className="font-mont-bd text-md">Employees</h1>
+      <h1 className="font-mont-bd text-md">{t('customer-service.restaurant-details.employees')}</h1>
       {employees.length > 0 ? (
         employees.map(employee => renderEmployeeDetails(employee))
       ) : (
-        <p className="text-sm text-grey-3">No employees found.</p>
+        <p className="text-sm text-grey-3">
+          {t('customer-service.restaurant-details.no-employees')}
+        </p>
       )}
     </div>
   )
@@ -108,21 +112,21 @@ const RestaurantDetails: React.FC = () => {
   if (!restaurant) {
     return (
       <div className="text-center">
-        <p className="text-grey-5">No restaurant details available.</p>
+        <p className="text-grey-5">
+          {t('customer-service.restaurant-details.no-restaurant-details')}
+        </p>
       </div>
     )
   }
 
   return (
     <div className="h-full w-full flex flex-col">
-      {/* Nagłówek wyświetlany nad resztą */}
-      <h1 className="text-lg font-semibold p-2">Restaurant details</h1>
-  
-      {/* Reszta strony */}
+      <h1 className="text-lg font-semibold p-2">
+        {t('customer-service.restaurant-details.restaurant-details')}
+      </h1>
+
       <div className="flex h-full w-full gap-4 bg-grey-1 dark:bg-grey-5 overflow-hidden">
-        {/* Lewa kolumna */}
         <div className="flex flex-col gap-4 h-full w-1/2 overflow-hidden">
-          {/* Logo */}
           <div className="flex h-[40%] bg-white rounded-lg overflow-hidden shadow-md">
             <img
               src={getImage(restaurant.logo, DefaultImage)}
@@ -130,14 +134,12 @@ const RestaurantDetails: React.FC = () => {
               className="object-cover w-full h-full"
             />
           </div>
-  
-          {/* Lista pracowników */}
-          <div className="flex flex-col bg-white dark:bg-black rounded-lg p-4 shadow-md h-[70%] overflow-y-auto">
+
+          <div className="overflow-y-auto scroll flex flex-col bg-white dark:bg-black rounded-lg p-4 shadow-md h-[70%] overflow-y-auto">
             {renderEmployees()}
           </div>
         </div>
-  
-        {/* Prawa kolumna */}
+
         <Details />
       </div>
     </div>

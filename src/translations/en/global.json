@@ -954,6 +954,16 @@
             "status": "Status",
             "no-orders": "No orders.",
             "employee": "Employee"
+        },
+        "restaurant-details": {
+            "restaurant-details": "Restaurant details",
+            "go-to-profile": "Go to Profile",
+            "employees": "Employees",
+            "no-employees": "No employees found.",
+            "no-restaurant-details": "No restaurant details available.",
+            "hall": "Hall",
+            "backdoor": "Backdoor",
+            "employee-id": "Employee ID"
         }
     },
     "cart":{

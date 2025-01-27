@@ -952,6 +952,16 @@
             "status": "Status",
             "no-orders": "Brak zamówień.",
             "employee": "Pracownik"
+        },
+        "restaurant-details": {
+            "restaurant-details": "Szczegóły restauracji",
+            "go-to-profile": "Przejdź do profilu",
+            "employees": "Pracownicy",
+            "no-employees": "Nie znaleziono pracowników.",
+            "no-restaurant-details": "Brak szczegółów restauracji.",
+            "hall": "Sala",
+            "backdoor": "Zaplecze",
+            "employee-id": "Numer pracownika"
         }
     },
     "cart":{
