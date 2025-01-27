@@ -251,23 +251,25 @@
             },
             "reservationDeposit": {
                 "required": "Depozyt za rezerwacje jest wymagany",
-                "max": "Depozyt za rezerwacje nie moze przekroczyć 300",
-                "min": "Depozyt za rezerwacje nie moze być mniejszy niz 0",
+                "max": "Depozyt za rezerwacje nie może przekroczyć 300",
+                "min": "Depozyt za rezerwacje nie może być mniejszy niz 0",
                 "number": "Nalezy wprowadzić liczbę"
             },
             "maxReservationDurationMinutes": {
                 "required": "Maksymalny czas rezerwacji jest wymagany",
-                "max": "Maksymalny czas rezerwacji nie moze przekroczyć 1440 minut",
-                "min": "Maksymalny czas rezerwacji nie moze być nizszy niz 30 minut",
+                "max": "Maksymalny czas rezerwacji nie może przekroczyć 1440 minut",
+                "min": "Maksymalny czas rezerwacji nie może być nizszy niz 30 minut",
                 "number": "Nalezy wprowadzić liczbę"
             }
         },
                 "event-creation": {
         "name": {
-            "required": "Nazwa wydarzenia jest wymagana"
+            "required": "Nazwa wydarzenia jest wymagana",
+            "max": "Nazwa nie może przekroczyć 50 znaków"
         },
         "description": {
-            "required": "Opis jest wymagany"
+            "required": "Opis jest wymagany",
+            "max": "Opis nie może przekroczyć 200 znaków"
         },
         "time": {
             "required": "Czas wydarzenia jest wymagany",
@@ -945,7 +947,7 @@
         "new-reservation": "Nowa rezerwacja w",
         "new-notification": "Nowe powiadomienie."
     },
-    "ParticipantMenageDialog":{
+    "ParticipantManageDialog":{
         "manageParticipants":"Zarządzaj uczestnikami",
         "participants": "Uczestnicy",
         "interested": "Zainteresowani",

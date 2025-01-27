@@ -269,10 +269,12 @@
         },
         "event-creation": {
             "name": {
-            "required": "Event name is required"
+            "required": "Event name is required",
+            "max": "Name must have a maximum of 50 characters"
             },
             "description": {
-            "required": "Description is required"
+            "required": "Description is required",
+            "max": "Description must have a maximum of 200 characters"
             },
             "time": {
             "required": "Event time is required",
@@ -946,7 +948,7 @@
         "new-reservation": "New reservation in",
         "new-notification": "New notification."
     },
-    "ParticipantMenageDialog":{
+    "ParticipantManageDialog":{
         "manageParticipants":"Manage Participants",
         "participants": "Participants",
         "interested": "Interested",

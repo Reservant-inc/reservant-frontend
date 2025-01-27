@@ -68,7 +68,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
       onClose={onClose}
       title={t('event-creation.event-creation-title')}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col max-w-[600px] scroll overflow-y-auto">
         <h1 className="text-primary dark:text-secondary text-start font-bold p-2">
           {t('event-creation.event-creation')}
         </h1>
@@ -89,7 +89,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 
           {eventDetails && (
             <div className="pb-2">
-              <h2 className="text-lg font-bold text-primary dark:text-secondary">
+              <h2 className="text-lg font-bold break-words whitespace-pre-wrap text-primary dark:text-secondary">
                 {eventDetails.name}
               </h2>
 
@@ -97,7 +97,7 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
                 {formatDate(eventDetails.time)}
               </p>
 
-              <p className="text-grey-4 italic text-start">
+              <p className="text-grey-4 italic break-words whitespace-pre-wrap text-start break-words whitespace-pre-wrap">
                 {eventDetails.description}
               </p>
             </div>

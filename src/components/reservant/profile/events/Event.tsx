@@ -177,7 +177,9 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           </div>
         </div>
 
-        <p className="text-sm">{event.description}</p>
+        <p className="text-sm break-words whitespace-pre-wrap">
+          {event.description}
+        </p>
 
         {event.photo && (
           <img
