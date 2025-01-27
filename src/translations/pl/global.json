@@ -39,7 +39,8 @@
         "step": "Krok",
         "of": "z",
         "join": "Zgłoś zainteresowanie",
-        "files": "Pliki"
+        "files": "Pliki",
+        "too-large": "Jeden z przesyłanych plików jest zbyt duży. Maksymalny rozmiar pliku: 1024Kb."
     },
     "reservation": {
         "history": "Historia rezerwacji",
