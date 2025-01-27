@@ -944,7 +944,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                                     // Jeśli checkbox jest ZAZNACZONY, ustaw domyślne godziny
                                     replace(index, {
                                       from: '00:00',
-                                      until: '00:00'
+                                      until: '23:30'
                                     })
                                   } else {
                                     // Jeśli checkbox jest ODZNACZONY, ustaw null
