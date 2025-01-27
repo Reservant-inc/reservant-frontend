@@ -294,6 +294,36 @@
         }
     },
     "restaurant-management": {
+        "visits": {
+"visits": "Visits",
+"orders": "Orders",
+"items": "Menu items",
+
+
+"expand":"Expand",
+"visitId" : "Visit ID",
+"date":"Date of reservation",
+"started":"Started at",
+"finished":"Finished at",
+"orders-count":"Orders count",
+"earnings": "Earnings from orders",
+"tip": "Tip",
+"takeaway":"Takeaway?",
+"clients":"Number of clients",
+"table":"Table number",
+
+"orderId":"Order ID",
+"assigned":"Assigned employee",
+"items-count": "Ordered items count",
+"earnings-items": "Earnings from items",
+
+"image":"Image",
+"item-name":"Menu item name",
+"one-item-price": "One item price",
+"amount": "Amount ordered",
+"total":"Total"
+
+        },
         "groups": {
             "counter": "Number of restaurants",
             "add-button": "Add a new Group",

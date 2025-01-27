@@ -19,11 +19,14 @@ import {
   KeyboardArrowRight
 } from '@mui/icons-material'
 import Default from '../../../../assets/images/defaultMenuItemImage.png'
+import { useTranslation } from 'react-i18next'
 
 const HistoryTab: React.FC = ({}) => {
   const [visits, setVisits] = useState<VisitType[]>([])
 
   const { restaurantId } = useParams()
+
+  const [t] = useTranslation('global')
 
   const activeRestaurantId =
     restaurantId === undefined ? -1 : parseInt(restaurantId)
@@ -128,11 +131,6 @@ const HistoryTab: React.FC = ({}) => {
           <TableCell>{visit.orders.length}</TableCell>
           <TableCell>{ordersEarnings.toFixed(2)}</TableCell>
           <TableCell>{visit.tip ?? 0}</TableCell>
-          <TableCell>
-            {visit.tip
-              ? (ordersEarnings + visit.tip).toFixed(2)
-              : ordersEarnings.toFixed(2)}
-          </TableCell>
           <TableCell>{visit.takeaway ? <Check /> : <Close />}</TableCell>
           <TableCell>
             {visit.participants.length + visit.numberOfGuests}
@@ -143,13 +141,27 @@ const HistoryTab: React.FC = ({}) => {
           <TableRow className="bg-grey-0 dark:bg-grey-5">
             <TableCell colSpan={12}>
               <TableContainer>
+                <h1 className="pt-3 pl-3 font-mont-bd text-lg">
+                  {t('restaurant-management.visits.orders')}:
+                </h1>
+
                 <Table className="w-full">
                   <TableHead>
-                    <TableCell>Expand</TableCell>
-                    <TableCell>Order ID</TableCell>
-                    <TableCell>Assigned employee</TableCell>
-                    <TableCell>Items ordered count</TableCell>
-                    <TableCell>Earnings</TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.expand')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.orderId')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.assigned')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.items-count')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.earnings-items')}
+                    </TableCell>
                   </TableHead>
                   <TableBody>
                     {visit.orders.map((order: OrderType) => (
@@ -204,13 +216,27 @@ const HistoryTab: React.FC = ({}) => {
           <TableRow className="bg-grey-1 dark:bg-grey-6">
             <TableCell colSpan={6}>
               <TableContainer>
+                <h1 className="pt-3 pl-3 font-mont-bd text-lg">
+                  {t('restaurant-management.visits.items')}:
+                </h1>
+
                 <Table className="w-full">
                   <TableHead>
-                    <TableCell>Image</TableCell>
-                    <TableCell>Menu item name</TableCell>
-                    <TableCell>One item price</TableCell>
-                    <TableCell>Ordered count</TableCell>
-                    <TableCell>Total</TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.image')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.item-name')}{' '}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.one-item-price')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.amount')}
+                    </TableCell>
+                    <TableCell>
+                      {t('restaurant-management.visits.total')}
+                    </TableCell>
                   </TableHead>
                   <TableBody>
                     {order.items.map(order => (
@@ -240,20 +266,24 @@ const HistoryTab: React.FC = ({}) => {
   return (
     <div className="h-full overflow-y-auto scroll w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
       <TableContainer>
+        <h1 className="pt-3 pl-3 font-mont-bd text-lg">
+          {t('restaurant-management.visits.visits')}:
+        </h1>
         <Table>
           <TableHead>
-            <TableCell>Expand</TableCell>
-            <TableCell>Visit ID</TableCell>
-            <TableCell>Date of reservation</TableCell>
-            <TableCell>Started at</TableCell>
-            <TableCell>Finished at</TableCell>
-            <TableCell>Orders count</TableCell>
-            <TableCell>Earnings</TableCell>
-            <TableCell>Tip</TableCell>
-            <TableCell>Total earnings</TableCell>
-            <TableCell>Takeaway?</TableCell>
-            <TableCell>Clients in total</TableCell>
-            <TableCell>Table number</TableCell>
+            <TableCell>{t('restaurant-management.visits.expand')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.visitId')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.date')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.started')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.finished')}</TableCell>
+            <TableCell>
+              {t('restaurant-management.visits.orders-count')}
+            </TableCell>
+            <TableCell>{t('restaurant-management.visits.earnings')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.tip')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.takeaway')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.clients')}</TableCell>
+            <TableCell>{t('restaurant-management.visits.table')}</TableCell>
           </TableHead>
           <TableBody>
             {visits.map((visit: VisitType) => (
