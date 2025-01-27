@@ -127,6 +127,8 @@ export default function EmployeeManagement() {
     try {
       await fetchDELETE(`/user/${id}`)
       setEmpToDel('')
+      populateRows()
+      setIsConfirmationOpen(false)
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
@@ -134,7 +136,6 @@ export default function EmployeeManagement() {
         console.error('Unexpected error')
       }
     }
-    populateRows()
   }
 
   const handleRowEdit = async (id: GridRowId) => {
@@ -289,7 +290,6 @@ export default function EmployeeManagement() {
         onClose={() => setIsConfirmationOpen(false)}
         onConfirm={() => {
           handleDeleteEmp(empToDel)
-          populateRows()
         }}
         confirmationText={t('employee-management.delete-employee-confirmation')} //@TODO translation
       />
