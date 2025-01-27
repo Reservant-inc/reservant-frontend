@@ -35,6 +35,13 @@ const Login: React.FC = () => {
 
       const response = await fetchPOST('/auth/login', JSON.stringify(values))
 
+      console.log(response)
+
+      if (response.roles.inculdes('RestaurantEmployee')) {
+        setLoginError(t('landing-page.error-403'))
+        return // Zatrzymujemy dalsze przetwarzanie
+      }
+
       if (response.status === 403) {
         // Jeśli status to 403, ustaw błąd z komunikatem
         setLoginError(t('landing-page.error-403'))
