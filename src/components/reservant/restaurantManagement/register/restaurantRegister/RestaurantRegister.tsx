@@ -42,13 +42,13 @@ const initialValues: RestaurantDataType = {
   groupId: -1,
   reservationDeposit: null,
   openingHours: [
-    { from: '00:00', until: '00:00' },
-    { from: '00:00', until: '00:00' },
-    { from: '00:00', until: '00:00' },
-    { from: '00:00', until: '00:00' },
-    { from: '00:00', until: '00:00' },
-    { from: '00:00', until: '00:00' },
-    { from: '00:00', until: '00:00' }
+    { from: '00:00', until: '23:30' },
+    { from: '00:00', until: '23:30' },
+    { from: '00:00', until: '23:30' },
+    { from: '00:00', until: '23:30' },
+    { from: '00:00', until: '23:30' },
+    { from: '00:00', until: '23:30' },
+    { from: '00:00', until: '23:30' }
   ],
   maxReservationDurationMinutes: null,
   location: {
@@ -356,7 +356,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         name="address"
                         label={t('restaurant-register.address-field-label')}
                         variant="standard"
-                        autoComplete={false}
                         as={TextField}
                         onBlur={async (
                           e: React.ChangeEvent<HTMLInputElement>
@@ -647,7 +646,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                                     // Jeśli checkbox jest ZAZNACZONY, ustaw domyślne godziny
                                     replace(index, {
                                       from: '00:00',
-                                      until: '00:00'
+                                      until: '23:30'
                                     })
                                   } else {
                                     // Jeśli checkbox jest ODZNACZONY, ustaw null
