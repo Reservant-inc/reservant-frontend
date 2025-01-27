@@ -1030,7 +1030,9 @@
         "report-submitted": "Report submitted successfully.",
         "user-banned": "User banned successfully.",
         "user-unbanned": "User unbanned successfully.",
-        "ban-access-denied": "You don't have permission to ban this user."
+        "ban-access-denied": "You don't have permission to ban this user.",
+        "user-deleted": "User deleted successfully.",
+        "user-delete-access-denied": "You don't have permission to delete this user's account."
     },
     "notifications": {
         "3-newest": "Three newest",
