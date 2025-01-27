@@ -8,6 +8,9 @@ import {
 import Cookies from 'js-cookie'
 import Dialog from '../../../reusableComponents/Dialog'
 import { useTranslation } from 'react-i18next'
+import { Tooltip } from '@mui/material'
+import { Group } from '@mui/icons-material'
+import DefaultPhoto from '../../../../assets/images/user.jpg'
 
 interface Participant {
   userId: string
@@ -46,6 +49,7 @@ const FocusedRestaurantEventDetails: React.FC<
   const isCreator = userId === event.creator.userId
   const [participants, setParticipants] = useState<Participant[]>([])
   const [showLeaveDialog, setShowLeaveDialog] = useState(false)
+  const [showParticipantsDialog, setShowParticipantsDialog] = useState(false)
   const isParticipant = participants.some(
     participant => participant.userId === userId
   )
@@ -159,7 +163,7 @@ const FocusedRestaurantEventDetails: React.FC<
           </div>
         </div>
 
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex justify-between items-center">
           {!isCreator && (
             <button
               onClick={
@@ -169,9 +173,7 @@ const FocusedRestaurantEventDetails: React.FC<
                     ? handleRemoveInterest
                     : handleInterestClick
               }
-              className={
-                ' w-3/4 px-4 py-2 transition text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md'
-              }
+              className="w-3/4 px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
             >
               {isParticipant
                 ? 'Opuść wydarzenie'
@@ -183,13 +185,53 @@ const FocusedRestaurantEventDetails: React.FC<
           {isCreator && (
             <button
               disabled
-              className="w-3/4 py-2 rounded-lg bg-grey-3 text-black cursor-not-allowed"
+              className="w-3/4 px-4 py-2 rounded-lg bg-grey-3 text-black cursor-not-allowed"
             >
               Jesteś twórcą tego eventu
             </button>
           )}
+          <Tooltip title="See participants" arrow>
+            <button
+              onClick={() => setShowParticipantsDialog(true)}
+              className="px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md flex items-center"
+            >
+              <Group />
+            </button>
+          </Tooltip>
         </div>
       </div>
+
+      {showParticipantsDialog && (
+        <Dialog
+          open={showParticipantsDialog}
+          onClose={() => setShowParticipantsDialog(false)}
+          title={t('profile.events.see-participants')}
+        >
+          <div className="w-[300px] max-h-[500px] overflow-y-auto scroll">
+            <div className="space-y-4 dark:text-white p-2">
+              {participants.length > 0 ? (
+                participants.map(user => (
+                  <div
+                    key={user.userId}
+                    className="flex items-center space-x-4"
+                  >
+                    <img
+                      src={getImage(user.photo ?? DefaultPhoto, DefaultPhoto)}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <span>
+                      {user.firstName} {user.lastName}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <h1>{t('customer-service.visit-details.no-participants')}</h1>
+              )}
+            </div>
+          </div>
+        </Dialog>
+      )}
 
       {showLeaveDialog && (
         <Dialog
