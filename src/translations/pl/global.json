@@ -820,6 +820,13 @@
         "delete_account_cannot_undone": "Tej akcji nie można cofnąć!"
     },
     "customer-service": {
+        "restaurant": {
+            "name": "Nazwa restauracji",
+            "type": "Rodzaj działalności",
+            "city": "Miasto",
+            "description": "Opis",
+            "actions": "Akcje"
+        },
         "reports": {
             "resolved": "Czy rozwiązane?",
             "report-date": "Data zgłoszenia",

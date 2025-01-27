@@ -824,6 +824,13 @@
         "delete_account_cannot_undone": "This action cannot be undone!"
     },
     "customer-service": {
+        "restaurant": {
+            "name": "Restaurant name",
+            "type": "Business type",
+            "city": "City",
+            "description": "Description",
+            "actions": "Actions"
+        },
         "reports": {
             "resolved": "Is resolved?",
             "report-date": "Report date",
