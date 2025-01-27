@@ -66,6 +66,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
             }
         }
 
+      console.log(response)
       setRows(tmp)
     } catch (error) {
       console.error('Error populating table', error)
@@ -115,7 +116,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
     const body = JSON.stringify([
       {
-        employmentId: newRow.id,
+        employmentId: newRow.employmentId,
         isBackdoorEmployee: newRow.isBackdoorEmployee,
         isHallEmployee: newRow.isHallEmployee
       }
