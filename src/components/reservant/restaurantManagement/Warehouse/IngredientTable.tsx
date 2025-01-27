@@ -24,7 +24,6 @@ import EditQuantityDialog from './EditQuantityDialog'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import TuneIcon from '@mui/icons-material/Tune'
 
-//Szymon TODO: podmienić formularze na formiki
 const IngredientTable: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true)
   const [ingredients, setIngredients] = useState<IngredientType[]>([])
@@ -45,12 +44,6 @@ const IngredientTable: React.FC = () => {
   >([])
   const [selectedDropdownIngredient, setSelectedDropdownIngredient] =
     useState<string>('')
-  const [formValues, setFormValues] = useState({
-    name: '',
-    unitOfMeasurement: 'Gram',
-    minimalAmount: 0,
-    amount: 0
-  })
 
   const [t] = useTranslation('global')
 
@@ -156,54 +149,54 @@ const IngredientTable: React.FC = () => {
     setIsGroceryListOpen(true)
   }
 
-  const handleFormChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value
-    })
-  }
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
-    setFormValues({
-      name: '',
-      unitOfMeasurement: 'Gram',
-      minimalAmount: 0,
-      amount: 0
-    })
+    // setFormValues({
+    //   publicName: '',
+    //   unitOfMeasurement: 'Gram',
+    //   minimalAmount: 0,
+    //   amount: 0
+    // })
   }
 
-  const handleAddIngredient = async () => {
+  const handleAddIngredient = async (values: {
+    publicName: string;
+    unitOfMeasurement: string;
+    minimalAmount: number;
+    amount?: number;
+  }) => {
     try {
-      const restaurantId = activeRestaurantId
-
+      const restaurantId = activeRestaurantId;
+  
       if (restaurantId === -1) {
-        console.error('Invalid restaurant ID')
-        return
+        console.error('Invalid restaurant ID');
+        return;
       }
-
+  
       const payload = {
-        publicName: formValues.name,
-        unitOfMeasurement: formValues.unitOfMeasurement,
-        minimalAmount: Number(formValues.minimalAmount),
+        publicName: values.publicName,
+        unitOfMeasurement: values.unitOfMeasurement,
+        minimalAmount: Number(values.minimalAmount),
         amountToOrder: 10,
-        amount: formValues.amount ? Number(formValues.amount) : 0,
-        restaurantId: restaurantId
-      }
-
-      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload))
-
+        amount: values.amount ? Number(values.amount) : 0,
+        restaurantId: restaurantId,
+      };
+  
+      const response = await fetchPOST(`/ingredients`, JSON.stringify(payload));
+  
       if (response) {
-        fetchIngredients()
+        fetchIngredients();
       } else {
-        console.warn('New ingredient added but no response returned')
+        console.warn('New ingredient added but no response returned');
       }
     } catch (error) {
-      console.error('Error adding ingredient:', error)
+      console.error('Error adding ingredient:', error);
     }
-  }
+  };
+  
+  
+  
 
   const handleIncreaseAmount = (id: number) => {
     setGroceryList(prevList =>
@@ -457,8 +450,8 @@ const IngredientTable: React.FC = () => {
       <AddIngredientDialog
         open={isModalOpen}
         onClose={handleCloseModal}
-        formValues={formValues}
-        onFormChange={handleFormChange}
+        // formValues={formValues}
+        // onFormChange={handleFormChange}
         onAddIngredient={handleAddIngredient}
         t={t}
       />

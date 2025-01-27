@@ -292,8 +292,43 @@
         "photoFileName": {
             "required": "Zdjęcie jest wymagane"
         }
+        },
+        "create-menu": {
+            "name": {
+                "required": "Nazwa menu jest wymagana",
+                "max": "Nazwa menu nie może przekraczać 20 znaków"
+            },
+            "alternateName": {
+                "max": "Alternatywna nazwa nie może przekraczać 20 znaków"
+            },
+            "menuType": {
+                "required": "Typ menu jest wymagany"
+            },
+            "dateFrom": {
+                "required": "Data rozpoczęcia jest wymagana"
+            },
+            "dateUntil": {
+                "required": "Data zakończenia jest wymagana",
+                "valid": "Data zakończenia musi być dzisiaj lub w przyszłości",
+                "afterDateFrom": "Data zakończenia musi być późniejsza niż data rozpoczęcia"
+            }
+        },
+        "add-ingredient": {
+            "publicName": {
+                "required": "Nazwa składnika jest wymagana",
+                "max": "Nazwa może mieć maksymalnie 20 znaków."
+            },
+            "unit": {
+                "required": "Jednostka miary jest wymagana"
+            },
+            "minimalAmount": {
+                "required": "Minimalna ilość jest wymagana",
+                "min": "Minimalna ilość nie może być mniejsza niż 0"
+            },
+            "amount": {
+                "min": "Ilość nie może być mniejsza niż 0"
+            }
         }
-
     },
     "restaurant-management": {
         "visits": {
@@ -643,7 +678,10 @@
         "unit-unit": "Opakowanie",
         "edit-quantity": "Edytuj ilość",
         "save": "Zapisz",
-        "comment-cannot-be-empty": "Komentarz nie może być pusty"
+        "comment-cannot-be-empty": "Komentarz nie może być pusty",
+        "select-unit": "Wybierz jednostkę",
+        "comment-max-200": "Komentarz musi mieć maksymalnie 200 znaków",
+        "amount-min-0": "Aktualna ilość musi wynosić minimum 0"
     },
     "delivery": {
         "deliveries": "Zarządzanie dostawami",

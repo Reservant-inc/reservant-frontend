@@ -48,7 +48,7 @@ const IngredientHistoryDialog: React.FC<IngredientHistoryDialogProps> = ({
       title={`${t('warehouse.ingredient-history')} ${ingredient.publicName}`}
     >
       <div
-        className="p-4 text-black dark:text-white max-h-[65vh] min-w-[35vh] overflow-y-auto scroll"
+        className="p-4 text-black dark:text-white max-h-[65vh] min-w-[35vw] max-w-[65vw] overflow-y-auto scroll"
       >
         <h1 className="text-lg font-semibold mb-4">{t('warehouse.ingredient-details')}</h1>
         <p>
@@ -111,7 +111,7 @@ const IngredientHistoryDialog: React.FC<IngredientHistoryDialogProps> = ({
                       <span className="font-mont-bd">{t('warehouse.new-amount1')}:</span>{' '}
                       {correction.newAmount}
                     </p>
-                    <p>
+                    <p className="break-words text-wrap">
                       <span className="font-mont-bd">{t('warehouse.comment')}:</span>{' '}
                       {correction.comment}
                     </p>

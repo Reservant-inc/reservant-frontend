@@ -297,7 +297,43 @@
             "photoFileName": {
             "required": "Photo is required"
             }
-        }
+        },
+        "create-menu": {
+            "name": {
+                "required": "Menu name is required",
+                "max": "Menu name cannot exceed 20 characters"
+            },
+            "alternateName": {
+                "max": "Alternate name cannot exceed 20 characters"
+            },
+            "menuType": {
+                "required": "Menu type is required"
+            },
+            "dateFrom": {
+                "required": "Start date is required"
+            },
+            "dateUntil": {
+                "required": "End date is required",
+                "valid": "End date must be today or in the future",
+                "afterDateFrom": "End date must be after the start date"
+            }
+        },
+        "add-ingredient": {
+            "publicName": {
+                "required": "The name of the ingredient is required",
+                "max": "Name must be at most 20 characters long."
+            },
+            "unit": {
+                "required": "The unit of measurement is required"
+            },
+            "minimalAmount": {
+                "required": "The minimal amount is required",
+                "min": "The minimal amount cannot be less than 0"
+            },
+            "amount": {
+                "min": "The amount cannot be less than 0"
+            }
+        }   
     },
     "restaurant-management": {
         "visits": {
@@ -645,7 +681,10 @@
         "unit-unit": "Unit",
         "edit-quantity": "Edit quantity",
         "save": "Save",
-        "comment-cannot-be-empty": "Comment cannot be empty"
+        "comment-cannot-be-empty": "Comment cannot be empty",
+        "select-unit": "Select unit",
+        "comment-max-200": "The comment must have a maximum of 200 characters",
+        "amount-min-0": "Current amount must be at least 0"
     },
     "delivery": {
         "deliveries": "Deliveries management",
