@@ -195,7 +195,7 @@ export const useValidationSchemas = () => {
     })
     .test(
       'at-least-one-checkbox',
-      t('errors.employee-register.employeeRole.required'),
+      t('errors.add-employee.employeeRole.required'),
       obj => {
         if (obj.isBackdoorEmployee || obj.isHallEmployee) {
           return true

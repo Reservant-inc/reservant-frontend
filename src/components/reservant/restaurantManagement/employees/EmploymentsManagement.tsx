@@ -54,7 +54,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
           if (response[i].userId === empid)
             for (const j in response[i].employments) {
               tmp.push({
-                id: Number(i),
+                id: Number(j),
                 employmentId: response[i].employments[j].employmentId,
                 restaurantName: response[i].employments[j].restaurantName,
                 restaurantId:
@@ -290,7 +290,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
           {formik => {
             return (
               <Form>
-                <div className="w-full flex flex-col items-start gap-3 justify-center">
+                <div className="w-full flex items-center justify-center">
                   <div className="form-control flex gap-6 w-full justify-start">
                     <Field
                       id="selectedRestaurant"
@@ -355,25 +355,27 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                       </span>
                     </div>
                   </div>
-                  <button
-                    id="RestaurantAddEmpSubmitButton"
-                    type="submit"
-                    disabled={!formik.dirty || !formik.isValid}
-                    className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
-                  >
-                    <h1 className="font-mont-md text-md">
-                      {t('add-employee.addEmployee')}
-                    </h1>
-                  </button>
                   <div className="">
-                    <ErrorMessage name="isBackdoorEmployee">
-                      {msg => <ErrorMes msg={msg} />}
-                    </ErrorMessage>
-                    {!formik.touched.isBackdoorEmployee && (
-                      <ErrorMessage name="isHallEmployee">
+                    <button
+                      id="RestaurantAddEmpSubmitButton"
+                      type="submit"
+                      disabled={!formik.dirty || !formik.isValid}
+                      className=" gap-1 text-nowrap flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                    >
+                      <h1 className="font-mont-md text-md">
+                        {t('add-employee.addEmployee')}
+                      </h1>
+                    </button>
+                    <>
+                      <ErrorMessage name="isBackdoorEmployee">
                         {msg => <ErrorMes msg={msg} />}
                       </ErrorMessage>
-                    )}
+                      {!formik.touched.isBackdoorEmployee && (
+                        <ErrorMessage name="isHallEmployee">
+                          {msg => <ErrorMes msg={msg} />}
+                        </ErrorMessage>
+                      )}
+                    </>
                   </div>
                 </div>
               </Form>
