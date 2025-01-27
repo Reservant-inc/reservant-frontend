@@ -281,7 +281,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                 onChange={e => {
                   setOption(e.target.value as Option)
                 }}
-                className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
+                className="border-[1px] dark:bg-black rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
               >
                 <option
                   value={Option.All}
@@ -319,7 +319,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                     )
                     setObject(selectedObject)
                   }}
-                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
+                  className="border-[1px] dark:bg-black rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
                 >
                   <option
                     value=""
@@ -356,7 +356,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                     )
                     setObject(selectedObject)
                   }}
-                  className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
+                  className="border-[1px] dark:bg-black rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
                 >
                   <option
                     value=""
@@ -388,7 +388,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               id="timePeriodSelect"
               value={timePeriod}
               onChange={e => setTimePeriod(e.target.value as TimePeriod)}
-              className="border-[1px] rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
+              className="border-[1px] dark:bg-black rounded-md border-grey-4 pr-8 py-1 text-sm h-8 dark:text-white"
             >
               <option
                 value={TimePeriod.PastMonth}

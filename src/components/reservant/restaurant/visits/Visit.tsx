@@ -45,7 +45,7 @@ const Visit: React.FC<VisitProps> = () => {
   const [friendsToAdd, setFriendsToAdd] = useState<UserType[]>(
     reservationData ? reservationData.friendsToAdd : []
   )
-
+  const [disabledTimeSlots, setDisabledTimeSlots] = useState<string[]>([])
   const [availableHours, setAvailableHours] = useState<
     { from: string; until: string }[]
   >([])
@@ -99,7 +99,7 @@ const Visit: React.FC<VisitProps> = () => {
       const visitHours = await fetchGET(
         `/restaurants/${restaurant.restaurantId}/available-hours?date=${date}&numberOfGuests=${guests}`
       )
-
+    // console.log(visitHours)
       setAvailableHours(visitHours)
     } catch (error) {
       if (error instanceof FetchError) {
@@ -112,22 +112,44 @@ const Visit: React.FC<VisitProps> = () => {
 
   const generateTimeSlots = () => {
     const slots: string[] = []
+    const disabledSlots: string[] = []
     const now = new Date()
     const isToday = date === getParsedDate()
 
-    availableHours.forEach(({ from, until }) => {
-      let currentTime = parseTime(from)
-      const endTime = parseTime(until)
+    const availableTimes = availableHours
+      .map(({ from, until }) => ({
+        from: parseTime(from),
+        until: parseTime(until),
+      }))
+      .sort((a, b) => a.from.getTime() - b.from.getTime())
 
-      while (currentTime <= endTime) {
+    availableTimes.forEach(({ from, until }) => {
+      let currentTime = from
+
+      while (currentTime < until) {
         if (!isToday || currentTime >= now) {
-          slots.push(formatTime(currentTime))
+          slots.push(formatLocalTime(currentTime))
         }
         currentTime = new Date(currentTime.getTime() + 30 * 60000)
       }
     })
 
-    setTimeSlots(slots)
+    const startOfDay = parseTime("00:00")
+    const endOfDay = parseTime("23:59")
+    let currentTime = startOfDay
+
+    while (currentTime <= endOfDay) {
+      const timeString = formatLocalTime(currentTime);
+  
+      if (!slots.includes(timeString)) {
+        disabledSlots.push(timeString)
+      }
+  
+      currentTime = new Date(currentTime.getTime() + 30 * 60000)
+    }
+  
+    setTimeSlots(slots);
+    setDisabledTimeSlots(disabledSlots);
   }
 
   const parseTime = (timeString: string) => {
@@ -137,13 +159,13 @@ const Visit: React.FC<VisitProps> = () => {
     return date
   }
 
-  const formatTime = (date: Date): string => {
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const ampm = hours >= 12 ? 'PM' : 'AM'
-    const formattedHours = hours % 12 || 12
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-    return `${formattedHours}:${formattedMinutes} ${ampm}`
+  const formatLocalTime = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true, 
+    }
+    return date.toLocaleTimeString([], options)
   }
 
   return (
@@ -203,20 +225,23 @@ const Visit: React.FC<VisitProps> = () => {
           </div>
           <div className="flex h-full w-full items-center  justify-between gap-3 text-nowrap">
             <label className="font-mont-md">{t('reservation.time')}: </label>
-            <select
-              id="timeselect"
-              onChange={e => setSelectedTimeslot(e.target.value)}
-              value={selectedTimeslot}
-              className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm  dark:bg-black dark:text-grey-0"
-            >
-              {timeSlots.length <= 0 && (
-                <option>{t('general.not-available')}</option>
-              )}
-              {timeSlots.map((slot, index) => (
-                <option key={index} value={slot} className="hover:bg-grey-1">
-                  {slot}
-                </option>
-              ))}
+              <select
+                id="timeselect"
+                onChange={(e) => {
+                  const selectedLocalTime = e.target.value
+                  setSelectedTimeslot(selectedLocalTime)
+                }}
+                value={selectedTimeslot}
+                className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm dark:bg-black dark:text-grey-0"
+              >
+                {timeSlots.length <= 0 && <option>{t('general.not-available')}</option>}
+                {timeSlots
+                  .filter((slot) => !disabledTimeSlots.includes(slot))
+                  .map((slot, index) => (
+                    <option key={index} value={slot}>
+                      {slot}
+                    </option>
+                  ))}
             </select>
           </div>
         </div>

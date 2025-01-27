@@ -32,7 +32,7 @@ const Tab: React.FC<TabProps> = ({ path, title, icon, id, full, onClose }) => {
         className={` ${isSelected ? 'bg-white dark:bg-black' : 'bg-grey-0 dark:bg-grey-5'} ${full && 'rounded-lg'}  h-full w-full rounded-t-lg px-4 dark:text-grey-1`}
         onClick={handleClick}
       >
-        <div className="flex text-nowrap items-center gap-2">
+        <div className="flex text-xs text-nowrap items-center gap-2">
           {icon}
           {(full || size.width > 1500 || !icon) && <h1>{title}</h1>}
         </div>

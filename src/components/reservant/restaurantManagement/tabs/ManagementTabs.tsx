@@ -238,13 +238,17 @@ const ManagementTabs: React.FC = ({}) => {
       </div>
       <Tooltip
         title={
-          restaurantId ? `${t('management-tabs.restaurant')} ${restaurant?.name}` : t('management-tabs.managementPanel')
+          restaurantId
+            ? `${t('management-tabs.restaurant')} ${restaurant?.name}`
+            : t('management-tabs.managementPanel')
         }
         placement="bottom"
         arrow
       >
         <h1 className="text-xl dark:text-grey-0 truncate text-right text-nowrap">
-          {restaurantId ? `${t('management-tabs.restaurant')} ${restaurant?.name}` : t('management-tabs.managementPanel')}
+          {restaurantId
+            ? `${restaurant?.name}`
+            : t('management-tabs.managementPanel')}
         </h1>
       </Tooltip>
     </div>

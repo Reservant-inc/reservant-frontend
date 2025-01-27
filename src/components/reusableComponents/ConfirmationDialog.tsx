@@ -21,10 +21,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   confirmationText
 }) => {
   const [t] = useTranslation('global')
-  const handleConfirm = () => {
-    onConfirm()
-    onClose()
-  }
+
   return (
     <Dialog open={open} onClose={onClose} title={t('general.confirmation')}>
       <div className="p-4 flex flex-col gap-4">
@@ -38,11 +35,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           <Button onClick={onClose} color="error" id="ConfirmationCancel">
             {t('general.cancel')}
           </Button>
-          <Button
-            onClick={handleConfirm}
-            color="primary"
-            id="ConfirmationConfirm"
-          >
+          <Button onClick={onConfirm} color="primary" id="ConfirmationConfirm">
             {t('general.yes')}
           </Button>
         </div>

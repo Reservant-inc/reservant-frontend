@@ -52,10 +52,16 @@ const EventCreationModal: React.FC<EventCreationModalProps> = ({
   const [t] = useTranslation('global')
 
   const validationSchema = Yup.object({
-    name: Yup.string().required(t('errors.event-creation.name.required')).trim().min(1, t('errors.event-creation.name.required')),
-    description: Yup.string().required(
-      t('errors.event-creation.description.required')
-    ).trim().min(1, t('errors.event-creation.description.required')),
+    name: Yup.string()
+      .required(t('errors.event-creation.name.required'))
+      .trim()
+      .min(1, t('errors.event-creation.name.required'))
+      .max(50, t('errors.event-creation.name.max')),
+    description: Yup.string()
+      .required(t('errors.event-creation.description.required'))
+      .trim()
+      .min(1, t('errors.event-creation.description.required'))
+      .max(200, t('errors.event-creation.description.max')),
     time: Yup.string()
       .required(t('errors.event-creation.time.required'))
       .test('is-future', t('errors.event-creation.time.isFuture'), value => {

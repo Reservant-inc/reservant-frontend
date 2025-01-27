@@ -341,8 +341,10 @@ export const useValidationSchemas = () => {
     name: yup.string().required(),
     alternateName: yup.string(),
     menuType: yup.string().required(),
-    dateFrom: yup.string().required(),
-    dateUntil: yup.string().required()
+    dateFrom: yup.date().required(),
+    dateUntil: yup
+      .date()
+      .min(new Date(), t('errors.user-register.birthDate.min'))
   })
 
   return {
