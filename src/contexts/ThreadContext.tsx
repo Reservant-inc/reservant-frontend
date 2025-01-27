@@ -3,8 +3,6 @@ import Thread from '../components/reservant/navigation/navItems/Threads/Thread'
 import InactiveThread from '../components/reservant/navigation/navItems/Threads/InactiveThread'
 import { ThreadType } from '../services/types'
 import renderUserPhotos from '../utils/DisplayUserPhotos'
-import { fetchDELETE } from '../services/APIconn'
-import { FetchError } from '../services/Errors'
 
 interface ThreadContextProps {
   children: ReactNode

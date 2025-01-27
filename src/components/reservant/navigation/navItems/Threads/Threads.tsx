@@ -2,12 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react'
 import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded'
 import AddCommentRoundedIcon from '@mui/icons-material/AddCommentRounded'
-import {
-  fetchDELETE,
-  fetchGET,
-  fetchPOST,
-  getImage
-} from '../../../../../services/APIconn'
+import { fetchGET, fetchPOST } from '../../../../../services/APIconn'
 import {
   FriendData,
   PaginationType,
@@ -136,7 +131,7 @@ const Threads: React.FC = () => {
       setHasMore(true)
       getThreads()
     }
-  }, [option])
+  }, [option, isPressed])
 
   const toggleCreatingThread = () => {
     if (isCreatingThread) {
