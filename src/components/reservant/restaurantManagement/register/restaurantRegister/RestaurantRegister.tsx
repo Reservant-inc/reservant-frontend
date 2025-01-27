@@ -297,7 +297,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   return (
     <div
       id="restaurantRegister-div-wrapper"
-      className="w-[700px] h-[750px] p-8 px-24 overflow-y-auto scroll"
+      className="w-[600px] h-[700px] p-4 flex flex-col gap-6 "
     >
       <h1
         id="restaurantRegister-header"
@@ -319,15 +319,13 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
         }
       >
         {formik => (
-          <Form className="w-full h-full mt-[10%]">
+          <Form className="w-full h-full ">
             <div className="form-container h-full flex flex-col items-center gap-2">
               {/* Pasek postępu */}
               <div className="relative w-4/5 h-4 bg-grey-0 dark:bg-grey-5 rounded-full overflow-hidden">
                 <div
-                  className="absolute h-full bg-primary dark:bg-secondary rounded-full transition-all"
-                  style={{
-                    width: `${(activeStep / 3) * 100}%`
-                  }}
+                  className={`${activeStep === 1 ? ' w-1/3 ' : activeStep === 2 ? ' w-2/3 ' : ' w-full '}
+                    h-full bg-primary dark:bg-secondary rounded-full transition-all`}
                 />
               </div>
               <span className="text-sm text-black font-mont-md dark:text-grey-2">
@@ -335,7 +333,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
               </span>
               {/* Step 1 */}
               {activeStep === 1 && (
-                <div className="flex w-full flex-col items-center gap-6">
+                <div className="px-4 h-[80%] overflow-y-auto scroll flex w-full flex-col items-center gap-6">
                   <Field
                     type="text"
                     id="name"
@@ -473,7 +471,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     }
                   />
 
-                  <div className="w-full mt-2">
+                  <div className="w-full ">
                     <InputLabel
                       id="restaurantType-label"
                       className={`[&>*]:label-[20px] ${
@@ -494,7 +492,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       name="restaurantType"
                       value={formik.values.restaurantType}
                       onChange={formik.handleChange}
-                      className={`w-full dark:text-white border-b-[1px] border-white`}
+                      className={`w-full dark:bg-black dark:text-white border-b-[1px] border-white`}
                     >
                       <option
                         id="restaurantRegister-opt-restaurant"
@@ -535,7 +533,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                       className={`flex h-[50px] w-[70px] cursor-pointer items-center justify-center rounded-lg shadow-md bg-primary dark:bg-secondary dark:text-black text-white
                           }`}
                     >
-                      {t('restaurant-register.next')}
+                      {t('restaurant-register.nextButton')}
                     </button>
 
                     {serverError && (
@@ -547,11 +545,11 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
 
               {/* Step 2 */}
               {activeStep === 2 && (
-                <div className="flex w-full flex-col items-center gap-4 pb-4">
+                <div className="px-4 h-[80%]  overflow-y-auto scroll h-4/5 flex w-full flex-col items-center gap-6">
                   <FieldArray name="tags">
                     {({ push, remove }) => (
                       <div className="flex flex-col w-4/5">
-                        <FormLabel className="text text-black font-mont-md mb-2 dark:text-white">
+                        <FormLabel className="text text-black font-mont-md  dark:text-white">
                           {t('restaurant-register.tags-label')}
                         </FormLabel>
                         <FormGroup className="grid grid-cols-2">
@@ -588,7 +586,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           ))}
                         </FormGroup>
                         {formik.touched.tags && formik.errors.tags && (
-                          <div className="text-error text-[15px] text-sm mt-1 font-mont-md">
+                          <div className="text-error text-[15px] text-sm  font-mont-md">
                             {formik.errors.tags}{' '}
                             {/* nie wiem co z tym zrobić */}
                           </div>
@@ -599,7 +597,9 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                   <div className="[&>*]:label-[20px] w-[88%] [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white">
                     <FormControlLabel
                       label={
-                        <span className="text-[15px]">{t('restaurant-register.provideDelivery-label')}</span>
+                        <span className="text-[15px]">
+                          {t('restaurant-register.provideDelivery-label')}
+                        </span>
                       }
                       control={
                         <Checkbox
@@ -618,7 +618,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                   <FieldArray name="openingHours">
                     {({ replace }) => (
                       <div className="flex flex-col w-4/5 gap-4">
-                        <FormLabel className="text text-[15px] text-black font-mont-md mb-2 dark:text-white">
+                        <FormLabel className="text text-[15px] text-black font-mont-md  dark:text-white">
                           {t('restaurant-register.openingHours-label')}
                         </FormLabel>
 
@@ -742,7 +742,9 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                     type="text"
                     id="maxReservationDurationMinutes"
                     name="maxReservationDurationMinutes"
-                    label={t('restaurant-register.maximum-reservation-duration')}
+                    label={t(
+                      'restaurant-register.maximum-reservation-duration'
+                    )}
                     variant="standard"
                     as={TextField}
                     className={`[&>*]:label-[20px] w-4/5 [&>*]:font-mont-md [&>*]:text-[15px] [&>*]:dark:text-white ${!(formik.errors.maxReservationDurationMinutes && formik.touched.maxReservationDurationMinutes) ? '[&>*]:text-black [&>*]:before:border-black dark:[&>*]:before:border-white [&>*]:after:border-secondary' : '[&>*]:text-error dark:[&>*]:text-error [&>*]:before:border-error [&>*]:after:border-error'}`}
@@ -778,7 +780,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
 
               {/* Step 3 */}
               {activeStep === 3 && (
-                <div className="flex w-full flex-col items-center gap-4">
+                <div className="px-4 h-[80%]  overflow-y-auto scroll flex w-full flex-col items-center gap-6 ">
                   <div className="flex items-center w-4/5 gap-4">
                     <label
                       htmlFor="logo"
@@ -985,7 +987,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                   </div>
 
                   <div className="w-4/5 flex flex-col text-[15px] dark:text-white">
-                    <label htmlFor="group" className="mt-2 text-lg">
+                    <label htmlFor="group" className=" text-lg">
                       {t('restaurant-register.group')}
                     </label>
 

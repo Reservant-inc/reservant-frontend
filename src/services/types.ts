@@ -327,7 +327,6 @@ export type ReviewType = {
 }
 
 export type VisitType = {
-  id: number
   clientId: string
   date: string
   deposit: number
@@ -347,7 +346,6 @@ export type VisitType = {
 }
 
 export type OrderType = {
-  id: number
   orderId: number
   visitId: number
   cost: number
@@ -397,7 +395,14 @@ export type EventDataType = {
 
 export type EventDialogState = {
   isOpen: boolean
-  type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit' | null
+  type:
+    | 'delete'
+    | 'leave'
+    | 'details'
+    | 'manageParticipants'
+    | 'edit'
+    | 'seeParticipants'
+    | null
 }
 
 export type InterestedUser = {

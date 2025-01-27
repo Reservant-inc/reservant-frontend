@@ -22,7 +22,7 @@ const Filters = <T extends Record<string, any>>({
     sortBy,
     filterByName,
   }: FiltersProps<T>) => {
-    const [sortOrder, setSortOrder] = useState<string>('newest');
+    const [sortOrder, setSortOrder] = useState<string>('oldest');
     const [startDate, setStartDate] = useState<string | null>(null);
     const [endDate, setEndDate] = useState<string | null>(null);
     const [t] = useTranslation('global');

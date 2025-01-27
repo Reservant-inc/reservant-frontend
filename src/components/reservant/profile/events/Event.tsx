@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   fetchDELETE,
   fetchGET,
@@ -19,6 +19,8 @@ import ParticipantMenageDialog from './ParticipantMenageDialog'
 import EventEditDialog from './EventEditDialog'
 import { useTranslation } from 'react-i18next'
 
+import Dialog from '../../../reusableComponents/Dialog'
+
 interface EventProps {
   event: EventDataType
   listType: EventListType
@@ -38,23 +40,37 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
   const userInfo = JSON.parse(Cookies.get('userInfo') as string)
 
   const creator = event.creator
+
+  const [isParticipant, setIsParticipant] = useState<boolean>(false)
+
+  const isCreator = creator.userId === userInfo.userId
+
+  const [isInterested, setIsInterested] = useState<boolean>(false)
+  useEffect(() => {
+    const getInterest = async () => {
+      const res = await fetchGET(
+        `/user/is-interested-in-event/${event.eventId}`
+      )
+      setIsInterested(res)
+    }
+    getInterest()
+    fetchEventDetails()
+  }, [])
+
   const restaurant = event.restaurant
 
   const openDialog = async (
-    type: 'delete' | 'leave' | 'details' | 'manageParticipants' | 'edit'
+    type:
+      | 'delete'
+      | 'leave'
+      | 'details'
+      | 'manageParticipants'
+      | 'edit'
+      | 'seeParticipants'
   ) => {
     setDialogState({ isOpen: true, type })
 
-    if (type === 'details') {
-      await fetchEventDetails()
-    }
-
-    if (type === 'edit') {
-      await fetchEventDetails()
-    }
-
     if (type === 'manageParticipants') {
-      await fetchEventDetails()
       await fetchInterestedUsers()
     }
   }
@@ -82,15 +98,25 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       console.error('Error leaving event:', error)
     }
   }
+  const handleInterestClick = async () => {
+    try {
+      await fetchPOST(`/events/${event.eventId}/interested`)
+      refreshEvents()
+    } catch (error) {
+      console.error('Error sending interest request:', error)
+    }
+  }
 
   const fetchEventDetails = async () => {
     try {
       const response = await fetchGET(`/events/${event.eventId}`)
       setEventDetails(response)
       setParticipants(response.participants || [])
+      setIsParticipant(
+        response.participants.some((p: any) => p.userId === userInfo.userId)
+      )
     } catch (error) {
       console.error('Error fetching event details:', error)
-    } finally {
     }
   }
 
@@ -164,20 +190,23 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
                 <p className="font-mont-bd">{restaurant?.name}</p>
               </a>
             </h1>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <h1 className="text-sm text-grey-4 dark:text-grey-2">
                 {event.restaurant?.city}, {formatDate(event.time)}
               </h1>
-              {event.participants && (
-                <h1 className="text-sm text-grey-4 dark:text-grey-2 underline hover:cursor-pointer">
-                  {event.participants.length} {t('profile.events.participated')}
-                </h1>
-              )}
+              <h1
+                className="text-sm text-grey-4 dark:text-grey-2 underline hover:cursor-pointer"
+                onClick={() => openDialog('seeParticipants')}
+              >
+                {t('profile.events.see-participants')}
+              </h1>
             </div>
           </div>
         </div>
 
-        <p className="text-sm">{event.description}</p>
+        <p className="text-sm break-words whitespace-pre-wrap">
+          {event.description}
+        </p>
 
         {event.photo && (
           <img
@@ -189,7 +218,8 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
       </div>
 
       <div className="flex gap-2 py-3">
-        {listType === EventListType.Interested && (
+        {(listType === EventListType.Interested ||
+          (!isCreator && isInterested)) && (
           <button
             className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             onClick={() => openDialog('leave')}
@@ -197,7 +227,8 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
             {t('profile.events.revoke')}
           </button>
         )}
-        {listType === EventListType.Participates && (
+        {(listType === EventListType.Participates ||
+          (!isCreator && isParticipant)) && (
           <button
             className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
             onClick={() => openDialog('leave')}
@@ -205,6 +236,17 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
             {t('profile.events.leave')}
           </button>
         )}
+        {new Date(event.time) >= new Date() &&
+          !isCreator &&
+          !isParticipant &&
+          !isInterested && (
+            <button
+              className="border-[1px] rounded-md p-1 bg-white dark:bg-black border-primary text-primary transition  hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
+              onClick={() => handleInterestClick()}
+            >
+              {t('general.join')}
+            </button>
+          )}
         <div className="flex space-x-4">
           {listType === EventListType.Created &&
             new Date(event.time) >= new Date() && (
@@ -272,6 +314,38 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           onConfirm={handleDeleteEvent}
           confirmationText={t('event-creation.delete-confirmation')}
         />
+      )}
+
+      {dialogState.isOpen && dialogState.type === 'seeParticipants' && (
+        <Dialog
+          open={dialogState.isOpen}
+          onClose={closeDialog}
+          title={t('profile.events.see-participants')}
+        >
+          <div className="w-[300px] max-h-[500px] overflow-y-auto scroll">
+            <div className="space-y-4 dark:text-white p-2">
+              {participants.length > 0 ? (
+                participants.map(user => (
+                  <div
+                    key={user.userId}
+                    className="flex items-center space-x-4"
+                  >
+                    <img
+                      src={getImage(user.photo, DefaultImage)}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <span>
+                      {user.firstName} {user.lastName}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <h1>{t('customer-service.visit-details.no-participants')}</h1>
+              )}
+            </div>
+          </div>
+        </Dialog>
       )}
     </div>
   )
