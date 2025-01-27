@@ -784,7 +784,9 @@
             "no-event-history": "Brak wydarzeń do wyświetlenia.",
             "friend-participate": "Jeden albo więcej Twoich znajomych uczestniczył w tym wydarzeniu.",
             "you-created-event": "Utworzyłeś wydarzenie.",
-            "see-participants": "Zobacz uczestników"
+            "see-participants": "Zobacz uczestników",
+            "confirm-exit": "Czy na pewno chcesz opuścić wydarzenie",
+            "confirm-exit-title": "Potwierdzenie wyjścia"
         },
         "reports" : {
             "reports": "Zgłoszenia",

@@ -108,10 +108,10 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
                       <Tooltip
                         title={
                           isPastDeadline
-                            ? t('ParticipantMenageDialog.pastAcceptTime')
+                            ? t('ParticipantManageDialog.pastAcceptTime')
                             : isLimitReached
-                              ? t('ParticipantMenageDialog.participantLimit')
-                              : t('ParticipantMenageDialog.acceptParticipant')
+                              ? t('ParticipantManageDialog.participantLimit')
+                              : t('ParticipantManageDialog.acceptParticipant')
                         }
                       >
                         <button
@@ -131,7 +131,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
                         </button>
                       </Tooltip>
                       {/* Reject button */}
-                      <Tooltip title={t('ParticipantMenageDialog.decline')}>
+                      <Tooltip title={t('ParticipantManageDialog.decline')}>
                         <button
                           className="text-danger"
                           onClick={() => onRejectUser(user.userId)}
