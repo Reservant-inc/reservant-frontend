@@ -432,7 +432,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
               ]}
               yAxis={[
                 {
-                  label: 'Customer count'
+                  label: t('restaurant-management.statistics.customer-count')
                 }
               ]}
               series={[
@@ -485,7 +485,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                   }
                 }
               ]}
-              yAxis={[{ label: 'Revenue' }]}
+              yAxis={[{ label: t('restaurant-management.statistics.revenue') }]}
               series={[
                 {
                   type: 'bar',
@@ -537,7 +537,7 @@ const Statistics: React.FC<StatisticsProps> = ({ scope }) => {
                   }
                 }
               ]}
-              yAxis={[{ label: 'Reviews' }]}
+              yAxis={[{ label: t('restaurant-management.statistics.reviews') }]}
               series={[
                 {
                   type: 'bar',

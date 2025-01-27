@@ -6,7 +6,7 @@ const EventTab: React.FC = () => {
   return (
     <div className="flex flex-col rounded-lg w-full h-full">
       <div className="flex justify-between items-center dark:text-grey-1">
-        <div className="px-2 py-1">
+        <div className="px-2 ">
           <h1 className="text-lg font-mont-bd">Events</h1>
         </div>
         <EventListTabs />

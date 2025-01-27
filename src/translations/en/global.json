@@ -42,7 +42,8 @@
         "of": "of",
         "join": "Sign up",
         "files": "Files",
-        "employee": "Employee"
+        "employee": "Employee",
+        "too-large": "One of the provided files is too large. Maximum size is 1024Kb."
     },
     "landing-page": {
         "loginButton": "Sign in",
@@ -172,22 +173,27 @@
         },
         "login": {
             "login": "Login is required",
-            "password": "Password is required"
+            "password": "Password is required",
+            "restaurant-employee": "Restaurant employee may only log in in employee dashboard"
         },
         "user-register": {
             "firstName": {
                 "matches": "First name can only contain letters",
-                "required": "First name is required"
+                "required": "First name is required",
+                "max": "First name cannot exceed 30 letters"
             },
             "lastName": {
                 "matches": "Last name can only contain letters",
-                "required": "Last name is required"
+                "required": "Last name is required",
+                "max": "Last name cannot exceed 30 letters"
             },
             "login": {
                 "required": "Login is required",
                 "matches": "Login can only contain letters",
                 "taken": "User with this login already exists",
-                "invalid": "Login can only contain letters A-Z and numbers"
+                "invalid": "Login can only contain letters A-Z and numbers",
+                "max": "Login cannot exceed 50 characters",
+                "max-emp": "Login cannot exceed 50 characters. That includes the {OwnerID}+ prefix"
             },
             "email": {
                 "matches": "Invalid e-mail",
@@ -784,7 +790,9 @@
             "no-event-history": "No events to view.",
             "friend-participate": "One or more of your friends participated in this event.",
             "you-created-event": "You created an event.",
-            "see-participants": "see participants"
+            "see-participants": "See participants",
+            "confirm-exit": "Are you sure you want to leave",
+            "confirm-exit-title": "Confirm exit"
         },
         "reports" : {
             "reports": "Reports",
@@ -801,6 +809,8 @@
                 "pending": "Pending"
 
             },
+            "see-note": "see note",
+            "note": "Note",
             "category": {
                 "technical": "Technical",
                 "emp": "Complaint on employee",
@@ -823,6 +833,13 @@
         "delete_account_cannot_undone": "This action cannot be undone!"
     },
     "customer-service": {
+        "restaurant": {
+            "name": "Restaurant name",
+            "type": "Business type",
+            "city": "City",
+            "description": "Description",
+            "actions": "Actions"
+        },
         "reports": {
             "resolved": "Is resolved?",
             "report-date": "Report date",
@@ -953,6 +970,16 @@
             "status": "Status",
             "no-orders": "No orders.",
             "employee": "Employee"
+        },
+        "restaurant-details": {
+            "restaurant-details": "Restaurant details",
+            "go-to-profile": "Go to Profile",
+            "employees": "Employees",
+            "no-employees": "No employees found.",
+            "no-restaurant-details": "No restaurant details available.",
+            "hall": "Hall",
+            "backdoor": "Backdoor",
+            "employee-id": "Employee ID"
         }
     },
     "cart":{

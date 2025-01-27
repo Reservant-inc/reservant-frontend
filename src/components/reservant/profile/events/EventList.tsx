@@ -21,7 +21,7 @@ const EventList: React.FC<EventListProps> = ({ listType }) => {
   const location = useLocation()
 
   const apiRoutes: Record<EventListType, string> = {
-    [EventListType.Created]: '/user/events?category=CreatedBy',
+    [EventListType.Created]: '/user/events?category=CreatedBy&order=DateDesc',
     [EventListType.Interested]: '/user/events?category=InterestedIn',
     [EventListType.Participates]: '/user/events?category=ParticipateIn',
     [EventListType.History]: '/events?friendsOnly=false'

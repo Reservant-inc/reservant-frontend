@@ -212,7 +212,7 @@ const Event: React.FC<EventProps> = ({ event, listType, refreshEvents }) => {
           <img
             src={getImage(event.photo, '')}
             alt={`${event.name} event`}
-            className="w-full h-auto object-cover rounded-sm "
+            className="w-full h-auto object-cover rounded-md "
           />
         )}
       </div>

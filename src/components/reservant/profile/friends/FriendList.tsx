@@ -41,7 +41,7 @@ const FriendList: React.FC<FriendListProps> = ({ listType }) => {
   const fetchFriends = async () => {
     setLoading(true)
     try {
-      const response: PaginationType = await fetchGET(apiRoute)
+      const response: PaginationType = await fetchGET(`${apiRoute}?perPage=-1`)
       const data: FriendData[] = response.items as unknown as FriendData[]
       setFriends(data)
       setFilteredFriends(data)

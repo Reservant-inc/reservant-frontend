@@ -54,6 +54,7 @@ const FocusedRestaurantEventDetails: React.FC<
     participant => participant.userId === userId
   )
   const isInterested = interestedEventsIds.includes(event.eventId)
+  const [interested, setInterested] = useState(0)
 
   const [t] = useTranslation('global')
 
@@ -61,6 +62,7 @@ const FocusedRestaurantEventDetails: React.FC<
     try {
       const data = await fetchGET(`/events/${event.eventId}`)
       setParticipants(data.participants)
+      setInterested(data.numberInterested)
     } catch (error) {
       console.error('Error fetching participants:', error)
     }
@@ -146,7 +148,7 @@ const FocusedRestaurantEventDetails: React.FC<
               <span className="font-mont-bd text-primary dark:text-secondary">
                 {t('profile.events.participants')}:
               </span>{' '}
-              {event.numberInterested}
+              {interested}
             </p>
             <p>
               <span className="font-mont-bd text-primary dark:text-secondary">
@@ -187,10 +189,10 @@ const FocusedRestaurantEventDetails: React.FC<
               disabled
               className="w-3/4 px-4 py-2 rounded-lg bg-grey-3 text-black cursor-not-allowed"
             >
-              Jesteś twórcą tego eventu
+              {t('profile.events.created')}
             </button>
           )}
-          <Tooltip title="See participants" arrow>
+          <Tooltip title={t('profile.events.see-participants')} arrow>
             <button
               onClick={() => setShowParticipantsDialog(true)}
               className="px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md flex items-center"
@@ -237,11 +239,11 @@ const FocusedRestaurantEventDetails: React.FC<
         <Dialog
           open={showLeaveDialog}
           onClose={() => setShowLeaveDialog(false)}
-          title="Potwierdzenie wyjścia"
+          title={t('profile.events.confirm-exit-title')}
         >
           <div className="p-4 dark:text-white">
             <p className="mb-4">
-              Czy na pewno chcesz opuścić wydarzenie{' '}
+            {t('profile.events.confirm-exit')}{' '}
               <strong>{event.name}</strong>?
             </p>
             <div className="flex justify-end gap-2">
@@ -249,13 +251,13 @@ const FocusedRestaurantEventDetails: React.FC<
                 className="px-4 py-2 transition text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
                 onClick={handleLeaveEvent}
               >
-                Tak
+                {t('customer-service.visit-details.yes')}
               </button>
               <button
                 className="px-4 py-2 transition text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
                 onClick={() => setShowLeaveDialog(false)}
               >
-                Nie
+                {t('customer-service.visit-details.no')}
               </button>
             </div>
           </div>
