@@ -329,7 +329,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                 />
               </div>
               <span className="text-sm text-black font-mont-md dark:text-grey-2">
-                {`Step ${activeStep} of 3`}
+                {`${t('general.step')} ${activeStep} ${t('general.of')}  3`}
               </span>
               {/* Step 1 */}
               {activeStep === 1 && (
