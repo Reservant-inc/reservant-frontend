@@ -41,7 +41,8 @@
         "step": "Step",
         "of": "of",
         "join": "Sign up",
-        "files": "Files"
+        "files": "Files",
+        "too-large": "One of the provided files is too large. Maximum size is 1024Kb."
     },
     "landing-page": {
         "loginButton": "Sign in",

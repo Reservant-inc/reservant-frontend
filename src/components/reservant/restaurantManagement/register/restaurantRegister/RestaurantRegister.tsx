@@ -3,12 +3,14 @@ import { Formik, Form, Field, FieldArray } from 'formik'
 import { useTranslation } from 'react-i18next'
 // Material-UI imports
 import {
+  Alert,
   Checkbox,
   CircularProgress,
   FormControlLabel,
   FormGroup,
   FormLabel,
   InputLabel,
+  Snackbar,
   TextField
 } from '@mui/material'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
@@ -75,6 +77,7 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
   const [dropdownVisible, setDropdownVisible] = useState(false)
 
   const [groups, setGroups] = useState<null | GroupType[]>(null)
+  const [snackOpen, setSnackOpen] = useState<boolean>(false)
 
   const { t } = useTranslation('global')
 
@@ -269,6 +272,9 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
+        if (error.status === 400) {
+          setSnackOpen(true)
+        }
       } else {
         console.error(
           'Nieoczekiwany błąd podczas przesyłania plików lub wysyłania formularza:',
@@ -1054,6 +1060,20 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           </Form>
         )}
       </Formik>
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={5000}
+        onClose={() => setSnackOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert
+          onClose={() => setSnackOpen(false)}
+          severity="error"
+          variant="filled"
+        >
+          {t('general.too-large')}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
