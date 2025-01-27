@@ -17,7 +17,7 @@ export const useValidationSchemas = () => {
       .string()
       .max(30, t('errors.user-register.firstName.max'))
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.firstName.matches')
       )
       .required(t('errors.user-register.firstName.required')),
@@ -26,7 +26,7 @@ export const useValidationSchemas = () => {
       .string()
       .max(30, t('errors.user-register.lastName.max'))
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.lastName.matches')
       )
       .required(t('errors.user-register.lastName.required')),
@@ -96,7 +96,7 @@ export const useValidationSchemas = () => {
       .string()
       .max(30, t('errors.user-register.firstName.max'))
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.firstName.matches')
       )
       .required(t('errors.user-register.firstName.required')),
@@ -105,7 +105,7 @@ export const useValidationSchemas = () => {
       .string()
       .max(30, t('errors.user-register.lastName.max'))
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.lastName.matches')
       )
       .required(t('errors.user-register.lastName.required')),
@@ -167,6 +167,38 @@ export const useValidationSchemas = () => {
       )
       .required(t('errors.user-register.confirmPassword.required'))
   })
+  const employeeEditSchema = yup.object({
+    firstName: yup
+      .string()
+
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
+        t('errors.user-register.firstName.matches')
+      )
+      .required(t('errors.user-register.firstName.required')),
+
+    lastName: yup
+      .string()
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
+        t('errors.user-register.lastName.matches')
+      )
+      .required(t('errors.user-register.lastName.required')),
+
+    phoneNumber: yup
+      .string()
+      .matches(
+        /^\+[0-9]{11,15}$/,
+        t('errors.user-register.phoneNumber.matches')
+      )
+      .required(t('errors.user-register.phoneNumber.required')),
+
+    birthDate: yup
+      .date()
+      .min('1900-01-01', t('errors.user-register.birthDate.min'))
+      .max('2007-01-01', t('errors.user-register.birthDate.max'))
+      .required(t('errors.user-register.birthDate.required'))
+  })
 
   const RestaurantAddEmployeeSchema = yup
     .object({
@@ -178,7 +210,7 @@ export const useValidationSchemas = () => {
     })
     .test(
       'at-least-one-checkbox',
-      t('errors.employee-register.employeeRole.required'),
+      t('errors.add-employee.employeeRole.required'),
       obj => {
         if (obj.isBackdoorEmployee || obj.isHallEmployee) {
           return true
@@ -398,6 +430,7 @@ export const useValidationSchemas = () => {
     RestaurantRegisterStep3Schema,
     RestaurantEditSchema,
     menuItemsSchema,
-    RestaurantAddEmployeeSchema2
+    RestaurantAddEmployeeSchema2,
+    employeeEditSchema
   }
 }

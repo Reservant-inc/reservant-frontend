@@ -86,9 +86,11 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   }
 
   const handleDeleteClick = (id: GridRowId) => async () => {
-    setRows(rows.filter(row => row.id !== id))
+    const emp = rows.find(row => row.id == id)?.employmentId
 
-    await fetchDELETE(`/employments/${id}`)
+    await fetchDELETE(`/employments/${emp}`)
+
+    populateRows()
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -113,7 +115,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     setRows(rows.map(row => (row.id === newRow.id ? updatedRow : row)))
     const body = JSON.stringify([
       {
-        employmentId: newRow.id,
+        employmentId: newRow.employmentId,
         isBackdoorEmployee: newRow.isBackdoorEmployee,
         isHallEmployee: newRow.isHallEmployee
       }
@@ -202,7 +204,6 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     }
   ]
 
-
   useEffect(() => {
     const getRestaurants = async () => {
       try {
@@ -289,12 +290,12 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
           {formik => {
             return (
               <Form>
-                <div className="w-full flex flex-col items-start gap-3 justify-center">
-                  <div className="form-control flex gap-6 w-full justify-start">
+                <div className="w-full flex flex items-center gap-6 w-full">
+                  <div className="form-control flex gap-6 justify-start">
                     <Field
                       id="selectedRestaurant"
                       default="Select a restaurant"
-                      className="dark:bg-black dark:text-grey-0 rounded-lg"
+                      className="dark:bg-black dark:text-grey-0 rounded-lg pr-8"
                       name="selectedRestaurant"
                       component="select"
                     >
@@ -304,7 +305,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                         selected={true}
                         id="addEmp-option-default"
                       >
-                        Restaurant
+                        {t('general.restaurant')}
                       </option>
                       {restaurants
                         .filter(
@@ -354,17 +355,17 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                       </span>
                     </div>
                   </div>
-                  <button
-                    id="RestaurantAddEmpSubmitButton"
-                    type="submit"
-                    disabled={!formik.dirty || !formik.isValid}
-                    className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
-                  >
-                    <h1 className="font-mont-md text-md">
-                      {t('add-employee.addEmployee')}
-                    </h1>
-                  </button>
-                  <div className="">
+                  <div>
+                    <button
+                      id="RestaurantAddEmpSubmitButton"
+                      type="submit"
+                      disabled={!formik.dirty || !formik.isValid}
+                      className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] enabled:border-primary enabled:dark:border-secondary disabled:text-grey-2 disabled:border-grey-2 rounded-md enabled:text-primary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black disabled:cursor-not-allowed"
+                    >
+                      <h1 className="font-mont-md text-md">
+                        {t('add-employee.addEmployee')}
+                      </h1>
+                    </button>
                     <ErrorMessage name="isBackdoorEmployee">
                       {msg => <ErrorMes msg={msg} />}
                     </ErrorMessage>

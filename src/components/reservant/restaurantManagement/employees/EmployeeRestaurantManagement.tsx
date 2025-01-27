@@ -27,10 +27,8 @@ import {
 } from '../../../../services/APIconn'
 import EmployeeRegister from '../register/EmployeeRegister'
 import Dialog from '../../../reusableComponents/Dialog'
-import AddIcon from '@mui/icons-material/Add'
 import ConfirmationDialog from '../../../reusableComponents/ConfirmationDialog'
 import { FetchError } from '../../../../services/Errors'
-import EmploymentsManagement from './EmploymentsManagement'
 import { ErrorMessage, Field, Form, Formik, FormikValues } from 'formik'
 import { useValidationSchemas } from '../../../../hooks/useValidationSchema'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
@@ -124,14 +122,18 @@ export default function EmployeeRestaurantManagement() {
             onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ {t('employee-management.add-employee')}</h1>
+            <h1 className="text-md font-mont-md">
+              + {t('employee-management.add-employee')}
+            </h1>
           </button>
           <button
             id="RestaurantEmpAdd"
             onClick={() => setIsAddModalOpen(true)}
             className="flex items-center justify-center rounded-md border-[1px] border-primary px-3 py-1 text-primary hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black"
           >
-            <h1 className="text-md font-mont-md">+ {t('employee-management.assign-employee')}</h1>
+            <h1 className="text-md font-mont-md">
+              + {t('employee-management.assign-employee')}
+            </h1>
           </button>
         </div>
       </GridToolbarContainer>
@@ -235,14 +237,14 @@ export default function EmployeeRestaurantManagement() {
       field: 'empID',
       headerName: t('employee-management.userId'),
       type: 'string',
-      width: 180,
+      flex: 1,
       editable: false
     },
     {
       field: 'firstName',
       headerName: t('employee-management.firstName'),
       type: 'string',
-      width: 180,
+      flex: 0.5,
       editable: false
     },
 
@@ -250,59 +252,43 @@ export default function EmployeeRestaurantManagement() {
       field: 'lastName',
       headerName: t('employee-management.lastName'),
       type: 'string',
-      width: 180,
+      flex: 0.5,
       editable: false
     },
     {
       field: 'phoneNumber',
       headerName: t('employee-management.phoneNumber'),
       type: 'string',
-      width: 180,
-      align: 'left',
-      headerAlign: 'left',
+      flex: 0.5,
       editable: false
     },
     {
       field: 'isHallEmployee',
       headerName: t('employee-management.hallRole'),
       type: 'boolean',
-      width: 180,
-      align: 'left',
-      headerAlign: 'left',
+      flex: 0.5,
       editable: true
     },
     {
       field: 'isBackdoorEmployee',
       headerName: t('employee-management.backdoorRole'),
       type: 'boolean',
-      width: 180,
-      align: 'left',
-      headerAlign: 'left',
+      flex: 0.5,
       editable: true
     },
     {
       field: 'dateFrom',
       headerName: t('employee-management.assignedSince'),
       type: 'string',
-      width: 180,
-      align: 'left',
-      headerAlign: 'left',
+      flex: 1,
       editable: false
     },
-    {
-      field: 'dateUntil',
-      headerName: t('employee-management.assignedUntil'),
-      type: 'string',
-      width: 180,
-      align: 'left',
-      headerAlign: 'left',
-      editable: false
-    },
+
     {
       field: 'actions',
       type: 'actions',
       headerName: t('employee-management.actions'),
-      width: 100,
+      flex: 0.5,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
@@ -430,7 +416,7 @@ export default function EmployeeRestaurantManagement() {
                             selected={true}
                             id="addEmp-option-default"
                           >
-                            Employee
+                            {t('general.employee')}
                           </option>
                           {employees
                             .filter(
@@ -511,7 +497,7 @@ export default function EmployeeRestaurantManagement() {
           handleDeleteEmp(empToDel)
           populateRows()
         }}
-        confirmationText={t('employee-management.delete-employee-confirmation')} //@TODO translation
+        confirmationText={t('employee-management.unassign')}
       />
     </div>
   )

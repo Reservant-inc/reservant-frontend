@@ -40,6 +40,7 @@
         "of": "z",
         "join": "Zgłoś zainteresowanie",
         "files": "Pliki",
+        "employee": "Pracownik",
         "too-large": "Jeden z przesyłanych plików jest zbyt duży. Maksymalny rozmiar pliku: 1024Kb."
     },
     "reservation": {
@@ -106,6 +107,7 @@
         }
     },
     "add-employee": {
+        
         "isBackdoorEmployee": "Pracownik zaplecza",
         "isHallEmployee": "Parcownik sali" ,
         "addEmployee": "Dodaj zatrudnienie"
@@ -164,6 +166,11 @@
         "rentalContract": "Umowa najmu"
     },
     "errors": {
+        "add-employee": {
+            "employeeRole": {
+                "required" : "Co najmniej jedna rola jest wymagana"
+            }
+        },
         "login": {
             "login": "Login jest wymagany",
             "password": "Hasło jest wymagane",
@@ -495,7 +502,10 @@
         "assignedSince": "Przypisane od",
         "assignedUntil": "Przypisane do",
         "assign-employee": "Przypisz pracownika do restauracji",
-        "adding-employment": "Przypisywanie do restauracji..."
+        "adding-employment": "Przypisywanie do restauracji...",
+        "unassign": "Czy na pewno usunąć przypisanie tego pracownika?",
+        "editing-employee":"Edytowanie pracownika..."
+
 
     },
     "management-tabs":{

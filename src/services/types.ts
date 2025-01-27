@@ -241,6 +241,8 @@ export type PaginationType = {
 
 export type UserType = {
   userId: string
+  login?: string
+  birthDate?: string
   firstName: string
   lastName: string
   photo: string
