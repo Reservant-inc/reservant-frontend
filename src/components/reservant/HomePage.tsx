@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Map from './map/Map'
-import { Alert, Button, List, ListItemButton, Snackbar, Typography } from '@mui/material'
+import {
+  Alert,
+  Button,
+  List,
+  ListItemButton,
+  Snackbar,
+  Typography
+} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp'
 import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp'
@@ -34,7 +41,6 @@ export default function HomePage() {
     []
   )
 
-
   const { restaurantId } = useParams<{ restaurantId?: string }>()
   const navigate = useNavigate()
 
@@ -63,37 +69,42 @@ export default function HomePage() {
     getTags()
   }, [])
 
-  useEffect(() => {
-    const getRestaurants = async () => {
-      try {
-        const tagsQuery = chosenTags.map(tag => `&tags=${tag}`).join('')
-        const response = await fetchGET(
-          `/restaurants?origLat=52.225&origLon=21.01&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&perPage=10`
+  const getRestaurants = async () => {
+    try {
+      const tagsQuery = chosenTags.map(tag => `&tags=${tag}`).join('')
+      const response = await fetchGET(
+        `/restaurants?origLat=52.225&origLon=21.01&lat1=${bounds.lat1}&lon1=${bounds.lon1}&lat2=${bounds.lat2}&lon2=${bounds.lon2}${tagsQuery}&minRating=${reviewFilter}&perPage=10`
+      )
+
+      const newRestaurants = response.items.filter(
+        (restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId)
+      )
+
+      setAllRestaurants([...allRestaurants, ...newRestaurants])
+
+      setLoadedRestaurantIds(prevIds => {
+        const newIds = new Set(prevIds)
+        newRestaurants.forEach((restaurant: any) =>
+          newIds.add(restaurant.restaurantId)
         )
-
-        const newRestaurants = response.items.filter(
-          (restaurant: any) => !loadedRestaurantIds.has(restaurant.restaurantId)
-        )
-
-        setAllRestaurants([...allRestaurants, ...newRestaurants])
-
-        setLoadedRestaurantIds(prevIds => {
-          const newIds = new Set(prevIds)
-          newRestaurants.forEach((restaurant: any) =>
-            newIds.add(restaurant.restaurantId)
-          )
-          return newIds
-        })
-      } catch (error) {
-        if (error instanceof FetchError) {
-          console.error(error.formatErrors())
-        } else {
-          console.error('Unexpected error:', error)
-        }
+        return newIds
+      })
+    } catch (error) {
+      if (error instanceof FetchError) {
+        console.error(error.formatErrors())
+      } else {
+        console.error('Unexpected error:', error)
       }
     }
+  }
+
+  useEffect(() => {
     getRestaurants()
   }, [bounds, chosenTags, reviewFilter])
+
+  useEffect(() => {
+    getRestaurants()
+  }, [])
 
   useEffect(() => {
     const fetchRestaurantById = async (id: number) => {
@@ -414,7 +425,6 @@ export default function HomePage() {
           )}
         </OutsideClickHandler>
       </div>
-
 
       {/* Restaurant Details */}
       {selectedRestaurant && (
