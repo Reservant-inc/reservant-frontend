@@ -66,7 +66,6 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
             }
         }
 
-      console.log(response)
       setRows(tmp)
     } catch (error) {
       console.error('Error populating table', error)
