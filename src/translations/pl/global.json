@@ -165,7 +165,8 @@
     "errors": {
         "login": {
             "login": "Login jest wymagany",
-            "password": "Hasło jest wymagane"
+            "password": "Hasło jest wymagane",
+            "restaurant-employee": "Pracownik restauracji może zalogować się tylko z panelu pracownika"
         },
         "user-register": {
             "firstName": {
