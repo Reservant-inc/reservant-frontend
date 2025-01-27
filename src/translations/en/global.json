@@ -38,6 +38,7 @@
         "remove": "Remove",
         "restaurant": "Restaurant",
         "uploadPhoto": "Upload photo",
+        "join": "Sign up",
         "files": "Files"
     },
     "landing-page": {
@@ -738,7 +739,8 @@
             "no-participates": "You are not a participant in any events.",
             "no-event-history": "No events to view.",
             "friend-participate": "One or more of your friends participated in this event.",
-            "you-created-event": "You created an event."
+            "you-created-event": "You created an event.",
+            "see-participants": "see participants"
         },
         "reports" : {
             "reports": "Reports",

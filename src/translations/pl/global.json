@@ -36,6 +36,7 @@
         "noPhotos": "Dodaj więcej zdjęć",
         "restaurant": "Restauracja",
         "uploadPhoto": "Dodaj zdjęcie",
+        "join": "Zgłoś zainteresowanie",
         "files": "Pliki"
     },
     "reservation": {
@@ -736,7 +737,8 @@
             "no-participates": "Nie uczestniczysz w żadnym wydarzeniu.",
             "no-event-history": "Brak wydarzeń do wyświetlenia.",
             "friend-participate": "Jeden albo więcej Twoich znajomych uczestniczył w tym wydarzeniu.",
-            "you-created-event": "Utworzyłeś wydarzenie."
+            "you-created-event": "Utworzyłeś wydarzenie.",
+            "see-participants": "Zobacz uczestników"
         },
         "reports" : {
             "reports": "Zgłoszenia",

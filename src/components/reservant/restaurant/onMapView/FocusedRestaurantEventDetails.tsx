@@ -176,10 +176,10 @@ const FocusedRestaurantEventDetails: React.FC<
               className="w-3/4 px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
             >
               {isParticipant
-                ? 'Opuść wydarzenie'
+                ? t('profile.events.leave')
                 : isInterested
-                  ? 'Usuń zainteresowanie'
-                  : 'Zainteresuj się'}
+                  ? t('profile.events.revoke')
+                  : t('general.join')}
             </button>
           )}
           {isCreator && (
