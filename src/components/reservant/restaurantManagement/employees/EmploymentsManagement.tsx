@@ -290,8 +290,8 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
           {formik => {
             return (
               <Form>
-                <div className="w-full flex items-center justify-center">
-                  <div className="form-control flex gap-6 w-full justify-start">
+                <div className="w-full flex flex items-center gap-6 w-full">
+                  <div className="form-control flex gap-6 justify-start">
                     <Field
                       id="selectedRestaurant"
                       default="Select a restaurant"
@@ -355,27 +355,25 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                       </span>
                     </div>
                   </div>
-                  <div className="">
+                  <div>
                     <button
                       id="RestaurantAddEmpSubmitButton"
                       type="submit"
                       disabled={!formik.dirty || !formik.isValid}
-                      className=" gap-1 text-nowrap flex items-center justify-center px-3 py-1 border-[1px] border-primary dark:border-secondary rounded-md text-primary dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black"
+                      className=" gap-1 flex items-center justify-center px-3 py-1 border-[1px] enabled:border-primary enabled:dark:border-secondary disabled:text-grey-2 disabled:border-grey-2 rounded-md enabled:text-primary enabled:dark:text-secondary enabled:dark:hover:bg-secondary enabled:hover:bg-primary enabled:hover:text-white enabled:dark:hover:text-black disabled:cursor-not-allowed"
                     >
                       <h1 className="font-mont-md text-md">
                         {t('add-employee.addEmployee')}
                       </h1>
                     </button>
-                    <>
-                      <ErrorMessage name="isBackdoorEmployee">
+                    <ErrorMessage name="isBackdoorEmployee">
+                      {msg => <ErrorMes msg={msg} />}
+                    </ErrorMessage>
+                    {!formik.touched.isBackdoorEmployee && (
+                      <ErrorMessage name="isHallEmployee">
                         {msg => <ErrorMes msg={msg} />}
                       </ErrorMessage>
-                      {!formik.touched.isBackdoorEmployee && (
-                        <ErrorMessage name="isHallEmployee">
-                          {msg => <ErrorMes msg={msg} />}
-                        </ErrorMessage>
-                      )}
-                    </>
+                    )}
                   </div>
                 </div>
               </Form>
