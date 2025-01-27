@@ -922,7 +922,9 @@
         "report-submitted": "Report submitted successfully.",
         "user-banned": "User banned successfully.",
         "user-unbanned": "User unbanned successfully.",
-        "ban-access-denied": "You don't have permission to ban this user."
+        "ban-access-denied": "You don't have permission to ban this user.",
+        "delete-access-denied":  "You don't have permission to delete this user's account.",
+        "user-deleted": "User deleted successfully."
     },
     "notifications": {
         "3-newest": "Three newest",

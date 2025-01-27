@@ -921,7 +921,9 @@
         "report-submitted": "Zgłoszenie wysłane.",
         "user-banned": "Użytkownik zbanowany.",
         "user-unbanned": "Użytkownik odbanowany.",
-        "ban-access-denied": "Nie masz uprawnień do zbanowania tego uzytkownika."
+        "ban-access-denied": "Nie masz uprawnień do zbanowania tego uzytkownika.",
+        "delete-access-denied":  "Nie masz uprawnień do usunięcia konta tego użytkownika.",
+        "user-deleted": "Użytkownik usunięty."
     },
     "notifications": {
         "3-newest": "Trzy najnowsze",

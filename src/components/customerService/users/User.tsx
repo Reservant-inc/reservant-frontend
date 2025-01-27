@@ -30,6 +30,9 @@ const User: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [unbanSnackbarOpen, setUnbanSnackbarOpen] = useState<boolean>(false)
   const [snackbarBanManager, setSnackbarBanManager] = useState<boolean>(false)
+  const [snackbarDeleteManager, setSnackbarDeleteManager] =
+    useState<boolean>(false)
+  const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState<boolean>(false)
 
   const { userId } = useParams<{ userId: string }>()
   const { t } = useTranslation('global')
@@ -77,14 +80,20 @@ const User: React.FC = () => {
   const handleDeleteUser = async () => {
     try {
       await fetchDELETE(`/users/${userId}`)
-      fetchUserData()
+      setDeleteSnackbarOpen(true)
     } catch (error) {
-      console.error('Error deleting user:', error)
+      if (error instanceof FetchError) {
+        if (error.status === 400) {
+          setSnackbarDeleteManager(true)
+        } else {
+        }
+      }
     } finally {
       setIsDeleteDialogOpen(false)
+      fetchUserData()
     }
   }
-
+  
   const handleBanUser = async (values: {
     days: number
     hours: number
@@ -96,14 +105,14 @@ const User: React.FC = () => {
       await fetchPOST(`/users/${userId}/ban`, JSON.stringify(payload))
       setSnackbarOpen(true)
     } catch (error) {
-        if (error instanceof FetchError) {
-          // const errors = error.formatErrors()
-          if (error.status === 400) {
-            setSnackbarBanManager(true)
-          } else {
-            // console.error(errors)
-          }
+      if (error instanceof FetchError) {
+        // const errors = error.formatErrors()
+        if (error.status === 400) {
+          setSnackbarBanManager(true)
+        } else {
+          // console.error(errors)
         }
+      }
     } finally {
       fetchUserData()
     }
@@ -116,6 +125,10 @@ const User: React.FC = () => {
   const handleUnbanSnackbarClose = () => setUnbanSnackbarOpen(false)
 
   const handleSnackbarBanManagerClose = () => setSnackbarBanManager(false)
+
+  const handleSnackbarDeleteManagerClose = () => setSnackbarDeleteManager(false)
+
+  const handleDeleteSnackbarClose = () => setDeleteSnackbarOpen(false)
 
   const handleUnbanUser = async () => {
     try {
@@ -251,7 +264,7 @@ const User: React.FC = () => {
       <Dialog
         open={isDialogOpen}
         onClose={() => {
-          setIsDialogOpen(false);
+          setIsDialogOpen(false)
         }}
         title={`${t('customer-service.user.ban_user_dialog_title')} ${userInfo?.firstName || ''} ${
           userInfo?.lastName || ''
@@ -261,7 +274,10 @@ const User: React.FC = () => {
           initialValues={{ timeValue: 1, timeUnit: 'Hours' }}
           validationSchema={Yup.object({
             timeValue: Yup.number()
-              .min(1, t('customer-service.user.ban_duration_error.min_duration'))
+              .min(
+                1,
+                t('customer-service.user.ban_duration_error.min_duration')
+              )
               .required(t('customer-service.user.ban_duration.required'))
           })}
           onSubmit={(values, { resetForm }) => {
@@ -269,10 +285,10 @@ const User: React.FC = () => {
               days: values.timeUnit === 'Days' ? values.timeValue : 0,
               hours: values.timeUnit === 'Hours' ? values.timeValue : 0,
               minutes: values.timeUnit === 'Minutes' ? values.timeValue : 0
-            });
+            })
 
-            setIsDialogOpen(false); 
-            resetForm();
+            setIsDialogOpen(false)
+            resetForm()
           }}
         >
           {formik => (
@@ -290,9 +306,15 @@ const User: React.FC = () => {
                     name="timeUnit"
                     className="text-sm cursor-pointer rounded-md p-2 bg-white dark:bg-black dark:text-white w-1/2"
                   >
-                    <option value="Minutes">{t('customer-service.user.ban_duration.minutes')}</option>
-                    <option value="Hours">{t('customer-service.user.ban_duration.hours')}</option>
-                    <option value="Days">{t('customer-service.user.ban_duration.days')}</option>
+                    <option value="Minutes">
+                      {t('customer-service.user.ban_duration.minutes')}
+                    </option>
+                    <option value="Hours">
+                      {t('customer-service.user.ban_duration.hours')}
+                    </option>
+                    <option value="Days">
+                      {t('customer-service.user.ban_duration.days')}
+                    </option>
                   </Field>
 
                   <Field
@@ -303,7 +325,9 @@ const User: React.FC = () => {
                 </div>
 
                 {formik.touched.timeValue && formik.errors.timeValue && (
-                  <p className="text-red text-sm mt-2">{formik.errors.timeValue}</p>
+                  <p className="text-red text-sm mt-2">
+                    {formik.errors.timeValue}
+                  </p>
                 )}
               </div>
 
@@ -319,7 +343,9 @@ const User: React.FC = () => {
                   type="submit"
                   disabled={formik.isSubmitting || !!formik.errors.timeValue}
                   className={`text-nowrap text-sm border-primary hover:scale-105 hover:bg-primary hover:text-white dark:border-secondary dark:text-secondary dark:hover:bg-secondary dark:hover:text-black dark:bg-black border-[1px] rounded-md px-3 py-2 bg-white text-primary transition ${
-                    formik.errors.timeValue ? 'opacity-50 cursor-not-allowed' : ''
+                    formik.errors.timeValue
+                      ? 'opacity-50 cursor-not-allowed'
+                      : ''
                   }`}
                 >
                   {t('customer-service.user.ban_user')}
@@ -372,7 +398,11 @@ const User: React.FC = () => {
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" variant="filled">
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          variant="filled"
+        >
           {t('snackbar.user-banned')}
         </Alert>
       </Snackbar>
@@ -382,7 +412,11 @@ const User: React.FC = () => {
         onClose={handleUnbanSnackbarClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Alert onClose={handleUnbanSnackbarClose} severity="success" variant="filled">
+        <Alert
+          onClose={handleUnbanSnackbarClose}
+          severity="success"
+          variant="filled"
+        >
           {t('snackbar.user-unbanned')}
         </Alert>
       </Snackbar>
@@ -392,8 +426,40 @@ const User: React.FC = () => {
         onClose={handleSnackbarBanManagerClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Alert onClose={handleSnackbarBanManagerClose} severity="error" variant="filled">
+        <Alert
+          onClose={handleSnackbarBanManagerClose}
+          severity="error"
+          variant="filled"
+        >
           {t('snackbar.ban-access-denied')}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={snackbarDeleteManager}
+        autoHideDuration={5000}
+        onClose={handleSnackbarDeleteManagerClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert
+          onClose={handleSnackbarDeleteManagerClose}
+          severity="error"
+          variant="filled"
+        >
+          {t('snackbar.delete-access-denied')}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={deleteSnackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleDeleteSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert
+          onClose={handleDeleteSnackbarClose}
+          severity="success"
+          variant="filled"
+        >
+          {t('snackbar.user-deleted')}
         </Alert>
       </Snackbar>
     </div>
