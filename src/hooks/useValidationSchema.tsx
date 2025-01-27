@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 import { fetchGET } from '../services/APIconn'
 import { isValidPhoneNumber } from 'libphonenumber-js'
+import Cookies from 'js-cookie'
 
 export const useValidationSchemas = () => {
   const [t] = useTranslation('global')
@@ -14,6 +15,7 @@ export const useValidationSchemas = () => {
   const userRegisterSchema = yup.object({
     firstName: yup
       .string()
+      .max(30, t('errors.user-register.firstName.max'))
       .matches(
         /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
         t('errors.user-register.firstName.matches')
@@ -22,6 +24,7 @@ export const useValidationSchemas = () => {
 
     lastName: yup
       .string()
+      .max(30, t('errors.user-register.lastName.max'))
       .matches(
         /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
         t('errors.user-register.lastName.matches')
@@ -30,9 +33,10 @@ export const useValidationSchemas = () => {
 
     login: yup
       .string()
+      .max(50, t('errors.user-register.login.max'))
       .matches(
         /^[a-zA-Z0-9]+$/,
-        t('errors.user-register.login.invalid') //
+        t('errors.user-register.login.invalid')
       )
       .required(t('errors.user-register.login.required'))
       .test('unique login', t('errors.user-register.login.taken'), login => {
@@ -90,7 +94,7 @@ export const useValidationSchemas = () => {
   const employeeRegisterSchema = yup.object({
     firstName: yup
       .string()
-
+      .max(30, t('errors.user-register.firstName.max'))
       .matches(
         /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
         t('errors.user-register.firstName.matches')
@@ -99,6 +103,7 @@ export const useValidationSchemas = () => {
 
     lastName: yup
       .string()
+      .max(30, t('errors.user-register.lastName.max'))
       .matches(
         /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
         t('errors.user-register.lastName.matches')
@@ -108,16 +113,26 @@ export const useValidationSchemas = () => {
     login: yup
       .string()
       .required(t('errors.user-register.login.required'))
+      .max(50, t('errors.user-register.login.max-emp'))
       .matches(/^[1-9a-zA-Z]+$/, t('errors.user-register.login.matches'))
       .test('unique login', t('errors.user-register.login.taken'), login => {
         return new Promise((resolve, reject) => {
-          fetchGET(`/auth/is-unique-login?login=${login}`)
-            .then(res => {
-              if (res) resolve(true)
-              else resolve(false)
+          const userInfo = JSON.parse(Cookies.get('userInfo') as string);
+          // sprawdzany z dwóch requestów - dla loginów pracowników i loginów ogólnych`
+          Promise.all([
+            fetchGET(`/auth/is-unique-login?login=${encodeURIComponent(userInfo.login)}%2B${encodeURIComponent(login)}`),
+            fetchGET(`/auth/is-unique-login?login=${encodeURIComponent(login)}`)
+          ])
+            .then(([res1, res2]) => {
+              if (res1 && res2) {
+                resolve(true)
+              } else {
+                resolve(false)
+              }
             })
             .catch(error => {
               console.error(error)
+              reject(error)
             })
         })
       }),

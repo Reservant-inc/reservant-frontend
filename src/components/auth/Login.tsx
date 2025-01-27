@@ -67,7 +67,8 @@ const Login: React.FC = () => {
           firstName: userInfo.firstName,
           lastName: userInfo.lastName,
           roles: userInfo.roles,
-          photo: userInfo.photo
+          photo: userInfo.photo,
+          login: userInfo.login
         }),
         { expires: 1 }
       )

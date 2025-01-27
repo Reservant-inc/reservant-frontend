@@ -54,6 +54,7 @@ const FocusedRestaurantEventDetails: React.FC<
     participant => participant.userId === userId
   )
   const isInterested = interestedEventsIds.includes(event.eventId)
+  const [interested, setInterested] = useState(0)
 
   const [t] = useTranslation('global')
 
@@ -61,6 +62,7 @@ const FocusedRestaurantEventDetails: React.FC<
     try {
       const data = await fetchGET(`/events/${event.eventId}`)
       setParticipants(data.participants)
+      setInterested(data.numberInterested)
     } catch (error) {
       console.error('Error fetching participants:', error)
     }
