@@ -489,7 +489,10 @@
         "assignedSince": "Przypisane od",
         "assignedUntil": "Przypisane do",
         "assign-employee": "Przypisz pracownika do restauracji",
-        "adding-employment": "Przypisywanie do restauracji..."
+        "adding-employment": "Przypisywanie do restauracji...",
+        "unassign": "Czy na pewno usunąć przypisanie tego pracownika?",
+        "editing-employee":"Edytowanie pracownika..."
+
 
     },
     "management-tabs":{

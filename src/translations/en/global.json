@@ -487,6 +487,7 @@
         "actions": "Actions",
         "add-employee": "Add an Employee",
         "creating-employee": "Creating a new employee...",
+        "editing-employee":"Editing an employee...",
         "delete-employee-confirmation": "Are you sure you want to delete this employee?",
         "restaurantName": "Restaurant name",
         "hallRole": "Hall role",
@@ -494,6 +495,7 @@
         "assignedSince": "Assigned since",
         "assignedUntil": "Assigned until",
         "assign-employee": "Assign an Employee to a restaurant",
+        "unassign": "Are you sure you want to unassign this employee?",
         "adding-employment": "Adding employment..."
 
     },

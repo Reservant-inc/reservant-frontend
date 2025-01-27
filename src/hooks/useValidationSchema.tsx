@@ -152,6 +152,38 @@ export const useValidationSchemas = () => {
       )
       .required(t('errors.user-register.confirmPassword.required'))
   })
+  const employeeEditSchema = yup.object({
+    firstName: yup
+      .string()
+
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t('errors.user-register.firstName.matches')
+      )
+      .required(t('errors.user-register.firstName.required')),
+
+    lastName: yup
+      .string()
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t('errors.user-register.lastName.matches')
+      )
+      .required(t('errors.user-register.lastName.required')),
+
+    phoneNumber: yup
+      .string()
+      .matches(
+        /^\+[0-9]{11,15}$/,
+        t('errors.user-register.phoneNumber.matches')
+      )
+      .required(t('errors.user-register.phoneNumber.required')),
+
+    birthDate: yup
+      .date()
+      .min('1900-01-01', t('errors.user-register.birthDate.min'))
+      .max('2007-01-01', t('errors.user-register.birthDate.max'))
+      .required(t('errors.user-register.birthDate.required'))
+  })
 
   const RestaurantAddEmployeeSchema = yup
     .object({
@@ -380,6 +412,7 @@ export const useValidationSchemas = () => {
     RestaurantRegisterStep3Schema,
     RestaurantEditSchema,
     menuItemsSchema,
-    RestaurantAddEmployeeSchema2
+    RestaurantAddEmployeeSchema2,
+    employeeEditSchema
   }
 }

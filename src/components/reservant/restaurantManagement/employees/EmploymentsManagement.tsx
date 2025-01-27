@@ -54,7 +54,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
           if (response[i].userId === empid)
             for (const j in response[i].employments) {
               tmp.push({
-                id: Number(j),
+                id: Number(i),
                 employmentId: response[i].employments[j].employmentId,
                 restaurantName: response[i].employments[j].restaurantName,
                 restaurantId:
@@ -86,9 +86,11 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   }
 
   const handleDeleteClick = (id: GridRowId) => async () => {
-    setRows(rows.filter(row => row.id !== id))
+    const emp = rows.find(row => row.id == id)?.employmentId
 
-    await fetchDELETE(`/employments/${id}`)
+    await fetchDELETE(`/employments/${emp}`)
+
+    populateRows()
   }
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -202,7 +204,6 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
     }
   ]
 
-
   useEffect(() => {
     const getRestaurants = async () => {
       try {
@@ -294,7 +295,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                     <Field
                       id="selectedRestaurant"
                       default="Select a restaurant"
-                      className="dark:bg-black dark:text-grey-0 rounded-lg"
+                      className="dark:bg-black dark:text-grey-0 rounded-lg pr-8"
                       name="selectedRestaurant"
                       component="select"
                     >
