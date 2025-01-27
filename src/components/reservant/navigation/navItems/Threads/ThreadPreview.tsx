@@ -11,19 +11,15 @@ interface ThreadPreviewProps {
   renderUserPhotos: Function
   handleThreadOpen: Function
   pressHandler: Function
-  deleteThread: Function
 }
 
 const ThreadPreview: React.FC<ThreadPreviewProps> = ({
   thread,
   renderUserPhotos,
   handleThreadOpen,
-  pressHandler,
-  deleteThread
+  pressHandler
 }) => {
   const [updatedThread, setUpdatedThread] = useState<ThreadType | null>(null)
-  const [isPressed, setIsPressed] = useState<boolean>(false)
-  const [isHovering, setIsHovering] = useState<boolean>(false)
 
   const [t] = useTranslation('global')
 
@@ -49,11 +45,7 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({
   }, [])
 
   return (
-    <div
-      className="flex items-center justify-between gap-2 w-full hover:bg-grey-0 dark:hover:bg-grey-5 relative"
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
+    <div className="flex items-center justify-between gap-2 w-full hover:bg-grey-0 dark:hover:bg-grey-5 relative">
       {updatedThread && (
         <>
           <button
@@ -69,22 +61,8 @@ const ThreadPreview: React.FC<ThreadPreviewProps> = ({
               <h1 className="text-sm dark:text-white">{threadTitle}</h1>
             </div>
           </button>
-          {isHovering && (
-            <button
-              className="hover:bg-grey-1 dark:hover:bg-grey-4 rounded-full p-1 mr-2"
-              onClick={() => setIsPressed(true)}
-            >
-              <DeleteIcon className="dark:text-grey-1 hover:text-error w-5 h-5" />
-            </button>
-          )}
         </>
       )}
-      <ConfirmationDialog
-        open={isPressed}
-        onClose={() => setIsPressed(false)}
-        onConfirm={() => deleteThread(thread.threadId)}
-        confirmationText={t('threads.delete')}
-      />
     </div>
   )
 }
