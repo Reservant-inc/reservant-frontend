@@ -405,8 +405,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           <li
                             key={index}
                             onClick={() => {
-                              console.log(suggestion)
-
                               const address = suggestion.address.road
                                 ? suggestion.address.house_number
                                   ? `${suggestion.address.road} ${suggestion.address.house_number}`
