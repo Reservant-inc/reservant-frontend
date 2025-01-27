@@ -39,7 +39,8 @@
         "step": "Krok",
         "of": "z",
         "join": "Zgłoś zainteresowanie",
-        "files": "Pliki"
+        "files": "Pliki",
+        "employee": "Pracownik"
     },
     "reservation": {
         "history": "Historia rezerwacji",

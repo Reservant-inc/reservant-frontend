@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { fetchGET } from '../../../../../services/APIconn';
-import Search from '../../../../reusableComponents/Search';
-import RestaurantReview from './RestaurantReview';
-import { ReviewType, User } from '../../../../../services/types';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { CircularProgress } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { fetchGET } from '../../../../../services/APIconn'
+import Search from '../../../../reusableComponents/Search'
+import RestaurantReview from './RestaurantReview'
+import { ReviewType, User } from '../../../../../services/types'
 
 const ReviewsList: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [reviews, setReviews] = useState<ReviewType[]>([]);
-  const [filteredReviews, setFilteredReviews] = useState<ReviewType[]>([]);
-  const { userId } = useParams<{ userId: string }>();
-  const [user, setUser] = useState<User | null>(null);
-  const [userLoading, setUserLoading] = useState<boolean>(true);
-  const { t } = useTranslation('global');
+  const [loading, setLoading] = useState<boolean>(true)
+  const [reviews, setReviews] = useState<ReviewType[]>([])
+  const [filteredReviews, setFilteredReviews] = useState<ReviewType[]>([])
+  const { userId } = useParams<{ userId: string }>()
+  const [user, setUser] = useState<User | null>(null)
+  const [userLoading, setUserLoading] = useState<boolean>(true)
+  const { t } = useTranslation('global')
 
   useEffect(() => {
-    fetchReviews();
-    fetchUser();
-  }, [userId]);
+    fetchReviews()
+    fetchUser()
+  }, [userId])
 
   const fetchUser = async () => {
     try {
-      setUserLoading(true);
-      const userData = await fetchGET(`/users/${userId}`);
-      setUser(userData);
+      setUserLoading(true)
+      const userData = await fetchGET(`/users/${userId}`)
+      setUser(userData)
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error('Error fetching user:', error)
     } finally {
-      setUserLoading(false);
+      setUserLoading(false)
     }
-  };
+  }
 
   const fetchReviews = async () => {
     try {
-      setLoading(true);
-      const response = await fetchGET(`/users/${userId}/reviews`);
-      setReviews(response.items);
-      setFilteredReviews(response.items);
+      setLoading(true)
+      const response = await fetchGET(`/users/${userId}/reviews`)
+      setReviews(response.items)
+      setFilteredReviews(response.items)
     } catch (error) {
-      console.error('Error fetching reviews:', error);
+      console.error('Error fetching reviews:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const refreshReviews = () => {
-    fetchReviews();
-  };
+    fetchReviews()
+  }
 
   const handleSearchChange = (query: string) => {
     setFilteredReviews(
@@ -57,8 +57,8 @@ const ReviewsList: React.FC = () => {
             review.contents.toLowerCase().includes(query.toLowerCase())
           )
         : reviews
-    );
-  };
+    )
+  }
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -71,7 +71,6 @@ const ReviewsList: React.FC = () => {
         </div>
 
         <div className="flex flex-col h-full pr-2 overflow-y-auto scroll gap-5">
-
           {!loading && user ? (
             filteredReviews.length === 0 ? (
               <p className="italic text-center">
@@ -79,14 +78,14 @@ const ReviewsList: React.FC = () => {
               </p>
             ) : (
               filteredReviews.map(review => (
-                <RestaurantReview 
-                    review={review} 
-                    key={review.reviewId} 
-                    refreshReviews={refreshReviews}
-                    user={user}
-                    restaurantId={review.restaurantId}
-                    isCustomerServiceView={true}
-                    />
+                <RestaurantReview
+                  review={review}
+                  key={review.reviewId}
+                  refreshReviews={refreshReviews}
+                  user={user}
+                  restaurantId={review.restaurantId}
+                  isCustomerServiceView={true}
+                />
               ))
             )
           ) : (
@@ -95,7 +94,7 @@ const ReviewsList: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReviewsList;
+export default ReviewsList

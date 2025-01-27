@@ -15,7 +15,7 @@ export const useValidationSchemas = () => {
     firstName: yup
       .string()
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.firstName.matches')
       )
       .required(t('errors.user-register.firstName.required')),
@@ -23,7 +23,7 @@ export const useValidationSchemas = () => {
     lastName: yup
       .string()
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.lastName.matches')
       )
       .required(t('errors.user-register.lastName.required')),
@@ -92,7 +92,7 @@ export const useValidationSchemas = () => {
       .string()
 
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.firstName.matches')
       )
       .required(t('errors.user-register.firstName.required')),
@@ -100,7 +100,7 @@ export const useValidationSchemas = () => {
     lastName: yup
       .string()
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.lastName.matches')
       )
       .required(t('errors.user-register.lastName.required')),
@@ -157,7 +157,7 @@ export const useValidationSchemas = () => {
       .string()
 
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.firstName.matches')
       )
       .required(t('errors.user-register.firstName.required')),
@@ -165,7 +165,7 @@ export const useValidationSchemas = () => {
     lastName: yup
       .string()
       .matches(
-        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/,
         t('errors.user-register.lastName.matches')
       )
       .required(t('errors.user-register.lastName.required')),

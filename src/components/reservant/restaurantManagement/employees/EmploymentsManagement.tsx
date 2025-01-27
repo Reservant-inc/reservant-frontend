@@ -305,7 +305,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
                         selected={true}
                         id="addEmp-option-default"
                       >
-                        Restaurant
+                        {t('general.restaurant')}
                       </option>
                       {restaurants
                         .filter(

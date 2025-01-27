@@ -29,7 +29,6 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ onClose, emp }) => {
       setSubmitting(true)
 
       const number = parsePhoneNumber(values.phoneNumber)
-      console.log('submitting')
       if (!emp) {
         const body = JSON.stringify({
           login: values.login,
@@ -42,7 +41,6 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ onClose, emp }) => {
           password: values.password,
           birthDate: values.birthDate
         })
-        console.log(body)
 
         await fetchPOST('/auth/register-restaurant-employee', body)
       } else {
@@ -55,7 +53,6 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ onClose, emp }) => {
           },
           birthDate: values.birthDate
         })
-        console.log(body)
         await fetchPUT(`/users/${emp.userId}`, body)
       }
 
@@ -170,7 +167,7 @@ const RegisterEmp: React.FC<RegisterEmpProps> = ({ onClose, emp }) => {
                 <div
                   className={`  flex items-center justify-start gap-1 border-b-[1px] text-nowrap ${formik.errors.birthDate && formik.touched.birthDate ? 'border-error text-error' : 'border-black text-black dark:text-grey-1 dark:border-white'}`}
                 >
-                  <label htmlFor="birthDate">Birth date:</label>
+                  <label htmlFor="birthDate">{t('auth.birthDate')}:</label>
                   <Field
                     type="Date"
                     id="birthDate"

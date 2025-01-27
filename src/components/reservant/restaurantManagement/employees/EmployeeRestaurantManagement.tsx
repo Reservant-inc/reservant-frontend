@@ -416,7 +416,7 @@ export default function EmployeeRestaurantManagement() {
                             selected={true}
                             id="addEmp-option-default"
                           >
-                            Employee
+                            {t('general.employee')}
                           </option>
                           {employees
                             .filter(

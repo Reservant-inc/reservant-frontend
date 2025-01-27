@@ -41,7 +41,8 @@
         "step": "Step",
         "of": "of",
         "join": "Sign up",
-        "files": "Files"
+        "files": "Files",
+        "employee": "Employee"
     },
     "landing-page": {
         "loginButton": "Sign in",
