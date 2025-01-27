@@ -172,17 +172,21 @@
         "user-register": {
             "firstName": {
                 "matches": "Imię może składać się tylko z liter",
-                "required": "Imię jest wymagane"
+                "required": "Imię jest wymagane",
+                "max": "Imię może mieć maksymalnie 30 liter"
             },
             "lastName": {
                 "matches": "Nazwisko może składać się tylko z liter",
-                "required": "Nazwisko jest wymagane"
+                "required": "Nazwisko jest wymagane",
+                "max": "Nazwisko może mieć maksymalnie 30 liter"
             },
             "login": {
                 "required": "Login jest wymagany",
                 "matches": "Login może składać się tylko z liter",
                 "taken": "Użytkownik z takim loginem już istnieje",
-                "invalid": "Login może składać się tylko z liter A-Z i cyfr"
+                "invalid": "Login może składać się tylko z liter A-Z i cyfr",
+                "max": "Login może mieć maksymalnie 50 znaków",
+                "max-emp": "Login może mieć maksymalnie 50 znaków. Limit obejmuje też dodawany prefiks {ID Właściciela}+"
             },
             "email": {
                 "matches": "Niepoprawny e-mail",
@@ -959,6 +963,16 @@
             "status": "Status",
             "no-orders": "Brak zamówień.",
             "employee": "Pracownik"
+        },
+        "restaurant-details": {
+            "restaurant-details": "Szczegóły restauracji",
+            "go-to-profile": "Przejdź do profilu",
+            "employees": "Pracownicy",
+            "no-employees": "Nie znaleziono pracowników.",
+            "no-restaurant-details": "Brak szczegółów restauracji.",
+            "hall": "Sala",
+            "backdoor": "Zaplecze",
+            "employee-id": "Numer pracownika"
         }
     },
     "cart":{
