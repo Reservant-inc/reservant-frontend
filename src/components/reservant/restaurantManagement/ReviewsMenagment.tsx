@@ -17,7 +17,7 @@ const ReviewsManagement: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const { t } = useTranslation('global')
-  const [perPage] = useState<number>(5)
+  const [perPage] = useState<number>(10)
   const [user, setUser] = useState<User | null>(null)
 
   const { restaurantId } = useParams()
@@ -132,7 +132,7 @@ const ReviewsManagement: React.FC = () => {
           )}
         </div>
         {/* Pagination at the Bottom */}
-        <div className="flex justify-end absolute bottom-4 right-4">
+        <div className="flex justify-end  bottom-4 right-4">
           {' '}
           {/* Using absolute positioning for pagination */}
           <Pagination
