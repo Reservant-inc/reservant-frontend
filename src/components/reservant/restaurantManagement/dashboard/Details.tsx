@@ -193,38 +193,41 @@ const Details: React.FC = () => {
               )}
             </ul>
           </div>
-          <h1>Files:</h1>
-          <Link
-            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.rentalContract}`}
-          >
-            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
-              {t('restaurant-management.details.rental')}{' '}
-            </h1>
-          </Link>
-          <Link
-            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.alcoholLicense}`}
-          >
-            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
-              {t('restaurant-management.details.alcohol')}{' '}
-            </h1>
-          </Link>
-          <Link
-            to={`${process.env.REACT_APP_SERVER_IP}${restaurant.businessPermission}`}
-          >
-            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
-              {t('restaurant-management.details.permission')}{' '}
-            </h1>
-          </Link>
-          <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.idCard}`}>
-            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
-              {t('restaurant-management.details.idcard')}{' '}
-            </h1>
-          </Link>
-          <Link to="" onClick={() => setLogoOpen(true)}>
-            <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
-              Logo
-            </h1>
-          </Link>
+          <h1>{t('general.files')}:</h1>
+          {restaurant.rentalContract && (
+            <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.rentalContract}`}>
+              <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+                {t('restaurant-management.details.rental')}
+              </h1>
+            </Link>
+          )}
+          {restaurant.alcoholLicense && (
+            <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.alcoholLicense}`}>
+              <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+                {t('restaurant-management.details.alcohol')}
+              </h1>
+            </Link>
+          )}
+          {restaurant.businessPermission && (
+            <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.businessPermission}`}>
+              <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+                {t('restaurant-management.details.permission')}
+              </h1>
+            </Link>
+          )}
+          {restaurant.idCard && (
+            <Link to={`${process.env.REACT_APP_SERVER_IP}${restaurant.idCard}`}>
+              <h1 className="underline text-sm text-grey-4 dark:text-grey-2">
+                {t('restaurant-management.details.idcard')}
+              </h1>
+            </Link>
+          )}
+          {restaurant.logo && (
+            <Link to="" onClick={() => setLogoOpen(true)}>
+              <h1 className="underline text-sm text-grey-4 dark:text-grey-2">Logo</h1>
+            </Link>
+          )}
+
           {logoOpen && (
             <Dialog
               open={logoOpen}

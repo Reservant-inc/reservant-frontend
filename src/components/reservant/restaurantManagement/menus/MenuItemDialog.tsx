@@ -208,7 +208,7 @@ const MenuItemDialog: React.FC<MenuItemDialogProps> = ({
             : '',
           alcoholPercentage: menuItemToEdit?.alcoholPercentage
             ? menuItemToEdit.alcoholPercentage
-            : ''
+            : 0
         }}
         validationSchema={menuItemsSchema}
         onSubmit={menuItemToEdit ? onSubmitEditedMenuItem : onSubmitNewMenuItem}

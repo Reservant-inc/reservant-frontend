@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import {
-  OrderType,
-  VisitType,
-  ReportType,
-  UserType
-} from '../../../../services/types'
+import { OrderType, VisitType, UserType } from '../../../../services/types'
 import { fetchGET, getImage, fetchPOST } from '../../../../services/APIconn'
 import DefaultImage from '../../../../assets/images/no-image.png'
 import { FetchError } from '../../../../services/Errors'
 import { format } from 'date-fns'
 import Dialog from '../../../reusableComponents/Dialog'
 import { ReservationListType } from '../../../../services/enums'
-import { Alert, IconButton, Snackbar } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
 import ErrorMes from '../../../reusableComponents/ErrorMessage'
-import { report } from 'node:process'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from '../../../../contexts/SnackbarContext'
-
 
 interface ReservationProps {
   reservation: VisitType
@@ -32,11 +23,9 @@ const Reservation: React.FC<ReservationProps> = ({
 }) => {
   const [orders, setOrders] = useState<OrderType[]>([])
   const [isComplaining, setIsComplaining] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(true)
   const [reportType, setReportType] = useState<string>('')
   const [reportNote, setReportNote] = useState<string>('')
   const [selectedEmployee, setSelectedEmployee] = useState<string>('')
-  const [alertMessage, setAlertMessage] = useState<string>('')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false)
   const { setSnackbar } = useSnackbar()
@@ -53,14 +42,12 @@ const Reservation: React.FC<ReservationProps> = ({
       )
 
       setOrders(fetchedOrders)
-      setLoading(false)
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
       } else {
         console.error('Unexpected error')
       }
-      setLoading(false)
     }
   }
 
@@ -72,8 +59,6 @@ const Reservation: React.FC<ReservationProps> = ({
   useEffect(() => {
     if (reservation.orders.length > 0) {
       fetchOrders()
-    } else {
-      setLoading(false)
     }
   }, [reservation.orders])
 
@@ -122,7 +107,6 @@ const Reservation: React.FC<ReservationProps> = ({
       }
 
       await fetchPOST(endpoint, JSON.stringify(reportData))
-      setAlertMessage('Your report has been submitted successfully.')
     } catch (error) {
       if (error instanceof FetchError) console.error(error.formatErrors())
     } finally {
@@ -130,7 +114,7 @@ const Reservation: React.FC<ReservationProps> = ({
       setReportType('')
       setReportNote('')
       setSelectedEmployee('')
-      setSnackbar(`${t('snackbar.report-submitted')}`, 'success');
+      setSnackbar(`${t('snackbar.report-submitted')}`, 'success')
     }
   }
 

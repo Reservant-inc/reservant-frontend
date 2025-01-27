@@ -36,7 +36,8 @@
         "noPhotos": "Dodaj więcej zdjęć",
         "restaurant": "Restauracja",
         "uploadPhoto": "Dodaj zdjęcie",
-        "join": "Zgłoś zainteresowanie"
+        "join": "Zgłoś zainteresowanie",
+        "files": "Pliki"
     },
     "reservation": {
         "history": "Historia rezerwacji",
@@ -291,6 +292,36 @@
 
     },
     "restaurant-management": {
+        "visits": {
+            "visits": "Wizyty",
+            "orders": "Zamówienia",
+            "items": "Pozycje z menu",
+            
+"expand":"Rozwiń",
+"visitId" : "ID wizyty",
+"date":"Data rezerwacji",
+
+"started":"Data rozpoczęcia",
+"finished":"Data zakończenia",
+"orders-count":"Ilość zamówień",
+"earnings": "Przychód z zamówień",
+"tip": "Napiwek",
+"takeaway":"Zabrano na wynos?",
+"clients":"Liczba klientów",
+"table":"Numer stolika",
+
+"orderId":"ID zamówienia",
+"assigned":"Obsługujący pracownik",
+"items-count": "Ilość zamówionych pozycji",
+"earnings-items": "Przychód z zamówionych pozycji",
+
+
+"image":"Zdjęcie",
+"item-name":"Nazwa pozycji",
+"one-item-price": "Cena jednostkowa",
+"amount": "Zamówiona ilość",
+"total":"Koszt całkowity"
+                    },
         "groups": {
             "counter": "Liczba lokali",
             "add-button": "Dodaj Grupę",
@@ -763,7 +794,9 @@
                 "rejected": "Odrzucone",
                 "pending": "Oczekujące"
 
-            }
+            },
+            "reported-employee":"Zgłoszony pracownik",
+            "resolution-note": "Notatka do rozwiązania"
 
         },
         "report-details": {
