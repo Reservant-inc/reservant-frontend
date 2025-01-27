@@ -30,6 +30,8 @@ const User: React.FC = () => {
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false)
   const [unbanSnackbarOpen, setUnbanSnackbarOpen] = useState<boolean>(false)
   const [snackbarBanManager, setSnackbarBanManager] = useState<boolean>(false)
+  const [snackbarUserDeleted, setSnackbarUserDeleted] = useState<boolean>(false)
+  const [snackbarUserDeleteAccessDenied, setSnackbarUserDeleteAccessDenied] = useState<boolean>(false)
 
   const { userId } = useParams<{ userId: string }>()
   const { t } = useTranslation('global')
@@ -77,11 +79,19 @@ const User: React.FC = () => {
   const handleDeleteUser = async () => {
     try {
       await fetchDELETE(`/users/${userId}`)
-      fetchUserData()
+      setSnackbarUserDeleted(true)
     } catch (error) {
-      console.error('Error deleting user:', error)
+      if (error instanceof FetchError) {
+        // const errors = error.formatErrors()
+        if (error.status === 400) {
+          setSnackbarUserDeleteAccessDenied(true)
+        } else {
+          // console.error(errors)
+        }
+      }
     } finally {
       setIsDeleteDialogOpen(false)
+      fetchUserData()
     }
   }
 
@@ -117,6 +127,10 @@ const User: React.FC = () => {
 
   const handleSnackbarBanManagerClose = () => setSnackbarBanManager(false)
 
+  const handleSnackbarUserDeletedClose = () => setSnackbarUserDeleted(false)
+
+  const handleSnackbarUserDeleteAccessDeniedClose = () => setSnackbarUserDeleteAccessDenied(false)
+
   const handleUnbanUser = async () => {
     try {
       await fetchPOST(`/users/${userId}/unban`, {})
@@ -151,7 +165,7 @@ const User: React.FC = () => {
                     <>
                       {userInfo?.bannedUntil ? (
                         <button
-                          className="border-[1px] rounded-lg p-1 text-primary hover:text-white"
+                          className="border-[1px] rounded-lg p-1 text-primary dark:border-secondary dark:text-secondary hover:text-black dark:hover:text-white dark:hover:border-white"
                           onClick={handleUnbanUser}
                         >
                           <DeleteForeverIcon className="w-4 h-4" />
@@ -276,13 +290,13 @@ const User: React.FC = () => {
           }}
         >
           {formik => (
-            <Form className="h-[200px] w-[300px] flex flex-col justify-between p-4">
+            <Form className="h-[200px] flex flex-col justify-between p-4">
               <div className="flex flex-col gap-4">
                 <div
                   className={`flex items-center gap-4 p-2 border-2 rounded-md ${
                     formik.touched.timeValue && formik.errors.timeValue
                       ? 'border-red'
-                      : 'border-primary'
+                      : 'border-primary dark:border-secondary'
                   }`}
                 >
                   <Field
@@ -365,6 +379,28 @@ const User: React.FC = () => {
           </div>
         </div>
       </Dialog>
+
+      <Snackbar
+        open={snackbarUserDeleteAccessDenied}
+        autoHideDuration={5000}
+        onClose={handleSnackbarUserDeleteAccessDeniedClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={handleSnackbarUserDeleteAccessDeniedClose} severity="error" variant="filled">
+          {t('snackbar.user-delete-access-denied')}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={snackbarUserDeleted}
+        autoHideDuration={5000}
+        onClose={handleSnackbarUserDeletedClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert onClose={handleSnackbarUserDeletedClose} severity="success" variant="filled">
+          {t('snackbar.user-deleted')}
+        </Alert>
+      </Snackbar>
 
       <Snackbar
         open={snackbarOpen}
