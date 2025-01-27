@@ -8,6 +8,9 @@ import {
 import Cookies from 'js-cookie'
 import Dialog from '../../../reusableComponents/Dialog'
 import { useTranslation } from 'react-i18next'
+import { Tooltip } from '@mui/material'
+import { Group } from '@mui/icons-material'
+import DefaultPhoto from '../../../../assets/images/user.jpg'
 
 interface Participant {
   userId: string
@@ -46,6 +49,7 @@ const FocusedRestaurantEventDetails: React.FC<
   const isCreator = userId === event.creator.userId
   const [participants, setParticipants] = useState<Participant[]>([])
   const [showLeaveDialog, setShowLeaveDialog] = useState(false)
+  const [showParticipantsDialog, setShowParticipantsDialog] = useState(false)
   const isParticipant = participants.some(
     participant => participant.userId === userId
   )
@@ -109,53 +113,57 @@ const FocusedRestaurantEventDetails: React.FC<
         />
       )}
       <div className="p-3 dark:bg-black">
-        <h2 className="font-bold text-xl text-left">{event.name}</h2>
-        <p className="text-left mb-4">{event.description}</p>
+        <h2 className="font-bold text-xl text-left break-words whitespace-pre-wrap">
+          {event.name}
+        </h2>
+        <p className="text-left mb-4 break-words whitespace-pre-wrap">
+          {event.description}
+        </p>
 
         <div className="flex justify-between text-sm text-left">
           <div className="flex flex-col gap-2">
             <p>
-              <strong className="text-primary dark:text-secondary">
+              <span className="font-mont-bd text-primary dark:text-secondary">
                 {t('profile.events.date')}:
-              </strong>{' '}
+              </span>{' '}
               {new Date(event.time).toLocaleString()}
             </p>
             <p>
-              <strong className="text-primary dark:text-secondary">
-                {t('profile.events.applications-by')}:{' '}
-              </strong>{' '}
+              <span className="font-mont-bd text-primary dark:text-secondary">
+                {t('profile.events.applications-by')}:
+              </span>{' '}
               {new Date(event.mustJoinUntil).toLocaleString()}
             </p>
             <p>
-              <strong className="text-primary dark:text-secondary">
+              <span className="font-mont-bd text-primary dark:text-secondary">
                 {t('profile.events.creator')}:
-              </strong>{' '}
+              </span>{' '}
               {event.creator.firstName} {event.creator.lastName}
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <p>
-              <strong className="text-primary dark:text-secondary">
-                {t('profile.events.participants')}:{' '}
-              </strong>{' '}
+              <span className="font-mont-bd text-primary dark:text-secondary">
+                {t('profile.events.participants')}:
+              </span>{' '}
               {event.numberInterested}
             </p>
             <p>
-              <strong className="text-primary dark:text-secondary">
-                {t('profile.events.participantss')}:{' '}
-              </strong>{' '}
+              <span className="font-mont-bd text-primary dark:text-secondary">
+                {t('profile.events.participantss')}:
+              </span>{' '}
               {participants.length}
             </p>
             <p>
-              <strong className="text-primary dark:text-secondary">
+              <span className="font-mont-bd text-primary dark:text-secondary">
                 {t('profile.events.max-participants')}:
-              </strong>{' '}
+              </span>{' '}
               {event.maxPeople}
             </p>
           </div>
         </div>
 
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex justify-between items-center">
           {!isCreator && (
             <button
               onClick={
@@ -165,11 +173,7 @@ const FocusedRestaurantEventDetails: React.FC<
                     ? handleRemoveInterest
                     : handleInterestClick
               }
-              className={`w-3/4 py-2 rounded-lg transition hover:scale-105 dark:text-black ${
-                isParticipant || isInterested
-                  ? 'bg-primary text-white dark:bg-secondary'
-                  : 'bg-primary text-white dark:bg-secondary'
-              }`}
+              className="w-3/4 px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
             >
               {isParticipant
                 ? 'Opuść wydarzenie'
@@ -181,13 +185,53 @@ const FocusedRestaurantEventDetails: React.FC<
           {isCreator && (
             <button
               disabled
-              className="w-3/4 py-2 rounded-lg bg-grey-3 text-black cursor-not-allowed"
+              className="w-3/4 px-4 py-2 rounded-lg bg-grey-3 text-black cursor-not-allowed"
             >
               Jesteś twórcą tego eventu
             </button>
           )}
+          <Tooltip title="See participants" arrow>
+            <button
+              onClick={() => setShowParticipantsDialog(true)}
+              className="px-4 py-2 text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md flex items-center"
+            >
+              <Group />
+            </button>
+          </Tooltip>
         </div>
       </div>
+
+      {showParticipantsDialog && (
+        <Dialog
+          open={showParticipantsDialog}
+          onClose={() => setShowParticipantsDialog(false)}
+          title={t('profile.events.see-participants')}
+        >
+          <div className="w-[300px] max-h-[500px] overflow-y-auto scroll">
+            <div className="space-y-4 dark:text-white p-2">
+              {participants.length > 0 ? (
+                participants.map(user => (
+                  <div
+                    key={user.userId}
+                    className="flex items-center space-x-4"
+                  >
+                    <img
+                      src={getImage(user.photo ?? DefaultPhoto, DefaultPhoto)}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <span>
+                      {user.firstName} {user.lastName}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <h1>{t('customer-service.visit-details.no-participants')}</h1>
+              )}
+            </div>
+          </div>
+        </Dialog>
+      )}
 
       {showLeaveDialog && (
         <Dialog
@@ -195,20 +239,20 @@ const FocusedRestaurantEventDetails: React.FC<
           onClose={() => setShowLeaveDialog(false)}
           title="Potwierdzenie wyjścia"
         >
-          <div className="p-4">
+          <div className="p-4 dark:text-white">
             <p className="mb-4">
               Czy na pewno chcesz opuścić wydarzenie{' '}
               <strong>{event.name}</strong>?
             </p>
             <div className="flex justify-end gap-2">
               <button
-                className="bg-primary hover:bg-primary-2 text-white py-1 px-3 rounded transition hover:scale-105"
+                className="px-4 py-2 transition text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
                 onClick={handleLeaveEvent}
               >
                 Tak
               </button>
               <button
-                className="bg-grey-2 hover:bg-grey-3 text-white py-1 px-3 rounded transition hover:scale-105"
+                className="px-4 py-2 transition text-primary dark:border-secondary dark:text-secondary hover:bg-primary hover:text-white border-primary dark:hover:bg-secondary dark:hover:text-black border-[1px] rounded-md"
                 onClick={() => setShowLeaveDialog(false)}
               >
                 Nie

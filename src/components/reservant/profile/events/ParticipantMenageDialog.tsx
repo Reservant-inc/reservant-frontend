@@ -1,13 +1,13 @@
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Tooltip from '@mui/material/Tooltip';
-import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import CheckSharpIcon from '@mui/icons-material/CheckSharp';
-import { InterestedUser } from '../../../../services/types';
-import UserDefault from '../../../../assets/images/user.jpg';
-import { useTranslation } from 'react-i18next';
+import React from 'react'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import Tooltip from '@mui/material/Tooltip'
+import CloseSharpIcon from '@mui/icons-material/CloseSharp'
+import CheckSharpIcon from '@mui/icons-material/CheckSharp'
+import { InterestedUser } from '../../../../services/types'
+import UserDefault from '../../../../assets/images/user.jpg'
+import { useTranslation } from 'react-i18next'
 import { getImage } from '../../../../services/APIconn'
 
 interface ParticipantMenageDialogProps {
@@ -31,7 +31,7 @@ const ParticipantMenageDialog: React.FC<ParticipantMenageDialogProps> = ({
   mustJoinUntil,
   maxPeople
 }) => {
-const [t] = useTranslation('global')
+  const [t] = useTranslation('global')
 
   // Check if the current date is past mustJoinUntil
   const isPastDeadline = mustJoinUntil
@@ -53,7 +53,7 @@ const [t] = useTranslation('global')
       }}
     >
       <DialogTitle className="flex justify-between items-center font-bold border-b border-grey-1 dark:text-white">
-        <span>{t('ParticipantsMenageDialog.menageParticipants')}</span>
+        <span>{t('ParticipantManageDialog.manageParticipants')}</span>
         <button onClick={onClose} className="text-grey-2">
           <CloseSharpIcon />
         </button>
@@ -63,7 +63,8 @@ const [t] = useTranslation('global')
           {/* Participants Column */}
           <div className="flex-1">
             <h2 className="text-lg font-bold mb-1 dark:text-white">
-            {t('ParticipantsMenageDialog.participants')} <span className="text-grey-3">({participants.length})</span>
+              {t('ParticipantManageDialog.participants')}{' '}
+              <span className="text-grey-3">({participants.length})</span>
             </h2>
             <div className="space-y-4 dark:text-white">
               {participants.map(user => (
@@ -84,7 +85,8 @@ const [t] = useTranslation('global')
           {/* Interested Users Column */}
           <div className="flex-1">
             <h2 className="text-lg font-bold mb-1 dark:text-white">
-            {t('ParticipantsMenageDialog.interested')} <span className="text-grey-3">({interestedUsers.length})</span>
+              {t('ParticipantManageDialog.interested')}{' '}
+              <span className="text-grey-3">({interestedUsers.length})</span>
             </h2>
             <div className="space-y-4">
               {interestedUsers.map(user => (
@@ -108,8 +110,8 @@ const [t] = useTranslation('global')
                           isPastDeadline
                             ? t('ParticipantMenageDialog.pastAcceptTime')
                             : isLimitReached
-                            ? t('ParticipantMenageDialog.participantLimit')
-                            : t('ParticipantMenageDialog.acceptParticipant')
+                              ? t('ParticipantMenageDialog.participantLimit')
+                              : t('ParticipantMenageDialog.acceptParticipant')
                         }
                       >
                         <button
