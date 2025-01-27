@@ -117,22 +117,13 @@ export const useValidationSchemas = () => {
       .matches(/^[1-9a-zA-Z]+$/, t('errors.user-register.login.matches'))
       .test('unique login', t('errors.user-register.login.taken'), login => {
         return new Promise((resolve, reject) => {
-          const userInfo = JSON.parse(Cookies.get('userInfo') as string);
-          // sprawdzany z dwóch requestów - dla loginów pracowników i loginów ogólnych`
-          Promise.all([
-            fetchGET(`/auth/is-unique-login?login=${encodeURIComponent(userInfo.login)}%2B${encodeURIComponent(login)}`),
-            fetchGET(`/auth/is-unique-login?login=${encodeURIComponent(login)}`)
-          ])
-            .then(([res1, res2]) => {
-              if (res1 && res2) {
-                resolve(true)
-              } else {
-                resolve(false)
-              }
+          fetchGET(`/auth/is-unique-login?login=${login}&isEmployeeLogin=true`)
+            .then(res => {
+              if (res) resolve(true)
+              else resolve(false)
             })
             .catch(error => {
               console.error(error)
-              reject(error)
             })
         })
       }),
