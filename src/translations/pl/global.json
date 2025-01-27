@@ -286,8 +286,27 @@
         "photoFileName": {
             "required": "Zdjęcie jest wymagane"
         }
+        },
+        "create-menu": {
+            "name": {
+                "required": "Nazwa menu jest wymagana",
+                "max": "Nazwa menu nie może przekraczać 20 znaków"
+            },
+            "alternateName": {
+                "max": "Alternatywna nazwa nie może przekraczać 20 znaków"
+            },
+            "menuType": {
+                "required": "Typ menu jest wymagany"
+            },
+            "dateFrom": {
+                "required": "Data rozpoczęcia jest wymagana"
+            },
+            "dateUntil": {
+                "required": "Data zakończenia jest wymagana",
+                "valid": "Data zakończenia musi być dzisiaj lub w przyszłości",
+                "afterDateFrom": "Data zakończenia musi być późniejsza niż data rozpoczęcia"
+            }
         }
-
     },
     "restaurant-management": {
         "groups": {

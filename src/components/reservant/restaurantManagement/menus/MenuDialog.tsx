@@ -76,7 +76,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               alternateName: values.alternateName,
               menuType: values.menuType,
               dateFrom: values.dateFrom,
-              dateUntil: values.dateUntil,
+              dateUntil: values.dateUntil || null,
               photo: ''
             }
           : {
@@ -84,7 +84,7 @@ const MenuDialog: React.FC<MenuDialogProps> = ({
               name: values.name,
               menuType: values.menuType,
               dateFrom: values.dateFrom,
-              dateUntil: values.dateUntil,
+              dateUntil: values.dateUntil || null,
               photo: ''
             }
       )

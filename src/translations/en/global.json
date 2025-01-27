@@ -291,7 +291,27 @@
             "photoFileName": {
             "required": "Photo is required"
             }
-        }
+        },
+        "create-menu": {
+            "name": {
+                "required": "Menu name is required",
+                "max": "Menu name cannot exceed 20 characters"
+            },
+            "alternateName": {
+                "max": "Alternate name cannot exceed 20 characters"
+            },
+            "menuType": {
+                "required": "Menu type is required"
+            },
+            "dateFrom": {
+                "required": "Start date is required"
+            },
+            "dateUntil": {
+                "required": "End date is required",
+                "valid": "End date must be today or in the future",
+                "afterDateFrom": "End date must be after the start date"
+            }
+        }   
     },
     "restaurant-management": {
         "groups": {

@@ -338,11 +338,42 @@ export const useValidationSchemas = () => {
   })
 
   const menuSchema = yup.object({
-    name: yup.string().required(),
-    alternateName: yup.string(),
-    menuType: yup.string().required(),
-    dateFrom: yup.string().required(),
-    dateUntil: yup.string().required()
+    name: yup
+    .string()
+    .max(20, t('errors.create-menu.name.max'))
+    .required(t('errors.create-menu.name.required')),
+  alternateName: yup
+    .string()
+    .max(20, t('errors.create-menu.alternateName.max')),
+  menuType: yup
+    .string()
+    .required(t('errors.create-menu.menuType.required')),
+  dateFrom: yup
+    .string()
+    .required(t('errors.create-menu.dateFrom.required')),
+    dateUntil: yup
+    .string()
+    .nullable()
+    .test(
+      'is-valid-date',
+      t('errors.create-menu.dateUntil.valid'),
+      (value) => {
+        if (!value) return true;
+        const today = new Date();
+        const untilDate = new Date(value);
+        return untilDate >= today; 
+      }
+    )
+    .test(
+      'is-after-dateFrom',
+      t('errors.create-menu.dateUntil.afterDateFrom'),
+      function (value) {
+        const { dateFrom } = this.parent;
+        if (!value || !dateFrom) return true; 
+        return new Date(value) > new Date(dateFrom); 
+      }
+    )
+    // .required(t('errors.create-menu.dateUntil.required')),
   })
 
   return {
