@@ -404,6 +404,8 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                           <li
                             key={index}
                             onClick={() => {
+                              console.log(suggestion)
+
                               const address = suggestion.address.road
                                 ? suggestion.address.house_number
                                   ? `${suggestion.address.road} ${suggestion.address.house_number}`
@@ -433,6 +435,14 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                                 formik.setFieldValue(
                                   'city',
                                   suggestion.address.city
+                                )
+                                formik.setFieldTouched('city', false, true)
+                              }
+
+                              if (suggestion.address.village) {
+                                formik.setFieldValue(
+                                  'city',
+                                  suggestion.address.village
                                 )
                                 formik.setFieldTouched('city', false, true)
                               }

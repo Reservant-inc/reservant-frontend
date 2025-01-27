@@ -591,6 +591,14 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                                 formik.setFieldTouched('city', false, true)
                               }
 
+                              if (suggestion.address.village) {
+                                formik.setFieldValue(
+                                  'city',
+                                  suggestion.address.village
+                                )
+                                formik.setFieldTouched('city', false, true)
+                              }
+
                               formik.setFieldValue('address', formattedAddress)
                               formik.setFieldValue('location', {
                                 latitude: parseFloat(suggestion.lat),
