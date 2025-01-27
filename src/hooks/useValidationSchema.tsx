@@ -284,7 +284,10 @@ export const useValidationSchemas = () => {
     city: yup
       .string()
       .required(t('errors.restaurant-register.city.required'))
-      .matches(/^[A-Za-z\s-]+$/, t('errors.restaurant-register.city.invalid')),
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t('errors.restaurant-register.city.invalid')
+      ),
     nip: yup
       .string()
       .matches(/^[0-9]{10}$/, t('errors.restaurant-register.tin.matches'))

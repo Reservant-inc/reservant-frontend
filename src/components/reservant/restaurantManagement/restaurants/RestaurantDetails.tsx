@@ -58,7 +58,12 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     address: Yup.string().required(
       t('errors.restaurant-register.address.required')
     ),
-    city: Yup.string().required(t('errors.restaurant-register.city.required')),
+    city: Yup.string()
+      .required(t('errors.restaurant-register.city.required'))
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t('errors.restaurant-register.city.invalid')
+      ),
     reservationDeposit: Yup.number()
       .typeError(t('errors.restaurant-register.reservationDeposit.number')) // Komunikat dla nieprawidłowej liczby
       .min(0, t('errors.restaurant-register.reservationDeposit.min'))
@@ -126,7 +131,18 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
           throw new Error('Failed to fetch suggestions')
         }
         const data = await response.json()
-        setSuggestions(data)
+
+        const filteredResults = data.filter(
+          (item: any) =>
+            item.type === 'road' ||
+            item.type === 'house' ||
+            item.type === 'residential' ||
+            item.type === 'living_street' ||
+            item.type === 'apartments' ||
+            item.type === 'yes'
+        )
+
+        setSuggestions(filteredResults)
         setDropdownVisible(true)
       } catch (error) {
         console.error('Error fetching suggestions:', error)
@@ -560,6 +576,28 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                                 /[„”]/g,
                                 ''
                               )
+
+                              if (suggestion.address.postcode) {
+                                formik.setFieldValue(
+                                  'postalIndex',
+                                  suggestion.address.postcode
+                                )
+                                formik.setFieldTouched(
+                                  'postalIndex',
+                                  false,
+                                  true
+                                )
+                              }
+
+                              const { city, village, town } = suggestion.address
+
+                              if (city || village || town) {
+                                formik.setFieldValue(
+                                  'city',
+                                  city || village || town
+                                )
+                                formik.setFieldTouched('city', false, true)
+                              }
 
                               formik.setFieldValue('address', formattedAddress)
                               formik.setFieldValue('location', {

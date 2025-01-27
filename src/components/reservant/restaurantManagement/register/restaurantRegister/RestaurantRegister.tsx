@@ -99,7 +99,18 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
           throw new Error('Failed to fetch suggestions')
         }
         const data = await response.json()
-        setSuggestions(data)
+
+        const filteredResults = data.filter(
+          (item: any) =>
+            item.type === 'road' ||
+            item.type === 'house' ||
+            item.type === 'residential' ||
+            item.type === 'living_street' ||
+            item.type === 'apartments' ||
+            item.type === 'yes'
+        )
+
+        setSuggestions(filteredResults)
         setDropdownVisible(true)
       } catch (error) {
         console.error('Error fetching suggestions:', error)
@@ -406,6 +417,28 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                                 /[„”]/g,
                                 ''
                               )
+
+                              if (suggestion.address.postcode) {
+                                formik.setFieldValue(
+                                  'postalIndex',
+                                  suggestion.address.postcode
+                                )
+                                formik.setFieldTouched(
+                                  'postalIndex',
+                                  false,
+                                  true
+                                )
+                              }
+
+                              const { city, village, town } = suggestion.address
+
+                              if (city || village || town) {
+                                formik.setFieldValue(
+                                  'city',
+                                  city || village || town
+                                )
+                                formik.setFieldTouched('city', false, true)
+                              }
 
                               formik.setFieldValue('address', formattedAddress)
                               formik.setFieldValue('location', {
