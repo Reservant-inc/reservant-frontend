@@ -15,7 +15,11 @@ import {
   GridRowModel,
   GridRowEditStopReasons
 } from '@mui/x-data-grid'
-import { EmploymentType, RestaurantShortType } from '../../../../services/types'
+import {
+  EmployeeType,
+  EmploymentType,
+  RestaurantShortType
+} from '../../../../services/types'
 import {
   fetchDELETE,
   fetchGET,
@@ -39,6 +43,7 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
   const [t] = useTranslation('global')
   const { RestaurantAddEmployeeSchema } = useValidationSchemas()
   const [restaurants, setRestaurants] = useState<RestaurantShortType[]>([])
+  const [employee, setEmployee] = useState<EmployeeType>()
 
   useEffect(() => {
     populateRows()
@@ -46,25 +51,19 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
 
   const populateRows = async () => {
     try {
-      const response = await fetchGET('/user/employees')
+      const response = await fetchGET(`/users/${empid}`)
+      setEmployee(response)
       const tmp: (EmploymentType & { id: number })[] = []
-
-      if (response.length)
-        for (const i in response) {
-          if (response[i].userId === empid)
-            for (const j in response[i].employments) {
-              tmp.push({
-                id: Number(j),
-                employmentId: response[i].employments[j].employmentId,
-                restaurantName: response[i].employments[j].restaurantName,
-                restaurantId:
-                  response[i].employments[j].restaurant.restaurantId,
-                isBackdoorEmployee:
-                  response[i].employments[j].isBackdoorEmployee,
-                isHallEmployee: response[i].employments[j].isHallEmployee
-              })
-            }
-        }
+      for (const i in response.employments) {
+        tmp.push({
+          id: Number(i),
+          employmentId: response.employments[i].employmentId,
+          restaurantName: response.employments[i].restaurantName,
+          restaurantId: response.employments[i].restaurant.restaurantId,
+          isBackdoorEmployee: response.employments[i].isBackdoorEmployee,
+          isHallEmployee: response.employments[i].isHallEmployee
+        })
+      }
 
       setRows(tmp)
     } catch (error) {
@@ -278,6 +277,9 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
 
   return (
     <div className=" h-[50vh] flex flex-col w-fit ">
+      <h1 className="p-2 font-mont-bd text-lg">
+        {employee?.firstName} {employee?.lastName}
+      </h1>
       <div className="p-3 h-[25%]">
         <Formik
           initialValues={initialValues}

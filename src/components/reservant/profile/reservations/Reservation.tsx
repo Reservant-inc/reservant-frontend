@@ -164,8 +164,8 @@ const Reservation: React.FC<ReservationProps> = ({
 
           <div className="flex gap-2">
             <h1 className="text-sm">
-              {reservation.orders.length > 0
-                ? `${t('reservation.items')}: ${reservation.orders.length} ${t('reservation.for')} ${totalCost}zł`
+              {orders.length > 0
+                ? `${t('reservation.items')}: ${orders.reduce((sum, order) => sum + order.items?.length, 0)} ${t('reservation.for')} ${totalCost}zł`
                 : t('reservation.no-orders')}
               ,
             </h1>
@@ -252,7 +252,7 @@ const Reservation: React.FC<ReservationProps> = ({
                 >
                   {t('reservation.order')}
                 </option> */}
-                {reservation.orders.length > 0 && (
+                {orders.length > 0 && (
                   <option
                     value="complain-employee"
                     className="dark:text-grey-1 dark:bg-black"
@@ -340,8 +340,8 @@ const Reservation: React.FC<ReservationProps> = ({
                 {reservation.restaurant.name} {reservation.restaurant.city}
               </h1>
               <h1 className="text-sm">
-                {reservation.orders.length > 0
-                  ? `${reservation.orders.length} ${t('reservation.items')}, `
+                {orders.length > 0
+                  ? `${orders.length} ${t('reservation.items')}, `
                   : `${t('reservation.cancel-no-orders')}`}
                 {format(new Date(reservation.reservationDate), 'dd.MM HH:mm')}
               </h1>
@@ -349,7 +349,7 @@ const Reservation: React.FC<ReservationProps> = ({
           </div>
 
           <div className="flex flex-col gap-2 p-2">
-            {reservation.orders.length > 0 &&
+            {orders.length > 0 &&
               orders.map(order =>
                 order.items.map(item => (
                   <div
