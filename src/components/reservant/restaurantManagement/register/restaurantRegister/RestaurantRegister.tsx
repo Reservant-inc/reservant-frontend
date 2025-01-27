@@ -356,7 +356,6 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                         name="address"
                         label={t('restaurant-register.address-field-label')}
                         variant="standard"
-                        autoComplete={false}
                         as={TextField}
                         onBlur={async (
                           e: React.ChangeEvent<HTMLInputElement>
