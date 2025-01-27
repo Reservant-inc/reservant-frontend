@@ -72,7 +72,7 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
               />
               {report.reportStatus === 'ResolvedNegatively' ? (
                 <p className="flex gap-1">
-                  <p>{t('profile.reports.status.rejected')} </p>
+                  <p>{t('profile.reports.status.rejected')}, </p>
                   <p
                     className="underline hover:cursor-pointer"
                     onClick={() => setOpenNote(true)}
@@ -84,7 +84,7 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
                 t('profile.reports.status.pending')
               ) : (
                 <p className="flex gap-1">
-                  <p>{t('profile.reports.status.resolved')}</p>
+                  <p>{t('profile.reports.status.resolved')},</p>
                   <p
                     className="underline hover:cursor-pointer"
                     onClick={() => setOpenNote(true)}
