@@ -798,6 +798,8 @@
                 "pending": "Pending"
 
             },
+            "see-note": "see note",
+            "note": "Note",
             "category": {
                 "technical": "Technical",
                 "emp": "Complaint on employee",

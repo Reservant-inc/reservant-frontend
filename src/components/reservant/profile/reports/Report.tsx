@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { ReportType, ThreadType } from '../../../../services/types'
 import { Circle, Message } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +8,7 @@ import { fetchGET } from '../../../../services/APIconn'
 import { FetchError } from '../../../../services/Errors'
 import { ThreadContext } from '../../../../contexts/ThreadContext'
 import Cookies from 'js-cookie'
+import Dialog from '../../../reusableComponents/Dialog'
 
 interface ReportProps {
   report: ReportType & { userRole?: string }
@@ -18,6 +19,7 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
   const [t] = useTranslation('global')
 
   const { handleThreadOpen } = useContext(ThreadContext)
+  const [openNote, setOpenNote] = useState<boolean>(false)
 
   const openChat = async () => {
     try {
@@ -68,11 +70,29 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
               <Circle
                 className={`${report.reportStatus === 'ResolvedNegatively' ? 'text-red' : report.reportStatus === 'NotResolved' ? 'text-warning' : 'text-green'} text-xs`}
               />
-              {report.reportStatus === 'ResolvedNegatively'
-                ? t('profile.reports.status.rejected')
-                : report.reportStatus === 'NotResolved'
-                  ? t('profile.reports.status.pending')
-                  : t('profile.reports.status.resolved')}
+              {report.reportStatus === 'ResolvedNegatively' ? (
+                <p className="flex gap-1">
+                  <p>{t('profile.reports.status.rejected')}, </p>
+                  <p
+                    className="underline hover:cursor-pointer"
+                    onClick={() => setOpenNote(true)}
+                  >
+                    {t('profile.reports.see-note')}{' '}
+                  </p>
+                </p>
+              ) : report.reportStatus === 'NotResolved' ? (
+                t('profile.reports.status.pending')
+              ) : (
+                <p className="flex gap-1">
+                  <p>{t('profile.reports.status.resolved')},</p>
+                  <p
+                    className="underline hover:cursor-pointer"
+                    onClick={() => setOpenNote(true)}
+                  >
+                    {t('profile.reports.see-note')}
+                  </p>
+                </p>
+              )}
             </p>
           )}
           <div className="flex flex-col gap-1">
@@ -97,6 +117,19 @@ const Report: React.FC<ReportProps> = ({ report, listType }) => {
           </button>
         )}
       </div>
+      {openNote && (
+        <Dialog
+          open={openNote}
+          onClose={() => {
+            setOpenNote(false)
+          }}
+          title={t('profile.reports.note')}
+        >
+          <div className="w-[300px] h-[200px] p-2 dark:text-grey-0 overflow-y-auto scroll">
+            <p>{report.resolutionComment}</p>
+          </div>
+        </Dialog>
+      )}
     </div>
   )
 }

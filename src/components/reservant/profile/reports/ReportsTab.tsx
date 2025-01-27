@@ -9,7 +9,7 @@ const ReportsTab: React.FC = () => {
   return (
     <div className="flex flex-col rounded-lg w-full h-full">
       <div className="flex justify-between items-center">
-        <div className="px-2 py-1">
+        <div className="px-2 ">
           <h1 className="text-lg font-mont-bd dark:text-grey-1">Reports</h1>
         </div>
         <ReportsTabs />

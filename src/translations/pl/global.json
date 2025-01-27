@@ -794,6 +794,8 @@
                 "rejected": "Odrzucony",
                 "pending": "Oczekuje"
             },
+            "see-note": "zobacz notatkę",
+            "note": "Notatka",
             "category": {
                 "technical": "Problem techniczny",
                 "emp": "Skarga na pracownika",
