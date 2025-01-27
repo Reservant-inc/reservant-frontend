@@ -24,9 +24,12 @@ const EditQuantityDialog: React.FC<EditQuantityDialogProps> = ({
   if (!open || !ingredient) return null;
 
   const validationSchema = Yup.object({
-    currentAmount: Yup.number().min(0).required(t('warehouse.required')),
+    currentAmount: Yup.number()
+      .min(0, t('warehouse.amount-min-0'))
+      .required(t('warehouse.required')),
     comment: Yup.string()
       .required(t('warehouse.required'))
+      .max(200, t('warehouse.comment-max-200'))
       .test(
         'not-empty-or-spaces',
         t('warehouse.comment-cannot-be-empty'),
