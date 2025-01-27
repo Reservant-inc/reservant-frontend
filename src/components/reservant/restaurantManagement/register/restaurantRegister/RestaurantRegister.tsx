@@ -106,7 +106,8 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
             item.type === 'house' ||
             item.type === 'residential' ||
             item.type === 'living_street' ||
-            item.type === 'apartments'
+            item.type === 'apartments' ||
+            item.type === 'yes'
         )
 
         setSuggestions(filteredResults)
@@ -431,18 +432,12 @@ const RestaurantRegister: React.FC<RestaurantRegisterProps> = ({
                                 )
                               }
 
-                              if (suggestion.address.city) {
-                                formik.setFieldValue(
-                                  'city',
-                                  suggestion.address.city
-                                )
-                                formik.setFieldTouched('city', false, true)
-                              }
+                              const { city, village, town } = suggestion.address
 
-                              if (suggestion.address.village) {
+                              if (city || village || town) {
                                 formik.setFieldValue(
                                   'city',
-                                  suggestion.address.village
+                                  city || village || town
                                 )
                                 formik.setFieldTouched('city', false, true)
                               }

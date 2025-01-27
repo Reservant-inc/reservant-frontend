@@ -58,7 +58,12 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
     address: Yup.string().required(
       t('errors.restaurant-register.address.required')
     ),
-    city: Yup.string().required(t('errors.restaurant-register.city.required')),
+    city: Yup.string()
+      .required(t('errors.restaurant-register.city.required'))
+      .matches(
+        /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/,
+        t('errors.restaurant-register.city.invalid')
+      ),
     reservationDeposit: Yup.number()
       .typeError(t('errors.restaurant-register.reservationDeposit.number')) // Komunikat dla nieprawidłowej liczby
       .min(0, t('errors.restaurant-register.reservationDeposit.min'))
@@ -133,7 +138,8 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
             item.type === 'house' ||
             item.type === 'residential' ||
             item.type === 'living_street' ||
-            item.type === 'apartments'
+            item.type === 'apartments' ||
+            item.type === 'yes'
         )
 
         setSuggestions(filteredResults)
@@ -583,18 +589,12 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                                 )
                               }
 
-                              if (suggestion.address.city) {
-                                formik.setFieldValue(
-                                  'city',
-                                  suggestion.address.city
-                                )
-                                formik.setFieldTouched('city', false, true)
-                              }
+                              const { city, village, town } = suggestion.address
 
-                              if (suggestion.address.village) {
+                              if (city || village || town) {
                                 formik.setFieldValue(
                                   'city',
-                                  suggestion.address.village
+                                  city || village || town
                                 )
                                 formik.setFieldTouched('city', false, true)
                               }
