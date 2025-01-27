@@ -266,7 +266,7 @@ const HistoryTab: React.FC = ({}) => {
   return (
     <div className="h-full overflow-y-auto scroll w-full flex-col space-y-2 rounded-lg bg-white dark:bg-black">
       <TableContainer>
-        <h1 className="pt-3 pl-3 font-mont-bd text-lg">
+        <h1 className="pt-3 pl-3 font-mont-bd text-lg dark:text-grey-0">
           {t('restaurant-management.visits.visits')}:
         </h1>
         <Table>
