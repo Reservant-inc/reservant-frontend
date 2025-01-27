@@ -174,11 +174,11 @@ const RestaurantReview: React.FC<RestaurantReviewProps> = ({
 
       <div className="review-content flex flex-col items-start p-1">
         <h1>
-          <h1 className="text-sm">
+          <p className="text-sm">
             {isExpanded || review.contents.length <= 100
               ? review.contents
               : `${review.contents.substring(0, 100)}...`}
-          </h1>
+          </p>
           {review.contents.length > 100 && !isExpanded && (
             <span
               className="text-grey-2 cursor-pointer text-sm"
