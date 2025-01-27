@@ -8,8 +8,7 @@ import {
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
 import { fetchGET, fetchPOST, getImage } from '../../../../../services/APIconn'
 import { FetchError } from '../../../../../services/Errors'
-import { CircularProgress, IconButton, Tooltip } from '@mui/material'
-import InfiniteScroll from 'react-infinite-scroll-component'
+import { IconButton, Tooltip } from '@mui/material'
 import DefaultPhoto from '../../../../../assets/images/user.jpg'
 import Cookies from 'js-cookie'
 import HorizontalRuleRoundedIcon from '@mui/icons-material/HorizontalRuleRounded'
@@ -35,12 +34,14 @@ const Thread: React.FC<ThreadProps> = ({
 
   thread.participants = thread.participants.filter(
     participant =>
-      participant.userId != JSON.parse(Cookies.get('userInfo') as string).userId
+      participant.userId !==
+      JSON.parse(Cookies.get('userInfo') as string).userId
   )
 
   const [t] = useTranslation('global')
 
   const scrollableDivRef = useRef<HTMLDivElement | null>(null)
+  const prevScrollHeight = useRef<number>(0)
 
   const getMessages = async () => {
     try {
@@ -49,7 +50,9 @@ const Thread: React.FC<ThreadProps> = ({
       )
       const newMessages: MessageType[] = result.items as MessageType[]
 
-      if (newMessages.length < 20) setHasMore(false)
+      if (newMessages.length < 20) {
+        setHasMore(false)
+      }
 
       if (page > 0) {
         setMessages(prevMessages => [...prevMessages, ...newMessages])
@@ -71,18 +74,39 @@ const Thread: React.FC<ThreadProps> = ({
 
   useEffect(() => {
     if (scrollableDivRef.current) {
-      scrollableDivRef.current.scrollTop = scrollableDivRef.current.scrollHeight
+      const scrollableDiv = scrollableDivRef.current
+
+      if (page === 0 || prevScrollHeight.current === 0) {
+        scrollableDiv.scrollTop = scrollableDiv.scrollHeight
+      } else if (prevScrollHeight.current && page > 0) {
+        const newScrollHeight = scrollableDiv.scrollHeight
+        scrollableDiv.scrollTop = newScrollHeight - prevScrollHeight.current
+      }
     }
-  }, [messages])
+  }, [messages, page])
+
+  const handleScroll = () => {
+    if (scrollableDivRef.current) {
+      const { scrollTop, scrollHeight } = scrollableDivRef.current
+
+      if (scrollTop === 0 && hasMore) {
+        prevScrollHeight.current = scrollHeight
+        const nextPage = page + 1
+        setPage(nextPage)
+      }
+    }
+  }
 
   const handleSendMessage = async (message: string) => {
     try {
-      await fetchPOST(
+      const newMessage: MessageType = await fetchPOST(
         `/threads/${thread.threadId}/messages`,
         JSON.stringify({ contents: message })
       )
-      setPage(0)
-      getMessages()
+
+      setMessages(prevMessages => [newMessage, ...prevMessages])
+
+      prevScrollHeight.current = 0
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
@@ -205,24 +229,11 @@ const Thread: React.FC<ThreadProps> = ({
             id="scrollableDiv"
             className="h-full w-full overflow-y-auto scroll grid items-end pb-1"
             ref={scrollableDivRef}
+            onScroll={handleScroll}
           >
-            <InfiniteScroll
-              dataLength={messages.length}
-              next={() => setPage(prevPage => prevPage + 1)}
-              hasMore={hasMore}
-              loader={
-                <div className="w-full flex justify-center text-grey-1">
-                  <CircularProgress />
-                </div>
-              }
-              scrollableTarget="scrollableDiv"
-              className="px-2 hidescroll"
-              inverse={true}
-            >
-              <div className="h-full w-full flex flex-col-reverse gap-4">
-                {messages.map(message => renderMessage(message))}
-              </div>
-            </InfiniteScroll>
+            <div className="h-full w-full flex flex-col-reverse gap-4">
+              {messages.map(message => renderMessage(message))}
+            </div>
           </div>
           <div className="flex items-center justify-between h-12 w-full p-2 gap-2 relative">
             <div
