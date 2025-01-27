@@ -35,16 +35,12 @@ const PrivateThreadPreview: React.FC<ThreadPreviewProps> = ({
     let response
 
     try {
-      if (friend.privateMessageThreadId === 0) {
-        response = await createThread(otherUser.userId)
-        getFriends()
-      } else {
-        response = await fetchGET(`/threads/${friend.privateMessageThreadId}`)
-      }
+      response = await fetchGET(`/threads/${friend.privateMessageThreadId}`)
     } catch (error) {
       if (error instanceof FetchError) {
         if (error.errors.includes('NotFound')) {
           response = await createThread(otherUser.userId)
+          getFriends()
         } else {
           console.error(error.formatErrors())
         }
