@@ -35,6 +35,11 @@ const Login: React.FC = () => {
 
       const response = await fetchPOST('/auth/login', JSON.stringify(values))
 
+      if (response.roles.includes('RestaurantEmployee')) {
+        setLoginError(t('errors.login.restaurant-employee'))
+        return // Zatrzymujemy dalsze przetwarzanie
+      }
+
       if (response.status === 403) {
         // Jeśli status to 403, ustaw błąd z komunikatem
         setLoginError(t('landing-page.error-403'))
@@ -164,7 +169,7 @@ const Login: React.FC = () => {
                     </button>
 
                     {loginError.length > 0 && (
-                      <h1 className="font-mont-md text-lg text-error">
+                      <h1 className="font-mont-md text-lg text-error text-center">
                         {loginError}
                       </h1>
                     )}

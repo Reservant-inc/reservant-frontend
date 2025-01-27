@@ -172,7 +172,8 @@
         },
         "login": {
             "login": "Login is required",
-            "password": "Password is required"
+            "password": "Password is required",
+            "restaurant-employee": "Restaurant employee may only log in in employee dashboard"
         },
         "user-register": {
             "firstName": {
