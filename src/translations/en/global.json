@@ -764,7 +764,9 @@
                 "rejected": "Rejected",
                 "pending": "Pending"
 
-            }
+            },
+            "reported-employee":"Reported employee",
+            "resolution-note": "Resolution note"
         },
         "report-details": {
             "report-details": "Report details",
