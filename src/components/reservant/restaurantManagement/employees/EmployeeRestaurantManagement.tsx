@@ -106,7 +106,9 @@ export default function EmployeeRestaurantManagement() {
 
         let tmp: EmployeeType[] = res
 
-        setEmployees(tmp)
+        setEmployees(
+          tmp.filter(e => e.firstName !== 'DELETED' && e.lastName !== 'DELETED')
+        )
       } catch (error) {
         console.error('Error fetching restaurants', error)
       }
