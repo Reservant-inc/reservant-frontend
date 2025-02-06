@@ -4,8 +4,6 @@ import { useLocation } from 'react-router-dom'
 import { PaginationType, VisitType } from '../../../../services/types'
 import { fetchGET } from '../../../../services/APIconn'
 import Reservation from './Reservation'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { CircularProgress } from '@mui/material'
 import { FetchError } from '../../../../services/Errors'
 import Filters from '../../../reusableComponents/Filters'
 import { useTranslation } from 'react-i18next'
@@ -15,8 +13,6 @@ interface ReservationListProps {
 }
 
 const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
-  const [page, setPage] = useState<number>(0)
-  const [hasMore, setHasMore] = useState<boolean>(true)
   const [reservations, setReservations] = useState<VisitType[]>([])
   const [filteredReservations, setFilteredReservations] = useState<VisitType[]>(
     []
@@ -39,26 +35,15 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
 
   useEffect(() => {
     fetchReservations()
-  }, [location, page])
+  }, [location])
 
   const fetchReservations = async () => {
     try {
-      const response: PaginationType = await fetchGET(
-        apiRoute + `?page=${page}`
-      )
+      const response: PaginationType = await fetchGET(apiRoute)
       const newReservations: VisitType[] = response.items as VisitType[]
 
-      if (newReservations.length < 10) {
-        setHasMore(false)
-      } else {
-        if (!hasMore) setHasMore(true)
-      }
-
-      const updatedReservations =
-        page > 0 ? [...reservations, ...newReservations] : newReservations
-
-      setReservations(updatedReservations)
-      setFilteredReservations(updatedReservations)
+      setReservations(newReservations)
+      setFilteredReservations(newReservations)
     } catch (error) {
       if (error instanceof FetchError) {
         console.error(error.formatErrors())
@@ -90,29 +75,18 @@ const ReservationList: React.FC<ReservationListProps> = ({ listType }) => {
           {filteredReservations.length === 0 ? (
             <p className="italic text-center">{noEventsMessage[listType]}</p>
           ) : (
-            <InfiniteScroll
-              dataLength={filteredReservations.length}
-              next={() => setPage(prevPage => prevPage + 1)}
-              hasMore={hasMore}
-              loader={
-                <CircularProgress className="self-center text-grey-2 w-10 h-10" />
-              }
-              scrollableTarget="scrollableDiv"
-              className="overflow-y-hidden flex flex-col rounded-lg p-2"
-            >
-              {filteredReservations.map(reservation => (
-                <Reservation
-                  reservation={reservation}
-                  reservationType={listType}
-                  key={reservation.visitId}
-                  refreshReservations={() =>
-                    setTimeout(() => {
-                      fetchReservations()
-                    }, 1000)
-                  }
-                />
-              ))}
-            </InfiniteScroll>
+            filteredReservations.map(reservation => (
+              <Reservation
+                reservation={reservation}
+                reservationType={listType}
+                key={reservation.visitId}
+                refreshReservations={() =>
+                  setTimeout(() => {
+                    fetchReservations()
+                  }, 1000)
+                }
+              />
+            ))
           )}
         </div>
       </div>

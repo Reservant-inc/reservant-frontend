@@ -84,26 +84,23 @@ const Checkout: React.FC = () => {
         ) as HTMLInputElement
       )?.value
 
-      // jeśli Card to dodaje i odejmuje środki, jeśli Wallet to tylko odejmuje
-      // jezeli wybralismy Card i mamy cos w koszyku ale to jest darmowe to tez nie chcemy robic add-money
-      if (
-        selectedPaymentMethod === 'Card' &&
-        items &&
-        items.length > 0 &&
-        totalCost > 0
-      ) {
-        const addMoneyBody = JSON.stringify({
-          title: `Funds deposit for order in: ${restaurant.name}`,
-          amount: totalCost
-        })
-        await fetchPOST('/wallet/add-money', addMoneyBody)
+      const adjustedDate = new Date(
+        new Date(dateTime).getTime() + 60 * 60000
+      ).toJSON() // dateTime + 60 minut
+      const adjustedEndTime = new Date(
+        new Date(adjustedDate).getTime() + 30 * 60000
+      ).toJSON() // adjustedDate + 30 minut
+
+      if (reservationData) {
+        console.log(reservationData.guests)
+        console.log(getParticipantsIds())
       }
 
       const visitBody = JSON.stringify({
-        date: dateTime,
-        endTime: new Date(new Date(dateTime).getTime() + 30 * 60000).toJSON(),
+        date: adjustedDate,
+        endTime: adjustedEndTime,
         numberOfGuests: reservationData
-          ? reservationData.guests - getParticipantsIds().length
+          ? reservationData.guests - getParticipantsIds().length - 1
           : 0,
         tip: 0,
         takeaway: false,
@@ -116,7 +113,8 @@ const Checkout: React.FC = () => {
         const orderBody = JSON.stringify({
           visitId: visitRes.visitId,
           note: note.trim() ? note : undefined,
-          items: items
+          items: items,
+          paymentWithCard: selectedPaymentMethod === 'Card'
         })
         await fetchPOST('/orders', orderBody)
       }
@@ -145,7 +143,6 @@ const Checkout: React.FC = () => {
       for (const friend of reservationData.friendsToAdd) {
         res.push(friend.userId)
       }
-      res.push(user.userId)
     }
     return res
   }

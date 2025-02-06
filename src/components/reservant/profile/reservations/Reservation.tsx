@@ -170,7 +170,7 @@ const Reservation: React.FC<ReservationProps> = ({
               ,
             </h1>
             <h1 className="text-sm">
-              {format(new Date(reservation.reservationDate), 'dd.MM HH:mm')}
+              {format(new Date(reservation.date), 'dd.MM HH:mm')}
             </h1>
           </div>
           <div className="flex flex-col gap-2 p-2">

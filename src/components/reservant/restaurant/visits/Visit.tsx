@@ -99,7 +99,6 @@ const Visit: React.FC<VisitProps> = () => {
       const visitHours = await fetchGET(
         `/restaurants/${restaurant.restaurantId}/available-hours?date=${date}&numberOfGuests=${guests}`
       )
-    // console.log(visitHours)
       setAvailableHours(visitHours)
     } catch (error) {
       if (error instanceof FetchError) {
@@ -119,7 +118,7 @@ const Visit: React.FC<VisitProps> = () => {
     const availableTimes = availableHours
       .map(({ from, until }) => ({
         from: parseTime(from),
-        until: parseTime(until),
+        until: parseTime(until)
       }))
       .sort((a, b) => a.from.getTime() - b.from.getTime())
 
@@ -134,22 +133,22 @@ const Visit: React.FC<VisitProps> = () => {
       }
     })
 
-    const startOfDay = parseTime("00:00")
-    const endOfDay = parseTime("23:59")
+    const startOfDay = parseTime('00:00')
+    const endOfDay = parseTime('23:59')
     let currentTime = startOfDay
 
     while (currentTime <= endOfDay) {
-      const timeString = formatLocalTime(currentTime);
-  
+      const timeString = formatLocalTime(currentTime)
+
       if (!slots.includes(timeString)) {
         disabledSlots.push(timeString)
       }
-  
+
       currentTime = new Date(currentTime.getTime() + 30 * 60000)
     }
-  
-    setTimeSlots(slots);
-    setDisabledTimeSlots(disabledSlots);
+
+    setTimeSlots(slots)
+    setDisabledTimeSlots(disabledSlots)
   }
 
   const parseTime = (timeString: string) => {
@@ -163,7 +162,7 @@ const Visit: React.FC<VisitProps> = () => {
     const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true, 
+      hour12: true
     }
     return date.toLocaleTimeString([], options)
   }
@@ -225,23 +224,25 @@ const Visit: React.FC<VisitProps> = () => {
           </div>
           <div className="flex h-full w-full items-center  justify-between gap-3 text-nowrap">
             <label className="font-mont-md">{t('reservation.time')}: </label>
-              <select
-                id="timeselect"
-                onChange={(e) => {
-                  const selectedLocalTime = e.target.value
-                  setSelectedTimeslot(selectedLocalTime)
-                }}
-                value={selectedTimeslot}
-                className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm dark:bg-black dark:text-grey-0"
-              >
-                {timeSlots.length <= 0 && <option>{t('general.not-available')}</option>}
-                {timeSlots
-                  .filter((slot) => !disabledTimeSlots.includes(slot))
-                  .map((slot, index) => (
-                    <option key={index} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
+            <select
+              id="timeselect"
+              onChange={e => {
+                const selectedLocalTime = e.target.value
+                setSelectedTimeslot(selectedLocalTime)
+              }}
+              value={selectedTimeslot}
+              className="scroll ring-none flex h-7 w-36 items-center rounded-md border-[1px] border-grey-2 px-4 py-0 text-sm dark:bg-black dark:text-grey-0"
+            >
+              {timeSlots.length <= 0 && (
+                <option>{t('general.not-available')}</option>
+              )}
+              {timeSlots
+                .filter(slot => !disabledTimeSlots.includes(slot))
+                .map((slot, index) => (
+                  <option key={index} value={slot}>
+                    {slot}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
