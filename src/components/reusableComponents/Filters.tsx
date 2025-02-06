@@ -20,7 +20,7 @@ const Filters = <T extends Record<string, any>>({
   sortBy,
   filterByName
 }: FiltersProps<T>) => {
-  const [sortOrder, setSortOrder] = useState<string>('newest')
+  const [sortOrder, setSortOrder] = useState<string>('oldest')
   const [startDate, setStartDate] = useState<string | null>(null)
   const [endDate, setEndDate] = useState<string | null>(null)
   const [t] = useTranslation('global')
@@ -60,7 +60,7 @@ const Filters = <T extends Record<string, any>>({
     filteredData.sort((a, b) => {
       const dateA = new Date(a[sortBy]).getTime()
       const dateB = new Date(b[sortBy]).getTime()
-      return sort === 'newest' ? dateA - dateB : dateB - dateA
+      return sort === 'newest' ? dateB - dateA : dateA - dateB
     })
 
     // Filtrowanie po datach
