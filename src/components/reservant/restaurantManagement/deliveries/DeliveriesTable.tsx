@@ -1,93 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { fetchGET } from '../../../../services/APIconn';
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import CheckSharpIcon from '@mui/icons-material/CheckSharp';
-import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import CircularProgress from '@mui/material/CircularProgress';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import DeliveryActionDialog from './DeliveryActionDialog';
-import DeliveryDetailsDialog from './DeliveryDetailsDialog';
+import React, { useEffect, useState } from 'react'
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import { fetchGET } from '../../../../services/APIconn'
+import ManageSearchIcon from '@mui/icons-material/ManageSearch'
+import CheckSharpIcon from '@mui/icons-material/CheckSharp'
+import CloseSharpIcon from '@mui/icons-material/CloseSharp'
+import CircularProgress from '@mui/material/CircularProgress'
+import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import DeliveryActionDialog from './DeliveryActionDialog'
+import DeliveryDetailsDialog from './DeliveryDetailsDialog'
 import { Tooltip, IconButton, ThemeProvider } from '@mui/material'
 
-
 const DeliveriesTable: React.FC = () => {
-  const [deliveries, setDeliveries] = useState<any[]>([]);
-  const [filteredDeliveries, setFilteredDeliveries] = useState<any[]>([]);
-  const [selectedDeliveryId, setSelectedDeliveryId] = useState<number | null>(null);
-  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState<'confirm' | 'cancel' | null>(null);
-  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
-  const [filter, setFilter] = useState<'all' | 'delivered' | 'notDelivered'>('all');
-  const [loading, setLoading] = useState<boolean>(true);
-  const { restaurantId } = useParams();
-  const [t] = useTranslation('global');
+  const [deliveries, setDeliveries] = useState<any[]>([])
+  const [filteredDeliveries, setFilteredDeliveries] = useState<any[]>([])
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState<number | null>(
+    null
+  )
+  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false)
+  const [actionType, setActionType] = useState<'confirm' | 'cancel' | null>(
+    null
+  )
+  const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false)
+  const [filter, setFilter] = useState<'all' | 'delivered' | 'notDelivered'>(
+    'all'
+  )
+  const [loading, setLoading] = useState<boolean>(true)
+  const { restaurantId } = useParams()
+  const [t] = useTranslation('global')
 
-  const activeRestaurantId = restaurantId ? parseInt(restaurantId) : -1;
+  const activeRestaurantId = restaurantId ? parseInt(restaurantId) : -1
 
   useEffect(() => {
     if (activeRestaurantId !== -1) {
-      fetchDeliveries();
+      fetchDeliveries()
     }
-  }, [activeRestaurantId]);
+  }, [activeRestaurantId])
 
   useEffect(() => {
-    applyFilter();
-  }, [deliveries, filter]);
+    applyFilter()
+  }, [deliveries, filter])
 
   const fetchDeliveries = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
       const deliveredResponse = await fetchGET(
         `/restaurants/${activeRestaurantId}/deliveries?returnDelivered=true&page=0&perPage=10`
-      );
-      const deliveredItems = deliveredResponse.items || [];
+      )
+      const deliveredItems = deliveredResponse.items || []
 
       const notDeliveredResponse = await fetchGET(
         `/restaurants/${activeRestaurantId}/deliveries?returnDelivered=false&page=0&perPage=10`
-      );
-      const notDeliveredItems = notDeliveredResponse.items || [];
+      )
+      const notDeliveredItems = notDeliveredResponse.items || []
 
-      setDeliveries([...deliveredItems, ...notDeliveredItems]);
+      setDeliveries([...deliveredItems, ...notDeliveredItems])
     } catch (error) {
-      console.error('Error fetching deliveries:', error);
+      console.error('Error fetching deliveries:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const applyFilter = () => {
     if (filter === 'delivered') {
-      setFilteredDeliveries(deliveries.filter((delivery) => delivery.deliveredTime !== null));
+      setFilteredDeliveries(
+        deliveries.filter(delivery => delivery.deliveredTime !== null)
+      )
     } else if (filter === 'notDelivered') {
-      setFilteredDeliveries(deliveries.filter((delivery) => delivery.deliveredTime === null));
+      setFilteredDeliveries(
+        deliveries.filter(delivery => delivery.deliveredTime === null)
+      )
     } else {
-      setFilteredDeliveries(deliveries);
+      setFilteredDeliveries(deliveries)
     }
-  };
+  }
 
-  const handleOpenActionDialog = (deliveryId: number, action: 'confirm' | 'cancel') => {
-    setSelectedDeliveryId(deliveryId);
-    setActionType(action);
-    setIsActionDialogOpen(true);
-  };
+  const handleOpenActionDialog = (
+    deliveryId: number,
+    action: 'confirm' | 'cancel'
+  ) => {
+    setSelectedDeliveryId(deliveryId)
+    setActionType(action)
+    setIsActionDialogOpen(true)
+  }
 
   const handleCloseActionDialog = () => {
-    setSelectedDeliveryId(null);
-    setActionType(null);
-    setIsActionDialogOpen(false);
-  };
+    setSelectedDeliveryId(null)
+    setActionType(null)
+    setIsActionDialogOpen(false)
+  }
 
   const handleOpenDetailsDialog = (deliveryId: number) => {
-    setSelectedDeliveryId(deliveryId);
-    setIsDetailsDialogOpen(true);
-  };
+    setSelectedDeliveryId(deliveryId)
+    setIsDetailsDialogOpen(true)
+  }
 
   const handleCloseDetailsDialog = () => {
-    setSelectedDeliveryId(null);
-    setIsDetailsDialogOpen(false);
-  };
+    setSelectedDeliveryId(null)
+    setIsDetailsDialogOpen(false)
+  }
 
   const columns: GridColDef[] = [
     {
@@ -96,7 +108,7 @@ const DeliveriesTable: React.FC = () => {
       flex: 1,
       sortable: true,
       align: 'center',
-      headerAlign: 'center',
+      headerAlign: 'center'
     },
     {
       field: 'orderTime',
@@ -105,17 +117,16 @@ const DeliveriesTable: React.FC = () => {
       sortable: true,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams) =>
         params.row.orderTime
           ? new Date(params.row.orderTime).toLocaleDateString('pl-PL', {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
               hour: '2-digit',
-              minute: '2-digit',
+              minute: '2-digit'
             })
           : t('delivery.no-date')
-      ),
     },
     {
       field: 'deliveredTime',
@@ -124,17 +135,16 @@ const DeliveriesTable: React.FC = () => {
       sortable: true,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams) =>
         params.row.deliveredTime
           ? new Date(params.row.deliveredTime).toLocaleDateString('pl-PL', {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
               hour: '2-digit',
-              minute: '2-digit',
+              minute: '2-digit'
             })
           : t('delivery.no-date')
-      ),
     },
     {
       field: 'canceledTime',
@@ -143,17 +153,16 @@ const DeliveriesTable: React.FC = () => {
       sortable: true,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridRenderCellParams) => (
+      renderCell: (params: GridRenderCellParams) =>
         params.row.canceledTime
           ? new Date(params.row.canceledTime).toLocaleDateString('pl-PL', {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
               hour: '2-digit',
-              minute: '2-digit',
+              minute: '2-digit'
             })
           : t('delivery.no-date')
-      ),
     },
     {
       field: 'actions',
@@ -163,9 +172,9 @@ const DeliveriesTable: React.FC = () => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridRenderCellParams) => {
-        const isDelivered = params.row.deliveredTime !== null;
-        const isCanceled = params.row.canceledTime !== null;
-    
+        const isDelivered = params.row.deliveredTime !== null
+        const isCanceled = params.row.canceledTime !== null
+
         return (
           <div className="flex gap-2 justify-center items-center">
             <Tooltip title={t('delivery.confirm')} arrow>
@@ -176,16 +185,17 @@ const DeliveriesTable: React.FC = () => {
                   }
                   disabled={isDelivered || isCanceled}
                   style={{
-                    color: isDelivered || isCanceled
-                      ? 'var(--grey-0)' 
-                      : 'var(--green)', 
+                    color:
+                      isDelivered || isCanceled
+                        ? 'var(--grey-0)'
+                        : 'var(--green)'
                   }}
                 >
                   <CheckSharpIcon fontSize="medium" />
                 </IconButton>
               </span>
             </Tooltip>
-    
+
             <Tooltip title={t('delivery.cancel')} arrow>
               <span>
                 <IconButton
@@ -194,22 +204,21 @@ const DeliveriesTable: React.FC = () => {
                   }
                   disabled={isDelivered || isCanceled}
                   style={{
-                    color: isDelivered|| isCanceled
-                      ? 'var(--grey-0)' 
-                      : 'var(--red)', 
+                    color:
+                      isDelivered || isCanceled ? 'var(--grey-0)' : 'var(--red)'
                   }}
                 >
                   <CloseSharpIcon fontSize="medium" />
                 </IconButton>
               </span>
             </Tooltip>
-    
+
             <Tooltip title={t('delivery.details')} arrow>
               <span>
                 <IconButton
                   onClick={() => handleOpenDetailsDialog(params.row.deliveryId)}
                   style={{
-                    color: 'var(--primary)', 
+                    color: 'var(--primary)'
                   }}
                 >
                   <ManageSearchIcon fontSize="medium" />
@@ -217,26 +226,27 @@ const DeliveriesTable: React.FC = () => {
               </span>
             </Tooltip>
           </div>
-        );
-      },
+        )
+      }
     }
-    
-  ];
-  
-  
+  ]
 
   return (
     <>
-      <div className="overflow-y-auto flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
+      <div className="overflow-y-auto scroll flex h-full w-full flex-col rounded-lg bg-white dark:bg-black">
         <div className="flex items-center gap-4 p-4">
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value as 'all' | 'delivered' | 'notDelivered')}
+            onChange={e =>
+              setFilter(e.target.value as 'all' | 'delivered' | 'notDelivered')
+            }
             className="border-[1px] border-primary px-3 py-1 text-primary rounded-md  dark:border-secondary dark:text-secondary pr-8 dark:bg-black"
           >
             <option value="all">{t('delivery.filter-all')}</option>
             <option value="delivered">{t('delivery.filter-delivered')}</option>
-            <option value="notDelivered">{t('delivery.filter-not-delivered')}</option>
+            <option value="notDelivered">
+              {t('delivery.filter-not-delivered')}
+            </option>
           </select>
         </div>
         {loading ? (
@@ -247,7 +257,7 @@ const DeliveriesTable: React.FC = () => {
           <DataGrid
             rows={filteredDeliveries.map((delivery, index) => ({
               ...delivery,
-              id: delivery.deliveryId || index,
+              id: delivery.deliveryId || index
             }))}
             columns={columns}
             pageSizeOptions={[5, 10, 25, 100]}
@@ -278,7 +288,7 @@ const DeliveriesTable: React.FC = () => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default DeliveriesTable;
+export default DeliveriesTable

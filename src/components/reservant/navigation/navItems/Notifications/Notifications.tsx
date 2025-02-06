@@ -1,48 +1,49 @@
-import React, { useContext, useEffect, useState } from 'react';
-import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler';
-import { Notifications as NotificationsIcon } from '@mui/icons-material';
-import NotificationList from './NotificationList';
-import { fetchGET } from '../../../../../services/APIconn';
-import { Button } from '@mui/material';
-import { ThemeContext } from '../../../../../contexts/ThemeContext';
+import React, { useContext, useEffect, useState } from 'react'
+import OutsideClickHandler from '../../../../reusableComponents/OutsideClickHandler'
+import { Notifications as NotificationsIcon } from '@mui/icons-material'
+import NotificationList from './NotificationList'
+import { fetchGET } from '../../../../../services/APIconn'
+import { Button } from '@mui/material'
+import { ThemeContext } from '../../../../../contexts/ThemeContext'
 import { useTranslation } from 'react-i18next'
 
 const NotificationsButton: React.FC = () => {
-  const [isPressed, setIsPressed] = useState<boolean>(false);
-  const [unreadNotificationCount, setUnreadNotificationCount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [showAll, setShowAll] = useState<boolean>(false);
-  const [t] = useTranslation('global');
+  const [isPressed, setIsPressed] = useState<boolean>(false)
+  const [unreadNotificationCount, setUnreadNotificationCount] =
+    useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [showAll, setShowAll] = useState<boolean>(false)
+  const [t] = useTranslation('global')
 
-  const { isDark } = useContext(ThemeContext);
+  const { isDark } = useContext(ThemeContext)
 
   const pressHandler = () => {
-    setIsPressed(!isPressed);
-  };
+    setIsPressed(!isPressed)
+  }
 
   const fetchNotificationCount = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const response = await fetchGET('/notifications/bubbles');
-      setUnreadNotificationCount(response.unreadNotificationCount);
+      const response = await fetchGET('/notifications/bubbles')
+      setUnreadNotificationCount(response.unreadNotificationCount)
     } catch (error) {
-      console.error('Error fetching unread notifications count:', error);
+      console.error('Error fetching unread notifications count:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const closeNotifications = () => {
-    setIsPressed(false);
-  };
+    setIsPressed(false)
+  }
 
   const updateUnreadCount = async () => {
-    await fetchNotificationCount();
-  };
+    await fetchNotificationCount()
+  }
 
   useEffect(() => {
-    fetchNotificationCount();
-  }, []);
+    fetchNotificationCount()
+  }, [])
 
   return (
     <OutsideClickHandler onOutsideClick={pressHandler} isPressed={isPressed}>
@@ -52,8 +53,8 @@ const NotificationsButton: React.FC = () => {
           isPressed && 'text-primary dark:text-secondary'
         }`}
         onClick={() => {
-          pressHandler();
-          setShowAll(false);
+          pressHandler()
+          setShowAll(false)
         }}
       >
         <NotificationsIcon className="h-[23px] w-[23px]" />
@@ -67,7 +68,7 @@ const NotificationsButton: React.FC = () => {
         <div
           className={`nav-dropdown flex w-[300px] h-[45vh] flex-col z-[1] bg-white dark:bg-black`}
         >
-          <div className="flex-1 w-full overflow-y-auto">
+          <div className="flex-1 w-full overflow-y-auto scroll">
             <NotificationList
               updateUnreadCount={updateUnreadCount}
               showAll={showAll}
@@ -96,7 +97,7 @@ const NotificationsButton: React.FC = () => {
         </div>
       )}
     </OutsideClickHandler>
-  );
-};
+  )
+}
 
-export default NotificationsButton;
+export default NotificationsButton

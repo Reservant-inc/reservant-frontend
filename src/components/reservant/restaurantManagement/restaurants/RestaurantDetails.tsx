@@ -1169,7 +1169,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({
                 <div className="border border-grey-15 dark:border-grey-2 rounded p-4 hover:border-black">
                   <FieldArray name="photos">
                     {({ push, remove }) => (
-                      <div className="flex flex-wrap gap-4 overflow-x-auto">
+                      <div className="flex flex-wrap gap-4 overflow-x-auto scroll">
                         {' '}
                         {/* Wrapping photos in one row with scroll */}
                         {/* Wyświetlanie zdjęć */}
