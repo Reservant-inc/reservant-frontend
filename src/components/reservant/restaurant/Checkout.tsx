@@ -99,9 +99,12 @@ const Checkout: React.FC = () => {
         await fetchPOST('/wallet/add-money', addMoneyBody)
       }
 
+      const adjustedDate = new Date(new Date(dateTime).getTime() + 60 * 60000).toJSON(); // dateTime + 60 minut
+      const adjustedEndTime = new Date(new Date(adjustedDate).getTime() + 30 * 60000).toJSON(); // adjustedDate + 30 minut
+
       const visitBody = JSON.stringify({
-        date: dateTime,
-        endTime: new Date(new Date(dateTime).getTime() + 30 * 60000).toJSON(),
+        date: adjustedDate,
+        endTime: adjustedEndTime,
         numberOfGuests: reservationData
           ? reservationData.guests - getParticipantsIds().length
           : 0,
