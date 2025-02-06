@@ -91,11 +91,16 @@ const Checkout: React.FC = () => {
         new Date(adjustedDate).getTime() + 30 * 60000
       ).toJSON() // adjustedDate + 30 minut
 
+      if (reservationData) {
+        console.log(reservationData.guests)
+        console.log(getParticipantsIds())
+      }
+
       const visitBody = JSON.stringify({
         date: adjustedDate,
         endTime: adjustedEndTime,
         numberOfGuests: reservationData
-          ? reservationData.guests - getParticipantsIds().length
+          ? reservationData.guests - getParticipantsIds().length - 1
           : 0,
         tip: 0,
         takeaway: false,
@@ -138,7 +143,6 @@ const Checkout: React.FC = () => {
       for (const friend of reservationData.friendsToAdd) {
         res.push(friend.userId)
       }
-      res.push(user.userId)
     }
     return res
   }
