@@ -250,7 +250,7 @@ const Checkout: React.FC = () => {
                 <label>{totalPrice ? totalPrice : 0} zł</label>
               </span>
               <span className="flex justify-between py-1">
-                <label>{t('choeckout.totalCost')}:</label>
+                <label>{t('checkout.totalCost')}:</label>
                 <label>{totalCost} zł</label>
               </span>
             </div>
