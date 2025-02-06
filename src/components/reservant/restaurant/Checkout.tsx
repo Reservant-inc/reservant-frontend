@@ -84,23 +84,12 @@ const Checkout: React.FC = () => {
         ) as HTMLInputElement
       )?.value
 
-      // jeśli Card to dodaje i odejmuje środki, jeśli Wallet to tylko odejmuje
-      // jezeli wybralismy Card i mamy cos w koszyku ale to jest darmowe to tez nie chcemy robic add-money
-      if (
-        selectedPaymentMethod === 'Card' &&
-        items &&
-        items.length > 0 &&
-        totalCost > 0
-      ) {
-        const addMoneyBody = JSON.stringify({
-          title: `Funds deposit for order in: ${restaurant.name}`,
-          amount: totalCost
-        })
-        await fetchPOST('/wallet/add-money', addMoneyBody)
-      }
-
-      const adjustedDate = new Date(new Date(dateTime).getTime() + 60 * 60000).toJSON(); // dateTime + 60 minut
-      const adjustedEndTime = new Date(new Date(adjustedDate).getTime() + 30 * 60000).toJSON(); // adjustedDate + 30 minut
+      const adjustedDate = new Date(
+        new Date(dateTime).getTime() + 60 * 60000
+      ).toJSON() // dateTime + 60 minut
+      const adjustedEndTime = new Date(
+        new Date(adjustedDate).getTime() + 30 * 60000
+      ).toJSON() // adjustedDate + 30 minut
 
       const visitBody = JSON.stringify({
         date: adjustedDate,
@@ -119,7 +108,8 @@ const Checkout: React.FC = () => {
         const orderBody = JSON.stringify({
           visitId: visitRes.visitId,
           note: note.trim() ? note : undefined,
-          items: items
+          items: items,
+          paymentWithCard: selectedPaymentMethod === 'Card'
         })
         await fetchPOST('/orders', orderBody)
       }
