@@ -227,10 +227,11 @@ export default function EmploymentsManagement({ empid }: { empid: string }) {
         let tmp1: RestaurantShortType[] = []
 
         for (const restaurant of response1) {
-          tmp1.push({
-            restaurantId: restaurant.restaurantId,
-            name: restaurant.name
-          })
+          if (!restaurant.isArchived)
+            tmp1.push({
+              restaurantId: restaurant.restaurantId,
+              name: restaurant.name
+            })
         }
 
         tmp1 = tmp1.filter(e => {
