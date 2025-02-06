@@ -87,7 +87,7 @@ const ReviewsManagement: React.FC = () => {
           </Tooltip>
         </div>
         {/* Display Filtered and Sorted Reviews */}
-        <div className="flex-1 overflow-y-auto h-full ">
+        <div className="flex-1 overflow-y-auto h-full scroll">
           {' '}
           {/* Scrollable review section */}
           {filteredAndSortedReviews === null ||
