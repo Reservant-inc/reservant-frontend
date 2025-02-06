@@ -117,8 +117,8 @@ const Menu = forwardRef<HTMLDivElement, MenuProps>(function Menu(
       <ConfirmationDialog
         open={isConfirmationOpen}
         onClose={() => setIsConfirmationOpen(false)}
-        onConfirm={() => {
-          handleDeleteMenu()
+        onConfirm={async () => {
+          await handleDeleteMenu()
           fetchMenus()
         }}
         confirmationText={`Are you sure you want to delete ${menu.name}?`} //@TODO translation
