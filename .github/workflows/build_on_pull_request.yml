@@ -33,14 +33,12 @@ jobs:
       - name: Deploy
         if: github.event.pull_request.merged == true
         uses: wlixcc/SFTP-Deploy-Action@v1.2.5
-        env:
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
         with:
-          username: $FTP_USERNAME
+          username: ${{ secrets.FTP_USERNAME }}
           server: ${{ secrets.FTP_SERVER }}
           port: ${{ secrets.FTP_PORT }}
           local_path: './build/*'
-          remote_path: '/home/$FTP_USERNAME/www/'
+          remote_path: '~/www/'
           rsyncArgs: '--exclude=*.map'
           sftpArgs: '-o ConnectTimeout=5'
           sftp_only: true
