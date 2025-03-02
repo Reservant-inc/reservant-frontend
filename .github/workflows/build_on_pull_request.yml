@@ -38,7 +38,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           port: ${{ secrets.FTP_PORT }}
           local_path: './build/*'
-          remote_path: '~/www/'
+          remote_path: 'www/'
           rsyncArgs: '--exclude=*.map'
           sftpArgs: '-o ConnectTimeout=5'
           sftp_only: true
