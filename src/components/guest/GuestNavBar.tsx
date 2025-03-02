@@ -27,7 +27,7 @@ const GuestNavBar: React.FC = () => {
                 (isDark ? ' text-secondary' : ' text-primary')
               }
             >
-              RESERVANT - test
+              RESERVANT
             </h1>
           )}
         </div>
