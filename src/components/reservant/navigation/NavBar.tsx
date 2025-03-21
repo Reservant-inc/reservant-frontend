@@ -30,7 +30,7 @@ const NavBar: React.FC = () => {
                 (isDark ? ' text-secondary' : ' text-primary')
               }
             >
-              RESERVANT
+              RESERVANT - PUBLIC DEMO
             </h1>
           )}
         </div>
