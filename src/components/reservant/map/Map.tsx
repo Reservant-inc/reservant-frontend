@@ -30,7 +30,7 @@ const Map: React.FC<MapProps> = ({
     mapRef.current = map
 
     map.zoomControl.remove()
-    map.setMinZoom(10)
+    map.setMinZoom(5)
     map.setMaxZoom(20)
 
     useEffect(() => {
