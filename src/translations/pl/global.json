@@ -581,7 +581,9 @@
         "delivery-fee": "Koszt dostawy",
         "events": "Wydarzenia:",
         "no-events-found": "Brak wydarzeń dla tej restauracji.",
-        "events-search": "Wyszukaj wydarzenie"
+        "events-search": "Wyszukaj wydarzenie",
+        "terms": "Zasady",
+        "privacy": "Prywatność"
     },
     "event-creation": {
         "even-title": "Wydarzenie",

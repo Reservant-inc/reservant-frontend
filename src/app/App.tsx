@@ -54,6 +54,8 @@ import VisitDetails from '../components/customerService/visits/VisitDetails'
 import RestaurantDetails from '../components/customerService/restaurants/RestaurantDetails'
 import Statistics from '../components/reservant/restaurantManagement/dashboard/Statistics'
 import Details from '../components/reservant/restaurantManagement/dashboard/Details'
+import Terms from '../components/TermsOfService'
+import Privacy from '../components/PrivacyPolicy'
 
 const router = createBrowserRouter([
   {
@@ -281,6 +283,14 @@ const router = createBrowserRouter([
   {
     path: '/logout',
     action: logoutAction
+  },
+  {
+    path: 'terms-of-service',
+    element: <Terms />,
+  },
+  {
+    path: 'privacy-policy',
+    element: <Privacy />,
   },
   {
     path: '*',

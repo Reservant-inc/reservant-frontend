@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
 import { Button, List, ListItemButton, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import StarPurple500SharpIcon from '@mui/icons-material/StarPurple500Sharp'
@@ -6,6 +7,8 @@ import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import SecurityIcon from '@mui/icons-material/Security';
 import { useTranslation } from 'react-i18next'
 import { fetchGET, getImage } from '../../services/APIconn'
 import { FetchError } from '../../services/Errors'
@@ -14,6 +17,7 @@ import CustomRating from '../reusableComponents/CustomRating'
 import OutsideClickHandler from '../reusableComponents/OutsideClickHandler'
 import Map from '../reservant/map/Map'
 import GuestFocusedRestaurantDetails from './GuestFocusedRestaurantDetails'
+
 
 export default function GuestHomePage() {
   const [restaurants, setRestaurants] = useState<RestaurantDetailsType[]>([])
@@ -117,6 +121,16 @@ export default function GuestHomePage() {
       setLoadedRestaurantIds(new Set())
       return updatedTags
     })
+  }
+
+  let navigate = useNavigate(); 
+  const goToTerms = () =>{ 
+    let path = `/terms-of-service`; 
+    navigate(path);
+  }
+  const goToPrivacy = () =>{ 
+    let path = `/privacy-policy`; 
+    navigate(path);
   }
 
   return (
@@ -223,6 +237,16 @@ export default function GuestHomePage() {
                 </ListItemButton>
               ))}
             </List>
+          </div>
+          <div>
+            <Button className="px-4 text-grey-2" onClick={goToTerms}>
+              <AssignmentIcon className="h-[15px] w-[15px] text-grey-2 hover:cursor-pointer" />
+              <h1>{t('home-page.terms')}</h1>
+            </Button>
+            <Button className="px-4 text-grey-2" onClick={goToPrivacy}>
+              <SecurityIcon className="h-[15px] w-[15px] text-grey-2 hover:cursor-pointer" />
+              <h1>{t('home-page.privacy')}</h1>
+            </Button>
           </div>
         </div>
       ) : (
