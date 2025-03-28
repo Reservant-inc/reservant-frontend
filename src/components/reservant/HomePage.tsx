@@ -15,6 +15,8 @@ import LocalOfferSharpIcon from '@mui/icons-material/LocalOfferSharp'
 import CloseSharpIcon from '@mui/icons-material/CloseSharp'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import SecurityIcon from '@mui/icons-material/Security';
 import { useTranslation } from 'react-i18next'
 import { fetchGET, getImage } from '../../services/APIconn'
 import { FetchError } from '../../services/Errors'
@@ -183,6 +185,15 @@ export default function HomePage() {
     setSelectedRestaurant(null)
   }
 
+  const goToTerms = () =>{ 
+    let path = `/terms-of-service`; 
+    navigate(path);
+  }
+  const goToPrivacy = () =>{ 
+    let path = `/privacy-policy`; 
+    navigate(path);
+  }
+
   return (
     <div
       id="homePage-wrapper"
@@ -287,6 +298,16 @@ export default function HomePage() {
                 </ListItemButton>
               ))}
             </List>
+          </div>
+          <div>
+            <Button className="px-4 text-grey-2" onClick={goToTerms}>
+              <AssignmentIcon className="h-[15px] w-[15px] text-grey-2 hover:cursor-pointer" />
+              <h1>{t('home-page.terms')}</h1>
+            </Button>
+            <Button className="px-4 text-grey-2" onClick={goToPrivacy}>
+              <SecurityIcon className="h-[15px] w-[15px] text-grey-2 hover:cursor-pointer" />
+              <h1>{t('home-page.privacy')}</h1>
+            </Button>
           </div>
         </div>
       ) : (
