@@ -1,4 +1,3 @@
-[![Foo](https://raw.githubusercontent.com/Reservant-inc/.github/refs/heads/main/.github/resources/reservant_logo.png)](https://reservant.app/)
 
 # Terms and Conditions
 
@@ -93,6 +92,14 @@ Notwithstanding any damages that You might incur, the entire liability of the Co
 To the maximum extent permitted by applicable law, in no event shall the Company or its suppliers be liable for any special, incidental, indirect, or consequential damages whatsoever (including, but not limited to, damages for loss of profits, loss of data or other information, for business interruption, for personal injury, loss of privacy arising out of or in any way related to the use of or inability to use the Service, third-party software and/or third-party hardware used with the Service, or otherwise in connection with any provision of this Terms), even if the Company or any supplier has been advised of the possibility of such damages and even if the remedy fails of its essential purpose.
 
 Some states do not allow the exclusion of implied warranties or limitation of liability for incidental or consequential damages, which means that some of the above limitations may not apply. In these states, each party's liability will be limited to the greatest extent permitted by law.
+
+## Privacy Policy
+If you use our Services, you must abide by our [Privacy Policy](https://reservant.app/privacy-policy). 
+
+> [!IMPORTANT]  
+> The application database is **cleared once every 24 hours**. This means deleting all the accounts created during this time. 
+
+You acknowledge that you have read our Privacy Policy and understand that it sets forth how we collect, use, and store your information. If you do not agree with our Privacy Statement, then you must stop using the Services immediately. Any person, entity, or service collecting data from the Services must comply with our Privacy Statement. Misuse of any User's Personal Information is prohibited. If you collect any Personal Information from a User, you agree that you will only use the Personal Information you gather for the purpose for which the User has authorized it. You agree that you will reasonably secure any Personal Information you have gathered from the Services, and you will respond promptly to complaints, removal requests, and 'do not contact' requests from us or Users.
 
 ## "AS IS" and "AS AVAILABLE" Disclaimer
 
