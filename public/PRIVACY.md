@@ -2,7 +2,7 @@
 
 Last updated: March 27, 2025
 
-> [!IMPORTANT]  
+> ### IMPORTANT  
 > The application database is **cleared once every 24 hours**. This means deleting all the accounts created during this time. 
 
 This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
@@ -24,7 +24,7 @@ For the purposes of this Privacy Policy:
 
 
 
-- __Company__ (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to https://reservant.app/.
+- __Company__ (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Reservant team.
 
 
 
