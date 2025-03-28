@@ -20,7 +20,7 @@ For the purposes of these Terms and Conditions:
 - __Affiliate__ means an entity that controls, is controlled by or is under common control with a party, where "control" means ownership of 50% or more of the shares, equity interest or other securities entitled to vote for election of directors or other managing authority.
 
 - __Country__ refers to:  Poland
-- __Company__ (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Reservant.
+- __Company__ (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to Reservant team.
 
 - __Device__ means any device that can access the Service such as a computer, a cellphone or a digital tablet.
 
@@ -96,7 +96,7 @@ Some states do not allow the exclusion of implied warranties or limitation of li
 ## Privacy Policy
 If you use our Services, you must abide by our [Privacy Policy](https://reservant.app/privacy-policy). 
 
-> [!IMPORTANT]  
+> IMPORTANT  
 > The application database is **cleared once every 24 hours**. This means deleting all the accounts created during this time. 
 
 You acknowledge that you have read our Privacy Policy and understand that it sets forth how we collect, use, and store your information. If you do not agree with our Privacy Statement, then you must stop using the Services immediately. Any person, entity, or service collecting data from the Services must comply with our Privacy Statement. Misuse of any User's Personal Information is prohibited. If you collect any Personal Information from a User, you agree that you will only use the Personal Information you gather for the purpose for which the User has authorized it. You agree that you will reasonably secure any Personal Information you have gathered from the Services, and you will respond promptly to complaints, removal requests, and 'do not contact' requests from us or Users.
