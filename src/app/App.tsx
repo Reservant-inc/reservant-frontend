@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { isMobile } from 'react-device-detect';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import UserRegister from '../components/auth/UserRegister'
 import {
@@ -299,6 +300,14 @@ const router = createBrowserRouter([
 ])
 
 const App = () => {
+  const currentPath = window.location.pathname;
+
+  useEffect(() => {
+    if (isMobile && currentPath !== '/privacy-policy' && currentPath !== '/terms-of-service') {
+      window.location.href = 'https://play.google.com/store/apps/details?id=com.reservant.reservant_mobile';
+    }
+  }, []);
+
   return (
     <div id="AppWrapper" className="App font-mont-md">
       <div id="AppMainSection" className="h-screen">
