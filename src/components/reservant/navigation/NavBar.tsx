@@ -8,11 +8,22 @@ import Threads from './navItems/Threads/Threads'
 import useWindowDimensions from '../../../hooks/useWindowResize'
 import { ThemeContext } from '../../../contexts/ThemeContext'
 import SearchBar from './navItems/Friends/SearchBar'
+import { Button } from '@mui/material'
+import GitHubIcon from '@mui/icons-material/GitHub';
+import ShopIcon from '@mui/icons-material/Shop';
 
 const NavBar: React.FC = () => {
   const { isDark } = useContext(ThemeContext)
 
   const size = useWindowDimensions()
+
+  const goToGithub = () =>{ 
+    window.location.href = 'https://github.com/Reservant-inc';
+  }
+  const goToPlayStore = () =>{ 
+    window.location.href = 'https://play.google.com/store/apps/details?id=com.reservant.reservant_mobile';
+  }
+
 
   return (
     <div className="flex h-full w-full items-center dark:bg-black">
@@ -33,6 +44,12 @@ const NavBar: React.FC = () => {
               RESERVANT - PUBLIC DEMO
             </h1>
           )}
+          <Button className="px-2 text-grey-2" onClick={goToGithub}>
+            <GitHubIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
+          </Button>
+          <Button className="px-2 text-grey-2" onClick={goToPlayStore}>
+            <ShopIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
+          </Button>
         </div>
 
         <Sections />

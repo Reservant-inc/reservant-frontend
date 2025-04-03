@@ -3,6 +3,10 @@ import LogoSecondary from '../../assets/images/LOGO-SECONDARY.png'
 import LogoPrimary from '../../assets/images/LOGO-PRIMARY.png'
 import useWindowDimensions from '../../hooks/useWindowResize'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@mui/material'
+import GitHubIcon from '@mui/icons-material/GitHub';
+import ShopIcon from '@mui/icons-material/Shop';
+
 
 const GuestNavBar: React.FC = () => {
   const [isDark, setIsDark] = useState(localStorage.theme === 'dark')
@@ -10,6 +14,13 @@ const GuestNavBar: React.FC = () => {
   const navigate = useNavigate()
 
   const size = useWindowDimensions()
+
+  const goToGithub = () =>{ 
+    window.location.href = 'https://github.com/Reservant-inc';
+  }
+  const goToPlayStore = () =>{ 
+    window.location.href = 'https://play.google.com/store/apps/details?id=com.reservant.reservant_mobile';
+  }
 
   return (
     <div className="flex h-full w-full items-center shadow-md dark:bg-black">
@@ -30,6 +41,12 @@ const GuestNavBar: React.FC = () => {
               RESERVANT - PUBLIC DEMO
             </h1>
           )}
+          <Button className="px-2 text-grey-2" onClick={goToGithub}>
+            <GitHubIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
+          </Button>
+          <Button className="px-2 text-grey-2" onClick={goToPlayStore}>
+            <ShopIcon className="h-[25px] w-[25px] text-grey-2 hover:cursor-pointer" />
+          </Button>
         </div>
 
         <div className="flex items-center gap-3">
